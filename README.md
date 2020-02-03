@@ -124,15 +124,41 @@ class SomeWidget {
 
 ```
 
-## Getting Started
+# Versioning strategy (Gitflow)
+  - master     --> release branch
+  - develop    --> development branch 
+  - demo       --> for presentational use only (@ end of sprint, functionality is demo-ed here)
+  - feature    --> used for creating new features
+  - components --> used for continuous of UI components
+  - bugfix     --> used for fixing up found issues or bugs
+  - refactor   --> used for refactoring
 
-This project is a starting point for a Flutter application.
+Ex. `https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow`
 
-A few resources to get you started if this is your first Flutter project:
+# Git naming strategy
+Naming should be based on : ${branchType}/${asanaTaskId}/${humanlyReadableCommentInCamelCase}
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Ex. `feature/bosch-047/toolForm` or `bugfix/bosch-048/toolDetails`
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Since components are not directly part of a specific asana task id, they exist as separate branched
+
+Ex. `component/table` or `component/input`
+
+
+# D.O.D (for each story/deliverable)
+When implementing a task, each dev should:
+  - implement UI screens based on provided moqups
+  - implement UI functionality based on story description/provided docs/what was groomed/moqups intuition
+  - implement according API calls. If API is not available, then fakeBackend interceptor implementation should be used.
+  - happy flow dev testing (++ since we don't have QA yet)
+  - pull request with at least one reviewer approval. Branch should be instantly mergeable
+  - update story status in monday
+
+## Useful places
+Monday: `https://redabac.monday.com/boards/389692425`
+Moqups: `https://xd.adobe.com/view/1f267900-798e-4a62-734d-f5a3d0738f45-6917/`
+
+## Meets + sprint
+Sprint duration: `2 weeks`
+Weekly status call: `Every monday & Thursday from  14:00PM` 
+Demo: `Once every two weeks on friday @ 09:30`
