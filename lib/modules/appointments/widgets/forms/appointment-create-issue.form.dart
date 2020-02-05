@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert.info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -28,19 +29,23 @@ class AppointmentCreateIssueFormState
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-                height: MediaQuery.of(context).size.height * .5,
-                child: ListView.builder(
-                  itemCount: issues.length,
-                  itemBuilder: (context, int) {
-                    return _buildListTile(int, issues);
-                  },
-                )),
+              height: MediaQuery.of(context).size.height * .5,
+              child: ListView.builder(
+                itemCount: issues.length + 1,
+                itemBuilder: (context, int) {
+                  return _buildListTile(int - 1, issues);
+                },
+              ),
+            ),
             FloatingActionButton(onPressed: _addIssue, child: Icon(Icons.add))
           ],
         ));
   }
 
   ListTile _buildListTile(int index, List<IssueItem> issues) {
+    if (index == -1) {
+      return AlertInfoWidget(S.of(context).appointment_create_step2_alert);
+    }
     if (issues.length > 1) {
       return ListTile(
         title: TextFormField(

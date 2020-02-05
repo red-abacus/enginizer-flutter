@@ -73,4 +73,8 @@ class Appointment {
 
     return propMap;
   }
+
+  static String scheduledTimeFormat() {
+    return "dd/MM/yyyy HH:mm";
+  }
 }

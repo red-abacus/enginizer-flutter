@@ -1,0 +1,36 @@
+import 'package:intl/intl.dart';
+
+class DateUtils {
+  static DateTime firstDayOfWeek(DateTime date) {
+    return date.subtract(new Duration(days: date.weekday));
+  }
+
+  static DateTime lastDayOfWeek(DateTime date) {
+    return date.add(new Duration(days: date.weekday));
+  }
+
+  static DateTime startOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day, 0);
+  }
+
+  static DateTime addDayToDate(DateTime date, int days) {
+    return date.add(new Duration(days: days));
+  }
+
+  static DateTime addHourToDate(DateTime date, int hour) {
+    return date.add(new Duration(hours: hour));
+  }
+
+  static String getWeekDayName(DateTime date) {
+    String formattedDate = DateFormat('EEE').format(date);
+    return formattedDate;
+  }
+
+  static DateTime dateFromString(String dateString, String format) {
+    return DateFormat(format).parse(dateString);
+  }
+
+  static String stringFromDate(DateTime date, String format) {
+    return DateFormat(format).format(date);
+  }
+}

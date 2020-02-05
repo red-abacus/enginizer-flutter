@@ -21,11 +21,9 @@ final appointmentDateTimeStateKey =
     new GlobalKey<AppointmentDateTimeFormState>();
 
 class AppointmentCreateModal extends StatefulWidget {
-  final List<ServiceItem> serviceItems;
   final Function createAppointment;
 
-  AppointmentCreateModal(
-      {this.serviceItems = const [], this.createAppointment});
+  AppointmentCreateModal({this.createAppointment});
 
   @override
   _AppointmentCreateModalState createState() => _AppointmentCreateModalState();
@@ -47,12 +45,15 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   RaisedButton btnNext;
 
   ProviderServiceProvider providerServiceProvider;
-  AppointmentsProvider appointmentProvider;
+  AppointmentsProvider appointmentsProvider;
 
   @override
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+    appointmentsProvider = Provider.of<AppointmentsProvider>(context);
+
     steps = _buildSteps(context);
+
     return FractionallySizedBox(
         heightFactor: .8,
         child: Container(
@@ -140,7 +141,9 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           title: _stepStateData[3]['active']
               ? Text(S.of(context).appointment_create_step4)
               : Text(''),
-          content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
+          content: AppointmentDateTimeForm(
+              key: appointmentDateTimeStateKey,
+              appointments: appointmentsProvider.appointments),
           state: _stepStateData[3]['state'])
     ];
   }

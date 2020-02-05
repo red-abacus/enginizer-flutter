@@ -1,19 +1,69 @@
-enum TimeEntryStatus { Free, Booked }
+import 'dart:collection';
 
-class TimeEntry {
-  String time;
-  TimeEntryStatus status;
+import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 
-  TimeEntry({this.time, this.status});
+enum DateEntryStatus { Free, Booked }
+
+class AppointmentTimeEntry {
+  static List<String> entriesFromAppointments(List<Appointment> appointments) {
+    List<String> entries = [];
+
+    for (Appointment appointment in appointments) {
+      if (!entries.contains(appointment.scheduleDateTime)) {
+        entries.add(appointment.scheduleDateTime);
+      }
+    }
+
+    return entries;
+  }
 }
 
 class DateEntry {
-  String date;
-  List<TimeEntry> timeSeries;
+  DateTime dateTime;
 
-  DateEntry({this.date, this.timeSeries});
+  DateEntry(this.dateTime);
+
+  String dateForAppointment() {
+    return DateUtils.stringFromDate(dateTime, Appointment.scheduledTimeFormat());
+  }
 }
 
-class TimeTableResponse {
-  List<DateEntry> dateEntries;
+class CalendarEntry {
+  DateTime dateTime;
+  List<DateEntry> entries = [];
+
+  CalendarEntry(this.dateTime);
+
+  static List<CalendarEntry> getDateEntries(
+      DateTime currentDate, List<Appointment> appointments) {
+    List<CalendarEntry> calendarEntries = [];
+
+    List<String> appointmentEntries =
+        AppointmentTimeEntry.entriesFromAppointments(appointments);
+
+    DateTime startDate =
+        DateUtils.addHourToDate(DateUtils.startOfDay(currentDate), 8);
+
+    for (int i = 0; i < 7; i++) {
+      CalendarEntry calendarEntry = CalendarEntry(startDate);
+
+      for (int j = 0; j < 9; j++) {
+        DateEntry dateEntry = DateEntry(startDate);
+
+        if (!appointmentEntries.contains(dateEntry.dateForAppointment())) {
+          calendarEntry.entries.add(dateEntry);
+        }
+
+        startDate = DateUtils.addHourToDate(startDate, 1);
+      }
+
+      calendarEntries.add(calendarEntry);
+
+      startDate = DateUtils.addHourToDate(
+          DateUtils.startOfDay(DateUtils.addDayToDate(startDate, 1)), 8);
+    }
+
+    return calendarEntries;
+  }
 }

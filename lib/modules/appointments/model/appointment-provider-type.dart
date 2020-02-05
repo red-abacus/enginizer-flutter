@@ -1,0 +1,4 @@
+enum AppointmentProviderType {
+  Specific,
+  Auction
+}

@@ -19,6 +19,7 @@ class AppointmentsProvider with ChangeNotifier {
   Future<List<Appointment>> loadAppointments() async {
     var response = await this.appointmentsService.getAppointments();
     _appointments = response.items;
+
     notifyListeners();
     return _appointments;
   }

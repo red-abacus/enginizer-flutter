@@ -12,6 +12,9 @@ class ProviderService {
   static const String PROVIDERS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers';
 
+  static const String APPOINTMENTS_PATH =
+      '${Environment.PROVIDERS_BASE_API}/providers';
+
   Dio _dio = inject<Dio>();
 
   ProviderService();

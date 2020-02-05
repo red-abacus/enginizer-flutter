@@ -1,25 +1,30 @@
+import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/scheduler_widget.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentDateTimeForm extends StatefulWidget {
-  AppointmentDateTimeForm({Key key}) : super(key: key);
+  List<Appointment> appointments;
+
+  AppointmentDateTimeForm({Key key, this.appointments}) : super(key: key);
 
   @override
   AppointmentDateTimeFormState createState() => AppointmentDateTimeFormState();
 }
 
 class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
+  ProviderServiceProvider providerServiceProvider;
+
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
+    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * .5,
       child: SchedulerWidget(
-        dateEntries: [
-          DateEntry(timeSeries: [
-            TimeEntry(time: 'lala', status: TimeEntryStatus.Free)
-          ], date: '02/02/2002')
-        ],
+        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
       ),
     );
   }

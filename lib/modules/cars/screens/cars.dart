@@ -79,6 +79,7 @@ class CarsState extends State<Cars> {
 
   void _openAppointmentCreateModal(BuildContext ctx, Car car) {
     Provider.of<ProviderServiceProvider>(context).loadServices();
+    Provider.of<AppointmentsProvider>(context).loadAppointments();
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -90,8 +91,6 @@ class CarsState extends State<Cars> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return AppointmentCreateModal(
-              serviceItems:
-                  Provider.of<ProviderServiceProvider>(context).serviceItems,
               createAppointment: _createAppointment,
             );
           });

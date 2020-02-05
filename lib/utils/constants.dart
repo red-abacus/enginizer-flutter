@@ -16,6 +16,9 @@ const Color yellow = Color(0xFFECE43C);
 const Color gray = Color(0xFF838383);
 const Color red = Color.fromRGBO(153, 0, 0, 1);
 
+const Color dark_gray= Color.fromRGBO(169, 169, 169, 1);
+const Color switch_dark_gray = Color.fromRGBO(70, 70, 72, 1);
+
 class Constants {
   static DateFormat time = new DateFormat("hh:mm");
   static DateFormat date = new DateFormat("dd/MM/yyyy");

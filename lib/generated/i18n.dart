@@ -32,7 +32,11 @@ class S implements WidgetsLocalizations {
   String get appointment_create_step1 => "Choose services";
   String get appointment_create_step2 => "Describe issues";
   String get appointment_create_step3 => "Select providers";
+  String get appointment_create_step3_specific => "Specific";
+  String get appointment_create_step3_bid => "Auction";
+  String get appointment_create_step3_alert => "In Auction mode, the services will bid to carry out your repairs";
   String get appointment_create_step4 => "Schedule appointment";
+  String get appointment_create_step2_alert => "Add the problems encountered wiht your car, one on the line";
   String get auth_email => "E-mail";
   String get auth_error_invalidEmail => "Email is not valid";
   String get auth_error_nameReuired => "Name is required!";
@@ -78,6 +82,7 @@ class S implements WidgetsLocalizations {
   String get general_add => "Add";
   String get general_back => "Back";
   String get general_continue => "Continue";
+  String get general_details => "DETAILS";
 }
 
 class $en extends S {
@@ -102,6 +107,14 @@ class $ro extends S {
   String get appointment_create_step4 => "Programează";
   @override
   String get appointment_create_step3 => "Alege furnizor";
+  @override
+  String get appointment_create_step3_specific => "Specific";
+  @override
+  String get appointment_create_step3_bid => "Licitatie";
+  @override
+  String get appointment_create_step3_alert => "In modul Licitatie, service-urile vor licita pentru a va efectua reparatiile";
+  @override
+  String get appointment_create_step2_alert => "Adaugati problemele intampinate cu masina, cate una pe linie.";
   @override
   String get general_continue => "Continuă";
   @override
@@ -204,6 +217,8 @@ class $ro extends S {
   String get cars_create_error_MileageEmpty => "Rulaj necompletat!";
   @override
   String get auth_login => "Login";
+  @override
+  String get general_details => "DETALII";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
