@@ -3,10 +3,8 @@ import 'package:enginizer_flutter/modules/appointments/enum/appointment.details.
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-details.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentDetails extends StatefulWidget {

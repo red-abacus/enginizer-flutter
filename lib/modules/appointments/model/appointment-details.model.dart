@@ -19,9 +19,9 @@ class AppointmentDetail {
   }
 
   static _mapIssuesList(List<dynamic> response) {
-    List<AppointmentType> appointmentTypes = [];
+    List<IssueItem> appointmentTypes = [];
     response.forEach((item) {
-      appointmentTypes.add(AppointmentType.fromJson(item));
+      appointmentTypes.add(IssueItem.fromJson(item));
     });
     return appointmentTypes;
   }

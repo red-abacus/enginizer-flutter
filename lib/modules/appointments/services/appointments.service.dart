@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
@@ -80,8 +79,8 @@ class AppointmentsService {
     }
   }
 
-  Future<AppointmentDetails> appointmentDetails(int appointmentId) async {
-    final response = await http.post(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString(),
+  Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
+    final response = await http.get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString(),
         headers: {
           Headers.contentTypeHeader: 'application/json', // set content-length
         });
@@ -89,7 +88,7 @@ class AppointmentsService {
     if (response.statusCode == 200) {
       Map<String, dynamic> parsed = jsonDecode(response.body);
 
-      return _mapAppointment(parsed);
+      return _mapAppointmentDetails(parsed);
     } else {
       // If that response was not OK, throw an error.
       throw Exception('CREATE_CAR_FAILED');
@@ -110,7 +109,7 @@ class AppointmentsService {
     return Appointment.fromJson(response);
   }
 
-  AppointmentDetails _mapAppointmentDetails(dynamic response) {
-    return AppointmentDetails.from
+  AppointmentDetail _mapAppointmentDetails(dynamic response) {
+    return AppointmentDetail.fromJson(response);
   }
 }

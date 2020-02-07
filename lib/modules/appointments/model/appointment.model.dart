@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
@@ -16,6 +17,7 @@ class Appointment {
   List<AppointmentType> appointmentTypes;
   OperatingUnit operatingUnit;
   AppointmentStatus status;
+  AppointmentDetail appointmentDetail;
 
   Appointment(
       {this.id,
