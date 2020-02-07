@@ -22,6 +22,10 @@ class AppointmentsService {
       '${Environment.API_BASE_URL}/api/providers/';
   static const String PROVIDER_TIMETABLE_SUFFIX = '/timetable';
 
+  static const String CANCEL_APPOINTMENT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String CANCEL_APPOINTMENT_SUFFIX = '/cancel';
+
   Dio _dio = inject<Dio>();
 
   AppointmentsService();
@@ -80,7 +84,8 @@ class AppointmentsService {
   }
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
-    final response = await http.get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString(),
+    final response = await http.get(
+        APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString(),
         headers: {
           Headers.contentTypeHeader: 'application/json', // set content-length
         });
@@ -111,5 +116,29 @@ class AppointmentsService {
 
   AppointmentDetail _mapAppointmentDetails(dynamic response) {
     return AppointmentDetail.fromJson(response);
+  }
+
+  Future<Appointment> cancelAppointment(int appointmentId) async {
+    final response = await http.patch(
+        buildCancelAppointmentPath(appointmentId),
+        headers: {
+          Headers.contentTypeHeader: 'application/json', // set content-length
+        });
+
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> parsed = jsonDecode(response.body);
+
+      return _mapAppointment(parsed);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('CANCEL_APPOINTMENT_FAILED');
+    }
+  }
+
+  String buildCancelAppointmentPath(int appointmentId) {
+    return CANCEL_APPOINTMENT_PREFIX +
+        appointmentId.toString() +
+        CANCEL_APPOINTMENT_SUFFIX;
   }
 }

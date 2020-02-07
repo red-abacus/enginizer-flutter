@@ -1,17 +1,23 @@
+
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:flutter/cupertino.dart';
 
+
 class AppointmentProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
   Appointment _selectedAppointment;
-  AppointmentDetail _appointmentDetail;
+  AppointmentDetail _selectedAppointmentDetail;
 
   Appointment get selectedAppointment {
     return _selectedAppointment;
+  }
+
+  AppointmentDetail get selectedAppointmentDetail {
+    return _selectedAppointmentDetail;
   }
 
   selectAppointment(Appointment appointment) {
@@ -20,7 +26,13 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   Future<AppointmentDetail> getAppointmentDetails(Appointment appointment) async {
-    _appointmentDetail = await this.appointmentsService.getAppointmentDetails(appointment.id);
-    return _appointmentDetail;
+    _selectedAppointmentDetail = await this.appointmentsService.getAppointmentDetails(appointment.id);
+    return _selectedAppointmentDetail;
+  }
+
+  Future<Appointment> cancelAppointment(Appointment appointment) async {
+    _selectedAppointment = await this.appointmentsService.cancelAppointment(appointment.id);
+    notifyListeners();
+    return _selectedAppointment;
   }
 }

@@ -37,6 +37,8 @@ class S implements WidgetsLocalizations {
   String get appointment_details_car => "Car";
   String get appointment_details_services_title => "Requested services";
   String get appointment_details_services_issues => "Reported issues";
+  String get appointment_details_services_appointment_date => "Appointment date";
+  String get appointment_details_services_appointment_cancel => "Cancel";
   String get appointments_list_search_hint => "Registration no. or car model";
   String get auth_email => "E-mail";
   String get auth_error_invalidEmail => "Email is not valid";
@@ -83,6 +85,7 @@ class S implements WidgetsLocalizations {
   String get general_add => "Add";
   String get general_back => "Back";
   String get general_continue => "Continue";
+  String get general_at => "at";
 }
 
 class $en extends S {
@@ -123,6 +126,10 @@ class $ro extends S {
   String get appointment_details_services_title => "Servicii solicitate:";
   @override
   String get appointment_details_services_issues => "Probleme raportate:";
+  @override
+  String get appointment_details_services_appointment_date => "Data programare";
+  @override
+  String get appointment_details_services_appointment_cancel => "Anulare";
   @override
   String get appointments_list_search_hint => "Numar de inmatriculare sau model autoturism";
   @override
@@ -219,6 +226,8 @@ class $ro extends S {
   String get cars_create_error_MileageEmpty => "Rulaj necompletat!";
   @override
   String get auth_login => "Login";
+  @override
+  String get general_at => "la";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

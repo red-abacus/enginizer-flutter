@@ -46,7 +46,7 @@ class AppointmentsState extends State<Appointments> {
         _isLoading = true;
       });
 
-      Provider.of<AppointmentsProvider>(context).loadAppointments().then((_) {
+      Provider.of<AppointmentsProvider>(context, listen: false).loadAppointments().then((_) {
         setState(() {
           _appointments = Provider
               .of<AppointmentsProvider>(context, listen: false)

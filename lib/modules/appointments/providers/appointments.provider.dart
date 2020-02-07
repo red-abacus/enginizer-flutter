@@ -16,6 +16,16 @@ class AppointmentsProvider with ChangeNotifier {
     return _appointments;
   }
 
+  void refreshAppointment(Appointment appointment) {
+    for (int i = 0; i < _appointments.length; i++) {
+      if (_appointments[i].id == appointment.id) {
+        _appointments[i] = appointment;
+//        notifyListeners();
+        break;
+      }
+    }
+  }
+
   Future<List<Appointment>> loadAppointments() async {
     var response = await this.appointmentsService.getAppointments();
     _appointments = response.items;
@@ -29,7 +39,8 @@ class AppointmentsProvider with ChangeNotifier {
   }
 
   Future<Appointment> createAppointment(Appointment appointment) async {
-    var newAppointment = await this.appointmentsService.createAppointment(appointment);
+    var newAppointment =
+        await this.appointmentsService.createAppointment(appointment);
     _appointments.add(newAppointment);
     notifyListeners();
     return newAppointment;
