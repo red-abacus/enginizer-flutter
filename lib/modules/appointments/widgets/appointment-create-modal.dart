@@ -50,6 +50,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
 
   @override
   Widget build(BuildContext context) {
+
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
     appointmentsProvider = Provider.of<AppointmentsProvider>(context);
 
@@ -169,7 +170,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         if (!appointmentIssuesStateKey.currentState.valid())
           return;
         else {
-          Provider.of<ProviderServiceProvider>(context).loadProviders();
+          Provider.of<ProviderServiceProvider>(context, listen: false).loadProviders();
           setState(() {
             _stepStateData[_currentStepIndex]['state'] = StepState.complete;
             _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;

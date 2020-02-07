@@ -1,8 +1,11 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
+import 'package:enginizer_flutter/modules/appointments/appointments.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
@@ -47,6 +50,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: ProviderServiceProvider()),
           ChangeNotifierProvider.value(value: AppointmentsProvider()),
           ChangeNotifierProvider.value(value: UserProvider())
+          ChangeNotifierProvider.value(value: AppointmentProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           authProvider.tryAutoLogin();
@@ -85,7 +89,9 @@ class AppState extends State<App> {
             routes: {
               '/auth': (context) => AuthScreen(),
               '/cars': (context) => Cars(),
-              '/cars/details': (context) => CarDetails()
+              '/cars/details': (context) => CarDetails(),
+              Appointments.route: (context) => Appointments(),
+              AppointmentDetails.route: (context) => AppointmentDetails()
             },
           );
         }));
