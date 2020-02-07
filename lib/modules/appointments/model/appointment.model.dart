@@ -1,5 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:intl/intl.dart';
 
@@ -17,15 +19,14 @@ class Appointment {
   OperatingUnit operatingUnit;
   AppointmentStatus status;
 
-  Appointment(
-      {this.id,
-      this.date,
-      this.createdDate,
-      this.scheduleDateTime,
-      this.car,
-      this.appointmentTypes,
-      this.operatingUnit,
-      this.status});
+  Appointment({this.id,
+    this.date,
+    this.createdDate,
+    this.scheduleDateTime,
+    this.car,
+    this.appointmentTypes,
+    this.operatingUnit,
+    this.status});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -62,7 +63,7 @@ class Appointment {
       'scheduleDateTime': scheduleDateTime,
       'car': car.toJson(),
       'appointmentTypes':
-          appointmentTypes.map((appointmentType) => appointmentType.toJson()),
+      appointmentTypes.map((appointmentType) => appointmentType.toJson()),
       'operatingUnit': operatingUnit.toJson(),
       'status': status.toJson()
     };

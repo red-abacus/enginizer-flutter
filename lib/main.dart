@@ -4,6 +4,7 @@ import 'package:enginizer_flutter/layout/navigation.app.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
@@ -44,10 +45,13 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: CarProvider()),
           ChangeNotifierProvider.value(value: CarsMakeProvider()),
           ChangeNotifierProvider.value(value: ProviderServiceProvider()),
-          ChangeNotifierProvider.value(value: AppointmentsProvider())
+          ChangeNotifierProvider.value(value: AppointmentsProvider()),
+          ChangeNotifierProvider.value(value: UserProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           authProvider.tryAutoLogin();
+          Provider.of<UserProvider>(context, listen: false).getLoggedUserCredentials();
+
           return MaterialApp(
             home: authProvider.isAuth ? NavigationApp() : AuthScreen(),
             theme: ThemeData(

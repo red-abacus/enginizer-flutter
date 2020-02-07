@@ -1,3 +1,5 @@
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+
 class ServiceProvider {
   int id;
   String name;
@@ -8,6 +10,8 @@ class ServiceProvider {
   String profilePhotoUrl;
   String registrationNumber;
   String image;
+
+  List<ServiceProviderItem> items = [];
 
   ServiceProvider(
       {this.id,

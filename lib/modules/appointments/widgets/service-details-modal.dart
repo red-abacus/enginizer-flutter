@@ -1,28 +1,21 @@
-import 'package:enginizer_flutter/modules/appointments/model/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/cars/widgets/details/car-details-widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-details-widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CarDetailsModal extends StatefulWidget {
+class ServiceDetailsModal extends StatefulWidget {
   @override
-  _CarDetailsModalState createState() => _CarDetailsModalState();
+  _ServiceDetailsModalState createState() => _ServiceDetailsModalState();
 
   ServiceProvider serviceProvider;
 
-  CarDetailsModal(this.serviceProvider);
+  ServiceDetailsModal(this.serviceProvider);
 }
 
-class _CarDetailsModalState extends State<CarDetailsModal> {
+class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: 2.0,
-      child: _buildContent(widget.serviceProvider),
-    );
-  }
-
-  Widget _buildContent(ServiceProvider serviceProvider) {
     return ClipRRect(
       borderRadius: new BorderRadius.circular(5.0),
       child: Container(
@@ -35,7 +28,7 @@ class _CarDetailsModalState extends State<CarDetailsModal> {
           data: ThemeData(
               accentColor: Theme.of(context).primaryColor,
               primaryColor: Theme.of(context).primaryColor),
-          child: CarDetailsWidget(serviceProvider),
+          child: ServiceDetailsWidget(widget.serviceProvider),
         ),
       ),
     );

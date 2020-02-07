@@ -1,8 +1,8 @@
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/cars/widgets/car-details-modal.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert.info.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -191,12 +191,15 @@ class AppointmentCreateProvidersFormState
                             fontFamily: "Lato"),
                       ),
                       onPressed: () {
+                        Provider.of<ProviderServiceProvider>(context).loadProviderServices(currentService);
+
                         showModalBottomSheet(
+                          isScrollControlled: true,
                             context: context,
                             builder: (_) {
                               return StatefulBuilder(builder:
                                   (BuildContext context, StateSetter state) {
-                                return CarDetailsModal(currentService);
+                                return ServiceDetailsModal(currentService);
                               });
                             });
                       }),

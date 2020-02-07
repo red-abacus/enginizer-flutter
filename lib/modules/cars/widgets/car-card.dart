@@ -82,7 +82,6 @@ class CarCard extends StatelessWidget {
                       splashColor: Theme.of(context).primaryColor,
                       onPressed: () =>
                       {
-                        print("test ?"),
                         this.openAppointmentCreateModal(context, this.car)
                       },
                       child: Text('SCHEDULE',

@@ -22,10 +22,7 @@ class AppointmentCreateServicesFormState
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
 
     List<ServiceItem> services = widget.serviceItems;
-    for (int i = 0; i < services.length; i++) {
-      providerServiceProvider.providerServiceFormState
-          .putIfAbsent(services[i].name.toString(), () => false);
-    }
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * .5,
       child: ListView.builder(
@@ -36,9 +33,9 @@ class AppointmentCreateServicesFormState
           return CheckboxListTile(
             title: Text(serviceName),
             value:
-                providerServiceProvider.providerServiceFormState[serviceName],
+                providerServiceProvider.selectedServiceItems.contains(services[index]),
             onChanged: (bool value) {
-              onChanged(serviceName, value);
+              onChanged(services[index], value);
             },
           );
         },
@@ -47,15 +44,22 @@ class AppointmentCreateServicesFormState
     );
   }
 
-  ValueChanged<bool> onChanged(String serviceName, bool value) {
+  ValueChanged<bool> onChanged(ServiceItem serviceItem, bool value) {
     setState(() {
-      providerServiceProvider.providerServiceFormState[serviceName] = value;
+      if (value) {
+        if (!providerServiceProvider.selectedServiceItems.contains(serviceItem)) {
+          providerServiceProvider.selectedServiceItems.add(serviceItem);
+        }
+      }
+      else {
+        if (providerServiceProvider.selectedServiceItems.contains(serviceItem)) {
+          providerServiceProvider.selectedServiceItems.remove(serviceItem);
+        }
+      }
     });
   }
 
   bool valid() {
-    for (bool checked in providerServiceProvider
-        .providerServiceFormState.values) if (checked) return true;
-    return false;
+    return providerServiceProvider.selectedServiceItems.length > 0;
   }
 }

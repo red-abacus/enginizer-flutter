@@ -30,18 +30,23 @@ class Auth with ChangeNotifier {
     _token = null;
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
+    prefs.remove("email");
     prefs.clear();
     notifyListeners();
   }
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
+
     if (!prefs.containsKey('token')) {
       return false;
     }
+
     _token = prefs.getString('token');
 
+    // TODO - autologins generate multiple screen refresh and multiple downloads for different models. This needs to be repaired.
     notifyListeners();
+
     return true;
   }
 
@@ -51,6 +56,7 @@ class Auth with ChangeNotifier {
       _token = response.token;
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
+      prefs.setString("email", email);
       notifyListeners();
       return response;
     } catch (error) {
@@ -70,6 +76,7 @@ class Auth with ChangeNotifier {
       _token = response.token;
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
+      prefs.setString("email", email);
       notifyListeners();
       return response;
     } catch (error) {

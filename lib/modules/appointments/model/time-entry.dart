@@ -58,7 +58,9 @@ class CalendarEntry {
         startDate = DateUtils.addHourToDate(startDate, 1);
       }
 
-      calendarEntries.add(calendarEntry);
+      if (calendarEntry.entries.length > 0) {
+        calendarEntries.add(calendarEntry);
+      }
 
       startDate = DateUtils.addHourToDate(
           DateUtils.startOfDay(DateUtils.addDayToDate(startDate, 1)), 8);

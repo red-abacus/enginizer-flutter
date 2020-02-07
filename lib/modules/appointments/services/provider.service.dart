@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:http/http.dart' as http;
 
 class ProviderService {
   static const String SERVICES_PATH =
@@ -14,6 +18,10 @@ class ProviderService {
 
   static const String APPOINTMENTS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers';
+
+  static const String PROVIDER_SCHEDULE_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String PROVIDER_SCHEDULE_SUFFIX = "/schedule";
 
   Dio _dio = inject<Dio>();
 
@@ -57,5 +65,34 @@ class ProviderService {
   _mapProviders(Map<String, dynamic> commingServices) {
     var response = ServiceProviderResponse.fromJson(commingServices);
     return response;
+  }
+
+  // Get Provider Schedules
+
+  Future<List<ServiceProviderSchedule>> getProviderSchedules(int providerId) async {
+    final response =
+    await http.get(buildProviderSchedulesPath(providerId));
+
+    if (response.statusCode == 200) {
+      List parsed = jsonDecode(response.body);
+      return _mapProviderSchedules(parsed);
+    } else
+      throw Exception('PROVIDER_SERVICES_FAILED');
+  }
+
+  String buildProviderSchedulesPath(int providerId) {
+    return PROVIDER_SCHEDULE_PREFIX +
+        providerId.toString() +
+        PROVIDER_SCHEDULE_SUFFIX;
+  }
+
+  List<ServiceProviderSchedule> _mapProviderSchedules(List response) {
+    List<ServiceProviderSchedule> list = [];
+
+    for(Map<String, dynamic> item in response) {
+      list.add(ServiceProviderSchedule.fromJson(item));
+    }
+
+    return list;
   }
 }

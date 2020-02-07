@@ -4,7 +4,9 @@ import 'package:enginizer_flutter/modules/appointments/providers/provider-servic
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/services/auth.service.dart';
+import 'package:enginizer_flutter/modules/authentication/services/user.service.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
 import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
 import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
@@ -21,9 +23,11 @@ void setupDependencyInjection() {
   inject.registerLazySingleton(() => CarService());
   inject.registerLazySingleton(() => AppointmentsService());
   inject.registerLazySingleton(() => ProviderService());
+  inject.registerLazySingleton(() => UserService());
 
   inject.registerFactory(() => Auth());
   inject.registerFactory(() => CarsMakeProvider());
   inject.registerFactory(() => ProviderServiceProvider());
   inject.registerFactory(() => AppointmentsProvider());
+  inject.registerFactory(() => UserProvider());
 }

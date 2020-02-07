@@ -83,6 +83,13 @@ class S implements WidgetsLocalizations {
   String get general_back => "Back";
   String get general_continue => "Continue";
   String get general_details => "DETAILS";
+  // TODO - Need proper translation
+  String get service_services => "Services";
+  String get service_reviews => "Reviews";
+  // TODO - Need proper translation
+  String get service_fiscal => "Fiscal info";
+  // TODO - Need proper translation
+  String get service_promotions => "Promotions";
 }
 
 class $en extends S {
@@ -130,6 +137,13 @@ class $ro extends S {
   @override
   String get SERVICE => "Servisare";
   @override
+  String get service_services => "Servicii";
+  @override
+  String get service_reviews => "Recenzii";
+  @override
+  String get service_fiscal => "Date fiscale";
+  @override
+  String get service_promotions => "Promotii";
   String get cars_create_registrationNumber => "Număr înmatriculare";
   @override
   String get general_back => "Înapoi";

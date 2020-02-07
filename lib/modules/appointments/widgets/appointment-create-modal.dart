@@ -1,12 +1,13 @@
 import 'package:enginizer_flutter/generated/i18n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-services.form.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
+import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -182,6 +183,9 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         if (!appointmentShopsStateKey.currentState.valid())
           return;
         else {
+          ProviderServiceProvider provider = Provider.of<ProviderServiceProvider>(context);
+          provider.loadProviderSchedules(provider.selectedProvider);
+
           setState(() {
             _stepStateData[_currentStepIndex]['state'] = StepState.complete;
             _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
@@ -230,8 +234,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   }
 
   _submit() {
-    var appointment = Appointment();
-
-    widget.createAppointment(appointment);
+    AppointmentRequest appointmentRequest =
+        AppointmentRequest(providerServiceProvider);
+    widget.createAppointment(appointmentRequest);
   }
 }

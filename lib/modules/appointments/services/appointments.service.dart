@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +22,10 @@ class AppointmentsService {
   static const String PROVIDER_TIMETABLE_PREFIX =
       '${Environment.API_BASE_URL}/api/providers/';
   static const String PROVIDER_TIMETABLE_SUFFIX = '/timetable';
+
+  static const String PROVIDER_SERVICES_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String PROVIDER_SERVICES_SUFFIX = "/services";
 
   Dio _dio = inject<Dio>();
 
@@ -44,6 +52,12 @@ class AppointmentsService {
         PROVIDER_TIMETABLE_SUFFIX;
   }
 
+  String buildProviderServicesPath(int providerId) {
+    return PROVIDER_SERVICES_PREFIX +
+        providerId.toString() +
+        PROVIDER_SERVICES_SUFFIX;
+  }
+
   Future<List<ServiceItem>> getServices() async {
     final response = await _dio.get('$SERVICES_PATH');
 
@@ -57,37 +71,52 @@ class AppointmentsService {
     }
   }
 
-  Future<Appointment> createAppointment(Appointment appointment) async {
-    print(appointment.toJson());
-    final response = await http.post(APPOINTMENTS_API_PATH,
-        body: jsonEncode(appointment.toJson()),
-        headers: {
-          Headers.contentTypeHeader: 'application/json', // set content-length
-        });
-
-    if (response.statusCode == 201) {
-      // If server returns an OK response, parse the JSON.
-
-      Map<String, dynamic> parsed = jsonDecode(response.body);
-
-      return _mapAppointment(parsed);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('CREATE_CAR_FAILED');
-    }
-  }
-
-  Future<List<DateEntry>> scheduleItems(providerId) async {
-    final response = await _dio.get(buildProviderTimetablePath(providerId));
-  }
-
   List<ServiceItem> _mapServices(List<dynamic> brands) {
     List<ServiceItem> serviceList = [];
     brands.forEach((brnd) => serviceList.add(ServiceItem.fromJson(brnd)));
     return serviceList;
   }
 
+  Future<ServiceProviderItemsResponse> getServiceProviderItems(
+      ServiceProvider serviceProvider) async {
+    final response =
+        await http.get(buildProviderServicesPath(serviceProvider.id));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> parsed = jsonDecode(response.body);
+      return _mapServiceProviderItems(parsed);
+    } else
+      throw Exception('PROVIDER_SERVICES_FAILED');
+  }
+
+  ServiceProviderItemsResponse _mapServiceProviderItems(
+      Map<String, dynamic> response) {
+    return ServiceProviderItemsResponse.fromJson(response);
+  }
+
+  Future<Appointment> createAppointment(
+      AppointmentRequest appointmentRequest) async {
+    final response = await http.post(APPOINTMENTS_API_PATH,
+        body: jsonEncode(appointmentRequest.toJson()),
+        headers: {
+          Headers.contentTypeHeader: 'application/json', // set content-length
+        });
+
+    if (response.statusCode == 201) {
+      Map<String, dynamic> parsed = jsonDecode(response.body);
+
+      return _mapAppointment(parsed);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('CREATE_APPOINTMENT_FAILED');
+    }
+  }
+
   Appointment _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
+  }
+
+  Future<List<DateEntry>> scheduleItems(providerId) async {
+    final response = await _dio.get(buildProviderTimetablePath(providerId));
   }
 }

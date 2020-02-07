@@ -1,7 +1,9 @@
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
+import 'package:enginizer_flutter/modules/authentication/models/user-credentials.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user-type.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';

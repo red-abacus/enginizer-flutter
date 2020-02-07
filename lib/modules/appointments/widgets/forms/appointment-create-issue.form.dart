@@ -22,6 +22,7 @@ class AppointmentCreateIssueFormState
   @override
   Widget build(BuildContext context) {
     var providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+
     var issues = providerServiceProvider.issuesFormState;
     return Form(
         key: _formKey,
