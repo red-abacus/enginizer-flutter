@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal.dart';
@@ -80,8 +81,6 @@ class CarsState extends State<Cars> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
                 return AppointmentCreateModal(
-                  serviceItems:
-                  Provider.of<ProviderServiceProvider>(context, listen: false).serviceItems,
                   createAppointment: _createAppointment,
                 );
               });
@@ -106,9 +105,9 @@ class CarsState extends State<Cars> {
       Navigator.pop(context);
     });
   }
-  _createAppointment(Appointment appointment) {
+  _createAppointment(AppointmentRequest appointmentRequest) {
     Provider.of<AppointmentsProvider>(context)
-        .createAppointment(appointment)
+        .createAppointment(appointmentRequest)
         .then((_) {
       Navigator.pop(context);
     });

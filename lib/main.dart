@@ -49,7 +49,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: CarsMakeProvider()),
           ChangeNotifierProvider.value(value: ProviderServiceProvider()),
           ChangeNotifierProvider.value(value: AppointmentsProvider()),
-          ChangeNotifierProvider.value(value: UserProvider())
+          ChangeNotifierProvider.value(value: UserProvider()),
           ChangeNotifierProvider.value(value: AppointmentProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {

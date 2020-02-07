@@ -23,7 +23,7 @@ class AppointmentCreateIssueFormState
   Widget build(BuildContext context) {
 
     var providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
-    var issues = providerServiceProvider.isswuesFormState;
+    var issues = providerServiceProvider.issuesFormState;
     return Form(
         key: _formKey,
         child: Column(
