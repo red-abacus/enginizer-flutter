@@ -19,7 +19,7 @@ class AppointmentCreateServicesFormState
 
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+    providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
     List<ServiceItem> services = widget.serviceItems;
     for (int i = 0; i < services.length; i++) {
       providerServiceProvider.providerServiceFormState

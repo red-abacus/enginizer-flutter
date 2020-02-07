@@ -22,7 +22,7 @@ class AppointmentCreateProvidersFormState
 
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+    providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
     var providers = providerServiceProvider.serviceProviders;
     return SizedBox(
       height: MediaQuery.of(context).size.height * .5,

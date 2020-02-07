@@ -33,6 +33,11 @@ class S implements WidgetsLocalizations {
   String get appointment_create_step2 => "Describe issues";
   String get appointment_create_step3 => "Select providers";
   String get appointment_create_step4 => "Schedule appointment";
+  String get appointment_details_request => "Request";
+  String get appointment_details_car => "Car";
+  String get appointment_details_services_title => "Requested services";
+  String get appointment_details_services_issues => "Reported issues";
+  String get appointments_list_search_hint => "Registration no. or car model";
   String get auth_email => "E-mail";
   String get auth_error_invalidEmail => "Email is not valid";
   String get auth_error_nameReuired => "Name is required!";
@@ -110,6 +115,16 @@ class $ro extends S {
   String get appointment_create_step2 => "Descrie probleme";
   @override
   String get appointment_create_step1 => "Alege servicii";
+  @override
+  String get appointment_details_request => "Solicitare";
+  @override
+  String get appointment_details_car => "Autoturism";
+  @override
+  String get appointment_details_services_title => "Servicii solicitate:";
+  @override
+  String get appointment_details_services_issues => "Probleme raportate:";
+  @override
+  String get appointments_list_search_hint => "Numar de inmatriculare sau model autoturism";
   @override
   String get cars_create_selectYear => "Alege an";
   @override

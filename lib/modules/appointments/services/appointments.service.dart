@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
@@ -12,6 +14,8 @@ import 'package:http/http.dart' as http;
 class AppointmentsService {
   static const String APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
+  static const String APPOINTMENTS_DETAILS_API_PATH =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String SERVICES_PATH = '${Environment.API_BASE_URL}/services';
   static const String TIMETABLE_PATH =
       '${Environment.API_BASE_URL}/providers/timetable';
@@ -58,7 +62,6 @@ class AppointmentsService {
   }
 
   Future<Appointment> createAppointment(Appointment appointment) async {
-    print(appointment.toJson());
     final response = await http.post(APPOINTMENTS_API_PATH,
         body: jsonEncode(appointment.toJson()),
         headers: {
@@ -68,6 +71,22 @@ class AppointmentsService {
     if (response.statusCode == 201) {
       // If server returns an OK response, parse the JSON.
 
+      Map<String, dynamic> parsed = jsonDecode(response.body);
+
+      return _mapAppointment(parsed);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('CREATE_CAR_FAILED');
+    }
+  }
+
+  Future<AppointmentDetails> appointmentDetails(int appointmentId) async {
+    final response = await http.post(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString(),
+        headers: {
+          Headers.contentTypeHeader: 'application/json', // set content-length
+        });
+
+    if (response.statusCode == 200) {
       Map<String, dynamic> parsed = jsonDecode(response.body);
 
       return _mapAppointment(parsed);
@@ -89,5 +108,9 @@ class AppointmentsService {
 
   Appointment _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
+  }
+
+  AppointmentDetails _mapAppointmentDetails(dynamic response) {
+    return AppointmentDetails.from
   }
 }

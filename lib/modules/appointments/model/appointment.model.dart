@@ -73,4 +73,23 @@ class Appointment {
 
     return propMap;
   }
+
+  bool filtered(String value) {
+    var filtered = false;
+
+    if (car != null) {
+      if (car.model != null) {
+        if (car.model.name != null) {
+          filtered = car.model.name.toLowerCase().contains(value.toLowerCase());
+        }
+      }
+
+      if (car.registrationNumber != null) {
+        filtered = filtered ||
+            car.registrationNumber.toLowerCase().contains(value.toLowerCase());
+      }
+    }
+
+    return filtered;
+  }
 }
