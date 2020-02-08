@@ -1,11 +1,11 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
-import 'package:enginizer_flutter/modules/appointments/appointments.dart';
+import 'package:enginizer_flutter/modules/appointments/screens/appointments.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
+import 'package:enginizer_flutter/modules/appointments/screens/appointment-details.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';

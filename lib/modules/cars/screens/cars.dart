@@ -90,9 +90,8 @@ class CarsState extends State<Cars> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return AppointmentCreateModal(
-              serviceItems:
-                  Provider.of<ProviderServiceProvider>(context, listen: false).serviceItems,
-              createAppointment: _createAppointment,
+              _createAppointment,
+              false,
             );
           });
         });

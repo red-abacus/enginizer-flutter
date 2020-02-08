@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/appointments.dart';
+import 'package:enginizer_flutter/modules/appointments/screens/appointments.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:flutter/material.dart';

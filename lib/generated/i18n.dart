@@ -29,6 +29,7 @@ class S implements WidgetsLocalizations {
   String get TOW_SERVICE => "Toeing";
   String get appointment_create_error_issueCannotBeEmpty => "Issue cannot be empty";
   String get appointment_create_issues => "Add issue";
+  String get appointment_create_step0 => "Select car";
   String get appointment_create_step1 => "Choose services";
   String get appointment_create_step2 => "Describe issues";
   String get appointment_create_step3 => "Select providers";
@@ -116,6 +117,8 @@ class $ro extends S {
   String get cars_create_error_vinEmpty => "VIN necompletat!";
   @override
   String get appointment_create_step2 => "Descrie probleme";
+  @override
+  String get appointment_create_step0 => "Alege masina";
   @override
   String get appointment_create_step1 => "Alege servicii";
   @override
