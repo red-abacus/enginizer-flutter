@@ -21,7 +21,7 @@ const Color gray_80 = Color.fromRGBO(70, 70, 72, 0.4);
 
 const Color red = Color.fromRGBO(153, 0, 0, 1);
 
-const Color dark_gray= Color.fromRGBO(169, 169, 169, 1);
+const Color dark_gray = Color.fromRGBO(169, 169, 169, 1);
 const Color switch_dark_gray = Color.fromRGBO(70, 70, 72, 1);
 
 class Constants {

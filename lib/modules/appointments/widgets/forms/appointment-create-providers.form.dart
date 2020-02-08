@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class AppointmentCreateProvidersForm extends StatefulWidget {
   AppointmentCreateProvidersForm({Key key}) : super(key: key);
+
   @override
   AppointmentCreateProvidersFormState createState() {
     return AppointmentCreateProvidersFormState();
@@ -20,6 +21,7 @@ class AppointmentCreateProvidersForm extends StatefulWidget {
 class AppointmentCreateProvidersFormState
     extends State<AppointmentCreateProvidersForm> {
   ProviderServiceProvider providerServiceProvider;
+
   @override
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
@@ -105,6 +107,7 @@ class AppointmentCreateProvidersFormState
   Widget _buildListItem(int index, List<ServiceProvider> providers) {
     var currentService = providers[index];
     return LayoutBuilder(builder: (context, constraints) {
+      const double LIST_ITEM_SELECTION_WIDTH = 7;
       return Container(
         margin: EdgeInsets.only(bottom: 10),
         child: Material(
@@ -121,17 +124,6 @@ class AppointmentCreateProvidersFormState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  if (providerServiceProvider.selectedProvider ==
-                      currentService)
-                    new Container(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Theme.of(context).accentColor,
-                        size: 24.0,
-                        semanticLabel: 'Selected provider check',
-                      ),
-                    ),
                   Image.network(
                     '${currentService.image}',
                     fit: BoxFit.fitHeight,
@@ -199,6 +191,19 @@ class AppointmentCreateProvidersFormState
                               });
                             });
                       }),
+                  Container(
+                    width: LIST_ITEM_SELECTION_WIDTH,
+                    child: Column(
+                      children: [
+                        if (providerServiceProvider.selectedProvider ==
+                            currentService)
+                          Container(
+                            height: 100,
+                            color: Theme.of(context).accentColor,
+                          )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

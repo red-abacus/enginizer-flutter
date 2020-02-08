@@ -18,14 +18,12 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
   ProviderServiceProvider providerServiceProvider;
 
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * .5,
-      child: SchedulerWidget(
-        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
-      ),
+    return SchedulerWidget(
+      calendarEntries:
+          CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
     );
   }
 
