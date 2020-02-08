@@ -3,11 +3,12 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-provide
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/alert.info.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class AppointmentCreateProvidersForm extends StatefulWidget {
   AppointmentCreateProvidersForm({Key key}) : super(key: key);
   @override
@@ -15,6 +16,7 @@ class AppointmentCreateProvidersForm extends StatefulWidget {
     return AppointmentCreateProvidersFormState();
   }
 }
+
 class AppointmentCreateProvidersFormState
     extends State<AppointmentCreateProvidersForm> {
   ProviderServiceProvider providerServiceProvider;
@@ -70,6 +72,7 @@ class AppointmentCreateProvidersFormState
       ],
     );
   }
+
   Widget _containerWidget() {
     if (providerServiceProvider.appointmentProviderType ==
         AppointmentProviderType.Specific) {
@@ -98,6 +101,7 @@ class AppointmentCreateProvidersFormState
           )),
     );
   }
+
   Widget _buildListItem(int index, List<ServiceProvider> providers) {
     var currentService = providers[index];
     return LayoutBuilder(builder: (context, constraints) {
@@ -183,7 +187,8 @@ class AppointmentCreateProvidersFormState
                             fontFamily: "Lato"),
                       ),
                       onPressed: () {
-                        Provider.of<ProviderServiceProvider>(context).loadProviderServices(currentService);
+                        Provider.of<ProviderServiceProvider>(context)
+                            .loadProviderServices(currentService);
                         showModalBottomSheet(
                             isScrollControlled: true,
                             context: context,
@@ -202,6 +207,7 @@ class AppointmentCreateProvidersFormState
       );
     });
   }
+
   _selectService(ServiceProvider currentService) {
     setState(() {
       if (providerServiceProvider.selectedProvider == currentService) {
@@ -211,6 +217,7 @@ class AppointmentCreateProvidersFormState
       }
     });
   }
+
   bool valid() {
     return providerServiceProvider.selectedProvider != null ||
         providerServiceProvider.appointmentProviderType ==
