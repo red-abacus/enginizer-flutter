@@ -1,12 +1,12 @@
+import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'model/appointment.model.dart';
-import 'widgets/appointments-list.dart';
+import 'widgets/appointments-list.widget.dart';
 
 class Appointments extends StatefulWidget {
   static const String route = '/appointments';
@@ -30,12 +30,11 @@ class AppointmentsState extends State<Appointments> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppointmentsProvider>(
-      builder: (context, appointmentsProvider, _) =>
-          Scaffold(
-            body: Center(
-              child: _renderAppointments(_isLoading, _appointments),
-            ),
-          ),
+      builder: (context, appointmentsProvider, _) => Scaffold(
+        body: Center(
+          child: _renderAppointments(_isLoading, _appointments),
+        ),
+      ),
     );
   }
 
@@ -48,9 +47,9 @@ class AppointmentsState extends State<Appointments> {
 
       Provider.of<AppointmentsProvider>(context).loadAppointments().then((_) {
         setState(() {
-          _appointments = Provider
-              .of<AppointmentsProvider>(context, listen: false)
-              .appointments;
+          _appointments =
+              Provider.of<AppointmentsProvider>(context, listen: false)
+                  .appointments;
           _isLoading = false;
         });
       });
@@ -69,26 +68,24 @@ class AppointmentsState extends State<Appointments> {
   void _filterAppointments(String value) {
     setState(() {
       List<Appointment> appointments =
-          Provider
-              .of<AppointmentsProvider>(context, listen: false)
+          Provider.of<AppointmentsProvider>(context, listen: false)
               .appointments;
 
       if (value.isEmpty) {
         _appointments = appointments;
-      }
-      else {
-        _appointments = appointments.where((item) =>
-            item.filtered(value)).toList();
+      } else {
+        _appointments =
+            appointments.where((item) => item.filtered(value)).toList();
       }
     });
   }
 
-  _renderAppointments(bool _isLoading, List <Appointment> appointments) {
+  _renderAppointments(bool _isLoading, List<Appointment> appointments) {
     return _isLoading
         ? CircularProgressIndicator()
         : AppointmentsList(
-        appointments: appointments,
-        selectAppointment: _selectAppointment,
-        filterAppointments: _filterAppointments);
+            appointments: appointments,
+            selectAppointment: _selectAppointment,
+            filterAppointments: _filterAppointments);
   }
 }

@@ -29,7 +29,7 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
         calendarEntry.dateTime.month == now.month &&
         calendarEntry.dateTime.day == now.day;
 
-    Color background = (isToday ? Constants.light_green : Constants.dark_green);
+    Color background = (isToday ? Constants.darker_gray : Constants.light_gray);
 
     return new Container(
       padding: EdgeInsets.all(5),

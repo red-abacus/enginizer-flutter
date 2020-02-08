@@ -4,7 +4,7 @@ import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'appointment-card.dart';
+import 'appointment-card.widget.dart';
 
 class AppointmentsList extends StatelessWidget {
   List<Appointment> appointments = [];
@@ -12,7 +12,8 @@ class AppointmentsList extends StatelessWidget {
   Function selectAppointment;
   Function filterAppointments;
 
-  AppointmentsList({this.appointments, this.selectAppointment, this.filterAppointments});
+  AppointmentsList(
+      {this.appointments, this.selectAppointment, this.filterAppointments});
 
   @override
   Widget build(BuildContext context) {

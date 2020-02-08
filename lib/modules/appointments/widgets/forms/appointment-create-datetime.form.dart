@@ -1,7 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/scheduler_widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/scheduler.widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
