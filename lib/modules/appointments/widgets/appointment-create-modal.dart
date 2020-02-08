@@ -13,13 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final appointmentServicesStateKey =
-    new GlobalKey<AppointmentCreateServicesFormState>();
+new GlobalKey<AppointmentCreateServicesFormState>();
 final appointmentIssuesStateKey =
-    new GlobalKey<AppointmentCreateIssueFormState>();
+new GlobalKey<AppointmentCreateIssueFormState>();
 final appointmentShopsStateKey =
-    new GlobalKey<AppointmentCreateProvidersFormState>();
+new GlobalKey<AppointmentCreateProvidersFormState>();
 final appointmentDateTimeStateKey =
-    new GlobalKey<AppointmentDateTimeFormState>();
+new GlobalKey<AppointmentDateTimeFormState>();
 
 class AppointmentCreateModal extends StatefulWidget {
   final Function createAppointment;
@@ -63,51 +63,51 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   }
 
   Widget _buildStepper(BuildContext context) => ClipRRect(
-        borderRadius: new BorderRadius.circular(5.0),
-        child: Container(
-          decoration: new BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(40.0),
-                  topRight: const Radius.circular(40.0))),
-          child: Theme(
-            data: ThemeData(
-                accentColor: Theme.of(context).primaryColor,
-                primaryColor: Theme.of(context).primaryColor),
-            child: Stepper(
-                currentStep: _currentStepIndex,
-                onStepContinue: _next,
-                onStepCancel: _back,
-                onStepTapped: (step) => _goTo(step),
-                type: StepperType.horizontal,
-                steps: steps,
-                controlsBuilder: (BuildContext context,
-                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-                  return Row(
-                    children: <Widget>[
-                      SizedBox(height: 70),
-                      btnPrev = FlatButton(
-                        child: Text(S.of(context).general_back),
-                        onPressed: onStepCancel,
-                      ),
-                      btnNext = RaisedButton(
-                        elevation: 0,
-                        child: isLastStep
-                            ? Text(S.of(context).general_add)
-                            : Text(S.of(context).general_continue),
-                        textColor: Theme.of(context).cardColor,
-                        onPressed: onStepContinue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        color: Theme.of(context).primaryColor,
-                      )
-                    ],
-                  );
-                }),
-          ),
-        ),
-      );
+    borderRadius: new BorderRadius.circular(5.0),
+    child: Container(
+      decoration: new BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: new BorderRadius.only(
+              topLeft: const Radius.circular(40.0),
+              topRight: const Radius.circular(40.0))),
+      child: Theme(
+        data: ThemeData(
+            accentColor: Theme.of(context).primaryColor,
+            primaryColor: Theme.of(context).primaryColor),
+        child: Stepper(
+            currentStep: _currentStepIndex,
+            onStepContinue: _next,
+            onStepCancel: _back,
+            onStepTapped: (step) => _goTo(step),
+            type: StepperType.horizontal,
+            steps: steps,
+            controlsBuilder: (BuildContext context,
+                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+              return Row(
+                children: <Widget>[
+                  SizedBox(height: 70),
+                  btnPrev = FlatButton(
+                    child: Text(S.of(context).general_back),
+                    onPressed: onStepCancel,
+                  ),
+                  btnNext = RaisedButton(
+                    elevation: 0,
+                    child: isLastStep
+                        ? Text(S.of(context).general_add)
+                        : Text(S.of(context).general_continue),
+                    textColor: Theme.of(context).cardColor,
+                    onPressed: onStepContinue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                  )
+                ],
+              );
+            }),
+      ),
+    ),
+  );
 
   List<Step> _buildSteps(BuildContext context) {
     return [
@@ -183,9 +183,6 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         if (!appointmentShopsStateKey.currentState.valid())
           return;
         else {
-          ProviderServiceProvider provider = Provider.of<ProviderServiceProvider>(context);
-          provider.loadProviderSchedules(provider.selectedProvider);
-
           setState(() {
             _stepStateData[_currentStepIndex]['state'] = StepState.complete;
             _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
@@ -234,8 +231,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   }
 
   _submit() {
-    AppointmentRequest appointmentRequest =
-        AppointmentRequest(providerServiceProvider);
+    AppointmentRequest appointmentRequest = providerServiceProvider.appointmentRequest();
     widget.createAppointment(appointmentRequest);
   }
 }

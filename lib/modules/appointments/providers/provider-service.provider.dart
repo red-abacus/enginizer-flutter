@@ -1,7 +1,9 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
@@ -30,7 +32,8 @@ class ProviderServiceProvider with ChangeNotifier {
   // form entry
   List<ServiceItem> selectedServiceItems = [];
   DateEntry dateEntry;
-  AppointmentProviderType appointmentProviderType = AppointmentProviderType.Specific;
+  AppointmentProviderType appointmentProviderType =
+      AppointmentProviderType.Specific;
   UserCredentials userCredentials;
 
   Future<List<ServiceItem>> loadServices() async {
@@ -45,15 +48,53 @@ class ProviderServiceProvider with ChangeNotifier {
     return serviceProviders;
   }
 
-  Future<List<ServiceProviderItem>> loadProviderServices(ServiceProvider serviceProvider) async {
-    var response = await appointmentsService.getServiceProviderItems(serviceProvider);
+  Future<List<ServiceProviderItem>> loadProviderServices(
+      ServiceProvider serviceProvider) async {
+    var response =
+        await appointmentsService.getServiceProviderItems(serviceProvider);
     serviceProviderItems = response.items;
     return serviceProviderItems;
   }
 
-  Future<List<ServiceProviderSchedule>> loadProviderSchedules(ServiceProvider serviceProvider) async {
-    var response = await providerService.getProviderSchedules(serviceProvider.id);
+  Future<List<ServiceProviderSchedule>> loadProviderSchedules(
+      ServiceProvider serviceProvider) async {
+    var response =
+        await providerService.getProviderSchedules(serviceProvider.id);
     serviceProviderSchedules = response;
     return serviceProviderSchedules;
+  }
+
+  Future<List<ServiceProviderTimetable>> loadServiceProviderTimetables(
+      ServiceProvider serviceProvider, String startDate, String endDate) async {
+    var response = await providerService.getServiceProviderTimetables(
+        serviceProvider.id, startDate, endDate);
+    serviceProvider.timetables = response;
+    return response;
+  }
+
+  AppointmentRequest appointmentRequest() {
+    AppointmentRequest appointmentRequest = AppointmentRequest();
+    appointmentRequest.issues = [];
+    for (IssueItem item in issuesFormState) {
+      appointmentRequest.issues.add(item.description);
+    }
+
+    appointmentRequest.serviceIds = [];
+
+    for (ServiceItem item in selectedServiceItems) {
+      appointmentRequest.serviceIds.add(item.id);
+    }
+
+    if (selectedProvider != null) {
+      appointmentRequest.providerId = selectedProvider.id;
+      appointmentRequest.address = selectedProvider.address;
+    } else {
+      appointmentRequest.address = "";
+    }
+
+    appointmentRequest.scheduledTimes = [dateEntry.dateForAppointment()];
+    appointmentRequest.carId = car.id;
+    appointmentRequest.userId = userCredentials.id;
+    return appointmentRequest;
   }
 }

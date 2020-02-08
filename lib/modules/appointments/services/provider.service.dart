@@ -1,7 +1,9 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
@@ -22,6 +24,10 @@ class ProviderService {
   static const String PROVIDER_SCHEDULE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String PROVIDER_SCHEDULE_SUFFIX = "/schedule";
+
+  static const String PROVIDER_TIMETABLE_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String PROVIDER_TIMETABLE_SUFFIX = "/timetable";
 
   Dio _dio = inject<Dio>();
 
@@ -67,11 +73,10 @@ class ProviderService {
     return response;
   }
 
-  // Get Provider Schedules
-
-  Future<List<ServiceProviderSchedule>> getProviderSchedules(int providerId) async {
-    final response =
-    await http.get(buildProviderSchedulesPath(providerId));
+  //Get Provider Schedules
+  Future<List<ServiceProviderSchedule>> getProviderSchedules(
+      int providerId) async {
+    final response = await http.get(buildProviderSchedulesPath(providerId));
 
     if (response.statusCode == 200) {
       List parsed = jsonDecode(response.body);
@@ -89,10 +94,47 @@ class ProviderService {
   List<ServiceProviderSchedule> _mapProviderSchedules(List response) {
     List<ServiceProviderSchedule> list = [];
 
-    for(Map<String, dynamic> item in response) {
+    for (Map<String, dynamic> item in response) {
       list.add(ServiceProviderSchedule.fromJson(item));
     }
 
     return list;
+  }
+
+  // GET PROVIDER TIMETABLE
+  Future<List<ServiceProviderTimetable>> getServiceProviderTimetables(
+      int providerId, String startDate, String endDate) async {
+    final response = await _dio.get(buildProviderTimetablePath(providerId),
+        queryParameters: {
+          "startDate": startDate,
+          "endDate": endDate
+        });
+
+    if (response.statusCode == 200) {
+      return _mapServiceProviderTimetable(response.data);
+    } else
+      throw Exception('PROVIDER_SERVICES_FAILED');
+  }
+
+  List<ServiceProviderTimetable> _mapServiceProviderTimetable(List<dynamic> response) {
+    List<ServiceProviderTimetable> list = [];
+
+    response.forEach((item) {
+      String localDate = item["localDate"] != null ? item["localDate"] : "";
+
+      List<dynamic> entries = item["timeSeries"];
+
+      entries.forEach((entry) {
+        list.add(ServiceProviderTimetable.fromJson(entry, localDate));
+      });
+    });
+
+    return list;
+  }
+
+  String buildProviderTimetablePath(int providerId) {
+    return PROVIDER_TIMETABLE_PREFIX +
+        providerId.toString() +
+        PROVIDER_TIMETABLE_SUFFIX;
   }
 }

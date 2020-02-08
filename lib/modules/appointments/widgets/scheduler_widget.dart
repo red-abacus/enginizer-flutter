@@ -67,22 +67,29 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
       textColor = Colors.white;
     }
 
-    return new Container(
+    double opacity = (dateEntry.status == DateEntryStatus.Free) ? 1.0 : 0.4;
+
+    return Container(
       width: 100,
       height: 20,
-      child: new FlatButton(
-        color: boxBackground,
-        onPressed: () => onClicked(dateEntry),
-        child: new Text(DateUtils.stringFromDate(dateEntry.dateTime, "HH:mm"),
-            style: TextStyle(
-                fontWeight: FontWeight.w800, fontSize: 10, color: textColor),
-            textAlign: TextAlign.center),
-      ),
-      margin: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        border: Border.all(color: Constants.red, width: 1),
-        borderRadius: new BorderRadius.all(
-          const Radius.circular(5.0),
+      child: Opacity(
+        opacity: opacity,
+        child: Container(
+          child: new FlatButton(
+            color: boxBackground,
+            onPressed: () => onClicked(dateEntry),
+            child: new Text(DateUtils.stringFromDate(dateEntry.dateTime, "HH:mm"),
+                style: TextStyle(
+                    fontWeight: FontWeight.w800, fontSize: 10, color: textColor),
+                textAlign: TextAlign.center),
+          ),
+          margin: EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            border: Border.all(color: Constants.red, width: 1),
+            borderRadius: new BorderRadius.all(
+              const Radius.circular(5.0),
+            ),
+          ),
         ),
       ),
     );
@@ -143,8 +150,10 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
   }
 
   onClicked(DateEntry dateEntry) {
-    setState(() {
-      Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
-    });
+    if (dateEntry.status == DateEntryStatus.Free) {
+      setState(() {
+        Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
+      });
+    }
   }
 }

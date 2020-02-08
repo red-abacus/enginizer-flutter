@@ -27,7 +27,6 @@ class CarService {
   }
 
   Future<Car> addCar(Car car) async {
-    print(car.toJson());
     final response =
         await http.post(CAR_API_PATH, body: jsonEncode(car.toJson()), headers: {
       Headers.contentTypeHeader: 'application/json', // set content-length

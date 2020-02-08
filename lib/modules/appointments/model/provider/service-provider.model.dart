@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 
 class ServiceProvider {
   int id;
@@ -12,6 +13,7 @@ class ServiceProvider {
   String image;
 
   List<ServiceProviderItem> items = [];
+  List<ServiceProviderTimetable> timetables = [];
 
   ServiceProvider(
       {this.id,
