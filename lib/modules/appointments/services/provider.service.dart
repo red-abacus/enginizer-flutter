@@ -59,6 +59,21 @@ class ProviderService {
     }
   }
 
+  Future<ServiceProviderResponse> getProvidersByServices(
+      List<int> serviceIds) async {
+//    final response = await _dio.get(PROVIDERS_PATH,
+//        queryParameters: {"serviceProvidedIds": serviceIds});
+
+    final response = await _dio.get(PROVIDERS_PATH);
+
+    if (response.statusCode == 200) {
+      return _mapProviders(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('LOAD_PROVIDERS_FAILED');
+    }
+  }
+
   Future<List<DateEntry>> scheduleItems(providerId) async {
     final response = await _dio.get(SERVICES_PATH);
   }
@@ -105,10 +120,7 @@ class ProviderService {
   Future<List<ServiceProviderTimetable>> getServiceProviderTimetables(
       int providerId, String startDate, String endDate) async {
     final response = await _dio.get(buildProviderTimetablePath(providerId),
-        queryParameters: {
-          "startDate": startDate,
-          "endDate": endDate
-        });
+        queryParameters: {"startDate": startDate, "endDate": endDate});
 
     if (response.statusCode == 200) {
       return _mapServiceProviderTimetable(response.data);
@@ -116,7 +128,8 @@ class ProviderService {
       throw Exception('PROVIDER_SERVICES_FAILED');
   }
 
-  List<ServiceProviderTimetable> _mapServiceProviderTimetable(List<dynamic> response) {
+  List<ServiceProviderTimetable> _mapServiceProviderTimetable(
+      List<dynamic> response) {
     List<ServiceProviderTimetable> list = [];
 
     response.forEach((item) {

@@ -48,6 +48,12 @@ class ProviderServiceProvider with ChangeNotifier {
     return serviceProviders;
   }
 
+  Future<List<ServiceProvider>> loadProvidersByServiceItems(List<int> servicesIds) async {
+    var response = await providerService.getProvidersByServices(servicesIds);
+    serviceProviders = response.items;
+    return serviceProviders;
+  }
+
   Future<List<ServiceProviderItem>> loadProviderServices(
       ServiceProvider serviceProvider) async {
     var response =

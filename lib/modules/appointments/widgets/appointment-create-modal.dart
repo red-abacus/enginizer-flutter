@@ -1,5 +1,6 @@
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
@@ -169,7 +170,17 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         if (!appointmentIssuesStateKey.currentState.valid())
           return;
         else {
-          Provider.of<ProviderServiceProvider>(context).loadProviders();
+          ProviderServiceProvider provider = Provider.of<ProviderServiceProvider>(context, listen: false);
+          List<int> serviceIds = [];
+
+          for(ServiceItem serviceItem in provider.selectedServiceItems) {
+            serviceIds.add(serviceItem.id);
+          }
+
+          print("service ids ${serviceIds}");
+
+          provider.loadProvidersByServiceItems(serviceIds);
+
           setState(() {
             _stepStateData[_currentStepIndex]['state'] = StepState.complete;
             _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
