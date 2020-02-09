@@ -1,5 +1,5 @@
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
 import 'package:enginizer_flutter/modules/appointments/appointments.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
@@ -92,8 +92,6 @@ class AppState extends State<App> {
               DefaultCupertinoLocalizations.delegate
             ],
             supportedLocales: S.delegate.supportedLocales,
-            localeResolutionCallback:
-                S.delegate.resolution(fallback: new Locale("ro", "")),
             routes: {
               '/auth': (context) => AuthScreen(),
               '/cars': (context) => Cars(),

@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user-credentials.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user-type.model.dart';
@@ -135,7 +135,7 @@ class _AuthFormState extends State<AuthForm>
                             ? (value) {
                                 _authData['name'] = value;
                                 if (value.isEmpty) {
-                                  return S.of(context).auth_error_nameReuired;
+                                  return S.of(context).auth_error_nameRequired;
                                 } else {
                                   return null;
                                 }
