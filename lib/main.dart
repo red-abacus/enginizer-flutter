@@ -14,6 +14,7 @@ import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart
 import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/car.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
+import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,11 +54,18 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
-          authProvider.tryAutoLogin();
-          Provider.of<UserProvider>(context, listen: false).getLoggedUserCredentials();
-
+          Provider.of<UserProvider>(context, listen: false)
+              .getLoggedUserCredentials();
           return MaterialApp(
-            home: authProvider.isAuth ? NavigationApp() : AuthScreen(),
+            home: authProvider.isAuth
+                ? NavigationApp()
+                : FutureBuilder(
+                    future: authProvider.tryAutoLogin(),
+                    builder: (ctx, authResultSnapshot) =>
+                        authResultSnapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen()),
             theme: ThemeData(
               primaryColor: Color.fromRGBO(153, 0, 0, 1),
               accentColor: Color.fromRGBO(206, 49, 47, 1),
