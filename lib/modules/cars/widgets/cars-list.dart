@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class CarList extends StatelessWidget {
   List<Car> cars = [];
+  Function filterCars;
   Function selectCar;
   Function openAppointmentCreateModal;
 
-  CarList({this.cars, this.selectCar, this.openAppointmentCreateModal});
+  CarList({this.cars, this.filterCars, this.selectCar, this.openAppointmentCreateModal});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class CarList extends StatelessWidget {
                     autofocus: false,
                     decoration: InputDecoration(labelText: 'Find car'),
                     onChanged: (val) {
-                      print(val);
+                      this.filterCars(context, val);
                     },
                   ),
                 )),

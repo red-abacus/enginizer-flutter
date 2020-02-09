@@ -12,9 +12,14 @@ class CarsProvider with ChangeNotifier {
     return _cars;
   }
 
-  Future<List<Car>> loadCars() async {
+  Future<List<Car>> loadCars({String filterValue = ''}) async {
     var response = await this.carService.getCars();
     _cars = response.items;
+
+    if (filterValue.isNotEmpty) {
+      _cars = _cars.where((car) => car.filtered(filterValue)).toList();
+    }
+
     notifyListeners();
     return _cars;
   }
