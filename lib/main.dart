@@ -1,3 +1,16 @@
+import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/layout/navigation.app.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
+import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
+import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
+import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
+import 'package:enginizer_flutter/modules/cars/screens/car.dart';
+import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/injection.dart';
-import 'generated/l10n.dart';
 import 'layout/navigation.app.dart';
 import 'modules/appointments/providers/appointment.provider.dart';
 import 'modules/appointments/providers/appointments.provider.dart';
@@ -22,6 +34,7 @@ import 'modules/cars/providers/cars-make.provider.dart';
 import 'modules/cars/providers/cars.provider.dart';
 import 'modules/cars/screens/car.dart';
 import 'modules/cars/screens/cars.dart';
+import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +70,9 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
+          Provider.of<UserProvider>(context, listen: false)
+              .getLoggedUserCredentials();
+
           return MaterialApp(
             home: authProvider.isAuth
                 ? NavigationApp()
@@ -70,6 +86,8 @@ class AppState extends State<App> {
             theme: ThemeData(
               primaryColor: Color.fromRGBO(153, 0, 0, 1),
               accentColor: Color.fromRGBO(206, 49, 47, 1),
+              primaryColorLight: Color.fromRGBO(193, 193, 193, 1),
+              primaryColorDark: Color.fromRGBO(80, 80, 70, 1),
               cardColor: Colors.white,
               fontFamily: 'Lato',
               pageTransitionsTheme: PageTransitionsTheme(

@@ -1,4 +1,3 @@
-import 'package:enginizer_flutter/generated/intl/r.dart';
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user-type.model.dart';
@@ -128,7 +127,7 @@ class _AuthFormState extends State<AuthForm>
                         focusNode: _nameFieldFocus,
                         enabled: _authMode == AuthMode.Signup,
                         decoration:
-                            InputDecoration(labelText: R.of(context).auth_name),
+                            InputDecoration(labelText: S.of(context).auth_name),
                         obscureText: true,
                         validator: _authMode == AuthMode.Signup
                             ? (value) {

@@ -1,14 +1,14 @@
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal..widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../model/appointment.model.dart';
-import '../widgets/appointments-list.dart';
 import 'appointment-details.dart';
 
 class Appointments extends StatefulWidget {

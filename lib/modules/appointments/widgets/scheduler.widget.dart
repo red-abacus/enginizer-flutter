@@ -29,11 +29,17 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
         calendarEntry.dateTime.month == now.month &&
         calendarEntry.dateTime.day == now.day;
 
-    Color background = (isToday ? Constants.dark_green : Constants.light_green);
+    Color background = (isToday ? Constants.darker_gray : Constants.light_gray);
 
     return new Container(
+      padding: EdgeInsets.all(5),
       margin: EdgeInsets.only(top: 10),
-      color: background,
+      decoration: BoxDecoration(
+          color: background,
+          border: Border.all(color: background, width: 1),
+          borderRadius: new BorderRadius.all(
+            const Radius.circular(5.0),
+          )),
       child: Column(
         children: <Widget>[
           _buildDayHeader(calendarEntry.dateTime),
@@ -41,7 +47,7 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
             childAspectRatio: 10 / 6,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 5,
+            crossAxisCount: 3,
             children: List.generate(
               calendarEntry.entries.length,
               (int index) {
@@ -67,22 +73,29 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
       textColor = Colors.white;
     }
 
-    return new Container(
+    double opacity = (dateEntry.status == DateEntryStatus.Free) ? 1.0 : 0.4;
+
+    return Container(
       width: 100,
       height: 20,
-      child: new FlatButton(
-        color: boxBackground,
-        onPressed: () => onClicked(dateEntry),
-        child: new Text(DateUtils.stringFromDate(dateEntry.dateTime, "HH:mm"),
-            style: TextStyle(
-                fontWeight: FontWeight.w800, fontSize: 10, color: textColor),
-            textAlign: TextAlign.center),
-      ),
-      margin: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        border: Border.all(color: Constants.red, width: 1),
-        borderRadius: new BorderRadius.all(
-          const Radius.circular(5.0),
+      child: Opacity(
+        opacity: opacity,
+        child: Container(
+          child: new FlatButton(
+            color: boxBackground,
+            onPressed: () => onClicked(dateEntry),
+            child: new Text(DateUtils.stringFromDate(dateEntry.dateTime, "HH:mm"),
+                style: TextStyle(
+                    fontWeight: FontWeight.w800, fontSize: 10, color: textColor),
+                textAlign: TextAlign.center),
+          ),
+          margin: EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            border: Border.all(color: Constants.red, width: 1),
+            borderRadius: new BorderRadius.all(
+              const Radius.circular(5.0),
+            ),
+          ),
         ),
       ),
     );
@@ -143,8 +156,10 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
   }
 
   onClicked(DateEntry dateEntry) {
-    setState(() {
-      Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
-    });
+    if (dateEntry.status == DateEntryStatus.Free) {
+      setState(() {
+        Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
+      });
+    }
   }
 }

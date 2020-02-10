@@ -27,7 +27,6 @@ class CarService {
   }
 
   Future<Car> addCar(Car car) async {
-    print(car.toJson());
     final response =
         await _dio.post(CAR_API_PATH, data: jsonEncode(car.toJson()));
 

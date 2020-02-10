@@ -20,38 +20,41 @@ class AppointmentCreateServicesFormState
 
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
+    providerServiceProvider =
+        Provider.of<ProviderServiceProvider>(context, listen: false);
     List<ServiceItem> services = widget.serviceItems;
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .5,
-      child: ListView.builder(
-        itemBuilder: (ctx, index) {
-          var serviceName = _translateServiceName(services[index].name.toString());
+        height: MediaQuery.of(context).size.height * .5,
+        child: ListView.builder(
+          itemBuilder: (ctx, index) {
+            var serviceName =
+                _translateServiceName(services[index].name.toString());
 
-          return CheckboxListTile(
-            title: Text(serviceName),
-            value:
-                providerServiceProvider.selectedServiceItems.contains(services[index]),
-            onChanged: (bool value) {
-              onChanged(services[index], value);
-            },
-          );
-        },
-        itemCount: services.length,
-      ),
+            return CheckboxListTile(
+              title: Text(serviceName),
+              value: providerServiceProvider.selectedServiceItems
+                  .contains(services[index]),
+              onChanged: (bool value) {
+                onChanged(services[index], value);
+              },
+            );
+          },
+          itemCount: services.length,
+        )
     );
   }
 
   ValueChanged<bool> onChanged(ServiceItem serviceItem, bool value) {
     setState(() {
       if (value) {
-        if (!providerServiceProvider.selectedServiceItems.contains(serviceItem)) {
+        if (!providerServiceProvider.selectedServiceItems
+            .contains(serviceItem)) {
           providerServiceProvider.selectedServiceItems.add(serviceItem);
         }
-      }
-      else {
-        if (providerServiceProvider.selectedServiceItems.contains(serviceItem)) {
+      } else {
+        if (providerServiceProvider.selectedServiceItems
+            .contains(serviceItem)) {
           providerServiceProvider.selectedServiceItems.remove(serviceItem);
         }
       }

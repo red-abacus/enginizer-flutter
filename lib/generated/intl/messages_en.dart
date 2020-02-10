@@ -38,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "TOW_SERVICE" : MessageLookupByLibrary.simpleMessage("Tow Service"),
     "appointment_create_error_issueCannotBeEmpty" : MessageLookupByLibrary.simpleMessage("Issue cannot be empty"),
     "appointment_create_issues" : MessageLookupByLibrary.simpleMessage("Add issue"),
+    "appointment_create_step0" : MessageLookupByLibrary.simpleMessage("Select car"),
     "appointment_create_step1" : MessageLookupByLibrary.simpleMessage("Choose services"),
     "appointment_create_step2" : MessageLookupByLibrary.simpleMessage("Describe issues"),
     "appointment_create_step2_alert" : MessageLookupByLibrary.simpleMessage("Add the problems encountered wiht your car, one on the line"),
@@ -48,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_create_step4" : MessageLookupByLibrary.simpleMessage("Schedule appointment"),
     "appointment_details_car" : MessageLookupByLibrary.simpleMessage("Car"),
     "appointment_details_request" : MessageLookupByLibrary.simpleMessage("Request"),
+    "appointment_details_services_appointment_cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "appointment_details_services_issues" : MessageLookupByLibrary.simpleMessage("Reported issues"),
     "appointment_details_services_title" : MessageLookupByLibrary.simpleMessage("Requested services"),
     "appointments_list_search_hint" : MessageLookupByLibrary.simpleMessage("Registration no. or car model"),
@@ -95,15 +97,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "cars_create_vin" : MessageLookupByLibrary.simpleMessage("Insert VIN"),
     "cars_list_search_hint" : MessageLookupByLibrary.simpleMessage("Registration no. or car model"),
     "general_add" : MessageLookupByLibrary.simpleMessage("Add"),
+    "general_at" : MessageLookupByLibrary.simpleMessage("at"),
     "general_back" : MessageLookupByLibrary.simpleMessage("Back"),
     "general_continue" : MessageLookupByLibrary.simpleMessage("Continue"),
     "general_details" : MessageLookupByLibrary.simpleMessage("Details"),
     "service_fiscal" : MessageLookupByLibrary.simpleMessage("Fiscal info"),
     "service_promotions" : MessageLookupByLibrary.simpleMessage("Promotions"),
     "service_reviews" : MessageLookupByLibrary.simpleMessage("Reviews"),
-    "service_services" : MessageLookupByLibrary.simpleMessage("Services"),
-    "appointment_details_services_appointment_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
-    "general_at": MessageLookupByLibrary.simpleMessage("at"),
-    "appointment_create_step0": MessageLookupByLibrary.simpleMessage("Select car")
+    "service_services" : MessageLookupByLibrary.simpleMessage("Services")
   };
 }

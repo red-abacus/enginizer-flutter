@@ -2,38 +2,112 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class AppointmentCreateProvidersForm extends StatefulWidget {
   AppointmentCreateProvidersForm({Key key}) : super(key: key);
+
   @override
   AppointmentCreateProvidersFormState createState() {
     return AppointmentCreateProvidersFormState();
   }
 }
+
 class AppointmentCreateProvidersFormState
     extends State<AppointmentCreateProvidersForm> {
   ProviderServiceProvider providerServiceProvider;
+
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
-    var providers = providerServiceProvider.serviceProviders;
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * .5,
-      child: ListView.builder(
-        itemCount: providers.length,
-        itemBuilder: (context, int) {
-          return _buildListItem(int, providers);
-        },
-      ),
+    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text(
+              S.of(context).appointment_create_step3_specific,
+              style: new TextStyle(
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold,
+                color: gray,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            new Switch(
+              value: providerServiceProvider.appointmentProviderType ==
+                  AppointmentProviderType.Auction,
+              onChanged: (bool isOn) {
+                setState(() {
+                  if (isOn) {
+                    providerServiceProvider.appointmentProviderType =
+                        AppointmentProviderType.Auction;
+                  } else {
+                    providerServiceProvider.appointmentProviderType =
+                        AppointmentProviderType.Specific;
+                  }
+                });
+              },
+              activeTrackColor: switch_dark_gray,
+              inactiveThumbColor: red,
+              inactiveTrackColor: switch_dark_gray,
+              activeColor: red,
+              hoverColor: Colors.blue,
+            ),
+            new Text(
+              S.of(context).appointment_create_step3_bid,
+              style: new TextStyle(
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        _containerWidget(),
+      ],
     );
   }
+
+  Widget _containerWidget() {
+    if (providerServiceProvider.appointmentProviderType ==
+        AppointmentProviderType.Specific) {
+      return new Container(
+        margin: EdgeInsets.only(top: 10),
+        child: new SizedBox(
+          height: MediaQuery.of(context).size.height * .5,
+          child: ListView.builder(
+            itemCount: providerServiceProvider.serviceProviders.length,
+            itemBuilder: (context, int) {
+              return _buildListItem(
+                  int, providerServiceProvider.serviceProviders);
+            },
+          ),
+        ),
+      );
+    }
+    return new Container(
+      margin: EdgeInsets.only(top: 10),
+      child: new SizedBox(
+          height: MediaQuery.of(context).size.height * .5,
+          child: new Container(
+            margin: EdgeInsets.only(top: 20),
+            child: new AlertInfoWidget(
+                S.of(context).appointment_create_step3_alert),
+          )),
+    );
+  }
+
   Widget _buildListItem(int index, List<ServiceProvider> providers) {
     var currentService = providers[index];
     return LayoutBuilder(builder: (context, constraints) {
+      const double LIST_ITEM_SELECTION_WIDTH = 7;
       return Container(
         margin: EdgeInsets.only(bottom: 10),
         child: Material(
@@ -50,17 +124,6 @@ class AppointmentCreateProvidersFormState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  if (providerServiceProvider.selectedProvider ==
-                      currentService)
-                    new Container(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Theme.of(context).accentColor,
-                        size: 24.0,
-                        semanticLabel: 'Selected provider check',
-                      ),
-                    ),
                   Image.network(
                     '${currentService.image}',
                     fit: BoxFit.fitHeight,
@@ -116,7 +179,8 @@ class AppointmentCreateProvidersFormState
                             fontFamily: "Lato"),
                       ),
                       onPressed: () {
-                        Provider.of<ProviderServiceProvider>(context).loadProviderServices(currentService);
+                        Provider.of<ProviderServiceProvider>(context)
+                            .loadProviderServices(currentService);
                         showModalBottomSheet(
                             isScrollControlled: true,
                             context: context,
@@ -127,6 +191,19 @@ class AppointmentCreateProvidersFormState
                               });
                             });
                       }),
+                  Container(
+                    width: LIST_ITEM_SELECTION_WIDTH,
+                    child: Column(
+                      children: [
+                        if (providerServiceProvider.selectedProvider ==
+                            currentService)
+                          Container(
+                            height: 100,
+                            color: Theme.of(context).accentColor,
+                          )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -135,6 +212,7 @@ class AppointmentCreateProvidersFormState
       );
     });
   }
+
   _selectService(ServiceProvider currentService) {
     setState(() {
       if (providerServiceProvider.selectedProvider == currentService) {
@@ -144,6 +222,7 @@ class AppointmentCreateProvidersFormState
       }
     });
   }
+
   bool valid() {
     return providerServiceProvider.selectedProvider != null ||
         providerServiceProvider.appointmentProviderType ==

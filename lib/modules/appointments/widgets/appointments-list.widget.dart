@@ -1,11 +1,10 @@
-import 'package:enginizer_flutter/generated/intl/r.dart';
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'appointment-card.dart';
+import 'appointment-card.widget.dart';
 
 class AppointmentsList extends StatelessWidget {
   List<Appointment> appointments = [];
@@ -13,7 +12,8 @@ class AppointmentsList extends StatelessWidget {
   Function selectAppointment;
   Function filterAppointments;
 
-  AppointmentsList({this.appointments, this.selectAppointment, this.filterAppointments});
+  AppointmentsList(
+      {this.appointments, this.selectAppointment, this.filterAppointments});
 
   @override
   Widget build(BuildContext context) {

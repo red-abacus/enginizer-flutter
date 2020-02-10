@@ -38,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "TOW_SERVICE" : MessageLookupByLibrary.simpleMessage("Tractări"),
     "appointment_create_error_issueCannotBeEmpty" : MessageLookupByLibrary.simpleMessage("Problemă necompletată!"),
     "appointment_create_issues" : MessageLookupByLibrary.simpleMessage("Adaugă problemă"),
+    "appointment_create_step0" : MessageLookupByLibrary.simpleMessage("Alege mașină"),
     "appointment_create_step1" : MessageLookupByLibrary.simpleMessage("Alege servicii"),
     "appointment_create_step2" : MessageLookupByLibrary.simpleMessage("Descrie probleme"),
     "appointment_create_step2_alert" : MessageLookupByLibrary.simpleMessage("Descrie problemele pe care le are mașina, câte una pe linie"),
@@ -48,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_create_step4" : MessageLookupByLibrary.simpleMessage("Programează"),
     "appointment_details_car" : MessageLookupByLibrary.simpleMessage("Mașină"),
     "appointment_details_request" : MessageLookupByLibrary.simpleMessage("Cerere"),
+    "appointment_details_services_appointment_cancel" : MessageLookupByLibrary.simpleMessage("Anulare"),
     "appointment_details_services_issues" : MessageLookupByLibrary.simpleMessage("Probleme raportate"),
     "appointment_details_services_title" : MessageLookupByLibrary.simpleMessage("Servicii solicitate"),
     "appointments_list_search_hint" : MessageLookupByLibrary.simpleMessage("Număr înmatriculare sau model mașină"),
@@ -95,15 +97,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "cars_create_vin" : MessageLookupByLibrary.simpleMessage("VIN"),
     "cars_list_search_hint" : MessageLookupByLibrary.simpleMessage("Număr înmatriculare sau model mașină"),
     "general_add" : MessageLookupByLibrary.simpleMessage("Adaugă"),
+    "general_at" : MessageLookupByLibrary.simpleMessage("la"),
     "general_back" : MessageLookupByLibrary.simpleMessage("Înapoi"),
     "general_continue" : MessageLookupByLibrary.simpleMessage("Continuă"),
     "general_details" : MessageLookupByLibrary.simpleMessage("Detalii"),
     "service_fiscal" : MessageLookupByLibrary.simpleMessage("Fiscal info"),
     "service_promotions" : MessageLookupByLibrary.simpleMessage("Promotions"),
     "service_reviews" : MessageLookupByLibrary.simpleMessage("Reviews"),
-    "service_services" : MessageLookupByLibrary.simpleMessage("Services"),
-    "appointment_details_services_appointment_cancel": MessageLookupByLibrary.simpleMessage("Anulare"),
-    "general_at": MessageLookupByLibrary.simpleMessage("la"),
-    "appointment_create_step0": MessageLookupByLibrary.simpleMessage("Alege mașină")
+    "service_services" : MessageLookupByLibrary.simpleMessage("Services")
   };
 }

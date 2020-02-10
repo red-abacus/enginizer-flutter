@@ -6,7 +6,9 @@ import 'package:enginizer_flutter/modules/appointments/providers/provider-servic
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:intl/intl.dart';
 
+import '../../cars/models/car.model.dart';
 import 'appointment-type.model.dart';
+import 'operating-unit.model.dart';
 
 class Appointment {
   int id;
