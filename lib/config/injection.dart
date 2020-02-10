@@ -17,10 +17,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 GetIt inject = GetIt.instance;
 
 void setupDependencyInjection(SharedPreferences s) async {
-  inject.registerLazySingleton(() => Dio(BaseOptions(headers: {
-        'Authorization': 'Bearer ${s.getString('token')}',
-        Headers.contentTypeHeader: 'application/json', // set content-length
-      })));
+  inject.registerLazySingleton(() {
+    Dio dio = new Dio(BaseOptions(headers: {
+      Headers.contentTypeHeader: 'application/json', // set content-length
+    }));
+
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+      options.headers['Authorization'] = 'Bearer ${s.getString('token')}';
+      return options;
+    }));
+
+    return dio;
+  });
+
   inject.registerLazySingleton(() => AuthService());
   inject.registerLazySingleton(() => CarMakeService());
   inject.registerLazySingleton(() => CarService());
