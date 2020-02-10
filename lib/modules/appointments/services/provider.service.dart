@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
@@ -7,7 +5,6 @@ import 'package:enginizer_flutter/modules/appointments/model/response/provider-s
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
-import 'package:http/http.dart' as http;
 
 class ProviderService {
   static const String SERVICES_PATH =
@@ -69,13 +66,12 @@ class ProviderService {
 
   // Get Provider Schedules
 
-  Future<List<ServiceProviderSchedule>> getProviderSchedules(int providerId) async {
-    final response =
-    await http.get(buildProviderSchedulesPath(providerId));
+  Future<List<ServiceProviderSchedule>> getProviderSchedules(
+      int providerId) async {
+    final response = await _dio.get(buildProviderSchedulesPath(providerId));
 
     if (response.statusCode == 200) {
-      List parsed = jsonDecode(response.body);
-      return _mapProviderSchedules(parsed);
+      return _mapProviderSchedules(response.data);
     } else
       throw Exception('PROVIDER_SERVICES_FAILED');
   }
@@ -89,7 +85,7 @@ class ProviderService {
   List<ServiceProviderSchedule> _mapProviderSchedules(List response) {
     List<ServiceProviderSchedule> list = [];
 
-    for(Map<String, dynamic> item in response) {
+    for (Map<String, dynamic> item in response) {
       list.add(ServiceProviderSchedule.fromJson(item));
     }
 

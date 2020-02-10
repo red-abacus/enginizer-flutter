@@ -1,11 +1,11 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
+import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
 import 'package:enginizer_flutter/modules/appointments/appointments.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
@@ -20,11 +20,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setupDependencyInjection();
+  final prefs = await SharedPreferences.getInstance();
+  setupDependencyInjection(prefs);
   runApp(App());
 }
 
@@ -54,8 +56,6 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
-          Provider.of<UserProvider>(context, listen: false)
-              .getLoggedUserCredentials();
           return MaterialApp(
             home: authProvider.isAuth
                 ? NavigationApp()

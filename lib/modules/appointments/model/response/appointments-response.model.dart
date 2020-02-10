@@ -7,9 +7,11 @@ class AppointmentsResponse {
 
   AppointmentsResponse({this.total, this.totalPages, this.items});
 
-  factory AppointmentsResponse.fromJson(List<dynamic> data) {
+  factory AppointmentsResponse.fromJson(Map<String, dynamic> json) {
     return AppointmentsResponse(
-        items: _mapAppointments(data));
+        total: json['total'],
+        totalPages: json['totalPages'],
+        items: _mapAppointments(json['items']));
   }
 
   static _mapAppointments(List<dynamic> response) {
