@@ -1,13 +1,14 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/enum/appointment.details.tabbar.state.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-details.widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentDetails extends StatefulWidget {
@@ -37,26 +38,56 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
         Provider.of<AppointmentProvider>(context, listen: false);
 
     return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-        ),
-        body: Column(
-          children: <Widget>[
-            Container(
-              child: Container(
-                child: _buildTabBar(),
-              ),
+      key: _scaffoldKey,
+      appBar: AppBar(
+        iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+      ),
+      body: Column(
+        children: <Widget>[
+          Container(
+            child: Container(
+              child: _buildTabBar(),
             ),
-            _getContent(),
-          ],
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: _getContent(),
+            ),
+          )
+        ],
+      ),
+      floatingActionButton: _getFloatingButton(),
+    );
+  }
+
+  Widget _getFloatingButton() {
+    bool visibility =
+        appointmentProvider.selectedAppointment.status.name.toLowerCase() ==
+            "submitted";
+
+    return new Visibility(
+        visible: visibility,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            _cancelAppointment(appointmentProvider.selectedAppointment);
+          },
+          label: Text(
+            S
+                .of(context)
+                .appointment_details_services_appointment_cancel
+                .toUpperCase(),
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+          ),
+          backgroundColor: Colors.white,
         ));
   }
 
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
-        return AppointmentDetailsWidget(appointment: appointmentProvider.selectedAppointment,
+        return AppointmentDetailsWidget(
+            appointment: appointmentProvider.selectedAppointment,
             appointmentDetail: appointmentProvider.selectedAppointmentDetail);
       case AppointmentDetailsTabBarState.CAR:
         return AppointmentDetailsCarWidget();
@@ -114,5 +145,13 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       case AppointmentDetailsTabBarState.CAR:
         return S.of(context).appointment_details_car;
     }
+  }
+
+  void _cancelAppointment(Appointment appointment) {
+    setState(() {
+      appointmentProvider.cancelAppointment(appointment).then((appointment) {
+        Provider.of<AppointmentsProvider>(context, listen: false).refreshAppointment(appointment);
+      });
+    });
   }
 }
