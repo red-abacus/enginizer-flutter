@@ -88,6 +88,9 @@ class S implements WidgetsLocalizations {
   String get general_back => "Back";
   String get general_continue => "Continue";
   String get general_details => "DETAILS";
+  String get general_find => "Find";
+  String get general_status => "Status";
+  String get general_car => "Car";
   // TODO - Need proper translation
   String get service_services => "Services";
   String get service_reviews => "Reviews";
@@ -95,6 +98,8 @@ class S implements WidgetsLocalizations {
   String get service_fiscal => "Fiscal info";
   // TODO - Need proper translation
   String get service_promotions => "Promotions";
+
+  String get auctions_title => "Auctions";
 }
 
 class $en extends S {
@@ -248,6 +253,14 @@ class $ro extends S {
   String get auth_login => "Login";
   @override
   String get general_details => "DETALII";
+  @override
+  String get general_find => "Caută";
+  @override
+  String get general_status => "Status";
+  @override
+  String get general_car => "Masină";
+  @override
+  String get auctions_title => "Licitatii";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

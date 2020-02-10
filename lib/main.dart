@@ -20,6 +20,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'modules/auctions/screens/auctions.dart';
+import 'modules/auctions/providers/auctions-provider.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -50,7 +53,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: ProviderServiceProvider()),
           ChangeNotifierProvider.value(value: AppointmentsProvider()),
           ChangeNotifierProvider.value(value: UserProvider()),
-          ChangeNotifierProvider.value(value: AppointmentProvider())
+          ChangeNotifierProvider.value(value: AppointmentProvider()),
+          ChangeNotifierProvider.value(value: AuctionsProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           authProvider.tryAutoLogin();
@@ -94,7 +98,8 @@ class AppState extends State<App> {
               '/cars': (context) => Cars(),
               '/cars/details': (context) => CarDetails(),
               Appointments.route: (context) => Appointments(),
-              AppointmentDetails.route: (context) => AppointmentDetails()
+              AppointmentDetails.route: (context) => AppointmentDetails(),
+              Auctions.route: (context) => Auctions()
             },
           );
         }));
