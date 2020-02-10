@@ -1,8 +1,7 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal..widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
@@ -11,6 +10,7 @@ import 'package:enginizer_flutter/modules/cars/widgets/car-create-modal.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/cars-list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class Cars extends StatefulWidget {
   static const String route = '/cars';
   static final IconData icon = Icons.card_travel;
@@ -19,6 +19,7 @@ class Cars extends StatefulWidget {
     return CarsState(route: route);
   }
 }
+
 class CarsState extends State<Cars> {
   String route;
   var _initDone = false;
@@ -37,6 +38,7 @@ class CarsState extends State<Cars> {
           )),
     );
   }
+
   @override
   void didChangeDependencies() {
     if (!_initDone) {
@@ -52,6 +54,7 @@ class CarsState extends State<Cars> {
     _initDone = true;
     super.didChangeDependencies();
   }
+
   void _openCarCreateModal(BuildContext ctx) {
     Provider.of<CarsMakeProvider>(context).loadCarBrands();
     showModalBottomSheet<void>(
@@ -63,12 +66,13 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return CarCreateModal(
-                    brands: Provider.of<CarsMakeProvider>(context).brands,
-                    addCar: _addCar);
-              });
+            return CarCreateModal(
+                brands: Provider.of<CarsMakeProvider>(context).brands,
+                addCar: _addCar);
+          });
         });
   }
+
   void _openAppointmentCreateModal(BuildContext ctx, Car car) {
     Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
     showModalBottomSheet<void>(
@@ -80,31 +84,35 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentCreateModal(
-                  createAppointment: _createAppointment,
-                );
-              });
+            return AppointmentCreateModal(
+              createAppointment: _createAppointment,
+            );
+          });
         });
   }
+
   void _selectCar(BuildContext ctx, Car selectedCar) {
     Provider.of<CarProvider>(ctx).selectCar(selectedCar);
     Navigator.of(ctx).pushNamed(
       '/cars/details',
     );
   }
+
   _renderCars(bool _isLoading, List<Car> cars) {
     return _isLoading
         ? CircularProgressIndicator()
         : CarList(
-        cars: cars,
-        selectCar: _selectCar,
-        openAppointmentCreateModal: _openAppointmentCreateModal);
+            cars: cars,
+            selectCar: _selectCar,
+            openAppointmentCreateModal: _openAppointmentCreateModal);
   }
+
   _addCar(Car car) {
     Provider.of<CarsProvider>(context).addCar(car).then((_) {
       Navigator.pop(context);
     });
   }
+
   _createAppointment(AppointmentRequest appointmentRequest) {
     Provider.of<AppointmentsProvider>(context)
         .createAppointment(appointmentRequest)

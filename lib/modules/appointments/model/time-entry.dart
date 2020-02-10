@@ -1,6 +1,7 @@
-import 'dart:collection';
-
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
+import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 
 enum DateEntryStatus { Free, Booked }
@@ -21,11 +22,13 @@ class AppointmentTimeEntry {
 
 class DateEntry {
   DateTime dateTime;
+  String status;
 
-  DateEntry(this.dateTime);
+  DateEntry({this.dateTime, this.status});
 
   String dateForAppointment() {
-    return DateUtils.stringFromDate(dateTime, Appointment.scheduledTimeFormat());
+    return DateUtils.stringFromDate(
+        dateTime, Appointment.scheduledTimeFormat());
   }
 }
 
@@ -35,6 +38,8 @@ class CalendarEntry {
 
   CalendarEntry(this.dateTime);
 
+  // TODO remove it once we confirm that everything works well with timeseries
+  @Deprecated('Will be removed when getTimeSeries works')
   static List<CalendarEntry> getDateEntries(
       DateTime currentDate, List<Appointment> appointments) {
     List<CalendarEntry> calendarEntries = [];
@@ -49,7 +54,7 @@ class CalendarEntry {
       CalendarEntry calendarEntry = CalendarEntry(startDate);
 
       for (int j = 0; j < 9; j++) {
-        DateEntry dateEntry = DateEntry(startDate);
+        DateEntry dateEntry = DateEntry(dateTime: startDate);
 
         if (!appointmentEntries.contains(dateEntry.dateForAppointment())) {
           calendarEntry.entries.add(dateEntry);
@@ -64,6 +69,22 @@ class CalendarEntry {
 
       startDate = DateUtils.addHourToDate(
           DateUtils.startOfDay(DateUtils.addDayToDate(startDate, 1)), 8);
+    }
+
+    return calendarEntries;
+  }
+
+  static List<CalendarEntry> getTimeSeries(
+      DateTime currentDate, List<ServiceProviderSchedule> schedules) {
+    List<CalendarEntry> calendarEntries = [];
+
+    for (ServiceProviderSchedule schedule in schedules) {
+      DateTime calendarDate = Constants.date.parse(schedule.localDate);
+
+      for (ServiceProviderTimeSerie timeSerie in schedule.timeSeries) {
+        var dateWithHour = DateUtils.addHourToDate(
+            calendarDate, int.parse(timeSerie.hour.split(':')[0]));
+      }
     }
 
     return calendarEntries;

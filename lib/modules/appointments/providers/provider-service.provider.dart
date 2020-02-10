@@ -1,10 +1,10 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
@@ -30,7 +30,8 @@ class ProviderServiceProvider with ChangeNotifier {
   // form entry
   List<ServiceItem> selectedServiceItems = [];
   DateEntry dateEntry;
-  AppointmentProviderType appointmentProviderType = AppointmentProviderType.Specific;
+  AppointmentProviderType appointmentProviderType =
+      AppointmentProviderType.Specific;
   UserCredentials userCredentials;
 
   Future<List<ServiceItem>> loadServices() async {
@@ -45,14 +46,22 @@ class ProviderServiceProvider with ChangeNotifier {
     return serviceProviders;
   }
 
-  Future<List<ServiceProviderItem>> loadProviderServices(ServiceProvider serviceProvider) async {
-    var response = await appointmentsService.getServiceProviderItems(serviceProvider);
+  Future<List<ServiceProviderItem>> loadProviderServices(
+      ServiceProvider serviceProvider) async {
+    var response =
+        await appointmentsService.getServiceProviderItems(serviceProvider);
     serviceProviderItems = response.items;
     return serviceProviderItems;
   }
 
-  Future<List<ServiceProviderSchedule>> loadProviderSchedules(ServiceProvider serviceProvider) async {
-    var response = await providerService.getProviderSchedules(serviceProvider.id);
+  Future<List<ServiceProviderSchedule>> loadProviderSchedules(
+      ServiceProvider serviceProvider) async {
+    var providerId;
+    if (serviceProvider != null) {
+      providerId = serviceProvider.id;
+    }
+
+    var response = await providerService.getProviderSchedules(providerId);
     serviceProviderSchedules = response;
     return serviceProviderSchedules;
   }

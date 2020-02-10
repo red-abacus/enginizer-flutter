@@ -156,7 +156,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             height: MediaQuery.of(context).size.height * FORM_HEIGHT_PERCENTAGE,
             child: AppointmentDateTimeForm(
                 key: appointmentDateTimeStateKey,
-                appointments: appointmentsProvider.appointments),
+                providerSchedules:
+                    providerServiceProvider.serviceProviderSchedules),
           ),
           state: _stepStateData[3]['state'])
     ];
