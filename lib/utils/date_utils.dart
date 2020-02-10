@@ -21,6 +21,10 @@ class DateUtils {
     return date.add(new Duration(hours: hour));
   }
 
+  static DateTime addMinutesToDate(DateTime date, int minutes) {
+    return date.add(new Duration(minutes: minutes));
+  }
+
   static String getWeekDayName(DateTime date) {
     String formattedDate = DateFormat('EEE').format(date);
     return formattedDate;

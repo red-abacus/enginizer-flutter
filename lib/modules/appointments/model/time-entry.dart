@@ -81,10 +81,21 @@ class CalendarEntry {
     for (ServiceProviderSchedule schedule in schedules) {
       DateTime calendarDate = Constants.date.parse(schedule.localDate);
 
+      CalendarEntry calendarEntry = CalendarEntry(calendarDate);
+
       for (ServiceProviderTimeSerie timeSerie in schedule.timeSeries) {
         var dateWithHour = DateUtils.addHourToDate(
             calendarDate, int.parse(timeSerie.hour.split(':')[0]));
+
+        var dateWithMinutes = DateUtils.addMinutesToDate(
+            dateWithHour, int.parse(timeSerie.hour.split(':')[1]));
+
+        DateEntry dateEntry = DateEntry(dateTime: dateWithMinutes, status: timeSerie.slotStatus);
+
+        calendarEntry.entries.add(dateEntry);
       }
+
+      calendarEntries.add(calendarEntry);
     }
 
     return calendarEntries;

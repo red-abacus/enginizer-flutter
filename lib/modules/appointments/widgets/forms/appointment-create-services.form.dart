@@ -27,7 +27,6 @@ class AppointmentCreateServicesFormState
 
     return ListView.builder(
       itemBuilder: (ctx, index) {
-        // TODO service name should be translated
         var serviceName = _translateServiceName(services[index].name.toString());
 
         return CheckboxListTile(
