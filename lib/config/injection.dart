@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
@@ -30,4 +31,5 @@ void setupDependencyInjection() {
   inject.registerFactory(() => ProviderServiceProvider());
   inject.registerFactory(() => AppointmentsProvider());
   inject.registerFactory(() => UserProvider());
+  inject.registerFactory(() => AppointmentProvider());
 }

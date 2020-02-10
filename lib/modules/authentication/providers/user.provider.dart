@@ -14,7 +14,7 @@ class UserProvider with ChangeNotifier {
 
     String email = prefs.get("email");
 
-    if (email.isNotEmpty) {
+    if (email != null && email.isNotEmpty) {
       return _getUserCredentials(prefs.get("email"));
     }
 

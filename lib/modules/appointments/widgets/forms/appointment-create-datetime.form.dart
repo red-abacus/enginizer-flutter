@@ -1,9 +1,9 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/scheduler_widget.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/scheduler.widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +30,14 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
             Provider.of<ProviderServiceProvider>(context).selectedProvider),
       ),
     );
+
+/*    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+
+    return SchedulerWidget(
+      calendarEntries:
+          CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
+    );
+    */
   }
 
   @override

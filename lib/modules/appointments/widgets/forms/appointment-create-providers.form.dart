@@ -2,8 +2,8 @@ import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/alert.info.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,6 @@ class AppointmentCreateProvidersFormState
   @override
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -93,7 +92,6 @@ class AppointmentCreateProvidersFormState
         ),
       );
     }
-
     return new Container(
       margin: EdgeInsets.only(top: 10),
       child: new SizedBox(
@@ -109,6 +107,7 @@ class AppointmentCreateProvidersFormState
   Widget _buildListItem(int index, List<ServiceProvider> providers) {
     var currentService = providers[index];
     return LayoutBuilder(builder: (context, constraints) {
+      const double LIST_ITEM_SELECTION_WIDTH = 7;
       return Container(
         margin: EdgeInsets.only(bottom: 10),
         child: Material(
@@ -125,17 +124,6 @@ class AppointmentCreateProvidersFormState
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  if (providerServiceProvider.selectedProvider ==
-                      currentService)
-                    new Container(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Theme.of(context).accentColor,
-                        size: 24.0,
-                        semanticLabel: 'Selected provider check',
-                      ),
-                    ),
                   Image.network(
                     '${currentService.image}',
                     fit: BoxFit.fitHeight,
@@ -191,10 +179,10 @@ class AppointmentCreateProvidersFormState
                             fontFamily: "Lato"),
                       ),
                       onPressed: () {
-                        Provider.of<ProviderServiceProvider>(context).loadProviderServices(currentService);
-
+                        Provider.of<ProviderServiceProvider>(context)
+                            .loadProviderServices(currentService);
                         showModalBottomSheet(
-                          isScrollControlled: true,
+                            isScrollControlled: true,
                             context: context,
                             builder: (_) {
                               return StatefulBuilder(builder:
@@ -203,6 +191,19 @@ class AppointmentCreateProvidersFormState
                               });
                             });
                       }),
+                  Container(
+                    width: LIST_ITEM_SELECTION_WIDTH,
+                    child: Column(
+                      children: [
+                        if (providerServiceProvider.selectedProvider ==
+                            currentService)
+                          Container(
+                            height: 100,
+                            color: Theme.of(context).accentColor,
+                          )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

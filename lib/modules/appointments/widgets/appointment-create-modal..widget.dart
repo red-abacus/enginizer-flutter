@@ -1,14 +1,12 @@
 import 'package:enginizer_flutter/generated/i18n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-services.form.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +30,8 @@ class AppointmentCreateModal extends StatefulWidget {
 }
 
 class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
+  static const FORM_HEIGHT_PERCENTAGE = .58;
+
   int _currentStepIndex = 0;
   bool isLastStep = false;
   List<Step> steps = [];
@@ -117,9 +117,12 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           title: _currentStepIndex == 0
               ? Text(S.of(context).appointment_create_step1)
               : Text(''),
-          content: AppointmentCreateServicesForm(
-            key: appointmentServicesStateKey,
-            serviceItems: providerServiceProvider.serviceItems,
+          content: Container(
+            height: MediaQuery.of(context).size.height * FORM_HEIGHT_PERCENTAGE,
+            child: AppointmentCreateServicesForm(
+              key: appointmentServicesStateKey,
+              serviceItems: providerServiceProvider.serviceItems,
+            ),
           ),
           state: _stepStateData[0]['state']),
       Step(
@@ -127,15 +130,22 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           title: _currentStepIndex == 1
               ? Text(S.of(context).appointment_create_step2)
               : Text(''),
-          content: AppointmentCreateIssueForm(key: appointmentIssuesStateKey),
+          content: Container(
+              height:
+                  MediaQuery.of(context).size.height * FORM_HEIGHT_PERCENTAGE,
+              child:
+                  AppointmentCreateIssueForm(key: appointmentIssuesStateKey)),
           state: _stepStateData[1]['state']),
       Step(
           isActive: _stepStateData[2]['active'],
           title: _currentStepIndex == 2
               ? Text(S.of(context).appointment_create_step3)
               : Text(''),
-          content: AppointmentCreateProvidersForm(
-            key: appointmentShopsStateKey,
+          content: Container(
+            height: MediaQuery.of(context).size.height * FORM_HEIGHT_PERCENTAGE,
+            child: AppointmentCreateProvidersForm(
+              key: appointmentShopsStateKey,
+            ),
           ),
           state: _stepStateData[2]['state']),
       Step(
@@ -143,9 +153,12 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           title: _stepStateData[3]['active']
               ? Text(S.of(context).appointment_create_step4)
               : Text(''),
-          content: AppointmentDateTimeForm(
-              key: appointmentDateTimeStateKey,
-              appointments: appointmentsProvider.appointments),
+          content: Container(
+            height: MediaQuery.of(context).size.height * FORM_HEIGHT_PERCENTAGE,
+            child: AppointmentDateTimeForm(
+                key: appointmentDateTimeStateKey,
+                appointments: appointmentsProvider.appointments),
+          ),
           state: _stepStateData[3]['state'])
     ];
   }
@@ -176,8 +189,6 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           for(ServiceItem serviceItem in provider.selectedServiceItems) {
             serviceIds.add(serviceItem.id);
           }
-
-          print("service ids ${serviceIds}");
 
           provider.loadProvidersByServiceItems(serviceIds);
 

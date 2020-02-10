@@ -29,11 +29,17 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
         calendarEntry.dateTime.month == now.month &&
         calendarEntry.dateTime.day == now.day;
 
-    Color background = (isToday ? Constants.dark_green : Constants.light_green);
+    Color background = (isToday ? Constants.darker_gray : Constants.light_gray);
 
     return new Container(
+      padding: EdgeInsets.all(5),
       margin: EdgeInsets.only(top: 10),
-      color: background,
+      decoration: BoxDecoration(
+          color: background,
+          border: Border.all(color: background, width: 1),
+          borderRadius: new BorderRadius.all(
+            const Radius.circular(5.0),
+          )),
       child: Column(
         children: <Widget>[
           _buildDayHeader(calendarEntry.dateTime),
@@ -41,7 +47,7 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
             childAspectRatio: 10 / 6,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 5,
+            crossAxisCount: 3,
             children: List.generate(
               calendarEntry.entries.length,
               (int index) {

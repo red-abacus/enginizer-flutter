@@ -2,7 +2,7 @@ import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AlertInfoWidget extends ListTile {
+class AlertInfoWidget extends StatelessWidget {
   String contentString;
 
   AlertInfoWidget(this.contentString);
@@ -25,13 +25,10 @@ class AlertInfoWidget extends ListTile {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Container(
-              height: 60,
-              width: 60,
-              margin: EdgeInsets.only(left: 5),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(35))),
+            new Icon(
+              Icons.info,
+              color: Theme.of(context).cardColor,
+              size: 60,
             ),
             new Expanded(
               child: new Container(
