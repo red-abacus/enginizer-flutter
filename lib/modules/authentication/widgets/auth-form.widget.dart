@@ -1,9 +1,8 @@
+import 'package:enginizer_flutter/generated/intl/r.dart';
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user-credentials.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user-type.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
-import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +128,7 @@ class _AuthFormState extends State<AuthForm>
                         focusNode: _nameFieldFocus,
                         enabled: _authMode == AuthMode.Signup,
                         decoration:
-                            InputDecoration(labelText: S.of(context).auth_name),
+                            InputDecoration(labelText: R.of(context).auth_name),
                         obscureText: true,
                         validator: _authMode == AuthMode.Signup
                             ? (value) {

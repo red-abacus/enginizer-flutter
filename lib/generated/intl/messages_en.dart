@@ -101,6 +101,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "service_fiscal" : MessageLookupByLibrary.simpleMessage("Fiscal info"),
     "service_promotions" : MessageLookupByLibrary.simpleMessage("Promotions"),
     "service_reviews" : MessageLookupByLibrary.simpleMessage("Reviews"),
-    "service_services" : MessageLookupByLibrary.simpleMessage("Services")
+    "service_services" : MessageLookupByLibrary.simpleMessage("Services"),
+    "appointment_details_services_appointment_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "general_at": MessageLookupByLibrary.simpleMessage("at"),
+    "appointment_create_step0": MessageLookupByLibrary.simpleMessage("Select car")
   };
 }

@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
@@ -15,9 +16,10 @@ class Appointment {
   String scheduleDateTime;
 
   Car car;
-  List<AppointmentType> appointmentTypes;
+  List<AppointmentType> appointmentTypes = [];
   OperatingUnit operatingUnit;
   AppointmentStatus status;
+  AppointmentDetail appointmentDetail;
 
   Appointment({this.id,
     this.date,
@@ -39,7 +41,7 @@ class Appointment {
         car: json['car'] != null ? Car.fromJson(json['car']) : null,
         appointmentTypes: json['appointmentType'] != null
             ? _mapAppointmentTypes(json['appointmentType'])
-            : null,
+            : [],
         operatingUnit: json['operatingUnit'] != null
             ? OperatingUnit.fromJson(json['operatingUnit'])
             : null,

@@ -70,6 +70,7 @@
   "appointment_details_services_title": "Requested services",
   "appointment_details_services_issues": "Reported issues",
   "appointments_list_search_hint": "Registration no. or car model",
+  "appointment_details_services_appointment_cancel": "Cancel",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -79,5 +80,7 @@
   "service_services": "Services",
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",
-  "service_promotions": "Promotions"
+  "service_promotions": "Promotions",
+  "general_at": "at",
+  "appointment_create_step0": "Select car"
 }

@@ -1,17 +1,19 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-services.form.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'forms/appointment-create-datetime.form.dart';
+import 'forms/appointment-create-issue.form.dart';
+import 'forms/appointment-create-providers.form.dart';
+import 'forms/appointment-create-select-car.form.dart';
+import 'forms/appointment-create-services.form.dart';
+
+final appointmentCarSelectionStateKey =
+    new GlobalKey<AppointmentCreateSelectCarFormState>();
 final appointmentServicesStateKey =
     new GlobalKey<AppointmentCreateServicesFormState>();
 final appointmentIssuesStateKey =
@@ -23,8 +25,32 @@ final appointmentDateTimeStateKey =
 
 class AppointmentCreateModal extends StatefulWidget {
   final Function createAppointment;
+  final bool showCarSelection;
 
-  AppointmentCreateModal({this.createAppointment});
+  Map<int, dynamic> _stepStateData;
+
+  AppointmentCreateModal(this.createAppointment, this.showCarSelection) {
+    _generateStateData();
+  }
+
+  void _generateStateData() {
+    if (!this.showCarSelection) {
+      _stepStateData = {
+        0: {"state": StepState.indexed, "active": true, "title": Text("")},
+        1: {"state": StepState.disabled, "active": false, "title": Text("")},
+        2: {"state": StepState.disabled, "active": false, "title": Text("")},
+        3: {"state": StepState.disabled, "active": false, "title": Text("")},
+      };
+    } else {
+      _stepStateData = {
+        0: {"state": StepState.indexed, "active": true, "title": Text("")},
+        1: {"state": StepState.disabled, "active": false, "title": Text("")},
+        2: {"state": StepState.disabled, "active": false, "title": Text("")},
+        3: {"state": StepState.disabled, "active": false, "title": Text("")},
+        4: {"state": StepState.disabled, "active": false, "title": Text("")},
+      };
+    }
+  }
 
   @override
   _AppointmentCreateModalState createState() => _AppointmentCreateModalState();
@@ -35,13 +61,6 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   bool isLastStep = false;
   List<Step> steps = [];
 
-  Map<int, dynamic> _stepStateData = {
-    0: {"state": StepState.indexed, "active": true, "title": Text("")},
-    1: {"state": StepState.disabled, "active": false, "title": Text("")},
-    2: {"state": StepState.disabled, "active": false, "title": Text("")},
-    3: {"state": StepState.disabled, "active": false, "title": Text("")},
-  };
-
   FlatButton btnPrev;
   RaisedButton btnNext;
 
@@ -50,10 +69,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
 
   @override
   Widget build(BuildContext context) {
-
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-    appointmentsProvider = Provider.of<AppointmentsProvider>(context);
-
+    providerServiceProvider =
+        Provider.of<ProviderServiceProvider>(context, listen: false);
     steps = _buildSteps(context);
 
     return FractionallySizedBox(
@@ -111,117 +128,216 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
       );
 
   List<Step> _buildSteps(BuildContext context) {
-    return [
-      Step(
-          isActive: _stepStateData[0]['active'],
+    if (widget.showCarSelection) {
+      return [
+        Step(
+          isActive: widget._stepStateData[0]["active"],
           title: _currentStepIndex == 0
-              ? Text(S.of(context).appointment_create_step1)
+              ? Text(S.of(context).appointment_create_step0)
               : Text(''),
-          content: AppointmentCreateServicesForm(
-            key: appointmentServicesStateKey,
-            serviceItems: providerServiceProvider.serviceItems,
-          ),
-          state: _stepStateData[0]['state']),
-      Step(
-          isActive: _stepStateData[1]['active'],
-          title: _currentStepIndex == 1
-              ? Text(S.of(context).appointment_create_step2)
-              : Text(''),
-          content: AppointmentCreateIssueForm(key: appointmentIssuesStateKey),
-          state: _stepStateData[1]['state']),
-      Step(
-          isActive: _stepStateData[2]['active'],
-          title: _currentStepIndex == 2
-              ? Text(S.of(context).appointment_create_step3)
-              : Text(''),
-          content: AppointmentCreateProvidersForm(
-            key: appointmentShopsStateKey,
-          ),
-          state: _stepStateData[2]['state']),
-      Step(
-          isActive: _currentStepIndex == 3,
-          title: _stepStateData[3]['active']
-              ? Text(S.of(context).appointment_create_step4)
-              : Text(''),
-          content: AppointmentDateTimeForm(
-              key: appointmentDateTimeStateKey,
-              appointments: appointmentsProvider.appointments),
-          state: _stepStateData[3]['state'])
-    ];
+          content: AppointmentCreateSelectCarForm(
+              key: appointmentCarSelectionStateKey),
+        ),
+        Step(
+            isActive: widget._stepStateData[1]['active'],
+            title: _currentStepIndex == 1
+                ? Text(S.of(context).appointment_create_step1)
+                : Text(''),
+            content: AppointmentCreateServicesForm(
+              key: appointmentServicesStateKey,
+              serviceItems: providerServiceProvider.serviceItems,
+            ),
+            state: widget._stepStateData[1]['state']),
+        Step(
+            isActive: widget._stepStateData[2]['active'],
+            title: _currentStepIndex == 2
+                ? Text(S.of(context).appointment_create_step2)
+                : Text(''),
+            content: AppointmentCreateIssueForm(key: appointmentIssuesStateKey),
+            state: widget._stepStateData[2]['state']),
+        Step(
+            isActive: widget._stepStateData[3]['active'],
+            title: _currentStepIndex == 3
+                ? Text(S.of(context).appointment_create_step3)
+                : Text(''),
+            content: AppointmentCreateProvidersForm(
+              key: appointmentShopsStateKey,
+            ),
+            state: widget._stepStateData[3]['state']),
+        Step(
+            isActive: _currentStepIndex == 4,
+            title: widget._stepStateData[4]['active']
+                ? Text(S.of(context).appointment_create_step4)
+                : Text(''),
+            content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
+            state: widget._stepStateData[4]['state'])
+      ];
+    } else {
+      return [
+        Step(
+            isActive: widget._stepStateData[0]['active'],
+            title: _currentStepIndex == 0
+                ? Text(S.of(context).appointment_create_step1)
+                : Text(''),
+            content: AppointmentCreateServicesForm(
+              key: appointmentServicesStateKey,
+              serviceItems: providerServiceProvider.serviceItems,
+            ),
+            state: widget._stepStateData[0]['state']),
+        Step(
+            isActive: widget._stepStateData[1]['active'],
+            title: _currentStepIndex == 1
+                ? Text(S.of(context).appointment_create_step2)
+                : Text(''),
+            content: AppointmentCreateIssueForm(key: appointmentIssuesStateKey),
+            state: widget._stepStateData[1]['state']),
+        Step(
+            isActive: widget._stepStateData[2]['active'],
+            title: _currentStepIndex == 2
+                ? Text(S.of(context).appointment_create_step3)
+                : Text(''),
+            content: AppointmentCreateProvidersForm(
+              key: appointmentShopsStateKey,
+            ),
+            state: widget._stepStateData[2]['state']),
+        Step(
+            isActive: _currentStepIndex == 3,
+            title: widget._stepStateData[3]['active']
+                ? Text(S.of(context).appointment_create_step4)
+                : Text(''),
+            content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
+            state: widget._stepStateData[3]['state'])
+      ];
+    }
   }
 
   _next() {
     _resetStepTitles();
-    switch (_currentStepIndex) {
-      case 0:
-        if (!appointmentServicesStateKey.currentState.valid()) {
-          return;
-        } else {
-          setState(() {
-            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
-            _stepStateData[_currentStepIndex + 1]['active'] = true;
-            _goTo(_currentStepIndex + 1);
-            isLastStep = false;
-          });
-        }
-        break;
-      case 1:
-        if (!appointmentIssuesStateKey.currentState.valid())
-          return;
-        else {
-          Provider.of<ProviderServiceProvider>(context, listen: false).loadProviders();
-          setState(() {
-            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
-            _stepStateData[_currentStepIndex + 1]['active'] = true;
-            _goTo(_currentStepIndex + 1);
-            isLastStep = false;
-          });
-        }
-        break;
-      case 2:
-        if (!appointmentShopsStateKey.currentState.valid())
-          return;
-        else {
-          ProviderServiceProvider provider = Provider.of<ProviderServiceProvider>(context);
-          provider.loadProviderSchedules(provider.selectedProvider);
 
-          setState(() {
-            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
-            _stepStateData[_currentStepIndex + 1]['active'] = true;
-            _goTo(_currentStepIndex + 1);
-            isLastStep = true;
-          });
-        }
-        break;
-      case 3:
-        if (!appointmentDateTimeStateKey.currentState.valid())
-          return;
-        else {
-          setState(() {
-            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-            _submit();
-          });
-        }
-        break;
+    if (widget.showCarSelection) {
+      switch (_currentStepIndex) {
+        case 0:
+          _carChecker();
+          break;
+        case 1:
+          _servicesChecker();
+          break;
+        case 2:
+          _issuesChecker();
+          break;
+        case 3:
+          _providersChecker();
+          break;
+        case 4:
+          _calendarChecker();
+          break;
+      }
+    }
+    else {
+      switch (_currentStepIndex) {
+        case 0:
+          _servicesChecker();
+          break;
+        case 1:
+          _issuesChecker();
+          break;
+        case 2:
+          _providersChecker();
+          break;
+        case 3:
+          _calendarChecker();
+          break;
+      }
+    }
+  }
+
+  _carChecker() {
+    if (!appointmentCarSelectionStateKey.currentState.valid()) {
+    } else {
+      setState(() {
+        widget._stepStateData[_currentStepIndex]['state'] = StepState.complete;
+        widget._stepStateData[_currentStepIndex + 1]['state'] =
+            StepState.indexed;
+        widget._stepStateData[_currentStepIndex + 1]['active'] = true;
+        _goTo(_currentStepIndex + 1);
+        isLastStep = false;
+      });
+    }
+  }
+
+  _servicesChecker() {
+    if (!appointmentServicesStateKey.currentState.valid()) {
+    } else {
+      setState(() {
+        widget._stepStateData[_currentStepIndex]['state'] = StepState.complete;
+        widget._stepStateData[_currentStepIndex + 1]['state'] =
+            StepState.indexed;
+        widget._stepStateData[_currentStepIndex + 1]['active'] = true;
+        _goTo(_currentStepIndex + 1);
+        isLastStep = false;
+      });
+    }
+  }
+
+  _issuesChecker() {
+    if (!appointmentIssuesStateKey.currentState.valid()) {
+    }
+    else {
+      Provider.of<ProviderServiceProvider>(context, listen: false)
+          .loadProviders();
+      setState(() {
+        widget._stepStateData[_currentStepIndex]['state'] = StepState.complete;
+        widget._stepStateData[_currentStepIndex + 1]['state'] =
+            StepState.indexed;
+        widget._stepStateData[_currentStepIndex + 1]['active'] = true;
+        _goTo(_currentStepIndex + 1);
+        isLastStep = false;
+      });
+    }
+  }
+
+  _providersChecker() {
+    if (!appointmentShopsStateKey.currentState.valid())
+      return;
+    else {
+      setState(() {
+        widget._stepStateData[_currentStepIndex]['state'] =
+            StepState.complete;
+        widget._stepStateData[_currentStepIndex + 1]['state'] =
+            StepState.indexed;
+        widget._stepStateData[_currentStepIndex + 1]['active'] = true;
+        _goTo(_currentStepIndex + 1);
+        isLastStep = true;
+      });
+    }
+  }
+
+  _calendarChecker() {
+    if (!appointmentDateTimeStateKey.currentState.valid()) {
+    }
+    else {
+      setState(() {
+        widget._stepStateData[_currentStepIndex]['state'] =
+            StepState.complete;
+        _submit();
+      });
     }
   }
 
   _resetStepTitles() {
-    for (int i = 0; i < _stepStateData.length; i++) {
-      _stepStateData[i]['title'] = Text('');
+    for (int i = 0; i < widget._stepStateData.length; i++) {
+      widget._stepStateData[i]['title'] = Text('');
     }
   }
 
   _back() {
     setState(() {
       if (_currentStepIndex > 0) {
-        _stepStateData[_currentStepIndex]['state'] = StepState.disabled;
-        _stepStateData[_currentStepIndex]['active'] = false;
-        _stepStateData[_currentStepIndex - 1]['state'] = StepState.indexed;
-        _stepStateData[_currentStepIndex - 1]['active'] = true;
+        widget._stepStateData[_currentStepIndex]['state'] = StepState.disabled;
+        widget._stepStateData[_currentStepIndex]['active'] = false;
+        widget._stepStateData[_currentStepIndex - 1]['state'] =
+            StepState.indexed;
+        widget._stepStateData[_currentStepIndex - 1]['active'] = true;
         _goTo(_currentStepIndex - 1);
         isLastStep = false;
       }

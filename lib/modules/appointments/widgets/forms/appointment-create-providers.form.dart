@@ -3,7 +3,6 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-provide
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/alert.info.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,82 +19,16 @@ class AppointmentCreateProvidersFormState
   ProviderServiceProvider providerServiceProvider;
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              S.of(context).appointment_create_step3_specific,
-              style: new TextStyle(
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.bold,
-                color: gray,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            new Switch(
-              value: providerServiceProvider.appointmentProviderType ==
-                  AppointmentProviderType.Auction,
-              onChanged: (bool isOn) {
-                setState(() {
-                  if (isOn) {
-                    providerServiceProvider.appointmentProviderType =
-                        AppointmentProviderType.Auction;
-                  } else {
-                    providerServiceProvider.appointmentProviderType =
-                        AppointmentProviderType.Specific;
-                  }
-                });
-              },
-              activeTrackColor: switch_dark_gray,
-              inactiveThumbColor: red,
-              inactiveTrackColor: switch_dark_gray,
-              activeColor: red,
-              hoverColor: Colors.blue,
-            ),
-            new Text(
-              S.of(context).appointment_create_step3_bid,
-              style: new TextStyle(
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-        _containerWidget(),
-      ],
-    );
-  }
-  Widget _containerWidget() {
-    if (providerServiceProvider.appointmentProviderType ==
-        AppointmentProviderType.Specific) {
-      return new Container(
-        margin: EdgeInsets.only(top: 10),
-        child: new SizedBox(
-          height: MediaQuery.of(context).size.height * .5,
-          child: ListView.builder(
-            itemCount: providerServiceProvider.serviceProviders.length,
-            itemBuilder: (context, int) {
-              return _buildListItem(
-                  int, providerServiceProvider.serviceProviders);
-            },
-          ),
-        ),
-      );
-    }
-    return new Container(
-      margin: EdgeInsets.only(top: 10),
-      child: new SizedBox(
-          height: MediaQuery.of(context).size.height * .5,
-          child: new Container(
-            margin: EdgeInsets.only(top: 20),
-            child: new AlertInfoWidget(
-                S.of(context).appointment_create_step3_alert),
-          )),
+    providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
+    var providers = providerServiceProvider.serviceProviders;
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * .5,
+      child: ListView.builder(
+        itemCount: providers.length,
+        itemBuilder: (context, int) {
+          return _buildListItem(int, providers);
+        },
+      ),
     );
   }
   Widget _buildListItem(int index, List<ServiceProvider> providers) {

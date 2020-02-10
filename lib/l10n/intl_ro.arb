@@ -70,6 +70,7 @@
   "appointment_details_services_title": "Servicii solicitate",
   "appointment_details_services_issues": "Probleme raportate",
   "appointments_list_search_hint": "Număr înmatriculare sau model mașină",
+  "appointment_details_services_appointment_cancel": "Anulare",
   "SERVICE": "Service",
   "CAR_WASHING": "Spălătorie",
   "PAINT_SHOP": "Vopsire",
@@ -79,5 +80,7 @@
   "service_services": "Services",
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",
-  "service_promotions": "Promotions"
+  "service_promotions": "Promotions",
+  "general_at": "la",
+  "appointment_create_step0": "Alege mașină"
 }

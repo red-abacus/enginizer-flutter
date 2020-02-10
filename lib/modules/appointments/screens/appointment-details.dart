@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/enum/appointment.details.tabbar.state.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-details.widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,9 +56,10 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
-        return AppointmentDetailsWidget(appointment: appointmentProvider.selectedAppointment);
+        return AppointmentDetailsWidget(appointment: appointmentProvider.selectedAppointment,
+            appointmentDetail: appointmentProvider.selectedAppointmentDetail);
       case AppointmentDetailsTabBarState.CAR:
-        // TODO: Handle this case.
+        return AppointmentDetailsCarWidget();
         break;
     }
   }
@@ -100,8 +102,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           ),
           decoration: BoxDecoration(
               border: Border(
-            bottom: BorderSide(width: 1.0, color: bottomColor),
-          ))),
+                bottom: BorderSide(width: 1.0, color: bottomColor),
+              ))),
     );
   }
 

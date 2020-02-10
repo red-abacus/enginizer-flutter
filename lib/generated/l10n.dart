@@ -10,18 +10,18 @@ import 'intl/messages_all.dart';
 
 class S {
   S(this.localeName);
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final String name = locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    final String name =
+        locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       return S(localeName);
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -757,6 +757,33 @@ class S {
       args: [],
     );
   }
+
+  String get appointment_details_services_appointment_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'appointment_details_services_appointment_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_at {
+    return Intl.message(
+      'at',
+      name: "general_at",
+      desc: '',
+      args: []
+    );
+  }
+
+  String get appointment_create_step0 {
+    return Intl.message(
+        'Select car',
+        name: "appointment_create_step0",
+        desc: '',
+        args: []
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -764,14 +791,17 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
-      Locale('ro', ''), Locale('en', ''),
+      Locale('ro', ''),
+      Locale('en', ''),
     ];
   }
 
   @override
   bool isSupported(Locale locale) => _isSupported(locale);
+
   @override
   Future<S> load(Locale locale) => S.load(locale);
+
   @override
   bool shouldReload(AppLocalizationDelegate old) => false;
 

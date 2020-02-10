@@ -1,19 +1,3 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/layout/navigation.app.dart';
-import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
-import 'package:enginizer_flutter/modules/appointments/appointments.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
-import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
-import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
-import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
-import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
-import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
-import 'package:enginizer_flutter/modules/cars/screens/car.dart';
-import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +5,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'config/injection.dart';
+import 'generated/l10n.dart';
+import 'layout/navigation.app.dart';
+import 'modules/appointments/providers/appointment.provider.dart';
+import 'modules/appointments/providers/appointments.provider.dart';
+import 'modules/appointments/providers/provider-service.provider.dart';
+import 'modules/appointments/screens/appointment-details.dart';
+import 'modules/appointments/screens/appointments.dart';
+import 'modules/authentication/providers/auth.provider.dart';
+import 'modules/authentication/providers/user.provider.dart';
+import 'modules/authentication/screens/auth.screen.dart';
+import 'modules/cars/providers/car.provider.dart';
+import 'modules/cars/providers/cars-make.provider.dart';
+import 'modules/cars/providers/cars.provider.dart';
+import 'modules/cars/screens/car.dart';
+import 'modules/cars/screens/cars.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

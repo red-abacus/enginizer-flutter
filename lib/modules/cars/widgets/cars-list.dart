@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/generated/intl/r.dart';
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/car-card.dart';

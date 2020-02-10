@@ -43,8 +43,6 @@ class AppointmentRequest {
       "userId": userId
     };
 
-    print("prop map ${propMap}");
-
     return propMap;
   }
 }

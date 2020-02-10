@@ -27,6 +27,10 @@ class AppointmentsService {
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String PROVIDER_SERVICES_SUFFIX = "/services";
 
+  static const String CANCEL_APPOINTMENT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String CANCEL_APPOINTMENT_SUFFIX = '/cancel';
+
   Dio _dio = inject<Dio>();
 
   AppointmentsService();
@@ -59,10 +63,10 @@ class AppointmentsService {
     }
   }
 
-  Future<Appointment> createAppointment(
-      AppointmentRequest appointmentRequest) async {
+  Future<Appointment> createAppointment(AppointmentRequest appointmentRequest) async {
     final response = await _dio.post(APPOINTMENTS_API_PATH,
         data: jsonEncode(appointmentRequest.toJson()));
+
     if (response.statusCode == 201) {
       return _mapAppointment(response.data);
     } else {
@@ -72,8 +76,8 @@ class AppointmentsService {
   }
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
-    final response = await _dio
-        .get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString());
+    final response = await _dio.get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString());
+
     if (response.statusCode == 200) {
       return _mapAppointmentDetails(response.data);
     } else {
@@ -120,5 +124,22 @@ class AppointmentsService {
     return PROVIDER_SERVICES_PREFIX +
         providerId.toString() +
         PROVIDER_SERVICES_SUFFIX;
+  }
+
+  Future<Appointment> cancelAppointment(int appointmentId) async {
+    final response = await _dio.patch(buildCancelAppointmentPath(appointmentId));
+
+    if (response.statusCode == 200) {
+      return _mapAppointment(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('CANCEL_APPOINTMENT_FAILED');
+    }
+  }
+
+  String buildCancelAppointmentPath(int appointmentId) {
+    return CANCEL_APPOINTMENT_PREFIX +
+        appointmentId.toString() +
+        CANCEL_APPOINTMENT_SUFFIX;
   }
 }

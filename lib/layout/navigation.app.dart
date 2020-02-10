@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/appointments.dart';
+import 'package:enginizer_flutter/modules/appointments/screens/appointments.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,8 @@ class NavigationApp extends StatefulWidget {
 class _NavigationAppState extends State<NavigationApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  String _selectedDrawerRoute = Cars.route;
+  // TODO - remove this
+  String _selectedDrawerRoute = Appointments.route;
 
   @override
   Widget build(BuildContext context) {
