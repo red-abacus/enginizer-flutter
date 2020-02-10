@@ -90,7 +90,9 @@ class CarsState extends State<Cars> {
           });
         });
   }
-
+  void _filterCars(BuildContext ctx, String filterValue) {
+    Provider.of<CarsProvider>(ctx).loadCars(filterValue: filterValue);
+  }
   void _selectCar(BuildContext ctx, Car selectedCar) {
     Provider.of<CarProvider>(ctx).selectCar(selectedCar);
     Navigator.of(ctx).pushNamed(
@@ -102,9 +104,10 @@ class CarsState extends State<Cars> {
     return _isLoading
         ? CircularProgressIndicator()
         : CarList(
-            cars: cars,
-            selectCar: _selectCar,
-            openAppointmentCreateModal: _openAppointmentCreateModal);
+        cars: cars,
+        filterCars: _filterCars,
+        selectCar: _selectCar,
+        openAppointmentCreateModal: _openAppointmentCreateModal);
   }
 
   _addCar(Car car) {

@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class AppointmentCreateServicesFormState
     return ListView.builder(
       itemBuilder: (ctx, index) {
         // TODO service name should be translated
-        var serviceName = services[index].name.toString();
+        var serviceName = _translateServiceName(services[index].name.toString());
 
         return CheckboxListTile(
           title: Text(serviceName),
@@ -60,5 +61,24 @@ class AppointmentCreateServicesFormState
 
   bool valid() {
     return providerServiceProvider.selectedServiceItems.length > 0;
+  }
+
+  String _translateServiceName(String serviceName) {
+    switch (serviceName) {
+      case 'SERVICE':
+        return S.of(context).SERVICE;
+      case 'CAR_WASHING':
+        return S.of(context).CAR_WASHING;
+      case 'PAINT_SHOP':
+        return S.of(context).PAINT_SHOP;
+      case 'TIRE_SHOP':
+        return S.of(context).TIRE_SHOP;
+      case 'TOW_SERVICE':
+        return S.of(context).TOW_SERVICE;
+      case 'PICKUP_RETURN':
+        return S.of(context).PICKUP_RETURN;
+      default:
+        return '';
+    }
   }
 }

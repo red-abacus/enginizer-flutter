@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-color.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-cylinder-capacity.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-power.model.dart';
@@ -183,8 +183,33 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
   List<DropdownMenuItem<CarColor>> _buildCarColorDropdownItems(
       List<CarColor> colors) {
     List<DropdownMenuItem<CarColor>> colorsDropdownList = [];
-    colors.forEach((color) => colorsDropdownList
-        .add(DropdownMenuItem(value: color, child: Text(color.name))));
+    colors.forEach((color) => colorsDropdownList.add(DropdownMenuItem(
+        value: color, child: Text(_translateColorName(color.name)))));
     return colorsDropdownList;
+  }
+
+  String _translateColorName(String colorName) {
+    switch (colorName) {
+      case 'COLOR_RED':
+        return S.of(context).COLOR_RED;
+      case 'COLOR_BLACK':
+        return S.of(context).COLOR_BLACK;
+      case 'COLOR_GREEN':
+        return S.of(context).COLOR_GREEN;
+      case 'COLOR_SILVER':
+        return S.of(context).COLOR_SILVER;
+      case 'COLOR_WHITE':
+        return S.of(context).COLOR_WHITE;
+      case 'COLOR_GRAY':
+        return S.of(context).COLOR_GRAY;
+      case 'COLOR_DARK_BLUE':
+        return S.of(context).COLOR_DARK_BLUE;
+      case 'COLOR_DARK_GRAY':
+        return S.of(context).COLOR_DARK_GRAY;
+      case 'COLOR_GOLD':
+        return S.of(context).COLOR_GOLD;
+      default:
+        return '';
+    }
   }
 }

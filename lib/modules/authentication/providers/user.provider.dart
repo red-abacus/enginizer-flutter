@@ -9,6 +9,8 @@ class UserProvider with ChangeNotifier {
 
   UserCredentials userCredentials;
 
+  @Deprecated(
+      'The GET method for /users/credentials has been removed from the API')
   Future<void> getLoggedUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

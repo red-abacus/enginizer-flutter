@@ -12,13 +12,25 @@ import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart
 import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
 import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt inject = GetIt.instance;
 
-void setupDependencyInjection() {
-  inject.registerLazySingleton(() => Dio(BaseOptions(headers: {
-        Headers.contentTypeHeader: 'application/json', // set content-length
-      })));
+void setupDependencyInjection(SharedPreferences s) async {
+  inject.registerLazySingleton(() {
+    Dio dio = new Dio(BaseOptions(headers: {
+      Headers.contentTypeHeader: 'application/json', // set content-length
+    }));
+
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+      options.headers['Authorization'] = 'Bearer ${s.getString('token')}';
+      return options;
+    }));
+
+    return dio;
+  });
+
   inject.registerLazySingleton(() => AuthService());
   inject.registerLazySingleton(() => CarMakeService());
   inject.registerLazySingleton(() => CarService());

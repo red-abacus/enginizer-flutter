@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/datepicker.widget.dart';
 import 'package:flutter/cupertino.dart';

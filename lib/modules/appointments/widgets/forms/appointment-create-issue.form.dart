@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';

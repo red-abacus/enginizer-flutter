@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-query.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';

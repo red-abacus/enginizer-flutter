@@ -6,6 +6,7 @@ import 'package:enginizer_flutter/modules/cars/models/car-model.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-power.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-transmissions.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-year.model.dart';
+import 'package:enginizer_flutter/utils/string.utils.dart';
 import 'package:intl/intl.dart';
 
 class Car {
@@ -105,5 +106,22 @@ class Car {
     }
 
     return propMap;
+  }
+
+  bool filtered(String value) {
+    var filtered = false;
+
+    if (registrationNumber != null) {
+      filtered = StringUtils.containsIgnoreCase(registrationNumber, value);
+    }
+
+    if (model != null) {
+      if (model.name != null) {
+        filtered =
+            filtered || StringUtils.containsIgnoreCase(model.name, value);
+      }
+    }
+
+    return filtered;
   }
 }

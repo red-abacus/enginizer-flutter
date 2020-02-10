@@ -1,5 +1,5 @@
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/generated/i18n.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
 import 'package:enginizer_flutter/modules/appointments/appointment-details.dart';
 import 'package:enginizer_flutter/modules/appointments/appointments.dart';
@@ -14,16 +14,19 @@ import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart
 import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/car.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
+import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setupDependencyInjection();
+  final prefs = await SharedPreferences.getInstance();
+  setupDependencyInjection(prefs);
   runApp(App());
 }
 
@@ -53,12 +56,16 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
-          authProvider.tryAutoLogin();
-          Provider.of<UserProvider>(context, listen: false)
-              .getLoggedUserCredentials();
-
           return MaterialApp(
-            home: authProvider.isAuth ? NavigationApp() : AuthScreen(),
+            home: authProvider.isAuth
+                ? NavigationApp()
+                : FutureBuilder(
+                    future: authProvider.tryAutoLogin(),
+                    builder: (ctx, authResultSnapshot) =>
+                        authResultSnapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen()),
             theme: ThemeData(
               primaryColor: Color.fromRGBO(153, 0, 0, 1),
               accentColor: Color.fromRGBO(206, 49, 47, 1),
@@ -87,8 +94,6 @@ class AppState extends State<App> {
               DefaultCupertinoLocalizations.delegate
             ],
             supportedLocales: S.delegate.supportedLocales,
-            localeResolutionCallback:
-                S.delegate.resolution(fallback: new Locale("ro", "")),
             routes: {
               '/auth': (context) => AuthScreen(),
               '/cars': (context) => Cars(),

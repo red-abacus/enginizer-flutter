@@ -21,7 +21,7 @@ class AuthService {
     try {
       response = await _dio.post('$AUTH_API_PATH/login',
           data: payload,
-          options: Options(contentType: ContentType.json.toString()));
+          options: Options(headers: {}, contentType: ContentType.json.toString()));
     } catch (e) {
       if (e.response.statusCode == 401) {
         throw HttpException('INVALID_CREDENTIALS');

@@ -1,13 +1,15 @@
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/car-card.dart';
 import 'package:flutter/material.dart';
 
 class CarList extends StatelessWidget {
   List<Car> cars = [];
+  Function filterCars;
   Function selectCar;
   Function openAppointmentCreateModal;
 
-  CarList({this.cars, this.selectCar, this.openAppointmentCreateModal});
+  CarList({this.cars, this.filterCars, this.selectCar, this.openAppointmentCreateModal});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +29,10 @@ class CarList extends StatelessWidget {
                   child: TextField(
                     key: Key('searchBar'),
                     autofocus: false,
-                    decoration: InputDecoration(labelText: 'Find car'),
+                    decoration: InputDecoration(
+                        labelText: S.of(context).cars_list_search_hint),
                     onChanged: (val) {
-                      print(val);
+                      this.filterCars(context, val);
                     },
                   ),
                 )),
