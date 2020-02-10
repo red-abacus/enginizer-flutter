@@ -82,5 +82,8 @@
   "service_fiscal": "Fiscal info",
   "service_promotions": "Promotions",
   "general_at": "la",
-  "appointment_create_step0": "Alege mașină"
+  "appointment_create_step0": "Alege mașină",
+  "general_find": "Caută",
+  "general_status": "Status",
+  "general_car": "Masină"
 }

@@ -82,5 +82,8 @@
   "service_fiscal": "Fiscal info",
   "service_promotions": "Promotions",
   "general_at": "at",
-  "appointment_create_step0": "Select car"
+  "appointment_create_step0": "Select car",
+  "general_find": "Find",
+  "general_status": "Status",
+  "general_car": "Car"
 }

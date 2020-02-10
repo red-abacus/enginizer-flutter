@@ -784,6 +784,33 @@ class S {
       args: [],
     );
   }
+
+  String get general_find {
+    return Intl.message(
+      'Find',
+      name: 'general_find',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_status {
+    return Intl.message(
+      'Status',
+      name: 'general_status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_car {
+    return Intl.message(
+      'Car',
+      name: 'general_car',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

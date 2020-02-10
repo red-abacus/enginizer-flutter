@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/screens/appointments.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/auctions.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class NavigationApp extends StatefulWidget {
   final drawerItems = [
     new DrawerItem("Dashboard", Dashboad.route, Icons.rss_feed),
     new DrawerItem("Cars", Cars.route, Icons.local_pizza),
-    new DrawerItem(
-        "Appointments", Appointments.route, Icons.account_balance_wallet)
+    new DrawerItem("Appointments", Appointments.route, Icons.account_balance_wallet),
+    new DrawerItem("Auctions", Auctions.route, Icons.account_balance_wallet)
   ];
 
   @override
@@ -29,8 +30,7 @@ class NavigationApp extends StatefulWidget {
 class _NavigationAppState extends State<NavigationApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  // TODO - remove this
-  String _selectedDrawerRoute = Appointments.route;
+  String _selectedDrawerRoute = Cars.route;
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +96,8 @@ class _NavigationAppState extends State<NavigationApp> {
         return Cars();
       case Appointments.route:
         return Appointments();
+      case Auctions.route:
+        return Auctions();
       default:
         return new Text("Error");
     }

@@ -88,6 +88,19 @@ class S implements WidgetsLocalizations {
   String get general_continue => "Continue";
   String get general_at => "at";
   String get cars_list_search_hint => "Registration no. or car model";
+  String get general_details => "DETAILS";
+  String get general_find => "Find";
+  String get general_status => "Status";
+  String get general_car => "Car";
+  // TODO - Need proper translation
+  String get service_services => "Services";
+  String get service_reviews => "Reviews";
+  // TODO - Need proper translation
+  String get service_fiscal => "Fiscal info";
+  // TODO - Need proper translation
+  String get service_promotions => "Promotions";
+
+  String get auctions_title => "Auctions";
 }
 
 class $en extends S {
@@ -234,6 +247,16 @@ class $ro extends S {
   String get general_at => "la";
   @override
   String get cars_list_search_hint => "înmatriculare sau model mașină";
+
+  String get general_details => "DETALII";
+  @override
+  String get general_find => "Caută";
+  @override
+  String get general_status => "Status";
+  @override
+  String get general_car => "Masină";
+  @override
+  String get auctions_title => "Licitatii";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

@@ -26,6 +26,8 @@ import 'modules/appointments/providers/appointments.provider.dart';
 import 'modules/appointments/providers/provider-service.provider.dart';
 import 'modules/appointments/screens/appointment-details.dart';
 import 'modules/appointments/screens/appointments.dart';
+import 'modules/auctions/providers/auctions-provider.dart';
+import 'modules/auctions/screens/auctions.dart';
 import 'modules/authentication/providers/auth.provider.dart';
 import 'modules/authentication/providers/user.provider.dart';
 import 'modules/authentication/screens/auth.screen.dart';
@@ -67,7 +69,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: ProviderServiceProvider()),
           ChangeNotifierProvider.value(value: AppointmentsProvider()),
           ChangeNotifierProvider.value(value: UserProvider()),
-          ChangeNotifierProvider.value(value: AppointmentProvider())
+          ChangeNotifierProvider.value(value: AppointmentProvider()),
+          ChangeNotifierProvider.value(value: AuctionsProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           Provider.of<UserProvider>(context, listen: false)
@@ -116,7 +119,8 @@ class AppState extends State<App> {
               '/cars': (context) => Cars(),
               '/cars/details': (context) => CarDetails(),
               Appointments.route: (context) => Appointments(),
-              AppointmentDetails.route: (context) => AppointmentDetails()
+              AppointmentDetails.route: (context) => AppointmentDetails(),
+              Auctions.route: (context) => Auctions()
             },
           );
         }));
