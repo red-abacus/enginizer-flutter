@@ -200,6 +200,24 @@ class S {
     );
   }
 
+  String get auctions_details_appointment_details {
+    return Intl.message(
+      'Appointment Details',
+      name: 'auctions_details_appointment_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_details_appointment_auctions {
+    return Intl.message(
+      'Auctions',
+      name: 'auctions_details_appointment_auctions',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get cars_create_step1 {
     return Intl.message(
       'Identification',
@@ -699,6 +717,15 @@ class S {
     return Intl.message(
       'Cancel',
       name: 'appointment_details_services_appointment_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_services_appointment_date {
+    return Intl.message(
+      'Appointment date',
+      name: 'appointment_details_services_appointment_date',
       desc: '',
       args: [],
     );

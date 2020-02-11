@@ -1,0 +1,4 @@
+enum AuctionDetailsScreenState {
+  APPOINTMENT,
+  AUCTIONS
+}

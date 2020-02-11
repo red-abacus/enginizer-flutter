@@ -13,6 +13,7 @@ class AuctionsList extends StatelessWidget {
   final List<Auction> auctions;
 
   Function filterAuctions;
+  Function selectAuction;
 
   String searchString;
   AuctionStatus auctionStatus;
@@ -22,6 +23,7 @@ class AuctionsList extends StatelessWidget {
       {this.carBrands,
       this.auctions,
       this.filterAuctions,
+      this.selectAuction,
       this.searchString,
       this.auctionStatus,
       this.carBrand});
@@ -156,7 +158,9 @@ class AuctionsList extends StatelessWidget {
     return brandDropdownList;
   }
 
-  _selectAuction(Auction auction) {}
+  _selectAuction(Auction auction) {
+    this.selectAuction(auction);
+  }
 
   _titleFromState(AuctionStatus status, BuildContext context) {
     switch (status) {

@@ -3,6 +3,7 @@ import 'package:enginizer_flutter/layout/navigation.app.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
@@ -117,7 +118,8 @@ class AppState extends State<App> {
               '/cars/details': (context) => CarDetails(),
               Appointments.route: (context) => Appointments(),
               AppointmentDetails.route: (context) => AppointmentDetails(),
-              Auctions.route: (context) => Auctions()
+              Auctions.route: (context) => Auctions(),
+              AuctionDetails.route: (context) => AuctionDetails()
             },
           );
         }));

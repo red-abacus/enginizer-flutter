@@ -1,5 +1,7 @@
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/auctions-list.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +50,7 @@ class AuctionsState extends State<Auctions> {
       });
 
       auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      auctionsProvider.resetParameters();
 
       auctionsProvider.loadCarBrands().then((_) {
         auctionsProvider.loadAuctions().then((_) {
@@ -57,6 +60,7 @@ class AuctionsState extends State<Auctions> {
         });
       });
     }
+
     _initDone = true;
 
     super.didChangeDependencies();
@@ -71,6 +75,7 @@ class AuctionsState extends State<Auctions> {
             carBrands: auctionsProvider.carBrands,
             auctions: auctionsProvider.auctions,
             filterAuctions: _filterAuctions,
+            selectAuction: _selectAuction,
             searchString: auctionsProvider.searchString,
             auctionStatus: auctionsProvider.filterStatus,
             carBrand: auctionsProvider.filterCarBrand);
@@ -78,5 +83,10 @@ class AuctionsState extends State<Auctions> {
 
   _filterAuctions(String value, AuctionStatus status, CarBrand carBrand) {
     auctionsProvider.filterAuctions(value, status, carBrand);
+  }
+
+  _selectAuction(Auction auction) {
+    auctionsProvider.selectedAuction = auction;
+    Navigator.of(context).pushNamed(AuctionDetails.route);
   }
 }

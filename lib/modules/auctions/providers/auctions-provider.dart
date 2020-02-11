@@ -1,4 +1,6 @@
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
+import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/foundation.dart';
 class AuctionsProvider with ChangeNotifier {
   CarMakeService carMakeService = inject<CarMakeService>();
   AuctionsService auctionsService = inject<AuctionsService>();
+  AppointmentsService appointmentsService = inject<AppointmentsService>();
 
   AuctionStatus filterStatus;
   CarBrand filterCarBrand;
@@ -19,6 +22,8 @@ class AuctionsProvider with ChangeNotifier {
   List<Auction> auctions = [];
 
   AuctionResponse auctionResponse;
+  Auction selectedAuction;
+  AppointmentDetail appointmentDetails;
 
   Future<List<CarBrand>> loadCarBrands() async {
     carBrands = await carMakeService.getCarBrands();
@@ -48,5 +53,19 @@ class AuctionsProvider with ChangeNotifier {
         .toList();
     notifyListeners();
     return auctions;
+  }
+
+  Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
+    appointmentDetails = await this.appointmentsService.getAppointmentDetails(appointmentId);
+    return appointmentDetails;
+  }
+
+  void resetParameters() {
+    this.filterStatus = null;
+    this.filterCarBrand = null;
+    this.searchString = "";
+
+    carBrands = [];
+    auctions = [];
   }
 }
