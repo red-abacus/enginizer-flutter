@@ -41,7 +41,7 @@ class AppointmentsState extends State<Appointments> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 1,
-          onPressed: () => _openCreateAppointmentModal(context),
+          onPressed: () => _openAppointmentCreateModal(context),
           child: Icon(Icons.add),
         ),
       ),
@@ -104,7 +104,9 @@ class AppointmentsState extends State<Appointments> {
             filterAppointments: _filterAppointments);
   }
 
-  void _openCreateAppointmentModal(BuildContext buildContext) {
+  void _openAppointmentCreateModal(BuildContext buildContext) {
+    Provider.of<ProviderServiceProvider>(context).initFormValues();
+
     Provider.of<CarsProvider>(context, listen: false).loadCars();
     Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
 

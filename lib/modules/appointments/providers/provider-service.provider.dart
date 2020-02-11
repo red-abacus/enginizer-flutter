@@ -17,25 +17,30 @@ import 'package:flutter/widgets.dart';
 class ProviderServiceProvider with ChangeNotifier {
   JwtUser authUser;
 
-  Car selectedCar;
-
   List<ServiceItem> serviceItems = [];
   List<ServiceProvider> serviceProviders = [];
   List<ServiceProviderItem> serviceProviderItems = [];
   List<ServiceProviderSchedule> serviceProviderSchedules = [];
 
-  List<IssueItem> issuesFormState = [IssueItem(id: null, description: '')];
-
-  ServiceProvider selectedProvider;
-
   ProviderService providerService = inject<ProviderService>();
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
-  // form entry
-  List<ServiceItem> selectedServiceItems = [];
+  // Form entries
+  Car selectedCar;
+  List<ServiceItem> selectedServiceItems;
+  List<IssueItem> issuesFormState;
+  AppointmentProviderType appointmentProviderType;
+  ServiceProvider selectedProvider;
   DateEntry dateEntry;
-  AppointmentProviderType appointmentProviderType =
-      AppointmentProviderType.Specific;
+
+  void initFormValues() {
+    selectedCar = null;
+    selectedServiceItems = [];
+    issuesFormState = [IssueItem(id: null, description: '')];
+    appointmentProviderType = AppointmentProviderType.Specific;
+    selectedProvider = null;
+    dateEntry = null;
+  }
 
   Future<List<ServiceItem>> loadServices() async {
     var response = await providerService.getServices();
@@ -51,7 +56,8 @@ class ProviderServiceProvider with ChangeNotifier {
     return serviceProviders;
   }
 
-  Future<List<ServiceProvider>> loadProvidersByServiceItems(List<int> servicesIds) async {
+  Future<List<ServiceProvider>> loadProvidersByServiceItems(
+      List<int> servicesIds) async {
     var response = await providerService.getProvidersByServices(servicesIds);
     serviceProviders = response.items;
     notifyListeners();

@@ -77,7 +77,10 @@ class CarsState extends State<Cars> {
   }
 
   void _openAppointmentCreateModal(BuildContext ctx, Car selectedCar) {
+    Provider.of<ProviderServiceProvider>(context).initFormValues();
+
     Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
+
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

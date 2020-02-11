@@ -1,6 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
@@ -19,15 +18,15 @@ import 'forms/appointment-create-select-car.form.dart';
 import 'forms/appointment-create-services.form.dart';
 
 final appointmentCarSelectionStateKey =
-new GlobalKey<AppointmentCreateSelectCarFormState>();
+    new GlobalKey<AppointmentCreateSelectCarFormState>();
 final appointmentServicesStateKey =
-new GlobalKey<AppointmentCreateServicesFormState>();
+    new GlobalKey<AppointmentCreateServicesFormState>();
 final appointmentIssuesStateKey =
-new GlobalKey<AppointmentCreateIssueFormState>();
+    new GlobalKey<AppointmentCreateIssueFormState>();
 final appointmentShopsStateKey =
-new GlobalKey<AppointmentCreateProvidersFormState>();
+    new GlobalKey<AppointmentCreateProvidersFormState>();
 final appointmentDateTimeStateKey =
-new GlobalKey<AppointmentDateTimeFormState>();
+    new GlobalKey<AppointmentDateTimeFormState>();
 
 class AppointmentCreateModal extends StatefulWidget {
   final Function createAppointment;
@@ -36,7 +35,8 @@ class AppointmentCreateModal extends StatefulWidget {
 
   Map<int, dynamic> _stepStateData;
 
-  AppointmentCreateModal(this.createAppointment, this.showCarSelection, [this.selectedCar]) {
+  AppointmentCreateModal(this.createAppointment, this.showCarSelection,
+      [this.selectedCar]) {
     _generateStateData();
   }
 
@@ -74,12 +74,10 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   RaisedButton btnNext;
 
   ProviderServiceProvider providerServiceProvider;
-  AppointmentsProvider appointmentsProvider;
 
   @override
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-    appointmentsProvider = Provider.of<AppointmentsProvider>(context);
 
     final authProvider = Provider.of<Auth>(context);
     providerServiceProvider.authUser = authProvider.userDetails;
