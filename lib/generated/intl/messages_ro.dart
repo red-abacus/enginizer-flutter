@@ -50,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_details_car" : MessageLookupByLibrary.simpleMessage("Mașină"),
     "appointment_details_request" : MessageLookupByLibrary.simpleMessage("Cerere"),
     "appointment_details_services_appointment_cancel" : MessageLookupByLibrary.simpleMessage("Anulare"),
+    "appointment_details_services_appointment_date" : MessageLookupByLibrary.simpleMessage("Dată programare"),
     "appointment_details_services_issues" : MessageLookupByLibrary.simpleMessage("Probleme raportate"),
     "appointment_details_services_title" : MessageLookupByLibrary.simpleMessage("Servicii solicitate"),
     "appointments_list_search_hint" : MessageLookupByLibrary.simpleMessage("Număr înmatriculare sau model mașină"),

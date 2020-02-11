@@ -85,5 +85,6 @@
   "appointment_create_step0": "Select car",
   "general_find": "Find",
   "general_status": "Status",
-  "general_car": "Car"
+  "general_car": "Car",
+  "appointment_details_services_appointment_date": "Appointment date"
 }

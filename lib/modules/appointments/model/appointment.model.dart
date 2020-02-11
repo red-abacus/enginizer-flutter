@@ -1,9 +1,9 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../cars/models/car.model.dart';
@@ -16,6 +16,7 @@ class Appointment {
   DateTime date;
   String createdDate;
   String scheduleDateTime;
+  String name;
 
   Car car;
   List<AppointmentType> appointmentTypes = [];
@@ -23,16 +24,19 @@ class Appointment {
   AppointmentStatus status;
   AppointmentDetail appointmentDetail;
 
-  Appointment({this.id,
-    this.date,
-    this.createdDate,
-    this.scheduleDateTime,
-    this.car,
-    this.appointmentTypes,
-    this.operatingUnit,
-    this.status});
+  Appointment(
+      {this.id,
+      this.date,
+      this.createdDate,
+      this.scheduleDateTime,
+      this.car,
+      this.appointmentTypes,
+      this.operatingUnit,
+      this.status,
+      this.name});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
+    print("json ${json}");
     return Appointment(
         id: json['id'],
         date: json['date'] != null
@@ -49,7 +53,8 @@ class Appointment {
             : null,
         status: json['status'] != null
             ? AppointmentStatus.fromJson(json['status'])
-            : null);
+            : null,
+        name: json["name"] != null ? json["name"] : "");
   }
 
   static _mapAppointmentTypes(List<dynamic> response) {
@@ -67,7 +72,7 @@ class Appointment {
       'scheduleDateTime': scheduleDateTime,
       'car': car.toJson(),
       'appointmentTypes':
-      appointmentTypes.map((appointmentType) => appointmentType.toJson()),
+          appointmentTypes.map((appointmentType) => appointmentType.toJson()),
       'operatingUnit': operatingUnit.toJson(),
       'status': status.toJson()
     };
@@ -87,9 +92,9 @@ class Appointment {
     var filtered = false;
 
     if (car != null) {
-      if (car.model != null) {
-        if (car.model.name != null) {
-          filtered = car.model.name.toLowerCase().contains(value.toLowerCase());
+      if (car.brand != null) {
+        if (car.brand.name != null) {
+          filtered = car.brand.name.toLowerCase().contains(value.toLowerCase());
         }
       }
 
@@ -100,5 +105,22 @@ class Appointment {
     }
 
     return filtered;
+  }
+
+  Color resolveStatusColor() {
+    if (status != null) {
+      switch (status.name.toLowerCase()) {
+        case 'completed':
+          return green;
+        case 'in_work':
+          return yellow;
+        case 'submitted':
+          return gray;
+        case 'canceled':
+          return red;
+      }
+    }
+
+    return gray;
   }
 }
