@@ -3,6 +3,7 @@
   "general_continue": "Continuă",
   "general_add": "Adaugă",
   "general_details": "Detalii",
+  "general_auction": "Licițatie",
   "auth_name": "Nume",
   "auth_email": "E-mail",
   "auth_password": "Parola",
@@ -15,6 +16,8 @@
   "auth_error_passwordMismatch": "Parolele nu sunt la fel!",
   "auth_error_passwordTooShort": "Parola este prea scurtă!",
   "auth_error_invalidEmail": "Email nu este valid!",
+  "auctions_search_hint": "Număr înmatriculare sau model mașină",
+  "auctions_finished": "Finalizate",
   "cars_create_step1": "Identificare",
   "cars_create_step2": "Technice",
   "cars_create_step3": "Extra",
@@ -85,5 +88,6 @@
   "appointment_create_step0": "Alege mașină",
   "general_find": "Caută",
   "general_status": "Status",
-  "general_car": "Masină"
+  "general_car": "Masină",
+  "general_all": "Toate"
 }

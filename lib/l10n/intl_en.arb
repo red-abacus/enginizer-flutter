@@ -3,6 +3,7 @@
   "general_continue": "Continue",
   "general_add": "Add",
   "general_details": "Details",
+  "general_auction": "Auction",
   "auth_name": "Name",
   "auth_email": "E-mail",
   "auth_password": "Password",
@@ -15,6 +16,8 @@
   "auth_error_passwordMismatch": "Passwords are not the same!",
   "auth_error_passwordTooShort": "Password is too short!",
   "auth_error_invalidEmail": "Email is not valid",
+  "auctions_search_hint": "Registration no. or car model",
+  "auctions_finished": "Finished",
   "cars_create_step1": "Identification",
   "cars_create_step2": "Technical",
   "cars_create_step3": "Extra",
@@ -85,5 +88,6 @@
   "appointment_create_step0": "Select car",
   "general_find": "Find",
   "general_status": "Status",
-  "general_car": "Car"
+  "general_car": "Car",
+  "general_all": "All"
 }

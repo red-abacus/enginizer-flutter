@@ -1,13 +1,9 @@
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/auctions-list.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/auctions-provider.dart';
-import '../providers/auctions-provider.dart';
-import '../providers/auctions-provider.dart';
 import '../providers/auctions-provider.dart';
 
 class Auctions extends StatefulWidget {
@@ -65,13 +61,17 @@ class AuctionsState extends State<Auctions> {
   }
 
   _renderAuctions(bool _isLoading) {
-    List<CarBrand> brands =
-        Provider.of<AuctionsProvider>(context, listen: false).carBrands;
-
     return _isLoading
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : AuctionsList(carBrands: brands);
+        : AuctionsList(
+            carBrands: auctionsProvider.carBrands,
+            auctions: auctionsProvider.auctions,
+            filterAuctions: _filterAuctions);
+  }
+
+  _filterAuctions(String value) {
+    auctionsProvider.filterAuctions(filterValue: value);
   }
 }

@@ -65,6 +65,15 @@ class S {
     );
   }
 
+  String get general_auction {
+    return Intl.message(
+      'Auction',
+      name: 'general_auction',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auth_name {
     return Intl.message(
       'Name',
@@ -168,6 +177,24 @@ class S {
     return Intl.message(
       'Email is not valid',
       name: 'auth_error_invalidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_search_hint {
+    return Intl.message(
+      'Registration no. or car model',
+      name: 'auctions_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_finished {
+    return Intl.message(
+      'Finished',
+      name: 'auctions_finished',
       desc: '',
       args: [],
     );
@@ -807,6 +834,15 @@ class S {
     return Intl.message(
       'Car',
       name: 'general_car',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_all {
+    return Intl.message(
+      'All',
+      name: 'general_all',
       desc: '',
       args: [],
     );
