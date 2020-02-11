@@ -8,7 +8,6 @@ class AuctionResponse {
   AuctionResponse({this.total, this.totalPages, this.auctions});
 
   factory AuctionResponse.fromJson(Map<String, dynamic> json) {
-    print("my json ${json}");
     return AuctionResponse(
         total: json['total'],
         totalPages: json['totalPages'],

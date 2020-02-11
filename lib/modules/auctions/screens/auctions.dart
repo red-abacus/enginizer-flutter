@@ -1,5 +1,7 @@
+import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/auctions-list.dart';
+import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,10 +70,13 @@ class AuctionsState extends State<Auctions> {
         : AuctionsList(
             carBrands: auctionsProvider.carBrands,
             auctions: auctionsProvider.auctions,
-            filterAuctions: _filterAuctions);
+            filterAuctions: _filterAuctions,
+            searchString: auctionsProvider.searchString,
+            auctionStatus: auctionsProvider.filterStatus,
+            carBrand: auctionsProvider.filterCarBrand);
   }
 
-  _filterAuctions(String value) {
-    auctionsProvider.filterAuctions(filterValue: value);
+  _filterAuctions(String value, AuctionStatus status, CarBrand carBrand) {
+    auctionsProvider.filterAuctions(value, status, carBrand);
   }
 }

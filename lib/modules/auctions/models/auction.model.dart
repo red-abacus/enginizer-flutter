@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
+import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:enginizer_flutter/utils/string.utils.dart';
 import 'package:flutter/gestures.dart';
 
@@ -34,21 +35,47 @@ class Auction {
         status: json["status"] != null ? json["status"] : "");
   }
 
-  bool filtered(String value) {
-    var filtered = false;
+  bool filtered(String value, AuctionStatus auctionStatus, CarBrand carBrand) {
+    var filterTitle = false;
 
-    if (car != null) {
-      filtered = StringUtils.containsIgnoreCase(car.registrationNumber, value);
+    if (value != null) {
+      if (car != null) {
+        filterTitle = StringUtils.containsIgnoreCase(car.registrationNumber, value);
 
-      if (car.brand != null) {
-        if (car.brand.name != null) {
-          filtered =
-              filtered || StringUtils.containsIgnoreCase(car.brand.name, value);
+        if (car.brand != null) {
+          if (car.brand.name != null) {
+            filterTitle =
+                filterTitle || StringUtils.containsIgnoreCase(car.brand.name, value);
+          }
         }
       }
     }
 
-    return filtered;
+    bool filterStatus = false;
+
+    if (auctionStatus != null) {
+      if (auctionStatus == AuctionStatus.ALL || getStatus() == auctionStatus) {
+        filterStatus = true;
+      }
+    }
+    else {
+      filterStatus = true;
+    }
+
+    bool filterBrand = false;
+
+    if (carBrand != null) {
+      if (car != null && car.brand != null) {
+        if (carBrand.id == car.brand.id) {
+          filterBrand = true;
+        }
+      }
+    }
+    else {
+      filterBrand = true;
+    }
+
+    return filterTitle && filterStatus && filterBrand;
   }
 
   AuctionStatus getStatus() {

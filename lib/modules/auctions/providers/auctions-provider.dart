@@ -13,6 +13,7 @@ class AuctionsProvider with ChangeNotifier {
 
   AuctionStatus filterStatus;
   CarBrand filterCarBrand;
+  String searchString = "";
 
   List<CarBrand> carBrands = [];
   List<Auction> auctions = [];
@@ -33,13 +34,18 @@ class AuctionsProvider with ChangeNotifier {
     return auctionResponse;
   }
 
-  Future<List<Auction>> filterAuctions({String filterValue = ''}) async {
+  Future<List<Auction>> filterAuctions(String searchString,
+      AuctionStatus filterStatus, CarBrand filterCarBrand) async {
+    this.searchString = searchString;
+    this.filterStatus = filterStatus;
+    this.filterCarBrand = filterCarBrand;
+
     auctions = auctionResponse.auctions;
 
-    if (filterValue.isNotEmpty) {
-      auctions = auctions.where((auction) => auction.filtered(filterValue)).toList();
-    }
-
+    auctions = auctions
+        .where((auction) => auction.filtered(
+            this.searchString, this.filterStatus, this.filterCarBrand))
+        .toList();
     notifyListeners();
     return auctions;
   }
