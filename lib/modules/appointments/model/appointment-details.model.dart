@@ -32,7 +32,6 @@ class AppointmentDetail {
   }
 
   static _mapServicesList(List<dynamic> response) {
-    print("some services ${response}");
     List<ServiceItem> serviceItems = [];
     response.forEach((item) {
       serviceItems.add(ServiceItem.fromJson(item));

@@ -57,23 +57,36 @@ class AuctionDetailsState extends State<AuctionDetails> {
         _isLoading = true;
       });
 
-      auctionsProvider
-          .getAppointmentDetails(
-              auctionsProvider.selectedAuction.appointment.id)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+      setState(() {
+        _isLoading = false;
       });
+      // TODO - remove this
+//      auctionsProvider
+//          .getAppointmentDetails(
+//              auctionsProvider.selectedAuction.appointment.id)
+//          .then((_) {
+//        auctionsProvider.loadBids().then((_) {
+//          setState(() {
+//            _isLoading = false;
+//          });
+//        });
+//      });
     }
     _initDone = true;
     super.didChangeDependencies();
   }
 
   _titleText() {
+    // TODO - remove this
+//    return Text(
+//      auctionsProvider.selectedAuction.appointment?.name,
+//      style:
+//          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+//    );
     return Text(
-      auctionsProvider.selectedAuction.appointment?.name,
-      style: TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+      "test",
+      style:
+      TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
   }
 
@@ -104,9 +117,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
   _getContent() {
     switch (this.currentState) {
       case AuctionDetailsScreenState.APPOINTMENT:
-        return AuctionAppointmentDetailsWidget(
-            auction: auctionsProvider.selectedAuction,
-            appointmentDetail: auctionsProvider.appointmentDetails);
+        // TODO - remove this
+//        return AuctionAppointmentDetailsWidget(
+//            auction: auctionsProvider.selectedAuction,
+//            appointmentDetail: auctionsProvider.appointmentDetails);
+        return AuctionBidsWidget();
       case AuctionDetailsScreenState.AUCTIONS:
         return AuctionBidsWidget();
         break;
