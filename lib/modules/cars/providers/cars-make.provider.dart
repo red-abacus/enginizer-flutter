@@ -47,21 +47,25 @@ class CarsMakeProvider with ChangeNotifier {
 
   Future<List<CarBrand>> loadCarBrands() async {
     brands = await carMakeService.getCarBrands();
+    notifyListeners();
     return brands;
   }
 
   Future<List<CarModel>> loadCarModel(CarQuery query) async {
     carModels = await carMakeService.getCarModels(query);
+    notifyListeners();
     return carModels;
   }
 
   Future<List<CarYear>> loadCarYears(CarQuery query) async {
     carYears = await carMakeService.getCarYears(query);
+    notifyListeners();
     return carYears;
   }
 
   Future<List<CarFuelType>> loadCarFuelTypes() async {
     carFuelTypes = await carMakeService.getCarFuelTypes();
+    notifyListeners();
     return carFuelTypes;
   }
 
@@ -69,21 +73,25 @@ class CarsMakeProvider with ChangeNotifier {
       CarQuery query) async {
     carCylinderCapacities =
         await carMakeService.getCarCylinderCapacities(query);
+    notifyListeners();
     return carCylinderCapacities;
   }
 
   Future<List<CarPower>> loadCarPowers(query) async {
     carPowers = await carMakeService.getCarPowers(query);
+    notifyListeners();
     return carPowers;
   }
 
   Future<List<CarTransmission>> loadCarTransmissions() async {
     carTransmissions = await carMakeService.getCarTransmissions();
+    notifyListeners();
     return carTransmissions;
   }
 
   Future<List<CarColor>> loadCarColors() async {
     carColors = await carMakeService.getCarColors();
+    notifyListeners();
     return carColors;
   }
 }

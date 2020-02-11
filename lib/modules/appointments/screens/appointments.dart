@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
@@ -104,8 +105,8 @@ class AppointmentsState extends State<Appointments> {
   }
 
   void _openCreateAppointmentModal(BuildContext buildContext) {
-    Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
     Provider.of<CarsProvider>(context, listen: false).loadCars();
+    Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -124,5 +125,11 @@ class AppointmentsState extends State<Appointments> {
         });
   }
 
-  void _createAppointment() {}
+  _createAppointment(AppointmentRequest appointmentRequest) {
+    Provider.of<AppointmentsProvider>(context)
+        .createAppointment(appointmentRequest)
+        .then((_) {
+      Navigator.pop(context);
+    });
+  }
 }

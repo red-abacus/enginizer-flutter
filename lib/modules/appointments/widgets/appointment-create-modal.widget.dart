@@ -19,7 +19,7 @@ import 'forms/appointment-create-select-car.form.dart';
 import 'forms/appointment-create-services.form.dart';
 
 final appointmentCarSelectionStateKey =
-    new GlobalKey<AppointmentCreateSelectCarFormState>();
+new GlobalKey<AppointmentCreateSelectCarFormState>();
 final appointmentServicesStateKey =
 new GlobalKey<AppointmentCreateServicesFormState>();
 final appointmentIssuesStateKey =
@@ -32,11 +32,11 @@ new GlobalKey<AppointmentDateTimeFormState>();
 class AppointmentCreateModal extends StatefulWidget {
   final Function createAppointment;
   final bool showCarSelection;
-  final Car car;
+  final Car selectedCar;
 
   Map<int, dynamic> _stepStateData;
 
-  AppointmentCreateModal(this.createAppointment, this.showCarSelection, [this.car]) {
+  AppointmentCreateModal(this.createAppointment, this.showCarSelection, [this.selectedCar]) {
     _generateStateData();
   }
 
@@ -84,7 +84,9 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     final authProvider = Provider.of<Auth>(context);
     providerServiceProvider.authUser = authProvider.userDetails;
 
-    providerServiceProvider.car = widget.car;
+    if (widget.selectedCar != null) {
+      providerServiceProvider.selectedCar = widget.selectedCar;
+    }
 
     steps = _buildSteps(context);
 
@@ -152,6 +154,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               : Text(''),
           content: AppointmentCreateSelectCarForm(
               key: appointmentCarSelectionStateKey),
+          state: widget._stepStateData[0]['state'],
         ),
         Step(
             isActive: widget._stepStateData[1]['active'],

@@ -16,7 +16,8 @@ import 'package:flutter/widgets.dart';
 
 class ProviderServiceProvider with ChangeNotifier {
   JwtUser authUser;
-  Car car;
+
+  Car selectedCar;
 
   List<ServiceItem> serviceItems = [];
   List<ServiceProvider> serviceProviders = [];
@@ -39,18 +40,21 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<ServiceItem>> loadServices() async {
     var response = await providerService.getServices();
     serviceItems = response.items;
+    notifyListeners();
     return serviceItems;
   }
 
   Future<List<ServiceProvider>> loadProviders() async {
     var response = await providerService.getProviders();
     serviceProviders = response.items;
+    notifyListeners();
     return serviceProviders;
   }
 
   Future<List<ServiceProvider>> loadProvidersByServiceItems(List<int> servicesIds) async {
     var response = await providerService.getProvidersByServices(servicesIds);
     serviceProviders = response.items;
+    notifyListeners();
     return serviceProviders;
   }
 
@@ -59,6 +63,7 @@ class ProviderServiceProvider with ChangeNotifier {
     var response =
         await appointmentsService.getServiceProviderItems(serviceProvider);
     serviceProviderItems = response.items;
+    notifyListeners();
     return serviceProviderItems;
   }
 
@@ -67,6 +72,7 @@ class ProviderServiceProvider with ChangeNotifier {
     var response =
         await providerService.getProviderSchedules(serviceProvider.id);
     serviceProviderSchedules = response;
+    notifyListeners();
     return serviceProviderSchedules;
   }
 
@@ -75,6 +81,7 @@ class ProviderServiceProvider with ChangeNotifier {
     var response = await providerService.getServiceProviderTimetables(
         serviceProvider.id, startDate, endDate);
     serviceProvider.timetables = response;
+    notifyListeners();
     return response;
   }
 
@@ -82,7 +89,7 @@ class ProviderServiceProvider with ChangeNotifier {
     AppointmentRequest appointmentRequest = AppointmentRequest();
 
     appointmentRequest.userId = authUser.userId;
-    appointmentRequest.carId = car.id;
+    appointmentRequest.carId = selectedCar.id;
 
     appointmentRequest.issues = [];
     for (IssueItem item in issuesFormState) {

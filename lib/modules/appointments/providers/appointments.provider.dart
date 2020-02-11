@@ -35,11 +35,6 @@ class AppointmentsProvider with ChangeNotifier {
     return _appointments;
   }
 
-  Future<List<ServiceItem>> loadServices() async {
-    _serviceItems = await appointmentsService.getServices();
-    return _serviceItems;
-  }
-
   Future<Appointment> createAppointment(AppointmentRequest appointmentRequest) async {
     var newAppointment =
         await this.appointmentsService.createAppointment(appointmentRequest);
