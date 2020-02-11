@@ -5,6 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/auctions-provider.dart';
+import '../providers/auctions-provider.dart';
+import '../providers/auctions-provider.dart';
+import '../providers/auctions-provider.dart';
+
 class Auctions extends StatefulWidget {
   static const String route = '/auctions';
   static final IconData icon = Icons.card_travel;
@@ -20,17 +25,20 @@ class AuctionsState extends State<Auctions> {
   var _initDone = false;
   var _isLoading = false;
 
+  AuctionsProvider auctionsProvider;
+
   AuctionsState({this.route});
 
   @override
   Widget build(BuildContext context) {
+    auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+
     return Consumer<AuctionsProvider>(
-      builder: (context, appointmentsProvider, _) =>
-          Scaffold(
-            body: Center(
-              child: _renderAuctions(_isLoading),
-            ),
-          ),
+      builder: (context, appointmentsProvider, _) => Scaffold(
+        body: Center(
+          child: _renderAuctions(_isLoading),
+        ),
+      ),
     );
   }
 
@@ -41,9 +49,13 @@ class AuctionsState extends State<Auctions> {
         _isLoading = true;
       });
 
-      Provider.of<AuctionsProvider>(context, listen: false).loadCarBrands().then((_) {
-        setState(() {
-          _isLoading = false;
+      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+
+      auctionsProvider.loadCarBrands().then((_) {
+        auctionsProvider.loadAuctions().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
         });
       });
     }
@@ -53,10 +65,13 @@ class AuctionsState extends State<Auctions> {
   }
 
   _renderAuctions(bool _isLoading) {
-    List<CarBrand> brands = Provider.of<AuctionsProvider>(context, listen: false).carBrands;
+    List<CarBrand> brands =
+        Provider.of<AuctionsProvider>(context, listen: false).carBrands;
 
     return _isLoading
-        ? CircularProgressIndicator()
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
         : AuctionsList(carBrands: brands);
   }
 }

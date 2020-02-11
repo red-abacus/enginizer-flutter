@@ -5,6 +5,7 @@ import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../modules/auctions/screens/auctions.dart';
 import '../modules/cars/screens/dashboard.dart';
 
 class DrawerItem {
@@ -30,7 +31,9 @@ class NavigationApp extends StatefulWidget {
 class _NavigationAppState extends State<NavigationApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  String _selectedDrawerRoute = Cars.route;
+  // TODO - remove this
+  String _selectedDrawerRoute = Auctions.route;
+//  String _selectedDrawerRoute = Cars.route;
 
   @override
   Widget build(BuildContext context) {

@@ -12,6 +12,7 @@ import 'operating-unit.model.dart';
 
 class Appointment {
   int id;
+  String name;
 
   DateTime date;
   String createdDate;
@@ -23,14 +24,16 @@ class Appointment {
   AppointmentStatus status;
   AppointmentDetail appointmentDetail;
 
-  Appointment({this.id,
-    this.date,
-    this.createdDate,
-    this.scheduleDateTime,
-    this.car,
-    this.appointmentTypes,
-    this.operatingUnit,
-    this.status});
+  Appointment(
+      {this.id,
+      this.date,
+      this.createdDate,
+      this.scheduleDateTime,
+      this.car,
+      this.appointmentTypes,
+      this.operatingUnit,
+      this.status,
+      this.name});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -38,8 +41,9 @@ class Appointment {
         date: json['date'] != null
             ? DateFormat('dd/MM/yyyy').parse(json['itpExpireDate'])
             : null,
-        createdDate: json['createdDate'],
-        scheduleDateTime: json['scheduleDateTime'],
+        createdDate: json['createdDate'] != null ? json["createdDate"] : null,
+        scheduleDateTime:
+            json['scheduleDateTime'] != null ? json['scheduleDateTime'] : null,
         car: json['car'] != null ? Car.fromJson(json['car']) : null,
         appointmentTypes: json['appointmentType'] != null
             ? _mapAppointmentTypes(json['appointmentType'])
@@ -49,7 +53,8 @@ class Appointment {
             : null,
         status: json['status'] != null
             ? AppointmentStatus.fromJson(json['status'])
-            : null);
+            : null,
+        name: json["name"] != null ? json["name"] : "");
   }
 
   static _mapAppointmentTypes(List<dynamic> response) {
@@ -67,7 +72,7 @@ class Appointment {
       'scheduleDateTime': scheduleDateTime,
       'car': car.toJson(),
       'appointmentTypes':
-      appointmentTypes.map((appointmentType) => appointmentType.toJson()),
+          appointmentTypes.map((appointmentType) => appointmentType.toJson()),
       'operatingUnit': operatingUnit.toJson(),
       'status': status.toJson()
     };
