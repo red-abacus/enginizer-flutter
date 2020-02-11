@@ -1,20 +1,21 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user-credentials.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:flutter/widgets.dart';
 
 class ProviderServiceProvider with ChangeNotifier {
+  JwtUser authUser;
   Car car;
 
   List<ServiceItem> serviceItems = [];
@@ -34,7 +35,6 @@ class ProviderServiceProvider with ChangeNotifier {
   DateEntry dateEntry;
   AppointmentProviderType appointmentProviderType =
       AppointmentProviderType.Specific;
-  UserCredentials userCredentials;
 
   Future<List<ServiceItem>> loadServices() async {
     var response = await providerService.getServices();
@@ -80,6 +80,10 @@ class ProviderServiceProvider with ChangeNotifier {
 
   AppointmentRequest appointmentRequest() {
     AppointmentRequest appointmentRequest = AppointmentRequest();
+
+    appointmentRequest.userId = authUser.userId;
+    appointmentRequest.carId = car.id;
+
     appointmentRequest.issues = [];
     for (IssueItem item in issuesFormState) {
       appointmentRequest.issues.add(item.description);
@@ -99,8 +103,6 @@ class ProviderServiceProvider with ChangeNotifier {
     }
 
     appointmentRequest.scheduledTimes = [dateEntry.dateForAppointment()];
-    appointmentRequest.carId = car.id;
-    appointmentRequest.userId = userCredentials.id;
     return appointmentRequest;
   }
 }

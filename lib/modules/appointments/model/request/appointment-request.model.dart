@@ -1,5 +1,3 @@
-
-
 class AppointmentRequest {
   String address;
   int carId;

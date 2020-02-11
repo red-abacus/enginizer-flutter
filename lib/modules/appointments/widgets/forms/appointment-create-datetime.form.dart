@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
@@ -8,9 +8,9 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentDateTimeForm extends StatefulWidget {
-  List<Appointment> appointments;
+  List<ServiceProviderSchedule> providerSchedules;
 
-  AppointmentDateTimeForm({Key key, this.appointments}) : super(key: key);
+  AppointmentDateTimeForm({Key key, this.providerSchedules}) : super(key: key);
 
   @override
   AppointmentDateTimeFormState createState() => AppointmentDateTimeFormState();
@@ -35,7 +35,7 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
 
     return SchedulerWidget(
       calendarEntries:
-          CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
+          CalendarEntry.getTimeSeries(DateTime.now(), widget.providerSchedules),
     );
     */
   }

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/authentication/models/auth.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/authentication/services/auth.service.dart';
+import 'package:enginizer_flutter/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +17,14 @@ class Auth with ChangeNotifier {
 
   bool get isAuth {
     return _token != null;
+  }
+
+  JwtUser get userDetails {
+    if (_token == null) {
+      return null;
+    }
+    final jwtUser = JwtHelper.parseJwt(_token);
+    return JwtUser.fromJson(jwtUser);
   }
 
   Future<void> signup(String name, String email, String password,

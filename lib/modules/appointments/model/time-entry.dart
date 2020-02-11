@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';

@@ -73,9 +73,6 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionsProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
-          Provider.of<UserProvider>(context, listen: false)
-              .getLoggedUserCredentials();
-
           return MaterialApp(
             home: authProvider.isAuth
                 ? NavigationApp()

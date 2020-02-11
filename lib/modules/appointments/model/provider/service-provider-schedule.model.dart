@@ -1,21 +1,12 @@
-class ServiceProviderSchedule {
+class ServiceProviderTimeSerie {
   int id;
-  String dayOfWeek;
-  String startTime;
-  String endTime;
+  String hour;
+  String slotStatus;
 
-  ServiceProviderSchedule(
-      {this.id,
-        this.dayOfWeek,
-        this.startTime,
-        this.endTime});
+  ServiceProviderTimeSerie({this.id, this.hour, this.slotStatus});
 
-  factory ServiceProviderSchedule.fromJson(Map<String, dynamic> json) {
-    return ServiceProviderSchedule(
-        id: json['id'],
-        dayOfWeek: json['dayOfWeek'],
-        startTime: json['startTime'],
-        endTime: json['endTime']
-    );
+  factory ServiceProviderTimeSerie.fromJson(Map<String, dynamic> json) {
+    return ServiceProviderTimeSerie(
+        id: json['id'], hour: json['hour'], slotStatus: json['slotStatus']);
   }
 }

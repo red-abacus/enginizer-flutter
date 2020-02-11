@@ -1,10 +1,7 @@
-import 'dart:collection';
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-schedule.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';

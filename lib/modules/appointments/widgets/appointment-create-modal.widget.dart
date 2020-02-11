@@ -2,13 +2,12 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/forms/appointment-create-services.form.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,10 +32,11 @@ new GlobalKey<AppointmentDateTimeFormState>();
 class AppointmentCreateModal extends StatefulWidget {
   final Function createAppointment;
   final bool showCarSelection;
+  final Car car;
 
   Map<int, dynamic> _stepStateData;
 
-  AppointmentCreateModal(this.createAppointment, this.showCarSelection) {
+  AppointmentCreateModal(this.createAppointment, this.showCarSelection, [this.car]) {
     _generateStateData();
   }
 
@@ -80,6 +80,11 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
     appointmentsProvider = Provider.of<AppointmentsProvider>(context);
+
+    final authProvider = Provider.of<Auth>(context);
+    providerServiceProvider.authUser = authProvider.userDetails;
+
+    providerServiceProvider.car = widget.car;
 
     steps = _buildSteps(context);
 

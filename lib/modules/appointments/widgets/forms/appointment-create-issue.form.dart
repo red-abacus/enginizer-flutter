@@ -22,22 +22,32 @@ class AppointmentCreateIssueFormState
 
   @override
   Widget build(BuildContext context) {
-    var providerServiceProvider = Provider.of<ProviderServiceProvider>(context, listen: false);
+    var providerServiceProvider =
+        Provider.of<ProviderServiceProvider>(context, listen: false);
     var issues = providerServiceProvider.issuesFormState;
 
     return Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            AlertInfoWidget(S.of(context).appointment_create_step2_alert),
-            IssuesListWidget(
-              issues: issues,
-              addIssue: _addIssue,
-              removeIssue: _removeAt,
-            )
-          ],
-        ));
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * .5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                AlertInfoWidget(S.of(context).appointment_create_step2_alert),
+                IssuesListWidget(
+                  issues: issues,
+                  addIssue: _addIssue,
+                  removeIssue: _removeAt,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   bool valid() {
