@@ -13,7 +13,9 @@ class AuctionsService {
   AuctionsService();
 
   Future<AuctionResponse> getAuctions() async {
+    print("get auctions ?");
     final response = await _dio.get(AUCTIONS_PATH);
+    print("finish response !");
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.

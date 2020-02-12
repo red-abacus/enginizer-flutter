@@ -46,6 +46,7 @@ class AuctionsState extends State<Auctions> {
   void didChangeDependencies() {
     if (!_initDone) {
       setState(() {
+        _isLoading = false;
         _isLoading = true;
       });
 

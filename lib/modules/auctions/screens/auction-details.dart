@@ -1,7 +1,9 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-details-state.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/details/auction-bids.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -57,36 +59,26 @@ class AuctionDetailsState extends State<AuctionDetails> {
         _isLoading = true;
       });
 
-      setState(() {
-        _isLoading = false;
+      auctionsProvider
+          .getAppointmentDetails(
+              auctionsProvider.selectedAuction.appointment.id)
+          .then((_) {
+        auctionsProvider.loadBids().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
       });
-      // TODO - remove this
-//      auctionsProvider
-//          .getAppointmentDetails(
-//              auctionsProvider.selectedAuction.appointment.id)
-//          .then((_) {
-//        auctionsProvider.loadBids().then((_) {
-//          setState(() {
-//            _isLoading = false;
-//          });
-//        });
-//      });
     }
     _initDone = true;
     super.didChangeDependencies();
   }
 
   _titleText() {
-    // TODO - remove this
-//    return Text(
-//      auctionsProvider.selectedAuction.appointment?.name,
-//      style:
-//          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
-//    );
     return Text(
-      "test",
+      auctionsProvider.selectedAuction.appointment?.name,
       style:
-      TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
   }
 
@@ -117,13 +109,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
   _getContent() {
     switch (this.currentState) {
       case AuctionDetailsScreenState.APPOINTMENT:
-        // TODO - remove this
-//        return AuctionAppointmentDetailsWidget(
-//            auction: auctionsProvider.selectedAuction,
-//            appointmentDetail: auctionsProvider.appointmentDetails);
-        return AuctionBidsWidget();
+        return AuctionAppointmentDetailsWidget(
+            auction: auctionsProvider.selectedAuction,
+            appointmentDetail: auctionsProvider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
-        return AuctionBidsWidget();
+        return AuctionBidsWidget(auction: null, selectBid: _selectBid);
         break;
     }
     return Container();
@@ -175,9 +165,14 @@ class AuctionDetailsState extends State<AuctionDetails> {
   String stateTitle(AuctionDetailsScreenState state, BuildContext context) {
     switch (state) {
       case AuctionDetailsScreenState.APPOINTMENT:
-        return S.of(context).auctions_details_appointment_details;
+        return S.of(context).auction_details_title;
       case AuctionDetailsScreenState.AUCTIONS:
-        return S.of(context).auctions_details_appointment_auctions;
+        return S.of(context).auction_bids_title;
     }
+  }
+
+  _selectBid(Bid bid) {
+    auctionsProvider.selectedBid = bid;
+    Navigator.of(context).pushNamed(BidDetails.route);
   }
 }

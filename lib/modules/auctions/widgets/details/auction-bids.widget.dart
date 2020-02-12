@@ -1,12 +1,14 @@
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/cards/auctions-provider.card.dart';
+import 'package:enginizer_flutter/modules/auctions/widgets/cards/bid.card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuctionBidsWidget extends StatefulWidget {
   Auction auction;
 
-  AuctionBidsWidget({this.auction});
+  Function selectBid;
+
+  AuctionBidsWidget({this.auction, this.selectBid});
 
   @override
   AuctionBidsWidgetState createState() {
@@ -52,7 +54,7 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return AuctionProviderCard(serviceProvider: null);
+            return BidCard(bid: null, selectBid: widget.selectBid);
           },
           itemCount: 20,
         ),

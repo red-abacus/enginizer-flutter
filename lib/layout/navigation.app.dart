@@ -31,9 +31,7 @@ class NavigationApp extends StatefulWidget {
 class _NavigationAppState extends State<NavigationApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  // TODO - remove this
-  String _selectedDrawerRoute = Auctions.route;
-//  String _selectedDrawerRoute = Cars.route;
+  String _selectedDrawerRoute = Cars.route;
 
   @override
   Widget build(BuildContext context) {

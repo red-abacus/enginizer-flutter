@@ -1,14 +1,16 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AuctionProviderCard extends StatelessWidget {
-  ServiceProvider serviceProvider;
+class BidCard extends StatelessWidget {
+  final Bid bid;
+  final Function selectBid;
 
-  AuctionProviderCard({this.serviceProvider});
+  BidCard({this.bid, this.selectBid});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class AuctionProviderCard extends StatelessWidget {
         child: InkWell(
           splashColor: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
-          onTap: () => {},
+          onTap: () => {
+            selectBid(bid)
+          },
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(10.0),
             child: Row(
@@ -30,43 +34,7 @@ class AuctionProviderCard extends StatelessWidget {
               children: <Widget>[
                 _imageContainer(),
                 _textContainer(),
-                FlatButton(
-                    color: Colors.blue,
-                    child: Text(
-                      S.of(context).general_details,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: red,
-                          fontFamily: "Lato"),
-                    ),
-                    onPressed: () {
-//                      Provider.of<ProviderServiceProvider>(context)
-//                          .loadProviderServices(currentService);
-//                      showModalBottomSheet(
-//                          isScrollControlled: true,
-//                          context: context,
-//                          builder: (_) {
-//                            return StatefulBuilder(builder:
-//                                (BuildContext context, StateSetter state) {
-//                              return ServiceDetailsModal(currentService);
-//                            });
-//                          });
-//                    }),
-                    }),
-//                Container(
-//                  width: LIST_ITEM_SELECTION_WIDTH,
-//                  child: Column(
-//                    children: [
-//                      if (providerServiceProvider.selectedProvider ==
-//                          currentService)
-//                        Container(
-//                          height: 100,
-//                          color: Theme.of(context).accentColor,
-//                        )
-//                    ],
-//                  ),
-//                ),
+                _detailsContainer(context),
               ],
             ),
           ),
@@ -79,7 +47,7 @@ class AuctionProviderCard extends StatelessWidget {
     return Container(
       color: red,
       width: 100,
-      height: 100,
+      height: 120,
       child: SvgPicture.asset(
         'assets/images/statuses/in_bid.svg'.toLowerCase(),
         semanticsLabel: 'Appointment Status Image',
@@ -99,9 +67,8 @@ class AuctionProviderCard extends StatelessWidget {
   _textContainer() {
     return Expanded(
       child: Container(
-        color: red,
         margin: EdgeInsets.only(left: 10),
-        height: 100,
+        height: 120,
         child: Stack(
           children: [
             Column(
@@ -116,16 +83,32 @@ class AuctionProviderCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         height: 1.5)),
+                Row(
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      'assets/images/icons/star_icon.svg',
+                      semanticsLabel: 'Review Image',
+                      height: 14,
+                      width: 14,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 5),
+                      child: Text(
+                        "4.6 (1766)",
+                        style: TextHelper.customTextStyle(null, gray, null, 11),
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
-                  'test',
-//                    '${auction.car?.brand?.name} ${auction.car?.model?.name} ${auction.car?.year?.name}',
+                  "Servicii: Doar 1 serviciu",
                     style: TextStyle(
-                        color: Colors.black87,
+                        color: yellow,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.normal,
                         fontSize: 12.8,
                         height: 1.5)),
-                Text('test 2',
+                Text('Cost: 700 ron',
                     style: TextStyle(
                         color: gray,
                         fontFamily: 'Lato',
@@ -140,17 +123,31 @@ class AuctionProviderCard extends StatelessWidget {
                   alignment: FractionalOffset.bottomLeft,
                   child: Container(
                     margin: EdgeInsets.only(bottom: 10),
-                    child: Text("Ora programare: 11.02.2020 la 11:00",
+                    child: Text("Ora programare:\n11.02.2020 la 11:00",
                         style: TextStyle(
-                            color: Colors.black87,
+                            color: gray,
                             fontFamily: 'Lato',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11.2,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 10,
                             height: 1.5)),
                   )),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _detailsContainer(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Text(
+        S.of(context).general_details,
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: red,
+            fontFamily: "Lato"),
       ),
     );
   }

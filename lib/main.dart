@@ -4,6 +4,7 @@ import 'package:enginizer_flutter/modules/appointments/providers/appointment.pro
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/screens/auth.screen.dart';
@@ -119,7 +120,8 @@ class AppState extends State<App> {
               Appointments.route: (context) => Appointments(),
               AppointmentDetails.route: (context) => AppointmentDetails(),
               Auctions.route: (context) => Auctions(),
-              AuctionDetails.route: (context) => AuctionDetails()
+              AuctionDetails.route: (context) => AuctionDetails(),
+              BidDetails.route: (context) => BidDetails()
             },
           );
         }));

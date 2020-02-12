@@ -731,6 +731,60 @@ class S {
     );
   }
 
+  String get auction_details_title {
+    return Intl.message(
+      'Auction Details',
+      name: 'auction_details_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bids_title {
+    return Intl.message(
+      'Bids',
+      name: 'auction_bids_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bids_provider {
+    return Intl.message(
+      'Service Provider',
+      name: 'auction_bids_provider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_services_provided {
+    return Intl.message(
+      'Services Provided',
+      name: 'auction_bid_services_provided',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_see_provider_profile {
+    return Intl.message(
+      'See Profile',
+      name: 'auction_bid_see_provider_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_estimate {
+    return Intl.message(
+      'See Estimate',
+      name: 'auction_bid_estimate',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get SERVICE {
     return Intl.message(
       'Service',
