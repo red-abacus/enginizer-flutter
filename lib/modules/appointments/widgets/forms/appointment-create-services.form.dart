@@ -31,18 +31,49 @@ class AppointmentCreateServicesFormState
             var serviceName =
                 _translateServiceName(services[index].name.toString());
 
-            return CheckboxListTile(
-              title: Text(serviceName),
-              value: providerServiceProvider.selectedServiceItems
-                  .contains(services[index]),
-              onChanged: (bool value) {
-                onChanged(services[index], value);
-              },
+            bool visibility = services[index].name.toString() == "PICKUP_RETURN"
+                && providerServiceProvider.containsPickUpService();
+
+            return Column(
+              children: <Widget>[
+                Visibility(
+                  visible: visibility,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 15, right: 15),
+                    child: TextFormField(
+                        decoration: InputDecoration(
+                            labelText: S.of(context).appointment_create_add_pickup_address),
+                        onChanged: (value) {
+                          setState(() {
+                            providerServiceProvider.pickupAddress = value;
+                          });
+                        },
+                        initialValue: providerServiceProvider.pickupAddress,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return S
+                                .of(context)
+                                .appointment_create_error_pickupAddressCannotBeEmpty;
+                          } else {
+                            return null;
+                          }
+                        }
+                    ),
+                  ),
+                ),
+                CheckboxListTile(
+                  title: Text(serviceName),
+                  value: providerServiceProvider.selectedServiceItems
+                      .contains(services[index]),
+                  onChanged: (bool value) {
+                    onChanged(services[index], value);
+                  },
+                ),
+              ],
             );
           },
           itemCount: services.length,
-        )
-    );
+        ));
   }
 
   ValueChanged<bool> onChanged(ServiceItem serviceItem, bool value) {
@@ -62,7 +93,10 @@ class AppointmentCreateServicesFormState
   }
 
   bool valid() {
-    return providerServiceProvider.selectedServiceItems.length > 0;
+    bool servicesSelected = providerServiceProvider.selectedServiceItems.length > 0;
+    bool pickupAddressCompleted = providerServiceProvider.pickUpServiceValidation();
+
+    return servicesSelected && pickupAddressCompleted;
   }
 
   String _translateServiceName(String serviceName) {

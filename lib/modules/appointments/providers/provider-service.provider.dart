@@ -33,6 +33,8 @@ class ProviderServiceProvider with ChangeNotifier {
   ServiceProvider selectedProvider;
   DateEntry dateEntry;
 
+  String pickupAddress = "";
+
   void initFormValues() {
     selectedCar = null;
     selectedServiceItems = [];
@@ -40,6 +42,7 @@ class ProviderServiceProvider with ChangeNotifier {
     appointmentProviderType = AppointmentProviderType.Specific;
     selectedProvider = null;
     dateEntry = null;
+    pickupAddress = "";
   }
 
   Future<List<ServiceItem>> loadServices() async {
@@ -108,14 +111,48 @@ class ProviderServiceProvider with ChangeNotifier {
       appointmentRequest.serviceIds.add(item.id);
     }
 
+    appointmentRequest.address = "";
+    bool pickupSet = false;
+
+    if (pickUpServiceValidation()) {
+      appointmentRequest.address = pickupAddress;
+      pickupSet = true;
+    }
+
     if (selectedProvider != null) {
       appointmentRequest.providerId = selectedProvider.id;
-      appointmentRequest.address = selectedProvider.address;
-    } else {
-      appointmentRequest.address = "";
+
+      if (!pickupSet) {
+        appointmentRequest.address = selectedProvider.address;
+      }
     }
 
     appointmentRequest.scheduledTimes = [dateEntry.dateForAppointment()];
     return appointmentRequest;
+  }
+
+  bool containsPickUpService() {
+    for(ServiceItem serviceItem in this.selectedServiceItems) {
+      if (serviceItem.name == "PICKUP_RETURN") {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool pickUpServiceValidation() {
+    for(ServiceItem serviceItem in this.selectedServiceItems) {
+      if (serviceItem.name == "PICKUP_RETURN") {
+        if (this.pickupAddress.isNotEmpty) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 }

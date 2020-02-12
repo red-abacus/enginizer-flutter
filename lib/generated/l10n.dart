@@ -614,10 +614,28 @@ class S {
     );
   }
 
+  String get appointment_create_add_pickup_address {
+    return Intl.message(
+      'Add Pick-Up Address',
+      name: 'appointment_create_add_pickup_address',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get appointment_create_error_issueCannotBeEmpty {
     return Intl.message(
       'Issue cannot be empty',
       name: 'appointment_create_error_issueCannotBeEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_create_error_pickupAddressCannotBeEmpty {
+    return Intl.message(
+      'Address cannot be empty',
+      name: 'appointment_create_error_pickupAddressCannotBeEmpty',
       desc: '',
       args: [],
     );
