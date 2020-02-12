@@ -20,9 +20,7 @@ class CarMakeService {
   CarMakeService();
 
   Future<List<CarBrand>> getCarBrands() async {
-    print("load car brands !");
     final response = await _dio.get('$CAR_MAKE_API_PATH/brands');
-    print("finish car brands !");
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
