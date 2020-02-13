@@ -65,7 +65,7 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            for (ServiceItem serviceItem in widget.appointmentDetail.services)
+            for (ServiceItem serviceItem in widget.appointmentDetail.serviceItems)
               _appointmentServiceItem(serviceItem),
             _buildSeparator(),
             Container(

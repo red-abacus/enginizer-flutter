@@ -17,7 +17,6 @@ class Appointment {
   DateTime date;
   String createdDate;
   String scheduleDateTime;
-  String name;
 
   Car car;
   List<AppointmentType> appointmentTypes = [];

@@ -13,6 +13,9 @@ class AppointmentDetail {
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
 
+  AppointmentDetail(
+      {this.car, this.issues, this.serviceItems, this.scheduledDate});
+
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
         car: Car.fromJson(json["car"]),
@@ -29,7 +32,7 @@ class AppointmentDetail {
     return appointmentTypes;
   }
 
-  _mapServiceItems(List<dynamic> response) {
+  static _mapServiceItems(List<dynamic> response) {
     List<ServiceItem> services = [];
     response.forEach((item) {
       services.add(ServiceItem.fromJson(item));

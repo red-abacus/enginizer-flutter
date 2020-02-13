@@ -1,6 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-details-state.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';

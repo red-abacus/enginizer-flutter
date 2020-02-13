@@ -1,7 +1,6 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/screens/auctions.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/cards/auction.card.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';

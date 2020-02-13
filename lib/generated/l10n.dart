@@ -65,6 +65,15 @@ class S {
     );
   }
 
+  String get general_auction {
+    return Intl.message(
+      'Auction',
+      name: 'general_auction',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auth_name {
     return Intl.message(
       'Name',
@@ -168,6 +177,42 @@ class S {
     return Intl.message(
       'Email is not valid',
       name: 'auth_error_invalidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_search_hint {
+    return Intl.message(
+      'Registration no. or car model',
+      name: 'auctions_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_finished {
+    return Intl.message(
+      'Finished',
+      name: 'auctions_finished',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_details_appointment_details {
+    return Intl.message(
+      'Appointment Details',
+      name: 'auctions_details_appointment_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auctions_details_appointment_auctions {
+    return Intl.message(
+      'Auctions',
+      name: 'auctions_details_appointment_auctions',
       desc: '',
       args: [],
     );
@@ -695,6 +740,69 @@ class S {
     );
   }
 
+  String get appointment_details_services_appointment_date {
+    return Intl.message(
+      'Appointment date',
+      name: 'appointment_details_services_appointment_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_details_title {
+    return Intl.message(
+      'Auction Details',
+      name: 'auction_details_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bids_title {
+    return Intl.message(
+      'Bids',
+      name: 'auction_bids_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bids_provider {
+    return Intl.message(
+      'Service Provider',
+      name: 'auction_bids_provider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_services_provided {
+    return Intl.message(
+      'Services Provided',
+      name: 'auction_bid_services_provided',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_see_provider_profile {
+    return Intl.message(
+      'See Profile',
+      name: 'auction_bid_see_provider_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_estimate {
+    return Intl.message(
+      'See Estimate',
+      name: 'auction_bid_estimate',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get SERVICE {
     return Intl.message(
       'Service',
@@ -830,10 +938,10 @@ class S {
     );
   }
 
-  String get appointment_details_services_appointment_date {
+  String get general_all {
     return Intl.message(
-      'Appointment date',
-      name: 'appointment_details_services_appointment_date',
+      'All',
+      name: 'general_all',
       desc: '',
       args: [],
     );
