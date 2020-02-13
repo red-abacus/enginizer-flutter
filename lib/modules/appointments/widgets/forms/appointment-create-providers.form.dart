@@ -9,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../utils/constants.dart';
+
 class AppointmentCreateProvidersForm extends StatefulWidget {
   AppointmentCreateProvidersForm({Key key}) : super(key: key);
 
@@ -132,7 +134,7 @@ class AppointmentCreateProvidersFormState
                   ),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,18 +154,12 @@ class AppointmentCreateProvidersFormState
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("@${currentService.address}",
-                                  style: TextStyle(
-                                      fontFamily: 'Lato',
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.grey,
-                                      fontSize: 12))
-                            ],
-                          ),
+                          Text("@${currentService.address}",
+                              style: TextStyle(
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey,
+                                  fontSize: 12)),
                         ],
                       ),
                     ),
