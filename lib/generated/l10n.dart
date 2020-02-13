@@ -749,6 +749,33 @@ class S {
     );
   }
 
+  String get appointment_status_waiting {
+    return Intl.message(
+      'Waiting',
+      name: 'appointment_status_waiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_status_in_progress {
+    return Intl.message(
+      'In Progress',
+      name: 'appointment_status_in_progress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_status_finished {
+    return Intl.message(
+      'Finished',
+      name: 'appointment_status_finished',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',
@@ -942,6 +969,15 @@ class S {
     return Intl.message(
       'All',
       name: 'general_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_date {
+    return Intl.message(
+      'Date',
+      name: 'general_date',
       desc: '',
       args: [],
     );

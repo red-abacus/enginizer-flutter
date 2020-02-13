@@ -79,6 +79,9 @@
   "appointments_list_search_hint": "Număr înmatriculare sau model mașină",
   "appointment_details_services_appointment_cancel": "Anulare",
   "appointment_details_services_appointment_date": "Dată programare",
+  "appointment_status_waiting": "În Așteptare",
+  "appointment_status_in_progress": "În Lucru",
+  "appointment_status_finished": "Finalizată",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
@@ -100,5 +103,6 @@
   "general_find": "Caută",
   "general_status": "Status",
   "general_car": "Masină",
-  "general_all": "Toate"
+  "general_all": "Toate",
+  "general_date": "Dată"
 }
