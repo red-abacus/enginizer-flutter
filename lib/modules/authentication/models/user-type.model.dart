@@ -4,6 +4,6 @@
 class UserType {
   static const String Super = 'Super';
   static const String Client = 'Client';
-  static const String Partner = 'Provider';
+  static const String Provider = 'Provider';
   static const String Personnel = 'Personnel';
 }

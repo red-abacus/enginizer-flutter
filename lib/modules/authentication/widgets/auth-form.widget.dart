@@ -356,7 +356,7 @@ class _AuthFormState extends State<AuthForm>
 
   bool _toggleSwitch(value) {
     if (value == true) {
-      _authData['userType'] = UserType.Partner;
+      _authData['userType'] = UserType.Provider;
     } else {
       _authData['userType'] = UserType.Client;
     }

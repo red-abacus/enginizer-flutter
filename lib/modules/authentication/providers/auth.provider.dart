@@ -19,7 +19,7 @@ class Auth with ChangeNotifier {
     return _token != null;
   }
 
-  JwtUser get userDetails {
+  JwtUser get authUser {
     if (_token == null) {
       return null;
     }

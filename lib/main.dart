@@ -77,7 +77,7 @@ class AppState extends State<App> {
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
             home: authProvider.isAuth
-                ? NavigationApp()
+                ? NavigationApp(authUser: authProvider.authUser)
                 : FutureBuilder(
                     future: authProvider.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) =>

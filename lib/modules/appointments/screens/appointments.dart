@@ -14,7 +14,7 @@ import 'appointment-details.dart';
 
 class Appointments extends StatefulWidget {
   static const String route = '/appointments';
-  static final IconData icon = Icons.card_travel;
+  static final IconData icon = Icons.event_available;
 
   @override
   State<StatefulWidget> createState() {

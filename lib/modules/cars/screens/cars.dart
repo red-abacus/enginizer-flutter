@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class Cars extends StatefulWidget {
   static const String route = '/cars';
-  static final IconData icon = Icons.card_travel;
+  static final IconData icon = Icons.directions_car;
 
   @override
   State<StatefulWidget> createState() {

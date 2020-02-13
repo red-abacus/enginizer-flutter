@@ -2,15 +2,15 @@ import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Dashboad extends StatefulWidget {
+class Dashboard extends StatefulWidget {
   static const String route = '/dashboard';
-  static final IconData icon = Icons.rss_feed;
+  static final IconData icon = Icons.dashboard;
 
   @override
-  _DashboadState createState() => _DashboadState();
+  _DashboardState createState() => _DashboardState();
 }
 
-class _DashboadState extends State<Dashboad> {
+class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     Provider.of<CarsMakeProvider>(context).loadCarBrands();

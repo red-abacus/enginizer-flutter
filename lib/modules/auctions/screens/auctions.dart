@@ -12,7 +12,7 @@ import '../providers/auctions-provider.dart';
 
 class Auctions extends StatefulWidget {
   static const String route = '/auctions';
-  static final IconData icon = Icons.card_travel;
+  static final IconData icon = Icons.dashboard;
 
   @override
   State<StatefulWidget> createState() {

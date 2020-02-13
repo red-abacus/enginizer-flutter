@@ -80,7 +80,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
 
     final authProvider = Provider.of<Auth>(context);
-    providerServiceProvider.authUser = authProvider.userDetails;
+    providerServiceProvider.authUser = authProvider.authUser;
 
     if (widget.selectedCar != null) {
       providerServiceProvider.selectedCar = widget.selectedCar;
