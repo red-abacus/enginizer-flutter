@@ -27,7 +27,6 @@ class ServiceProvider {
       this.image});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
-    print("json ${json}");
     return ServiceProvider(
       id: json['id'],
       name: json['name'] != null ? json["name"] : "",

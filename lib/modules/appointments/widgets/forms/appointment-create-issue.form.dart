@@ -23,7 +23,7 @@ class AppointmentCreateIssueFormState
   @override
   Widget build(BuildContext context) {
     var providerServiceProvider =
-        Provider.of<ProviderServiceProvider>(context, listen: false);
+        Provider.of<ProviderServiceProvider>(context);
     var issues = providerServiceProvider.issuesFormState;
 
     return Form(
@@ -55,14 +55,18 @@ class AppointmentCreateIssueFormState
   }
 
   _addIssue() {
-    Provider.of<ProviderServiceProvider>(context, listen: false)
-        .issuesFormState
-        .add(IssueItem(description: ''));
+    setState(() {
+      Provider.of<ProviderServiceProvider>(context)
+          .issuesFormState
+          .add(IssueItem(description: ''));
+    });
   }
 
   _removeAt(int index) {
-    Provider.of<ProviderServiceProvider>(context, listen: false)
-        .issuesFormState
-        .removeAt(index);
+    setState(() {
+      Provider.of<ProviderServiceProvider>(context)
+          .issuesFormState
+          .removeAt(index);
+    });
   }
 }

@@ -46,24 +46,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
       BuildContext context, int index, List<IssueItem> issues) {
     if (issues.length > 1) {
       return ListTile(
-        title: TextFormField(
-            decoration: InputDecoration(
-                labelText: S.of(context).appointment_create_issues),
-            onChanged: (value) {
-              setState(() {
-                issues[index].description = value;
-              });
-            },
-            initialValue: issues[index].description,
-            validator: (value) {
-              if (value.isEmpty) {
-                return S
-                    .of(context)
-                    .appointment_create_error_issueCannotBeEmpty;
-              } else {
-                return null;
-              }
-            }),
+        title: _tileTextFormField(issues[index]),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -75,24 +58,33 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
       );
     } else {
       return ListTile(
-          title: TextFormField(
-              decoration: InputDecoration(
-                  labelText: S.of(context).appointment_create_issues),
-              onChanged: (value) {
-                setState(() {
-                  issues[index].description = value;
-                });
-              },
-              initialValue: issues[index].description,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return S
-                      .of(context)
-                      .appointment_create_error_issueCannotBeEmpty;
-                } else {
-                  return null;
-                }
-              }));
+          title: _tileTextFormField(issues[index])
+      );
     }
   }
+
+  _tileTextFormField(IssueItem issueItem) {
+    return TextFormField(
+        decoration: InputDecoration(
+            labelText: S.of(context).appointment_create_issues),
+        onChanged: (value) {
+          setState(() {
+            issueItem.description = value;
+          });
+        },
+        controller: TextEditingController(text: issueItem.description),
+        validator: (value) {
+          if (value.isEmpty) {
+            return S
+                .of(context)
+                .appointment_create_error_issueCannotBeEmpty;
+          } else {
+            return null;
+          }
+        });
+  }
+}
+
+class CustomTextFormField extends TextFormField {
+
 }

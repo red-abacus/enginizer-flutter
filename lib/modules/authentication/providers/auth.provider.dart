@@ -61,9 +61,7 @@ class Auth with ChangeNotifier {
 
   Future<AuthResponse> _authenticate(String email, String password) async {
     try {
-      print("try logon !");
       final response = await _authService.login(email, password);
-      print("finish !");
       _token = response.token;
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
@@ -71,7 +69,6 @@ class Auth with ChangeNotifier {
       notifyListeners();
       return response;
     } catch (error) {
-      print("error ? ${error}");
       throw error;
     }
   }
