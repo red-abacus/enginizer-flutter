@@ -87,5 +87,6 @@
   "appointment_create_step0": "Alege mașină",
   "general_find": "Caută",
   "general_status": "Status",
-  "general_car": "Masină"
+  "general_car": "Masină",
+  "appointment_details_services_appointment_date": "Dată programare"
 }

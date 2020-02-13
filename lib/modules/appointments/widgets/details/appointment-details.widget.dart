@@ -3,6 +3,7 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-details
 import 'package:enginizer_flutter/modules/appointments/model/appointment-type.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,7 +35,7 @@ class AppointmentDetailsWidgetState extends State<AppointmentDetailsWidget> {
             Row(
               children: <Widget>[
                 Container(
-                  color: gray2,
+                  color: widget.appointment.resolveStatusColor(),
                   width: 50,
                   height: 50,
                   child: Container(
@@ -67,8 +68,8 @@ class AppointmentDetailsWidgetState extends State<AppointmentDetailsWidget> {
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            for (AppointmentType type in widget.appointment.appointmentTypes)
-              _appointmentTypeText(type),
+            for (ServiceItem item in widget.appointmentDetail.serviceItems)
+              _serviceItemText(item),
             _buildSeparator(),
             Container(
               margin: EdgeInsets.only(top: 15),
@@ -84,7 +85,7 @@ class AppointmentDetailsWidgetState extends State<AppointmentDetailsWidget> {
             Container(
               margin: EdgeInsets.only(top: 15),
               child: Text(
-                S.of(context).appointment_details_services_appointment_cancel,
+                S.of(context).appointment_details_services_appointment_date,
                 style: TextHelper.customTextStyle(
                     null, gray2, FontWeight.bold, 13),
               ),
@@ -108,14 +109,14 @@ class AppointmentDetailsWidgetState extends State<AppointmentDetailsWidget> {
     );
   }
 
-  Widget _appointmentTypeText(AppointmentType type) {
+  Widget _serviceItemText(ServiceItem serviceItem) {
     return Row(
       children: <Widget>[
         Expanded(
             child: Container(
           margin: EdgeInsets.only(top: 4),
           child: Text(
-            type.name,
+            serviceItem.name,
             style: TextHelper.customTextStyle(null, Colors.black, null, 13),
           ),
         )),

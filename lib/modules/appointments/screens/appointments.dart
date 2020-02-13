@@ -74,10 +74,7 @@ class AppointmentsState extends State<Appointments> {
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
     Provider.of<AppointmentProvider>(context, listen: false)
         .selectAppointment(selectedAppointment);
-    Provider.of<AppointmentProvider>(context, listen: false)
-        .getAppointmentDetails(selectedAppointment).then((_) {
-      Navigator.of(context).pushNamed(AppointmentDetails.route);
-    });
+    Navigator.of(context).pushNamed(AppointmentDetails.route);
   }
 
   _filterAppointments(String value) {

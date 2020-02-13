@@ -144,11 +144,11 @@ class $ro extends S {
   @override
   String get appointment_details_services_issues => "Probleme raportate:";
   @override
-  String get appointment_details_services_appointment_date => "Data programare";
+  String get appointment_details_services_appointment_date => "Dată programare";
   @override
   String get appointment_details_services_appointment_cancel => "Anulare";
   @override
-  String get appointments_list_search_hint => "Numar de inmatriculare sau model autoturism";
+  String get appointments_list_search_hint => "Număr de inmatriculare sau model autoturism";
   @override
   String get cars_create_selectYear => "Alege an";
   @override

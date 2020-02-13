@@ -22,8 +22,10 @@ class AppointmentDetails extends StatefulWidget {
 
 class AppointmentDetailsState extends State<AppointmentDetails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
+
+  var _initDone = false;
+  var _isLoading = false;
 
   AppointmentDetailsState({this.route});
 
@@ -37,34 +39,71 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     appointmentProvider =
         Provider.of<AppointmentProvider>(context, listen: false);
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            child: Container(
-              child: _buildTabBar(),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: _getContent(),
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: _getFloatingButton(),
-    );
+    return Consumer<AppointmentProvider>(
+        builder: (context, appointmentProvider, _) => Scaffold(
+              appBar: AppBar(
+                title: Text(appointmentProvider.selectedAppointment.name,
+                  style: TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+                ),
+                iconTheme:
+                    new IconThemeData(color: Theme.of(context).cardColor),
+              ),
+              body: _content(),
+              floatingActionButton: _getFloatingButton(),
+            ));
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      appointmentProvider =
+          Provider.of<AppointmentProvider>(context, listen: false);
+
+      appointmentProvider
+          .getAppointmentDetails(appointmentProvider.selectedAppointment)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _initDone = true;
+    super.didChangeDependencies();
+  }
+
+  Widget _content() {
+    return _isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Column(
+            children: <Widget>[
+              Container(
+                child: Container(
+                  child: _buildTabBar(),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  child: _getContent(),
+                ),
+              )
+            ],
+          );
   }
 
   Widget _getFloatingButton() {
-    bool visibility =
-        appointmentProvider.selectedAppointment.status.name.toLowerCase() ==
-            "submitted";
+    bool visibility = Provider.of<AppointmentProvider>(context, listen: false)
+            .selectedAppointment
+            .status
+            .name
+            .toLowerCase() ==
+        "submitted";
 
     return new Visibility(
         visible: visibility,
@@ -133,8 +172,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           ),
           decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(width: 1.0, color: bottomColor),
-              ))),
+            bottom: BorderSide(width: 1.0, color: bottomColor),
+          ))),
     );
   }
 
@@ -150,7 +189,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   void _cancelAppointment(Appointment appointment) {
     setState(() {
       appointmentProvider.cancelAppointment(appointment).then((appointment) {
-        Provider.of<AppointmentsProvider>(context, listen: false).refreshAppointment(appointment);
+        Provider.of<AppointmentsProvider>(context, listen: false)
+            .refreshAppointment(appointment);
       });
     });
   }

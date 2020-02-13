@@ -829,6 +829,15 @@ class S {
       args: [],
     );
   }
+
+  String get appointment_details_services_appointment_date {
+    return Intl.message(
+      'Appointment date',
+      name: 'appointment_details_services_appointment_date',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

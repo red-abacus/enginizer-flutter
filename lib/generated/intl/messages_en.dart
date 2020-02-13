@@ -52,6 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_details_car" : MessageLookupByLibrary.simpleMessage("Car"),
     "appointment_details_request" : MessageLookupByLibrary.simpleMessage("Request"),
     "appointment_details_services_appointment_cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
+    "appointment_details_services_appointment_date" : MessageLookupByLibrary.simpleMessage("Appointment date"),
     "appointment_details_services_issues" : MessageLookupByLibrary.simpleMessage("Reported issues"),
     "appointment_details_services_title" : MessageLookupByLibrary.simpleMessage("Requested services"),
     "appointments_list_search_hint" : MessageLookupByLibrary.simpleMessage("Registration no. or car model"),
