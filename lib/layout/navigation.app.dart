@@ -26,7 +26,8 @@ class NavigationApp extends StatefulWidget {
   static final List<DrawerItem> userDrawerItems = [
     new DrawerItem("Dashboard", Dashboard.route, Icons.dashboard),
     new DrawerItem("Cars", Cars.route, Icons.directions_car),
-    new DrawerItem("Appointments", Appointments.route, Icons.event_available)
+    new DrawerItem("Appointments", Appointments.route, Icons.event_available),
+    new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
   ];
 
   static final List<DrawerItem> providerDrawerItems = [];
