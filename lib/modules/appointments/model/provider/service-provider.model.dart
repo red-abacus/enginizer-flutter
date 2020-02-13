@@ -27,14 +27,15 @@ class ServiceProvider {
       this.image});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
+    print("json ${json}");
     return ServiceProvider(
       id: json['id'],
-      name: json['name'],
+      name: json['name'] != null ? json["name"] : "",
       address: json['address'] != null ? json['address'] : "",
       cui: json['cui'] != null ? json['cui'] : "",
-      fiscalName: json['fiscalName'] ? json['fiscalName'] : "",
-      profilePhotoUrl: json['profilePhotoUrl'] ? json['profilePhotoUrl'] : "",
-      registrationNumber: json['registrationNumber'] ? json['registrationNumber'] : "",
+      fiscalName: json['fiscalName'] != null ? json['fiscalName'] : "",
+      profilePhotoUrl: json['profilePhotoUrl'] != null ? json['profilePhotoUrl'] : "",
+      registrationNumber: json['registrationNumber'] != null ? json['registrationNumber'] : "",
       image: json['image'] != null ? json['image'] : ""
     );
   }
