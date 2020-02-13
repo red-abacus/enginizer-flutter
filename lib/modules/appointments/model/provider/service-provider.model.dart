@@ -30,12 +30,12 @@ class ServiceProvider {
     return ServiceProvider(
       id: json['id'],
       name: json['name'],
-      address: json['address'],
-      cui: json['cui'],
-      fiscalName: json['fiscalName'],
-      profilePhotoUrl: json['profilePhotoUrl'],
-      registrationNumber: json['registrationNumber'],
-      image: json['image']
+      address: json['address'] != null ? json['address'] : "",
+      cui: json['cui'] != null ? json['cui'] : "",
+      fiscalName: json['fiscalName'] ? json['fiscalName'] : "",
+      profilePhotoUrl: json['profilePhotoUrl'] ? json['profilePhotoUrl'] : "",
+      registrationNumber: json['registrationNumber'] ? json['registrationNumber'] : "",
+      image: json['image'] != null ? json['image'] : ""
     );
   }
 

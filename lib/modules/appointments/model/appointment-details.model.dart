@@ -11,14 +11,14 @@ class AppointmentDetail {
   Car car;
   List<IssueItem> issues = [];
   List<ServiceItem> serviceItems = [];
-
-  AppointmentDetail({this.car, this.issues, this.serviceItems});
+  String scheduledDate;
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
         car: Car.fromJson(json["car"]),
         issues: _mapIssuesList(json["issues"]),
-    serviceItems: _mapServiceItems(json["services"]));
+        serviceItems: _mapServiceItems(json["services"]),
+        scheduledDate: json["scheduleDateTime"]);
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -29,7 +29,7 @@ class AppointmentDetail {
     return appointmentTypes;
   }
 
-  static _mapServiceItems(List<dynamic> response) {
+  _mapServiceItems(List<dynamic> response) {
     List<ServiceItem> services = [];
     response.forEach((item) {
       services.add(ServiceItem.fromJson(item));

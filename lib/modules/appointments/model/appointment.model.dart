@@ -12,6 +12,7 @@ import 'operating-unit.model.dart';
 
 class Appointment {
   int id;
+  String name;
 
   DateTime date;
   String createdDate;
@@ -41,8 +42,9 @@ class Appointment {
         date: json['date'] != null
             ? DateFormat('dd/MM/yyyy').parse(json['itpExpireDate'])
             : null,
-        createdDate: json['createdDate'],
-        scheduleDateTime: json['scheduleDateTime'],
+        createdDate: json['createdDate'] != null ? json["createdDate"] : null,
+        scheduleDateTime:
+            json['scheduleDateTime'] != null ? json['scheduleDateTime'] : null,
         car: json['car'] != null ? Car.fromJson(json['car']) : null,
         appointmentTypes: json['appointmentType'] != null
             ? _mapAppointmentTypes(json['appointmentType'])

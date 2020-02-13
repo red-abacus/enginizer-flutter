@@ -54,7 +54,6 @@ class Auth with ChangeNotifier {
 
     _token = prefs.getString('token');
 
-    // TODO - autologins generate multiple screen refresh and multiple downloads for different models. This needs to be repaired.
     notifyListeners();
 
     return true;
@@ -62,7 +61,9 @@ class Auth with ChangeNotifier {
 
   Future<AuthResponse> _authenticate(String email, String password) async {
     try {
+      print("try logon !");
       final response = await _authService.login(email, password);
+      print("finish !");
       _token = response.token;
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
@@ -70,6 +71,7 @@ class Auth with ChangeNotifier {
       notifyListeners();
       return response;
     } catch (error) {
+      print("error ? ${error}");
       throw error;
     }
   }

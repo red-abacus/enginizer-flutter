@@ -5,6 +5,7 @@ import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../modules/auctions/screens/auctions.dart';
 import '../modules/cars/screens/dashboard.dart';
 
 class DrawerItem {

@@ -1,9 +1,14 @@
+import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/auctions-list.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/auctions-provider.dart';
 
 class Auctions extends StatefulWidget {
   static const String route = '/auctions';
@@ -20,17 +25,20 @@ class AuctionsState extends State<Auctions> {
   var _initDone = false;
   var _isLoading = false;
 
+  AuctionsProvider auctionsProvider;
+
   AuctionsState({this.route});
 
   @override
   Widget build(BuildContext context) {
+    auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+
     return Consumer<AuctionsProvider>(
-      builder: (context, appointmentsProvider, _) =>
-          Scaffold(
-            body: Center(
-              child: _renderAuctions(_isLoading),
-            ),
-          ),
+      builder: (context, appointmentsProvider, _) => Scaffold(
+        body: Center(
+          child: _renderAuctions(_isLoading),
+        ),
+      ),
     );
   }
 
@@ -38,25 +46,48 @@ class AuctionsState extends State<Auctions> {
   void didChangeDependencies() {
     if (!_initDone) {
       setState(() {
+        _isLoading = false;
         _isLoading = true;
       });
 
-      Provider.of<AuctionsProvider>(context, listen: false).loadCarBrands().then((_) {
-        setState(() {
-          _isLoading = false;
+      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      auctionsProvider.resetParameters();
+
+      auctionsProvider.loadCarBrands().then((_) {
+        auctionsProvider.loadAuctions().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
         });
       });
     }
+
     _initDone = true;
 
     super.didChangeDependencies();
   }
 
   _renderAuctions(bool _isLoading) {
-    List<CarBrand> brands = Provider.of<AuctionsProvider>(context, listen: false).carBrands;
-
     return _isLoading
-        ? CircularProgressIndicator()
-        : AuctionsList(carBrands: brands);
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : AuctionsList(
+            carBrands: auctionsProvider.carBrands,
+            auctions: auctionsProvider.auctions,
+            filterAuctions: _filterAuctions,
+            selectAuction: _selectAuction,
+            searchString: auctionsProvider.searchString,
+            auctionStatus: auctionsProvider.filterStatus,
+            carBrand: auctionsProvider.filterCarBrand);
+  }
+
+  _filterAuctions(String value, AuctionStatus status, CarBrand carBrand) {
+    auctionsProvider.filterAuctions(value, status, carBrand);
+  }
+
+  _selectAuction(Auction auction) {
+    auctionsProvider.selectedAuction = auction;
+    Navigator.of(context).pushNamed(AuctionDetails.route);
   }
 }

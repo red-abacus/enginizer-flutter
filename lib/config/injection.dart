@@ -5,6 +5,8 @@ import 'package:enginizer_flutter/modules/appointments/providers/provider-servic
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/services/auction.service.dart';
+import 'package:enginizer_flutter/modules/auctions/services/bid.service.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/authentication/services/auth.service.dart';
@@ -38,6 +40,8 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerLazySingleton(() => AppointmentsService());
   inject.registerLazySingleton(() => ProviderService());
   inject.registerLazySingleton(() => UserService());
+  inject.registerLazySingleton(() => AuctionsService());
+  inject.registerLazySingleton(() => BidsService());
 
   inject.registerFactory(() => Auth());
   inject.registerFactory(() => CarsMakeProvider());
