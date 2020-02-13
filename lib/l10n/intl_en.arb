@@ -62,7 +62,7 @@
   "COLOR_GOLD": "Gold",
   "appointment_create_step1": "Choose services",
   "appointment_create_step2": "Describe issues",
-  "appointment_create_step2_alert": "Add the problems encountered wiht your car, one on the line",
+  "appointment_create_step2_alert": "Add the problems encountered with your car, one on the line",
   "appointment_create_step3": "Select providers",
   "appointment_create_step3_specific": "Specific",
   "appointment_create_step3_bid": "Auction",

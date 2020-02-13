@@ -598,7 +598,7 @@ class S {
 
   String get appointment_create_step2_alert {
     return Intl.message(
-      'Add the problems encountered wiht your car, one on the line',
+      'Add the problems encountered with your car, one on the line',
       name: 'appointment_create_step2_alert',
       desc: '',
       args: [],

@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_create_step0" : MessageLookupByLibrary.simpleMessage("Select car"),
     "appointment_create_step1" : MessageLookupByLibrary.simpleMessage("Choose services"),
     "appointment_create_step2" : MessageLookupByLibrary.simpleMessage("Describe issues"),
-    "appointment_create_step2_alert" : MessageLookupByLibrary.simpleMessage("Add the problems encountered wiht your car, one on the line"),
+    "appointment_create_step2_alert" : MessageLookupByLibrary.simpleMessage("Add the problems encountered with your car, one on the line"),
     "appointment_create_step3" : MessageLookupByLibrary.simpleMessage("Select providers"),
     "appointment_create_step3_alert" : MessageLookupByLibrary.simpleMessage("In Auction mode, the services will bid to carry out your repairs"),
     "appointment_create_step3_bid" : MessageLookupByLibrary.simpleMessage("Auction"),
