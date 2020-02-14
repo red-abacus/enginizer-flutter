@@ -1,7 +1,21 @@
+import 'dart:io';
+import 'dart:math';
+import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
+import 'package:enginizer_flutter/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
+import 'package:enginizer_flutter/utils/api_response.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
+import 'package:enginizer_flutter/modules/cars/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:bezier_chart/bezier_chart.dart';
+import 'package:bezier_chart/src/bezier_chart_config.dart';
+import 'package:bezier_chart/src/bezier_line.dart';
+import 'package:bezier_chart/src/bezier_chart_widget.dart';
+import 'package:image_cropper/image_cropper.dart';
+;
 
 class CarDetails extends StatefulWidget {
   final String route = '/car';
@@ -17,23 +31,329 @@ class CarDetails extends StatefulWidget {
 class CarDetailsState extends State<CarDetails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Car model;
+  File uploadImage;
+  CarProvider carProvider;
+  var initDone = false;
+
+  @override
+  void didChangeDependencies() {
+    if (!initDone) {
+      carProvider = Provider.of<CarProvider>(context);
+      carProvider.getCarDetails();
+      carProvider.getCarFuelConsumptionGraphic();
+      setState(() {
+        initDone = true;
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CarProvider>(
-      builder: (context, carProvider, _) => Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text('${carProvider.selectedCar.brand.name}'),
-            iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-          ),
-          body: Center(
-              child: Text('${carProvider.selectedCar.registrationNumber}')),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            elevation: 1,
-            child: Icon(Icons.add),
-          )),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text('${carProvider.selectedCar.brand.name}'),
+        iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+      ),
+      body: getCarDetailsListener(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 1,
+        onPressed: () => openModalAddFuelConsumption(context),
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  getCarDetailsListener() {
+    switch (carProvider.getCarDetailsAPI.status) {
+      case Status.LOADING:
+        return Container(
+            padding: EdgeInsets.all(10),
+            child: Center(child: CircularProgressIndicator()));
+        break;
+      case Status.ERROR:
+        return Text(carProvider.getCarFuelConsumptionAPI.toString());
+        break;
+      case Status.COMPLETED:
+        return showCarDetails(carProvider.selectedCar);
+        break;
+    }
+  }
+
+  uploadCarImageListener(car) {
+    switch (carProvider.uploadImageAPI.status) {
+      case Status.LOADING:
+        return Container(
+            padding: EdgeInsets.all(10),
+            child: Center(child: CircularProgressIndicator()));
+        break;
+      case Status.ERROR:
+//        return Text(carProvider.getCarFuelConsumptionAPI.toString());
+      return  showPicture(car);
+        break;
+      case Status.COMPLETED:
+        return  showPicture(car);
+        break;
+    }
+  }
+
+  showPicture(car){
+    return (uploadImage == null)
+        ? Image.network(
+      '${car.image}',
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height * 0.3,
+    )
+        : Image.file(
+      uploadImage,
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height * 0.3,
+    );
+  }
+
+  getChartDataLister() {
+    switch (carProvider.getCarFuelConsumptionAPI.status) {
+      case Status.LOADING:
+        return Container(
+            padding: EdgeInsets.all(10),
+            child: Center(child: CircularProgressIndicator()));
+        break;
+      case Status.ERROR:
+        return Text(carProvider.getCarFuelConsumptionAPI.toString());
+        break;
+      case Status.COMPLETED:
+        return showChart();
+        break;
+    }
+  }
+
+  showCarDetails(Car car) {
+    return Material(
+      elevation: 1,
+      color: Colors.grey[200],
+      borderRadius: new BorderRadius.circular(5.0),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: ClipRRect(
+                    borderRadius: new BorderRadius.circular(10.0),
+                    child: Container(
+                        color: Colors.white,
+                        child: uploadCarImageListener(car)),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    (car.brand?.name != null && car.model?.name != null)
+                        ? Padding(
+                            padding: EdgeInsets.all(20),
+                            child: TextWidget(
+                              "${car.brand?.name} - ${car.model?.name} ",
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Container(),
+                    (car.year?.name != null && car.color?.name != null)
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: TextWidget(
+                                "${car.year?.name}, ${car.color?.name}"),
+                          )
+                        : Container(),
+                    (car.power?.name != null && car.motor?.name != null)
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 20, top: 10),
+                            child: TextWidget(
+                                "${car.power?.name}CP, ${car.motor?.name}"))
+                        : Container(),
+                    (car.mileage != null)
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 20, top: 10),
+                            child: TextWidget("${car.mileage}KM"),
+                          )
+                        : Container(),
+                    (car.registrationNumber != null)
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 20, top: 10),
+                            child: TextWidget("${car.registrationNumber}"),
+                          )
+                        : Container(),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                    ),
+                    getChartDataLister()
+                  ],
+                ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              child: FlatButton(
+                padding: EdgeInsets.all(30),
+                splashColor: Theme.of(context).primaryColor,
+                onPressed: () async {
+                  showCameraDialog();
+                },
+                child: TextWidget(
+                  'Upload Image',
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  showChart() {
+    var now = DateTime.now();
+    var fromDate = DateTime(now.year, now.month - 1, now.day);
+
+    return Center(
+      child: Container(
+        color: Colors.red,
+        height: MediaQuery.of(context).size.height / 3,
+        width: MediaQuery.of(context).size.width,
+        child: BezierChart(
+          bezierChartScale: BezierChartScale.WEEKLY,
+          fromDate: fromDate,
+          toDate: now,
+          selectedDate: now,
+          series: [
+            BezierLine(label: "Consum", data: getGraphicData()),
+          ],
+          config: BezierChartConfig(
+            verticalIndicatorStrokeWidth: 3.0,
+            verticalIndicatorColor: Colors.black26,
+            showVerticalIndicator: true,
+            verticalIndicatorFixedPosition: false,
+            backgroundColor: Colors.red,
+            footerHeight: 35.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<DataPoint> getGraphicData() {
+    List<DataPoint> dataPoints = [];
+    dataPoints.clear();
+    CarFuelGraphicResponse response =
+        carProvider?.getCarFuelConsumptionAPI?.data;
+
+    if (response?.labels != null && response.labels.length > 0)
+      for (var i = 0; i < response.labels.length; i++) {
+        if (response.datasets[i] != null && response.labels[i] != null)
+          // TODO sterge random si si schimba dataset pentru ca vine doar 0 de pe api
+          dataPoints.add(DataPoint<DateTime>(
+              value: double.parse(
+                  (response.datasets[i] + Random().nextInt(35)).toString()),
+              xAxis: DateTime(DateTime.now().year, DateTime.now().month - 1,
+                  response.labels[i])));
+      }
+    return dataPoints;
+  }
+
+  showCameraDialog() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) => Container(
+              padding: EdgeInsets.only(top: 50, bottom: 50),
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text("Open Camera"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.camera);
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  ),
+                  RaisedButton(
+                    child: Text("Open Gallery"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.gallery);
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  ),
+                ],
+              ),
+            ));
+  }
+
+  void openModalAddFuelConsumption(BuildContext ctx) {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return CarFuelConsumptionForm(() {
+//              Navigator.pop(context);
+            });
+          });
+        });
+  }
+
+  Future getImage(ImageSource imageSource) async {
+    var image = await ImagePicker.pickImage(source: imageSource);
+    if (image != null) {
+      setState(() {
+        uploadImage = image;
+      });
+      cropImage(image);
+    }
+  }
+
+  cropImage(image) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: image.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropp image',
+            toolbarColor: Theme.of(context).primaryColor,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        )
+    );
+    if(croppedFile!=null)
+      carProvider.uploadImage(croppedFile);
+    else
+      carProvider.uploadImage(image);
   }
 }
