@@ -15,7 +15,7 @@ import 'package:bezier_chart/src/bezier_chart_config.dart';
 import 'package:bezier_chart/src/bezier_line.dart';
 import 'package:bezier_chart/src/bezier_chart_widget.dart';
 import 'package:image_cropper/image_cropper.dart';
-;
+
 
 class CarDetails extends StatefulWidget {
   final String route = '/car';
