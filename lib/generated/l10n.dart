@@ -803,6 +803,33 @@ class S {
     );
   }
 
+  String get auction_bid_estimate_price {
+    return Intl.message(
+      'Estimated Price',
+      name: 'auction_bid_estimate_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_cancel_description {
+    return Intl.message(
+      'Are you sure you want to cancel this bid?',
+      name: 'auction_bid_cancel_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_accept_description {
+    return Intl.message(
+      'Are you sure you want to accept this bid?',
+      name: 'auction_bid_accept_description',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get SERVICE {
     return Intl.message(
       'Service',
@@ -942,6 +969,51 @@ class S {
     return Intl.message(
       'All',
       name: 'general_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_decline {
+    return Intl.message(
+      'Decline',
+      name: 'general_decline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_accept {
+    return Intl.message(
+      'Accept',
+      name: 'general_accept',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_warning {
+    return Intl.message(
+      'Warning',
+      name: 'general_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_yes {
+    return Intl.message(
+      'Yes',
+      name: 'general_yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_no {
+    return Intl.message(
+      'No',
+      name: 'general_no',
       desc: '',
       args: [],
     );

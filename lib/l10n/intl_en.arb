@@ -85,6 +85,9 @@
   "auction_bid_services_provided": "Services Provided",
   "auction_bid_see_provider_profile": "See Profile",
   "auction_bid_estimate": "See Estimate",
+  "auction_bid_estimate_price": "Estimated Price",
+  "auction_bid_cancel_description": "Are you sure you want to cancel this bid?",
+  "auction_bid_accept_description": "Are you sure you want to accept this bid?",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -100,5 +103,10 @@
   "general_find": "Find",
   "general_status": "Status",
   "general_car": "Car",
-  "general_all": "All"
+  "general_all": "All",
+  "general_decline": "Decline",
+  "general_accept": "Accept",
+  "general_warning": "Warning",
+  "general_yes": "Yes",
+  "general_no": "No"
 }

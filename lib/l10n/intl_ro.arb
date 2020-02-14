@@ -85,6 +85,9 @@
   "auction_bid_services_provided": "Servicii Oferite",
   "auction_bid_see_provider_profile": "Vezi Profil",
   "auction_bid_estimate": "VEZI DEVIZ",
+  "auction_bid_estimate_price": "Cost Estimat",
+  "auction_bid_cancel_description": "Esti sigur ca dorești sa respingi această licitatie?",
+  "auction_bid_accept_description": "Esti sigur ca dorești sa accepti această licitatie?",
   "SERVICE": "Service",
   "CAR_WASHING": "Spălătorie",
   "PAINT_SHOP": "Vopsire",
@@ -100,5 +103,10 @@
   "general_find": "Caută",
   "general_status": "Status",
   "general_car": "Masină",
-  "general_all": "Toate"
+  "general_all": "Toate",
+  "general_decline": "Respinge",
+  "general_accept": "Acceptă",
+  "general_warning": "Avertizare",
+  "general_yes": "Da",
+  "general_no": "Nu"
 }

@@ -1,6 +1,4 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-type.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
@@ -31,66 +29,51 @@ class BidDetailsState extends State<BidDetails> {
     auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
 
     return Consumer<AuctionsProvider>(
-        builder: (context, appointmentsProvider, _) => Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(
-              iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-            ),
-            body: _contentWidget()));
-  }
-
-  _contentWidget() {
-    return Column(
-      children: <Widget>[
-        new Expanded(
-            child: Container(
-          margin: EdgeInsets.all(10),
-          child: new ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _imageContainer(),
-                  _providerTitleContainer(),
-                  _providerContainer(),
-                  _buildSeparator(),
-                  _serviceTitleContainer(),
-                  _servicesContainer(),
-                  _buildSeparator(),
-                  _issueTitleContainer(),
-                  _issueContainer(),
-//            for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
-//              _appointmentIssueType(widget.appointmentDetail.issues[i], i),
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    child: Text(
-                      S
-                          .of(context)
-                          .appointment_details_services_appointment_cancel,
-                      style: TextHelper.customTextStyle(
-                          null, gray2, FontWeight.bold, 13),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15, bottom: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          "test",
-                          style: TextHelper.customTextStyle(
-                              null, Colors.black, null, 18),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              )
-            ],
+      builder: (context, appointmentsProvider, _) => Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
           ),
-        ))
-      ],
+          body: Column(
+            children: <Widget>[
+              new Expanded(
+                  child: Container(
+                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                child: new ListView(
+                  padding: EdgeInsets.only(bottom: 60),
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _imageContainer(),
+                        _titleContainer(S.of(context).auction_bids_provider),
+                        _providerContainer(),
+                        _buildSeparator(),
+                        _titleContainer(
+                            S.of(context).auction_bid_services_provided),
+                        _servicesContainer(),
+                        _buildSeparator(),
+                        _titleContainer(
+                            S.of(context).appointment_details_services_issues),
+                        _issueContainer(),
+                        _buildSeparator(),
+                        _titleContainer(S
+                            .of(context)
+                            .appointment_details_services_appointment_date),
+                        _appointmentDateContainer(),
+                        _buildSeparator(),
+                        _titleContainer(S.of(context).auction_bid_estimate_price),
+                        _priceContainer(),
+                        _buildButtons(),
+                      ],
+                    )
+                  ],
+                ),
+              ))
+            ],
+          )),
     );
   }
 
@@ -121,16 +104,6 @@ class BidDetailsState extends State<BidDetails> {
           ),
         ),
       ],
-    );
-  }
-
-  _providerTitleContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 15),
-      child: Text(
-        S.of(context).auction_bids_provider,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
-      ),
     );
   }
 
@@ -165,16 +138,6 @@ class BidDetailsState extends State<BidDetails> {
             onPressed: () {},
           )
         ],
-      ),
-    );
-  }
-
-  _serviceTitleContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Text(
-        S.of(context).auction_bid_services_provided,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
       ),
     );
   }
@@ -224,29 +187,98 @@ class BidDetailsState extends State<BidDetails> {
     ));
   }
 
-  _issueTitleContainer() {
+  _issueContainer() {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Column(
+                children: <Widget>[
+                  for (int i = 0; i < 10; i++) _issueTextWidget(i)
+                ],
+              ),
+            ),
+          ),
+          FlatButton(
+            child: Text(
+              S.of(context).auction_bid_estimate.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            ),
+            onPressed: () {},
+          )
+        ],
+      ),
+    );
+  }
+
+  _appointmentDateContainer() {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Text(
+        "15.01.2020 ${S.of(context).general_at} 09:00",
+        style:
+            TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
+      ),
+    );
+  }
+
+  _priceContainer() {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Text(
+        "2000 RON",
+        style:
+            TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
+      ),
+    );
+  }
+
+  _titleContainer(String text) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        S.of(context).appointment_details_services_issues,
+        text,
         style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
       ),
     );
   }
 
-  _issueContainer() {
-    return Expanded(
-      child: Container(
-          margin: EdgeInsets.only(top: 5),
-          child: Row(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  for (int i = 0; i < 10; i++) _issueTextWidget(i)
-                ],
+  _buildButtons() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: new Row(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: FlatButton(
+              child: Text(
+                S.of(context).general_decline.toUpperCase(),
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
-            ],
-          )),
+              onPressed: () {
+                _cancelBid();
+              },
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: FlatButton(
+              child: Text(
+                S.of(context).general_accept.toUpperCase(),
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+              ),
+              onPressed: () {
+                _acceptBid();
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -254,8 +286,7 @@ class BidDetailsState extends State<BidDetails> {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Container(
             width: 20,
@@ -278,11 +309,11 @@ class BidDetailsState extends State<BidDetails> {
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                "test",
+                "Bataie fata stanga",
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -300,6 +331,82 @@ class BidDetailsState extends State<BidDetails> {
           ),
         )
       ],
+    );
+  }
+
+  _cancelBid() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(S.of(context).general_warning,
+              style:
+                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  S.of(context).auction_bid_cancel_description,
+                  style: TextHelper.customTextStyle(null, null, null, 16),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(S.of(context).general_no),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text(S.of(context).general_yes),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _acceptBid() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(S.of(context).general_warning,
+              style:
+              TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  S.of(context).auction_bid_accept_description,
+                  style: TextHelper.customTextStyle(null, null, null, 16),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(S.of(context).general_no),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text(S.of(context).general_yes),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

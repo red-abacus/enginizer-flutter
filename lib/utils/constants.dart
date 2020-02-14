@@ -2,6 +2,7 @@ library Constants;
 
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 const String SUCCESS_MESSAGE = " You will be contacted by us very soon.";
