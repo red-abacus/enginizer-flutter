@@ -25,11 +25,19 @@ void setupDependencyInjection(SharedPreferences s) async {
       Headers.contentTypeHeader: 'application/json', // set content-length
     }));
 
-    dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      options.headers['Authorization'] = 'Bearer ${s.getString('token')}';
-      return options;
-    }));
+    dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (RequestOptions options) async {
+          options.headers['Authorization'] = 'Bearer ${s.getString('token')}';
+          return options;
+        },
+        onError: (DioError e) async {
+          if (e?.response?.statusCode == 401 && s.getString('token') != null) {
+            s.remove('token');
+            s.clear();
+          }
+          return e;
+        }
+    ));
 
     return dio;
   });
