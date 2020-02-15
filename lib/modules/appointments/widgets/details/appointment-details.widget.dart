@@ -1,8 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-type.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
@@ -124,7 +123,7 @@ class AppointmentDetailsWidgetState extends State<AppointmentDetailsWidget> {
     );
   }
 
-  Widget _appointmentIssueType(IssueItem item, int index) {
+  Widget _appointmentIssueType(AppointmentIssue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Row(
@@ -152,7 +151,7 @@ class AppointmentDetailsWidgetState extends State<AppointmentDetailsWidget> {
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                item.description,
+                item.name,
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),

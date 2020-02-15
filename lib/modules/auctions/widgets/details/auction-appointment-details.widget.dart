@@ -1,6 +1,6 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AuctionAppointmentDetailsWidget extends StatefulWidget {
-  Auction auction;
-  AppointmentDetail appointmentDetail;
+  final Auction auction;
+  final AppointmentDetail appointmentDetail;
+  final Function openEstimator;
 
-  AuctionAppointmentDetailsWidget({this.auction, this.appointmentDetail});
+  AuctionAppointmentDetailsWidget(
+      {this.auction, this.appointmentDetail, this.openEstimator});
 
   @override
   AuctionAppointmentDetailsWidgetState createState() {
@@ -21,7 +23,8 @@ class AuctionAppointmentDetailsWidget extends StatefulWidget {
   }
 }
 
-class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetailsWidget> {
+class AuctionAppointmentDetailsWidgetState
+    extends State<AuctionAppointmentDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return new ListView(
@@ -38,8 +41,7 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
                   width: 50,
                   height: 50,
                   child: SvgPicture.asset(
-                    'assets/images/statuses/in_bid.svg'
-                        .toLowerCase(),
+                    'assets/images/statuses/in_bid.svg'.toLowerCase(),
                     semanticsLabel: 'Appointment Status Image',
                   ),
                 ),
@@ -65,7 +67,8 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            for (ServiceItem serviceItem in widget.appointmentDetail.serviceItems)
+            for (ServiceItem serviceItem
+                in widget.appointmentDetail.serviceItems)
               _appointmentServiceItem(serviceItem),
             _buildSeparator(),
             Container(
@@ -78,6 +81,23 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
             ),
             for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
               _appointmentIssueType(widget.appointmentDetail.issues[i], i),
+            Container(
+              margin: EdgeInsets.only(top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FlatButton(
+                    splashColor: Theme.of(context).primaryColor,
+                    onPressed: () => {widget.openEstimator(context)},
+                    child: Text(
+                      S.of(context).appointment_details_estimator,
+                      style: TextHelper.customTextStyle(null,
+                          Theme.of(context).accentColor, FontWeight.bold, 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             _buildSeparator(),
             Container(
               margin: EdgeInsets.only(top: 15),
@@ -96,12 +116,12 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
                         .replaceAll(" ", " ${S.of(context).general_at} "),
                     style: TextHelper.customTextStyle(
                         null, Colors.black, null, 18),
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -110,18 +130,19 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
     return Row(
       children: <Widget>[
         Expanded(
-            child: Container(
-              margin: EdgeInsets.only(top: 4),
-              child: Text(
-                serviceItem.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
-              ),
-            )),
+          child: Container(
+            margin: EdgeInsets.only(top: 4),
+            child: Text(
+              serviceItem.name,
+              style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _appointmentIssueType(IssueItem item, int index) {
+  Widget _appointmentIssueType(AppointmentIssue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Row(
@@ -149,7 +170,7 @@ class AuctionAppointmentDetailsWidgetState extends State<AuctionAppointmentDetai
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                item.description,
+                item.name,
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),

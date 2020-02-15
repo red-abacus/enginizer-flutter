@@ -1,5 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/issues/issues-list.widget.dart';
@@ -22,8 +22,7 @@ class AppointmentCreateIssueFormState
 
   @override
   Widget build(BuildContext context) {
-    var providerServiceProvider =
-        Provider.of<ProviderServiceProvider>(context);
+    var providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
     var issues = providerServiceProvider.issuesFormState;
 
     return Form(
@@ -58,7 +57,7 @@ class AppointmentCreateIssueFormState
     setState(() {
       Provider.of<ProviderServiceProvider>(context)
           .issuesFormState
-          .add(IssueItem(description: ''));
+          .add(AppointmentIssue(name: ''));
     });
   }
 

@@ -1,10 +1,10 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class IssuesListWidget extends StatefulWidget {
-  List<IssueItem> issues;
+  List<AppointmentIssue> issues;
   Function removeIssue;
   Function addIssue;
   Function issueChanged;
@@ -34,7 +34,8 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
     );
   }
 
-  Widget buildIssuesListBox(BuildContext context, List<IssueItem> issues) {
+  Widget buildIssuesListBox(
+      BuildContext context, List<AppointmentIssue> issues) {
     return ListView.builder(
         itemCount: issues.length,
         itemBuilder: (context, index) {
@@ -43,7 +44,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
   }
 
   ListTile _buildListTile(
-      BuildContext context, int index, List<IssueItem> issues) {
+      BuildContext context, int index, List<AppointmentIssue> issues) {
     if (issues.length > 1) {
       return ListTile(
         title: _tileTextFormField(issues[index]),
@@ -57,27 +58,23 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
         ),
       );
     } else {
-      return ListTile(
-          title: _tileTextFormField(issues[index])
-      );
+      return ListTile(title: _tileTextFormField(issues[index]));
     }
   }
 
-  _tileTextFormField(IssueItem issueItem) {
+  _tileTextFormField(AppointmentIssue issue) {
     return TextFormField(
-        decoration: InputDecoration(
-            labelText: S.of(context).appointment_create_issues),
+        decoration:
+            InputDecoration(labelText: S.of(context).appointment_create_issues),
         onChanged: (value) {
           setState(() {
-            issueItem.description = value;
+            issue.name = value;
           });
         },
-        controller: TextEditingController(text: issueItem.description),
+        controller: TextEditingController(text: issue.name),
         validator: (value) {
           if (value.isEmpty) {
-            return S
-                .of(context)
-                .appointment_create_error_issueCannotBeEmpty;
+            return S.of(context).appointment_create_error_issueCannotBeEmpty;
           } else {
             return null;
           }
@@ -85,6 +82,4 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
   }
 }
 
-class CustomTextFormField extends TextFormField {
-
-}
+class CustomTextFormField extends TextFormField {}
