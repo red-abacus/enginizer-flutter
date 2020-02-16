@@ -1,7 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/cards/appointment-card-provider.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/widgets/cards/appointment-card-consultant.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/datepicker.widget.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
