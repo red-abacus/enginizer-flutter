@@ -1,5 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/datepicker.widget.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,18 +11,34 @@ import 'appointment-card.widget.dart';
 class AppointmentsList extends StatelessWidget {
   List<Appointment> appointments = [];
 
+  String searchString;
+  AppointmentStatusState appointmentStatusState;
+  DateTime filterDateTime;
+
   Function selectAppointment;
   Function filterAppointments;
 
-  AppointmentsList(
-      {this.appointments, this.selectAppointment, this.filterAppointments});
+  AppointmentsList({
+    this.appointments,
+    this.selectAppointment,
+    this.filterAppointments,
+    this.searchString,
+    this.appointmentStatusState,
+    this.filterDateTime
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
       child: Container(
         child: Center(
           child: Column(
@@ -28,6 +46,7 @@ class AppointmentsList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               _buildSearchBar(context),
+              _buildFilterWidget(context),
               _buildListView(context),
             ],
           ),
@@ -43,11 +62,47 @@ class AppointmentsList extends StatelessWidget {
         style: TextHelper.customTextStyle(null, null, null, null),
         autofocus: false,
         decoration: InputDecoration(
-            labelText: S.of(context).appointments_list_search_hint),
+            labelText: S
+                .of(context)
+                .appointments_list_search_hint),
         onChanged: (val) {
-          filterAppointments(val);
+          filterAppointments(val, this.appointmentStatusState, this.filterDateTime);
         },
       ),
+    );
+  }
+
+  Widget _buildFilterWidget(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+            margin: EdgeInsets.only(right: 10),
+            child: DropdownButtonFormField(
+              isDense: true,
+              hint: _statusText(context),
+              items: _statusDropdownItems(context),
+              onChanged: (newValue) {
+                filterAppointments(
+                    this.searchString, newValue, this.filterDateTime);
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            height: 70,
+            child: BasicDateField(
+              labelText: S.of(context).general_date,
+              onChange: (value) {
+                filterAppointments(this.searchString, this.appointmentStatusState, value);
+              },
+            ),
+          )
+        ),
+      ],
     );
   }
 
@@ -65,5 +120,56 @@ class AppointmentsList extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _statusText(BuildContext context) {
+    String title = (this.appointmentStatusState == null)
+        ? S
+        .of(context)
+        .general_status
+        : _titleFromState(this.appointmentStatusState, context);
+
+    return Text(
+      title,
+      style: TextHelper.customTextStyle(null, Colors.grey, null, 15),
+    );
+  }
+
+  _titleFromState(AppointmentStatusState status, BuildContext context) {
+    switch (status) {
+      case AppointmentStatusState.WAITING:
+        return S
+            .of(context)
+            .appointment_status_waiting;
+      case AppointmentStatusState.IN_PROGRESS:
+        return S
+            .of(context)
+            .appointment_status_in_progress;
+      case AppointmentStatusState.FINISHED:
+        return S
+            .of(context)
+            .appointment_status_finished;
+    }
+  }
+
+  _statusDropdownItems(BuildContext context) {
+    List<DropdownMenuItem<AppointmentStatusState>> brandDropdownList = [];
+    brandDropdownList.add(DropdownMenuItem(
+        value: AppointmentStatusState.WAITING,
+        child: Text(S
+            .of(context)
+            .appointment_status_waiting)));
+    brandDropdownList.add(DropdownMenuItem(
+        value: AppointmentStatusState.IN_PROGRESS,
+        child:
+        Text(S
+            .of(context)
+            .appointment_status_in_progress)));
+    brandDropdownList.add(DropdownMenuItem(
+        value: AppointmentStatusState.FINISHED,
+        child: Text(S
+            .of(context)
+            .appointment_status_finished)));
+    return brandDropdownList;
   }
 }

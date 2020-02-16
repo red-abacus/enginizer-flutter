@@ -84,7 +84,3 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
         });
   }
 }
-
-class CustomTextFormField extends TextFormField {
-
-}

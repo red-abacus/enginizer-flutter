@@ -4,6 +4,7 @@ import 'package:enginizer_flutter/modules/appointments/providers/appointments.pr
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/appointments-list.widget.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class AppointmentsState extends State<Appointments> {
 
   @override
   Widget build(BuildContext context) {
+    _appointments = Provider.of<AppointmentsProvider>(context).appointments;
+
     return Consumer<AppointmentsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
@@ -55,15 +58,8 @@ class AppointmentsState extends State<Appointments> {
         _isLoading = true;
       });
 
-      Provider.of<AppointmentsProvider>(context, listen: false)
-          .loadAppointments()
-          .then((_) {
-        setState(() {
-          _appointments =
-              Provider.of<AppointmentsProvider>(context, listen: false)
-                  .appointments;
-          _isLoading = false;
-        });
+      Provider.of<AppointmentsProvider>(context).loadAppointments().then((_) {
+        _isLoading = false;
       });
     }
     _initDone = true;
@@ -72,40 +68,36 @@ class AppointmentsState extends State<Appointments> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    Provider.of<AppointmentProvider>(context, listen: false)
+    Provider.of<AppointmentProvider>(context)
         .selectAppointment(selectedAppointment);
     Navigator.of(context).pushNamed(AppointmentDetails.route);
   }
 
-  _filterAppointments(String value) {
-    setState(() {
-      List<Appointment> appointments =
-          Provider.of<AppointmentsProvider>(context, listen: false)
-              .appointments;
-
-      if (value.isEmpty) {
-        _appointments = appointments;
-      } else {
-        _appointments =
-            appointments.where((item) => item.filtered(value)).toList();
-      }
-    });
+  _filterAppointments(
+      String string, AppointmentStatusState state, DateTime dateTime) {
+    Provider.of<AppointmentsProvider>(context)
+        .filterAppointments(string, state, dateTime);
   }
 
   _renderAppointments(bool _isLoading, List<Appointment> appointments) {
+    AppointmentsProvider provider = Provider.of<AppointmentsProvider>(context);
+
     return _isLoading
         ? CircularProgressIndicator()
         : AppointmentsList(
             appointments: appointments,
             selectAppointment: _selectAppointment,
-            filterAppointments: _filterAppointments);
+            filterAppointments: _filterAppointments,
+            searchString: provider.filterSearchString,
+            appointmentStatusState: provider.filterStatus,
+            filterDateTime: provider.filterDateTime);
   }
 
   void _openAppointmentCreateModal(BuildContext buildContext) {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
 
-    Provider.of<CarsProvider>(context, listen: false).loadCars();
-    Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
+    Provider.of<CarsProvider>(context).loadCars();
+    Provider.of<ProviderServiceProvider>(context).loadServices();
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(

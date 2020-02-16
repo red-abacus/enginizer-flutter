@@ -79,6 +79,9 @@
   "appointments_list_search_hint": "Registration no. or car model",
   "appointment_details_services_appointment_cancel": "Cancel",
   "appointment_details_services_appointment_date": "Appointment date",
+  "appointment_status_waiting": "Waiting",
+  "appointment_status_in_progress": "In Progress",
+  "appointment_status_finished": "Finished",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -108,5 +111,6 @@
   "general_accept": "Accept",
   "general_warning": "Warning",
   "general_yes": "Yes",
-  "general_no": "No"
+  "general_no": "No",
+  "general_date": "Date"
 }
