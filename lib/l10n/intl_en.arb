@@ -112,5 +112,8 @@
   "general_warning": "Warning",
   "general_yes": "Yes",
   "general_no": "No",
-  "general_date": "Date"
+  "general_date": "Date",
+  "general_new": "New",
+  "general_scheduled": "Scheduled",
+  "general_finished": "Finished"
 }

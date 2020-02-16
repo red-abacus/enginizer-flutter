@@ -1054,6 +1054,33 @@ class S {
       args: [],
     );
   }
+
+  String get general_new {
+    return Intl.message(
+      'New',
+      name: 'general_new',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_scheduled {
+    return Intl.message(
+      'Scheduled',
+      name: 'general_scheduled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_finished {
+    return Intl.message(
+      'Finished',
+      name: 'general_finished',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

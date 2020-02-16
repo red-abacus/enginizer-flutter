@@ -4,6 +4,7 @@ import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.d
 import 'package:enginizer_flutter/modules/authentication/models/roles.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,7 @@ class NavigationApp extends StatefulWidget {
   static final List<DrawerItem> providerDrawerItems = [];
 
   static final List<DrawerItem> consultantDrawerItems = [
+    new DrawerItem("Appointments", AppointmentsConsultant.route, Icons.event_available),
     new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
   ];
 
@@ -48,7 +50,7 @@ class NavigationApp extends StatefulWidget {
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
       case Roles.ProviderConsultant:
-        return Auctions.route;
+        return AppointmentsConsultant.route;
       default:
         return '/';
     }
@@ -147,6 +149,8 @@ class _NavigationAppState extends State<NavigationApp> {
         return Appointments();
       case Auctions.route:
         return Auctions();
+      case AppointmentsConsultant.route:
+        return AppointmentsConsultant();
       default:
         return new Text("Error");
     }

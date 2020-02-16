@@ -112,5 +112,8 @@
   "general_warning": "Avertizare",
   "general_yes": "Da",
   "general_no": "Nu",
-  "general_date": "Dată"
+  "general_date": "Dată",
+  "general_new": "Nou",
+  "general_scheduled": "Programată",
+  "general_finished": "Finalizată"
 }

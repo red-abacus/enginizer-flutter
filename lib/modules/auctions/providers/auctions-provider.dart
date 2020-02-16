@@ -34,15 +34,12 @@ class AuctionsProvider with ChangeNotifier {
 
   Future<List<CarBrand>> loadCarBrands() async {
     carBrands = await carMakeService.getCarBrands();
-    notifyListeners();
     return carBrands;
   }
 
   Future<AuctionResponse> loadAuctions() async {
     auctionResponse = await auctionsService.getAuctions();
     this.auctions = auctionResponse.auctions;
-
-    notifyListeners();
     return auctionResponse;
   }
 
