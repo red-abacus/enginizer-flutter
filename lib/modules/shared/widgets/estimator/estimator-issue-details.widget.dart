@@ -57,71 +57,73 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
             ),
             Flexible(
               // The rest of the columns are scrollable horizontally
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: ClampingScrollPhysics(),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: <Widget>[
-                        _buildCell(
-                          S.of(context).estimator_type.toUpperCase(),
-                          headerCell: true,
-                        ),
-                        Column(
-                          children: _buildCells(issueItems, 'type'),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        _buildCell(
-                          S.of(context).estimator_code.toUpperCase(),
-                          headerCell: true,
-                        ),
-                        Column(
-                          children: _buildCells(issueItems, 'code'),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        _buildCell(
-                          S.of(context).estimator_quantity.toUpperCase(),
-                          headerCell: true,
-                        ),
-                        Column(
-                          children: _buildCells(issueItems, 'quantity'),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        _buildCell(
-                          S.of(context).estimator_priceNoVAT.toUpperCase(),
-                          headerCell: true,
-                        ),
-                        Column(
-                          children: _buildCells(issueItems, 'priceNoVAT'),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        _buildCell(
-                          S.of(context).estimator_priceVAT.toUpperCase(),
-                          headerCell: true,
-                        ),
-                        Column(
-                          children: _buildCells(issueItems, 'priceVAT'),
-                        ),
-                      ],
-                    ),
-                  ],
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: ClampingScrollPhysics(),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: <Widget>[
+                          _buildCell(
+                            S.of(context).estimator_type.toUpperCase(),
+                            headerCell: true,
+                          ),
+                          Column(
+                            children: _buildCells(issueItems, 'type'),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          _buildCell(
+                            S.of(context).estimator_code.toUpperCase(),
+                            headerCell: true,
+                          ),
+                          Column(
+                            children: _buildCells(issueItems, 'code'),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          _buildCell(
+                            S.of(context).estimator_quantity.toUpperCase(),
+                            headerCell: true,
+                          ),
+                          Column(
+                            children: _buildCells(issueItems, 'quantity'),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          _buildCell(
+                            S.of(context).estimator_priceNoVAT.toUpperCase(),
+                            headerCell: true,
+                          ),
+                          Column(
+                            children: _buildCells(issueItems, 'priceNoVAT'),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          _buildCell(
+                            S.of(context).estimator_priceVAT.toUpperCase(),
+                            headerCell: true,
+                          ),
+                          Column(
+                            children: _buildCells(issueItems, 'priceVAT'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -139,32 +141,29 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
   }
 
   Widget _buildCell(String fieldValue,
-      {bool firstColumn = false, bool headerCell = false}) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      width: firstColumn ? 180 : 150,
-      height: 54.0,
-      padding: EdgeInsets.only(left: 24, top: 5, bottom: 5),
-      decoration: BoxDecoration(
-        color: headerCell ? Theme.of(context).primaryColor : Colors.white,
-        border: Border(
-          bottom: BorderSide(width: 1.0, color: Colors.black12),
+          {bool firstColumn = false, bool headerCell = false}) =>
+      Container(
+        alignment: Alignment.centerLeft,
+        width: firstColumn ? 160 : 120,
+        height: 54.0,
+        padding: EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
+        decoration: BoxDecoration(
+          color: headerCell ? Theme.of(context).primaryColor : Colors.white,
+          border: Border(
+            bottom: BorderSide(width: 1.0, color: Colors.black12),
+          ),
         ),
-      ),
-      child: Text(
-        fieldValue.toString(),
-        style: TextStyle(
-          color: headerCell ? Colors.white : Colors.black87,
-          fontWeight: headerCell ? FontWeight.bold : FontWeight.normal,
-          fontSize: 15,
+        child: Text(
+          fieldValue.toString(),
+          style: TextStyle(
+            color: headerCell ? Colors.white : Colors.black87,
+            fontWeight: headerCell ? FontWeight.bold : FontWeight.normal,
+            fontSize: 15,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _buildForm(BuildContext context) {
-    return Container();
-  }
+  Widget _buildForm(BuildContext context) => Container();
 
   String _translateType(String type) {
     switch (type) {

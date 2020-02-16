@@ -904,7 +904,7 @@ class S {
 
   String get estimator_priceNoVAT {
     return Intl.message(
-      'Price\n(without VAT)',
+      'Price\n(w/o VAT)',
       name: 'estimator_priceNoVAT',
       desc: '',
       args: [],
@@ -913,7 +913,7 @@ class S {
 
   String get estimator_priceVAT {
     return Intl.message(
-      'Price\n(with VAT)',
+      'Price\n(w/ VAT)',
       name: 'estimator_priceVAT',
       desc: '',
       args: [],

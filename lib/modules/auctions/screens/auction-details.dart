@@ -214,14 +214,72 @@ class AuctionDetailsState extends State<AuctionDetails> {
             name: 'Cap bara',
             quantity: 2,
             priceNoVAT: 200,
-            price: 238)
+            price: 238),
+        new IssueItem(
+            id: 3,
+            type: new IssueItemType(id: 1, name: 'Service'),
+            code: 'KX234',
+            name: 'Schimbare placute frana',
+            quantity: 1,
+            priceNoVAT: 600,
+            price: 839),
+        new IssueItem(
+            id: 4,
+            type: new IssueItemType(id: 2, name: 'Product'),
+            code: 'MX157',
+            name: 'Placute frana',
+            quantity: 2,
+            priceNoVAT: 800,
+            price: 1049),
+        new IssueItem(
+            id: 5,
+            type: new IssueItemType(id: 1, name: 'Service'),
+            code: 'KX235',
+            name: 'Schimbat anvelopa fata stanga',
+            quantity: 1,
+            priceNoVAT: 1000,
+            price: 1190),
+        new IssueItem(
+            id: 6,
+            type: new IssueItemType(id: 2, name: 'Product'),
+            code: 'MX183',
+            name: 'Anvelopa fata stanga',
+            quantity: 1,
+            priceNoVAT: 150,
+            price: 219)
       ]),
       new Issue(id: 1, description: 'Moare bateria foarte usor', items: [
         new IssueItem(
             id: 1,
+            type: new IssueItemType(id: 1, name: 'Service'),
+            code: 'KX251',
+            name: 'Verificare / schimbare pompa apa',
+            quantity: 1,
+            priceNoVAT: 300,
+            price: 374),
+        new IssueItem(
+            id: 2,
             type: new IssueItemType(id: 2, name: 'Product'),
             code: 'MX111',
             name: 'Pompa apa',
+            quantity: 1,
+            priceNoVAT: 180,
+            price: 213)
+      ]),
+      new Issue(id: 1, description: 'Bec marsarier nefunctional', items: [
+        new IssueItem(
+            id: 1,
+            type: new IssueItemType(id: 1, name: 'Service'),
+            code: 'KX248',
+            name: 'Montare bulb marsarier',
+            quantity: 1,
+            priceNoVAT: 120,
+            price: 143),
+        new IssueItem(
+            id: 2,
+            type: new IssueItemType(id: 2, name: 'Product'),
+            code: 'MX148',
+            name: 'Bulb marsarier',
             quantity: 1,
             priceNoVAT: 150,
             price: 172)
