@@ -1,5 +1,8 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,10 +26,16 @@ class BidDetailsState extends State<BidDetails> {
   BidDetailsState({this.route});
 
   AuctionsProvider auctionsProvider;
+  WorkEstimatesProvider workEstimatesProvider;
+
+  var _initDone = false;
+  var _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+    workEstimatesProvider =
+        Provider.of<WorkEstimatesProvider>(context, listen: false);
 
     return Consumer<AuctionsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
@@ -37,43 +46,76 @@ class BidDetailsState extends State<BidDetails> {
           body: Column(
             children: <Widget>[
               new Expanded(
-                  child: Container(
-                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                child: new ListView(
-                  padding: EdgeInsets.only(bottom: 60),
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _imageContainer(),
-                        _titleContainer(S.of(context).auction_bids_provider),
-                        _providerContainer(),
-                        _buildSeparator(),
-                        _titleContainer(
-                            S.of(context).auction_bid_services_provided),
-                        _servicesContainer(),
-                        _buildSeparator(),
-                        _titleContainer(
-                            S.of(context).appointment_details_services_issues),
-                        _issueContainer(),
-                        _buildSeparator(),
-                        _titleContainer(S
-                            .of(context)
-                            .appointment_details_services_appointment_date),
-                        _appointmentDateContainer(),
-                        _buildSeparator(),
-                        _titleContainer(S.of(context).auction_bid_estimate_price),
-                        _priceContainer(),
-                        _buildButtons(),
-                      ],
-                    )
-                  ],
+                child: Container(
+                  margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                  child: _buildContent(),
                 ),
-              ))
+              ),
             ],
           )),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      workEstimatesProvider =
+          Provider.of<WorkEstimatesProvider>(context, listen: false);
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      auctionsProvider.getBidDetails().then((bidDetails) {
+        workEstimatesProvider
+            .getWorkEstimateDetails(bidDetails.workEstimateId)
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      });
+    }
+    _initDone = true;
+    super.didChangeDependencies();
+  }
+
+  _buildContent() {
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _getContent();
+  }
+
+  _getContent() {
+    return new ListView(
+      padding: EdgeInsets.only(bottom: 60),
+      shrinkWrap: true,
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _imageContainer(),
+            _titleContainer(S.of(context).auction_bids_provider),
+            _providerContainer(),
+            _buildSeparator(),
+            _titleContainer(S.of(context).auction_bid_services_provided),
+            _servicesContainer(),
+            _buildSeparator(),
+            _titleContainer(S.of(context).appointment_details_services_issues),
+            _issueContainer(),
+            _buildSeparator(),
+            _titleContainer(
+                S.of(context).appointment_details_services_appointment_date),
+            _appointmentDateContainer(),
+            _buildSeparator(),
+            _titleContainer(S.of(context).auction_bid_estimate_price),
+            _priceContainer(),
+            _buildButtons(),
+          ],
+        )
+      ],
     );
   }
 
@@ -96,7 +138,10 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.only(left: 10),
             child: Text(
-              auctionsProvider.selectedAuction.appointment.name,
+              (auctionsProvider.selectedAuction != null &&
+                      auctionsProvider.selectedAuction.appointment != null)
+                  ? auctionsProvider.selectedAuction.appointment.name
+                  : '',
               maxLines: 3,
               style:
                   TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
@@ -203,15 +248,34 @@ class BidDetailsState extends State<BidDetails> {
             ),
           ),
           FlatButton(
+            splashColor: Theme.of(context).primaryColor,
+            onPressed: () => _openEstimator(context),
             child: Text(
               S.of(context).auction_bid_estimate.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(
+                  null, Theme.of(context).accentColor, FontWeight.bold, 16),
             ),
-            onPressed: () {},
-          )
+          ),
         ],
       ),
     );
+  }
+
+  void _openEstimator(BuildContext ctx) {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            WorkEstimateDetails workEstimateDetails =
+                workEstimatesProvider.workEstimateDetails;
+            return EstimatorModal(workEstimateDetails: workEstimateDetails);
+          });
+        });
   }
 
   _appointmentDateContainer() {
@@ -380,7 +444,7 @@ class BidDetailsState extends State<BidDetails> {
         return AlertDialog(
           title: Text(S.of(context).general_warning,
               style:
-              TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

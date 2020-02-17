@@ -2,7 +2,7 @@ import 'package:enginizer_flutter/modules/appointments/model/provider/service-pr
 
 class Bid {
   int id;
-  int cost;
+  double cost;
   int coveredServicesCount;
   String createdDate;
   ServiceProvider serviceProvider;
@@ -22,14 +22,15 @@ class Bid {
 
   factory Bid.fromJson(Map<String, dynamic> json) {
     return Bid(
-      id: json["id"],
-      cost: json["cost"],
-      coveredServicesCount: json["coveredServicesCount"],
-      createdDate: json["createdDate"],
-      serviceProvider: ServiceProvider.fromJson(json["provider"]),
-      providerAcceptedDateTime: json["providerAcceptedDateTime"],
-      requestedServicesCount: json["requestedServicesCount"],
-      status: json["status"]
-    );
+        id: json["id"],
+        cost: json["cost"],
+        coveredServicesCount: json["coveredServicesCount"],
+        createdDate: json["createdDate"],
+        serviceProvider: json["provider"] != null
+            ? ServiceProvider.fromJson(json["provider"])
+            : null,
+        providerAcceptedDateTime: json["providerAcceptedDateTime"],
+        requestedServicesCount: json["requestedServicesCount"],
+        status: json["status"]);
   }
 }

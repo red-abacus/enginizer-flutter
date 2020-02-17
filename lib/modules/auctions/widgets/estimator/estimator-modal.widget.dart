@@ -1,13 +1,14 @@
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'estimator-issue-details.widget.dart';
 
 class EstimatorModal extends StatefulWidget {
-  final List<Issue> issues;
+  final WorkEstimateDetails workEstimateDetails;
   final EstimatorMode mode;
   final bool isContainer;
   final bool isLoading;
@@ -16,8 +17,8 @@ class EstimatorModal extends StatefulWidget {
   final Function issueChange;
 
   EstimatorModal(
-      {this.issues = const [],
-      this.mode = EstimatorMode.Edit,
+      {this.workEstimateDetails,
+      this.mode = EstimatorMode.Readonly,
       this.isContainer = false,
       this.isLoading = false,
       this.issuesChange,
@@ -57,7 +58,7 @@ class _EstimatorModalState extends State<EstimatorModal> {
               accentColor: Theme.of(context).primaryColor,
               primaryColor: Theme.of(context).primaryColor,
             ),
-            child: Stepper(
+            child: steps.isNotEmpty ? Stepper(
               currentStep: _currentStepIndex,
               onStepTapped: (stepIndex) => _showIssue(stepIndex),
               type: StepperType.vertical,
@@ -75,19 +76,21 @@ class _EstimatorModalState extends State<EstimatorModal> {
                   ],
                 );
               },
-            ),
+            ) : Container(),
           ),
         ),
       );
 
   List<Step> _buildSteps(BuildContext context) {
     List<Step> stepsList = [];
-    List<Issue> issues = widget.issues;
+    List<Issue> issues = widget.workEstimateDetails != null
+        ? widget.workEstimateDetails.issues
+        : [];
     issues.asMap().forEach((index, issue) {
       stepsList.add(
         Step(
           isActive: _isStepActive(index),
-          title: Text(issue.description),
+          title: Text(issue.name),
           content: EstimatorIssueDetails(
             issue: issue,
             addIssueItem: _addIssueItem,

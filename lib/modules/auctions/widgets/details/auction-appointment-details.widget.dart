@@ -12,10 +12,8 @@ import 'package:flutter_svg/svg.dart';
 class AuctionAppointmentDetailsWidget extends StatefulWidget {
   final Auction auction;
   final AppointmentDetail appointmentDetail;
-  final Function openEstimator;
 
-  AuctionAppointmentDetailsWidget(
-      {this.auction, this.appointmentDetail, this.openEstimator});
+  AuctionAppointmentDetailsWidget({this.auction, this.appointmentDetail});
 
   @override
   AuctionAppointmentDetailsWidgetState createState() {
@@ -67,9 +65,10 @@ class AuctionAppointmentDetailsWidgetState
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            for (ServiceItem serviceItem
-                in widget.appointmentDetail.serviceItems)
-              _appointmentServiceItem(serviceItem),
+            if (widget.appointmentDetail != null)
+              for (ServiceItem serviceItem
+                  in widget.appointmentDetail.serviceItems)
+                _appointmentServiceItem(serviceItem),
             _buildSeparator(),
             Container(
               margin: EdgeInsets.only(top: 15),
@@ -79,25 +78,9 @@ class AuctionAppointmentDetailsWidgetState
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
-              _appointmentIssueType(widget.appointmentDetail.issues[i], i),
-            Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FlatButton(
-                    splashColor: Theme.of(context).primaryColor,
-                    onPressed: () => {widget.openEstimator(context)},
-                    child: Text(
-                      S.of(context).appointment_details_estimator,
-                      style: TextHelper.customTextStyle(null,
-                          Theme.of(context).accentColor, FontWeight.bold, 16),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            if (widget.appointmentDetail != null)
+              for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
+                _appointmentIssueType(widget.appointmentDetail.issues[i], i),
             _buildSeparator(),
             Container(
               margin: EdgeInsets.only(top: 15),
@@ -112,8 +95,11 @@ class AuctionAppointmentDetailsWidgetState
               child: Row(
                 children: <Widget>[
                   Text(
-                    widget.appointmentDetail.scheduledDate
-                        .replaceAll(" ", " ${S.of(context).general_at} "),
+                    (widget.appointmentDetail != null &&
+                            widget.appointmentDetail.scheduledDate != null)
+                        ? widget.appointmentDetail.scheduledDate
+                            .replaceAll(" ", " ${S.of(context).general_at} ")
+                        : '',
                     style: TextHelper.customTextStyle(
                         null, Colors.black, null, 18),
                   ),

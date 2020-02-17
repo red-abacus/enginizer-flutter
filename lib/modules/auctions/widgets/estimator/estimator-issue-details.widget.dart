@@ -1,9 +1,8 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'models/issue-item.model.dart';
 
 class EstimatorIssueDetails extends StatefulWidget {
   final Issue issue;
@@ -167,9 +166,9 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
 
   String _translateType(String type) {
     switch (type) {
-      case 'Service':
+      case 'SERVICE':
         return S.of(context).estimator_service;
-      case 'Product':
+      case 'PRODUCT':
         return S.of(context).estimator_product;
       default:
         return '';

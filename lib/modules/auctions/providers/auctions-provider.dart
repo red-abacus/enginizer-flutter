@@ -3,6 +3,7 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-details
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/bid-response.model.dart';
@@ -31,6 +32,7 @@ class AuctionsProvider with ChangeNotifier {
   Auction selectedAuction;
   AppointmentDetail appointmentDetails;
   Bid selectedBid;
+  BidDetails bidDetails;
 
   Future<List<CarBrand>> loadCarBrands() async {
     carBrands = await carMakeService.getCarBrands();
@@ -70,6 +72,11 @@ class AuctionsProvider with ChangeNotifier {
   Future<BidResponse> loadBids() async {
     this.bidResponse = await this.bidsService.getBids();
     return bidResponse;
+  }
+
+  Future<BidDetails> getBidDetails() async {
+    bidDetails = await this.bidsService.getBidDetails(selectedBid.id);
+    return bidDetails;
   }
 
   void resetParameters() {

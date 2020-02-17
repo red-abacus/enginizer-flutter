@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/cards/bid.card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,7 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         key: Key('searchBar'),
         autofocus: false,
         decoration: InputDecoration(labelText: value),
-        onChanged: (val) {
-        },
+        onChanged: (val) {},
       ),
     );
   }
@@ -54,7 +54,7 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return BidCard(bid: null, selectBid: widget.selectBid);
+            return BidCard(bid: new Bid(id: 23), selectBid: widget.selectBid);
           },
           itemCount: 20,
         ),
