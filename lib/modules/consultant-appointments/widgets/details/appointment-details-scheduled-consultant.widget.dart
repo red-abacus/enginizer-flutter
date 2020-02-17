@@ -10,23 +10,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AppointmentDetailsNewConsultantWidget extends StatefulWidget {
+class AppointmentDetailsScheduledConsultantWidget extends StatefulWidget {
   Appointment appointment;
   AppointmentDetail appointmentDetail;
-  List<ServiceItem> serviceItem;
-  List<ServiceProviderItem> serviceProviderItem;
+  List<ServiceItem> serviceItems;
+  List<ServiceProviderItem> serviceProviderItems;
 
-  AppointmentDetailsNewConsultantWidget(
-      {this.appointment, this.appointmentDetail, this.serviceItem, this.serviceProviderItem});
+  AppointmentDetailsScheduledConsultantWidget(
+      {this.appointment, this.appointmentDetail, this.serviceItems, this.serviceProviderItems});
 
   @override
-  AppointmentDetailsNewConsultantWidgetState createState() {
-    return AppointmentDetailsNewConsultantWidgetState();
+  AppointmentDetailsScheduledConsultantWidgetState createState() {
+    return AppointmentDetailsScheduledConsultantWidgetState();
   }
 }
 
-class AppointmentDetailsNewConsultantWidgetState
-    extends State<AppointmentDetailsNewConsultantWidget> {
+class AppointmentDetailsScheduledConsultantWidgetState
+    extends State<AppointmentDetailsScheduledConsultantWidget> {
   @override
   Widget build(BuildContext context) {
     return new ListView(
@@ -66,6 +66,9 @@ class AppointmentDetailsNewConsultantWidgetState
             ),
             _titleContainer(S.of(context).appointment_details_applicant),
             _applicantContainer(),
+            _buildSeparator(),
+            _titleContainer(S.of(context).appointment_details_assiged_mechanic),
+            _mechanicRow(),
             _buildSeparator(),
             _titleContainer(S.of(context).appointment_details_services_title),
             _servicesContainer(),
@@ -184,7 +187,7 @@ class AppointmentDetailsNewConsultantWidgetState
   _servicesContainer() {
     return Column(
       children: <Widget>[
-        for (ServiceItem item in widget.serviceItem)
+        for (ServiceItem item in widget.serviceItems)
           _getServiceRow(item),
       ],
     );
@@ -250,32 +253,49 @@ class AppointmentDetailsNewConsultantWidgetState
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: new Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: FlatButton(
-              child: Text(
-                S.of(context).general_decline.toUpperCase(),
-                style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+          FlatButton(
+            child: Text(
+              // TODO - need proper translation for english version
+              S.of(context).general_assign.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+            ),
+            onPressed: () {},
+          )
+        ],
+      ),
+    );
+  }
+
+  _mechanicRow() {
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 20,
+            height: 20,
+            decoration: new BoxDecoration(
+              color: gray,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
               ),
-              onPressed: () {
-              },
             ),
           ),
           Expanded(
-            flex: 1,
-            child: FlatButton(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
               child: Text(
-                // TODO - need proper translation for english version
-                S.of(context).general_estimator.toUpperCase(),
+                S.of(context).appointment_details_no_mechanic_alert,
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
               ),
-              onPressed: () {
-              },
             ),
-          )
+          ),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-new-consultant.widget.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-scheduled-consultant.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,13 +95,27 @@ class AppointmentDetailsConsultantState
     AppointmentConsultantProvider provider =
         Provider.of<AppointmentConsultantProvider>(context);
 
-    if (provider.selectedAppointment.status.name.toLowerCase() == "submitted") {
-      return AppointmentDetailsNewConsultantWidget(
-          appointment: provider.selectedAppointment,
-          appointmentDetail: provider.selectedAppointmentDetail,
-          serviceProviderItems: provider.serviceProviderItems);
-    } else {
-      return Container();
+    switch (currentState) {
+      case AppointmentDetailsStatusState.REQUEST:
+        if (provider.selectedAppointment.status.name.toLowerCase() ==
+            "submitted") {
+          return AppointmentDetailsScheduledConsultantWidget(
+              appointment: provider.selectedAppointment,
+              appointmentDetail: provider.selectedAppointmentDetail,
+              serviceItems: provider.selectedAppointmentDetail.serviceItems,
+              serviceProviderItems: provider.serviceProviderItems);
+        } else {
+          AppointmentDetailsNewConsultantWidget(
+              appointment: provider.selectedAppointment,
+              appointmentDetail: provider.selectedAppointmentDetail,
+              serviceItem: provider.selectedAppointmentDetail.serviceItems,
+              serviceProviderItem: provider.serviceProviderItems);
+        }
+        break;
+      case AppointmentDetailsStatusState.CAR:
+        // TODO - need to add car details when finished
+        return Container();
+        break;
     }
   }
 

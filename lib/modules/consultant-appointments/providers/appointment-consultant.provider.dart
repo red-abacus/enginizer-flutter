@@ -23,7 +23,6 @@ class AppointmentConsultantProvider with ChangeNotifier {
   Future<List<ServiceProviderItem>> getProviderServices(int id) async {
     var response =
         await appointmentsService.getServiceProviderItems(id);
-    print("items ${response.items}");
     serviceProviderItems = response.items;
     notifyListeners();
     return serviceProviderItems;

@@ -23,7 +23,6 @@ class AppointmentDetail {
       this.user});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
-    print("appointment detail ${json}");
     return AppointmentDetail(
         car: Car.fromJson(json["car"]),
         issues: _mapIssuesList(json["issues"]),

@@ -794,6 +794,24 @@ class S {
     );
   }
 
+  String get appointment_details_assiged_mechanic {
+    return Intl.message(
+      'Assigned Mechanics',
+      name: 'appointment_details_assiged_mechanic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_no_mechanic_alert {
+    return Intl.message(
+      'No mechanic is assigned!',
+      name: 'appointment_details_no_mechanic_alert',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',
@@ -1104,6 +1122,15 @@ class S {
     return Intl.message(
       'Estimator',
       name: 'general_estimator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_assign {
+    return Intl.message(
+      'Assign',
+      name: 'general_assign',
       desc: '',
       args: [],
     );
