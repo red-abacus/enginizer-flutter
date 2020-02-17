@@ -857,6 +857,33 @@ class S {
     );
   }
 
+  String get auction_bid_all_services {
+    return Intl.message(
+      'All requested.',
+      name: 'auction_bid_all_services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_no_services {
+    return Intl.message(
+      'No service.',
+      name: 'auction_bid_no_services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_date_schedule {
+    return Intl.message(
+      'Scheduled date',
+      name: 'auction_bid_date_schedule',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get SERVICE {
     return Intl.message(
       'Service',
@@ -1050,6 +1077,51 @@ class S {
     return Intl.message(
       'Date',
       name: 'general_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_services {
+    return Intl.message(
+      'Services',
+      name: 'general_services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_service {
+    return Intl.message(
+      'Service',
+      name: 'general_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_only {
+    return Intl.message(
+      'Only',
+      name: 'general_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_price {
+    return Intl.message(
+      'Price',
+      name: 'general_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_currency {
+    return Intl.message(
+      'Ron',
+      name: 'general_currency',
       desc: '',
       args: [],
     );

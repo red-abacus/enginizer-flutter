@@ -1,5 +1,6 @@
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/auctions-list.dart';
@@ -50,7 +51,7 @@ class AuctionsState extends State<Auctions> {
         _isLoading = true;
       });
 
-      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      auctionsProvider = Provider.of<AuctionsProvider>(context);
       auctionsProvider.resetParameters();
 
       auctionsProvider.loadCarBrands().then((_) {
@@ -87,7 +88,7 @@ class AuctionsState extends State<Auctions> {
   }
 
   _selectAuction(Auction auction) {
-    auctionsProvider.selectedAuction = auction;
+    Provider.of<AuctionProvider>(context, listen: false).selectedAuction = auction;
     Navigator.of(context).pushNamed(AuctionDetails.route);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-details-state.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/details/auction-bids.widget.dart';
@@ -31,15 +31,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
   AuctionDetailsScreenState currentState =
       AuctionDetailsScreenState.APPOINTMENT;
 
-  AuctionsProvider auctionsProvider;
-
   AuctionDetailsState({this.route});
 
   @override
   Widget build(BuildContext context) {
-    auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
-
-    return Consumer<AuctionsProvider>(
+    return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
@@ -52,17 +48,16 @@ class AuctionDetailsState extends State<AuctionDetails> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      AuctionProvider auctionProvider = Provider.of<AuctionProvider>(context);
 
       setState(() {
         _isLoading = true;
       });
 
-      auctionsProvider
-          .getAppointmentDetails(
-              auctionsProvider.selectedAuction.appointment.id)
+      auctionProvider.getAppointmentDetails(
+          auctionProvider.selectedAuction.appointment.id)
           .then((_) {
-        auctionsProvider.loadBids().then((_) {
+        auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
             _isLoading = false;
           });
@@ -75,7 +70,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   _titleText() {
     return Text(
-      auctionsProvider.selectedAuction.appointment?.name,
+      Provider.of<AuctionProvider>(context).selectedAuction.appointment?.name,
       style:
           TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
@@ -106,13 +101,15 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _getContent() {
+    AuctionProvider auctionProvider = Provider.of<AuctionProvider>(context);
+
     switch (this.currentState) {
       case AuctionDetailsScreenState.APPOINTMENT:
         return AuctionAppointmentDetailsWidget(
-            auction: auctionsProvider.selectedAuction,
-            appointmentDetail: auctionsProvider.appointmentDetails);
+            auction: auctionProvider.selectedAuction,
+            appointmentDetail: auctionProvider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
-        return AuctionBidsWidget(auction: null, selectBid: _selectBid);
+        return AuctionBidsWidget(bids: auctionProvider.getBids(), selectBid: _selectBid);
         break;
     }
     return Container();
@@ -171,7 +168,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _selectBid(Bid bid) {
-    auctionsProvider.selectedBid = bid;
+    Provider.of<AuctionProvider>(context).selectedBid = bid;
     Navigator.of(context).pushNamed(BidDetails.route);
   }
 }

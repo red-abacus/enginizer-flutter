@@ -4,6 +4,7 @@ import 'package:enginizer_flutter/modules/appointments/providers/appointments.pr
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/services/auction.service.dart';
 import 'package:enginizer_flutter/modules/auctions/services/bid.service.dart';
@@ -58,4 +59,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => UserProvider());
   inject.registerFactory(() => AppointmentProvider());
   inject.registerFactory(() => AuctionsProvider());
+  inject.registerFactory(() => AuctionProvider());
 }

@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,7 @@ class BidCard extends StatelessWidget {
         child: InkWell(
           splashColor: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
-          onTap: () => {
-            selectBid(bid)
-          },
+          onTap: () => {selectBid(bid)},
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(10.0),
             child: Row(
@@ -33,7 +32,7 @@ class BidCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _imageContainer(),
-                _textContainer(),
+                _textContainer(context),
                 _detailsContainer(context),
               ],
             ),
@@ -48,23 +47,16 @@ class BidCard extends StatelessWidget {
       color: red,
       width: 100,
       height: 120,
-      child: SvgPicture.asset(
-        'assets/images/statuses/in_bid.svg'.toLowerCase(),
-        semanticsLabel: 'Appointment Status Image',
-        height: 60,
-        width: 60,
+      child: Image.network(
+        '${bid.serviceProvider?.image?.replaceAll(" ", "")}',
+        fit: BoxFit.fitHeight,
+        height: 100,
+        width: 100,
       ),
     );
-
-    //                Image.network(
-//                  '${currentService.image}',
-//                  fit: BoxFit.fitHeight,
-//                  height: 100,
-//                  width: 100,
-//                ),
   }
 
-  _textContainer() {
+  _textContainer(BuildContext context) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(left: 10),
@@ -76,7 +68,7 @@ class BidCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text("Service Center",
+                Text("${bid.serviceProvider?.name}",
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
@@ -94,44 +86,18 @@ class BidCard extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(left: 5),
                       child: Text(
-                        "4.6 (1766)",
+                        "${bid.serviceProvider?.rating?.value} (${bid.serviceProvider?.rating?.reviews})",
                         style: TextHelper.customTextStyle(null, gray, null, 11),
                       ),
                     ),
                   ],
                 ),
-                Text(
-                  "Servicii: Doar 1 serviciu",
-                    style: TextStyle(
-                        color: yellow,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12.8,
-                        height: 1.5)),
-                Text('Cost: 700 ron',
-                    style: TextStyle(
-                        color: gray,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 10,
-                        height: 1.5)),
+                _servicesText(context),
+                _priceText(context),
                 SizedBox(height: 10),
               ],
             ),
-            Positioned(
-              child: Align(
-                  alignment: FractionalOffset.bottomLeft,
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    child: Text("Ora programare:\n11.02.2020 la 11:00",
-                        style: TextStyle(
-                            color: gray,
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 10,
-                            height: 1.5)),
-                  )),
-            ),
+            _dateScheduleContainer(context),
           ],
         ),
       ),
@@ -149,6 +115,76 @@ class BidCard extends StatelessWidget {
             color: red,
             fontFamily: "Lato"),
       ),
+    );
+  }
+
+  _servicesText(BuildContext context) {
+    String title = "";
+    Color color = red;
+
+    if (bid.requestedServicesCount == bid.coveredServicesCount) {
+      title =
+          "${S.of(context).general_services}: ${S.of(context).auction_bid_all_services}";
+      color = green;
+    } else if (bid.coveredServicesCount == 0) {
+      title =
+          "${S.of(context).general_services}: ${S.of(context).auction_bid_no_services}";
+    } else {
+      String servicesCount = bid.coveredServicesCount == 1
+          ? S.of(context).general_service
+          : S.of(context).general_services;
+
+      title =
+          "${S.of(context).general_services}: ${S.of(context).general_only} ${bid.coveredServicesCount} $servicesCount";
+
+      color = yellow;
+    }
+
+    return Text(title,
+        style: TextStyle(
+            color: color,
+            fontFamily: 'Lato',
+            fontWeight: FontWeight.normal,
+            fontSize: 12.8,
+            height: 1.5));
+  }
+
+  _priceText(BuildContext context) {
+    String text = "${S.of(context).general_price}: ${bid.cost} ${S.of(context).general_currency}";
+    return Text(text,
+        style: TextStyle(
+            color: gray,
+            fontFamily: 'Lato',
+            fontWeight: FontWeight.normal,
+            fontSize: 10,
+            height: 1.5));
+  }
+
+  _dateScheduleContainer(BuildContext context) {
+    DateTime acceptedDate = bid.getAcceptedDate();
+
+    String dateString = (acceptedDate != null)
+    ? DateUtils.stringFromDate(acceptedDate, "dd.MM.yyyy")
+    : "";
+    String timeString = (acceptedDate != null)
+    ? DateUtils.stringFromDate(acceptedDate, "HH:mm")
+    : "";
+
+    String title = "${S.of(context).auction_bid_date_schedule}: $dateString ${S.of(context).general_at} $timeString";
+
+    return Positioned(
+      child: Align(
+          alignment: FractionalOffset.bottomLeft,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Text(title,
+                style: TextStyle(
+                    color: gray,
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 10,
+                    height: 1.5)),
+          )),
     );
   }
 }

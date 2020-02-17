@@ -91,6 +91,9 @@
   "auction_bid_estimate_price": "Cost Estimat",
   "auction_bid_cancel_description": "Esti sigur ca dorești sa respingi această licitatie?",
   "auction_bid_accept_description": "Esti sigur ca dorești sa accepti această licitatie?",
+  "auction_bid_all_services": "Toate cele solicitate",
+  "auction_bid_no_services": "Niciun serviciu.",
+  "auction_bid_date_schedule": "Oră programare",
   "SERVICE": "Service",
   "CAR_WASHING": "Spălătorie",
   "PAINT_SHOP": "Vopsire",
@@ -112,5 +115,10 @@
   "general_warning": "Avertizare",
   "general_yes": "Da",
   "general_no": "Nu",
-  "general_date": "Dată"
+  "general_date": "Dată",
+  "general_services": "Servicii",
+  "general_service": "Serviciu",
+  "general_only": "Doar",
+  "general_price": "Pret",
+  "general_currency": "Ron"
 }

@@ -91,6 +91,9 @@
   "auction_bid_estimate_price": "Estimated Price",
   "auction_bid_cancel_description": "Are you sure you want to cancel this bid?",
   "auction_bid_accept_description": "Are you sure you want to accept this bid?",
+  "auction_bid_all_services": "All requested.",
+  "auction_bid_no_services": "No service.",
+  "auction_bid_date_schedule": "Scheduled date",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -112,5 +115,10 @@
   "general_warning": "Warning",
   "general_yes": "Yes",
   "general_no": "No",
-  "general_date": "Date"
+  "general_date": "Date",
+  "general_services": "Services",
+  "general_service": "Service",
+  "general_only": "Only",
+  "general_price": "Price",
+  "general_currency": "Ron"
 }
