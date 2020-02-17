@@ -1,7 +1,9 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/appointments-list-consultant.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,8 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
+    Provider.of<AppointmentConsultantProvider>(context).selectedAppointment = selectedAppointment;
+    Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
   }
 
   _filterAppointments(String string, AppointmentStatusState state,

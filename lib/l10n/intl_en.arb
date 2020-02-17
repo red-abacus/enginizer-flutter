@@ -82,6 +82,8 @@
   "appointment_status_waiting": "Waiting",
   "appointment_status_in_progress": "In Progress",
   "appointment_status_finished": "Finished",
+  "appointment_details_applicant": "Applicant",
+  "appointment_details_request_reprogramming": "Request reprogramming",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -115,5 +117,6 @@
   "general_date": "Date",
   "general_new": "New",
   "general_scheduled": "Scheduled",
-  "general_finished": "Finished"
+  "general_finished": "Finished",
+  "general_estimator": "Estimator"
 }

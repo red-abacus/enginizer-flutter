@@ -63,7 +63,8 @@ class AppointmentsService {
     }
   }
 
-  Future<Appointment> createAppointment(AppointmentRequest appointmentRequest) async {
+  Future<Appointment> createAppointment(
+      AppointmentRequest appointmentRequest) async {
     final response = await _dio.post(APPOINTMENTS_API_PATH,
         data: jsonEncode(appointmentRequest.toJson()));
 
@@ -76,7 +77,8 @@ class AppointmentsService {
   }
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
-    final response = await _dio.get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString());
+    final response = await _dio
+        .get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString());
 
     if (response.statusCode == 200) {
       return _mapAppointmentDetails(response.data);
@@ -104,10 +106,8 @@ class AppointmentsService {
     return AppointmentDetail.fromJson(response);
   }
 
-  Future<ServiceProviderItemsResponse> getServiceProviderItems(
-      ServiceProvider serviceProvider) async {
-    final response =
-        await _dio.get(buildProviderServicesPath(serviceProvider.id));
+  Future<ServiceProviderItemsResponse> getServiceProviderItems(int id) async {
+    final response = await _dio.get(buildProviderServicesPath(id));
 
     if (response.statusCode == 200) {
       return _mapServiceProviderItems(response.data);
@@ -127,7 +127,8 @@ class AppointmentsService {
   }
 
   Future<Appointment> cancelAppointment(int appointmentId) async {
-    final response = await _dio.patch(buildCancelAppointmentPath(appointmentId));
+    final response =
+        await _dio.patch(buildCancelAppointmentPath(appointmentId));
 
     if (response.statusCode == 200) {
       return _mapAppointment(response.data);

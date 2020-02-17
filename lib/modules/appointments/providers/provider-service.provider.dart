@@ -70,7 +70,7 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<ServiceProviderItem>> loadProviderServices(
       ServiceProvider serviceProvider) async {
     var response =
-        await appointmentsService.getServiceProviderItems(serviceProvider);
+        await appointmentsService.getServiceProviderItems(serviceProvider.id);
     serviceProviderItems = response.items;
     notifyListeners();
     return serviceProviderItems;

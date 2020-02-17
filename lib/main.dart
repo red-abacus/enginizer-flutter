@@ -40,7 +40,9 @@ import 'modules/cars/providers/cars.provider.dart';
 import 'modules/cars/screens/car.dart';
 import 'modules/cars/screens/cars.dart';
 import 'generated/l10n.dart';
+import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +77,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: UserProvider()),
           ChangeNotifierProvider.value(value: AppointmentProvider()),
           ChangeNotifierProvider.value(value: AuctionsProvider()),
-          ChangeNotifierProvider.value(value: AppointmentsConsultantProvider())
+          ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
+          ChangeNotifierProvider.value(value: AppointmentConsultantProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
@@ -126,6 +129,7 @@ class AppState extends State<App> {
               AuctionDetails.route: (context) => AuctionDetails(),
               BidDetails.route: (context) => BidDetails(),
               AppointmentsConsultant.route: (context) => AppointmentsConsultant(),
+              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant()
             },
           );
         }));

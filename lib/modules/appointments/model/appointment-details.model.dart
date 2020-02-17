@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-status.
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:intl/intl.dart';
 
@@ -12,16 +13,23 @@ class AppointmentDetail {
   List<IssueItem> issues = [];
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
+  User user;
 
   AppointmentDetail(
-      {this.car, this.issues, this.serviceItems, this.scheduledDate});
+      {this.car,
+      this.issues,
+      this.serviceItems,
+      this.scheduledDate,
+      this.user});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
+    print("appointment detail ${json}");
     return AppointmentDetail(
         car: Car.fromJson(json["car"]),
         issues: _mapIssuesList(json["issues"]),
         serviceItems: _mapServiceItems(json["services"]),
-        scheduledDate: json["scheduleDateTime"]);
+        scheduledDate: json["scheduledDateTime"],
+        user: User.fromJson(json["user"]));
   }
 
   static _mapIssuesList(List<dynamic> response) {
