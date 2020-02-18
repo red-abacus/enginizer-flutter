@@ -1,15 +1,10 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:intl/intl.dart';
-
-import 'appointment-type.model.dart';
 
 class AppointmentDetail {
   Car car;
-  List<IssueItem> issues = [];
+  List<AppointmentIssue> issues = [];
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
 
@@ -21,13 +16,13 @@ class AppointmentDetail {
         car: Car.fromJson(json["car"]),
         issues: _mapIssuesList(json["issues"]),
         serviceItems: _mapServiceItems(json["services"]),
-        scheduledDate: json["scheduledDateTime"] != null ? json["scheduledDateTime"] : "");
+        scheduledDate: json["scheduledDateTime"] ?? "");
   }
 
   static _mapIssuesList(List<dynamic> response) {
-    List<IssueItem> appointmentTypes = [];
+    List<AppointmentIssue> appointmentTypes = [];
     response.forEach((item) {
-      appointmentTypes.add(IssueItem.fromJson(item));
+      appointmentTypes.add(AppointmentIssue.fromJson(item));
     });
     return appointmentTypes;
   }

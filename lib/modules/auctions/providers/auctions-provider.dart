@@ -1,13 +1,8 @@
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/response/bid-response.model.dart';
 import 'package:enginizer_flutter/modules/auctions/services/auction.service.dart';
-import 'package:enginizer_flutter/modules/auctions/services/bid.service.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
 import 'package:flutter/foundation.dart';

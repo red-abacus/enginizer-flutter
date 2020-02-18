@@ -749,6 +749,15 @@ class S {
     );
   }
 
+  String get appointment_details_estimator {
+    return Intl.message(
+      'See estimate',
+      name: 'appointment_details_estimator',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get appointment_status_waiting {
     return Intl.message(
       'Waiting',
@@ -879,6 +888,141 @@ class S {
     return Intl.message(
       'Scheduled date',
       name: 'auction_bid_date_schedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_type {
+    return Intl.message(
+      'Type',
+      name: 'estimator_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_typePlaceholder {
+    return Intl.message(
+      'Entry type',
+      name: 'estimator_typePlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_code {
+    return Intl.message(
+      'Code',
+      name: 'estimator_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_name {
+    return Intl.message(
+      'Name',
+      name: 'estimator_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_quantity {
+    return Intl.message(
+      'Quantity /\nTime unit',
+      name: 'estimator_quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_quantityPlaceholder {
+    return Intl.message(
+      'Quantity / Time unit',
+      name: 'estimator_quantityPlaceholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_price {
+    return Intl.message(
+      'Price',
+      name: 'estimator_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_priceNoVAT {
+    return Intl.message(
+      'Price\n(w/o VAT)',
+      name: 'estimator_priceNoVAT',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_priceVAT {
+    return Intl.message(
+      'Price\n(w/ VAT)',
+      name: 'estimator_priceVAT',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_service {
+    return Intl.message(
+      'Service',
+      name: 'estimator_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_product {
+    return Intl.message(
+      'Product',
+      name: 'estimator_product',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_dismiss {
+    return Intl.message(
+      'Dismiss',
+      name: 'estimator_dismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_totalProducts {
+    return Intl.message(
+      'Total Products',
+      name: 'estimator_totalProducts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_totalServices {
+    return Intl.message(
+      'Total Services',
+      name: 'estimator_totalServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get estimator_total {
+    return Intl.message(
+      'Total',
+      name: 'estimator_total',
       desc: '',
       args: [],
     );
@@ -1122,6 +1266,15 @@ class S {
     return Intl.message(
       'Ron',
       name: 'general_currency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_no_entries {
+    return Intl.message(
+      'No entries available',
+      name: 'general_no_entries',
       desc: '',
       args: [],
     );

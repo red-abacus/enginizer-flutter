@@ -46,16 +46,13 @@ class AuctionsList extends StatelessWidget {
   }
 
   Widget _buildSearchWidget(BuildContext context) {
-    String value = (this.searchString.isEmpty)
-        ? S.of(context).auctions_search_hint
-        : this.searchString;
-
     return Container(
       margin: EdgeInsets.only(top: 10.0, bottom: 10),
       child: TextField(
         key: Key('searchBar'),
         autofocus: false,
-        decoration: InputDecoration(labelText: value),
+        decoration:
+            InputDecoration(labelText: S.of(context).auctions_search_hint),
         onChanged: (val) {
           this.filterAuctions(val, this.auctionStatus, this.carBrand);
         },

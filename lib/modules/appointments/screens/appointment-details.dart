@@ -96,8 +96,9 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   }
 
   Widget _getFloatingButton() {
-    bool visibility = appointmentProvider.selectedAppointment.status.name.toLowerCase() ==
-        "submitted";
+    bool visibility =
+        appointmentProvider.selectedAppointment.status.name.toLowerCase() ==
+            "submitted";
 
     return new Visibility(
         visible: visibility,
@@ -124,7 +125,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
             appointmentDetail: appointmentProvider.selectedAppointmentDetail);
       case AppointmentDetailsTabBarState.CAR:
         return AppointmentDetailsCarWidget();
-        break;
+      default:
+        return Container();
     }
   }
 

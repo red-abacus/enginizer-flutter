@@ -33,8 +33,18 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   AuctionDetailsState({this.route});
 
+  AuctionProvider auctionProvider;
+
   @override
   Widget build(BuildContext context) {
+    auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
+
+    if (auctionProvider.selectedAuction == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
+    }
+
     return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
@@ -48,7 +58,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      AuctionProvider auctionProvider = Provider.of<AuctionProvider>(context);
+      auctionProvider = Provider.of<AuctionProvider>(context);
 
       setState(() {
         _isLoading = true;
@@ -70,7 +80,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   _titleText() {
     return Text(
-      Provider.of<AuctionProvider>(context).selectedAuction.appointment?.name,
+      auctionProvider.selectedAuction?.appointment?.name ?? 'N/A',
       style:
           TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
@@ -101,8 +111,6 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _getContent() {
-    AuctionProvider auctionProvider = Provider.of<AuctionProvider>(context);
-
     switch (this.currentState) {
       case AuctionDetailsScreenState.APPOINTMENT:
         return AuctionAppointmentDetailsWidget(
@@ -168,7 +176,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _selectBid(Bid bid) {
-    Provider.of<AuctionProvider>(context).selectedBid = bid;
+    auctionProvider.selectedBid = bid;
     Navigator.of(context).pushNamed(BidDetails.route);
   }
 }

@@ -2,7 +2,6 @@ import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:flutter/cupertino.dart';
 
 

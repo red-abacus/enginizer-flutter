@@ -3,7 +3,6 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment.model.d
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:flutter/widgets.dart';

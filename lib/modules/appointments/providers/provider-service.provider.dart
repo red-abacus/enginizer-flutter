@@ -1,6 +1,6 @@
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
-import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
@@ -28,7 +28,7 @@ class ProviderServiceProvider with ChangeNotifier {
   // Form entries
   Car selectedCar;
   List<ServiceItem> selectedServiceItems;
-  List<IssueItem> issuesFormState;
+  List<AppointmentIssue> issuesFormState;
   AppointmentProviderType appointmentProviderType;
   ServiceProvider selectedProvider;
   DateEntry dateEntry;
@@ -38,7 +38,7 @@ class ProviderServiceProvider with ChangeNotifier {
   void initFormValues() {
     selectedCar = null;
     selectedServiceItems = [];
-    issuesFormState = [IssueItem(id: null, description: '')];
+    issuesFormState = [AppointmentIssue(id: null, name: '')];
     appointmentProviderType = AppointmentProviderType.Specific;
     selectedProvider = null;
     dateEntry = null;
@@ -101,8 +101,8 @@ class ProviderServiceProvider with ChangeNotifier {
     appointmentRequest.carId = selectedCar.id;
 
     appointmentRequest.issues = [];
-    for (IssueItem item in issuesFormState) {
-      appointmentRequest.issues.add(item.description);
+    for (AppointmentIssue item in issuesFormState) {
+      appointmentRequest.issues.add(item.name);
     }
 
     appointmentRequest.serviceIds = [];

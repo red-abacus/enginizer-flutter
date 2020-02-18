@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/bid-response.model.dart';
 import 'package:enginizer_flutter/modules/auctions/services/bid.service.dart';
@@ -16,9 +17,11 @@ class AuctionProvider with ChangeNotifier {
   Auction selectedAuction;
   AppointmentDetail appointmentDetails;
   Bid selectedBid;
+  BidDetails bidDetails;
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
-    appointmentDetails = await this.appointmentsService.getAppointmentDetails(appointmentId);
+    appointmentDetails =
+        await this.appointmentsService.getAppointmentDetails(appointmentId);
     notifyListeners();
     return appointmentDetails;
   }
@@ -28,8 +31,14 @@ class AuctionProvider with ChangeNotifier {
     notifyListeners();
     return bidResponse;
   }
-//
+
   List<Bid> getBids() {
-    return this.bidResponse.bids;
+    return this.bidResponse?.bids ?? [];
+  }
+
+  Future<BidDetails> getBidDetails() async {
+    bidDetails = await this.bidsService.getBidDetails(selectedBid.id);
+    notifyListeners();
+    return bidDetails;
   }
 }

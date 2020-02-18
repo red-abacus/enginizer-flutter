@@ -3,6 +3,7 @@ import 'package:enginizer_flutter/layout/navigation.app.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
@@ -22,6 +23,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/injection.dart';
+import 'generated/l10n.dart';
 import 'layout/navigation.app.dart';
 import 'modules/appointments/providers/appointment.provider.dart';
 import 'modules/appointments/providers/appointments.provider.dart';
@@ -39,7 +41,6 @@ import 'modules/cars/providers/cars-make.provider.dart';
 import 'modules/cars/providers/cars.provider.dart';
 import 'modules/cars/screens/car.dart';
 import 'modules/cars/screens/cars.dart';
-import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +76,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentProvider()),
           ChangeNotifierProvider.value(value: AuctionsProvider()),
           ChangeNotifierProvider.value(value: AuctionProvider()),
-
+          ChangeNotifierProvider.value(value: WorkEstimatesProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
