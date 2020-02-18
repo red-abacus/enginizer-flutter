@@ -11,6 +11,7 @@ class WorkEstimatesProvider with ChangeNotifier {
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
     workEstimateDetails =
         await this.workEstimatesService.getWorkEstimateDetails(workEstimateId);
+    notifyListeners();
     return workEstimateDetails;
   }
 
