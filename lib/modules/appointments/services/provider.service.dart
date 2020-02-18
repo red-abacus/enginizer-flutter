@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
@@ -13,6 +14,9 @@ class ProviderService {
 
   static const String PROVIDERS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers';
+
+  static const String PROVIDER_DETAILS_PATH =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
 
   static const String APPOINTMENTS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers';
@@ -88,7 +92,7 @@ class ProviderService {
 
   Future<List<ServiceProviderSchedule>> getProviderSchedules(
       int providerId) async {
-    final response = await _dio.get(buildProviderSchedulesPath(providerId));
+    final response = await _dio.get(_buildProviderSchedulesPath(providerId));
 
     if (response.statusCode == 200) {
       return _mapProviderSchedules(response.data);
@@ -96,7 +100,7 @@ class ProviderService {
       throw Exception('PROVIDER_SERVICES_FAILED');
   }
 
-  String buildProviderSchedulesPath(int providerId) {
+  _buildProviderSchedulesPath(int providerId) {
     return PROVIDER_SCHEDULE_PREFIX +
         providerId.toString() +
         PROVIDER_SCHEDULE_SUFFIX;
@@ -115,7 +119,7 @@ class ProviderService {
   // GET PROVIDER TIMETABLE
   Future<List<ServiceProviderTimetable>> getServiceProviderTimetables(
       int providerId, String startDate, String endDate) async {
-    final response = await _dio.get(buildProviderTimetablePath(providerId),
+    final response = await _dio.get(_buildProviderTimetablePath(providerId),
         queryParameters: {"startDate": startDate, "endDate": endDate});
 
     if (response.statusCode == 200) {
@@ -141,9 +145,22 @@ class ProviderService {
     return list;
   }
 
-  String buildProviderTimetablePath(int providerId) {
+  _buildProviderTimetablePath(int providerId) {
     return PROVIDER_TIMETABLE_PREFIX +
         providerId.toString() +
         PROVIDER_TIMETABLE_SUFFIX;
+  }
+
+  Future<ServiceProvider> getProviderDetails(int providerId) async {
+    String path = PROVIDER_DETAILS_PATH + providerId.toString();
+
+    final response = await _dio.get(path);
+
+    if (response.statusCode == 200) {
+      return ServiceProvider.fromJson(response.data);
+    }
+    else {
+      throw Exception("LOAD_PROVIDER_DETAILS_FAILED");
+    }
   }
 }

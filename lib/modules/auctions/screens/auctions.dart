@@ -88,8 +88,11 @@ class AuctionsState extends State<Auctions> {
   }
 
   _selectAuction(Auction auction) {
-    Provider.of<AuctionProvider>(context, listen: false).selectedAuction =
-        auction;
+    AuctionProvider provider =
+        Provider.of<AuctionProvider>(context, listen: false);
+    provider.initialiseParameters();
+    provider.selectedAuction = auction;
+
     Navigator.of(context).pushNamed(AuctionDetails.route);
   }
 }

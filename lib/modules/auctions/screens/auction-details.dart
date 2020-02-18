@@ -45,6 +45,8 @@ class AuctionDetailsState extends State<AuctionDetails> {
       });
     }
 
+    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
+
     return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
@@ -57,24 +59,28 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   void didChangeDependencies() {
+    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
+    _initDone = Provider.of<AuctionProvider>(context).initDone;
+
     if (!_initDone) {
       auctionProvider = Provider.of<AuctionProvider>(context);
 
       setState(() {
-        _isLoading = true;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = true;
       });
 
-      auctionProvider.getAppointmentDetails(
-          auctionProvider.selectedAuction.appointment.id)
+      auctionProvider
+          .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
-            _isLoading = false;
+            Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
           });
         });
       });
     }
-    _initDone = true;
+
+    Provider.of<AuctionProvider>(context, listen: false).initDone = true;
     super.didChangeDependencies();
   }
 
@@ -117,7 +123,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
             auction: auctionProvider.selectedAuction,
             appointmentDetail: auctionProvider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
-        return AuctionBidsWidget(bids: auctionProvider.getBids(), selectBid: _selectBid);
+        return AuctionBidsWidget(
+            bids: auctionProvider.bids,
+            filterSearchString: auctionProvider.filterSearchString,
+          selectBid: _selectBid,
+        filterBids: _filterBids);
         break;
     }
     return Container();
@@ -178,5 +188,9 @@ class AuctionDetailsState extends State<AuctionDetails> {
   _selectBid(Bid bid) {
     auctionProvider.selectedBid = bid;
     Navigator.of(context).pushNamed(BidDetails.route);
+  }
+
+  _filterBids(String filterSearchString) {
+    Provider.of<AuctionProvider>(context).filterBids(filterSearchString);
   }
 }
