@@ -1,5 +1,6 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 
 class AppointmentDetail {
@@ -7,16 +8,22 @@ class AppointmentDetail {
   List<AppointmentIssue> issues = [];
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
+  User user;
 
   AppointmentDetail(
-      {this.car, this.issues, this.serviceItems, this.scheduledDate});
+      {this.car,
+      this.issues,
+      this.serviceItems,
+      this.scheduledDate,
+      this.user});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
         car: Car.fromJson(json["car"]),
         issues: _mapIssuesList(json["issues"]),
         serviceItems: _mapServiceItems(json["services"]),
-        scheduledDate: json["scheduledDateTime"] ?? "");
+        scheduledDate: json["scheduledDateTime"],
+        user: User.fromJson(json["user"]));
   }
 
   static _mapIssuesList(List<dynamic> response) {

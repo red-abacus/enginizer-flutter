@@ -30,17 +30,23 @@ class ServiceProvider {
       this.rating});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
+    print('service provider $json');
+
     return ServiceProvider(
-      id: json['id'],
-      name: json['name'] != null ? json["name"] : "",
-      address: json['address'] != null ? json['address'] : "",
-      cui: json['cui'] != null ? json['cui'] : "",
-      fiscalName: json['fiscalName'] != null ? json['fiscalName'] : "",
-      profilePhotoUrl: json['profilePhotoUrl'] != null ? json['profilePhotoUrl'] : "",
-      registrationNumber: json['registrationNumber'] != null ? json['registrationNumber'] : "",
-      image: json['image'] != null ? json['image'] : "",
-        rating: ServiceProviderRating.fromJson(json["ratingDto"])
-    );
+        id: json['id'],
+        name: json['name'] != null ? json["name"] : "",
+        address: json['address'] != null ? json['address'] : "",
+        cui: json['cui'] != null ? json['cui'] : "",
+        fiscalName: json['fiscalName'] != null ? json['fiscalName'] : "",
+        profilePhotoUrl:
+            json['profilePhotoUrl'] != null ? json['profilePhotoUrl'] : "",
+        registrationNumber: json['registrationNumber'] != null
+            ? json['registrationNumber']
+            : "",
+        image: json['image'] != null ? json['image'] : "",
+        rating: json["ratingDto"] != null
+            ? ServiceProviderRating.fromJson(json["ratingDto"])
+            : null);
   }
 
   Map<String, dynamic> toJson() {

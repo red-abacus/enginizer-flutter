@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -25,6 +26,7 @@ class Appointment {
   OperatingUnit operatingUnit;
   AppointmentStatus status;
   AppointmentDetail appointmentDetail;
+  ServiceProvider serviceProvider;
 
   Appointment(
       {this.id,
@@ -35,7 +37,8 @@ class Appointment {
       this.appointmentTypes,
       this.operatingUnit,
       this.status,
-      this.name});
+      this.name,
+      this.serviceProvider});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -56,7 +59,8 @@ class Appointment {
         status: json['status'] != null
             ? AppointmentStatus.fromJson(json['status'])
             : null,
-        name: json["name"] != null ? json["name"] : "");
+        name: json["name"] != null ? json["name"] : "",
+        serviceProvider: ServiceProvider.fromJson(json["provider"]));
   }
 
   static _mapAppointmentTypes(List<dynamic> response) {
@@ -95,18 +99,20 @@ class Appointment {
 
     if (value.isEmpty) {
       textFilter = true;
-    }
-    else {
+    } else {
       if (car != null) {
         if (car.brand != null) {
           if (car.brand.name != null) {
-            textFilter = car.brand.name.toLowerCase().contains(value.toLowerCase());
+            textFilter =
+                car.brand.name.toLowerCase().contains(value.toLowerCase());
           }
         }
 
         if (car.registrationNumber != null) {
           textFilter = textFilter ||
-              car.registrationNumber.toLowerCase().contains(value.toLowerCase());
+              car.registrationNumber
+                  .toLowerCase()
+                  .contains(value.toLowerCase());
         }
       }
     }
@@ -115,8 +121,7 @@ class Appointment {
 
     if (state == null) {
       statusFilter = true;
-    }
-    else {
+    } else {
       statusFilter = false;
 
       switch (state) {
@@ -136,10 +141,10 @@ class Appointment {
 
     if (dateTime == null) {
       timeFilter = true;
-    }
-    else {
+    } else {
       if (scheduleDateTime != null) {
-        DateTime scheduledDateTime = DateUtils.dateFromString(this.scheduleDateTime, scheduledTimeFormat());
+        DateTime scheduledDateTime = DateUtils.dateFromString(
+            this.scheduleDateTime, scheduledTimeFormat());
 
         if (scheduledDateTime != null) {
           timeFilter = DateUtils.isSameDay(dateTime, scheduledDateTime);

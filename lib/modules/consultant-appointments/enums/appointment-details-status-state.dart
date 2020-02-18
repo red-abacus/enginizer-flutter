@@ -1,0 +1,4 @@
+enum AppointmentDetailsStatusState {
+  REQUEST,
+  CAR
+}

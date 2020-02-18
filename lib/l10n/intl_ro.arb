@@ -83,6 +83,10 @@
   "appointment_status_waiting": "În Așteptare",
   "appointment_status_in_progress": "În Lucru",
   "appointment_status_finished": "Finalizată",
+  "appointment_details_applicant": "Solicitant",
+  "appointment_details_request_reprogramming": "Solicită reprogramare",
+  "appointment_details_assiged_mechanic": "Mecanic asignat",
+  "appointment_details_no_mechanic_alert": "Niciun mecanic nu este asignat!",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
@@ -137,5 +141,10 @@
   "general_only": "Doar",
   "general_price": "Pret",
   "general_currency": "Ron",
-  "general_no_entries": "Nu există înregistrări"
+  "general_no_entries": "Nu există înregistrări",
+  "general_new": "Nou",
+  "general_scheduled": "Programată",
+  "general_finished": "Finalizată",
+  "general_estimator": "Devizare",
+  "general_assign": "Asignează"
 }

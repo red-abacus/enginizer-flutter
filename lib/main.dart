@@ -14,6 +14,7 @@ import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart
 import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/car.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ import 'modules/cars/providers/cars-make.provider.dart';
 import 'modules/cars/providers/cars.provider.dart';
 import 'modules/cars/screens/car.dart';
 import 'modules/cars/screens/cars.dart';
+import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
+import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,7 +80,9 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentProvider()),
           ChangeNotifierProvider.value(value: AuctionsProvider()),
           ChangeNotifierProvider.value(value: AuctionProvider()),
-          ChangeNotifierProvider.value(value: WorkEstimatesProvider())
+          ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
+          ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
+          ChangeNotifierProvider.value(value: AppointmentConsultantProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
@@ -125,7 +131,9 @@ class AppState extends State<App> {
               AppointmentDetails.route: (context) => AppointmentDetails(),
               Auctions.route: (context) => Auctions(),
               AuctionDetails.route: (context) => AuctionDetails(),
-              BidDetails.route: (context) => BidDetails()
+              BidDetails.route: (context) => BidDetails(),
+              AppointmentsConsultant.route: (context) => AppointmentsConsultant(),
+              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant()
             },
           );
         }));

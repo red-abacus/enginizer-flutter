@@ -83,6 +83,10 @@
   "appointment_status_waiting": "Waiting",
   "appointment_status_in_progress": "In Progress",
   "appointment_status_finished": "Finished",
+  "appointment_details_applicant": "Applicant",
+  "appointment_details_request_reprogramming": "Request reprogramming",
+  "appointment_details_assiged_mechanic": "Assigned Mechanics",
+  "appointment_details_no_mechanic_alert": "No mechanic is assigned!",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -137,5 +141,10 @@
   "general_only": "Only",
   "general_price": "Price",
   "general_currency": "Ron",
-  "general_no_entries": "No entries available"
+  "general_no_entries": "No entries available",
+  "general_new": "New",
+  "general_scheduled": "Scheduled",
+  "general_finished": "Finished",
+  "general_estimator": "Estimator",
+  "general_assign": "Assign"
 }
