@@ -45,7 +45,7 @@ class Appointment {
             : null,
         createdDate: json['createdDate'] != null ? json["createdDate"] : null,
         scheduleDateTime:
-            json['scheduleDateTime'] != null ? json['scheduleDateTime'] : null,
+            json['scheduledDateTime'] != null ? json['scheduledDateTime'] : "",
         car: json['car'] != null ? Car.fromJson(json['car']) : null,
         appointmentTypes: json['appointmentType'] != null
             ? _mapAppointmentTypes(json['appointmentType'])
