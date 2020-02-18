@@ -35,6 +35,8 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   Widget build(BuildContext context) {
+    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
+
     return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
@@ -47,11 +49,14 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   void didChangeDependencies() {
+    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
+    _initDone = Provider.of<AuctionProvider>(context).initDone;
+
     if (!_initDone) {
       AuctionProvider auctionProvider = Provider.of<AuctionProvider>(context);
 
       setState(() {
-        _isLoading = true;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = true;
       });
 
       auctionProvider
@@ -59,12 +64,13 @@ class AuctionDetailsState extends State<AuctionDetails> {
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
-            _isLoading = false;
+            Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
           });
         });
       });
     }
-    _initDone = true;
+
+    Provider.of<AuctionProvider>(context, listen: false).initDone = true;
     super.didChangeDependencies();
   }
 

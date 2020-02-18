@@ -1,6 +1,8 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
+import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/bid-response.model.dart';
@@ -10,6 +12,10 @@ import 'package:flutter/cupertino.dart';
 class AuctionProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
   BidsService bidsService = inject<BidsService>();
+  ProviderService providerService = inject<ProviderService>();
+
+  bool isLoading = false;
+  bool initDone = false;
 
   BidResponse bidResponse;
   List<Bid> bids = [];
@@ -19,6 +25,17 @@ class AuctionProvider with ChangeNotifier {
   Bid selectedBid;
 
   String filterSearchString = "";
+
+  void initialiseParameters() {
+    bidResponse = null;
+    bids = [];
+    selectedAuction = null;
+    appointmentDetails = null;
+    selectedBid = null;
+    filterSearchString = "";
+    isLoading = false;
+    initDone = false;
+  }
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
     appointmentDetails = await this.appointmentsService.getAppointmentDetails(appointmentId);
@@ -42,5 +59,17 @@ class AuctionProvider with ChangeNotifier {
         .toList();
     notifyListeners();
     return bids;
+  }
+
+  Future<bool> acceptBid(int bidId) async {
+    return await this.bidsService.acceptBid(bidId);
+  }
+
+  Future<bool> rejectBid(int bidId) async {
+    return await this.bidsService.rejectBid(bidId);
+  }
+
+  Future<ServiceProvider> getServiceProviderDetails(int providerId) async {
+    return await this.providerService.getProviderDetails(providerId);
   }
 }

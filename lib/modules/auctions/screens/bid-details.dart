@@ -1,6 +1,8 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
@@ -139,7 +141,9 @@ class BidDetailsState extends State<BidDetails> {
               S.of(context).auction_bid_see_provider_profile.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
             ),
-            onPressed: () {},
+            onPressed: () {
+              _showServiceProviderDetails();
+            },
           )
         ],
       ),
@@ -274,7 +278,7 @@ class BidDetailsState extends State<BidDetails> {
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
               onPressed: () {
-                _cancelBid();
+                _showCancelBidAlert();
               },
             ),
           ),
@@ -287,7 +291,7 @@ class BidDetailsState extends State<BidDetails> {
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
               onPressed: () {
-                _acceptBid();
+                _showAcceptBidAlert();
               },
             ),
           )
@@ -348,8 +352,7 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
-  _cancelBid() {
-    // TODO - finish cancel bid
+  _showCancelBidAlert() {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -379,6 +382,7 @@ class BidDetailsState extends State<BidDetails> {
               child: Text(S.of(context).general_yes),
               onPressed: () {
                 Navigator.pop(context);
+                _cancelBid(auctionProvider.selectedBid);
               },
             ),
           ],
@@ -387,8 +391,18 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
-  _acceptBid() {
-    // TODO - finish accept bid
+  _cancelBid(Bid bid) {
+    auctionProvider.rejectBid(bid.id).then((success) {
+      if (success != null && success) {
+        Provider.of<AuctionProvider>(context, listen: false).initDone = false;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
+
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  _showAcceptBidAlert() {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -417,6 +431,7 @@ class BidDetailsState extends State<BidDetails> {
             FlatButton(
               child: Text(S.of(context).general_yes),
               onPressed: () {
+                _acceptBid(auctionProvider.selectedBid);
                 Navigator.pop(context);
               },
             ),
@@ -426,8 +441,36 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
+  _acceptBid(Bid bid) {
+    auctionProvider.acceptBid(bid.id).then((success) {
+      if (success != null && success) {
+        Provider.of<AuctionProvider>(context, listen: false).initDone = false;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
+
+        Navigator.pop(context);
+      }
+    });
+  }
+
   _seeEstimate() {
     // TODO - see estimate
 //    auctionProvider.selectedBid
+  }
+
+  _showServiceProviderDetails() {
+    int providerId = auctionProvider.selectedBid.serviceProvider.id;
+    auctionProvider.getServiceProviderDetails(providerId).then((serviceProvider) {
+      if (serviceProvider != null) {
+        showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (_) {
+              return StatefulBuilder(builder:
+                  (BuildContext context, StateSetter state) {
+                return ServiceDetailsModal(serviceProvider);
+              });
+            });
+      }
+    });
   }
 }
