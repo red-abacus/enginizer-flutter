@@ -54,8 +54,8 @@ class AuctionDetailsState extends State<AuctionDetails> {
         _isLoading = true;
       });
 
-      auctionProvider.getAppointmentDetails(
-          auctionProvider.selectedAuction.appointment.id)
+      auctionProvider
+          .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
@@ -109,7 +109,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
             auction: auctionProvider.selectedAuction,
             appointmentDetail: auctionProvider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
-        return AuctionBidsWidget(bids: auctionProvider.getBids(), selectBid: _selectBid);
+        return AuctionBidsWidget(
+            bids: auctionProvider.bids,
+            filterSearchString: auctionProvider.filterSearchString,
+          selectBid: _selectBid,
+        filterBids: _filterBids);
         break;
     }
     return Container();
@@ -170,5 +174,9 @@ class AuctionDetailsState extends State<AuctionDetails> {
   _selectBid(Bid bid) {
     Provider.of<AuctionProvider>(context).selectedBid = bid;
     Navigator.of(context).pushNamed(BidDetails.route);
+  }
+
+  _filterBids(String filterSearchString) {
+    Provider.of<AuctionProvider>(context).filterBids(filterSearchString);
   }
 }

@@ -12,10 +12,13 @@ class AuctionProvider with ChangeNotifier {
   BidsService bidsService = inject<BidsService>();
 
   BidResponse bidResponse;
+  List<Bid> bids = [];
 
   Auction selectedAuction;
   AppointmentDetail appointmentDetails;
   Bid selectedBid;
+
+  String filterSearchString = "";
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
     appointmentDetails = await this.appointmentsService.getAppointmentDetails(appointmentId);
@@ -23,13 +26,21 @@ class AuctionProvider with ChangeNotifier {
     return appointmentDetails;
   }
 
-  Future<BidResponse> loadBids(int auctionId) async {
+  Future<List<Bid>> loadBids(int auctionId) async {
     this.bidResponse = await this.bidsService.getBids(auctionId);
+    bids = bidResponse.bids;
     notifyListeners();
-    return bidResponse;
+    return bids;
   }
-//
-  List<Bid> getBids() {
-    return this.bidResponse.bids;
+
+  List<Bid> filterBids(String filterSearchString) {
+    this.filterSearchString = filterSearchString;
+
+    bids = bidResponse.bids;
+    bids = bids
+        .where((bid) => bid.filtered(this.filterSearchString))
+        .toList();
+    notifyListeners();
+    return bids;
   }
 }

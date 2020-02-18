@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/cards/bid.card.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +8,11 @@ class AuctionBidsWidget extends StatefulWidget {
   List<Bid> bids;
 
   Function selectBid;
+  Function filterBids;
 
-  AuctionBidsWidget({this.bids, this.selectBid});
+  String filterSearchString;
+
+  AuctionBidsWidget({this.bids, this.filterSearchString, this.selectBid, this.filterBids});
 
   @override
   AuctionBidsWidgetState createState() {
@@ -36,8 +39,11 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
   }
 
   Widget _buildSearchWidget(BuildContext context) {
-    // TODO - need to finish filtering on Service Providers
-    String value = "Cauta";
+    String value = S.of(context).general_find;
+
+    if (widget.filterSearchString.isNotEmpty) {
+      value = widget.filterSearchString;
+    }
 
     return Container(
       child: TextField(
@@ -45,6 +51,7 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         autofocus: false,
         decoration: InputDecoration(labelText: value),
         onChanged: (val) {
+          widget.filterBids(val);
         },
       ),
     );

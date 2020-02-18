@@ -41,4 +41,14 @@ class Bid {
   String _dateFormat() {
     return "dd/MM/yyyy HH:mm";
   }
+
+  bool filtered(String searchString) {
+    if (serviceProvider != null) {
+      if (serviceProvider.name.toLowerCase().contains(searchString.toLowerCase())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
