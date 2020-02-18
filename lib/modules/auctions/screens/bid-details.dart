@@ -1,9 +1,11 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,43 +25,44 @@ class BidDetailsState extends State<BidDetails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
-  BidDetailsState({this.route});
-
-  AuctionsProvider auctionsProvider;
-  WorkEstimatesProvider workEstimatesProvider;
-
   var _initDone = false;
   var _isLoading = false;
 
+  BidDetailsState({this.route});
+
+  AuctionProvider auctionProvider;
+  WorkEstimatesProvider workEstimatesProvider;
+
   @override
   Widget build(BuildContext context) {
-    auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+    auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
     workEstimatesProvider =
         Provider.of<WorkEstimatesProvider>(context, listen: false);
 
-    return Consumer<AuctionsProvider>(
-      builder: (context, appointmentsProvider, _) => Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-          ),
-          body: Column(
-            children: <Widget>[
-              new Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                  child: _buildContent(),
-                ),
+    return Consumer<AuctionProvider>(
+      builder: (context, auctionProvider, _) => Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+        ),
+        body: Column(
+          children: <Widget>[
+            new Expanded(
+              child: Container(
+                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                child: _buildContent(),
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
       workEstimatesProvider =
           Provider.of<WorkEstimatesProvider>(context, listen: false);
 
@@ -67,7 +70,7 @@ class BidDetailsState extends State<BidDetails> {
         _isLoading = true;
       });
 
-      auctionsProvider.getBidDetails().then((bidDetails) {
+      auctionProvider.getBidDetails().then((bidDetails) {
         workEstimatesProvider
             .getWorkEstimateDetails(bidDetails.workEstimateId)
             .then((_) {
@@ -129,7 +132,8 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.all(8),
             child: SvgPicture.asset(
-              'assets/images/statuses/in_bid.svg'.toLowerCase(),
+              'assets/images/statuses/${auctionProvider.selectedAuction?.appointment?.status?.name}.svg'
+                  .toLowerCase(),
               semanticsLabel: 'Appointment Status Image',
             ),
           ),
@@ -138,10 +142,7 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.only(left: 10),
             child: Text(
-              (auctionsProvider.selectedAuction != null &&
-                      auctionsProvider.selectedAuction.appointment != null)
-                  ? auctionsProvider.selectedAuction.appointment.name
-                  : '',
+              '${auctionProvider.selectedAuction?.appointment?.name}',
               maxLines: 3,
               style:
                   TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
@@ -169,7 +170,7 @@ class BidDetailsState extends State<BidDetails> {
             child: Container(
               margin: EdgeInsets.only(left: 5),
               child: Text(
-                "Provider name",
+                '${auctionProvider.selectedBid?.serviceProvider?.name}',
                 style: TextHelper.customTextStyle(
                     null, Colors.black, FontWeight.bold, 14),
               ),
@@ -190,27 +191,25 @@ class BidDetailsState extends State<BidDetails> {
   _servicesContainer() {
     return Column(
       children: <Widget>[
-        _getServiceRow(),
-        _getServiceRow(),
-        _getServiceRow(),
-        _getServiceRow(),
-        _getServiceRow(),
+        if (auctionProvider.appointmentDetails != null)
+          for (ServiceItem serviceItem
+              in auctionProvider.appointmentDetails?.serviceItems)
+            _getServiceRow(serviceItem),
       ],
     );
   }
 
-  _getServiceRow() {
+  _getServiceRow(ServiceItem serviceItem) {
     return Container(
         margin: EdgeInsets.only(top: 4),
         child: Row(
           children: <Widget>[
-            _getServiceText(),
-            _getServiceText(),
+            _getServiceText(serviceItem),
           ],
         ));
   }
 
-  _getServiceText() {
+  _getServiceText(ServiceItem serviceItem) {
     return Expanded(
         child: Container(
       margin: EdgeInsets.only(right: 10),
@@ -218,7 +217,7 @@ class BidDetailsState extends State<BidDetails> {
         children: <Widget>[
           Expanded(
             child: Text(
-              "Servicii auto",
+              serviceItem.name,
               style: TextHelper.customTextStyle(null, gray, null, 14),
             ),
           ),
@@ -242,7 +241,12 @@ class BidDetailsState extends State<BidDetails> {
               margin: EdgeInsets.only(top: 5),
               child: Column(
                 children: <Widget>[
-                  for (int i = 0; i < 10; i++) _issueTextWidget(i)
+                  if (auctionProvider.appointmentDetails != null)
+                    for (int i = 0;
+                        i < auctionProvider.appointmentDetails?.issues?.length;
+                        i++)
+                      _issueTextWidget(
+                          auctionProvider.appointmentDetails?.issues[i], i)
                 ],
               ),
             ),
@@ -271,18 +275,28 @@ class BidDetailsState extends State<BidDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            WorkEstimateDetails workEstimateDetails =
-                workEstimatesProvider.workEstimateDetails;
-            return EstimatorModal(workEstimateDetails: workEstimateDetails);
+            return EstimatorModal(
+                workEstimateDetails: workEstimatesProvider.workEstimateDetails);
           });
         });
   }
 
   _appointmentDateContainer() {
+    DateTime acceptedDate = auctionProvider.selectedBid?.getAcceptedDate();
+
+    String dateString = (acceptedDate != null)
+        ? DateUtils.stringFromDate(acceptedDate, "dd.MM.yyyy")
+        : "";
+    String timeString = (acceptedDate != null)
+        ? DateUtils.stringFromDate(acceptedDate, "HH:mm")
+        : "";
+
+    String title = "$dateString ${S.of(context).general_at} $timeString";
+
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Text(
-        "15.01.2020 ${S.of(context).general_at} 09:00",
+        title,
         style:
             TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
       ),
@@ -293,7 +307,7 @@ class BidDetailsState extends State<BidDetails> {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Text(
-        "2000 RON",
+        '${auctionProvider.selectedBid?.cost} ${S.of(context).general_currency.toUpperCase()}',
         style:
             TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
       ),
@@ -346,7 +360,7 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
-  Widget _issueTextWidget(int index) {
+  Widget _issueTextWidget(AppointmentIssue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Row(
@@ -373,7 +387,7 @@ class BidDetailsState extends State<BidDetails> {
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                "Bataie fata stanga",
+                item.name,
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),
@@ -399,6 +413,7 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   _cancelBid() {
+    // TODO - finish cancel bid
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -437,6 +452,7 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   _acceptBid() {
+    // TODO - finish accept bid
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

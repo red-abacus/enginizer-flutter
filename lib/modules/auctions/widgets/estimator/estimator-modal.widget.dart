@@ -58,39 +58,40 @@ class _EstimatorModalState extends State<EstimatorModal> {
               accentColor: Theme.of(context).primaryColor,
               primaryColor: Theme.of(context).primaryColor,
             ),
-            child: steps.isNotEmpty ? Stepper(
-              currentStep: _currentStepIndex,
-              onStepTapped: (stepIndex) => _showIssue(stepIndex),
-              type: StepperType.vertical,
-              steps: steps,
-              controlsBuilder: (BuildContext context,
-                  {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-                return Row(
-                  children: <Widget>[
-                    Container(
-                      child: null,
-                    ),
-                    Container(
-                      child: null,
-                    ),
-                  ],
-                );
-              },
-            ) : Container(),
+            child: steps.isNotEmpty
+                ? Stepper(
+                    currentStep: _currentStepIndex,
+                    onStepTapped: (stepIndex) => _showIssue(stepIndex),
+                    type: StepperType.vertical,
+                    steps: steps,
+                    controlsBuilder: (BuildContext context,
+                        {VoidCallback onStepContinue,
+                        VoidCallback onStepCancel}) {
+                      return Row(
+                        children: <Widget>[
+                          Container(
+                            child: null,
+                          ),
+                          Container(
+                            child: null,
+                          ),
+                        ],
+                      );
+                    },
+                  )
+                : Container(),
           ),
         ),
       );
 
   List<Step> _buildSteps(BuildContext context) {
     List<Step> stepsList = [];
-    List<Issue> issues = widget.workEstimateDetails != null
-        ? widget.workEstimateDetails.issues
-        : [];
+    List<Issue> issues = widget.workEstimateDetails?.issues ?? [];
     issues.asMap().forEach((index, issue) {
       stepsList.add(
         Step(
           isActive: _isStepActive(index),
-          title: Text(issue.name),
+          title: Text((issue.name?.isNotEmpty ?? false) ? issue.name : 'N/A'),
           content: EstimatorIssueDetails(
             issue: issue,
             addIssueItem: _addIssueItem,

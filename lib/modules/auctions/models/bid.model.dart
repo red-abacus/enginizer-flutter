@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 
 class Bid {
   int id;
@@ -32,5 +33,13 @@ class Bid {
         providerAcceptedDateTime: json["providerAcceptedDateTime"],
         requestedServicesCount: json["requestedServicesCount"],
         status: json["status"]);
+  }
+
+  DateTime getAcceptedDate() {
+    return DateUtils.dateFromString(providerAcceptedDateTime, _dateFormat());
+  }
+
+  String _dateFormat() {
+    return "dd/MM/yyyy HH:mm";
   }
 }

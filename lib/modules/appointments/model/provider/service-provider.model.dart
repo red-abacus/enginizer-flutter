@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-rating.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 
 class ServiceProvider {
@@ -11,6 +12,7 @@ class ServiceProvider {
   String profilePhotoUrl;
   String registrationNumber;
   String image;
+  ServiceProviderRating rating;
 
   List<ServiceProviderItem> items = [];
   List<ServiceProviderTimetable> timetables = [];
@@ -24,7 +26,8 @@ class ServiceProvider {
       this.fiscalName,
       this.profilePhotoUrl,
       this.registrationNumber,
-      this.image});
+      this.image,
+      this.rating});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
     return ServiceProvider(
@@ -35,7 +38,8 @@ class ServiceProvider {
       fiscalName: json['fiscalName'] != null ? json['fiscalName'] : "",
       profilePhotoUrl: json['profilePhotoUrl'] != null ? json['profilePhotoUrl'] : "",
       registrationNumber: json['registrationNumber'] != null ? json['registrationNumber'] : "",
-      image: json['image'] != null ? json['image'] : ""
+      image: json['image'] != null ? json['image'] : "",
+        rating: ServiceProviderRating.fromJson(json["ratingDto"])
     );
   }
 

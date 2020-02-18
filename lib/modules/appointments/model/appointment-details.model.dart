@@ -16,7 +16,7 @@ class AppointmentDetail {
         car: Car.fromJson(json["car"]),
         issues: _mapIssuesList(json["issues"]),
         serviceItems: _mapServiceItems(json["services"]),
-        scheduledDate: json["scheduleDateTime"]);
+        scheduledDate: json["scheduledDateTime"] ?? "");
   }
 
   static _mapIssuesList(List<dynamic> response) {

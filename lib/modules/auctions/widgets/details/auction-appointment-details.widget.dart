@@ -47,7 +47,7 @@ class AuctionAppointmentDetailsWidgetState
                   child: Container(
                     margin: EdgeInsets.only(left: 10),
                     child: Text(
-                      '${widget.auction?.car?.registrationNumber}',
+                      widget.auction?.car?.registrationNumber ?? 'N/A',
 //                      ${widget.auction?.status?.name}
                       maxLines: 3,
                       style: TextHelper.customTextStyle(

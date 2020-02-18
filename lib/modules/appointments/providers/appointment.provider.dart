@@ -21,7 +21,6 @@ class AppointmentProvider with ChangeNotifier {
 
   selectAppointment(Appointment appointment) {
     this._selectedAppointment = appointment;
-    notifyListeners();
   }
 
   Future<AppointmentDetail> getAppointmentDetails(Appointment appointment) async {

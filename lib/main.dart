@@ -30,6 +30,7 @@ import 'modules/appointments/providers/appointments.provider.dart';
 import 'modules/appointments/providers/provider-service.provider.dart';
 import 'modules/appointments/screens/appointment-details.dart';
 import 'modules/appointments/screens/appointments.dart';
+import 'modules/auctions/providers/auction-provider.dart';
 import 'modules/auctions/providers/auctions-provider.dart';
 import 'modules/auctions/screens/auctions.dart';
 import 'modules/authentication/providers/auth.provider.dart';
@@ -74,7 +75,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: UserProvider()),
           ChangeNotifierProvider.value(value: AppointmentProvider()),
           ChangeNotifierProvider.value(value: AuctionsProvider()),
-          ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
+          ChangeNotifierProvider.value(value: AuctionProvider()),
+          ChangeNotifierProvider.value(value: WorkEstimatesProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(

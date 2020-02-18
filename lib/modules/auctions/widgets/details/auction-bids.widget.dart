@@ -1,15 +1,14 @@
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/cards/bid.card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuctionBidsWidget extends StatefulWidget {
-  Auction auction;
+  List<Bid> bids;
 
   Function selectBid;
 
-  AuctionBidsWidget({this.auction, this.selectBid});
+  AuctionBidsWidget({this.bids, this.selectBid});
 
   @override
   AuctionBidsWidgetState createState() {
@@ -36,6 +35,7 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
   }
 
   Widget _buildSearchWidget(BuildContext context) {
+    // TODO - need to finish filtering on Service Providers
     String value = "Cauta";
 
     return Container(
@@ -54,9 +54,10 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return BidCard(bid: new Bid(id: 23), selectBid: widget.selectBid);
+            return BidCard(
+                bid: widget.bids[index], selectBid: widget.selectBid);
           },
-          itemCount: 20,
+          itemCount: widget.bids.length,
         ),
       ),
     );

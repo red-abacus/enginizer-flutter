@@ -25,9 +25,9 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        widget.issue.items != null
+        (widget.issue.items.isNotEmpty)
             ? issueItemsTable
-            : CircularProgressIndicator(),
+            : Text(S.of(context).general_no_entries),
         issueItemForm,
       ],
     );
