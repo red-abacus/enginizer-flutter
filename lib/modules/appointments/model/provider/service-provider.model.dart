@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-rating.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 

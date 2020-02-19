@@ -88,6 +88,11 @@
   "appointment_details_assiged_mechanic": "Assigned Mechanics",
   "appointment_details_no_mechanic_alert": "No mechanic is assigned!",
   "appointment_details_service_occupancy": "Service Occupancy",
+  "appointment_reviews_executed_appointments": "Executed appointments:",
+  "appointment_reviews_respected_appointments": "Respected appointments:",
+  "appointment_reviews_average_contact_response_time": "Average contact response time:",
+  "appointment_reviews_average_offer_response_time": "Average offer response time:",
+  "appointment_reviews_global_efficiency": "Global efficiency:",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -147,5 +152,7 @@
   "general_scheduled": "Scheduled",
   "general_finished": "Finished",
   "general_estimator": "Estimator",
-  "general_assign": "Assign"
+  "general_assign": "Assign",
+  "general_hour": "hour",
+  "general_hours": "hours"
 }

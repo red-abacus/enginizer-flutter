@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-client-review.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-review.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
@@ -34,6 +38,14 @@ class ProviderService {
   static const String PROVIDER_EMPLOYEE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String PROVIDER_EMPLOYEE_SUFFIX = '/people-timetable';
+
+  static const String PROVIDER_SERVICE_ITEMS_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String PROVIDER_SERVICE_ITEMS_SUFFIX = '/services';
+
+  static const String SERVICE_PROVIDER_REVIEWS_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String SERVICE_PROVIDER_REVIEWS_SUFFIX = '/reviews';
 
   Dio _dio = inject<Dio>();
 
@@ -195,5 +207,45 @@ class ProviderService {
     });
 
     return list;
+  }
+
+  Future<ServiceProviderItemsResponse> getProviderServiceItems(
+      int providerId) async {
+    final response =
+        await _dio.get(_buildGetProviderServiceItemsPath(providerId));
+
+    if (response.statusCode == 200) {
+      return _mapProviderServiceItems(response.data);
+    } else {
+      throw Exception('LOAD_PROVIDER_SERVICE_TEMS_FAILED');
+    }
+  }
+
+  _buildGetProviderServiceItemsPath(int providerId) {
+    return PROVIDER_SERVICE_ITEMS_PREFIX +
+        providerId.toString() +
+        PROVIDER_SERVICE_ITEMS_SUFFIX;
+  }
+
+  _mapProviderServiceItems(dynamic response) {
+    return ServiceProviderItemsResponse.fromJson(response);
+  }
+
+  Future<ServiceProviderReview> getServiceProviderReviews(
+      int providerId) async {
+    final response =
+        await _dio.get(_buildGetServiceProviderReviews(providerId));
+
+    if (response.statusCode == 200) {
+      return ServiceProviderReview.fromJson(response.data);
+    } else {
+      throw Exception('LOAD_SERVICE_PROVIDER_REVIEWS_FAILED');
+    }
+  }
+
+  _buildGetServiceProviderReviews(int providerId) {
+    return SERVICE_PROVIDER_REVIEWS_PREFIX +
+        providerId.toString() +
+        SERVICE_PROVIDER_REVIEWS_SUFFIX;
   }
 }

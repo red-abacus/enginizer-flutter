@@ -830,6 +830,51 @@ class S {
     );
   }
 
+  String get appointment_reviews_executed_appointments {
+    return Intl.message(
+      'Executed appointments:',
+      name: 'appointment_reviews_executed_appointments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_reviews_respected_appointments {
+    return Intl.message(
+      'Respected appointments:',
+      name: 'appointment_reviews_respected_appointments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_reviews_average_contact_response_time {
+    return Intl.message(
+      'Average contact response time:',
+      name: 'appointment_reviews_average_contact_response_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_reviews_average_offer_response_time {
+    return Intl.message(
+      'Average offer response time:',
+      name: 'appointment_reviews_average_offer_response_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_reviews_global_efficiency {
+    return Intl.message(
+      'Global efficiency:',
+      name: 'appointment_reviews_global_efficiency',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',
@@ -1365,6 +1410,24 @@ class S {
     return Intl.message(
       'Assign',
       name: 'general_assign',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_hour {
+    return Intl.message(
+      'hour',
+      name: 'general_hour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_hours {
+    return Intl.message(
+      'hours',
+      name: 'general_hours',
       desc: '',
       args: [],
     );

@@ -1,5 +1,6 @@
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,9 @@ class ServiceProviderItemWidgetState extends State<ServiceProviderItemWidget> {
   @override
   Widget build(BuildContext context) {
     List<ServiceProviderItem> items =
-        Provider
-            .of<ProviderServiceProvider>(context)
-            .serviceProviderItems;
+        Provider.of<ServiceProviderDetailsProvider>(context)
+            .serviceProviderItemsResponse
+            .items;
 
     return ListView.builder(
       itemBuilder: (context, index) {
@@ -42,11 +43,22 @@ class ServiceProviderItemWidgetState extends State<ServiceProviderItemWidget> {
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(left: 10),
+            child: Text(
+              item.name,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: 10),
+              margin: EdgeInsets.only(left: 5),
               child: Text(
-                item.name,
+                '- ${item.rate} ${S.of(context).general_currency}',
                 style: TextStyle(
                   fontSize: 14,
                   color: gray,

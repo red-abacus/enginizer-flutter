@@ -1,8 +1,10 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
@@ -82,7 +84,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
           ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
-          ChangeNotifierProvider.value(value: AppointmentConsultantProvider())
+          ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
+          ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(

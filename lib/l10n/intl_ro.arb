@@ -88,6 +88,11 @@
   "appointment_details_assiged_mechanic": "Mecanic asignat",
   "appointment_details_no_mechanic_alert": "Niciun mecanic nu este asignat!",
   "appointment_details_service_occupancy": "Ocuparea Serviciilor",
+  "appointment_reviews_executed_appointments": "Comenzi efectuate:",
+  "appointment_reviews_respected_appointments": "Respectare programări:",
+  "appointment_reviews_average_contact_response_time": "Timpul mediu răspuns la solicitări este de",
+  "appointment_reviews_average_offer_response_time": "Timpul mediu răspuns la oferte este de",
+  "appointment_reviews_global_efficiency": "Eficientă globală a personalului productiv:",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
@@ -147,5 +152,7 @@
   "general_scheduled": "Programată",
   "general_finished": "Finalizată",
   "general_estimator": "Devizare",
-  "general_assign": "Asignează"
+  "general_assign": "Asignează",
+  "general_hour": "oră",
+  "general_hours": "ore"
 }
