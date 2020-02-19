@@ -87,6 +87,7 @@
   "appointment_details_request_reprogramming": "Solicită reprogramare",
   "appointment_details_assiged_mechanic": "Mecanic asignat",
   "appointment_details_no_mechanic_alert": "Niciun mecanic nu este asignat!",
+  "appointment_details_service_occupancy": "Ocuparea Serviciilor",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",

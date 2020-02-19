@@ -821,6 +821,15 @@ class S {
     );
   }
 
+  String get appointment_details_service_occupancy {
+    return Intl.message(
+      'Service Occupancy',
+      name: 'appointment_details_service_occupancy',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',

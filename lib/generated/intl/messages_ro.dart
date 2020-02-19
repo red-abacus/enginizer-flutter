@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_details_no_mechanic_alert" : MessageLookupByLibrary.simpleMessage("Niciun mecanic nu este asignat!"),
     "appointment_details_request" : MessageLookupByLibrary.simpleMessage("Cerere"),
     "appointment_details_request_reprogramming" : MessageLookupByLibrary.simpleMessage("Solicită reprogramare"),
+    "appointment_details_service_occupancy" : MessageLookupByLibrary.simpleMessage("Ocuparea Serviciilor"),
     "appointment_details_services_appointment_cancel" : MessageLookupByLibrary.simpleMessage("Anulare"),
     "appointment_details_services_appointment_date" : MessageLookupByLibrary.simpleMessage("Dată programare"),
     "appointment_details_services_issues" : MessageLookupByLibrary.simpleMessage("Probleme raportate"),
