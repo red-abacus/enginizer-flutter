@@ -5,6 +5,7 @@ import 'package:enginizer_flutter/modules/authentication/models/roles.model.dart
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
+import 'package:enginizer_flutter/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,11 +32,15 @@ class NavigationApp extends StatefulWidget {
     new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
   ];
 
-  static final List<DrawerItem> providerDrawerItems = [];
+  static final List<DrawerItem> providerAdminDrawerItems = [];
 
   static final List<DrawerItem> consultantDrawerItems = [
     new DrawerItem("Appointments", AppointmentsConsultant.route, Icons.event_available),
     new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
+  ];
+
+  static final List<DrawerItem> mechanicDrawerItems = [
+    new DrawerItem("Appointments", AppointmentsMechanic.route, Icons.event_available)
   ];
 
   NavigationApp({this.authUser});
@@ -51,6 +56,8 @@ class NavigationApp extends StatefulWidget {
         return Dashboard.route;
       case Roles.ProviderConsultant:
         return AppointmentsConsultant.route;
+      case Roles.ProviderPersonnel:
+        return AppointmentsMechanic.route;
       default:
         return '/';
     }
@@ -63,9 +70,11 @@ class NavigationApp extends StatefulWidget {
       case Roles.Client:
         return NavigationApp.userDrawerItems;
       case Roles.ProviderAdmin:
-        return NavigationApp.providerDrawerItems;
+        return NavigationApp.providerAdminDrawerItems;
       case Roles.ProviderConsultant:
         return NavigationApp.consultantDrawerItems;
+      case Roles.ProviderPersonnel:
+        return NavigationApp.mechanicDrawerItems;
       default:
         return [];
     }
@@ -151,6 +160,8 @@ class _NavigationAppState extends State<NavigationApp> {
         return Auctions();
       case AppointmentsConsultant.route:
         return AppointmentsConsultant();
+      case AppointmentsMechanic.route:
+        return AppointmentsMechanic();
       default:
         return new Text("Error");
     }

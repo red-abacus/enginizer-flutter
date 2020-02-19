@@ -45,6 +45,10 @@ import 'modules/cars/screens/cars.dart';
 import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
+import 'modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
+import 'modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
+import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart';
+import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +86,9 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
           ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
-          ChangeNotifierProvider.value(value: AppointmentConsultantProvider())
+          ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
+          ChangeNotifierProvider.value(value: AppointmentsMechanicProvider()),
+          ChangeNotifierProvider.value(value: AppointmentMechanicProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
@@ -133,7 +139,9 @@ class AppState extends State<App> {
               AuctionDetails.route: (context) => AuctionDetails(),
               BidDetails.route: (context) => BidDetails(),
               AppointmentsConsultant.route: (context) => AppointmentsConsultant(),
-              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant()
+              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant(),
+              AppointmentsMechanic.route: (context) => AppointmentsMechanic(),
+              AppointmentDetailsMechanic.route: (context) => AppointmentDetailsMechanic()
             },
           );
         }));

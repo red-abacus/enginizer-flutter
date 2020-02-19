@@ -821,6 +821,33 @@ class S {
     );
   }
 
+  String get appointment_details_car_details {
+    return Intl.message(
+      'Car Details',
+      name: 'appointment_details_car_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_tasks_list {
+    return Intl.message(
+      'Tasks',
+      name: 'appointment_details_tasks_list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_service_history {
+    return Intl.message(
+      'Service History',
+      name: 'appointment_details_service_history',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',
