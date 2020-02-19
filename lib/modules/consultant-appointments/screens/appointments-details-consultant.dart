@@ -105,7 +105,7 @@ class AppointmentDetailsConsultantState
               serviceItems: provider.selectedAppointmentDetail.serviceItems,
               serviceProviderItems: provider.serviceProviderItems);
         } else {
-          AppointmentDetailsNewConsultantWidget(
+          return AppointmentDetailsNewConsultantWidget(
               appointment: provider.selectedAppointment,
               appointmentDetail: provider.selectedAppointmentDetail,
               serviceItem: provider.selectedAppointmentDetail.serviceItems,
