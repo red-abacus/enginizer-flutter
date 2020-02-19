@@ -60,7 +60,9 @@ class Appointment {
             ? AppointmentStatus.fromJson(json['status'])
             : null,
         name: json["name"] != null ? json["name"] : "",
-        serviceProvider: ServiceProvider.fromJson(json["provider"]));
+        serviceProvider: json['provider'] != null
+            ? ServiceProvider.fromJson(json["provider"])
+            : null);
   }
 
   static _mapAppointmentTypes(List<dynamic> response) {

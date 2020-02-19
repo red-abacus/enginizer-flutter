@@ -30,8 +30,6 @@ class ServiceProvider {
       this.rating});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
-    print('service provider $json');
-
     return ServiceProvider(
         id: json['id'],
         name: json['name'] != null ? json["name"] : "",
