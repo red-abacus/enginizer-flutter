@@ -4,12 +4,15 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.m
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/assign-employee-consultant-modal.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentDetailsScheduledConsultantWidget extends StatefulWidget {
   Appointment appointment;
@@ -18,7 +21,10 @@ class AppointmentDetailsScheduledConsultantWidget extends StatefulWidget {
   List<ServiceProviderItem> serviceProviderItems;
 
   AppointmentDetailsScheduledConsultantWidget(
-      {this.appointment, this.appointmentDetail, this.serviceItems, this.serviceProviderItems});
+      {this.appointment,
+      this.appointmentDetail,
+      this.serviceItems,
+      this.serviceProviderItems});
 
   @override
   AppointmentDetailsScheduledConsultantWidgetState createState() {
@@ -188,8 +194,7 @@ class AppointmentDetailsScheduledConsultantWidgetState
   _servicesContainer() {
     return Column(
       children: <Widget>[
-        for (ServiceItem item in widget.serviceItems)
-          _getServiceRow(item),
+        for (ServiceItem item in widget.serviceItems) _getServiceRow(item),
       ],
     );
   }
@@ -263,7 +268,9 @@ class AppointmentDetailsScheduledConsultantWidgetState
               S.of(context).general_assign.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
             ),
-            onPressed: () {},
+            onPressed: () {
+              _openAssignEmployeeModal();
+            },
           )
         ],
       ),
@@ -300,5 +307,21 @@ class AppointmentDetailsScheduledConsultantWidgetState
         ],
       ),
     );
+  }
+
+  _openAssignEmployeeModal() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return AssignEmployeeConsultantModal(
+                    appointment: widget.appointment);
+              });
+        });
   }
 }

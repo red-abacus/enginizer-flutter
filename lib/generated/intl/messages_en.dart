@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appointment_details_no_mechanic_alert" : MessageLookupByLibrary.simpleMessage("No mechanic is assigned!"),
     "appointment_details_request" : MessageLookupByLibrary.simpleMessage("Request"),
     "appointment_details_request_reprogramming" : MessageLookupByLibrary.simpleMessage("Request reprogramming"),
+    "appointment_details_service_occupancy" : MessageLookupByLibrary.simpleMessage("Service Occupancy"),
     "appointment_details_services_appointment_cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "appointment_details_services_appointment_date" : MessageLookupByLibrary.simpleMessage("Appointment date"),
     "appointment_details_services_issues" : MessageLookupByLibrary.simpleMessage("Reported issues"),

@@ -87,6 +87,7 @@
   "appointment_details_request_reprogramming": "Request reprogramming",
   "appointment_details_assiged_mechanic": "Assigned Mechanics",
   "appointment_details_no_mechanic_alert": "No mechanic is assigned!",
+  "appointment_details_service_occupancy": "Service Occupancy",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
