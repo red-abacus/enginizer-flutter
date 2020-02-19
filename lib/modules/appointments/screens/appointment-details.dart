@@ -36,14 +36,15 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   Widget build(BuildContext context) {
-    appointmentProvider =
-        Provider.of<AppointmentProvider>(context, listen: false);
+    appointmentProvider = Provider.of<AppointmentProvider>(context);
 
     return Consumer<AppointmentProvider>(
         builder: (context, appointmentProvider, _) => Scaffold(
               appBar: AppBar(
-                title: Text(appointmentProvider.selectedAppointment.name,
-                  style: TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+                title: Text(
+                  appointmentProvider.selectedAppointment.name,
+                  style: TextHelper.customTextStyle(
+                      null, Colors.white, FontWeight.bold, 20),
                 ),
                 iconTheme:
                     new IconThemeData(color: Theme.of(context).cardColor),
@@ -56,19 +57,16 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
+      appointmentProvider = Provider.of<AppointmentProvider>(context);
+
       setState(() {
         _isLoading = true;
       });
 
-      appointmentProvider =
-          Provider.of<AppointmentProvider>(context, listen: false);
-
       appointmentProvider
           .getAppointmentDetails(appointmentProvider.selectedAppointment)
           .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoading = false;
       });
     }
     _initDone = true;
@@ -78,8 +76,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   Widget _content() {
     return _isLoading
         ? Center(
-      child: CircularProgressIndicator(),
-    )
+            child: CircularProgressIndicator(),
+          )
         : Column(
             children: <Widget>[
               Container(
@@ -98,12 +96,9 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   }
 
   Widget _getFloatingButton() {
-    bool visibility = Provider.of<AppointmentProvider>(context, listen: false)
-            .selectedAppointment
-            .status
-            .name
-            .toLowerCase() ==
-        "submitted";
+    bool visibility =
+        appointmentProvider.selectedAppointment.status.name.toLowerCase() ==
+            "submitted";
 
     return new Visibility(
         visible: visibility,
@@ -130,7 +125,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
             appointmentDetail: appointmentProvider.selectedAppointmentDetail);
       case AppointmentDetailsTabBarState.CAR:
         return AppointmentDetailsCarWidget();
-        break;
+      default:
+        return Container();
     }
   }
 
@@ -189,7 +185,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   void _cancelAppointment(Appointment appointment) {
     setState(() {
       appointmentProvider.cancelAppointment(appointment).then((appointment) {
-        Provider.of<AppointmentsProvider>(context, listen: false)
+        Provider.of<AppointmentsProvider>(context)
             .refreshAppointment(appointment);
       });
     });

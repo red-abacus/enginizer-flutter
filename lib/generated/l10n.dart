@@ -758,6 +758,69 @@ class S {
     );
   }
 
+  String get appointment_status_waiting {
+    return Intl.message(
+      'Waiting',
+      name: 'appointment_status_waiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_status_in_progress {
+    return Intl.message(
+      'In Progress',
+      name: 'appointment_status_in_progress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_status_finished {
+    return Intl.message(
+      'Finished',
+      name: 'appointment_status_finished',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_applicant {
+    return Intl.message(
+      'Applicant',
+      name: 'appointment_details_applicant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_request_reprogramming {
+    return Intl.message(
+      'Request reprogramming',
+      name: 'appointment_details_request_reprogramming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_assiged_mechanic {
+    return Intl.message(
+      'Assigned Mechanics',
+      name: 'appointment_details_assiged_mechanic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_no_mechanic_alert {
+    return Intl.message(
+      'No mechanic is assigned!',
+      name: 'appointment_details_no_mechanic_alert',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',
@@ -839,6 +902,33 @@ class S {
     );
   }
 
+  String get auction_bid_all_services {
+    return Intl.message(
+      'All requested.',
+      name: 'auction_bid_all_services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_no_services {
+    return Intl.message(
+      'No service.',
+      name: 'auction_bid_no_services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get auction_bid_date_schedule {
+    return Intl.message(
+      'Scheduled date',
+      name: 'auction_bid_date_schedule',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get estimator_type {
     return Intl.message(
       'Type',
@@ -904,7 +994,7 @@ class S {
 
   String get estimator_priceNoVAT {
     return Intl.message(
-      'Price\n(without VAT)',
+      'Price\n(w/o VAT)',
       name: 'estimator_priceNoVAT',
       desc: '',
       args: [],
@@ -913,7 +1003,7 @@ class S {
 
   String get estimator_priceVAT {
     return Intl.message(
-      'Price\n(with VAT)',
+      'Price\n(w/ VAT)',
       name: 'estimator_priceVAT',
       desc: '',
       args: [],
@@ -1158,6 +1248,114 @@ class S {
     return Intl.message(
       'No',
       name: 'general_no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_date {
+    return Intl.message(
+      'Date',
+      name: 'general_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_services {
+    return Intl.message(
+      'Services',
+      name: 'general_services',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_service {
+    return Intl.message(
+      'Service',
+      name: 'general_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_only {
+    return Intl.message(
+      'Only',
+      name: 'general_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_price {
+    return Intl.message(
+      'Price',
+      name: 'general_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_currency {
+    return Intl.message(
+      'Ron',
+      name: 'general_currency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_no_entries {
+    return Intl.message(
+      'No entries available',
+      name: 'general_no_entries',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_new {
+    return Intl.message(
+      'New',
+      name: 'general_new',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_scheduled {
+    return Intl.message(
+      'Scheduled',
+      name: 'general_scheduled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_finished {
+    return Intl.message(
+      'Finished',
+      name: 'general_finished',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_estimator {
+    return Intl.message(
+      'Estimator',
+      name: 'general_estimator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_assign {
+    return Intl.message(
+      'Assign',
+      name: 'general_assign',
       desc: '',
       args: [],
     );

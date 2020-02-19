@@ -1,14 +1,10 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-details-state.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/details/auction-bids.widget.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/estimator-modal.widget.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue-item-type.model.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,15 +31,23 @@ class AuctionDetailsState extends State<AuctionDetails> {
   AuctionDetailsScreenState currentState =
       AuctionDetailsScreenState.APPOINTMENT;
 
-  AuctionsProvider auctionsProvider;
-
   AuctionDetailsState({this.route});
+
+  AuctionProvider auctionProvider;
 
   @override
   Widget build(BuildContext context) {
-    auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+    auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
 
-    return Consumer<AuctionsProvider>(
+    if (auctionProvider.selectedAuction == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
+    }
+
+    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
+
+    return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
@@ -55,31 +59,34 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   void didChangeDependencies() {
+    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
+    _initDone = Provider.of<AuctionProvider>(context).initDone;
+
     if (!_initDone) {
-      auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
+      auctionProvider = Provider.of<AuctionProvider>(context);
 
       setState(() {
-        _isLoading = true;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = true;
       });
 
-      auctionsProvider
-          .getAppointmentDetails(
-              auctionsProvider.selectedAuction.appointment.id)
+      auctionProvider
+          .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
           .then((_) {
-        auctionsProvider.loadBids().then((_) {
+        auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
-            _isLoading = false;
+            Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
           });
         });
       });
     }
-    _initDone = true;
+
+    Provider.of<AuctionProvider>(context, listen: false).initDone = true;
     super.didChangeDependencies();
   }
 
   _titleText() {
     return Text(
-      auctionsProvider.selectedAuction.appointment?.name,
+      auctionProvider.selectedAuction?.appointment?.name ?? 'N/A',
       style:
           TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
@@ -113,11 +120,14 @@ class AuctionDetailsState extends State<AuctionDetails> {
     switch (this.currentState) {
       case AuctionDetailsScreenState.APPOINTMENT:
         return AuctionAppointmentDetailsWidget(
-            auction: auctionsProvider.selectedAuction,
-            appointmentDetail: auctionsProvider.appointmentDetails,
-            openEstimator: _openEstimator);
+            auction: auctionProvider.selectedAuction,
+            appointmentDetail: auctionProvider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
-        return AuctionBidsWidget(auction: null, selectBid: _selectBid);
+        return AuctionBidsWidget(
+            bids: auctionProvider.bids,
+            filterSearchString: auctionProvider.filterSearchString,
+          selectBid: _selectBid,
+        filterBids: _filterBids);
         break;
     }
     return Container();
@@ -175,57 +185,12 @@ class AuctionDetailsState extends State<AuctionDetails> {
     }
   }
 
-  void _openEstimator(BuildContext ctx) {
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            List<Issue> issues = _mockIssues;
-            return EstimatorModal(issues: issues);
-          });
-        });
-  }
-
   _selectBid(Bid bid) {
-    auctionsProvider.selectedBid = bid;
+    auctionProvider.selectedBid = bid;
     Navigator.of(context).pushNamed(BidDetails.route);
   }
 
-  List<Issue> get _mockIssues {
-    return [
-      new Issue(id: 1, description: 'Bataie fata stanga', items: [
-        new IssueItem(
-            id: 1,
-            type: new IssueItemType(id: 1, name: 'Service'),
-            code: 'KX231',
-            name: 'Manopera',
-            quantity: 1,
-            priceNoVAT: 1000,
-            price: 1190),
-        new IssueItem(
-            id: 2,
-            type: new IssueItemType(id: 2, name: 'Product'),
-            code: 'MX121',
-            name: 'Cap bara',
-            quantity: 2,
-            priceNoVAT: 200,
-            price: 238)
-      ]),
-      new Issue(id: 1, description: 'Moare bateria foarte usor', items: [
-        new IssueItem(
-            id: 1,
-            type: new IssueItemType(id: 2, name: 'Product'),
-            code: 'MX111',
-            name: 'Pompa apa',
-            quantity: 1,
-            priceNoVAT: 150,
-            price: 172)
-      ])
-    ];
+  _filterBids(String filterSearchString) {
+    Provider.of<AuctionProvider>(context).filterBids(filterSearchString);
   }
 }

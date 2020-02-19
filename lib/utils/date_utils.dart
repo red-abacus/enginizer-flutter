@@ -37,4 +37,9 @@ class DateUtils {
   static String stringFromDate(DateTime date, String format) {
     return DateFormat(format).format(date);
   }
+
+  static bool isSameDay(DateTime date1, DateTime date2) {
+    return DateUtils.stringFromDate(date1, "dd-MM-yyyy") ==
+        DateUtils.stringFromDate(date2, "dd-MM-yyyy");
+  }
 }

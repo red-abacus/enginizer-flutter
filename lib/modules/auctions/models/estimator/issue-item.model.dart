@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/shared/widgets/estimator/models/issue-item-type.model.dart';
+import 'issue-item-type.model.dart';
 
 class IssueItem {
   int id;
@@ -6,8 +6,8 @@ class IssueItem {
   String code;
   String name;
   int quantity;
-  int price;
-  int priceNoVAT;
+  double price;
+  double priceVAT;
 
   IssueItem(
       {this.id,
@@ -16,7 +16,7 @@ class IssueItem {
       this.name,
       this.quantity,
       this.price,
-      this.priceNoVAT});
+      this.priceVAT});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
     return IssueItem(
@@ -28,7 +28,7 @@ class IssueItem {
         name: json['name'],
         quantity: json['quantity'],
         price: json['price'],
-        priceNoVAT: json['priceNoVAT']);
+        priceVAT: json['priceVAT']);
   }
 
   Map<String, dynamic> toMap() => {
@@ -36,7 +36,7 @@ class IssueItem {
         'type': type?.name,
         'code': code,
         'quantity': quantity.toString(),
-        'priceNoVAT': priceNoVAT.toString(),
+        'priceNoVAT': (price - priceVAT).toString(),
         'priceVAT': price.toString(),
       };
 }

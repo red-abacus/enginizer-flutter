@@ -1,14 +1,18 @@
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/cards/bid.card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuctionBidsWidget extends StatefulWidget {
-  Auction auction;
+  List<Bid> bids;
 
   Function selectBid;
+  Function filterBids;
 
-  AuctionBidsWidget({this.auction, this.selectBid});
+  String filterSearchString;
+
+  AuctionBidsWidget({this.bids, this.filterSearchString, this.selectBid, this.filterBids});
 
   @override
   AuctionBidsWidgetState createState() {
@@ -35,7 +39,11 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
   }
 
   Widget _buildSearchWidget(BuildContext context) {
-    String value = "Cauta";
+    String value = S.of(context).general_find;
+
+    if (widget.filterSearchString.isNotEmpty) {
+      value = widget.filterSearchString;
+    }
 
     return Container(
       child: TextField(
@@ -43,6 +51,7 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         autofocus: false,
         decoration: InputDecoration(labelText: value),
         onChanged: (val) {
+          widget.filterBids(val);
         },
       ),
     );
@@ -54,9 +63,10 @@ class AuctionBidsWidgetState extends State<AuctionBidsWidget> {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return BidCard(bid: null, selectBid: widget.selectBid);
+            return BidCard(
+                bid: widget.bids[index], selectBid: widget.selectBid);
           },
-          itemCount: 20,
+          itemCount: widget.bids.length,
         ),
       ),
     );

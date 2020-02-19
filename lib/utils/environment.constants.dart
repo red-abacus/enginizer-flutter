@@ -12,4 +12,6 @@ class Environment {
       "https://bid-dot-autowass.appspot.com/api";
   static const String BIDS_BASE_API =
       "https://bid-dot-autowass.appspot.com/api";
+  static const String WORK_ESTIMATES_BASE_API =
+      "https://work-estimate-dot-autowass.appspot.com/api";
 }

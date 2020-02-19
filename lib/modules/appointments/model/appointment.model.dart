@@ -1,8 +1,11 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,6 +26,7 @@ class Appointment {
   OperatingUnit operatingUnit;
   AppointmentStatus status;
   AppointmentDetail appointmentDetail;
+  ServiceProvider serviceProvider;
 
   Appointment(
       {this.id,
@@ -33,7 +37,8 @@ class Appointment {
       this.appointmentTypes,
       this.operatingUnit,
       this.status,
-      this.name});
+      this.name,
+      this.serviceProvider});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -43,7 +48,7 @@ class Appointment {
             : null,
         createdDate: json['createdDate'] != null ? json["createdDate"] : null,
         scheduleDateTime:
-            json['scheduleDateTime'] != null ? json['scheduleDateTime'] : null,
+            json['scheduledDateTime'] != null ? json['scheduledDateTime'] : "",
         car: json['car'] != null ? Car.fromJson(json['car']) : null,
         appointmentTypes: json['appointmentType'] != null
             ? _mapAppointmentTypes(json['appointmentType'])
@@ -54,7 +59,8 @@ class Appointment {
         status: json['status'] != null
             ? AppointmentStatus.fromJson(json['status'])
             : null,
-        name: json["name"] != null ? json["name"] : "");
+        name: json["name"] != null ? json["name"] : "",
+        serviceProvider: ServiceProvider.fromJson(json["provider"]));
   }
 
   static _mapAppointmentTypes(List<dynamic> response) {
@@ -88,23 +94,65 @@ class Appointment {
     return "dd/MM/yyyy HH:mm";
   }
 
-  bool filtered(String value) {
-    var filtered = false;
+  bool filtered(String value, AppointmentStatusState state, DateTime dateTime) {
+    var textFilter = false;
 
-    if (car != null) {
-      if (car.brand != null) {
-        if (car.brand.name != null) {
-          filtered = car.brand.name.toLowerCase().contains(value.toLowerCase());
+    if (value.isEmpty) {
+      textFilter = true;
+    } else {
+      if (car != null) {
+        if (car.brand != null) {
+          if (car.brand.name != null) {
+            textFilter =
+                car.brand.name.toLowerCase().contains(value.toLowerCase());
+          }
         }
-      }
 
-      if (car.registrationNumber != null) {
-        filtered = filtered ||
-            car.registrationNumber.toLowerCase().contains(value.toLowerCase());
+        if (car.registrationNumber != null) {
+          textFilter = textFilter ||
+              car.registrationNumber
+                  .toLowerCase()
+                  .contains(value.toLowerCase());
+        }
       }
     }
 
-    return filtered;
+    var statusFilter = false;
+
+    if (state == null) {
+      statusFilter = true;
+    } else {
+      statusFilter = false;
+
+      switch (state) {
+        case AppointmentStatusState.IN_PROGRESS:
+          if (this.status.name.toLowerCase() == "submitted") {
+            statusFilter = true;
+          }
+          break;
+        case AppointmentStatusState.WAITING:
+          break;
+        case AppointmentStatusState.FINISHED:
+          break;
+      }
+    }
+
+    bool timeFilter = false;
+
+    if (dateTime == null) {
+      timeFilter = true;
+    } else {
+      if (scheduleDateTime != null) {
+        DateTime scheduledDateTime = DateUtils.dateFromString(
+            this.scheduleDateTime, scheduledTimeFormat());
+
+        if (scheduledDateTime != null) {
+          timeFilter = DateUtils.isSameDay(dateTime, scheduledDateTime);
+        }
+      }
+    }
+
+    return textFilter && statusFilter && timeFilter;
   }
 
   Color resolveStatusColor() {

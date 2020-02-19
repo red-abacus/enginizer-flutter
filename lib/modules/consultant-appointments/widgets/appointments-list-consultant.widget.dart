@@ -1,14 +1,13 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/widgets/cards/appointment-card-consultant.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/datepicker.widget.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'appointment-card.widget.dart';
-
-class AppointmentsList extends StatelessWidget {
+class AppointmentsListProvider extends StatelessWidget {
   List<Appointment> appointments = [];
 
   String searchString;
@@ -18,7 +17,7 @@ class AppointmentsList extends StatelessWidget {
   Function selectAppointment;
   Function filterAppointments;
 
-  AppointmentsList({
+  AppointmentsListProvider({
     this.appointments,
     this.selectAppointment,
     this.filterAppointments,
@@ -91,16 +90,16 @@ class AppointmentsList extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
-          child: Container(
-            height: 70,
-            child: BasicDateField(
-              labelText: S.of(context).general_date,
-              onChange: (value) {
-                filterAppointments(this.searchString, this.appointmentStatusState, value);
-              },
-            ),
-          )
+            flex: 1,
+            child: Container(
+              height: 70,
+              child: BasicDateField(
+                labelText: S.of(context).general_date,
+                onChange: (value) {
+                  filterAppointments(this.searchString, this.appointmentStatusState, value);
+                },
+              ),
+            )
         ),
       ],
     );
@@ -112,7 +111,7 @@ class AppointmentsList extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return AppointmentCard(
+            return AppointmentCardConsultant(
                 appointment: this.appointments.elementAt(index),
                 selectAppointment: this.selectAppointment);
           },
@@ -140,15 +139,15 @@ class AppointmentsList extends StatelessWidget {
       case AppointmentStatusState.WAITING:
         return S
             .of(context)
-            .appointment_status_waiting;
+            .general_new;
       case AppointmentStatusState.IN_PROGRESS:
         return S
             .of(context)
-            .appointment_status_in_progress;
+            .general_scheduled;
       case AppointmentStatusState.FINISHED:
         return S
             .of(context)
-            .appointment_status_finished;
+            .general_finished;
     }
   }
 
@@ -158,18 +157,18 @@ class AppointmentsList extends StatelessWidget {
         value: AppointmentStatusState.WAITING,
         child: Text(S
             .of(context)
-            .appointment_status_waiting)));
+            .general_new)));
     brandDropdownList.add(DropdownMenuItem(
         value: AppointmentStatusState.IN_PROGRESS,
         child:
         Text(S
             .of(context)
-            .appointment_status_in_progress)));
+            .general_scheduled)));
     brandDropdownList.add(DropdownMenuItem(
         value: AppointmentStatusState.FINISHED,
         child: Text(S
             .of(context)
-            .appointment_status_finished)));
+            .general_finished)));
     return brandDropdownList;
   }
 }
