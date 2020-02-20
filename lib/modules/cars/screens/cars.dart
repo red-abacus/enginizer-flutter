@@ -71,42 +71,30 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CarCreateModal(
-                brands: Provider.of<CarsMakeProvider>(context).brands,
-                addCar: _addCar);
-          });
+                return CarCreateModal(
+                    brands: Provider.of<CarsMakeProvider>(context).brands,
+                    addCar: _addCar);
+              });
         });
   }
 
   void _openAppointmentCreateModal(BuildContext ctx, Car selectedCar) {
-    // TODO - remove this
-    Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = 7;
+    Provider.of<ProviderServiceProvider>(context).initFormValues();
 
-    showModalBottomSheet(
-        isScrollControlled: true,
+    Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         context: context,
-        builder: (_) {
-          return StatefulBuilder(builder:
-              (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
-          });
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return AppointmentCreateModal(_createAppointment, false, selectedCar);
+              });
         });
-//    Provider.of<ProviderServiceProvider>(context).initFormValues();
-//
-//    Provider.of<ProviderServiceProvider>(context, listen: false).loadServices();
-//
-//    showModalBottomSheet<void>(
-//        shape: RoundedRectangleBorder(
-//          borderRadius: BorderRadius.circular(10.0),
-//        ),
-//        context: context,
-//        isScrollControlled: true,
-//        builder: (BuildContext context) {
-//          return StatefulBuilder(
-//              builder: (BuildContext context, StateSetter state) {
-//            return AppointmentCreateModal(_createAppointment, false, selectedCar);
-//          });
-//        });
   }
 
   void _filterCars(BuildContext ctx, String filterValue) {
@@ -124,10 +112,10 @@ class CarsState extends State<Cars> {
     return _isLoading
         ? CircularProgressIndicator()
         : CarList(
-            cars: cars,
-            filterCars: _filterCars,
-            selectCar: _selectCar,
-            openAppointmentCreateModal: _openAppointmentCreateModal);
+        cars: cars,
+        filterCars: _filterCars,
+        selectCar: _selectCar,
+        openAppointmentCreateModal: _openAppointmentCreateModal);
   }
 
   _addCar(Car car) {

@@ -1,5 +1,6 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-fiscal-widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-items-widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-reviews-widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -59,6 +60,8 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
         break;
       case TabBarState.REVIEWS:
         return ServiceProviderReviewsWidget();
+      case TabBarState.FISCAL:
+        return ServiceProviderFiscalInfoWidget();
       default:
     }
   }

@@ -830,6 +830,15 @@ class S {
     );
   }
 
+  String get appointment_details_service_vta_payer {
+    return Intl.message(
+      'VTA Payer',
+      name: 'appointment_details_service_vta_payer',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get appointment_reviews_executed_appointments {
     return Intl.message(
       'Executed appointments:',
@@ -870,6 +879,33 @@ class S {
     return Intl.message(
       'Global efficiency:',
       name: 'appointment_reviews_global_efficiency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_client_rating_cleaning {
+    return Intl.message(
+      'Cleaning',
+      name: 'appointment_client_rating_cleaning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_client_rating_kindness {
+    return Intl.message(
+      'Kindness',
+      name: 'appointment_client_rating_kindness',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_client_rating_readiness {
+    return Intl.message(
+      'Readiness',
+      name: 'appointment_client_rating_readiness',
       desc: '',
       args: [],
     );

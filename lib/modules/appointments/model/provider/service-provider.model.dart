@@ -13,6 +13,7 @@ class ServiceProvider {
   String registrationNumber;
   String image;
   ServiceProviderRating rating;
+  bool isVATPayer;
 
   List<ServiceProviderItem> items = [];
   List<ServiceProviderTimetable> timetables = [];
@@ -27,7 +28,8 @@ class ServiceProvider {
       this.profilePhotoUrl,
       this.registrationNumber,
       this.image,
-      this.rating});
+      this.rating,
+      this.isVATPayer});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
     return ServiceProvider(
@@ -44,7 +46,8 @@ class ServiceProvider {
         image: json['image'] != null ? json['image'] : "",
         rating: json["ratingDto"] != null
             ? ServiceProviderRating.fromJson(json["ratingDto"])
-            : null);
+            : null,
+        isVATPayer: json['isVATPayer']);
   }
 
   Map<String, dynamic> toJson() {
