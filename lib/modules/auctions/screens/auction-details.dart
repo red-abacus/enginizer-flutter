@@ -65,6 +65,8 @@ class AuctionDetailsState extends State<AuctionDetails> {
     if (!_initDone) {
       auctionProvider = Provider.of<AuctionProvider>(context);
 
+      if (auctionProvider.selectedAuction == null) return;
+
       setState(() {
         Provider.of<AuctionProvider>(context, listen: false).isLoading = true;
       });
@@ -73,14 +75,13 @@ class AuctionDetailsState extends State<AuctionDetails> {
           .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
-          setState(() {
-            Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
-          });
+          Provider.of<AuctionProvider>(context, listen: false).isLoading =
+              false;
         });
       });
-    }
 
-    Provider.of<AuctionProvider>(context, listen: false).initDone = true;
+      Provider.of<AuctionProvider>(context, listen: false).initDone = true;
+    }
     super.didChangeDependencies();
   }
 
@@ -126,8 +127,8 @@ class AuctionDetailsState extends State<AuctionDetails> {
         return AuctionBidsWidget(
             bids: auctionProvider.bids,
             filterSearchString: auctionProvider.filterSearchString,
-          selectBid: _selectBid,
-        filterBids: _filterBids);
+            selectBid: _selectBid,
+            filterBids: _filterBids);
         break;
     }
     return Container();

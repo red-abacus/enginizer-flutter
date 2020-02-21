@@ -66,9 +66,11 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
 
   _tileTextFormField(AppointmentIssue issue) {
     return CustomTextFormField(
-        listener: (value) {
-          issue.name = value;
-        },
-        currentValue: issue.name);
+      labelText: S.of(context).appointment_create_issues,
+      listener: (value) {
+        issue.name = value;
+      },
+      currentValue: issue.name,
+    );
   }
 }

@@ -50,9 +50,7 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
       Provider.of<AppointmentsConsultantProvider>(context)
           .loadAppointments()
           .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoading = false;
       });
     }
     _initDone = true;

@@ -99,7 +99,7 @@ class AuctionAppointmentDetailsWidgetState
                             widget.appointmentDetail.scheduledDate != null)
                         ? widget.appointmentDetail.scheduledDate
                             .replaceAll(" ", " ${S.of(context).general_at} ")
-                        : '',
+                        : 'N/A',
                     style: TextHelper.customTextStyle(
                         null, Colors.black, null, 18),
                   ),

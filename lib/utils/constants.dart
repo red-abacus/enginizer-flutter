@@ -14,6 +14,12 @@ const Color disabled_text = Color.fromARGB(255, 225, 225, 225);
 const Color light_gray = Color.fromARGB(20, 211, 211, 211);
 const Color darker_gray = Color.fromARGB(40, 193, 193, 193);
 
+const Color active = Color(0xFF3D9970);
+const Color pending = Color(0xFFFFC107);
+const Color stop = Color(0xFFB94047);
+
+const Color foreground = Color(0xFF424242);
+
 const Color green = Color(0xFF009919);
 const Color yellow = Color(0xFFECE43C);
 

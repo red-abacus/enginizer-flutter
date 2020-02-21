@@ -4,7 +4,6 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.m
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,11 +13,14 @@ import 'package:flutter_svg/svg.dart';
 class AppointmentDetailsNewConsultantWidget extends StatefulWidget {
   Appointment appointment;
   AppointmentDetail appointmentDetail;
-  List<ServiceItem> serviceItem;
-  List<ServiceProviderItem> serviceProviderItem;
+  List<ServiceItem> serviceItems;
+  List<ServiceProviderItem> serviceProviderItems;
 
   AppointmentDetailsNewConsultantWidget(
-      {this.appointment, this.appointmentDetail, this.serviceItem, this.serviceProviderItem});
+      {this.appointment,
+      this.appointmentDetail,
+      this.serviceItems = const [],
+      this.serviceProviderItems = const []});
 
   @override
   AppointmentDetailsNewConsultantWidgetState createState() {
@@ -41,13 +43,13 @@ class AppointmentDetailsNewConsultantWidgetState
             Row(
               children: <Widget>[
                 Container(
-                    color: widget.appointment.resolveStatusColor(),
+                    color: widget.appointment?.resolveStatusColor(),
                     width: 50,
                     height: 50,
                     child: Container(
                       margin: EdgeInsets.all(5),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${widget.appointment.status?.name}.svg'
+                        'assets/images/statuses/${widget.appointment?.status?.name}.svg'
                             .toLowerCase(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
@@ -56,7 +58,7 @@ class AppointmentDetailsNewConsultantWidgetState
                   child: Container(
                     margin: EdgeInsets.only(left: 10),
                     child: Text(
-                      "${widget.appointment.name}",
+                      "${widget.appointment?.name ?? 'N/A'}",
                       maxLines: 3,
                       style: TextHelper.customTextStyle(
                           null, gray3, FontWeight.bold, 16),
@@ -72,8 +74,9 @@ class AppointmentDetailsNewConsultantWidgetState
             _servicesContainer(),
             _buildSeparator(),
             _titleContainer(S.of(context).appointment_details_services_issues),
-            for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
-              _appointmentIssueType(widget.appointmentDetail.issues[i], i),
+            if (widget.appointmentDetail != null)
+              for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
+                _appointmentIssueType(widget.appointmentDetail.issues[i], i),
             _buildSeparator(),
             _titleContainer(
                 S.of(context).appointment_details_services_appointment_date),
@@ -172,7 +175,7 @@ class AppointmentDetailsNewConsultantWidgetState
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                "${widget.appointmentDetail.user?.name}",
+                "${widget.appointmentDetail?.user?.name ?? "N/A"}",
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),
@@ -185,8 +188,8 @@ class AppointmentDetailsNewConsultantWidgetState
   _servicesContainer() {
     return Column(
       children: <Widget>[
-        for (ServiceItem item in widget.serviceItem)
-          _getServiceRow(item),
+        if (widget.serviceItems != null)
+          for (ServiceItem item in widget.serviceItems) _getServiceRow(item),
       ],
     );
   }
@@ -229,8 +232,11 @@ class AppointmentDetailsNewConsultantWidgetState
             child: Container(
               margin: EdgeInsets.only(top: 5),
               child: Text(
-                widget.appointment.scheduleDateTime
-                    .replaceAll(" ", " ${S.of(context).general_at} "),
+                (widget.appointment != null &&
+                        widget.appointment.scheduleDateTime != null)
+                    ? widget.appointment.scheduleDateTime
+                        .replaceAll(" ", " ${S.of(context).general_at} ")
+                    : 'N/A',
                 style: TextHelper.customTextStyle(null, Colors.black, null, 18),
               ),
             ),
@@ -258,10 +264,9 @@ class AppointmentDetailsNewConsultantWidgetState
               child: Text(
                 S.of(context).general_decline.toUpperCase(),
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           ),
           Expanded(
@@ -271,10 +276,9 @@ class AppointmentDetailsNewConsultantWidgetState
                 // TODO - need proper translation for english version
                 S.of(context).general_estimator.toUpperCase(),
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
           )
         ],

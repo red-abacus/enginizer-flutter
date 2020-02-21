@@ -19,6 +19,8 @@ import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
 import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
+import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,4 +70,6 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => WorkEstimatesProvider());
   inject.registerFactory(() => AppointmentsConsultantProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());
+  inject.registerFactory(() => AppointmentsMechanicProvider());
+  inject.registerFactory(() => AppointmentMechanicProvider());
 }
