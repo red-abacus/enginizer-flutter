@@ -1,5 +1,6 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -53,23 +54,14 @@ class _AppointmentDetailsTaskIssuesListState
   }
 
   _tileTextFormField(AppointmentIssue issue, bool enabled) {
-    return TextFormField(
-        decoration: InputDecoration(
-            labelText: S.of(context).appointment_details_task_add_issue),
-        onChanged: (value) {
-          setState(() {
-            issue.name = value;
-          });
-        },
-        initialValue: issue.name,
-        enabled: enabled,
-        validator: (value) {
-          if (value.isEmpty) {
-            return S.of(context).appointment_create_error_issueCannotBeEmpty;
-          } else {
-            return null;
-          }
-        });
+    return CustomTextFormField(
+      labelText: S.of(context).appointment_details_task_add_issue,
+      enabled: enabled,
+      listener: (value) {
+        issue.name = value;
+      },
+      currentValue: issue.name,
+    );
   }
 
   _isLastTile(int index) {
