@@ -71,7 +71,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
             issue.name = value;
           });
         },
-        controller: TextEditingController(text: issue.name),
+        initialValue: issue.name,
         validator: (value) {
           if (value.isEmpty) {
             return S.of(context).appointment_create_error_issueCannotBeEmpty;

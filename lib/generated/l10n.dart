@@ -848,6 +848,69 @@ class S {
     );
   }
 
+  String get appointment_details_task_check_lights {
+    return Intl.message(
+      'Lighting system check',
+      name: 'appointment_details_task_check_lights',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_task_check_battery {
+    return Intl.message(
+      'Battery status check',
+      name: 'appointment_details_task_check_battery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_task_check_liquids {
+    return Intl.message(
+      'Fluids state check',
+      name: 'appointment_details_task_check_liquids',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_task_check_brakes {
+    return Intl.message(
+      'Brake system check',
+      name: 'appointment_details_task_check_brakes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_task_check_steering {
+    return Intl.message(
+      'Suspension and steering check',
+      name: 'appointment_details_task_check_steering',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_task_check_braking_mechanism {
+    return Intl.message(
+      'Braking mechanism visual check',
+      name: 'appointment_details_task_check_braking_mechanism',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_task_add_issue {
+    return Intl.message(
+      'Describe issue',
+      name: 'appointment_details_task_add_issue',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get auction_details_title {
     return Intl.message(
       'Auction Details',

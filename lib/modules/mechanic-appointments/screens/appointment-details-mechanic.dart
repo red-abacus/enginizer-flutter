@@ -30,7 +30,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   AppointmentDetailsMechanicState({this.route});
 
-  AppointmentMechanicProvider appointmentProviderMechanic;
+  AppointmentMechanicProvider appointmentMechanicProvider;
 
   @override
   void initState() {
@@ -46,8 +46,14 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   @override
   Widget build(BuildContext context) {
-    appointmentProviderMechanic =
+    appointmentMechanicProvider =
         Provider.of<AppointmentMechanicProvider>(context);
+
+    if (appointmentMechanicProvider.selectedAppointment == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
+    }
 
     return Consumer<AppointmentMechanicProvider>(
       builder: (context, appointmentMechanicProvider, _) => Scaffold(
@@ -64,10 +70,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           ),
           title: _titleText(),
         ),
-        body: Container(
-          padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-          child: _buildContent(),
-        ),
+        body: _buildContent(),
       ),
     );
   }
@@ -79,18 +82,20 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
         _isLoading = true;
       });
 
-      appointmentProviderMechanic =
+      appointmentMechanicProvider =
           Provider.of<AppointmentMechanicProvider>(context);
 
-      appointmentProviderMechanic
+      appointmentMechanicProvider
           .getAppointmentDetails(
-              appointmentProviderMechanic.selectedAppointment)
+              appointmentMechanicProvider.selectedAppointment)
           .then((_) {
-        appointmentProviderMechanic
-            .getProviderServices(appointmentProviderMechanic
-                .selectedAppointment.serviceProvider.id)
-            .then((_) {
+        appointmentMechanicProvider
+            .getStandardTasks(
+                appointmentMechanicProvider.selectedAppointment.id)
+            .then((mechanicTasks) {
           setState(() {
+            appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
+            appointmentMechanicProvider.initFormValues();
             _isLoading = false;
           });
         });
@@ -102,7 +107,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   _titleText() {
     return Text(
-      appointmentProviderMechanic.selectedAppointment?.name ?? 'N/A',
+      appointmentMechanicProvider.selectedAppointment?.name ?? 'N/A',
       style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     );
@@ -119,19 +124,15 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       controller: _tabController,
       children: [
         AppointmentDetailsCarDetails(
-          appointment: appointmentProviderMechanic.selectedAppointment,
+          appointment: appointmentMechanicProvider.selectedAppointment,
           appointmentDetails:
-              appointmentProviderMechanic.selectedAppointmentDetail,
+              appointmentMechanicProvider.selectedAppointmentDetail,
         ),
-        AppointmentDetailsTasksList(
-          appointment: appointmentProviderMechanic.selectedAppointment,
-          appointmentDetails:
-              appointmentProviderMechanic.selectedAppointmentDetail,
-        ),
+        AppointmentDetailsTasksList(),
         AppointmentDetailsServiceHistory(
-          appointment: appointmentProviderMechanic.selectedAppointment,
+          appointment: appointmentMechanicProvider.selectedAppointment,
           appointmentDetails:
-              appointmentProviderMechanic.selectedAppointmentDetail,
+              appointmentMechanicProvider.selectedAppointmentDetail,
         ),
       ],
     );
