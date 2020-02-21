@@ -904,8 +904,26 @@ class S {
 
   String get appointment_details_task_add_issue {
     return Intl.message(
-      'Describe issue',
+      'Issue description',
       name: 'appointment_details_task_add_issue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_car_details_error {
+    return Intl.message(
+      'Car details couldn\'t be displayed',
+      name: 'appointment_details_car_details_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get appointment_details_service_history_error {
+    return Intl.message(
+      'There\'s no service history data yet',
+      name: 'appointment_details_service_history_error',
       desc: '',
       args: [],
     );

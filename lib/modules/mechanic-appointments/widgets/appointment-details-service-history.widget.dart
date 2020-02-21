@@ -1,14 +1,11 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentDetailsServiceHistory extends StatefulWidget {
-  final Appointment appointment;
-  final AppointmentDetail appointmentDetails;
-
-  AppointmentDetailsServiceHistory(
-      {this.appointment, this.appointmentDetails});
+  AppointmentDetailsServiceHistory();
 
   @override
   AppointmentDetailsServiceHistoryState createState() {
@@ -18,8 +15,29 @@ class AppointmentDetailsServiceHistory extends StatefulWidget {
 
 class AppointmentDetailsServiceHistoryState
     extends State<AppointmentDetailsServiceHistory> {
+  AppointmentMechanicProvider appointmentMechanicProvider;
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Appointment Details Service History'));
+    appointmentMechanicProvider =
+        Provider.of<AppointmentMechanicProvider>(context, listen: false);
+
+    List<dynamic> serviceHistory = appointmentMechanicProvider.serviceHistory;
+
+    return serviceHistory.isNotEmpty
+        ? _buildServiceHistory(context, serviceHistory)
+        : Center(
+        child: Text(S.of(context).appointment_details_service_history_error));
   }
+
+  _buildServiceHistory(BuildContext context, List<dynamic> serviceHistory) {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: serviceHistory.length,
+        itemBuilder: (context, index) {
+          // To be implemented
+          return Container();
+        });
+  }
+
 }

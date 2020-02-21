@@ -3,23 +3,27 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.m
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TaskIssuesList extends StatefulWidget {
+class AppointmentDetailsTaskIssuesList extends StatefulWidget {
   final List<AppointmentIssue> issues;
 
   final Function addIssue;
   final Function removeIssue;
 
-  TaskIssuesList({this.issues = const [], this.addIssue, this.removeIssue});
+  AppointmentDetailsTaskIssuesList(
+      {this.issues = const [], this.addIssue, this.removeIssue});
 
   @override
-  _TaskIssuesListState createState() => _TaskIssuesListState();
+  _AppointmentDetailsTaskIssuesListState createState() =>
+      _AppointmentDetailsTaskIssuesListState();
 }
 
-class _TaskIssuesListState extends State<TaskIssuesList> {
+class _AppointmentDetailsTaskIssuesListState
+    extends State<AppointmentDetailsTaskIssuesList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         itemCount: widget.issues.length,
         itemBuilder: (context, index) {
           return _buildListTile(context, index, widget.issues);
@@ -50,8 +54,8 @@ class _TaskIssuesListState extends State<TaskIssuesList> {
 
   _tileTextFormField(AppointmentIssue issue, bool enabled) {
     return TextFormField(
-        decoration:
-            InputDecoration(labelText: S.of(context).appointment_details_task_add_issue),
+        decoration: InputDecoration(
+            labelText: S.of(context).appointment_details_task_add_issue),
         onChanged: (value) {
           setState(() {
             issue.name = value;

@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';

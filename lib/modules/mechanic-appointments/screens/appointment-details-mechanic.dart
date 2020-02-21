@@ -47,7 +47,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   Widget build(BuildContext context) {
     appointmentMechanicProvider =
-        Provider.of<AppointmentMechanicProvider>(context);
+        Provider.of<AppointmentMechanicProvider>(context, listen: false);
 
     if (appointmentMechanicProvider.selectedAppointment == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -83,7 +83,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       });
 
       appointmentMechanicProvider =
-          Provider.of<AppointmentMechanicProvider>(context);
+          Provider.of<AppointmentMechanicProvider>(context, listen: false);
 
       appointmentMechanicProvider
           .getAppointmentDetails(
@@ -93,15 +93,14 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
             .getStandardTasks(
                 appointmentMechanicProvider.selectedAppointment.id)
             .then((mechanicTasks) {
-          setState(() {
-            appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
-            appointmentMechanicProvider.initFormValues();
-            _isLoading = false;
-          });
+          appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
+          appointmentMechanicProvider.initFormValues();
+          _isLoading = false;
         });
       });
+
+      _initDone = true;
     }
-    _initDone = true;
     super.didChangeDependencies();
   }
 
@@ -123,17 +122,9 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     return TabBarView(
       controller: _tabController,
       children: [
-        AppointmentDetailsCarDetails(
-          appointment: appointmentMechanicProvider.selectedAppointment,
-          appointmentDetails:
-              appointmentMechanicProvider.selectedAppointmentDetail,
-        ),
+        AppointmentDetailsCarDetails(),
         AppointmentDetailsTasksList(),
-        AppointmentDetailsServiceHistory(
-          appointment: appointmentMechanicProvider.selectedAppointment,
-          appointmentDetails:
-              appointmentMechanicProvider.selectedAppointmentDetail,
-        ),
+        AppointmentDetailsServiceHistory(),
       ],
     );
   }

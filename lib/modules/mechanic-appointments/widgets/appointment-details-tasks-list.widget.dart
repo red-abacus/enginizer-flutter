@@ -5,7 +5,7 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.m
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/timer-config.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/widgets/task-issues-list.widget.dart';
+import 'package:enginizer_flutter/modules/mechanic-appointments/widgets/appointment-details-task-issues-list.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +47,11 @@ class AppointmentDetailsTasksListState
     steps = _buildSteps(context);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         if (_showTimer)
           Container(
-            margin: EdgeInsets.only(top: 12, right: 12),
+            padding: EdgeInsets.all(12),
             alignment: Alignment.centerRight,
             child: _buildTimer(context),
           ),
@@ -146,7 +147,7 @@ class AppointmentDetailsTasksListState
                   ? _translateTaskName(task.name)
                   : 'N/A',
               style: TextStyle(color: Colors.black87)),
-          content: TaskIssuesList(
+          content: AppointmentDetailsTaskIssuesList(
             issues: appointmentMechanicProvider.selectedMechanicTask.issues,
             addIssue: _addIssue,
             removeIssue: _removeIssue,

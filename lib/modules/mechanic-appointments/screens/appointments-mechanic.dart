@@ -47,34 +47,32 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
         _isLoading = true;
       });
 
-      Provider.of<AppointmentsMechanicProvider>(context)
+      Provider.of<AppointmentsMechanicProvider>(context, listen: false)
           .loadAppointments()
           .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoading = false;
       });
-    }
-    _initDone = true;
 
+      _initDone = true;
+    }
     super.didChangeDependencies();
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
-        selectedAppointment;
+    Provider.of<AppointmentMechanicProvider>(context, listen: false)
+        .selectedAppointment = selectedAppointment;
     Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
   }
 
   _filterAppointments(
       String string, AppointmentStatusState state, DateTime dateTime) {
-    Provider.of<AppointmentsMechanicProvider>(context)
+    Provider.of<AppointmentsMechanicProvider>(context, listen: false)
         .filterAppointments(string, state, dateTime);
   }
 
   _renderAppointments(bool _isLoading, List<Appointment> appointments) {
-    AppointmentsMechanicProvider provider =
-        Provider.of<AppointmentsMechanicProvider>(context);
+    AppointmentsMechanicProvider appointmentsMechanicProvider =
+        Provider.of<AppointmentsMechanicProvider>(context, listen: false);
 
     return _isLoading
         ? CircularProgressIndicator()
@@ -82,8 +80,8 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
             appointments: appointments,
             selectAppointment: _selectAppointment,
             filterAppointments: _filterAppointments,
-            searchString: provider.filterSearchString,
-            appointmentStatusState: provider.filterStatus,
-            filterDateTime: provider.filterDateTime);
+            searchString: appointmentsMechanicProvider.filterSearchString,
+            appointmentStatusState: appointmentsMechanicProvider.filterStatus,
+            filterDateTime: appointmentsMechanicProvider.filterDateTime);
   }
 }

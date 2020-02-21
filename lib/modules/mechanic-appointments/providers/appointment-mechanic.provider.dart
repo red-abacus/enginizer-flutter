@@ -10,11 +10,13 @@ class AppointmentMechanicProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
   Appointment selectedAppointment;
-  AppointmentDetail selectedAppointmentDetail;
+  AppointmentDetail selectedAppointmentDetails;
 
   List<MechanicTask> standardTasks = [];
 
   MechanicTask selectedMechanicTask;
+
+  List<dynamic> serviceHistory = [];
 
   void initFormValues() {
     standardTasks.forEach((task) => task.issues = List.of(task.issues)
@@ -23,10 +25,10 @@ class AppointmentMechanicProvider with ChangeNotifier {
 
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
-    selectedAppointmentDetail =
+    selectedAppointmentDetails =
         await this.appointmentsService.getAppointmentDetails(appointment.id);
     notifyListeners();
-    return selectedAppointmentDetail;
+    return selectedAppointmentDetails;
   }
 
   Future<List<MechanicTask>> getStandardTasks(int appointmentId) async {

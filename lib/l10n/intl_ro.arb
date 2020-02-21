@@ -97,6 +97,8 @@
   "appointment_details_task_check_steering": "Verificare suspensie și direcție",
   "appointment_details_task_check_braking_mechanism": "Verificare vizuală conducte frânare",
   "appointment_details_task_add_issue": "Descriere problemă",
+  "appointment_details_car_details_error": "Detaliile mașinii nu au putut fi afișate",
+  "appointment_details_service_history_error": "Nu există date despre istoric",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
