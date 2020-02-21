@@ -3,6 +3,8 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.m
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../custom-text-form-field.dart';
+
 class IssuesListWidget extends StatefulWidget {
   List<AppointmentIssue> issues;
   Function removeIssue;
@@ -63,21 +65,10 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
   }
 
   _tileTextFormField(AppointmentIssue issue) {
-    return TextFormField(
-        decoration:
-            InputDecoration(labelText: S.of(context).appointment_create_issues),
-        onChanged: (value) {
-          setState(() {
-            issue.name = value;
-          });
+    return CustomTextFormField(
+        listener: (value) {
+          issue.name = value;
         },
-        initialValue: issue.name,
-        validator: (value) {
-          if (value.isEmpty) {
-            return S.of(context).appointment_create_error_issueCannotBeEmpty;
-          } else {
-            return null;
-          }
-        });
+        currentValue: issue.name);
   }
 }

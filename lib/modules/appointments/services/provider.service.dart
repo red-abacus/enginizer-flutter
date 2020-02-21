@@ -6,6 +6,8 @@ import 'package:enginizer_flutter/modules/appointments/model/provider/service-pr
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/models/employee.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 
 class ProviderService {
@@ -28,6 +30,10 @@ class ProviderService {
   static const String PROVIDER_TIMETABLE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String PROVIDER_TIMETABLE_SUFFIX = "/timetable";
+
+  static const String PROVIDER_EMPLOYEE_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String PROVIDER_EMPLOYEE_SUFFIX = '/people-timetable';
 
   Dio _dio = inject<Dio>();
 
@@ -158,9 +164,36 @@ class ProviderService {
 
     if (response.statusCode == 200) {
       return ServiceProvider.fromJson(response.data);
-    }
-    else {
+    } else {
       throw Exception("LOAD_PROVIDER_DETAILS_FAILED");
     }
+  }
+
+  Future<List<Employee>> getProviderEmployees(
+      int providerId, String startDate, String endDate) async {
+    final response = await _dio.get(_buildGetProviderEmployeesPath(providerId),
+        queryParameters: {"startDate": startDate, "endDate": endDate});
+
+    if (response.statusCode == 200) {
+      return _mapProviderEmployees(response.data);
+    } else {
+      throw Exception('LOAD_PROVIDER_EMPPLOYEES_FAILED');
+    }
+  }
+
+  _buildGetProviderEmployeesPath(int providerId) {
+    return PROVIDER_EMPLOYEE_PREFIX +
+        providerId.toString() +
+        PROVIDER_EMPLOYEE_SUFFIX;
+  }
+
+  _mapProviderEmployees(List<dynamic> response) {
+    List<Employee> list = [];
+
+    response.forEach((item) {
+      list.add(Employee.fromJson(item));
+    });
+
+    return list;
   }
 }

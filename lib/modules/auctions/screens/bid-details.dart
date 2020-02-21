@@ -37,37 +37,34 @@ class BidDetailsState extends State<BidDetails> {
 
   @override
   Widget build(BuildContext context) {
-    auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
+    auctionProvider = Provider.of<AuctionProvider>(context);
     workEstimatesProvider =
         Provider.of<WorkEstimatesProvider>(context, listen: false);
 
     return Consumer<AuctionProvider>(
-      builder: (context, auctionProvider, _) =>
-          Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(
-              iconTheme: new IconThemeData(color: Theme
-                  .of(context)
-                  .cardColor),
+      builder: (context, auctionProvider, _) => Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+        ),
+        body: Column(
+          children: <Widget>[
+            new Expanded(
+              child: Container(
+                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                child: _buildContent(),
+              ),
             ),
-            body: Column(
-              children: <Widget>[
-                new Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                    child: _buildContent(),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
+      auctionProvider = Provider.of<AuctionProvider>(context);
       workEstimatesProvider =
           Provider.of<WorkEstimatesProvider>(context, listen: false);
 
@@ -105,30 +102,20 @@ class BidDetailsState extends State<BidDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _imageContainer(),
-            _titleContainer(S
-                .of(context)
-                .auction_bids_provider),
+            _titleContainer(S.of(context).auction_bids_provider),
             _providerContainer(),
             _buildSeparator(),
-            _titleContainer(S
-                .of(context)
-                .auction_bid_services_provided),
+            _titleContainer(S.of(context).auction_bid_services_provided),
             _servicesContainer(),
             _buildSeparator(),
-            _titleContainer(S
-                .of(context)
-                .appointment_details_services_issues),
+            _titleContainer(S.of(context).appointment_details_services_issues),
             _issueContainer(),
             _buildSeparator(),
             _titleContainer(
-                S
-                    .of(context)
-                    .appointment_details_services_appointment_date),
+                S.of(context).appointment_details_services_appointment_date),
             _appointmentDateContainer(),
             _buildSeparator(),
-            _titleContainer(S
-                .of(context)
-                .auction_bid_estimate_price),
+            _titleContainer(S.of(context).auction_bid_estimate_price),
             _priceContainer(),
             _buildButtons(),
           ],
@@ -147,8 +134,7 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.all(8),
             child: SvgPicture.asset(
-              'assets/images/statuses/${auctionProvider.selectedAuction
-                  ?.appointment?.status?.name}.svg'
+              'assets/images/statuses/${auctionProvider.selectedAuction?.appointment?.status?.name}.svg'
                   .toLowerCase(),
               semanticsLabel: 'Appointment Status Image',
             ),
@@ -161,7 +147,7 @@ class BidDetailsState extends State<BidDetails> {
               '${auctionProvider.selectedAuction?.appointment?.name}',
               maxLines: 3,
               style:
-              TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
             ),
           ),
         ),
@@ -194,10 +180,7 @@ class BidDetailsState extends State<BidDetails> {
           ),
           FlatButton(
             child: Text(
-              S
-                  .of(context)
-                  .auction_bid_see_provider_profile
-                  .toUpperCase(),
+              S.of(context).auction_bid_see_provider_profile.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
             ),
             onPressed: () {
@@ -214,7 +197,7 @@ class BidDetailsState extends State<BidDetails> {
       children: <Widget>[
         if (auctionProvider.appointmentDetails != null)
           for (ServiceItem serviceItem
-          in auctionProvider.appointmentDetails?.serviceItems)
+              in auctionProvider.appointmentDetails?.serviceItems)
             _getServiceRow(serviceItem),
       ],
     );
@@ -233,23 +216,23 @@ class BidDetailsState extends State<BidDetails> {
   _getServiceText(ServiceItem serviceItem) {
     return Expanded(
         child: Container(
-          margin: EdgeInsets.only(right: 10),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  serviceItem.name,
-                  style: TextHelper.customTextStyle(null, gray, null, 14),
-                ),
-              ),
-              Container(
-                width: 30,
-                height: 30,
-                color: red,
-              )
-            ],
+      margin: EdgeInsets.only(right: 10),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              serviceItem.name,
+              style: TextHelper.customTextStyle(null, gray, null, 14),
+            ),
           ),
-        ));
+          Container(
+            width: 30,
+            height: 30,
+            color: red,
+          )
+        ],
+      ),
+    ));
   }
 
   _issueContainer() {
@@ -264,8 +247,8 @@ class BidDetailsState extends State<BidDetails> {
                 children: <Widget>[
                   if (auctionProvider.appointmentDetails != null)
                     for (int i = 0;
-                    i < auctionProvider.appointmentDetails?.issues?.length;
-                    i++)
+                        i < auctionProvider.appointmentDetails?.issues?.length;
+                        i++)
                       _issueTextWidget(
                           auctionProvider.appointmentDetails?.issues[i], i)
                 ],
@@ -273,19 +256,12 @@ class BidDetailsState extends State<BidDetails> {
             ),
           ),
           FlatButton(
-            splashColor: Theme
-                .of(context)
-                .primaryColor,
+            splashColor: Theme.of(context).primaryColor,
             onPressed: () => _openEstimator(context),
             child: Text(
-              S
-                  .of(context)
-                  .auction_bid_estimate
-                  .toUpperCase(),
+              S.of(context).auction_bid_estimate.toUpperCase(),
               style: TextHelper.customTextStyle(
-                  null, Theme
-                  .of(context)
-                  .accentColor, FontWeight.bold, 16),
+                  null, Theme.of(context).accentColor, FontWeight.bold, 16),
             ),
           ),
         ],
@@ -303,10 +279,9 @@ class BidDetailsState extends State<BidDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return EstimatorModal(
-                    workEstimateDetails: workEstimatesProvider
-                        .workEstimateDetails);
-              });
+            return EstimatorModal(
+                workEstimateDetails: workEstimatesProvider.workEstimateDetails);
+          });
         });
   }
 
@@ -320,16 +295,14 @@ class BidDetailsState extends State<BidDetails> {
         ? DateUtils.stringFromDate(acceptedDate, "HH:mm")
         : "";
 
-    String title = "$dateString ${S
-        .of(context)
-        .general_at} $timeString";
+    String title = "$dateString ${S.of(context).general_at} $timeString";
 
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Text(
         title,
         style:
-        TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
+            TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
       ),
     );
   }
@@ -338,12 +311,9 @@ class BidDetailsState extends State<BidDetails> {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Text(
-        '${auctionProvider.selectedBid?.cost} ${S
-            .of(context)
-            .general_currency
-            .toUpperCase()}',
+        '${auctionProvider.selectedBid?.cost} ${S.of(context).general_currency.toUpperCase()}',
         style:
-        TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
+            TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
       ),
     );
   }
@@ -367,12 +337,9 @@ class BidDetailsState extends State<BidDetails> {
             flex: 1,
             child: FlatButton(
               child: Text(
-                S
-                    .of(context)
-                    .general_decline
-                    .toUpperCase(),
+                S.of(context).general_decline.toUpperCase(),
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
               onPressed: () {
                 _showCancelBidAlert();
@@ -383,12 +350,9 @@ class BidDetailsState extends State<BidDetails> {
             flex: 1,
             child: FlatButton(
               child: Text(
-                S
-                    .of(context)
-                    .general_accept
-                    .toUpperCase(),
+                S.of(context).general_accept.toUpperCase(),
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
               ),
               onPressed: () {
                 _showAcceptBidAlert();
@@ -458,18 +422,14 @@ class BidDetailsState extends State<BidDetails> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S
-              .of(context)
-              .general_warning,
+          title: Text(S.of(context).general_warning,
               style:
-              TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                  S
-                      .of(context)
-                      .auction_bid_cancel_description,
+                  S.of(context).auction_bid_cancel_description,
                   style: TextHelper.customTextStyle(null, null, null, 16),
                 ),
               ],
@@ -477,17 +437,13 @@ class BidDetailsState extends State<BidDetails> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text(S
-                  .of(context)
-                  .general_no),
+              child: Text(S.of(context).general_no),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             FlatButton(
-              child: Text(S
-                  .of(context)
-                  .general_yes),
+              child: Text(S.of(context).general_yes),
               onPressed: () {
                 Navigator.pop(context);
                 _cancelBid(auctionProvider.selectedBid);
@@ -502,12 +458,8 @@ class BidDetailsState extends State<BidDetails> {
   _cancelBid(Bid bid) {
     auctionProvider.rejectBid(bid.id).then((success) {
       if (success != null && success) {
-        Provider
-            .of<AuctionProvider>(context, listen: false)
-            .initDone = false;
-        Provider
-            .of<AuctionProvider>(context, listen: false)
-            .isLoading = false;
+        Provider.of<AuctionProvider>(context, listen: false).initDone = false;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
 
         Navigator.pop(context);
       }
@@ -520,18 +472,14 @@ class BidDetailsState extends State<BidDetails> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S
-              .of(context)
-              .general_warning,
+          title: Text(S.of(context).general_warning,
               style:
-              TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                  S
-                      .of(context)
-                      .auction_bid_accept_description,
+                  S.of(context).auction_bid_accept_description,
                   style: TextHelper.customTextStyle(null, null, null, 16),
                 ),
               ],
@@ -539,17 +487,13 @@ class BidDetailsState extends State<BidDetails> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text(S
-                  .of(context)
-                  .general_no),
+              child: Text(S.of(context).general_no),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             FlatButton(
-              child: Text(S
-                  .of(context)
-                  .general_yes),
+              child: Text(S.of(context).general_yes),
               onPressed: () {
                 _acceptBid(auctionProvider.selectedBid);
                 Navigator.pop(context);
@@ -564,12 +508,8 @@ class BidDetailsState extends State<BidDetails> {
   _acceptBid(Bid bid) {
     auctionProvider.acceptBid(bid.id).then((success) {
       if (success != null && success) {
-        Provider
-            .of<AuctionProvider>(context, listen: false)
-            .initDone = false;
-        Provider
-            .of<AuctionProvider>(context, listen: false)
-            .isLoading = false;
+        Provider.of<AuctionProvider>(context, listen: false).initDone = false;
+        Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
 
         Navigator.pop(context);
       }
@@ -583,15 +523,16 @@ class BidDetailsState extends State<BidDetails> {
 
   _showServiceProviderDetails() {
     int providerId = auctionProvider.selectedBid.serviceProvider.id;
-    auctionProvider.getServiceProviderDetails(providerId).then((
-        serviceProvider) {
+    auctionProvider
+        .getServiceProviderDetails(providerId)
+        .then((serviceProvider) {
       if (serviceProvider != null) {
         showModalBottomSheet(
             isScrollControlled: true,
             context: context,
             builder: (_) {
-              return StatefulBuilder(builder:
-                  (BuildContext context, StateSetter state) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
                 return ServiceDetailsModal(serviceProvider);
               });
             });

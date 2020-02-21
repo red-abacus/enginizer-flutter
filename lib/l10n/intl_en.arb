@@ -87,6 +87,7 @@
   "appointment_details_request_reprogramming": "Request reprogramming",
   "appointment_details_assiged_mechanic": "Assigned Mechanics",
   "appointment_details_no_mechanic_alert": "No mechanic is assigned!",
+  "appointment_details_service_occupancy": "Service Occupancy",
   "appointment_details_car_details": "Car Details",
   "appointment_details_tasks_list": "Tasks",
   "appointment_details_service_history": "Service History",
