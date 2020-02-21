@@ -64,6 +64,9 @@ unlinked_spec.ds
 # Coverage
 coverage/
 
+# l10n generated files
+lib/generated/
+
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
 !**/ios/**/default.mode2v3
