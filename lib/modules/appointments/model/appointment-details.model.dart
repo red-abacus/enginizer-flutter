@@ -20,8 +20,9 @@ class AppointmentDetail {
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
         car: Car.fromJson(json["car"]),
-        issues: _mapIssuesList(json["issues"]),
-        serviceItems: _mapServiceItems(json["services"]),
+        issues: json["issues"] != null ? _mapIssuesList(json["issues"]) : [],
+        serviceItems:
+            json["services"] != null ? _mapServiceItems(json["services"]) : [],
         scheduledDate: json["scheduledDateTime"],
         user: User.fromJson(json["user"]));
   }

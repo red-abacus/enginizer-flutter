@@ -144,7 +144,7 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.only(left: 10),
             child: Text(
-              '${auctionProvider.selectedAuction?.appointment?.name}',
+              '${auctionProvider.selectedAuction?.appointment?.name ?? 'N/A'}',
               maxLines: 3,
               style:
                   TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
@@ -172,7 +172,7 @@ class BidDetailsState extends State<BidDetails> {
             child: Container(
               margin: EdgeInsets.only(left: 5),
               child: Text(
-                '${auctionProvider.selectedBid?.serviceProvider?.name}',
+                '${auctionProvider.selectedBid?.serviceProvider?.name ?? 'N/A'}',
                 style: TextHelper.customTextStyle(
                     null, Colors.black, FontWeight.bold, 14),
               ),
@@ -295,7 +295,9 @@ class BidDetailsState extends State<BidDetails> {
         ? DateUtils.stringFromDate(acceptedDate, "HH:mm")
         : "";
 
-    String title = "$dateString ${S.of(context).general_at} $timeString";
+    String title = acceptedDate != null
+        ? "$dateString ${S.of(context).general_at} $timeString"
+        : 'N/A';
 
     return Container(
       margin: EdgeInsets.only(top: 5),
@@ -311,7 +313,9 @@ class BidDetailsState extends State<BidDetails> {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Text(
-        '${auctionProvider.selectedBid?.cost} ${S.of(context).general_currency.toUpperCase()}',
+        auctionProvider.selectedBid?.cost != null
+            ? '${auctionProvider.selectedBid?.cost} ${S.of(context).general_currency.toUpperCase()}'
+            : 'N/A',
         style:
             TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
       ),
@@ -514,11 +518,6 @@ class BidDetailsState extends State<BidDetails> {
         Navigator.pop(context);
       }
     });
-  }
-
-  _seeEstimate() {
-    // TODO - see estimate
-//    auctionProvider.selectedBid
   }
 
   _showServiceProviderDetails() {

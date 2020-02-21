@@ -34,6 +34,15 @@ class AppointmentDetailsConsultantState
 
   @override
   Widget build(BuildContext context) {
+    AppointmentConsultantProvider provider =
+        Provider.of<AppointmentConsultantProvider>(context);
+
+    if (provider.selectedAppointment == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
+    }
+
     return Consumer<AppointmentConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
@@ -97,8 +106,9 @@ class AppointmentDetailsConsultantState
 
     switch (currentState) {
       case AppointmentDetailsStatusState.REQUEST:
-        if (provider.selectedAppointment.status.name.toLowerCase() ==
-            "submitted") {
+        if (provider.selectedAppointment != null &&
+            provider.selectedAppointment.status.name.toLowerCase() ==
+                "submitted") {
           return AppointmentDetailsScheduledConsultantWidget(
               appointment: provider.selectedAppointment,
               appointmentDetail: provider.selectedAppointmentDetail,
@@ -108,8 +118,8 @@ class AppointmentDetailsConsultantState
           return AppointmentDetailsNewConsultantWidget(
               appointment: provider.selectedAppointment,
               appointmentDetail: provider.selectedAppointmentDetail,
-              serviceItem: provider.selectedAppointmentDetail.serviceItems,
-              serviceProviderItem: provider.serviceProviderItems);
+              serviceItems: provider.selectedAppointmentDetail?.serviceItems,
+              serviceProviderItems: provider.serviceProviderItems);
         }
         break;
       case AppointmentDetailsStatusState.CAR:
