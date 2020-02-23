@@ -1,34 +1,38 @@
+import 'dart:convert';
+
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user-credentials.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:enginizer_flutter/modules/authentication/services/user.service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider with ChangeNotifier {
   final UserService _userService = inject<UserService>();
 
-  UserCredentials userCredentials;
+  JwtUserDetails userDetails;
 
-  @Deprecated(
-      'The GET method for /users/credentials has been removed from the API')
-  Future<void> getLoggedUserCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  String email = "";
+  String name = "";
 
-    String email = prefs.get("email");
+  String currentPassword = "";
+  String newPassword = "";
+  String confirmNewPassword = "";
 
-    if (email != null && email.isNotEmpty) {
-      return _getUserCredentials(prefs.get("email"));
-    }
-
-    return null;
+  initialiseParams() {
+    email = this.userDetails?.email;
+    name = this.userDetails?.name;
   }
 
-  Future<UserCredentials> _getUserCredentials(String email) async {
-    try {
-      userCredentials = await _userService.getUserCredentials(email);
-      return userCredentials;
-    } catch (error) {
-      throw error;
-    }
+  Future<JwtUserDetails> getUserDetails() async {
+    this.userDetails = await _userService.getUserDetails(userDetails.id);
+    notifyListeners();
+    return this.userDetails;
+  }
+
+  Future<JwtUserDetails> updateUserDetails(String email, String name) async {
+    var payload = json.encode({'email': email, 'name': name});
+
+    this.userDetails = await _userService.updateUserDetails(userDetails.id, payload);
+    notifyListeners();
+    return this.userDetails;
   }
 }

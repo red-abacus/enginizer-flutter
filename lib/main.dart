@@ -45,6 +45,8 @@ import 'modules/cars/screens/cars.dart';
 import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
+import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/user-details/screens/user-details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +79,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: ProviderServiceProvider()),
           ChangeNotifierProvider.value(value: AppointmentsProvider()),
           ChangeNotifierProvider.value(value: UserProvider()),
+          ChangeNotifierProvider.value(value: UserConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentProvider()),
           ChangeNotifierProvider.value(value: AuctionsProvider()),
           ChangeNotifierProvider.value(value: AuctionProvider()),
@@ -87,7 +90,8 @@ class AppState extends State<App> {
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
             home: authProvider.isAuth
-                ? NavigationApp(authUser: authProvider.authUser)
+                ? NavigationApp(authUser: authProvider.authUser,
+            authUserDetails: authProvider.authUserDetails)
                 : FutureBuilder(
                     future: authProvider.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) =>
@@ -133,7 +137,8 @@ class AppState extends State<App> {
               AuctionDetails.route: (context) => AuctionDetails(),
               BidDetails.route: (context) => BidDetails(),
               AppointmentsConsultant.route: (context) => AppointmentsConsultant(),
-              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant()
+              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant(),
+              UserDetails.route: (context) => UserDetails()
             },
           );
         }));

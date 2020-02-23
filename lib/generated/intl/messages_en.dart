@@ -160,6 +160,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "general_no_entries" : MessageLookupByLibrary.simpleMessage("No entries available"),
     "general_only" : MessageLookupByLibrary.simpleMessage("Only"),
     "general_price" : MessageLookupByLibrary.simpleMessage("Price"),
+    "general_save_changes" : MessageLookupByLibrary.simpleMessage("Save Changes"),
     "general_scheduled" : MessageLookupByLibrary.simpleMessage("Scheduled"),
     "general_service" : MessageLookupByLibrary.simpleMessage("Service"),
     "general_services" : MessageLookupByLibrary.simpleMessage("Services"),
@@ -169,6 +170,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "service_fiscal" : MessageLookupByLibrary.simpleMessage("Fiscal info"),
     "service_promotions" : MessageLookupByLibrary.simpleMessage("Promotions"),
     "service_reviews" : MessageLookupByLibrary.simpleMessage("Reviews"),
-    "service_services" : MessageLookupByLibrary.simpleMessage("Services")
+    "service_services" : MessageLookupByLibrary.simpleMessage("Services"),
+    "user_profile_confirm_password" : MessageLookupByLibrary.simpleMessage("Confirm Password"),
+    "user_profile_cui" : MessageLookupByLibrary.simpleMessage("CUI"),
+    "user_profile_cui_error" : MessageLookupByLibrary.simpleMessage("CUI is required!"),
+    "user_profile_current_password" : MessageLookupByLibrary.simpleMessage("Current Password"),
+    "user_profile_fiscal_name" : MessageLookupByLibrary.simpleMessage("Fiscal Name"),
+    "user_profile_fiscal_name_error" : MessageLookupByLibrary.simpleMessage("Fiscal name is required!"),
+    "user_profile_new_password" : MessageLookupByLibrary.simpleMessage("New Password"),
+    "user_profile_registration_number" : MessageLookupByLibrary.simpleMessage("Registration Number"),
+    "user_profile_registration_number_error" : MessageLookupByLibrary.simpleMessage("Registration number is required!"),
+    "user_profile_save_password" : MessageLookupByLibrary.simpleMessage("Save Password"),
+    "user_profile_vta_payer" : MessageLookupByLibrary.simpleMessage("VTA Payer")
   };
 }

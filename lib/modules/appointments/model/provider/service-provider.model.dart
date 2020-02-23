@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-rating.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/user-provider-schedule.model.dart';
 
 class ServiceProvider {
   int id;
@@ -13,6 +14,8 @@ class ServiceProvider {
   String registrationNumber;
   String image;
   ServiceProviderRating rating;
+  bool isVATPayer;
+  List<UserProviderSchedule> userProviderSchedules;
 
   List<ServiceProviderItem> items = [];
   List<ServiceProviderTimetable> timetables = [];
@@ -27,7 +30,9 @@ class ServiceProvider {
       this.profilePhotoUrl,
       this.registrationNumber,
       this.image,
-      this.rating});
+      this.rating,
+      this.isVATPayer,
+      this.userProviderSchedules});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
     return ServiceProvider(
@@ -44,7 +49,9 @@ class ServiceProvider {
         image: json['image'] != null ? json['image'] : "",
         rating: json["ratingDto"] != null
             ? ServiceProviderRating.fromJson(json["ratingDto"])
-            : null);
+            : null,
+        isVATPayer: json['isVATPayer'] != null ? json['isVATPayer'] : true,
+        userProviderSchedules: _mapUserProviderSchedules(json['schedule']));
   }
 
   Map<String, dynamic> toJson() {
@@ -60,5 +67,17 @@ class ServiceProvider {
     };
 
     return propMap;
+  }
+
+  static _mapUserProviderSchedules(List<dynamic> list) {
+    List<UserProviderSchedule> userProviderSchedules = [];
+
+    if (list != null) {
+      list.forEach((item) {
+        userProviderSchedules.add(UserProviderSchedule.fromJson(item));
+      });
+    }
+
+    return userProviderSchedules;
   }
 }

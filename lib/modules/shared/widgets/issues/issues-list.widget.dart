@@ -67,11 +67,9 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
         decoration:
             InputDecoration(labelText: S.of(context).appointment_create_issues),
         onChanged: (value) {
-          setState(() {
-            issue.name = value;
-          });
+          issue.name = value;
         },
-        controller: TextEditingController(text: issue.name),
+        controller: TextEditingController(),
         validator: (value) {
           if (value.isEmpty) {
             return S.of(context).appointment_create_error_issueCannotBeEmpty;

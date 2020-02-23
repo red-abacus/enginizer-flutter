@@ -2,27 +2,33 @@ import 'dart:async';
 
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/authentication/models/auth.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/authentication/services/auth.service.dart';
+import 'package:enginizer_flutter/modules/authentication/services/user.service.dart';
 import 'package:enginizer_flutter/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   final AuthService _authService = inject<AuthService>();
+  final UserService _userService = inject<UserService>();
+
+  JwtUserDetails authUserDetails;
 
   String _token;
   List<User> users = [];
 
   bool get isAuth {
-    return _token != null;
+    return _token != null && authUserDetails != null;
   }
 
   JwtUser get authUser {
     if (_token == null) {
       return null;
     }
+
     final jwtUser = JwtHelper.parseJwt(_token);
     return JwtUser.fromJson(jwtUser);
   }
@@ -54,6 +60,10 @@ class Auth with ChangeNotifier {
 
     _token = prefs.getString('token');
 
+    if (authUser != null) {
+      this.authUserDetails = await _userService.getUserDetails(authUser.userId);
+    }
+
     notifyListeners();
 
     return true;
@@ -66,6 +76,11 @@ class Auth with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
       prefs.setString("email", email);
+
+      if (authUser != null) {
+        this.authUserDetails = await _userService.getUserDetails(authUser.userId);
+      }
+
       notifyListeners();
       return response;
     } catch (error) {
@@ -86,6 +101,11 @@ class Auth with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
       prefs.setString("email", email);
+
+      if (authUser != null) {
+        this.authUserDetails = await _userService.getUserDetails(authUser.userId);
+      }
+
       notifyListeners();
       return response;
     } catch (error) {

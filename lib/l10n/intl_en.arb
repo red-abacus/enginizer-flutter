@@ -115,6 +115,17 @@
   "estimator_totalProducts": "Total Products",
   "estimator_totalServices": "Total Services",
   "estimator_total": "Total",
+  "user_profile_current_password": "Current Password",
+  "user_profile_new_password": "New Password",
+  "user_profile_confirm_password": "Confirm Password",
+  "user_profile_save_password": "Save Password",
+  "user_profile_fiscal_name": "Fiscal Name",
+  "user_profile_fiscal_name_error": "Fiscal name is required!",
+  "user_profile_registration_number": "Registration Number",
+  "user_profile_registration_number_error": "Registration number is required!",
+  "user_profile_vta_payer": "VTA Payer",
+  "user_profile_cui": "CUI",
+  "user_profile_cui_error": "CUI is required!",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -147,5 +158,6 @@
   "general_scheduled": "Scheduled",
   "general_finished": "Finished",
   "general_estimator": "Estimator",
-  "general_assign": "Assign"
+  "general_assign": "Assign",
+  "general_save_changes": "Save Changes"
 }
