@@ -14,6 +14,16 @@ class Issue {
         items: json['items'] != null ? _mapIssueItems(json['items']) : []);
   }
 
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> propMap = {
+      'id': id,
+      'name': name,
+      'items': items.map((item) => item.toJson()).toList()
+    };
+
+    return propMap;
+  }
+
   static _mapIssueItems(List<dynamic> response) {
     List<IssueItem> issuesItems = [];
     response.forEach((item) {

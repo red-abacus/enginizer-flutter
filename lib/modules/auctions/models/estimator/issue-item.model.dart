@@ -42,4 +42,18 @@ class IssueItem {
         'priceNoVAT': (price - priceVAT).toString(),
         'priceVAT': price.toString(),
       };
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> propMap = {
+      'id': id,
+      'typeId': type?.id,
+      'code': code,
+      'name': name,
+      'quantity': quantity,
+      'price': price,
+      'priceVAT': priceVAT,
+    };
+
+    return propMap;
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -108,16 +107,8 @@ class _EstimatorModalState extends State<EstimatorModal> {
   }
 
   void _addIssueItem(Issue issue) {
-    debugPrint(workEstimatesProvider.estimatorFormState.toString());
-    var issueItem = IssueItem(
-      typeId: workEstimatesProvider.estimatorFormState['type'].id,
-      code: workEstimatesProvider.estimatorFormState['code'].code,
-      name: workEstimatesProvider.estimatorFormState['name'].name,
-      quantity: workEstimatesProvider.estimatorFormState['quantity'],
-      price: workEstimatesProvider.estimatorFormState['price'],
-      priceVAT: workEstimatesProvider.estimatorFormState['priceVAT'],
-    );
-//    widget.addIssueItem(issue, issueItem);
+    Issue estimateIssueRequest = workEstimatesProvider.estimateIssueRequest(issue);
+    widget.addIssueItem(estimateIssueRequest);
   }
 
   void _removeIssueItem(Issue issue, int issueItemId) {

@@ -1,4 +1,6 @@
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
 import 'package:flutter/foundation.dart';
@@ -28,5 +30,36 @@ class WorkEstimatesProvider with ChangeNotifier {
         await this.workEstimatesService.getWorkEstimateDetails(workEstimateId);
     notifyListeners();
     return workEstimateDetails;
+  }
+
+  Future<Issue> addWorkEstimateItem(Issue issue) async {
+    var newIssue = await this
+        .workEstimatesService.addWorkEstimateItem(workEstimateDetails.id, issue);
+    var issueIndex = workEstimateDetails.issues
+        .indexWhere((estimateIssue) => estimateIssue.id == newIssue.id);
+    workEstimateDetails.issues[issueIndex] = newIssue;
+    notifyListeners();
+    return newIssue;
+  }
+
+  Issue estimateIssueRequest(Issue issue) {
+    Issue estimateIssueRequest = Issue();
+
+    estimateIssueRequest.id = issue.id;
+
+    estimateIssueRequest.items = [];
+
+    var issueItem = IssueItem(
+      type: estimatorFormState['type'],
+      code: estimatorFormState['code'].code,
+      name: estimatorFormState['name'].name,
+      quantity: estimatorFormState['quantity'],
+      price: estimatorFormState['price'],
+      priceVAT: estimatorFormState['priceVAT'],
+    );
+
+    estimateIssueRequest.items.add(issueItem);
+
+    return estimateIssueRequest;
   }
 }
