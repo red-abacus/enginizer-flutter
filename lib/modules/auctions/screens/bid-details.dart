@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
@@ -533,9 +534,11 @@ class BidDetailsState extends State<BidDetails> {
             isScrollControlled: true,
             context: context,
             builder: (_) {
+              Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = providerId;
+
               return StatefulBuilder(
                   builder: (BuildContext context, StateSetter state) {
-                return ServiceDetailsModal(serviceProvider);
+                return ServiceDetailsModal();
               });
             });
       }

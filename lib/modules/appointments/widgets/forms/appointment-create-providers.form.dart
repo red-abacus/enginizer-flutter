@@ -1,7 +1,9 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -27,6 +29,7 @@ class AppointmentCreateProvidersFormState
   @override
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -175,15 +178,15 @@ class AppointmentCreateProvidersFormState
                             fontFamily: "Lato"),
                       ),
                       onPressed: () {
-                        Provider.of<ProviderServiceProvider>(context)
-                            .loadProviderServices(currentService);
+                        Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = currentService.id;
+
                         showModalBottomSheet(
                             isScrollControlled: true,
                             context: context,
                             builder: (_) {
                               return StatefulBuilder(builder:
                                   (BuildContext context, StateSetter state) {
-                                return ServiceDetailsModal(currentService);
+                                return ServiceDetailsModal();
                               });
                             });
                       }),

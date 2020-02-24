@@ -9,6 +9,7 @@ class JwtHelper {
 
     final payload = _decodeBase64(parts[1]);
     final payloadMap = json.decode(payload);
+
     if (payloadMap is! Map<String, dynamic>) {
       throw Exception('invalid payload');
     }
