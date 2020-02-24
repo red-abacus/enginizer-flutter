@@ -341,7 +341,7 @@ class CarDetailsState extends State<CarDetails> {
           CropAspectRatioPreset.ratio16x9
         ],
         androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Cropp image',
+            toolbarTitle: 'Crop image',
             toolbarColor: Theme.of(context).primaryColor,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,

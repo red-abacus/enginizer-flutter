@@ -196,4 +196,17 @@ class ProviderService {
 
     return list;
   }
+
+  Future<ServiceProvider> updateServiceProviderDetails(int providerId, String body) async {
+    String path = APPOINTMENTS_PATH + providerId.toString();
+
+    final response = await _dio.patch(path);
+
+    if (response.statusCode == 200) {
+      return ServiceProvider.fromJson(response.data);
+    }
+    else {
+      throw Exception("UPDATE_PROVIDER_DETAILS_FAILED");
+    }
+  }
 }

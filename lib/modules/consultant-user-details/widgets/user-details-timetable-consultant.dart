@@ -48,7 +48,6 @@ class UserDetailsTimetableConsultant extends StatelessWidget {
 
   _hourContainer(UserProviderScheduleSlot slot) {
     return Container(
-      width: 120,
       height: 40,
         child: Container(
           child: new FlatButton(

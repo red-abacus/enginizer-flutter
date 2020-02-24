@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/scheduler.widget.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
@@ -8,6 +10,8 @@ import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class UserDetailsConsultant extends StatefulWidget {
@@ -79,6 +83,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
           padding: EdgeInsets.only(bottom: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               _avatarContainer(),
               _nameContainer(),
@@ -91,7 +96,8 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                   schedules: userConsultantProvider
                       .serviceProvider.userProviderSchedules),
               UserDetailsServicesConsultant(
-                  response: userConsultantProvider.serviceProviderItemsResponse),
+                  response:
+                      userConsultantProvider.serviceProviderItemsResponse),
             ],
           ),
         ),
@@ -105,10 +111,15 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
         width: 140,
         height: 140,
         margin: EdgeInsets.only(top: 20),
-        child: CircleAvatar(
-          child: Image.network(
-            '${userConsultantProvider.serviceProvider?.image}',
-            fit: BoxFit.fill,
+        child: InkWell(
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: () => showCameraDialog(),
+          child: CircleAvatar(
+            child: Image.network(
+              '${userConsultantProvider.serviceProvider?.image}',
+              fit: BoxFit.fill,
+            ),
           ),
         ),
       ),
@@ -317,5 +328,85 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
     );
   }
 
-  _saveDetails() {}
+  _saveDetails() {
+    userConsultantProvider.updateServiceProviderDetails().then((_) {});
+  }
+
+  showCameraDialog() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) => Container(
+              padding: EdgeInsets.only(top: 50, bottom: 50),
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text("Open Camera"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.camera);
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  ),
+                  RaisedButton(
+                    child: Text("Open Gallery"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.gallery);
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  ),
+                ],
+              ),
+            ));
+  }
+
+  Future getImage(ImageSource imageSource) async {
+    var image = await ImagePicker.pickImage(source: imageSource);
+    if (image != null) {
+      setState(() {
+        // TODO - handle this image
+//        uploadImage = image;
+      });
+      cropImage(image);
+    }
+  }
+
+  cropImage(image) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: image.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop image',
+            toolbarColor: Theme.of(context).primaryColor,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        ));
+    // TODO - upload image
+//    if(croppedFile!=null)
+//      carProvider.uploadImage(croppedFile);
+//    else
+//      carProvider.uploadImage(image);
+  }
 }

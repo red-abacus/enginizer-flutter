@@ -74,7 +74,11 @@ class ServiceProvider {
 
     if (list != null) {
       list.forEach((item) {
-        userProviderSchedules.add(UserProviderSchedule.fromJson(item));
+        UserProviderSchedule schedule = UserProviderSchedule.fromJson(item);
+
+        if (schedule != null) {
+          userProviderSchedules.add(schedule);
+        }
       });
     }
 

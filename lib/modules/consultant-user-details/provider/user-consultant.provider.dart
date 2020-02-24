@@ -57,4 +57,17 @@ class UserConsultantProvider with ChangeNotifier {
     notifyListeners();
     return this.serviceProviderItemsResponse;
   }
+
+  Future<ServiceProvider> updateServiceProviderDetails() async {
+    var payload = json.encode({
+      'fiscalName': fiscalName,
+      'registrationNumber': registrationNumber,
+      "vtaPayer": vtaPayer.toString(),
+      "cui": cui
+    });
+
+    this.serviceProvider = await _providerService.updateServiceProviderDetails(serviceProvider.id, payload);
+    notifyListeners();
+    return this.serviceProvider;
+  }
 }

@@ -9,10 +9,14 @@ class UserProviderSchedule {
   UserProviderSchedule({this.id, this.dayOfWeek, this.slots});
 
   factory UserProviderSchedule.fromJson(Map<String, dynamic> json) {
-    return UserProviderSchedule(
-        id: json['id'],
-        dayOfWeek: json['dayOfWeek'],
-        slots: _mapScheduleSlots(json['scheduleDto']));
+    if (json['dayOfWeek'] != null) {
+      return UserProviderSchedule(
+          id: json['id'],
+          dayOfWeek: json['dayOfWeek'],
+          slots: _mapScheduleSlots(json['scheduleDto']));
+    }
+
+    return null;
   }
 
   static _mapScheduleSlots(List<dynamic> response) {
