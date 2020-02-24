@@ -6,7 +6,8 @@ import 'package:enginizer_flutter/modules/appointments/model/provider/service-pr
 import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/models/employee.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 
@@ -34,6 +35,13 @@ class ProviderService {
   static const String PROVIDER_EMPLOYEE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String PROVIDER_EMPLOYEE_SUFFIX = '/people-timetable';
+
+  static const String ITEM_TYPES_PATH =
+      '${Environment.PROVIDERS_BASE_API}/itemTypes';
+
+  static const String PROVIDER_ITEMS_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String PROVIDER_ITEMS_SUFFIX = '/items';
 
   Dio _dio = inject<Dio>();
 
@@ -195,5 +203,55 @@ class ProviderService {
     });
 
     return list;
+  }
+
+  Future<List<ItemType>> getItemTypes() async {
+    final response = await _dio.get(ITEM_TYPES_PATH);
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+
+      return _mapItemTypes(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('LOAD_ITEM_TYPES_FAILED');
+    }
+  }
+
+  List<ItemType> _mapItemTypes(List<dynamic> response) {
+    List<ItemType> itemTypes = [];
+    response.forEach((item) {
+      itemTypes.add(ItemType.fromJson(item));
+    });
+    return itemTypes;
+  }
+
+  Future<List<ProviderItem>> getProviderItems(
+      int providerId, Map<String, dynamic> query) async {
+    final response = await _dio.get(_buildProviderItemsPath(providerId),
+        queryParameters: query);
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+
+      return _mapProviderItems(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('LOAD_ITEM_TYPES_FAILED');
+    }
+  }
+
+  _buildProviderItemsPath(int providerId) {
+    return PROVIDER_ITEMS_PREFIX +
+        providerId.toString() +
+        PROVIDER_ITEMS_SUFFIX;
+  }
+
+  List<ProviderItem> _mapProviderItems(List<dynamic> response) {
+    List<ProviderItem> providerItems = [];
+    response.forEach((item) {
+      providerItems.add(ProviderItem.fromJson(item));
+    });
+    return providerItems;
   }
 }

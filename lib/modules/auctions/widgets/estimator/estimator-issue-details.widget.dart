@@ -1,8 +1,11 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-form.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+final estimatorStateKey = new GlobalKey<EstimatorFormState>();
 
 class EstimatorIssueDetails extends StatefulWidget {
   final Issue issue;
@@ -143,7 +146,7 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
           {bool firstColumn = false, bool headerCell = false}) =>
       Container(
         alignment: Alignment.centerLeft,
-        width: firstColumn ? 160 : 120,
+        width: firstColumn ? MediaQuery.of(context).size.width * 0.4 : 120,
         height: 54.0,
         padding: EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
         decoration: BoxDecoration(
@@ -162,7 +165,22 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
         ),
       );
 
-  Widget _buildForm(BuildContext context) => Container();
+  Widget _buildForm(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Column(
+        children: <Widget>[
+          EstimatorForm(key: estimatorStateKey),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: FloatingActionButton(
+                onPressed: () => widget.addIssueItem(widget.issue),
+                child: Icon(Icons.add)),
+          ),
+        ],
+      ),
+    );
+  }
 
   String _translateType(String type) {
     switch (type) {

@@ -10,6 +10,9 @@ import 'package:enginizer_flutter/modules/appointments/model/service-item.model.
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:flutter/widgets.dart';
@@ -21,6 +24,8 @@ class ProviderServiceProvider with ChangeNotifier {
   List<ServiceProvider> serviceProviders = [];
   List<ServiceProviderItem> serviceProviderItems = [];
   List<ServiceProviderSchedule> serviceProviderSchedules = [];
+  List<ItemType> itemTypes = [];
+  List<ProviderItem> providerItems = [];
 
   ProviderService providerService = inject<ProviderService>();
   AppointmentsService appointmentsService = inject<AppointmentsService>();
@@ -94,6 +99,22 @@ class ProviderServiceProvider with ChangeNotifier {
     return response;
   }
 
+  Future<List<ItemType>> loadItemTypes() async {
+    var response = await providerService.getItemTypes();
+    itemTypes = response;
+    notifyListeners();
+    return response;
+  }
+
+  Future<List<ProviderItem>> loadProviderItems(
+      ServiceProvider serviceProvider, IssueItemQuery query) async {
+    var response = await providerService.getProviderItems(
+        serviceProvider.id, query.toJson());
+    providerItems = response;
+    notifyListeners();
+    return response;
+  }
+
   AppointmentRequest appointmentRequest() {
     AppointmentRequest appointmentRequest = AppointmentRequest();
 
@@ -132,7 +153,7 @@ class ProviderServiceProvider with ChangeNotifier {
   }
 
   bool containsPickUpService() {
-    for(ServiceItem serviceItem in this.selectedServiceItems) {
+    for (ServiceItem serviceItem in this.selectedServiceItems) {
       if (serviceItem.name == "PICKUP_RETURN") {
         return true;
       }
@@ -142,12 +163,11 @@ class ProviderServiceProvider with ChangeNotifier {
   }
 
   bool pickUpServiceValidation() {
-    for(ServiceItem serviceItem in this.selectedServiceItems) {
+    for (ServiceItem serviceItem in this.selectedServiceItems) {
       if (serviceItem.name == "PICKUP_RETURN") {
         if (this.pickupAddress.isNotEmpty) {
           return true;
-        }
-        else {
+        } else {
           return false;
         }
       }

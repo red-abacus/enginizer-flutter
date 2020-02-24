@@ -1,8 +1,9 @@
-import 'issue-item-type.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
 
 class IssueItem {
   int id;
-  IssueItemType type;
+  ItemType type;
+  int typeId;
   String code;
   String name;
   int quantity;
@@ -12,6 +13,7 @@ class IssueItem {
   IssueItem(
       {this.id,
       this.type,
+      this.typeId,
       this.code,
       this.name,
       this.quantity,
@@ -22,8 +24,9 @@ class IssueItem {
     return IssueItem(
         id: json['id'],
         type: json['type'] != null
-            ? IssueItemType.fromJson(json['type'])
+            ? ItemType.fromJson(json['type'])
             : null,
+        typeId: json['typeId'],
         code: json['code'],
         name: json['name'],
         quantity: json['quantity'],

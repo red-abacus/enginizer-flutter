@@ -1,28 +1,27 @@
 import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'estimator-issue-details.widget.dart';
 
 class EstimatorModal extends StatefulWidget {
-  final WorkEstimateDetails workEstimateDetails;
   final EstimatorMode mode;
   final bool isContainer;
   final bool isLoading;
 
-  final Function issuesChange;
-  final Function issueChange;
+  final Function addIssueItem;
+  final Function removeIssueItem;
 
   EstimatorModal(
-      {this.workEstimateDetails,
-      this.mode = EstimatorMode.Readonly,
+      {this.mode = EstimatorMode.Readonly,
       this.isContainer = false,
       this.isLoading = false,
-      this.issuesChange,
-      this.issueChange});
+      this.addIssueItem,
+      this.removeIssueItem});
 
   @override
   _EstimatorModalState createState() => _EstimatorModalState();
@@ -32,9 +31,14 @@ class _EstimatorModalState extends State<EstimatorModal> {
   int _currentStepIndex = 0;
   List<Step> steps = [];
 
+  WorkEstimatesProvider workEstimatesProvider;
+
   @override
   Widget build(BuildContext context) {
+    workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
+
     steps = _buildSteps(context);
+
     return FractionallySizedBox(
       heightFactor: .8,
       child: Container(
@@ -86,7 +90,7 @@ class _EstimatorModalState extends State<EstimatorModal> {
 
   List<Step> _buildSteps(BuildContext context) {
     List<Step> stepsList = [];
-    List<Issue> issues = widget.workEstimateDetails?.issues ?? [];
+    List<Issue> issues = workEstimatesProvider?.workEstimateDetails?.issues ?? [];
     issues.asMap().forEach((index, issue) {
       stepsList.add(
         Step(
@@ -103,9 +107,22 @@ class _EstimatorModalState extends State<EstimatorModal> {
     return stepsList;
   }
 
-  void _addIssueItem(Issue issue, IssueItem issueItem) {}
+  void _addIssueItem(Issue issue) {
+    debugPrint(workEstimatesProvider.estimatorFormState.toString());
+    var issueItem = IssueItem(
+      typeId: workEstimatesProvider.estimatorFormState['type'].id,
+      code: workEstimatesProvider.estimatorFormState['code'].code,
+      name: workEstimatesProvider.estimatorFormState['name'].name,
+      quantity: workEstimatesProvider.estimatorFormState['quantity'],
+      price: workEstimatesProvider.estimatorFormState['price'],
+      priceVAT: workEstimatesProvider.estimatorFormState['priceVAT'],
+    );
+//    widget.addIssueItem(issue, issueItem);
+  }
 
-  void _removeIssueItem(Issue issue, int issueItemIndex) {}
+  void _removeIssueItem(Issue issue, int issueItemId) {
+//    widget.removeIssueItem(issue, issueItemId);
+  }
 
   _showIssue(int stepIndex) {
     setState(() {

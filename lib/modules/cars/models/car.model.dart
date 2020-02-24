@@ -25,7 +25,7 @@ class Car {
   int mileage;
   DateTime itpExpireDate;
   DateTime rcaExpireDate;
-  int fuelConsumption;
+  String fuelConsumption;
   int ownerId;
 
   Car(

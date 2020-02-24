@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
@@ -270,6 +271,9 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   void _openEstimator(BuildContext ctx) {
+    Provider.of<WorkEstimatesProvider>(context).initValues();
+    Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -279,8 +283,7 @@ class BidDetailsState extends State<BidDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return EstimatorModal(
-                workEstimateDetails: workEstimatesProvider.workEstimateDetails);
+            return EstimatorModal();
           });
         });
   }
