@@ -1,15 +1,14 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-fiscal-widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-items-widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-reviews-widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ServiceDetailsWidget extends StatefulWidget {
-  ServiceProvider serviceProvider;
-
-  ServiceDetailsWidget(this.serviceProvider);
-
   @override
   ServiceDetailsWidgetState createState() => ServiceDetailsWidgetState();
 }
@@ -19,6 +18,8 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ServiceProviderDetailsProvider provider = Provider.of<ServiceProviderDetailsProvider>(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -28,14 +29,14 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
           alignment: Alignment.center,
           height: 200,
           child: Image.network(
-            '${widget.serviceProvider.image}',
+            provider.serviceProvider.image,
             fit: BoxFit.fill,
           ),
         ),
         Container(
           margin: EdgeInsets.only(left: 20, right: 20, top: 10),
           child: Text(
-            widget.serviceProvider.name,
+            provider.serviceProvider.name,
             style: TextStyle(
                 fontFamily: "Lato", fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -57,6 +58,10 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
       case TabBarState.SERVICES:
         return ServiceProviderItemWidget();
         break;
+      case TabBarState.REVIEWS:
+        return ServiceProviderReviewsWidget();
+      case TabBarState.FISCAL:
+        return ServiceProviderFiscalInfoWidget();
       default:
     }
   }

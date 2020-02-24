@@ -2,7 +2,7 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/assign-employee-consultant-modal.dart';

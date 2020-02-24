@@ -100,6 +100,15 @@
   "appointment_details_task_add_issue": "Issue description",
   "appointment_details_car_details_error": "Car details couldn't be displayed",
   "appointment_details_service_history_error": "There's no service history data yet",
+  "appointment_details_service_vta_payer": "VTA Payer",
+  "appointment_reviews_executed_appointments": "Executed appointments:",
+  "appointment_reviews_respected_appointments": "Respected appointments:",
+  "appointment_reviews_average_contact_response_time": "Average contact response time:",
+  "appointment_reviews_average_offer_response_time": "Average offer response time:",
+  "appointment_reviews_global_efficiency": "Global efficiency:",
+  "appointment_client_rating_cleaning": "Cleaning",
+  "appointment_client_rating_kindness": "Kindness",
+  "appointment_client_rating_readiness": "Readiness",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -159,5 +168,7 @@
   "general_scheduled": "Scheduled",
   "general_finished": "Finished",
   "general_estimator": "Estimator",
-  "general_assign": "Assign"
+  "general_assign": "Assign",
+  "general_hour": "hour",
+  "general_hours": "hours"
 }

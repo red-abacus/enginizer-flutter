@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 
 class ServiceProviderItemsResponse {
   int totalPages;

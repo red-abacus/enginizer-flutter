@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
@@ -62,6 +63,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => Auth());
   inject.registerFactory(() => CarsMakeProvider());
   inject.registerFactory(() => ProviderServiceProvider());
+  inject.registerFactory(() => ServiceProviderDetailsProvider());
   inject.registerFactory(() => AppointmentsProvider());
   inject.registerFactory(() => UserProvider());
   inject.registerFactory(() => AppointmentProvider());

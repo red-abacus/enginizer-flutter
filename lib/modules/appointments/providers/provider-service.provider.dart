@@ -1,7 +1,7 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
