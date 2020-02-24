@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +17,7 @@ class EstimatorModal extends StatefulWidget {
   final Function removeIssueItem;
 
   EstimatorModal(
-      {this.mode = EstimatorMode.Readonly,
+      {this.mode = EstimatorMode.ReadOnly,
       this.isContainer = false,
       this.isLoading = false,
       this.addIssueItem,
@@ -96,6 +97,7 @@ class _EstimatorModalState extends State<EstimatorModal> {
           isActive: _isStepActive(index),
           title: Text((issue.name?.isNotEmpty ?? false) ? issue.name : 'N/A'),
           content: EstimatorIssueDetails(
+            mode: widget.mode,
             issue: issue,
             addIssueItem: _addIssueItem,
             removeIssueItem: _removeIssueItem,
@@ -111,8 +113,8 @@ class _EstimatorModalState extends State<EstimatorModal> {
     widget.addIssueItem(estimateIssueRequest);
   }
 
-  void _removeIssueItem(Issue issue, int issueItemId) {
-//    widget.removeIssueItem(issue, issueItemId);
+  void _removeIssueItem(Issue issue, IssueItem issueItem) {
+    widget.removeIssueItem(issue, issueItem);
   }
 
   _showIssue(int stepIndex) {

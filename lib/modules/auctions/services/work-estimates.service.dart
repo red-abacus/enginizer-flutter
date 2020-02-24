@@ -44,6 +44,18 @@ class WorkEstimatesService {
     }
   }
 
+  Future<bool> deleteWorkEstimateItem(int id, int itemId) async {
+    final response = await _dio.delete('${_buildWorkEstimateItemsPath(id)}/$itemId');
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, return true.
+      return true;
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('DELETE_WORK_ESTIMATE_ITEM_FAILED');
+    }
+  }
+
   _buildWorkEstimateItemsPath(int workEstimateId) {
     return WORK_ESTIMATE_ITEMS_PREFIX +
         workEstimateId.toString() +

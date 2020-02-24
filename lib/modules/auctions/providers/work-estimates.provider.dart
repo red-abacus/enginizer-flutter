@@ -42,6 +42,20 @@ class WorkEstimatesProvider with ChangeNotifier {
     return newIssue;
   }
 
+  Future<bool> deleteWorkEstimateItem(Issue issue, IssueItem issueItem) async {
+    var estimateItemDeleted = await this
+        .workEstimatesService.deleteWorkEstimateItem(workEstimateDetails.id, issueItem.id);
+    if (estimateItemDeleted) {
+      var issueIndex = workEstimateDetails.issues
+          .indexWhere((estimateIssue) => estimateIssue.id == issue.id);
+      var estimateItemIndex = workEstimateDetails.issues[issueIndex].items
+          .indexWhere((estimateIssueItem) => estimateIssueItem.id == issueItem.id);
+      workEstimateDetails.issues[issueIndex].items.removeAt(estimateItemIndex);
+    }
+    notifyListeners();
+    return estimateItemDeleted;
+  }
+
   Issue estimateIssueRequest(Issue issue) {
     Issue estimateIssueRequest = Issue();
 

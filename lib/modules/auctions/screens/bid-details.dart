@@ -5,6 +5,8 @@ import 'package:enginizer_flutter/modules/appointments/providers/provider-servic
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
@@ -285,7 +287,11 @@ class BidDetailsState extends State<BidDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return EstimatorModal(addIssueItem: _addIssueItem);
+                return EstimatorModal(
+              mode: EstimatorMode.Create,
+              addIssueItem: _addIssueItem,
+              removeIssueItem: _removeIssueItem,
+            );
           });
         });
   }
@@ -294,6 +300,10 @@ class BidDetailsState extends State<BidDetails> {
     workEstimatesProvider.addWorkEstimateItem(issue).then((_) {
       workEstimatesProvider.initValues();
     });
+  }
+
+  _removeIssueItem(Issue issue, IssueItem issueItem) {
+    workEstimatesProvider.deleteWorkEstimateItem(issue, issueItem);
   }
 
   _appointmentDateContainer() {

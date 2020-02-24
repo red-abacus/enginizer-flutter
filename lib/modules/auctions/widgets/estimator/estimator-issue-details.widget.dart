@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-form.widget.dart';
@@ -8,12 +9,13 @@ import 'package:flutter/material.dart';
 final estimatorStateKey = new GlobalKey<EstimatorFormState>();
 
 class EstimatorIssueDetails extends StatefulWidget {
+  final EstimatorMode mode;
   final Issue issue;
 
   final Function addIssueItem;
   final Function removeIssueItem;
 
-  EstimatorIssueDetails({this.issue, this.addIssueItem, this.removeIssueItem});
+  EstimatorIssueDetails({this.mode, this.issue, this.addIssueItem, this.removeIssueItem});
 
   @override
   _EstimatorIssueDetailsState createState() => _EstimatorIssueDetailsState();
@@ -31,7 +33,9 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
         (widget.issue.items.isNotEmpty)
             ? issueItemsTable
             : Text(S.of(context).general_no_entries),
-        issueItemForm,
+        if (widget.mode == EstimatorMode.Create ||
+            widget.mode == EstimatorMode.Edit)
+          issueItemForm,
       ],
     );
   }
@@ -121,6 +125,16 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
                           ),
                         ],
                       ),
+                      if (widget.mode == EstimatorMode.Create ||
+                          widget.mode == EstimatorMode.Edit)
+                        Column(
+                          children: <Widget>[
+                            _buildRemoveButton(null, headerCell: true),
+                            Column(
+                              children: _buildRemoveButtons(issueItems),
+                            )
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -163,6 +177,34 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
             fontSize: 15,
           ),
         ),
+      );
+
+  List<Widget> _buildRemoveButtons(List<IssueItem> issueItems) {
+    List<Widget> cells = [];
+    issueItems.forEach((issueItem) {
+      cells.add(_buildRemoveButton(issueItem));
+    });
+    return cells;
+  }
+
+  Widget _buildRemoveButton(IssueItem issueItem, {bool headerCell = false}) =>
+      Container(
+        alignment: Alignment.center,
+        width: 80,
+        height: 54.0,
+        padding: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10),
+        decoration: BoxDecoration(
+          color: headerCell ? Theme.of(context).primaryColor : Colors.white,
+          border: Border(
+            bottom: BorderSide(width: 1.0, color: Colors.black12),
+          ),
+        ),
+        child: !headerCell
+            ? GestureDetector(
+                onTap: () => widget.removeIssueItem(widget.issue, issueItem),
+                child: Icon(Icons.close,
+                    color: Theme.of(context).accentColor, size: 32))
+            : Container(),
       );
 
   Widget _buildForm(BuildContext context) {

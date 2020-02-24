@@ -1,5 +1,6 @@
 enum EstimatorMode {
+	Create,
 	Edit,
-	Readonly,
+	ReadOnly,
 	Client
 }
