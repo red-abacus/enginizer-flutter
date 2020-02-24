@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
@@ -28,6 +29,7 @@ class AppointmentCreateProvidersFormState
   @override
   Widget build(BuildContext context) {
     providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

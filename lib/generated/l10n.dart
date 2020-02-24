@@ -1262,6 +1262,105 @@ class S {
     );
   }
 
+  String get user_profile_current_password {
+    return Intl.message(
+      'Current Password',
+      name: 'user_profile_current_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_new_password {
+    return Intl.message(
+      'New Password',
+      name: 'user_profile_new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_confirm_password {
+    return Intl.message(
+      'Confirm Password',
+      name: 'user_profile_confirm_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_save_password {
+    return Intl.message(
+      'Save Password',
+      name: 'user_profile_save_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_fiscal_name {
+    return Intl.message(
+      'Fiscal Name',
+      name: 'user_profile_fiscal_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_fiscal_name_error {
+    return Intl.message(
+      'Fiscal name is required!',
+      name: 'user_profile_fiscal_name_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_registration_number {
+    return Intl.message(
+      'Registration Number',
+      name: 'user_profile_registration_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_registration_number_error {
+    return Intl.message(
+      'Registration number is required!',
+      name: 'user_profile_registration_number_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_vta_payer {
+    return Intl.message(
+      'VTA Payer',
+      name: 'user_profile_vta_payer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_cui {
+    return Intl.message(
+      'CUI',
+      name: 'user_profile_cui',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get user_profile_cui_error {
+    return Intl.message(
+      'CUI is required!',
+      name: 'user_profile_cui_error',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get SERVICE {
     return Intl.message(
       'Service',
@@ -1572,6 +1671,15 @@ class S {
     return Intl.message(
       'hours',
       name: 'general_hours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get general_save_changes {
+    return Intl.message(
+      'Save Changes',
+      name: 'general_save_changes',
       desc: '',
       args: [],
     );

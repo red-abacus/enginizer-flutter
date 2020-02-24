@@ -183,6 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "general_no_entries" : MessageLookupByLibrary.simpleMessage("Nu există înregistrări"),
     "general_only" : MessageLookupByLibrary.simpleMessage("Doar"),
     "general_price" : MessageLookupByLibrary.simpleMessage("Pret"),
+    "general_save_changes" : MessageLookupByLibrary.simpleMessage("Salvează Modificările"),
     "general_scheduled" : MessageLookupByLibrary.simpleMessage("Programată"),
     "general_service" : MessageLookupByLibrary.simpleMessage("Serviciu"),
     "general_services" : MessageLookupByLibrary.simpleMessage("Servicii"),
@@ -192,6 +193,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "service_fiscal" : MessageLookupByLibrary.simpleMessage("Fiscal info"),
     "service_promotions" : MessageLookupByLibrary.simpleMessage("Promotions"),
     "service_reviews" : MessageLookupByLibrary.simpleMessage("Reviews"),
-    "service_services" : MessageLookupByLibrary.simpleMessage("Services")
+    "service_services" : MessageLookupByLibrary.simpleMessage("Services"),
+    "user_profile_confirm_password" : MessageLookupByLibrary.simpleMessage("Confirmă parola"),
+    "user_profile_cui" : MessageLookupByLibrary.simpleMessage("CUI"),
+    "user_profile_cui_error" : MessageLookupByLibrary.simpleMessage("CUI este necesar!"),
+    "user_profile_current_password" : MessageLookupByLibrary.simpleMessage("Parola Curentă"),
+    "user_profile_fiscal_name" : MessageLookupByLibrary.simpleMessage("Nume Fiscal"),
+    "user_profile_fiscal_name_error" : MessageLookupByLibrary.simpleMessage("Numele fiscal este necesar!"),
+    "user_profile_new_password" : MessageLookupByLibrary.simpleMessage("Parola Nouă"),
+    "user_profile_registration_number" : MessageLookupByLibrary.simpleMessage("Număr de Inregistrare"),
+    "user_profile_registration_number_error" : MessageLookupByLibrary.simpleMessage("Număr de inregistrare este necesar!"),
+    "user_profile_save_password" : MessageLookupByLibrary.simpleMessage("Salvează Parola"),
+    "user_profile_vta_payer" : MessageLookupByLibrary.simpleMessage("Plătitor de TVA")
   };
 }

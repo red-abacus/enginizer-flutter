@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-rating.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:enginizer_flutter/modules/authentication/models/user-provider-schedule.model.dart';
 
 class ServiceProvider {
   int id;
@@ -14,22 +15,22 @@ class ServiceProvider {
   String image;
   ServiceProviderRating rating;
   bool isVATPayer;
+  List<UserProviderSchedule> userProviderSchedules;
 
   List<ServiceProviderItem> items = [];
   List<ServiceProviderTimetable> timetables = [];
 
-  ServiceProvider(
-      {this.id,
-      this.name,
-      this.address,
-      this.contactPerson,
-      this.cui,
-      this.fiscalName,
-      this.profilePhotoUrl,
-      this.registrationNumber,
-      this.image,
-      this.rating,
-      this.isVATPayer});
+  ServiceProvider({this.id,
+    this.name,
+    this.address,
+    this.contactPerson,
+    this.cui,
+    this.fiscalName,
+    this.profilePhotoUrl,
+    this.registrationNumber,
+    this.image,
+    this.rating, this.isVATPayer,
+    this.userProviderSchedules});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
     return ServiceProvider(
@@ -47,7 +48,8 @@ class ServiceProvider {
         rating: json["ratingDto"] != null
             ? ServiceProviderRating.fromJson(json["ratingDto"])
             : null,
-        isVATPayer: json['isVATPayer']);
+        isVATPayer: json['isVATPayer'] != null ? json['isVATPayer'] : true,
+        userProviderSchedules: _mapUserProviderSchedules(json['schedule']));
   }
 
   Map<String, dynamic> toJson() {
@@ -63,5 +65,21 @@ class ServiceProvider {
     };
 
     return propMap;
+  }
+
+  static _mapUserProviderSchedules(List<dynamic> list) {
+    List<UserProviderSchedule> userProviderSchedules = [];
+
+    if (list != null) {
+      list.forEach((item) {
+        UserProviderSchedule schedule = UserProviderSchedule.fromJson(item);
+
+        if (schedule != null) {
+          userProviderSchedules.add(schedule);
+        }
+      });
+    }
+
+    return userProviderSchedules;
   }
 }
