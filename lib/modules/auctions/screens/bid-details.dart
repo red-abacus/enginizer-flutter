@@ -288,7 +288,7 @@ class BidDetailsState extends State<BidDetails> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return EstimatorModal(
-              mode: EstimatorMode.Create,
+              mode: EstimatorMode.Client,
               addIssueItem: _addIssueItem,
               removeIssueItem: _removeIssueItem,
             );
