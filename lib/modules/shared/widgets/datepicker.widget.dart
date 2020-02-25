@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BasicDateField extends StatelessWidget {
-  final format = DateFormat("yyyy-MM-dd");
+  DateFormat dateFormat = DateFormat("yyyy-MM-dd");
   Function validator;
   Function onChange;
   String labelText;
+  DateTime dateTime;
 
   BasicDateField({this.onChange, this.labelText = '', this.validator});
 
@@ -14,8 +15,9 @@ class BasicDateField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       DateTimeField(
-        format: format,
+        format: dateFormat,
         decoration: InputDecoration(labelText: labelText),
+        initialValue: this.dateTime,
         onShowPicker: (context, currentValue) {
           return showDatePicker(
               context: context,

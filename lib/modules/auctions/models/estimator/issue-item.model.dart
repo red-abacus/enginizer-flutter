@@ -9,6 +9,7 @@ class IssueItem {
   int quantity;
   double price;
   double priceVAT;
+  int issueId;
 
   IssueItem(
       {this.id,
@@ -45,13 +46,14 @@ class IssueItem {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
-      'id': id,
+      'id': id != null ? id : 0,
       'typeId': type?.id,
       'code': code,
       'name': name,
       'quantity': quantity,
       'price': price,
       'priceVAT': priceVAT,
+      'total': (price + priceVAT).toString()
     };
 
     return propMap;

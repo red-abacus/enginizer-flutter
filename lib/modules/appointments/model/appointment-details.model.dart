@@ -1,5 +1,6 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 
@@ -41,5 +42,15 @@ class AppointmentDetail {
       services.add(ServiceItem.fromJson(item));
     });
     return services;
+  }
+
+  List<Issue> getIssues() {
+    List<Issue> list = [];
+
+    for(AppointmentIssue issue in this.issues) {
+      list.add(Issue.fromAppointmentIssue(issue));
+    }
+
+    return list;
   }
 }

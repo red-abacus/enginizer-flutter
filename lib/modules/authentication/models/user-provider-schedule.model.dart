@@ -1,5 +1,4 @@
 import 'package:enginizer_flutter/modules/authentication/models/user-provider-schedule-slot.model.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
 
 class UserProviderSchedule {
   int id;

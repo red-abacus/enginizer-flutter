@@ -122,6 +122,10 @@
   "auction_bid_no_services": "No service.",
   "auction_bid_date_schedule": "Scheduled date",
   "auction_create_estimate": "Create Estimate",
+  "auction_proposed_date": "Proposed Date",
+  "auction_proposed_date_error": "Please select your proposed date",
+  "auction_create_bid": "Create Bid",
+  "auction_create_bid_validation_error": "Please make sure you add an estimation for every issue. Also, make sure the proposed date is selected.",
   "estimator_type": "Type",
   "estimator_typePlaceholder": "Entry type",
   "estimator_code": "Code",
@@ -195,5 +199,6 @@
   "general_assign": "Assign",
   "general_hour": "hour",
   "general_hours": "hours",
-  "general_save_changes": "Save Changes"
+  "general_save_changes": "Save Changes",
+  "general_ok": "Ok"
 }

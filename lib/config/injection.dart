@@ -22,6 +22,7 @@ import 'package:enginizer_flutter/modules/consultant-appointments/providers/appo
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/auctions-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
@@ -75,6 +76,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AuctionsConsultantProvider());
   inject.registerFactory(() => AuctionProvider());
   inject.registerFactory(() => AuctionConsultantProvider());
+  inject.registerFactory(() => CreateWorkEstimateProvider());
   inject.registerFactory(() => WorkEstimatesProvider());
   inject.registerFactory(() => AppointmentsConsultantProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());

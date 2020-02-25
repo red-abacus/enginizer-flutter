@@ -122,6 +122,10 @@
   "auction_bid_no_services": "Niciun serviciu.",
   "auction_bid_date_schedule": "Oră programare",
   "auction_create_estimate": "Crează Deviz",
+  "auction_proposed_date": "Propunere Dată",
+  "auction_proposed_date_error": "Selectează data propusă",
+  "auction_create_bid": "Crează Licitație",
+  "auction_create_bid_validation_error": "Te rog sa fii sigur că ai estimat fiecare problemă raportată. La fel, verifică dacă ai ales data propusă",
   "estimator_type": "Tip",
   "estimator_typePlaceholder": "Tip intrare",
   "estimator_code": "Cod",
@@ -195,5 +199,6 @@
   "general_assign": "Asignează",
   "general_hour": "oră",
   "general_hours": "ore",
-  "general_save_changes": "Salvează Modificările"
+  "general_save_changes": "Salvează Modificările",
+  "general_ok": "Ok"
 }

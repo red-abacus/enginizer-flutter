@@ -2,14 +2,9 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-modal.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,8 +15,9 @@ import 'package:provider/provider.dart';
 class AuctionConsultantWidget extends StatefulWidget {
   final Auction auction;
   final AppointmentDetail appointmentDetail;
+  final Function createBid;
 
-  AuctionConsultantWidget({this.auction, this.appointmentDetail});
+  AuctionConsultantWidget({this.auction, this.appointmentDetail, this.createBid});
 
   @override
   AuctionConsultantWidgetState createState() {
@@ -203,21 +199,25 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
   }
 
   _createEstimate() {
+    if (widget.appointmentDetail != null) {
+      Provider.of<CreateWorkEstimateProvider>(context)
+          .setAppointmentDetails(widget.appointmentDetail);
 
-  }
-
-  _addIssueItem(Issue issue) {
-    WorkEstimatesProvider provider =
-        Provider.of<WorkEstimatesProvider>(context);
-
-    provider.addWorkEstimateItem(issue).then((_) {
-      provider.initValues();
-    });
-  }
-
-  _removeIssueItem(Issue issue, IssueItem issueItem) {
-    WorkEstimatesProvider provider =
-        Provider.of<WorkEstimatesProvider>(context);
-    provider.deleteWorkEstimateItem(issue, issueItem);
+      Provider.of<CreateWorkEstimateProvider>(context).initValues();
+      Provider.of<CreateWorkEstimateProvider>(context).loadItemTypes().then((_) {
+        showModalBottomSheet<void>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                    return CreateEstimatorModal(createBid: widget.createBid);
+                  });
+            });
+      });
+    }
   }
 }

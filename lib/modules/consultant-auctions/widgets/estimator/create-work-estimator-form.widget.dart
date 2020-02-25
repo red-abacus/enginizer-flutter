@@ -1,33 +1,38 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class EstimatorForm extends StatefulWidget {
-  EstimatorForm({Key key}) : super(key: key);
+class CreateWorkEstimatorForm extends StatefulWidget {
+  Function addIssueItem;
+  Issue issue;
+
+  CreateWorkEstimatorForm({Key key, this.addIssueItem, this.issue})
+      : super(key: key);
 
   @override
-  EstimatorFormState createState() => EstimatorFormState();
+  CreateWorkEstimatorFormState createState() => CreateWorkEstimatorFormState();
 }
 
-class EstimatorFormState extends State<EstimatorForm> {
-  final GlobalKey<FormState> formKey = GlobalKey();
+class CreateWorkEstimatorFormState extends State<CreateWorkEstimatorForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    var auctionProvider = Provider.of<AuctionProvider>(context);
-    var providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-    var workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
+    var authProvider = Provider.of<Auth>(context);
+    var provider = Provider.of<CreateWorkEstimateProvider>(context);
+
+    var nameController = provider.estimatorFormState['name'] ?? null;
 
     return Form(
-      key: formKey,
+      key: _formKey,
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -40,9 +45,8 @@ class EstimatorFormState extends State<EstimatorForm> {
                     isExpanded: true,
                     decoration: InputDecoration(
                         labelText: S.of(context).estimator_form_type),
-                    items: _buildTypeDropdownItems(
-                        providerServiceProvider.itemTypes),
-                    value: workEstimatesProvider.estimatorFormState['type'],
+                    items: _buildTypeDropdownItems(provider.itemTypes),
+                    value: provider.estimatorFormState['type'],
                     validator: (value) {
                       if (value == null) {
                         return S
@@ -53,23 +57,17 @@ class EstimatorFormState extends State<EstimatorForm> {
                       }
                     },
                     onChanged: (selectedType) {
-                      providerServiceProvider
-                          .loadProviderItems(
-                              auctionProvider?.selectedBid?.serviceProvider,
+                      provider
+                          .loadProviderItems(authProvider?.authUser?.providerId,
                               IssueItemQuery(typeId: selectedType.id))
                           .then((_) => {
                                 setState(() {
-                                  workEstimatesProvider
-                                          .estimatorFormState['type'] =
+                                  provider.estimatorFormState['type'] =
                                       selectedType;
-                                  workEstimatesProvider
-                                      .estimatorFormState['code'] = null;
-                                  workEstimatesProvider
-                                      .estimatorFormState['name'] = null;
-                                  workEstimatesProvider
-                                      .estimatorFormState['price'] = '';
-                                  workEstimatesProvider
-                                      .estimatorFormState['priceVAT'] = '';
+                                  provider.estimatorFormState['code'] = null;
+                                  provider.estimatorFormState['name'] = null;
+                                  provider.estimatorFormState['price'] = '';
+                                  provider.estimatorFormState['priceVAT'] = '';
                                 })
                               });
                     },
@@ -83,12 +81,10 @@ class EstimatorFormState extends State<EstimatorForm> {
                       isExpanded: true,
                       decoration: InputDecoration(
                           labelText: S.of(context).estimator_form_code),
-                      items: workEstimatesProvider.estimatorFormState['type'] !=
-                              null
-                          ? _buildCodeDropdownItems(
-                              providerServiceProvider.providerItems)
+                      items: provider.estimatorFormState['type'] != null
+                          ? _buildCodeDropdownItems(provider.providerItems)
                           : [],
-                      value: workEstimatesProvider.estimatorFormState['code'],
+                      value: provider.estimatorFormState['code'],
                       validator: (value) {
                         if (value == null) {
                           return S
@@ -99,9 +95,9 @@ class EstimatorFormState extends State<EstimatorForm> {
                         }
                       },
                       onChanged: (selectedProviderItem) {
-                        providerServiceProvider
+                        provider
                             .loadProviderItems(
-                                auctionProvider?.selectedBid?.serviceProvider,
+                                authProvider?.authUser?.providerId,
                                 IssueItemQuery(
                                     typeId: selectedProviderItem.itemType.id,
                                     code: selectedProviderItem.code))
@@ -113,19 +109,14 @@ class EstimatorFormState extends State<EstimatorForm> {
                                                 provider.id ==
                                                 selectedProviderItem.id,
                                             orElse: () => null);
-                                    workEstimatesProvider
-                                            .estimatorFormState['code'] =
+                                    provider.estimatorFormState['code'] =
                                         foundProviderItem;
-                                    workEstimatesProvider
-                                            .estimatorFormState['name'] =
+                                    provider.estimatorFormState['name'] =
                                         foundProviderItem;
-                                    workEstimatesProvider
-                                        .estimatorFormState['quantity'] = 1;
-                                    workEstimatesProvider
-                                            .estimatorFormState['price'] =
+                                    provider.estimatorFormState['quantity'] = 1;
+                                    provider.estimatorFormState['price'] =
                                         foundProviderItem.price;
-                                    workEstimatesProvider
-                                            .estimatorFormState['priceVAT'] =
+                                    provider.estimatorFormState['priceVAT'] =
                                         foundProviderItem.priceVAT;
                                   })
                                 });
@@ -142,12 +133,10 @@ class EstimatorFormState extends State<EstimatorForm> {
                       isExpanded: true,
                       decoration: InputDecoration(
                           labelText: S.of(context).estimator_form_name),
-                      items: workEstimatesProvider.estimatorFormState['type'] !=
-                              null
-                          ? _buildNameDropdownItems(
-                              providerServiceProvider.providerItems)
+                      items: provider.estimatorFormState['type'] != null
+                          ? _buildNameDropdownItems(provider.providerItems)
                           : [],
-                      value: workEstimatesProvider.estimatorFormState['name'],
+                      value: nameController,
                       validator: (value) {
                         if (value == null) {
                           return S
@@ -158,9 +147,9 @@ class EstimatorFormState extends State<EstimatorForm> {
                         }
                       },
                       onChanged: (selectedProviderItem) {
-                        providerServiceProvider
+                        provider
                             .loadProviderItems(
-                                auctionProvider?.selectedBid?.serviceProvider,
+                                authProvider?.authUser?.providerId,
                                 IssueItemQuery(
                                     typeId: selectedProviderItem.itemType.id,
                                     code: selectedProviderItem.code,
@@ -173,19 +162,14 @@ class EstimatorFormState extends State<EstimatorForm> {
                                                 provider.id ==
                                                 selectedProviderItem.id,
                                             orElse: () => null);
-                                    workEstimatesProvider
-                                            .estimatorFormState['code'] =
+                                    provider.estimatorFormState['code'] =
                                         foundProviderItem;
-                                    workEstimatesProvider
-                                            .estimatorFormState['name'] =
+                                    provider.estimatorFormState['name'] =
                                         foundProviderItem;
-                                    workEstimatesProvider
-                                        .estimatorFormState['quantity'] = 1;
-                                    workEstimatesProvider
-                                            .estimatorFormState['price'] =
+                                    provider.estimatorFormState['quantity'] = 1;
+                                    provider.estimatorFormState['price'] =
                                         foundProviderItem.price;
-                                    workEstimatesProvider
-                                            .estimatorFormState['priceVAT'] =
+                                    provider.estimatorFormState['priceVAT'] =
                                         foundProviderItem.priceVAT;
                                   })
                                 });
@@ -200,11 +184,10 @@ class EstimatorFormState extends State<EstimatorForm> {
                         contentPadding: EdgeInsets.symmetric(vertical: 14.5)),
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                        text: workEstimatesProvider
-                            .estimatorFormState['quantity']
-                            .toString()),
+                        text:
+                            provider.estimatorFormState['quantity'].toString()),
                     onChanged: (newQuantity) {
-                      workEstimatesProvider.estimatorFormState['quantity'] =
+                      provider.estimatorFormState['quantity'] =
                           int.parse(newQuantity);
                     },
                     validator: (value) {
@@ -230,10 +213,9 @@ class EstimatorFormState extends State<EstimatorForm> {
                         contentPadding: EdgeInsets.symmetric(vertical: 14.5)),
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                        text: workEstimatesProvider.estimatorFormState['price']
-                            .toString()),
+                        text: provider.estimatorFormState['price'].toString()),
                     onChanged: (newPrice) {
-                      workEstimatesProvider.estimatorFormState['price'] =
+                      provider.estimatorFormState['price'] =
                           double.parse(newPrice);
                     },
                     validator: (value) {
@@ -254,11 +236,10 @@ class EstimatorFormState extends State<EstimatorForm> {
                         contentPadding: EdgeInsets.symmetric(vertical: 14.5)),
                     keyboardType: TextInputType.number,
                     controller: TextEditingController(
-                        text: workEstimatesProvider
-                            .estimatorFormState['priceVAT']
-                            .toString()),
+                        text:
+                            provider.estimatorFormState['priceVAT'].toString()),
                     onChanged: (newPriceVAT) {
-                      workEstimatesProvider.estimatorFormState['priceVAT'] =
+                      provider.estimatorFormState['priceVAT'] =
                           double.parse(newPriceVAT);
                     },
                     validator: (value) {
@@ -273,6 +254,14 @@ class EstimatorFormState extends State<EstimatorForm> {
                   ),
                 ),
               ],
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              child: FloatingActionButton(
+                  onPressed: () => {
+                        widget.addIssueItem(widget.issue)
+                      },
+                  child: Icon(Icons.add)),
             ),
           ],
         ),
@@ -309,6 +298,6 @@ class EstimatorFormState extends State<EstimatorForm> {
   }
 
   valid() {
-    return formKey.currentState.validate();
+    return _formKey.currentState.validate();
   }
 }

@@ -17,6 +17,7 @@ import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/car.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auction-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
@@ -96,6 +97,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionsConsultantProvider()),
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
+          ChangeNotifierProvider.value(value: CreateWorkEstimateProvider()),
           ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
           ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),

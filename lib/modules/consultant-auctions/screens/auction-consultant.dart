@@ -98,6 +98,12 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         ? Center(child: CircularProgressIndicator())
         : AuctionConsultantWidget(
             auction: auctionProvider.selectedAuction,
-            appointmentDetail: auctionProvider.appointmentDetails);
+            appointmentDetail: auctionProvider.appointmentDetails,
+            createBid: _createBid);
+  }
+
+  _createBid(Map<String, dynamic> content) {
+    auctionProvider.createBid(content).then((_) {
+    });
   }
 }
