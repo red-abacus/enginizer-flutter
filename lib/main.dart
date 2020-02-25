@@ -17,6 +17,8 @@ import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/car.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/screens/auction-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +50,8 @@ import 'modules/cars/screens/cars.dart';
 import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
+import 'modules/consultant-auctions/providers/auction-consultant.provider.dart';
+import 'modules/consultant-auctions/providers/auctions-consultant.provider.dart';
 import 'modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart';
@@ -89,7 +93,9 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: UserConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentProvider()),
           ChangeNotifierProvider.value(value: AuctionsProvider()),
+          ChangeNotifierProvider.value(value: AuctionsConsultantProvider()),
           ChangeNotifierProvider.value(value: AuctionProvider()),
+          ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
           ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
           ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
@@ -144,7 +150,9 @@ class AppState extends State<App> {
               Appointments.route: (context) => Appointments(),
               AppointmentDetails.route: (context) => AppointmentDetails(),
               Auctions.route: (context) => Auctions(),
+              AuctionsConsultant.route: (context) => AuctionsConsultant(),
               AuctionDetails.route: (context) => AuctionDetails(),
+              AuctionConsultant.route: (context) => AuctionConsultant(),
               BidDetails.route: (context) => BidDetails(),
               AppointmentsConsultant.route: (context) => AppointmentsConsultant(),
               AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant(),

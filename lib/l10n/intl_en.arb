@@ -121,6 +121,7 @@
   "auction_bid_all_services": "All requested.",
   "auction_bid_no_services": "No service.",
   "auction_bid_date_schedule": "Scheduled date",
+  "auction_create_estimate": "Create Estimate",
   "estimator_type": "Type",
   "estimator_typePlaceholder": "Entry type",
   "estimator_code": "Code",

@@ -1,14 +1,13 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/cards/auction.card.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/cards/auction-consultant.card.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
 
-class AuctionsList extends StatelessWidget {
+class AuctionsConsultantList extends StatelessWidget {
   final List<CarBrand> carBrands;
   final List<Auction> auctions;
 
@@ -19,14 +18,14 @@ class AuctionsList extends StatelessWidget {
   AuctionStatus auctionStatus;
   CarBrand carBrand;
 
-  AuctionsList(
+  AuctionsConsultantList(
       {this.carBrands,
-      this.auctions,
-      this.filterAuctions,
-      this.selectAuction,
-      this.searchString,
-      this.auctionStatus,
-      this.carBrand});
+        this.auctions,
+        this.filterAuctions,
+        this.selectAuction,
+        this.searchString,
+        this.auctionStatus,
+        this.carBrand});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class AuctionsList extends StatelessWidget {
         key: Key('searchBar'),
         autofocus: false,
         decoration:
-            InputDecoration(labelText: S.of(context).auctions_search_hint),
+        InputDecoration(labelText: S.of(context).auctions_search_hint),
         onChanged: (val) {
           this.filterAuctions(val, this.auctionStatus, this.carBrand);
         },
@@ -100,7 +99,7 @@ class AuctionsList extends StatelessWidget {
 
   Widget _brandText(BuildContext context) {
     String title =
-        (this.carBrand == null) ? S.of(context).general_car : carBrand.name;
+    (this.carBrand == null) ? S.of(context).general_car : carBrand.name;
 
     return Text(
       title,
@@ -125,7 +124,7 @@ class AuctionsList extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return AuctionConsultantCard(
+            return AuctionCard(
                 auction: auctions[index], selectAuction: _selectAuction);
           },
           itemCount: auctions.length,

@@ -121,6 +121,7 @@
   "auction_bid_all_services": "Toate cele solicitate",
   "auction_bid_no_services": "Niciun serviciu.",
   "auction_bid_date_schedule": "Oră programare",
+  "auction_create_estimate": "Crează Deviz",
   "estimator_type": "Tip",
   "estimator_typePlaceholder": "Tip intrare",
   "estimator_code": "Cod",

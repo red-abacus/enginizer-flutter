@@ -20,6 +20,8 @@ import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
 import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/auction-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/auctions-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
@@ -70,7 +72,9 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => UserConsultantProvider());
   inject.registerFactory(() => AppointmentProvider());
   inject.registerFactory(() => AuctionsProvider());
+  inject.registerFactory(() => AuctionsConsultantProvider());
   inject.registerFactory(() => AuctionProvider());
+  inject.registerFactory(() => AuctionConsultantProvider());
   inject.registerFactory(() => WorkEstimatesProvider());
   inject.registerFactory(() => AppointmentsConsultantProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());

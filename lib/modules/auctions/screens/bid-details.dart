@@ -83,8 +83,6 @@ class BidDetailsState extends State<BidDetails> {
             .then((_) {
           setState(() {
             _isLoading = false;
-
-
           });
         });
       });
@@ -289,7 +287,7 @@ class BidDetailsState extends State<BidDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return EstimatorModal(
+            return EstimatorModal(
               mode: EstimatorMode.Create,
               addIssueItem: _addIssueItem,
               removeIssueItem: _removeIssueItem,
@@ -553,7 +551,9 @@ class BidDetailsState extends State<BidDetails> {
             isScrollControlled: true,
             context: context,
             builder: (_) {
-              Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = providerId;
+              Provider.of<ServiceProviderDetailsProvider>(context,
+                      listen: false)
+                  .serviceProviderId = providerId;
 
               return StatefulBuilder(
                   builder: (BuildContext context, StateSetter state) {

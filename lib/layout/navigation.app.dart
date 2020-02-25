@@ -7,6 +7,7 @@ import 'package:enginizer_flutter/modules/authentication/providers/auth.provider
 import 'package:enginizer_flutter/modules/authentication/providers/user.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
@@ -43,7 +44,7 @@ class NavigationApp extends StatefulWidget {
   static final List<DrawerItem> consultantDrawerItems = [
     new DrawerItem(
         "Appointments", AppointmentsConsultant.route, Icons.event_available),
-    new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
+    new DrawerItem("Auctions", AuctionsConsultant.route, Icons.dashboard)
   ];
 
   static final List<DrawerItem> mechanicDrawerItems = [
@@ -63,7 +64,8 @@ class NavigationApp extends StatefulWidget {
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
       case Roles.ProviderConsultant:
-        return AppointmentsConsultant.route;
+        // TODO - remove this
+        return AuctionsConsultant.route;
       case Roles.ProviderPersonnel:
         return AppointmentsMechanic.route;
       default:
@@ -174,6 +176,8 @@ class _NavigationAppState extends State<NavigationApp> {
         return Appointments();
       case Auctions.route:
         return Auctions();
+      case AuctionsConsultant.route:
+        return AuctionsConsultant();
       case AppointmentsConsultant.route:
         return AppointmentsConsultant();
       case AppointmentsMechanic.route:
