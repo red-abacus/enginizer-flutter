@@ -134,16 +134,7 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
                   ],
                 ),
               ),
-              Container(
-                alignment: Alignment.center,
-                width: 54.0,
-                height: 54.0,
-                child: GestureDetector(
-                    onTap: () =>
-                        widget.removeIssueItem(widget.issue, issueItem),
-                    child: Icon(Icons.close,
-                        color: Theme.of(context).accentColor, size: 32)),
-              ),
+              _getRemoveButton(issueItem),
             ],
           ),
           Opacity(
@@ -157,6 +148,25 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
         ],
       )
     );
+  }
+
+  _getRemoveButton(IssueItem issueItem) {
+    if (widget.mode == EstimatorMode.Edit ||
+    widget.mode == EstimatorMode.Create) {
+      return Container(
+        alignment: Alignment.center,
+        width: 54.0,
+        height: 54.0,
+        child: GestureDetector(
+            onTap: () =>
+                widget.removeIssueItem(widget.issue, issueItem),
+            child: Icon(Icons.close,
+                color: Theme.of(context).accentColor, size: 32)),
+      );
+    }
+    else {
+      return Container();
+    }
   }
 
   Widget _buildForm(BuildContext context) {
