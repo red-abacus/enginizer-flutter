@@ -75,8 +75,10 @@ class AuctionDetailsState extends State<AuctionDetails> {
           .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
-          Provider.of<AuctionProvider>(context, listen: false).isLoading =
-              false;
+          setState(() {
+            Provider.of<AuctionProvider>(context, listen: false).isLoading =
+            false;
+          });
         });
       });
 

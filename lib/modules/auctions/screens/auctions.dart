@@ -32,8 +32,6 @@ class AuctionsState extends State<Auctions> {
 
   @override
   Widget build(BuildContext context) {
-    auctionsProvider = Provider.of<AuctionsProvider>(context, listen: false);
-
     return Consumer<AuctionsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(

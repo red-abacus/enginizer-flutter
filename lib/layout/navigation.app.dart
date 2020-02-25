@@ -47,7 +47,8 @@ class NavigationApp extends StatefulWidget {
   ];
 
   static final List<DrawerItem> mechanicDrawerItems = [
-    new DrawerItem("Appointments", AppointmentsMechanic.route, Icons.event_available)
+    new DrawerItem(
+        "Appointments", AppointmentsMechanic.route, Icons.event_available)
   ];
 
   NavigationApp({this.authUser, this.authUserDetails});

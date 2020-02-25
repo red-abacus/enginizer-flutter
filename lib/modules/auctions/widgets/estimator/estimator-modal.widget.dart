@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estima
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
+import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,46 +52,44 @@ class _EstimatorModalState extends State<EstimatorModal> {
         borderRadius: new BorderRadius.circular(5.0),
         child: Container(
           decoration: new BoxDecoration(
-            color: Theme.of(context).cardColor,
+//            color: Theme.of(context).cardColor,
             borderRadius: new BorderRadius.only(
               topLeft: const Radius.circular(40.0),
               topRight: const Radius.circular(40.0),
             ),
           ),
-          child: Theme(
-            data: ThemeData(
-              accentColor: Theme.of(context).primaryColor,
-              primaryColor: Theme.of(context).primaryColor,
-            ),
-            child: steps.isNotEmpty
-                ? Stepper(
-                    currentStep: _currentStepIndex,
-                    onStepTapped: (stepIndex) => _showIssue(stepIndex),
-                    type: StepperType.vertical,
-                    steps: steps,
-                    controlsBuilder: (BuildContext context,
-                        {VoidCallback onStepContinue,
-                        VoidCallback onStepCancel}) {
-                      return Row(
-                        children: <Widget>[
-                          Container(
-                            child: null,
-                          ),
-                          Container(
-                            child: null,
-                          ),
-                        ],
-                      );
-                    },
-                  )
-                : Container(),
-          ),
+          child: steps.isNotEmpty
+              ? Stepper(
+                  currentStep: _currentStepIndex,
+                  onStepTapped: (stepIndex) => _showIssue(stepIndex),
+                  type: StepperType.horizontal,
+                  steps: steps,
+                  controlsBuilder: (BuildContext context,
+                      {VoidCallback onStepContinue,
+                      VoidCallback onStepCancel}) {
+                    return Row(
+                      children: <Widget>[
+                        Container(
+                          width: 20,
+                          height: 20,
+                          child: null,
+                        ),
+                        Container(
+                          child: null,
+                        ),
+                      ],
+                    );
+                  },
+                )
+              : Container(),
         ),
       );
 
   List<Step> _buildSteps(BuildContext context) {
     List<Step> stepsList = [];
-    List<Issue> issues = workEstimatesProvider?.workEstimateDetails?.issues ?? [];
+    List<Issue> issues =
+        workEstimatesProvider?.workEstimateDetails?.issues ?? [];
+
     issues.asMap().forEach((index, issue) {
       stepsList.add(
         Step(
@@ -109,7 +108,8 @@ class _EstimatorModalState extends State<EstimatorModal> {
   }
 
   void _addIssueItem(Issue issue) {
-    Issue estimateIssueRequest = workEstimatesProvider.estimateIssueRequest(issue);
+    Issue estimateIssueRequest =
+        workEstimatesProvider.estimateIssueRequest(issue);
     widget.addIssueItem(estimateIssueRequest);
   }
 

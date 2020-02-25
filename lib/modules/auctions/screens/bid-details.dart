@@ -83,6 +83,8 @@ class BidDetailsState extends State<BidDetails> {
             .then((_) {
           setState(() {
             _isLoading = false;
+
+
           });
         });
       });
