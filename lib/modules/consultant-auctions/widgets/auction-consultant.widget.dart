@@ -17,7 +17,8 @@ class AuctionConsultantWidget extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function createBid;
 
-  AuctionConsultantWidget({this.auction, this.appointmentDetail, this.createBid});
+  AuctionConsultantWidget(
+      {this.auction, this.appointmentDetail, this.createBid});
 
   @override
   AuctionConsultantWidgetState createState() {
@@ -203,21 +204,18 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       Provider.of<CreateWorkEstimateProvider>(context)
           .setAppointmentDetails(widget.appointmentDetail);
 
-      Provider.of<CreateWorkEstimateProvider>(context).initValues();
-      Provider.of<CreateWorkEstimateProvider>(context).loadItemTypes().then((_) {
-        showModalBottomSheet<void>(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            context: context,
-            isScrollControlled: true,
-            builder: (BuildContext context) {
-              return StatefulBuilder(
-                  builder: (BuildContext context, StateSetter state) {
-                    return CreateEstimatorModal(createBid: widget.createBid);
-                  });
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return CreateEstimatorModal(createBid: widget.createBid);
             });
-      });
+          });
     }
   }
 }

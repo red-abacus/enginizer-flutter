@@ -20,7 +20,8 @@ class AppointmentTimeEntry {
 }
 
 class ServiceProviderTimeEntry {
-  static List<String> entriesFromServiceProviderTimetable(List<ServiceProviderTimetable> timetables) {
+  static List<String> entriesFromServiceProviderTimetable(
+      List<ServiceProviderTimetable> timetables) {
     List<String> entries = [];
 
     for (ServiceProviderTimetable timetable in timetables) {
@@ -40,7 +41,8 @@ class DateEntry {
   DateEntry(this.dateTime);
 
   String dateForAppointment() {
-    return DateUtils.stringFromDate(dateTime, Appointment.scheduledTimeFormat());
+    return DateUtils.stringFromDate(
+        dateTime, Appointment.scheduledTimeFormat());
   }
 }
 
@@ -50,9 +52,8 @@ class CalendarEntry {
 
   CalendarEntry(this.dateTime);
 
-  static List<CalendarEntry> getDateEntries(
-      DateTime currentDate, List<Appointment> appointments,
-      ServiceProvider serviceProvider) {
+  static List<CalendarEntry> getDateEntries(DateTime currentDate,
+      List<Appointment> appointments, ServiceProvider serviceProvider) {
     List<CalendarEntry> calendarEntries = [];
 
     List<String> appointmentEntries =
@@ -75,8 +76,51 @@ class CalendarEntry {
 
         if (serviceProvider == null) {
           dateEntry.status = DateEntryStatus.Free;
+        } else {
+          if (appointmentEntries.contains(dateEntry.dateForAppointment())) {
+            dateEntry.status = DateEntryStatus.Free;
+          }
         }
-        else {
+
+        calendarEntry.entries.add(dateEntry);
+        startDate = DateUtils.addHourToDate(startDate, 1);
+      }
+
+      if (calendarEntry.entries.length > 0) {
+        calendarEntries.add(calendarEntry);
+      }
+
+      startDate = DateUtils.addHourToDate(
+          DateUtils.startOfDay(DateUtils.addDayToDate(startDate, 1)), 8);
+    }
+
+    return calendarEntries;
+  }
+
+  static List<CalendarEntry> getDateEntriesFromTimetable(DateTime currentDate,
+      List<Appointment> appointments, List<ServiceProviderTimetable> timetables) {
+    List<CalendarEntry> calendarEntries = [];
+
+    List<String> appointmentEntries =
+    AppointmentTimeEntry.entriesFromAppointments(appointments);
+
+    if (timetables != null) {
+      appointmentEntries +=
+          ServiceProviderTimeEntry.entriesFromServiceProviderTimetable(timetables);
+    }
+
+    DateTime startDate =
+    DateUtils.addHourToDate(DateUtils.startOfDay(currentDate), 8);
+
+    for (int i = 0; i < 7; i++) {
+      CalendarEntry calendarEntry = CalendarEntry(startDate);
+
+      for (int j = 0; j < 9; j++) {
+        DateEntry dateEntry = DateEntry(startDate);
+
+        if (timetables == null) {
+          dateEntry.status = DateEntryStatus.Free;
+        } else {
           if (appointmentEntries.contains(dateEntry.dateForAppointment())) {
             dateEntry.status = DateEntryStatus.Free;
           }

@@ -24,20 +24,13 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * .5,
       child: SchedulerWidget(
-        // TODO - for now, this feature will be on next versions of app.
-        //        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
-        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), [],
-            Provider.of<ProviderServiceProvider>(context).selectedProvider),
-      ),
+          // TODO - for now, this feature will be on next versions of app.
+          //        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
+          calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), [],
+              Provider.of<ProviderServiceProvider>(context).selectedProvider),
+          dateEntrySelected: _dateEntrySelected,
+          dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry),
     );
-
-/*    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-
-    return SchedulerWidget(
-      calendarEntries:
-          CalendarEntry.getTimeSeries(DateTime.now(), widget.providerSchedules),
-    );
-    */
   }
 
   @override
@@ -66,6 +59,12 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
     }
     _initDone = true;
     super.didChangeDependencies();
+  }
+
+  _dateEntrySelected(DateEntry dateEntry) {
+    setState(() {
+      Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
+    });
   }
 
   bool valid() {

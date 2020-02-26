@@ -1,16 +1,17 @@
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/utils/constants.dart' as Constants;
 import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 
 class SchedulerWidget extends StatefulWidget {
   final List<CalendarEntry> calendarEntries;
+  DateEntry dateEntry;
 
-  SchedulerWidget({this.calendarEntries = const []});
+  Function dateEntrySelected;
+
+  SchedulerWidget({this.calendarEntries = const [], this.dateEntrySelected, this.dateEntry});
 
   @override
   SchedulerWidgetState createState() {
@@ -61,8 +62,7 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
   }
 
   Widget _buildGridCard(DateEntry dateEntry) {
-    DateEntry selectedDateEntry =
-        Provider.of<ProviderServiceProvider>(context).dateEntry;
+    DateEntry selectedDateEntry = widget.dateEntry;
 
     Color boxBackground = Colors.transparent;
     Color textColor = Constants.black_text;
@@ -157,9 +157,7 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
 
   onClicked(DateEntry dateEntry) {
     if (dateEntry.status == DateEntryStatus.Free) {
-      setState(() {
-        Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
-      });
+      widget.dateEntrySelected(dateEntry);
     }
   }
 }

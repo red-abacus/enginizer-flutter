@@ -1,5 +1,7 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
@@ -26,18 +28,24 @@ class CreateWorkEstimateProvider with ChangeNotifier {
   List<Issue> issues = [];
   List<ItemType> itemTypes = [];
   List<ProviderItem> providerItems = [];
+  List<ServiceProviderTimetable> serviceProviderTimetable = [];
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
-  DateTime proposedDate;
+  DateEntry dateEntry;
 
   void initValues() {
+    dateEntry = null;
     estimatorFormState = Map.from(initialEstimatorFormState);
   }
 
   void setAppointmentDetails(AppointmentDetail appointmentDetail) {
     _appointmentDetail = appointmentDetail;
-    issues = _appointmentDetail.getIssues();
+    issues = appointmentDetail.getIssues();
+  }
+
+  AppointmentDetail getAppointmentDetails() {
+    return _appointmentDetail;
   }
 
   Future<List<ItemType>> loadItemTypes() async {
@@ -47,13 +55,22 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     return response;
   }
 
-  Future<List<ProviderItem>> loadProviderItems(
-      int serviceProviderId, IssueItemQuery query) async {
+  Future<List<ProviderItem>> loadProviderItems(int serviceProviderId,
+      IssueItemQuery query) async {
     var response = await providerService.getProviderItems(
         serviceProviderId, query.toJson());
     providerItems = response;
     notifyListeners();
     return response;
+  }
+
+  Future<List<ServiceProviderTimetable>> loadServiceProviderSchedule(
+      int providerId, String startDate, String endDate) async {
+    this.serviceProviderTimetable =
+    await providerService.getServiceProviderTimetables(
+        providerId, startDate, endDate);
+    notifyListeners();
+    return this.serviceProviderTimetable;
   }
 
   addRequestToIssue(Issue issue) {
@@ -66,7 +83,7 @@ class CreateWorkEstimateProvider with ChangeNotifier {
       priceVAT: estimatorFormState['priceVAT'],
     );
 
-    for(Issue temp in issues) {
+    for (Issue temp in issues) {
       if (temp.id == issue.id) {
         issueItem.issueId = issueItem.issueId;
         temp.items.add(issueItem);
@@ -81,25 +98,26 @@ class CreateWorkEstimateProvider with ChangeNotifier {
   bool isValid() {
     bool valid = true;
 
-    for(Issue issue in issues) {
+    for (Issue issue in issues) {
       if (issue.items.length == 0) {
         valid = false;
         break;
       }
     }
 
-    valid = proposedDate != null;
+    valid = dateEntry != null;
 
     return valid;
   }
 
   Map<String, dynamic> createBidContent() {
     Map<String, dynamic> map = new Map();
-    map['proposedDate'] = this.proposedDate != null ? DateUtils.stringFromDate(this.proposedDate, 'dd/MM/yyyy HH:mm') : '';
+    map['proposedDate'] = this.dateEntry != null ? DateUtils.stringFromDate(
+        this.dateEntry.dateTime, 'dd/MM/yyyy HH:mm') : '';
 
     List<dynamic> issuesList = [];
 
-    for(Issue issue in issues) {
+    for (Issue issue in issues) {
       issuesList.add(issue.toCreateJson());
     }
 
