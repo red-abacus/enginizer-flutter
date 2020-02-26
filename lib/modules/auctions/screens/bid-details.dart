@@ -277,6 +277,7 @@ class BidDetailsState extends State<BidDetails> {
   void _openEstimator(BuildContext ctx) {
     Provider.of<WorkEstimatesProvider>(context).initValues();
     Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+    Provider.of<WorkEstimatesProvider>(context).workEstimateId = Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
