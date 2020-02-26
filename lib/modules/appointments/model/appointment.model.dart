@@ -22,7 +22,7 @@ class Appointment {
   String scheduleDateTime;
 
   Car car;
-  List<AppointmentType> appointmentTypes = [];
+  String appointmentType;
   OperatingUnit operatingUnit;
   AppointmentStatus status;
   AppointmentDetail appointmentDetail;
@@ -34,7 +34,7 @@ class Appointment {
       this.createdDate,
       this.scheduleDateTime,
       this.car,
-      this.appointmentTypes,
+      this.appointmentType,
       this.operatingUnit,
       this.status,
       this.name,
@@ -50,9 +50,7 @@ class Appointment {
         scheduleDateTime:
             json['scheduledDateTime'] != null ? json['scheduledDateTime'] : "",
         car: json['car'] != null ? Car.fromJson(json['car']) : null,
-        appointmentTypes: json['appointmentType'] != null
-            ? _mapAppointmentTypes(json['appointmentType'])
-            : [],
+        appointmentType: json['appointmentType'],
         operatingUnit: json['operatingUnit'] != null
             ? OperatingUnit.fromJson(json['operatingUnit'])
             : null,
@@ -79,8 +77,7 @@ class Appointment {
       'createdDate': createdDate,
       'scheduleDateTime': scheduleDateTime,
       'car': car.toJson(),
-      'appointmentTypes':
-          appointmentTypes.map((appointmentType) => appointmentType.toJson()),
+      'appointmentTypes': appointmentType,
       'operatingUnit': operatingUnit.toJson(),
       'status': status.toJson()
     };

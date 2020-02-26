@@ -60,7 +60,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       });
 
       auctionProvider
-          .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
+          .getAuctionDetails(auctionProvider.selectedAuction.id)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -98,12 +98,17 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         ? Center(child: CircularProgressIndicator())
         : AuctionConsultantWidget(
             auction: auctionProvider.selectedAuction,
-            appointmentDetail: auctionProvider.appointmentDetails,
+            auctionDetails: auctionProvider.auctionDetails,
             createBid: _createBid);
   }
 
   _createBid(Map<String, dynamic> content) {
     auctionProvider.createBid(content).then((_) {
+      Navigator.pop(context);
+
+      setState(() {
+        _initDone = false;
+      });
     });
   }
 }

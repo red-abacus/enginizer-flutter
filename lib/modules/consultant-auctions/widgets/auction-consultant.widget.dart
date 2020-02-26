@@ -2,7 +2,15 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
+import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
+import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-modal.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -14,11 +22,10 @@ import 'package:provider/provider.dart';
 
 class AuctionConsultantWidget extends StatefulWidget {
   final Auction auction;
-  final AppointmentDetail appointmentDetail;
+  final AuctionDetail auctionDetails;
   final Function createBid;
 
-  AuctionConsultantWidget(
-      {this.auction, this.appointmentDetail, this.createBid});
+  AuctionConsultantWidget({this.auction, this.auctionDetails, this.createBid});
 
   @override
   AuctionConsultantWidgetState createState() {
@@ -69,9 +76,9 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            if (widget.appointmentDetail != null)
+            if (widget.auctionDetails != null)
               for (ServiceItem serviceItem
-                  in widget.appointmentDetail.serviceItems)
+                  in widget.auctionDetails.serviceItems)
                 _appointmentServiceItem(serviceItem),
             _buildSeparator(),
             Container(
@@ -82,9 +89,9 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                     null, gray2, FontWeight.bold, 13),
               ),
             ),
-            if (widget.appointmentDetail != null)
-              for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
-                _appointmentIssueType(widget.appointmentDetail.issues[i], i),
+            if (widget.auctionDetails != null)
+              for (int i = 0; i < widget.auctionDetails.issues.length; i++)
+                _appointmentIssueType(widget.auctionDetails.issues[i], i),
             _buildSeparator(),
             Container(
               margin: EdgeInsets.only(top: 15),
@@ -99,9 +106,9 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
               child: Row(
                 children: <Widget>[
                   Text(
-                    (widget.appointmentDetail != null &&
-                            widget.appointmentDetail.scheduledDate != null)
-                        ? widget.appointmentDetail.scheduledDate
+                    (widget.auctionDetails != null &&
+                            widget.auctionDetails.scheduledDateTime != null)
+                        ? widget.auctionDetails.scheduledDateTime
                             .replaceAll(" ", " ${S.of(context).general_at} ")
                         : 'N/A',
                     style: TextHelper.customTextStyle(
@@ -112,17 +119,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: FlatButton(
-                child: Text(
-                  // TODO - need proper translation for english version
-                  S.of(context).auction_create_estimate.toUpperCase(),
-                  style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 24),
-                ),
-                onPressed: () {
-                  _createEstimate();
-                },
-              ),
+              child: _getEstimateButton(),
             ),
           ],
         ),
@@ -200,9 +197,9 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
   }
 
   _createEstimate() {
-    if (widget.appointmentDetail != null) {
+    if (widget.auctionDetails != null) {
       Provider.of<CreateWorkEstimateProvider>(context)
-          .setAppointmentDetails(widget.appointmentDetail);
+          .setAuctionDetails(widget.auctionDetails);
 
       showModalBottomSheet<void>(
           shape: RoundedRectangleBorder(
@@ -217,5 +214,64 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
             });
           });
     }
+  }
+
+  _seeEstimate(Bid bid) {
+    if (bid != null && bid.workEstimateId != 0) {
+      Provider.of<WorkEstimatesProvider>(context).initValues();
+      Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+          bid.workEstimateId;
+
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return EstimatorModal(
+                mode: EstimatorMode.ReadOnly,
+                addIssueItem: null,
+                removeIssueItem: null,
+              );
+            });
+          });
+    }
+  }
+
+  _getEstimateButton() {
+    if (widget.auctionDetails != null) {
+      JwtUserDetails userDetails = Provider.of<Auth>(context).authUserDetails;
+
+      if (userDetails != null) {
+        Bid userBid =
+            widget.auctionDetails.getConsultantBid(userDetails.userProvider.id);
+        if (userBid != null) {
+          return FlatButton(
+            child: Text(
+              // TODO - need proper translation for english version
+              S.of(context).auction_bid_estimate.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+            ),
+            onPressed: () {
+              _seeEstimate(userBid);
+            },
+          );
+        }
+      }
+    }
+
+    return FlatButton(
+      child: Text(
+        // TODO - need proper translation for english version
+        S.of(context).auction_create_estimate.toUpperCase(),
+        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+      ),
+      onPressed: () {
+        _createEstimate();
+      },
+    );
   }
 }

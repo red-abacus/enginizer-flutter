@@ -35,8 +35,7 @@ class _CreateEstimatorModalState extends State<CreateEstimatorModal> {
 
   @override
   Widget build(BuildContext context) {
-    if (_createWorkEstimateProvider.getAppointmentDetails() == null ||
-        Provider.of<Auth>(context).authUserDetails == null ||
+    if (Provider.of<Auth>(context).authUserDetails == null ||
         Provider.of<Auth>(context).authUserDetails.userProvider == null) {
       if (!_popped) {
         Navigator.pop(context);

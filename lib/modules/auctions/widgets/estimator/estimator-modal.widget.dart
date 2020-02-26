@@ -2,7 +2,6 @@ import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estima
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,20 +31,66 @@ class _EstimatorModalState extends State<EstimatorModal> {
   int _currentStepIndex = 0;
   List<Step> steps = [];
 
+  bool _isLoading = false;
+  bool _initDone = false;
+
   WorkEstimatesProvider workEstimatesProvider;
 
   @override
   Widget build(BuildContext context) {
     workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
 
-    steps = _buildSteps(context);
-
-    return FractionallySizedBox(
-      heightFactor: .8,
-      child: Container(
-        child: _buildStepper(context),
+    return Consumer<WorkEstimatesProvider>(
+      builder: (context, provider, _) => ClipRRect(
+        borderRadius: new BorderRadius.circular(5.0),
+        child: Container(
+          decoration: new BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20.0),
+                  topRight: const Radius.circular(20.0))),
+          child: Theme(
+            data: ThemeData(
+                accentColor: Theme.of(context).primaryColor,
+                primaryColor: Theme.of(context).primaryColor),
+            child: FractionallySizedBox(
+              heightFactor: .8,
+              child: _buildContent(context),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      WorkEstimatesProvider provider =
+          Provider.of<WorkEstimatesProvider>(context);
+      provider.getWorkEstimateDetails(provider.workEstimateId).then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+
+    _initDone = true;
+
+    super.didChangeDependencies();
+  }
+
+  _buildContent(BuildContext context) {
+    steps = _buildSteps(context);
+
+    return Container(
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : _buildStepper(context));
   }
 
   Widget _buildStepper(BuildContext context) => ClipRRect(

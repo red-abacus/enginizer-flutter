@@ -39,12 +39,13 @@ class Auction {
 
     if (value != null) {
       if (car != null) {
-        filterTitle = StringUtils.containsIgnoreCase(car.registrationNumber, value);
+        filterTitle =
+            StringUtils.containsIgnoreCase(car.registrationNumber, value);
 
         if (car.brand != null) {
           if (car.brand.name != null) {
-            filterTitle =
-                filterTitle || StringUtils.containsIgnoreCase(car.brand.name, value);
+            filterTitle = filterTitle ||
+                StringUtils.containsIgnoreCase(car.brand.name, value);
           }
         }
       }
@@ -56,8 +57,7 @@ class Auction {
       if (auctionStatus == AuctionStatus.ALL || getStatus() == auctionStatus) {
         filterStatus = true;
       }
-    }
-    else {
+    } else {
       filterStatus = true;
     }
 
@@ -69,8 +69,7 @@ class Auction {
           filterBrand = true;
         }
       }
-    }
-    else {
+    } else {
       filterBrand = true;
     }
 

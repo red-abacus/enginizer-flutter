@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 
 import '../../../config/injection.dart';
 import '../../../utils/environment.constants.dart';
@@ -29,6 +31,19 @@ class AuctionsService {
     } else {
       // If that response was not OK, throw an error.
       throw Exception('LOAD_SERVICES_FAILED');
+    }
+  }
+
+  Future<AuctionDetail> getAuctionDetails(int auctionId) async {
+    final response = await _dio.get(AUCTIONS_PATH + "/" + auctionId.toString());
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+
+      return AuctionDetail.fromJson(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('LOAD_AUCTION_DETAILS_ERROR');
     }
   }
 

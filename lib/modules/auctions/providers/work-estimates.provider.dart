@@ -17,6 +17,7 @@ class WorkEstimatesProvider with ChangeNotifier {
 
   WorkEstimatesService workEstimatesService = inject<WorkEstimatesService>();
 
+  int workEstimateId;
   WorkEstimateDetails workEstimateDetails;
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);

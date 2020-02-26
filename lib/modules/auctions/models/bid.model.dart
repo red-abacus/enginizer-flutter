@@ -10,6 +10,7 @@ class Bid {
   String providerAcceptedDateTime;
   int requestedServicesCount;
   String status;
+  int workEstimateId;
 
   Bid(
       {this.id,
@@ -19,7 +20,8 @@ class Bid {
       this.serviceProvider,
       this.providerAcceptedDateTime,
       this.requestedServicesCount,
-      this.status});
+      this.status,
+      this.workEstimateId});
 
   factory Bid.fromJson(Map<String, dynamic> json) {
     return Bid(
@@ -32,7 +34,9 @@ class Bid {
             : null,
         providerAcceptedDateTime: json["providerAcceptedDateTime"],
         requestedServicesCount: json["requestedServicesCount"],
-        status: json["status"]);
+        status: json["status"],
+        workEstimateId:
+            json['workEstimateId'] != null ? json['workEstimateId'] : 0);
   }
 
   DateTime getAcceptedDate() {
@@ -45,7 +49,9 @@ class Bid {
 
   bool filtered(String searchString) {
     if (serviceProvider != null) {
-      if (serviceProvider.name.toLowerCase().contains(searchString.toLowerCase())) {
+      if (serviceProvider.name
+          .toLowerCase()
+          .contains(searchString.toLowerCase())) {
         return true;
       }
     }

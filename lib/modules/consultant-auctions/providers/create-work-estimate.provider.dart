@@ -3,6 +3,7 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment-details
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
+import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
@@ -23,8 +24,6 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     'priceVAT': ''
   };
 
-  AppointmentDetail _appointmentDetail;
-
   List<Issue> issues = [];
   List<ItemType> itemTypes = [];
   List<ProviderItem> providerItems = [];
@@ -39,13 +38,8 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     estimatorFormState = Map.from(initialEstimatorFormState);
   }
 
-  void setAppointmentDetails(AppointmentDetail appointmentDetail) {
-    _appointmentDetail = appointmentDetail;
-    issues = appointmentDetail.getIssues();
-  }
-
-  AppointmentDetail getAppointmentDetails() {
-    return _appointmentDetail;
+  void setAuctionDetails(AuctionDetail auctionDetails) {
+    issues = auctionDetails.getIssues();
   }
 
   Future<List<ItemType>> loadItemTypes() async {

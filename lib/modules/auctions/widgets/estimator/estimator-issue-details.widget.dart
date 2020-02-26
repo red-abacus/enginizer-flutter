@@ -38,8 +38,7 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
           (widget.issue.items.isNotEmpty)
               ? issueItemsTable
               : Text(S.of(context).general_no_entries),
-          if (widget.mode == EstimatorMode.Create ||
-              widget.mode == EstimatorMode.Edit)
+          if (widget.mode == EstimatorMode.Edit)
             issueItemForm,
         ],
       ),
@@ -151,8 +150,7 @@ class _EstimatorIssueDetailsState extends State<EstimatorIssueDetails> {
   }
 
   _getRemoveButton(IssueItem issueItem) {
-    if (widget.mode == EstimatorMode.Edit ||
-    widget.mode == EstimatorMode.Create) {
+    if (widget.mode == EstimatorMode.Edit) {
       return Container(
         alignment: Alignment.center,
         width: 54.0,
