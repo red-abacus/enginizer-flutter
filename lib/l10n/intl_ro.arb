@@ -164,6 +164,8 @@
   "user_profile_vta_payer": "Plătitor de TVA",
   "user_profile_cui": "CUI",
   "user_profile_cui_error": "CUI este necesar!",
+  "work_estimate_status_pending": "În Așteptare",
+  "work_estimate_status_accepted": "Acceptat",
   "SERVICE": "Service",
   "CAR_WASHING": "Spălătorie",
   "PAINT_SHOP": "Vopsire",

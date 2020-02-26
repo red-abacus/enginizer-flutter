@@ -14,7 +14,6 @@ class AuctionsProvider with ChangeNotifier {
   AuctionStatus filterStatus;
   CarBrand filterCarBrand;
   String searchString = "";
-
   List<CarBrand> carBrands = [];
   List<Auction> auctions = [];
 

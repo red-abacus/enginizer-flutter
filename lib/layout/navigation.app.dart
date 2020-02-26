@@ -8,6 +8,7 @@ import 'package:enginizer_flutter/modules/authentication/providers/user.provider
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
@@ -44,7 +45,8 @@ class NavigationApp extends StatefulWidget {
   static final List<DrawerItem> consultantDrawerItems = [
     new DrawerItem(
         "Appointments", AppointmentsConsultant.route, Icons.event_available),
-    new DrawerItem("Auctions", AuctionsConsultant.route, Icons.dashboard)
+    new DrawerItem("Auctions", AuctionsConsultant.route, Icons.dashboard),
+    new DrawerItem("Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard)
   ];
 
   static final List<DrawerItem> mechanicDrawerItems = [
@@ -65,7 +67,7 @@ class NavigationApp extends StatefulWidget {
         return Dashboard.route;
       case Roles.ProviderConsultant:
         // TODO - remove here
-        return AuctionsConsultant.route;
+        return WorkEstimatesConsultant.route;
 //        return AppointmentsConsultant.route;
       case Roles.ProviderPersonnel:
         return AppointmentsMechanic.route;
@@ -185,6 +187,8 @@ class _NavigationAppState extends State<NavigationApp> {
         return AppointmentsMechanic();
       case UserDetailsConsultant.route:
         return UserDetailsConsultant();
+      case WorkEstimatesConsultant.route:
+        return WorkEstimatesConsultant();
       default:
         return new Text("Error");
     }

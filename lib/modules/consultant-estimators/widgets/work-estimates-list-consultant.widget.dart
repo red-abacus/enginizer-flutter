@@ -1,30 +1,30 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/cards/auction-consultant.card.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/widgets/cards/work-estimate-card-consultant.widget.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AuctionsList extends StatelessWidget {
+class WorkEstimatesListConsultantWidget extends StatelessWidget {
   final List<CarBrand> carBrands;
-  final List<Auction> auctions;
+  final List<WorkEstimate> workEstimates;
 
-  Function filterAuctions;
-  Function selectAuction;
+  Function filterWorkEstimates;
+  Function selectWorkEstimate;
 
   String searchString;
-  AuctionStatus auctionStatus;
+  WorkEstimateStatus workEstimateStatus;
   CarBrand carBrand;
 
-  AuctionsList(
+  WorkEstimatesListConsultantWidget(
       {this.carBrands,
-      this.auctions,
-      this.filterAuctions,
-      this.selectAuction,
+      this.workEstimates,
+      this.filterWorkEstimates,
+      this.selectWorkEstimate,
       this.searchString,
-      this.auctionStatus,
+      this.workEstimateStatus,
       this.carBrand});
 
   @override
@@ -36,7 +36,7 @@ class AuctionsList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _buildSearchWidget(context),
+//            _buildSearchBar(context),
             _buildFilterWidget(context),
             _buildList(context),
           ],
@@ -45,16 +45,18 @@ class AuctionsList extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchWidget(BuildContext context) {
+  Widget _buildSearchBar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.0, bottom: 10),
       child: TextField(
         key: Key('searchBar'),
+        style: TextHelper.customTextStyle(null, null, null, null),
         autofocus: false,
-        decoration:
-            InputDecoration(labelText: S.of(context).auctions_search_hint),
+        decoration: InputDecoration(
+            labelText: S
+                .of(context)
+                .appointments_list_search_hint),
         onChanged: (val) {
-          this.filterAuctions(val, this.auctionStatus, this.carBrand);
+          filterWorkEstimates(val, this.workEstimateStatus, this.carBrand);
         },
       ),
     );
@@ -73,26 +75,25 @@ class AuctionsList extends StatelessWidget {
               hint: _statusText(context),
               items: _statusDropdownItems(context),
               onChanged: (newValue) {
-                this.filterAuctions(this.searchString, newValue, this.carBrand);
+                this.filterWorkEstimates(this.searchString, newValue, this.carBrand);
               },
             ),
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            height: 40,
-            child: DropdownButtonFormField(
-              isDense: true,
-              hint: _brandText(context),
-              items: _brandDropdownItems(carBrands),
-              onChanged: (newValue) {
-                this.filterAuctions(
-                    this.searchString, this.auctionStatus, newValue);
-              },
-            ),
-          ),
-        ),
+//        Expanded(
+//          flex: 1,
+//          child: Container(
+//            height: 40,
+//            child: DropdownButtonFormField(
+//              isDense: true,
+//              hint: _brandText(context),
+//              items: _brandDropdownItems(carBrands),
+//              onChanged: (newValue) {
+//                this.filterWorkEstimates(this.searchString, this.workEstimateStatus, newValue);
+//              },
+//            ),
+//          ),
+//        ),
       ],
     );
   }
@@ -108,9 +109,9 @@ class AuctionsList extends StatelessWidget {
   }
 
   Widget _statusText(BuildContext context) {
-    String title = (this.auctionStatus == null)
+    String title = (this.workEstimateStatus == null)
         ? S.of(context).general_status
-        : _titleFromState(this.auctionStatus, context);
+        : _titleFromState(this.workEstimateStatus, context);
 
     return Text(
       title,
@@ -124,26 +125,27 @@ class AuctionsList extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            return AuctionConsultantCard(
-                auction: auctions[index], selectAuction: _selectAuction);
+            return WorkEstimateCardConsultant(
+                workEstimate: workEstimates[index],
+                selectWorkEstimate: _selectWorkEstimate);
           },
-          itemCount: auctions.length,
+          itemCount: workEstimates.length,
         ),
       ),
     );
   }
 
   _statusDropdownItems(BuildContext context) {
-    List<DropdownMenuItem<AuctionStatus>> brandDropdownList = [];
+    List<DropdownMenuItem<WorkEstimateStatus>> brandDropdownList = [];
     brandDropdownList.add(DropdownMenuItem(
-        value: AuctionStatus.IN_BID,
-        child: Text(S.of(context).general_auction)));
+        value: WorkEstimateStatus.PENDING,
+        child: Text(S.of(context).work_estimate_status_pending)));
     brandDropdownList.add(DropdownMenuItem(
-        value: AuctionStatus.FINISHED,
-        child: Text(S.of(context).auctions_finished)));
+        value: WorkEstimateStatus.ACCEPTED,
+        child: Text(S.of(context).work_estimate_status_accepted)));
     brandDropdownList.add(DropdownMenuItem(
-        value: AuctionStatus.ALL,
-        child: Text(S.of(context).general_all.toUpperCase())));
+        value: WorkEstimateStatus.ALL,
+        child: Text(S.of(context).general_all)));
     return brandDropdownList;
   }
 
@@ -154,17 +156,17 @@ class AuctionsList extends StatelessWidget {
     return brandDropdownList;
   }
 
-  _selectAuction(Auction auction) {
-    this.selectAuction(auction);
+  _selectWorkEstimate(WorkEstimate workEstimate) {
+    this.selectWorkEstimate(workEstimate);
   }
 
-  _titleFromState(AuctionStatus status, BuildContext context) {
+  _titleFromState(WorkEstimateStatus status, BuildContext context) {
     switch (status) {
-      case AuctionStatus.IN_BID:
-        return S.of(context).general_auction;
-      case AuctionStatus.FINISHED:
-        return S.of(context).auctions_finished;
-      case AuctionStatus.ALL:
+      case WorkEstimateStatus.PENDING:
+        return S.of(context).work_estimate_status_pending;
+      case WorkEstimateStatus.ACCEPTED:
+        return S.of(context).work_estimate_status_accepted;
+      case WorkEstimateStatus.ALL:
         return S.of(context).general_all;
     }
   }

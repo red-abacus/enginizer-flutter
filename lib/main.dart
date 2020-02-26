@@ -1,6 +1,5 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/layout/navigation.app.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
@@ -20,6 +19,8 @@ import 'package:enginizer_flutter/modules/consultant-appointments/screens/appoin
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auction-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -103,13 +104,15 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentsMechanicProvider()),
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
-          ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider())
+          ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider()),
+          ChangeNotifierProvider.value(value: WorkEstimatesConsultantProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
             home: authProvider.isAuth
-                ? NavigationApp(authUser: authProvider.authUser,
-            authUserDetails: authProvider.authUserDetails)
+                ? NavigationApp(
+                    authUser: authProvider.authUser,
+                    authUserDetails: authProvider.authUserDetails)
                 : FutureBuilder(
                     future: authProvider.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) =>
@@ -156,12 +159,16 @@ class AppState extends State<App> {
               AuctionDetails.route: (context) => AuctionDetails(),
               AuctionConsultant.route: (context) => AuctionConsultant(),
               BidDetails.route: (context) => BidDetails(),
-              AppointmentsConsultant.route: (context) => AppointmentsConsultant(),
-              AppointmentDetailsConsultant.route: (context) => AppointmentDetailsConsultant(),
+              AppointmentsConsultant.route: (context) =>
+                  AppointmentsConsultant(),
+              AppointmentDetailsConsultant.route: (context) =>
+                  AppointmentDetailsConsultant(),
               AppointmentsMechanic.route: (context) => AppointmentsMechanic(),
-              AppointmentDetailsMechanic.route: (context) => AppointmentDetailsMechanic(),
+              AppointmentDetailsMechanic.route: (context) =>
+                  AppointmentDetailsMechanic(),
               UserDetails.route: (context) => UserDetails(),
-              UserDetailsConsultant.route: (context) => UserDetailsConsultant()
+              UserDetailsConsultant.route: (context) => UserDetailsConsultant(),
+              WorkEstimatesConsultant.route: (context) => WorkEstimatesConsultant()
             },
           );
         }));

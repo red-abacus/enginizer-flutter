@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 
 class WorkEstimatesService {
@@ -17,6 +18,19 @@ class WorkEstimatesService {
   Dio _dio = inject<Dio>();
 
   WorkEstimatesService();
+
+  Future<WorkEstimateResponse> getWorkEstimates() async {
+    final response = await _dio.get('$WORK_ESTIMATES_PATH');
+
+    if (response.statusCode < 300) {
+      // If server returns an OK response, parse the JSON.
+
+      return WorkEstimateResponse.fromJson(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('WORK_ESTIMATE_DETAILS_FAILED');
+    }
+  }
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int id) async {
     final response = await _dio.get('$WORK_ESTIMATES_PATH/$id');
@@ -45,7 +59,8 @@ class WorkEstimatesService {
   }
 
   Future<bool> deleteWorkEstimateItem(int id, int itemId) async {
-    final response = await _dio.delete('${_buildWorkEstimateItemsPath(id)}/$itemId');
+    final response =
+        await _dio.delete('${_buildWorkEstimateItemsPath(id)}/$itemId');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, return true.

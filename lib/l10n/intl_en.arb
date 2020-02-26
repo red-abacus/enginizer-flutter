@@ -164,6 +164,8 @@
   "user_profile_vta_payer": "VTA Payer",
   "user_profile_cui": "CUI",
   "user_profile_cui_error": "CUI is required!",
+  "work_estimate_status_pending": "Pending",
+  "work_estimate_status_accepted": "Accepted",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
