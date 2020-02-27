@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
@@ -41,6 +42,7 @@ class Appointment {
       this.serviceProvider});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
+    print('json ${json['status']}');
     return Appointment(
         id: json['id'],
         date: json['date'] != null
@@ -122,18 +124,12 @@ class Appointment {
       statusFilter = true;
     } else {
       statusFilter = false;
+    }
 
-      switch (state) {
-        case AppointmentStatusState.IN_PROGRESS:
-          if (this.status.name.toLowerCase() == "submitted") {
-            statusFilter = true;
-          }
-          break;
-        case AppointmentStatusState.WAITING:
-          break;
-        case AppointmentStatusState.FINISHED:
-          break;
-      }
+    if (state == AppointmentStatusState.ALL) {
+      statusFilter = true;
+    } else {
+      statusFilter = state == getState();
     }
 
     bool timeFilter = false;
@@ -169,5 +165,44 @@ class Appointment {
     }
 
     return gray;
+  }
+
+  AppointmentStatusState getState() {
+    switch (status.name.toLowerCase()) {
+      case 'inwork':
+        return AppointmentStatusState.IN_WORK;
+      case 'pending':
+        return AppointmentStatusState.PENDING;
+      case 'submitted':
+        return AppointmentStatusState.SUBMITTED;
+      case 'scheduled':
+        return AppointmentStatusState.SCHEDULED;
+      default:
+        return AppointmentStatusState.ALL;
+    }
+  }
+
+  static String _titleState(BuildContext context, AppointmentStatusState state) {
+    switch (state) {
+      case AppointmentStatusState.IN_WORK:
+        return S.of(context).appointment_status_in_work;
+      case AppointmentStatusState.PENDING:
+        return S.of(context).appointment_status_pending;
+      case AppointmentStatusState.SUBMITTED:
+        return S.of(context).appointment_status_submitted;
+      case AppointmentStatusState.SCHEDULED:
+        return S.of(context).appointment_status_scheduled;
+      case AppointmentStatusState.ALL:
+        return S.of(context).general_all;
+    }
+  }
+
+  static String getTitleForState(
+      BuildContext buildContext, AppointmentStatusState state) {
+    return _titleState(buildContext, state);
+  }
+
+  String getAppointmentStateTitle(BuildContext buildContext) {
+    return _titleState(buildContext, getState());
   }
 }

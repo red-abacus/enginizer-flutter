@@ -66,9 +66,7 @@ class NavigationApp extends StatefulWidget {
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
       case Roles.ProviderConsultant:
-        // TODO - remove here
-        return WorkEstimatesConsultant.route;
-//        return AppointmentsConsultant.route;
+        return AppointmentsConsultant.route;
       case Roles.ProviderPersonnel:
         return AppointmentsMechanic.route;
       default:

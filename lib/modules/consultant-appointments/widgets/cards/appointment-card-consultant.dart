@@ -38,7 +38,7 @@ class AppointmentCardConsultant extends StatelessWidget {
                 children: <Widget>[
                   _imageContainer(),
                   _textContainer(),
-                  _statusContainer(),
+                  _statusContainer(context),
                 ],
               ),
             ),
@@ -118,12 +118,12 @@ class AppointmentCardConsultant extends StatelessWidget {
     );
   }
 
-  _statusContainer() {
+  _statusContainer(BuildContext context) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(right: 10),
         child: Text(
-          appointment.status.name.toUpperCase(),
+          appointment.getAppointmentStateTitle(context).toUpperCase(),
           textAlign: TextAlign.right,
           style: TextHelper.customTextStyle(
               null, appointment.resolveStatusColor(), FontWeight.bold, 12),

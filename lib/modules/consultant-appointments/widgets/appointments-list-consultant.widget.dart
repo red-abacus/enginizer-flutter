@@ -17,27 +17,20 @@ class AppointmentsListProvider extends StatelessWidget {
   Function selectAppointment;
   Function filterAppointments;
 
-  AppointmentsListProvider({
-    this.appointments,
-    this.selectAppointment,
-    this.filterAppointments,
-    this.searchString,
-    this.appointmentStatusState,
-    this.filterDateTime
-  });
+  AppointmentsListProvider(
+      {this.appointments,
+      this.selectAppointment,
+      this.filterAppointments,
+      this.searchString,
+      this.appointmentStatusState,
+      this.filterDateTime});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       child: Container(
         child: Center(
           child: Column(
@@ -61,11 +54,10 @@ class AppointmentsListProvider extends StatelessWidget {
         style: TextHelper.customTextStyle(null, null, null, null),
         autofocus: false,
         decoration: InputDecoration(
-            labelText: S
-                .of(context)
-                .appointments_list_search_hint),
+            labelText: S.of(context).appointments_list_search_hint),
         onChanged: (val) {
-          filterAppointments(val, this.appointmentStatusState, this.filterDateTime);
+          filterAppointments(
+              val, this.appointmentStatusState, this.filterDateTime);
         },
       ),
     );
@@ -96,11 +88,11 @@ class AppointmentsListProvider extends StatelessWidget {
               child: BasicDateField(
                 labelText: S.of(context).general_date,
                 onChange: (value) {
-                  filterAppointments(this.searchString, this.appointmentStatusState, value);
+                  filterAppointments(
+                      this.searchString, this.appointmentStatusState, value);
                 },
               ),
-            )
-        ),
+            )),
       ],
     );
   }
@@ -123,10 +115,8 @@ class AppointmentsListProvider extends StatelessWidget {
 
   Widget _statusText(BuildContext context) {
     String title = (this.appointmentStatusState == null)
-        ? S
-        .of(context)
-        .general_status
-        : _titleFromState(this.appointmentStatusState, context);
+        ? S.of(context).general_status
+        : Appointment.getTitleForState(context, this.appointmentStatusState);
 
     return Text(
       title,
@@ -134,41 +124,23 @@ class AppointmentsListProvider extends StatelessWidget {
     );
   }
 
-  _titleFromState(AppointmentStatusState status, BuildContext context) {
-    switch (status) {
-      case AppointmentStatusState.WAITING:
-        return S
-            .of(context)
-            .general_new;
-      case AppointmentStatusState.IN_PROGRESS:
-        return S
-            .of(context)
-            .general_scheduled;
-      case AppointmentStatusState.FINISHED:
-        return S
-            .of(context)
-            .general_finished;
-    }
-  }
-
   _statusDropdownItems(BuildContext context) {
     List<DropdownMenuItem<AppointmentStatusState>> brandDropdownList = [];
     brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.WAITING,
-        child: Text(S
-            .of(context)
-            .general_new)));
+        value: AppointmentStatusState.ALL,
+        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.ALL))));
     brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.IN_PROGRESS,
-        child:
-        Text(S
-            .of(context)
-            .general_scheduled)));
+        value: AppointmentStatusState.SCHEDULED,
+        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.SCHEDULED))));
     brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.FINISHED,
-        child: Text(S
-            .of(context)
-            .general_finished)));
+        value: AppointmentStatusState.SUBMITTED,
+        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.SUBMITTED))));
+    brandDropdownList.add(DropdownMenuItem(
+        value: AppointmentStatusState.PENDING,
+        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.PENDING))));
+    brandDropdownList.add(DropdownMenuItem(
+        value: AppointmentStatusState.IN_WORK,
+        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.IN_WORK))));
     return brandDropdownList;
   }
 }

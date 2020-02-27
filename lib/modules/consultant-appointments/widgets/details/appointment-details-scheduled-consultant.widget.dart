@@ -77,6 +77,10 @@ class AppointmentDetailsScheduledConsultantWidgetState
             _titleContainer(S.of(context).appointment_details_assiged_mechanic),
             _mechanicRow(),
             _buildSeparator(),
+            // TODO - need proper translation
+            _titleContainer(S.of(context).appointment_consultant_pick_up_car_title),
+            _pickUpCarForm(),
+            _buildSeparator(),
             _titleContainer(S.of(context).appointment_details_services_title),
             _servicesContainer(),
             _buildSeparator(),
@@ -301,6 +305,39 @@ class AppointmentDetailsScheduledConsultantWidgetState
                 S.of(context).appointment_details_no_mechanic_alert,
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _pickUpCarForm() {
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 20,
+            height: 20,
+            decoration: new BoxDecoration(
+              color: gray,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                // TODO - need proper translation
+                S.of(context).appointment_consultant_no_pick_up_car_form,
+                style:
+                TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
               ),
             ),
           ),
