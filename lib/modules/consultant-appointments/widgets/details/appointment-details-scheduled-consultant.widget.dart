@@ -6,6 +6,7 @@ import 'package:enginizer_flutter/modules/appointments/model/provider/service-pr
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/assign-employee-consultant-modal.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+
+final pickUpCarFormKey = new GlobalKey<PickUpCarFormConsultantModalState>();
 
 class AppointmentDetailsScheduledConsultantWidget extends StatefulWidget {
   Appointment appointment;
@@ -78,7 +81,8 @@ class AppointmentDetailsScheduledConsultantWidgetState
             _mechanicRow(),
             _buildSeparator(),
             // TODO - need proper translation
-            _titleContainer(S.of(context).appointment_consultant_pick_up_car_title),
+            _titleContainer(
+                S.of(context).appointment_consultant_pick_up_car_title),
             _pickUpCarForm(),
             _buildSeparator(),
             _titleContainer(S.of(context).appointment_details_services_title),
@@ -273,7 +277,9 @@ class AppointmentDetailsScheduledConsultantWidgetState
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
             ),
             onPressed: () {
-              _openAssignEmployeeModal();
+              // TODO - need to show employee modal
+              _openPickUpCarForm();
+//              _openAssignEmployeeModal();
             },
           )
         ],
@@ -337,7 +343,7 @@ class AppointmentDetailsScheduledConsultantWidgetState
                 // TODO - need proper translation
                 S.of(context).appointment_consultant_no_pick_up_car_form,
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
               ),
             ),
           ),
@@ -356,9 +362,24 @@ class AppointmentDetailsScheduledConsultantWidgetState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AssignEmployeeConsultantModal(
-                    appointment: widget.appointment);
-              });
+            return AssignEmployeeConsultantModal(
+                appointment: widget.appointment);
+          });
+        });
+  }
+
+  _openPickUpCarForm() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return PickUpCarFormConsultantModal(key: pickUpCarFormKey);
+          });
         });
   }
 }

@@ -51,6 +51,7 @@ import 'modules/cars/screens/car.dart';
 import 'modules/cars/screens/cars.dart';
 import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'modules/consultant-auctions/providers/auctions-consultant.provider.dart';
@@ -106,6 +107,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
           ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider()),
           ChangeNotifierProvider.value(value: WorkEstimatesConsultantProvider()),
+          ChangeNotifierProvider.value(value: PickUpCarFormConsultantProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(

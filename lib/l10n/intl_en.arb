@@ -111,6 +111,16 @@
   "appointment_client_rating_readiness": "Readiness",
   "appointment_consultant_pick_up_car_title": "Receive Car Form",
   "appointment_consultant_no_pick_up_car_form": "There is no receive car form!",
+  "appointment_consultant_car_form_photos_title": "Add Car Images (max 5)",
+  "appointment_consultant_car_form_real_km": "Real km number",
+  "appointment_consultant_car_form_real_km_error": "Add real km number!",
+  "appointment_consultant_car_form_tank_quantity": "Tank quantity",
+  "appointment_consultant_car_form_tank_quantity_error": "Add tank quantity!",
+  "appointment_consultant_car_form_tank_quantity_full": "1/1",
+  "appointment_consultant_car_form_tank_quantity_half": "1/2",
+  "appointment_consultant_car_form_tank_quantity_third": "1/3",
+  "appointment_consultant_car_form_tank_quantity_quarter": "1/4",
+  "appointment_consultant_car_form_tank_quantity_reserv": "Reserv",
   "appointment_status_in_work": "In Work",
   "appointment_status_pending": "Pending",
   "appointment_status_submitted": "Submitted",
@@ -208,5 +218,6 @@
   "general_hour": "hour",
   "general_hours": "hours",
   "general_save_changes": "Save Changes",
-  "general_ok": "Ok"
+  "general_ok": "Ok",
+  "general_add_image": "Add Image"
 }

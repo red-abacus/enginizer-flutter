@@ -20,6 +20,7 @@ import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
 import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/auctions-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
@@ -84,4 +85,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AppointmentsMechanicProvider());
   inject.registerFactory(() => AppointmentMechanicProvider());
   inject.registerFactory(() => WorkEstimatesConsultantProvider());
+  inject.registerFactory(() => PickUpCarFormConsultantProvider());
 }

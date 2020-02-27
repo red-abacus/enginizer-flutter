@@ -7,9 +7,10 @@ class CustomTextFormField extends StatelessWidget {
   final String currentValue;
   final Function listener;
   final bool enabled;
+  final String errorText;
 
   CustomTextFormField(
-      {this.labelText, this.listener, this.currentValue, this.enabled = true});
+      {this.labelText, this.listener, this.currentValue, this.enabled = true, this.errorText});
 
   TextEditingController _textController;
 
@@ -28,7 +29,7 @@ class CustomTextFormField extends StatelessWidget {
         enabled: enabled,
         validator: (value) {
           if (value.isEmpty) {
-            return S.of(context).appointment_create_error_issueCannotBeEmpty;
+            return errorText;
           } else {
             return null;
           }

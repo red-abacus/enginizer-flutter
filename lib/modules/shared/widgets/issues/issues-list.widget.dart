@@ -71,6 +71,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
         issue.name = value;
       },
       currentValue: issue.name,
+      errorText: S.of(context).appointment_create_error_issueCannotBeEmpty,
     );
   }
 }
