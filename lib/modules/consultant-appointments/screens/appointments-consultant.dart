@@ -61,22 +61,8 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    // TODO - remove this
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-                return PickUpCarFormConsultantModal(key: pickUpCarFormKey);
-              });
-        });
-
-//    Provider.of<AppointmentConsultantProvider>(context).selectedAppointment = selectedAppointment;
-//    Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
+    Provider.of<AppointmentConsultantProvider>(context).selectedAppointment = selectedAppointment;
+    Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
   }
 
   _filterAppointments(String string, AppointmentStatusState state,

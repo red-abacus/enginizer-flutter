@@ -121,6 +121,16 @@
   "appointment_consultant_car_form_tank_quantity_third": "1/3",
   "appointment_consultant_car_form_tank_quantity_quarter": "1/4",
   "appointment_consultant_car_form_tank_quantity_reserv": "Reservă",
+  "appointment_consultant_car_form_client_parts": "Piese aduse de client",
+  "appointment_consultant_payment_method": "Modalitate de plată",
+  "appointment_consultant_payment_method_error": "Nu ai ales modalitatea de plată!",
+  "appointment_consultant_payment_cash": "Numerar",
+  "appointment_consultant_payment_transfer": "Virament",
+  "appointment_consultant_payment_card": "Card",
+  "appointment_consultant_car_form_oil_change": "Convenție înlocuire ulei",
+  "appointment_consultant_car_form_oil_change_error": "Convenție înlocuire ulei necompletată!",
+  "appointment_consultant_car_form_damaged_items": "Elemente lipsă sau deteriorate",
+  "appointment_consultant_car_form_observation": "Observații finale",
   "appointment_status_in_work": "În Lucru",
   "appointment_status_pending": "În Așteptare",
   "appointment_status_submitted": "Prezentat",
@@ -219,5 +229,6 @@
   "general_hours": "ore",
   "general_save_changes": "Salvează Modificările",
   "general_ok": "Ok",
-  "general_add_image": "Adaugă Imagine"
+  "general_add_image": "Adaugă Imagine",
+  "general_save": "Salvează"
 }

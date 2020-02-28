@@ -121,6 +121,16 @@
   "appointment_consultant_car_form_tank_quantity_third": "1/3",
   "appointment_consultant_car_form_tank_quantity_quarter": "1/4",
   "appointment_consultant_car_form_tank_quantity_reserv": "Reserv",
+  "appointment_consultant_car_form_client_parts": "Parts brought by the client",
+  "appointment_consultant_payment_method": "Payment method",
+  "appointment_consultant_payment_method_error": "Please select the payment method!",
+  "appointment_consultant_payment_cash": "Cash",
+  "appointment_consultant_payment_transfer": "Transfer",
+  "appointment_consultant_payment_card": "Card",
+  "appointment_consultant_car_form_oil_change": "Oil replacement convention",
+  "appointment_consultant_car_form_oil_change_error": "Add oil replacement convention!",
+  "appointment_consultant_car_form_damaged_items": "Missing or damaged items",
+  "appointment_consultant_car_form_observation": "Final observations",
   "appointment_status_in_work": "In Work",
   "appointment_status_pending": "Pending",
   "appointment_status_submitted": "Submitted",
@@ -219,5 +229,6 @@
   "general_hours": "hours",
   "general_save_changes": "Save Changes",
   "general_ok": "Ok",
-  "general_add_image": "Add Image"
+  "general_add_image": "Add Image",
+  "general_save": "Save"
 }

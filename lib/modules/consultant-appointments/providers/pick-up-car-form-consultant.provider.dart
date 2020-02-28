@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:enginizer_flutter/modules/consultant-appointments/enums/payment-method.enum.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/enums/tank-quantity.enum.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,6 +10,11 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
 
   String km;
   TankQuantity tankQuantity;
+  bool clientParts = false;
+  PaymentMethod paymentMethod;
+  String oilChange;
+  String damagedItems;
+  String observations;
 
   resetParams() {
     files = [];
@@ -16,5 +22,10 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
 
     km = "";
     tankQuantity = null;
+    clientParts = false;
+    paymentMethod = null;
+    oilChange = "";
+    damagedItems = "";
+    observations = "";
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/enums/payment-method.enum.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/enums/tank-quantity.enum.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/pick-up-form/image-selection.widget.dart';
@@ -32,25 +33,32 @@ class PickUpCarFormConsultantModalState
   @override
   Widget build(BuildContext context) {
     return Consumer<PickUpCarFormConsultantProvider>(
-        builder: (context, provider, _) => FractionallySizedBox(
-            heightFactor: .8,
-            child: Container(
-                child: ClipRRect(
-              borderRadius: new BorderRadius.circular(5.0),
-              child: Container(
-                decoration: new BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(20.0),
-                        topRight: const Radius.circular(20.0))),
-                child: Theme(
-                  data: ThemeData(
-                      accentColor: Theme.of(context).primaryColor,
-                      primaryColor: Theme.of(context).primaryColor),
-                  child: _content(),
-                ),
-              ),
-            ))));
+        builder: (context, provider, _) =>
+            FractionallySizedBox(
+                heightFactor: .8,
+                child: Container(
+                    child: ClipRRect(
+                      borderRadius: new BorderRadius.circular(5.0),
+                      child: Container(
+                        decoration: new BoxDecoration(
+                            color: Theme
+                                .of(context)
+                                .cardColor,
+                            borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(20.0),
+                                topRight: const Radius.circular(20.0))),
+                        child: Theme(
+                          data: ThemeData(
+                              accentColor: Theme
+                                  .of(context)
+                                  .primaryColor,
+                              primaryColor: Theme
+                                  .of(context)
+                                  .primaryColor),
+                          child: _content(),
+                        ),
+                      ),
+                    ))));
   }
 
   @override
@@ -72,21 +80,23 @@ class PickUpCarFormConsultantModalState
   _content() {
     return SingleChildScrollView(
         child: Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      child: Padding(
-        padding: EdgeInsets.only(top: 20, bottom: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _addTitle(
-                S.of(context).appointment_consultant_car_form_photos_title),
-            ImageSelectionWidget(addImage: _addImage),
-            _getForm(),
-          ],
-        ),
-      ),
-    ));
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Padding(
+            padding: EdgeInsets.only(top: 20, bottom: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _addTitle(
+                    S
+                        .of(context)
+                        .appointment_consultant_car_form_photos_title),
+                ImageSelectionWidget(addImage: _addImage),
+                _getForm(),
+              ],
+            ),
+          ),
+        ));
   }
 
   _addTitle(String title) {
@@ -103,21 +113,28 @@ class PickUpCarFormConsultantModalState
       key: _formKey,
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CustomTextFormField(
-              labelText: S.of(context).appointment_consultant_car_form_real_km,
+              labelText: S
+                  .of(context)
+                  .appointment_consultant_car_form_real_km,
               listener: (value) {
                 _provider.km = value;
               },
               currentValue: _provider.km,
               errorText:
-                  S.of(context).appointment_consultant_car_form_real_km_error,
+              S
+                  .of(context)
+                  .appointment_consultant_car_form_real_km_error,
             ),
             Container(
               margin: EdgeInsets.only(top: 5),
               child: DropdownButtonFormField(
-                hint: Text(
-                    S.of(context).appointment_consultant_car_form_tank_quantity),
+                hint: Text(S
+                    .of(context)
+                    .appointment_consultant_car_form_tank_quantity),
                 items: _buildTankQuantityDropdownItems(),
                 value: _provider.tankQuantity,
                 validator: (value) {
@@ -135,7 +152,155 @@ class PickUpCarFormConsultantModalState
                   });
                 },
               ),
-            )
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    S
+                        .of(context)
+                        .appointment_consultant_car_form_client_parts,
+                    style: TextHelper.customTextStyle(
+                        null, gray2, FontWeight.normal, 16),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 5),
+                    child: Checkbox(
+                      onChanged: (bool value) {
+                        setState(() {
+                          _provider.clientParts = value;
+                        });
+                      },
+                      value: _provider.clientParts,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: DropdownButtonFormField(
+                hint: Text(S
+                    .of(context)
+                    .appointment_consultant_payment_method),
+                items: _buildPaymentMethodDropdownItems(),
+                value: _provider.paymentMethod,
+                validator: (value) {
+                  if (value == null) {
+                    return S
+                        .of(context)
+                        .appointment_consultant_payment_method_error;
+                  } else {
+                    return null;
+                  }
+                },
+                onChanged: (newValue) {
+                  setState(() {
+                    _provider.paymentMethod = newValue;
+                  });
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: CustomTextFormField(
+                labelText:
+                S
+                    .of(context)
+                    .appointment_consultant_car_form_oil_change,
+                listener: (value) {
+                  _provider.oilChange = value;
+                },
+                currentValue: _provider.oilChange,
+                errorText: S
+                    .of(context)
+                    .appointment_consultant_car_form_oil_change_error,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: _addTitle(
+                  S
+                      .of(context)
+                      .appointment_consultant_car_form_damaged_items),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+                border: Border.all(
+                  color: gray2,
+                  width: 1.0,
+                ),
+              ),
+              margin: EdgeInsets.only(top: 20, left: 10, right: 10),
+              child: Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 5,
+                  onChanged: (value) {
+                    setState(() {
+                      _provider.damagedItems = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: _addTitle(
+                  S
+                      .of(context)
+                      .appointment_consultant_car_form_observation),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+                border: Border.all(
+                  color: gray2,
+                  width: 1.0,
+                ),
+              ),
+              margin: EdgeInsets.only(top: 20, left: 10, right: 10),
+              child: Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 5,
+                  onChanged: (value) {
+                    setState(() {
+                      _provider.observations = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: FlatButton(
+                  child: Text(
+                    S.of(context).general_save.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: "Lato",
+                        color: red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24),
+                  ),
+                  onPressed: () {
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .viewInsets
+                  .bottom,
+            ),
           ],
         ),
       ),
@@ -153,6 +318,19 @@ class PickUpCarFormConsultantModalState
     });
 
     return quantityDropdownList;
+  }
+
+  List<DropdownMenuItem<PaymentMethod>> _buildPaymentMethodDropdownItems() {
+    List<DropdownMenuItem<PaymentMethod>> paymentMethodsList = [];
+
+    PaymentMethodUtilities.paymentMethods().forEach((paymentMethod) {
+      paymentMethodsList.add(DropdownMenuItem(
+          value: paymentMethod,
+          child: Text(PaymentMethodUtilities.titleForPaymentMethod(
+              context, paymentMethod))));
+    });
+
+    return paymentMethodsList;
   }
 
   Future _addImage(int index) async {
@@ -174,7 +352,9 @@ class PickUpCarFormConsultantModalState
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop image',
-            toolbarColor: Theme.of(context).primaryColor,
+            toolbarColor: Theme
+                .of(context)
+                .primaryColor,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),

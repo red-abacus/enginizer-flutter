@@ -8,9 +8,15 @@ class CustomTextFormField extends StatelessWidget {
   final Function listener;
   final bool enabled;
   final String errorText;
+  bool validate = true;
 
   CustomTextFormField(
-      {this.labelText, this.listener, this.currentValue, this.enabled = true, this.errorText});
+      {this.labelText,
+      this.listener,
+      this.currentValue,
+      this.enabled = true,
+      this.errorText,
+      this.validate});
 
   TextEditingController _textController;
 
@@ -28,11 +34,13 @@ class CustomTextFormField extends StatelessWidget {
         controller: _textController,
         enabled: enabled,
         validator: (value) {
-          if (value.isEmpty) {
-            return errorText;
-          } else {
-            return null;
+          if (validate) {
+            if (value.isEmpty) {
+              return errorText;
+            }
           }
+
+          return null;
         });
   }
 }
