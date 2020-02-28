@@ -116,7 +116,7 @@ class AppointmentsListProvider extends StatelessWidget {
   Widget _statusText(BuildContext context) {
     String title = (this.appointmentStatusState == null)
         ? S.of(context).general_status
-        : Appointment.getTitleForState(context, this.appointmentStatusState);
+        : AppointmentStatusStateUtils.title(context, this.appointmentStatusState);
 
     return Text(
       title,
@@ -125,22 +125,12 @@ class AppointmentsListProvider extends StatelessWidget {
   }
 
   _statusDropdownItems(BuildContext context) {
-    List<DropdownMenuItem<AppointmentStatusState>> brandDropdownList = [];
-    brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.ALL,
-        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.ALL))));
-    brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.SCHEDULED,
-        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.SCHEDULED))));
-    brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.SUBMITTED,
-        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.SUBMITTED))));
-    brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.PENDING,
-        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.PENDING))));
-    brandDropdownList.add(DropdownMenuItem(
-        value: AppointmentStatusState.IN_WORK,
-        child: Text(Appointment.getTitleForState(context, AppointmentStatusState.IN_WORK))));
-    return brandDropdownList;
+    List<DropdownMenuItem<AppointmentStatusState>> list = [];
+    AppointmentStatusStateUtils.statuses().forEach((status) {
+      list.add(DropdownMenuItem(
+          value: status,
+          child: Text(AppointmentStatusStateUtils.title(context, status))));
+    });
+    return list;
   }
 }

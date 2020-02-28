@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -5,6 +6,7 @@ import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
+import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 
 class WorkEstimatesService {
@@ -15,9 +17,26 @@ class WorkEstimatesService {
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String WORK_ESTIMATE_ITEMS_SUFFIX = '/items';
 
+  static const String WORK_ESTIMATE_ACCEPT_PREFIX =
+      '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
+  static const String WORK_ESTIMATE_ACCEPT_SUFFIX = '/accept';
+
   Dio _dio = inject<Dio>();
 
   WorkEstimatesService();
+
+  Future<WorkEstimateDetails> addNewWorkEstimate(
+      Map<String, dynamic> content) async {
+    final response =
+        await _dio.post('$WORK_ESTIMATES_PATH', data: jsonEncode(content));
+
+    if (response.statusCode == 200) {
+      return WorkEstimateDetails.fromJson(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('ADD_NEW_WORK_ESTIMATE_FAILED');
+    }
+  }
 
   Future<WorkEstimateResponse> getWorkEstimates() async {
     final response = await _dio.get('$WORK_ESTIMATES_PATH');
@@ -79,5 +98,27 @@ class WorkEstimatesService {
 
   Issue _mapIssue(dynamic response) {
     return Issue.fromJson(response);
+  }
+
+  Future<WorkEstimate> acceptWorkEstimate(
+      int workEstimateId, String proposedDate) async {
+    Map<String, dynamic> map = new Map();
+    
+    final response = await _dio.patch(_buildAcceptWorkEstimate(workEstimateId),
+        data: jsonEncode(map));
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      return WorkEstimate.fromJson(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('ADD_WORK_ESTIMATE_ITEM_FAILED');
+    }
+  }
+
+  _buildAcceptWorkEstimate(int workEstimateId) {
+    return WORK_ESTIMATE_ACCEPT_PREFIX +
+        workEstimateId.toString() +
+        WORK_ESTIMATE_ACCEPT_SUFFIX;
   }
 }

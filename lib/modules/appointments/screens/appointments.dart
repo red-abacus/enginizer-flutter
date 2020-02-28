@@ -25,21 +25,22 @@ class Appointments extends StatefulWidget {
 
 class AppointmentsState extends State<Appointments> {
   String route;
-  var _initDone = false;
   var _isLoading = false;
 
   List<Appointment> _appointments = [];
+
+  AppointmentsProvider _appointmentsProvider;
 
   AppointmentsState({this.route});
 
   @override
   Widget build(BuildContext context) {
-    _appointments = Provider.of<AppointmentsProvider>(context).appointments;
+    _appointmentsProvider = Provider.of<AppointmentsProvider>(context);
 
     return Consumer<AppointmentsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
-          child: _renderAppointments(_isLoading, _appointments),
+          child: _renderAppointments(_isLoading, _appointmentsProvider.appointments),
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
@@ -53,7 +54,9 @@ class AppointmentsState extends State<Appointments> {
 
   @override
   void didChangeDependencies() {
-    if (!_initDone) {
+    _appointmentsProvider = Provider.of<AppointmentsProvider>(context);
+
+    if (!_appointmentsProvider.initDone) {
       setState(() {
         _isLoading = true;
       });
@@ -62,7 +65,7 @@ class AppointmentsState extends State<Appointments> {
         _isLoading = false;
       });
     }
-    _initDone = true;
+    _appointmentsProvider.initDone = true;
 
     super.didChangeDependencies();
   }

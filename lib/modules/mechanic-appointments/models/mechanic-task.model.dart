@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 
 class MechanicTask {
   int id;
   String name;
   bool completed;
-  List<AppointmentIssue> issues;
+  List<Issue> issues;
 
   MechanicTask({this.id, this.name, this.completed, this.issues = const []});
 
@@ -17,9 +17,9 @@ class MechanicTask {
   }
 
   static _mapIssues(List<dynamic> response) {
-    List<AppointmentIssue> issues = [];
+    List<Issue> issues = [];
     response.forEach((item) {
-      issues.add(AppointmentIssue.fromJson(item));
+      issues.add(Issue.fromJson(item));
     });
     return issues;
   }

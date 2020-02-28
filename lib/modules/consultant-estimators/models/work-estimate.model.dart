@@ -4,7 +4,6 @@ import 'package:enginizer_flutter/modules/appointments/model/provider/service-pr
 import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
-import 'package:enginizer_flutter/utils/string.utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimate {

@@ -1,11 +1,11 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentDetailsTaskIssuesList extends StatefulWidget {
-  final List<AppointmentIssue> issues;
+  final List<Issue> issues;
 
   final Function addIssue;
   final Function removeIssue;
@@ -32,7 +32,7 @@ class _AppointmentDetailsTaskIssuesListState
   }
 
   ListTile _buildListTile(
-      BuildContext context, int index, List<AppointmentIssue> issues) {
+      BuildContext context, int index, List<Issue> issues) {
     return ListTile(
       title: _tileTextFormField(issues[index], _isLastTile(index)),
       trailing: Row(
@@ -53,7 +53,7 @@ class _AppointmentDetailsTaskIssuesListState
     );
   }
 
-  _tileTextFormField(AppointmentIssue issue, bool enabled) {
+  _tileTextFormField(Issue issue, bool enabled) {
     return CustomTextFormField(
       labelText: S.of(context).appointment_details_task_add_issue,
       enabled: enabled,
@@ -62,6 +62,7 @@ class _AppointmentDetailsTaskIssuesListState
       },
       currentValue: issue.name,
       errorText: S.of(context).appointment_create_error_issueCannotBeEmpty,
+      validate: true,
     );
   }
 

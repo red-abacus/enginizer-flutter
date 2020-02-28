@@ -13,15 +13,10 @@ class EstimatorModal extends StatefulWidget {
   final bool isContainer;
   final bool isLoading;
 
-  final Function addIssueItem;
-  final Function removeIssueItem;
-
   EstimatorModal(
       {this.mode = EstimatorMode.ReadOnly,
       this.isContainer = false,
-      this.isLoading = false,
-      this.addIssueItem,
-      this.removeIssueItem});
+      this.isLoading = false});
 
   @override
   _EstimatorModalState createState() => _EstimatorModalState();
@@ -155,11 +150,19 @@ class _EstimatorModalState extends State<EstimatorModal> {
   void _addIssueItem(Issue issue) {
     Issue estimateIssueRequest =
         workEstimatesProvider.estimateIssueRequest(issue);
-    widget.addIssueItem(estimateIssueRequest);
+
+    workEstimatesProvider.addWorkEstimateItem(estimateIssueRequest).then((_) {
+      setState(() {
+        workEstimatesProvider.initValues();
+      });
+    });
   }
 
   void _removeIssueItem(Issue issue, IssueItem issueItem) {
-    widget.removeIssueItem(issue, issueItem);
+    workEstimatesProvider.deleteWorkEstimateItem(issue, issueItem).then((_) {
+      setState(() {
+      });
+    });
   }
 
   _showIssue(int stepIndex) {

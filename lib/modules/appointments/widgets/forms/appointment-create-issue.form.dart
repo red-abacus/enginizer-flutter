@@ -1,6 +1,6 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-info.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/issues/issues-list.widget.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class AppointmentCreateIssueFormState
     setState(() {
       Provider.of<ProviderServiceProvider>(context)
           .issuesFormState
-          .add(AppointmentIssue(name: ''));
+          .add(Issue(name: ''));
     });
   }
 

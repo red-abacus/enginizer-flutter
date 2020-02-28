@@ -1,12 +1,25 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/request/work-estimate-request.model.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-new-consultant.widget.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-scheduled-consultant.widget.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-modal.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'assign-employee-consultant-modal.dart';
 
 class AppointmentDetailsConsultant extends StatefulWidget {
   static const String route =
@@ -20,7 +33,7 @@ class AppointmentDetailsConsultant extends StatefulWidget {
 
 class AppointmentDetailsConsultantState
     extends State<AppointmentDetailsConsultant> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  AppointmentConsultantProvider _appointmentConsultantProvider;
 
   String route;
 
@@ -34,10 +47,10 @@ class AppointmentDetailsConsultantState
 
   @override
   Widget build(BuildContext context) {
-    AppointmentConsultantProvider provider =
+    _appointmentConsultantProvider =
         Provider.of<AppointmentConsultantProvider>(context);
 
-    if (provider.selectedAppointment == null) {
+    if (_appointmentConsultantProvider.selectedAppointment == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -45,8 +58,12 @@ class AppointmentDetailsConsultantState
 
     return Consumer<AppointmentConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
-            key: _scaffoldKey,
             appBar: AppBar(
+              title: Text(
+                _appointmentConsultantProvider.selectedAppointment?.name,
+                style: TextHelper.customTextStyle(
+                    null, Colors.white, FontWeight.bold, 20),
+              ),
               iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
             ),
             body: _contentWidget()));
@@ -59,12 +76,15 @@ class AppointmentDetailsConsultantState
         _isLoading = true;
       });
 
-      AppointmentConsultantProvider provider =
+      _appointmentConsultantProvider =
           Provider.of<AppointmentConsultantProvider>(context);
-      provider.getAppointmentDetails(provider.selectedAppointment).then((_) {
-        provider
-            .getProviderServices(
-                provider.selectedAppointment.serviceProvider.id)
+      _appointmentConsultantProvider
+          .getAppointmentDetails(
+              _appointmentConsultantProvider.selectedAppointment)
+          .then((_) {
+        _appointmentConsultantProvider
+            .getProviderServices(_appointmentConsultantProvider
+                .selectedAppointment.serviceProvider.id)
             .then((_) {
           setState(() {
             _isLoading = false;
@@ -86,7 +106,7 @@ class AppointmentDetailsConsultantState
         ),
         Expanded(
           child: Container(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+            padding: EdgeInsets.only(top: 20),
             child: _buildContent(),
           ),
         )
@@ -101,31 +121,36 @@ class AppointmentDetailsConsultantState
   }
 
   _getContent() {
-    AppointmentConsultantProvider provider =
-        Provider.of<AppointmentConsultantProvider>(context);
-
     switch (currentState) {
       case AppointmentDetailsStatusState.REQUEST:
-        if (provider.selectedAppointment != null &&
-            provider.selectedAppointment.status.name.toLowerCase() ==
-                "submitted") {
-          return AppointmentDetailsScheduledConsultantWidget(
-              appointment: provider.selectedAppointment,
-              appointmentDetail: provider.selectedAppointmentDetail,
-              serviceItems: provider.selectedAppointmentDetail.serviceItems,
-              serviceProviderItems: provider.serviceProviderItems);
-        } else {
-          return AppointmentDetailsNewConsultantWidget(
-              appointment: provider.selectedAppointment,
-              appointmentDetail: provider.selectedAppointmentDetail,
-              serviceItems: provider.selectedAppointmentDetail?.serviceItems,
-              serviceProviderItems: provider.serviceProviderItems);
-        }
-        break;
+        return _getAppointmentDetailsScreen();
       case AppointmentDetailsStatusState.CAR:
-        // TODO - need to add car details when finished
         return Container();
         break;
+    }
+  }
+
+  _getAppointmentDetailsScreen() {
+    switch (_appointmentConsultantProvider.selectedAppointment.getState()) {
+      case AppointmentStatusState.SUBMITTED:
+      case AppointmentStatusState.PENDING:
+      case AppointmentStatusState.SCHEDULED:
+        return AppointmentDetailsGenericConsultantWidget(
+          appointment: _appointmentConsultantProvider.selectedAppointment,
+          appointmentDetail:
+              _appointmentConsultantProvider.selectedAppointmentDetail,
+          serviceItems: _appointmentConsultantProvider
+              .selectedAppointmentDetail.serviceItems,
+          serviceProviderItems:
+              _appointmentConsultantProvider.serviceProviderItems,
+          declineAppointment: _declineAppointment,
+          createEstimate: _createEstimate,
+          editEstimate: _editEstimate,
+          assignMechanic: _assignMechanic,
+          createPickUpCarForm: _createPickUpCarForm,
+        );
+      default:
+        return Container();
     }
   }
 
@@ -150,7 +175,7 @@ class AppointmentDetailsConsultantState
           child: Center(
             child: FlatButton(
               child: Text(
-                stateTitle(state, context),
+                _stateTitle(state, context),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Lato",
@@ -172,12 +197,115 @@ class AppointmentDetailsConsultantState
     );
   }
 
-  String stateTitle(AppointmentDetailsStatusState state, BuildContext context) {
+  String _stateTitle(
+      AppointmentDetailsStatusState state, BuildContext context) {
     switch (state) {
       case AppointmentDetailsStatusState.REQUEST:
         return S.of(context).appointment_details_request;
       case AppointmentDetailsStatusState.CAR:
         return S.of(context).appointment_details_car;
     }
+
+    return '';
+  }
+
+  _declineAppointment(Appointment appointment) {
+    _appointmentConsultantProvider
+        .cancelAppointment(appointment)
+        .then((appointment) {
+      Provider.of<AppointmentsConsultantProvider>(context)
+          .refreshAppointment(appointment);
+
+      setState(() {
+        _initDone = false;
+      });
+    });
+  }
+
+  _createEstimate() {
+    if (_appointmentConsultantProvider.selectedAppointmentDetail != null) {
+      Provider.of<CreateWorkEstimateProvider>(context).refreshValues();
+      Provider.of<CreateWorkEstimateProvider>(context).setIssues(
+          _appointmentConsultantProvider.selectedAppointmentDetail.issues);
+
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return CreateEstimatorModal(createBid: _createWorkEstimate);
+            });
+          });
+    }
+  }
+
+  _editEstimate() {
+    Provider.of<WorkEstimatesProvider>(context).initValues();
+    Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+    Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+        _appointmentConsultantProvider.selectedAppointmentDetail.workEstimateId;
+    Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+        _appointmentConsultantProvider.selectedAppointment.serviceProvider;
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return EstimatorModal(mode: EstimatorMode.Edit);
+          });
+        });
+  }
+
+  _createWorkEstimate(WorkEstimateRequest workEstimateRequest) {
+    _appointmentConsultantProvider
+        .createWorkEstimate(
+            _appointmentConsultantProvider.selectedAppointment.id,
+            _appointmentConsultantProvider.selectedAppointmentDetail.car.id,
+            _appointmentConsultantProvider.selectedAppointmentDetail.user.uid,
+            workEstimateRequest)
+        .then((_) {
+      setState(() {
+        _initDone = false;
+      });
+    });
+  }
+
+  _assignMechanic() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AssignEmployeeConsultantModal();
+          });
+        });
+  }
+
+  _createPickUpCarForm() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return PickUpCarFormConsultantModal();
+              });
+        });
   }
 }

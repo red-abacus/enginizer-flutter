@@ -1,6 +1,7 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+
+import 'estimator/issue.model.dart';
 
 class BidDetails {
   int id;
@@ -9,7 +10,7 @@ class BidDetails {
   int coveredServicesCount;
   List<dynamic> covertServices;
   String createdDate;
-  List<AppointmentIssue> issues;
+  List<Issue> issues;
   ServiceProvider serviceProvider;
   String providerAcceptedDateTime;
   int requestedServicesCount;
@@ -52,9 +53,9 @@ class BidDetails {
   }
 
   static _mapIssues(List<dynamic> response) {
-    List<AppointmentIssue> issues = [];
+    List<Issue> issues = [];
     response.forEach((item) {
-      issues.add(AppointmentIssue.fromJson(item));
+      issues.add(Issue.fromJson(item));
     });
     return issues;
   }

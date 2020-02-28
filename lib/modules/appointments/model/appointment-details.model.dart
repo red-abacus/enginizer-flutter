@@ -1,4 +1,3 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
@@ -6,17 +5,19 @@ import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 
 class AppointmentDetail {
   Car car;
-  List<AppointmentIssue> issues = [];
+  List<Issue> issues = [];
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
   User user;
+  int workEstimateId;
 
   AppointmentDetail(
       {this.car,
       this.issues,
       this.serviceItems,
       this.scheduledDate,
-      this.user});
+      this.user,
+      this.workEstimateId});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -25,15 +26,16 @@ class AppointmentDetail {
         serviceItems:
             json["services"] != null ? _mapServiceItems(json["services"]) : [],
         scheduledDate: json["scheduledDateTime"],
-        user: User.fromJson(json["user"]));
+        user: User.fromJson(json["user"]),
+        workEstimateId: json['workEstimateId']);
   }
 
   static _mapIssuesList(List<dynamic> response) {
-    List<AppointmentIssue> appointmentTypes = [];
+    List<Issue> list = [];
     response.forEach((item) {
-      appointmentTypes.add(AppointmentIssue.fromJson(item));
+      list.add(Issue.fromJson(item));
     });
-    return appointmentTypes;
+    return list;
   }
 
   static _mapServiceItems(List<dynamic> response) {
@@ -42,15 +44,5 @@ class AppointmentDetail {
       services.add(ServiceItem.fromJson(item));
     });
     return services;
-  }
-
-  List<Issue> getIssues() {
-    List<Issue> list = [];
-
-    for(AppointmentIssue issue in this.issues) {
-      list.add(Issue.fromAppointmentIssue(issue));
-    }
-
-    return list;
   }
 }

@@ -37,4 +37,13 @@ class AppointmentsConsultantProvider with ChangeNotifier {
     notifyListeners();
     return appointments;
   }
+
+  void refreshAppointment(Appointment appointment) {
+    for (int i = 0; i < appointments.length; i++) {
+      if (appointments[i].id == appointment.id) {
+        appointments[i] = appointment;
+        break;
+      }
+    }
+  }
 }

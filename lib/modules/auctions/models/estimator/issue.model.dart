@@ -1,5 +1,3 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
-
 import 'issue-item.model.dart';
 
 class Issue {
@@ -14,10 +12,6 @@ class Issue {
         id: json['id'],
         name: json['name'],
         items: json['items'] != null ? _mapIssueItems(json['items']) : []);
-  }
-
-  factory Issue.fromAppointmentIssue(AppointmentIssue issue) {
-    return Issue(id: issue.id, name: issue.name, items: []);
   }
 
   Map<String, dynamic> toJson() {
@@ -41,9 +35,16 @@ class Issue {
 
   static _mapIssueItems(List<dynamic> response) {
     List<IssueItem> issuesItems = [];
-    response.forEach((item) {
-      issuesItems.add(IssueItem.fromJson(item));
-    });
+
+    if (response != null) {
+      response.forEach((item) {
+        issuesItems.add(IssueItem.fromJson(item));
+      });
+    }
     return issuesItems;
+  }
+
+  clearItems() {
+    items = [];
   }
 }

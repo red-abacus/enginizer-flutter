@@ -148,6 +148,7 @@
   "auction_bid_no_services": "Niciun serviciu.",
   "auction_bid_date_schedule": "Oră programare",
   "auction_create_estimate": "Crează Deviz",
+  "auction_edit_estimate": "Editează Deviz",
   "auction_proposed_date": "Propunere Dată",
   "auction_proposed_date_error": "Selectează data propusă",
   "auction_create_bid": "Crează Licitație",
@@ -191,7 +192,10 @@
   "user_profile_cui": "CUI",
   "user_profile_cui_error": "CUI este necesar!",
   "work_estimate_status_pending": "În Așteptare",
-  "work_estimate_status_accepted": "Acceptat",
+  "work_estimate_status_accepted": "Acceptată",
+  "appointment_status_canceled": "Anulată",
+  "appointment_status_open_bid": "Licitație",
+  "appointment_status_completed": "Finalizată",
   "SERVICE": "Service",
   "CAR_WASHING": "Spălătorie",
   "PAINT_SHOP": "Vopsire",
@@ -230,5 +234,6 @@
   "general_save_changes": "Salvează Modificările",
   "general_ok": "Ok",
   "general_add_image": "Adaugă Imagine",
-  "general_save": "Salvează"
+  "general_save": "Salvează",
+  "general_create": "Crează"
 }

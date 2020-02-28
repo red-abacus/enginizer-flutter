@@ -3,8 +3,14 @@ import 'package:enginizer_flutter/modules/appointments/enum/appointment.details.
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-details.widget.dart';
+import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment_details-car.widget.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
+import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
+import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +27,6 @@ class AppointmentDetails extends StatefulWidget {
 }
 
 class AppointmentDetailsState extends State<AppointmentDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
   var _initDone = false;
@@ -32,17 +37,23 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   AppointmentDetailsTabBarState currentState =
       AppointmentDetailsTabBarState.REQUEST;
 
-  AppointmentProvider appointmentProvider;
+  AppointmentProvider _appointmentProvider;
 
   @override
   Widget build(BuildContext context) {
-    appointmentProvider = Provider.of<AppointmentProvider>(context);
+    if (_appointmentProvider == null ||
+        _appointmentProvider.selectedAppointment == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
+      return Container();
+    }
 
     return Consumer<AppointmentProvider>(
         builder: (context, appointmentProvider, _) => Scaffold(
               appBar: AppBar(
                 title: Text(
-                  appointmentProvider.selectedAppointment.name,
+                  _appointmentProvider.selectedAppointment.name,
                   style: TextHelper.customTextStyle(
                       null, Colors.white, FontWeight.bold, 20),
                 ),
@@ -50,23 +61,24 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
                     new IconThemeData(color: Theme.of(context).cardColor),
               ),
               body: _content(),
-              floatingActionButton: _getFloatingButton(),
             ));
   }
 
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      appointmentProvider = Provider.of<AppointmentProvider>(context);
+      _appointmentProvider = Provider.of<AppointmentProvider>(context);
 
       setState(() {
         _isLoading = true;
       });
 
-      appointmentProvider
-          .getAppointmentDetails(appointmentProvider.selectedAppointment)
+      _appointmentProvider
+          .getAppointmentDetails(_appointmentProvider.selectedAppointment)
           .then((_) {
-        _isLoading = false;
+        setState(() {
+          _isLoading = false;
+        });
       });
     }
     _initDone = true;
@@ -87,7 +99,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding: EdgeInsets.only(top: 20),
                   child: _getContent(),
                 ),
               )
@@ -95,34 +107,26 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           );
   }
 
-  Widget _getFloatingButton() {
-    bool visibility =
-        appointmentProvider.selectedAppointment.status.name.toLowerCase() ==
-            "submitted";
-
-    return new Visibility(
-        visible: visibility,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            _cancelAppointment(appointmentProvider.selectedAppointment);
-          },
-          label: Text(
-            S
-                .of(context)
-                .appointment_details_services_appointment_cancel
-                .toUpperCase(),
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
-          ),
-          backgroundColor: Colors.white,
-        ));
-  }
-
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
-        return AppointmentDetailsWidget(
-            appointment: appointmentProvider.selectedAppointment,
-            appointmentDetail: appointmentProvider.selectedAppointmentDetail);
+        switch (_appointmentProvider.selectedAppointment.getState()) {
+          case AppointmentStatusState.SUBMITTED:
+          case AppointmentStatusState.PENDING:
+          case AppointmentStatusState.SCHEDULED:
+            return AppointmentGenericDetailsWidget(
+                appointment: _appointmentProvider.selectedAppointment,
+                appointmentDetail:
+                    _appointmentProvider.selectedAppointmentDetail,
+                cancelAppointment: _cancelAppointment,
+                seeAppointment: _seeAppointment,
+                acceptAppointment: _acceptAppointment);
+            break;
+          default:
+            return Container();
+            break;
+        }
+        break;
       case AppointmentDetailsTabBarState.CAR:
         return AppointmentDetailsCarWidget();
       default:
@@ -182,12 +186,53 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     }
   }
 
-  void _cancelAppointment(Appointment appointment) {
+  _cancelAppointment(Appointment appointment) {
     setState(() {
-      appointmentProvider.cancelAppointment(appointment).then((appointment) {
+      _appointmentProvider.cancelAppointment(appointment).then((appointment) {
         Provider.of<AppointmentsProvider>(context)
             .refreshAppointment(appointment);
       });
     });
+  }
+
+  _seeAppointment() {
+    Provider.of<WorkEstimatesProvider>(context).initValues();
+    Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+    Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+        _appointmentProvider.selectedAppointmentDetail.workEstimateId;
+    Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+        _appointmentProvider.selectedAppointment.serviceProvider;
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return EstimatorModal(mode: EstimatorMode.Client);
+          });
+        });
+  }
+
+  _acceptAppointment() {
+    if (_appointmentProvider.selectedAppointmentDetail != null) {
+      if (_appointmentProvider.selectedAppointmentDetail.workEstimateId !=
+              null &&
+          _appointmentProvider.selectedAppointmentDetail.workEstimateId != 0) {
+        _appointmentProvider
+            .acceptWorkEstimate(
+                _appointmentProvider.selectedAppointmentDetail.workEstimateId,
+                _appointmentProvider.selectedAppointmentDetail.scheduledDate)
+            .then((_) {
+          setState(() {
+            Provider.of<AppointmentsProvider>(context).initDone = false;
+            _initDone = false;
+          });
+        });
+      }
+    }
   }
 }

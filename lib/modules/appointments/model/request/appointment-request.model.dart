@@ -1,3 +1,5 @@
+import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
+
 class AppointmentRequest {
   String address;
   int carId;
@@ -6,16 +8,19 @@ class AppointmentRequest {
   List<String> scheduledTimes;
   List<int> serviceIds;
   int userId;
+  AppointmentProviderType providerType;
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
       "address": address,
       "carId": carId,
+      "clientId": userId,
       "issues": issues,
       "providerId": providerId,
-      "scheduleDateTimes": scheduledTimes,
+      "scheduledDateTimes": scheduledTimes,
       "serviceIds": serviceIds,
-      "userId": userId
+      'specific':
+          providerType == AppointmentProviderType.Specific ? true : false
     };
 
     return propMap;

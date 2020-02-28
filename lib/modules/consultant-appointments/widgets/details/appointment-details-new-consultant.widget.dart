@@ -1,9 +1,9 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,7 +88,7 @@ class AppointmentDetailsNewConsultantWidgetState
     );
   }
 
-  Widget _appointmentIssueType(AppointmentIssue item, int index) {
+  Widget _appointmentIssueType(Issue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Row(

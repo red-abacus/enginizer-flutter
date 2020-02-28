@@ -1,8 +1,8 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -20,7 +20,7 @@ class AppointmentMechanicProvider with ChangeNotifier {
 
   void initFormValues() {
     standardTasks.forEach((task) => task.issues = List.of(task.issues)
-      ..add(AppointmentIssue(id: null, name: '')));
+      ..add(Issue(id: null, name: '')));
   }
 
   Future<AppointmentDetail> getAppointmentDetails(

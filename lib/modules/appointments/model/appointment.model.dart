@@ -1,4 +1,3 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
@@ -122,13 +121,11 @@ class Appointment {
     if (state == null) {
       statusFilter = true;
     } else {
-      statusFilter = false;
-    }
-
-    if (state == AppointmentStatusState.ALL) {
-      statusFilter = true;
-    } else {
-      statusFilter = state == getState();
+      if (state == AppointmentStatusState.ALL) {
+        statusFilter = true;
+      } else {
+        statusFilter = state == getState();
+      }
     }
 
     bool timeFilter = false;
@@ -150,20 +147,32 @@ class Appointment {
   }
 
   Color resolveStatusColor() {
-    if (status != null) {
-      switch (status.name.toLowerCase()) {
-        case 'completed':
-          return green;
-        case 'in_work':
-          return yellow;
-        case 'submitted':
-          return gray;
-        case 'canceled':
-          return red;
-      }
+    switch (getState()) {
+      case AppointmentStatusState.SUBMITTED:
+        return gray;
+      case AppointmentStatusState.IN_WORK:
+        return yellow;
+      case AppointmentStatusState.CANCELED:
+        return red;
+      case AppointmentStatusState.COMPLETED:
+        return green;
+      default:
     }
 
-    return gray;
+    return gray2;
+  }
+
+  String assetName() {
+    switch (getState()) {
+      case AppointmentStatusState.IN_WORK:
+        return 'in_work';
+      case AppointmentStatusState.OPEN_BID:
+        return 'in_bid';
+      case AppointmentStatusState.PENDING:
+        return 'waiting';
+      default:
+        return status.name.toLowerCase();
+    }
   }
 
   AppointmentStatusState getState() {
@@ -176,32 +185,14 @@ class Appointment {
         return AppointmentStatusState.SUBMITTED;
       case 'scheduled':
         return AppointmentStatusState.SCHEDULED;
+      case 'canceled':
+        return AppointmentStatusState.CANCELED;
+      case 'openbid':
+        return AppointmentStatusState.OPEN_BID;
+      case 'completed':
+        return AppointmentStatusState.COMPLETED;
       default:
         return AppointmentStatusState.ALL;
     }
-  }
-
-  static String _titleState(BuildContext context, AppointmentStatusState state) {
-    switch (state) {
-      case AppointmentStatusState.IN_WORK:
-        return S.of(context).appointment_status_in_work;
-      case AppointmentStatusState.PENDING:
-        return S.of(context).appointment_status_pending;
-      case AppointmentStatusState.SUBMITTED:
-        return S.of(context).appointment_status_submitted;
-      case AppointmentStatusState.SCHEDULED:
-        return S.of(context).appointment_status_scheduled;
-      case AppointmentStatusState.ALL:
-        return S.of(context).general_all;
-    }
-  }
-
-  static String getTitleForState(
-      BuildContext buildContext, AppointmentStatusState state) {
-    return _titleState(buildContext, state);
-  }
-
-  String getAppointmentStateTitle(BuildContext buildContext) {
-    return _titleState(buildContext, getState());
   }
 }

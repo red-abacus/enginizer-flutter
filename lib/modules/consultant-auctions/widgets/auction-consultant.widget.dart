@@ -1,12 +1,10 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
@@ -143,7 +141,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
     );
   }
 
-  Widget _appointmentIssueType(AppointmentIssue item, int index) {
+  Widget _appointmentIssueType(Issue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Row(
@@ -198,8 +196,9 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
   _createEstimate() {
     if (widget.auctionDetails != null) {
+      Provider.of<CreateWorkEstimateProvider>(context).refreshValues();
       Provider.of<CreateWorkEstimateProvider>(context)
-          .setAuctionDetails(widget.auctionDetails);
+          .setIssues(widget.auctionDetails.issues);
 
       showModalBottomSheet<void>(
           shape: RoundedRectangleBorder(
@@ -221,6 +220,8 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       Provider.of<WorkEstimatesProvider>(context).initValues();
       Provider.of<WorkEstimatesProvider>(context).workEstimateId =
           bid.workEstimateId;
+      Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+          bid.serviceProvider;
 
       showModalBottomSheet<void>(
           shape: RoundedRectangleBorder(
@@ -231,11 +232,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
           builder: (BuildContext context) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter state) {
-              return EstimatorModal(
-                mode: EstimatorMode.ReadOnly,
-                addIssueItem: null,
-                removeIssueItem: null,
-              );
+              return EstimatorModal(mode: EstimatorMode.ReadOnly);
             });
           });
     }

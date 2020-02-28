@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/timer-config.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
@@ -158,7 +158,7 @@ class AppointmentDetailsTasksListState
     return stepsList;
   }
 
-  _addIssue(AppointmentIssue issue) {
+  _addIssue(Issue issue) {
     if (issue.name.isEmpty) {
       return;
     }
@@ -167,7 +167,7 @@ class AppointmentDetailsTasksListState
           appointmentMechanicProvider.selectedMechanicTask.issues.length - 1;
       appointmentMechanicProvider.selectedMechanicTask.issues[index] = issue;
       appointmentMechanicProvider.selectedMechanicTask.issues
-          .add(AppointmentIssue(id: null, name: ''));
+          .add(Issue(id: null, name: ''));
     });
   }
 

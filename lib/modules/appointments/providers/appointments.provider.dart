@@ -11,7 +11,6 @@ class AppointmentsProvider with ChangeNotifier {
   AppointmentsResponse appointmentsResponse;
 
   List<Appointment> appointments = [];
-  List<ServiceItem> _serviceItems = [];
 
   Map<String, dynamic> serviceFormState = {'id': null, 'name': null};
 
@@ -21,11 +20,12 @@ class AppointmentsProvider with ChangeNotifier {
   AppointmentStatusState filterStatus;
   DateTime filterDateTime;
 
+  bool initDone = false;
+
   void refreshAppointment(Appointment appointment) {
     for (int i = 0; i < appointments.length; i++) {
       if (appointments[i].id == appointment.id) {
         appointments[i] = appointment;
-//        notifyListeners();
         break;
       }
     }

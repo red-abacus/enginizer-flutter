@@ -1,5 +1,4 @@
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
@@ -11,6 +10,7 @@ import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.dart';
@@ -33,7 +33,7 @@ class ProviderServiceProvider with ChangeNotifier {
   // Form entries
   Car selectedCar;
   List<ServiceItem> selectedServiceItems;
-  List<AppointmentIssue> issuesFormState;
+  List<Issue> issuesFormState;
   AppointmentProviderType appointmentProviderType;
   ServiceProvider selectedProvider;
   DateEntry dateEntry;
@@ -43,7 +43,7 @@ class ProviderServiceProvider with ChangeNotifier {
   void initFormValues() {
     selectedCar = null;
     selectedServiceItems = [];
-    issuesFormState = [AppointmentIssue(id: null, name: '')];
+    issuesFormState = [Issue(id: null, name: '')];
     appointmentProviderType = AppointmentProviderType.Specific;
     selectedProvider = null;
     dateEntry = null;
@@ -120,9 +120,10 @@ class ProviderServiceProvider with ChangeNotifier {
 
     appointmentRequest.userId = authUser.userId;
     appointmentRequest.carId = selectedCar.id;
+    appointmentRequest.providerType = appointmentProviderType;
 
     appointmentRequest.issues = [];
-    for (AppointmentIssue item in issuesFormState) {
+    for (Issue item in issuesFormState) {
       appointmentRequest.issues.add(item.name);
     }
 

@@ -1,12 +1,12 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../custom-text-form-field.dart';
 
 class IssuesListWidget extends StatefulWidget {
-  List<AppointmentIssue> issues;
+  List<Issue> issues;
   Function removeIssue;
   Function addIssue;
   Function issueChanged;
@@ -37,7 +37,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
   }
 
   Widget buildIssuesListBox(
-      BuildContext context, List<AppointmentIssue> issues) {
+      BuildContext context, List<Issue> issues) {
     return ListView.builder(
         itemCount: issues.length,
         itemBuilder: (context, index) {
@@ -46,7 +46,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
   }
 
   ListTile _buildListTile(
-      BuildContext context, int index, List<AppointmentIssue> issues) {
+      BuildContext context, int index, List<Issue> issues) {
     if (issues.length > 1) {
       return ListTile(
         title: _tileTextFormField(issues[index]),
@@ -64,7 +64,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
     }
   }
 
-  _tileTextFormField(AppointmentIssue issue) {
+  _tileTextFormField(Issue issue) {
     return CustomTextFormField(
       labelText: S.of(context).appointment_create_issues,
       listener: (value) {
@@ -72,6 +72,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
       },
       currentValue: issue.name,
       errorText: S.of(context).appointment_create_error_issueCannotBeEmpty,
+      validate: true,
     );
   }
 }

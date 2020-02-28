@@ -1,7 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/details/service-details-widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider/service-details-widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

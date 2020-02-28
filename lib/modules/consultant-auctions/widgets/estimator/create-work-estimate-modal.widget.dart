@@ -75,7 +75,6 @@ class _CreateEstimatorModalState extends State<CreateEstimatorModal> {
 
       _createWorkEstimateProvider =
           Provider.of<CreateWorkEstimateProvider>(context);
-      _createWorkEstimateProvider.initValues();
       _createWorkEstimateProvider.loadItemTypes().then((_) {
         String startDate =
             DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
@@ -154,7 +153,7 @@ class _CreateEstimatorModalState extends State<CreateEstimatorModal> {
 
   List<Step> _buildSteps(BuildContext context) {
     List<Step> stepsList = [];
-    List<Issue> issues = _createWorkEstimateProvider?.issues;
+    List<Issue> issues = _createWorkEstimateProvider?.workEstimateRequest?.issues;
 
     issues.asMap().forEach((index, issue) {
       stepsList.add(
@@ -203,8 +202,8 @@ class _CreateEstimatorModalState extends State<CreateEstimatorModal> {
   }
 
   _createBid() {
-    if (_createWorkEstimateProvider.isValid()) {
-      widget.createBid(_createWorkEstimateProvider.createBidContent());
+    if (_createWorkEstimateProvider.workEstimateRequest.isValid()) {
+      widget.createBid(_createWorkEstimateProvider.workEstimateRequest);
     } else {
       return showDialog<void>(
         context: context,

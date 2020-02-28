@@ -1,5 +1,5 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class AppointmentCard extends StatelessWidget {
                 children: <Widget>[
                   _imageContainer(),
                   _textContainer(),
-                  _statusContainer(),
+                  _statusContainer(context),
                 ],
               ),
             ),
@@ -57,7 +57,7 @@ class AppointmentCard extends StatelessWidget {
       padding: EdgeInsets.all(20),
       color: appointment.resolveStatusColor(),
       child: SvgPicture.asset(
-        'assets/images/statuses/${appointment.status?.name}.svg'.toLowerCase(),
+        'assets/images/statuses/${appointment.assetName()}.svg'.toLowerCase(),
         semanticsLabel: 'Appointment Status Image',
       ),
     );
@@ -120,12 +120,12 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 
-  _statusContainer() {
+  _statusContainer(BuildContext context) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(right: 10),
         child: Text(
-          appointment.status.name.toUpperCase(),
+          AppointmentStatusStateUtils.title(context, appointment.getState()).toUpperCase(),
           textAlign: TextAlign.right,
           style: TextHelper.customTextStyle(
               null, appointment.resolveStatusColor(), FontWeight.bold, 12),

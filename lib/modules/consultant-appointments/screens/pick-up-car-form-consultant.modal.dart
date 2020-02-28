@@ -33,32 +33,25 @@ class PickUpCarFormConsultantModalState
   @override
   Widget build(BuildContext context) {
     return Consumer<PickUpCarFormConsultantProvider>(
-        builder: (context, provider, _) =>
-            FractionallySizedBox(
-                heightFactor: .8,
-                child: Container(
-                    child: ClipRRect(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      child: Container(
-                        decoration: new BoxDecoration(
-                            color: Theme
-                                .of(context)
-                                .cardColor,
-                            borderRadius: new BorderRadius.only(
-                                topLeft: const Radius.circular(20.0),
-                                topRight: const Radius.circular(20.0))),
-                        child: Theme(
-                          data: ThemeData(
-                              accentColor: Theme
-                                  .of(context)
-                                  .primaryColor,
-                              primaryColor: Theme
-                                  .of(context)
-                                  .primaryColor),
-                          child: _content(),
-                        ),
-                      ),
-                    ))));
+        builder: (context, provider, _) => FractionallySizedBox(
+            heightFactor: .8,
+            child: Container(
+                child: ClipRRect(
+              borderRadius: new BorderRadius.circular(5.0),
+              child: Container(
+                decoration: new BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(20.0),
+                        topRight: const Radius.circular(20.0))),
+                child: Theme(
+                  data: ThemeData(
+                      accentColor: Theme.of(context).primaryColor,
+                      primaryColor: Theme.of(context).primaryColor),
+                  child: _content(),
+                ),
+              ),
+            ))));
   }
 
   @override
@@ -80,23 +73,21 @@ class PickUpCarFormConsultantModalState
   _content() {
     return SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _addTitle(
-                    S
-                        .of(context)
-                        .appointment_consultant_car_form_photos_title),
-                ImageSelectionWidget(addImage: _addImage),
-                _getForm(),
-              ],
-            ),
-          ),
-        ));
+      margin: EdgeInsets.only(left: 10, right: 10),
+      child: Padding(
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _addTitle(
+                S.of(context).appointment_consultant_car_form_photos_title),
+            ImageSelectionWidget(addImage: _addImage),
+            _getForm(),
+          ],
+        ),
+      ),
+    ));
   }
 
   _addTitle(String title) {
@@ -117,17 +108,14 @@ class PickUpCarFormConsultantModalState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CustomTextFormField(
-              labelText: S
-                  .of(context)
-                  .appointment_consultant_car_form_real_km,
+              labelText: S.of(context).appointment_consultant_car_form_real_km,
               listener: (value) {
                 _provider.km = value;
               },
               currentValue: _provider.km,
               errorText:
-              S
-                  .of(context)
-                  .appointment_consultant_car_form_real_km_error,
+                  S.of(context).appointment_consultant_car_form_real_km_error,
+              validate: true,
             ),
             Container(
               margin: EdgeInsets.only(top: 5),
@@ -158,9 +146,7 @@ class PickUpCarFormConsultantModalState
               child: Row(
                 children: <Widget>[
                   Text(
-                    S
-                        .of(context)
-                        .appointment_consultant_car_form_client_parts,
+                    S.of(context).appointment_consultant_car_form_client_parts,
                     style: TextHelper.customTextStyle(
                         null, gray2, FontWeight.normal, 16),
                   ),
@@ -181,9 +167,7 @@ class PickUpCarFormConsultantModalState
             Container(
               margin: EdgeInsets.only(top: 5),
               child: DropdownButtonFormField(
-                hint: Text(S
-                    .of(context)
-                    .appointment_consultant_payment_method),
+                hint: Text(S.of(context).appointment_consultant_payment_method),
                 items: _buildPaymentMethodDropdownItems(),
                 value: _provider.paymentMethod,
                 validator: (value) {
@@ -206,9 +190,7 @@ class PickUpCarFormConsultantModalState
               margin: EdgeInsets.only(top: 5),
               child: CustomTextFormField(
                 labelText:
-                S
-                    .of(context)
-                    .appointment_consultant_car_form_oil_change,
+                    S.of(context).appointment_consultant_car_form_oil_change,
                 listener: (value) {
                   _provider.oilChange = value;
                 },
@@ -216,14 +198,13 @@ class PickUpCarFormConsultantModalState
                 errorText: S
                     .of(context)
                     .appointment_consultant_car_form_oil_change_error,
+                validate: false,
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: _addTitle(
-                  S
-                      .of(context)
-                      .appointment_consultant_car_form_damaged_items),
+                  S.of(context).appointment_consultant_car_form_damaged_items),
             ),
             Container(
               decoration: BoxDecoration(
@@ -250,9 +231,7 @@ class PickUpCarFormConsultantModalState
             Container(
               margin: EdgeInsets.only(top: 20),
               child: _addTitle(
-                  S
-                      .of(context)
-                      .appointment_consultant_car_form_observation),
+                  S.of(context).appointment_consultant_car_form_observation),
             ),
             Container(
               decoration: BoxDecoration(
@@ -290,16 +269,12 @@ class PickUpCarFormConsultantModalState
                         fontWeight: FontWeight.bold,
                         fontSize: 24),
                   ),
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                 ),
               ),
             ),
             SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .viewInsets
-                  .bottom,
+              height: MediaQuery.of(context).viewInsets.bottom,
             ),
           ],
         ),
@@ -352,9 +327,7 @@ class PickUpCarFormConsultantModalState
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop image',
-            toolbarColor: Theme
-                .of(context)
-                .primaryColor,
+            toolbarColor: Theme.of(context).primaryColor,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),

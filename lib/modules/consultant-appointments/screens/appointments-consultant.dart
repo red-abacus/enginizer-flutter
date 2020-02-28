@@ -3,9 +3,7 @@ import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-details-consultant.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/appointments-list-consultant.widget.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-scheduled-consultant.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

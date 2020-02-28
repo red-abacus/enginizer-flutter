@@ -22,7 +22,6 @@ class EstimatorFormState extends State<EstimatorForm> {
 
   @override
   Widget build(BuildContext context) {
-    var auctionProvider = Provider.of<AuctionProvider>(context);
     var providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
     var workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
 
@@ -55,7 +54,7 @@ class EstimatorFormState extends State<EstimatorForm> {
                     onChanged: (selectedType) {
                       providerServiceProvider
                           .loadProviderItems(
-                              auctionProvider?.selectedBid?.serviceProvider,
+                              workEstimatesProvider?.serviceProvider,
                               IssueItemQuery(typeId: selectedType.id))
                           .then((_) => {
                                 setState(() {
@@ -101,7 +100,7 @@ class EstimatorFormState extends State<EstimatorForm> {
                       onChanged: (selectedProviderItem) {
                         providerServiceProvider
                             .loadProviderItems(
-                                auctionProvider?.selectedBid?.serviceProvider,
+                                workEstimatesProvider.serviceProvider,
                                 IssueItemQuery(
                                     typeId: selectedProviderItem.itemType.id,
                                     code: selectedProviderItem.code))
@@ -160,7 +159,7 @@ class EstimatorFormState extends State<EstimatorForm> {
                       onChanged: (selectedProviderItem) {
                         providerServiceProvider
                             .loadProviderItems(
-                                auctionProvider?.selectedBid?.serviceProvider,
+                                workEstimatesProvider.serviceProvider,
                                 IssueItemQuery(
                                     typeId: selectedProviderItem.itemType.id,
                                     code: selectedProviderItem.code,

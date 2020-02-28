@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
@@ -18,6 +19,7 @@ class WorkEstimatesProvider with ChangeNotifier {
   WorkEstimatesService workEstimatesService = inject<WorkEstimatesService>();
 
   int workEstimateId;
+  ServiceProvider serviceProvider;
   WorkEstimateDetails workEstimateDetails;
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);

@@ -135,6 +135,9 @@
   "appointment_status_pending": "Pending",
   "appointment_status_submitted": "Submitted",
   "appointment_status_scheduled": "Scheduled",
+  "appointment_status_canceled": "Canceled",
+  "appointment_status_open_bid": "Auction",
+  "appointment_status_completed": "Completed",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -148,6 +151,7 @@
   "auction_bid_no_services": "No service.",
   "auction_bid_date_schedule": "Scheduled date",
   "auction_create_estimate": "Create Estimate",
+  "auction_edit_estimate": "Edit Estimate",
   "auction_proposed_date": "Proposed Date",
   "auction_proposed_date_error": "Please select your proposed date",
   "auction_create_bid": "Create Bid",
@@ -230,5 +234,6 @@
   "general_save_changes": "Save Changes",
   "general_ok": "Ok",
   "general_add_image": "Add Image",
-  "general_save": "Save"
+  "general_save": "Save",
+  "general_create": "Create"
 }

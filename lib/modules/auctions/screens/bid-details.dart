@@ -1,5 +1,4 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-issue.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
@@ -277,7 +276,10 @@ class BidDetailsState extends State<BidDetails> {
   void _openEstimator(BuildContext ctx) {
     Provider.of<WorkEstimatesProvider>(context).initValues();
     Provider.of<ProviderServiceProvider>(context).loadItemTypes();
-    Provider.of<WorkEstimatesProvider>(context).workEstimateId = Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
+    Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+        Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
+    Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+        Provider.of<AuctionProvider>(context).bidDetails.serviceProvider;
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -288,23 +290,9 @@ class BidDetailsState extends State<BidDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return EstimatorModal(
-              mode: EstimatorMode.Client,
-              addIssueItem: _addIssueItem,
-              removeIssueItem: _removeIssueItem,
-            );
+            return EstimatorModal(mode: EstimatorMode.Client);
           });
         });
-  }
-
-  _addIssueItem(Issue issue) {
-    workEstimatesProvider.addWorkEstimateItem(issue).then((_) {
-      workEstimatesProvider.initValues();
-    });
-  }
-
-  _removeIssueItem(Issue issue, IssueItem issueItem) {
-    workEstimatesProvider.deleteWorkEstimateItem(issue, issueItem);
   }
 
   _appointmentDateContainer() {
@@ -390,7 +378,7 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
-  Widget _issueTextWidget(AppointmentIssue item, int index) {
+  Widget _issueTextWidget(Issue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Row(

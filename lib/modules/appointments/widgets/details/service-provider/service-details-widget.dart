@@ -1,8 +1,8 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-fiscal-widget.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-items-widget.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider-reviews-widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider/service-provider-fiscal-widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider/service-provider-items-widget.dart';
+import 'package:enginizer_flutter/modules/appointments/widgets/details/service-provider/service-provider-reviews-widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
