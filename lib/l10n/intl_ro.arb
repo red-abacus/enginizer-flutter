@@ -234,5 +234,6 @@
   "general_ok": "Ok",
   "general_add_image": "Adaugă Imagine",
   "general_save": "Salvează",
-  "general_create": "Crează"
+  "general_create": "Crează",
+  "general_rejected": "Respins"
 }

@@ -53,7 +53,6 @@ class BidsService {
 
   Future<bool> acceptBid(int bidId) async {
     final response = await _dio.patch(_buildAcceptBidPath(bidId));
-
     if (response.statusCode == 200) {
       return true;
     }
@@ -70,7 +69,6 @@ class BidsService {
 
   Future<bool> rejectBid(int bidId) async {
     final response = await _dio.patch(_buildRejectBidPath(bidId));
-
     if (response.statusCode == 200) {
       return true;
     }

@@ -1,0 +1,4 @@
+enum BidStatus {
+  REJECTED,
+  PENDING
+}

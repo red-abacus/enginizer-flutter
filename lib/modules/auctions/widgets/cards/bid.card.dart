@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
@@ -15,6 +16,11 @@ class BidCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double opacity = 1.0;
+
+    if (bid != null && bid.bidStatus() == BidStatus.REJECTED) {
+      opacity = 0.6;
+    }
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: Material(
@@ -27,15 +33,18 @@ class BidCard extends StatelessWidget {
           onTap: () => {selectBid(bid)},
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _imageContainer(),
-                _textContainer(context),
-                _detailsContainer(context),
-              ],
-            ),
+            child: Opacity(
+              opacity: opacity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _imageContainer(),
+                  _textContainer(context),
+                  _detailsContainer(context),
+                ],
+              ),
+            )
           ),
         ),
       ),
@@ -161,6 +170,23 @@ class BidCard extends StatelessWidget {
   }
 
   _dateScheduleContainer(BuildContext context) {
+    if (bid.bidStatus() == BidStatus.REJECTED) {
+      return Positioned(
+        child: Align(
+            alignment: FractionalOffset.bottomLeft,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: Text(S.of(context).general_rejected.toUpperCase(),
+                  style: TextStyle(
+                      color: red,
+                      fontFamily: 'Lato',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      height: 1.5)),
+            )),
+      );
+    }
+
     DateTime acceptedDate = bid.getAcceptedDate();
 
     String dateString = (acceptedDate != null)

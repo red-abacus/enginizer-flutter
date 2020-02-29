@@ -3,6 +3,7 @@ import 'package:enginizer_flutter/modules/appointments/model/service-item.model.
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
@@ -42,35 +43,34 @@ class BidDetailsState extends State<BidDetails> {
   @override
   Widget build(BuildContext context) {
     auctionProvider = Provider.of<AuctionProvider>(context);
-    workEstimatesProvider =
-        Provider.of<WorkEstimatesProvider>(context, listen: false);
+    workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
 
     return Consumer<AuctionProvider>(
-      builder: (context, auctionProvider, _) => Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-        ),
-        body: Column(
-          children: <Widget>[
-            new Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                child: _buildContent(),
-              ),
+        builder: (context, auctionProvider, _) => Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(
+              iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
             ),
-          ],
-        ),
-      ),
-    );
+            body: Column(
+              children: <Widget>[
+                new Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                    child: _buildContent(),
+                  ),
+                ),
+              ],
+            ),
+            floatingActionButton: _floatingButtonsContainer(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat));
   }
 
   @override
   void didChangeDependencies() {
     if (!_initDone) {
       auctionProvider = Provider.of<AuctionProvider>(context);
-      workEstimatesProvider =
-          Provider.of<WorkEstimatesProvider>(context, listen: false);
+      workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
 
       setState(() {
         _isLoading = true;
@@ -120,8 +120,7 @@ class BidDetailsState extends State<BidDetails> {
             _appointmentDateContainer(),
             _buildSeparator(),
             _titleContainer(S.of(context).auction_bid_estimate_price),
-            _priceContainer(),
-            _buildButtons(),
+            _priceContainer()
           ],
         )
       ],
@@ -138,7 +137,7 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.all(8),
             child: SvgPicture.asset(
-              'assets/images/statuses/${auctionProvider.selectedAuction?.appointment?.status?.name}.svg'
+              'assets/images/statuses/in_bid.svg'
                   .toLowerCase(),
               semanticsLabel: 'Appointment Status Image',
             ),
@@ -265,7 +264,7 @@ class BidDetailsState extends State<BidDetails> {
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(
-                  null, Theme.of(context).accentColor, FontWeight.bold, 16),
+                  null, red, FontWeight.bold, 16),
             ),
           ),
         ],
@@ -338,42 +337,6 @@ class BidDetailsState extends State<BidDetails> {
       child: Text(
         text,
         style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
-      ),
-    );
-  }
-
-  _buildButtons() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: new Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: FlatButton(
-              child: Text(
-                S.of(context).general_decline.toUpperCase(),
-                style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
-              ),
-              onPressed: () {
-                _showCancelBidAlert();
-              },
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: FlatButton(
-              child: Text(
-                S.of(context).general_accept.toUpperCase(),
-                style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
-              ),
-              onPressed: () {
-                _showAcceptBidAlert();
-              },
-            ),
-          )
-        ],
       ),
     );
   }
@@ -473,8 +436,6 @@ class BidDetailsState extends State<BidDetails> {
     auctionProvider.rejectBid(bid.id).then((success) {
       if (success != null && success) {
         Provider.of<AuctionProvider>(context, listen: false).initDone = false;
-        Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
-
         Navigator.pop(context);
       }
     });
@@ -523,8 +484,6 @@ class BidDetailsState extends State<BidDetails> {
     auctionProvider.acceptBid(bid.id).then((success) {
       if (success != null && success) {
         Provider.of<AuctionProvider>(context, listen: false).initDone = false;
-        Provider.of<AuctionProvider>(context, listen: false).isLoading = false;
-
         Navigator.pop(context);
       }
     });
@@ -551,5 +510,42 @@ class BidDetailsState extends State<BidDetails> {
             });
       }
     });
+  }
+
+  _floatingButtonsContainer() {
+    if (auctionProvider.selectedBid.bidStatus() == BidStatus.REJECTED) {
+      return Container();
+    }
+
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          FloatingActionButton.extended(
+            heroTag: '1',
+            onPressed: () {
+              _showCancelBidAlert();
+            },
+            label: Text(
+              S.of(context).general_decline.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+            ),
+            backgroundColor: Colors.white,
+          ),
+          FloatingActionButton.extended(
+            heroTag: '2',
+            onPressed: () {
+              _showAcceptBidAlert();
+            },
+            label: Text(
+              S.of(context).general_accept.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+            ),
+            backgroundColor: Colors.white,
+          ),
+        ],
+      ),
+    );
   }
 }

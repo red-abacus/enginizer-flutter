@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 
 class Bid {
@@ -57,5 +58,14 @@ class Bid {
     }
 
     return false;
+  }
+
+  BidStatus bidStatus() {
+    switch (this.status.toLowerCase()) {
+      case 'rejected':
+        return BidStatus.REJECTED;
+      default:
+        return BidStatus.PENDING;
+    }
   }
 }

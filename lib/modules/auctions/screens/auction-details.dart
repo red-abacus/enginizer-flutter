@@ -25,9 +25,6 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   String route;
 
-  var _initDone = false;
-  var _isLoading = false;
-
   AuctionDetailsScreenState currentState =
       AuctionDetailsScreenState.APPOINTMENT;
 
@@ -45,8 +42,6 @@ class AuctionDetailsState extends State<AuctionDetails> {
       });
     }
 
-    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
-
     return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             key: _scaffoldKey,
@@ -59,10 +54,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   void didChangeDependencies() {
-    _isLoading = Provider.of<AuctionProvider>(context).isLoading;
-    _initDone = Provider.of<AuctionProvider>(context).initDone;
-
-    if (!_initDone) {
+    if (!Provider.of<AuctionProvider>(context).initDone) {
       auctionProvider = Provider.of<AuctionProvider>(context);
 
       if (auctionProvider.selectedAuction == null) return;
@@ -114,7 +106,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _buildContent() {
-    return _isLoading
+    return Provider.of<AuctionProvider>(context).isLoading
         ? Center(child: CircularProgressIndicator())
         : _getContent();
   }

@@ -234,5 +234,6 @@
   "general_ok": "Ok",
   "general_add_image": "Add Image",
   "general_save": "Save",
-  "general_create": "Create"
+  "general_create": "Create",
+  "general_rejected": "Rejected"
 }
