@@ -25,9 +25,9 @@ class Appointments extends StatefulWidget {
 
 class AppointmentsState extends State<Appointments> {
   String route;
-  var _isLoading = false;
 
-  List<Appointment> _appointments = [];
+  var _isLoading = false;
+  var _initDone = false;
 
   AppointmentsProvider _appointmentsProvider;
 
@@ -56,15 +56,20 @@ class AppointmentsState extends State<Appointments> {
   void didChangeDependencies() {
     _appointmentsProvider = Provider.of<AppointmentsProvider>(context);
 
-    if (!_appointmentsProvider.initDone) {
+    _initDone = _initDone == false ? false : _appointmentsProvider.initDone;
+
+    if (!_initDone) {
       setState(() {
         _isLoading = true;
       });
 
-      Provider.of<AppointmentsProvider>(context).loadAppointments().then((_) {
+      _appointmentsProvider.resetFilterParameters();
+      _appointmentsProvider.loadAppointments().then((_) {
         _isLoading = false;
       });
     }
+
+    _initDone = true;
     _appointmentsProvider.initDone = true;
 
     super.didChangeDependencies();

@@ -39,6 +39,10 @@ class AuctionProvider with ChangeNotifier {
     initDone = false;
   }
 
+  void resetFilterParameters() {
+    filterSearchString = "";
+  }
+
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
     appointmentDetails =
         await this.appointmentsService.getAppointmentDetails(appointmentId);

@@ -31,6 +31,14 @@ class AppointmentsConsultantProvider with ChangeNotifier {
     return appointments;
   }
 
+  void resetParameters() {
+    filterSearchString = "";
+    filterStatus = null;
+    filterDateTime = null;
+    appointments = [];
+    _appointmentsResponse = null;
+  }
+
   Future<List<Appointment>> loadAppointments() async {
     _appointmentsResponse = await this.appointmentsService.getAppointments();
     appointments = _appointmentsResponse.items;

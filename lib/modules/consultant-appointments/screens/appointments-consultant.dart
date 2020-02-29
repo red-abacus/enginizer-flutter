@@ -47,6 +47,7 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
         _isLoading = true;
       });
 
+      Provider.of<AppointmentsConsultantProvider>(context).resetParameters();
       Provider.of<AppointmentsConsultantProvider>(context)
           .loadAppointments()
           .then((_) {

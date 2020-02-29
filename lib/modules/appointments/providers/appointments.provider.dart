@@ -16,11 +16,17 @@ class AppointmentsProvider with ChangeNotifier {
 
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
-  String filterSearchString = "";
+  String filterSearchString = '';
   AppointmentStatusState filterStatus;
   DateTime filterDateTime;
 
   bool initDone = false;
+
+  void resetFilterParameters() {
+    filterSearchString = '';
+    filterStatus = null;
+    filterDateTime = null;
+  }
 
   void refreshAppointment(Appointment appointment) {
     for (int i = 0; i < appointments.length; i++) {

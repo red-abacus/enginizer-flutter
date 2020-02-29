@@ -45,7 +45,9 @@ class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
       setState(() {
         _isLoading = true;
       });
-      _workEstimatesConsultantProvider = Provider.of<WorkEstimatesConsultantProvider>(context);
+      _workEstimatesConsultantProvider =
+          Provider.of<WorkEstimatesConsultantProvider>(context);
+      _workEstimatesConsultantProvider.resetParameters();
       _workEstimatesConsultantProvider.getWorkEstimates().then((_) {
         _workEstimatesConsultantProvider.loadCarBrands().then((_) {
           setState(() {

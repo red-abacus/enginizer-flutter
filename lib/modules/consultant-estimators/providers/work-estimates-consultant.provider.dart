@@ -20,6 +20,14 @@ class WorkEstimatesConsultantProvider with ChangeNotifier {
   String filterSearchString;
   CarBrand filterCarBrand;
 
+  void resetParameters() {
+    workEstimates = [];
+    carBrands = [];
+    filterStatus = null;
+    filterSearchString = null;
+    filterCarBrand = null;
+  }
+
   Future<List<WorkEstimate>> getWorkEstimates() async {
     _workEstimateResponse = await _workEstimatesService.getWorkEstimates();
     workEstimates = _workEstimateResponse.workEstimates;

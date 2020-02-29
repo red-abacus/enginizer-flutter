@@ -34,7 +34,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   Widget build(BuildContext context) {
-    auctionProvider = Provider.of<AuctionProvider>(context, listen: false);
+    auctionProvider = Provider.of<AuctionProvider>(context);
 
     if (auctionProvider.selectedAuction == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,7 +60,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
       if (auctionProvider.selectedAuction == null) return;
 
       setState(() {
-        Provider.of<AuctionProvider>(context, listen: false).isLoading = true;
+        Provider.of<AuctionProvider>(context).isLoading = true;
       });
 
       auctionProvider
@@ -68,13 +68,12 @@ class AuctionDetailsState extends State<AuctionDetails> {
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
-            Provider.of<AuctionProvider>(context, listen: false).isLoading =
-            false;
+            Provider.of<AuctionProvider>(context).isLoading = false;
           });
         });
       });
 
-      Provider.of<AuctionProvider>(context, listen: false).initDone = true;
+      Provider.of<AuctionProvider>(context).initDone = true;
     }
     super.didChangeDependencies();
   }
@@ -118,6 +117,8 @@ class AuctionDetailsState extends State<AuctionDetails> {
             auction: auctionProvider.selectedAuction,
             appointmentDetail: auctionProvider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
+        auctionProvider.resetFilterParameters();
+
         return AuctionBidsWidget(
             bids: auctionProvider.bids,
             filterSearchString: auctionProvider.filterSearchString,

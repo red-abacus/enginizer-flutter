@@ -1,9 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-modal.widget.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
