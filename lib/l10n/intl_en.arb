@@ -143,7 +143,6 @@
   "auction_bids_provider": "Service Provider",
   "auction_bid_services_provided": "Services Provided",
   "auction_bid_see_provider_profile": "See Profile",
-  "auction_bid_estimate": "See Estimate",
   "auction_bid_estimate_price": "Estimated Price",
   "auction_bid_cancel_description": "Are you sure you want to cancel this bid?",
   "auction_bid_accept_description": "Are you sure you want to accept this bid?",

@@ -114,12 +114,15 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           case AppointmentStatusState.SUBMITTED:
           case AppointmentStatusState.PENDING:
           case AppointmentStatusState.SCHEDULED:
+          case AppointmentStatusState.IN_WORK:
+          case AppointmentStatusState.CANCELED:
+          case AppointmentStatusState.COMPLETED:
             return AppointmentGenericDetailsWidget(
                 appointment: _appointmentProvider.selectedAppointment,
                 appointmentDetail:
                     _appointmentProvider.selectedAppointmentDetail,
+                viewEstimate: _seeEstimate,
                 cancelAppointment: _cancelAppointment,
-                seeAppointment: _seeAppointment,
                 acceptAppointment: _acceptAppointment);
             break;
           default:
@@ -195,26 +198,30 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     });
   }
 
-  _seeAppointment() {
-    Provider.of<WorkEstimatesProvider>(context).initValues();
-    Provider.of<ProviderServiceProvider>(context).loadItemTypes();
-    Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+  _seeEstimate() {
+    int workEstimateId =
         _appointmentProvider.selectedAppointmentDetail.workEstimateId;
-    Provider.of<WorkEstimatesProvider>(context).serviceProvider =
-        _appointmentProvider.selectedAppointment.serviceProvider;
 
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return EstimatorModal(mode: EstimatorMode.Client);
+    if (workEstimateId != null && workEstimateId != 0) {
+      Provider.of<WorkEstimatesProvider>(context).initValues();
+      Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+      Provider.of<WorkEstimatesProvider>(context).workEstimateId = workEstimateId;
+      Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+          _appointmentProvider.selectedAppointment.serviceProvider;
+
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return EstimatorModal(mode: EstimatorMode.Client);
+            });
           });
-        });
+    }
   }
 
   _acceptAppointment() {

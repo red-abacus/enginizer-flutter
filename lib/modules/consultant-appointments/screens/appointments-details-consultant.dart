@@ -135,6 +135,9 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.SUBMITTED:
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
+      case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.CANCELED:
+      case AppointmentStatusState.COMPLETED:
         return AppointmentDetailsGenericConsultantWidget(
           appointment: _appointmentConsultantProvider.selectedAppointment,
           appointmentDetail:
@@ -146,6 +149,7 @@ class AppointmentDetailsConsultantState
           declineAppointment: _declineAppointment,
           createEstimate: _createEstimate,
           editEstimate: _editEstimate,
+          viewEstimate: _viewEstimate,
           assignMechanic: _assignMechanic,
           createPickUpCarForm: _createPickUpCarForm,
         );
@@ -265,6 +269,35 @@ class AppointmentDetailsConsultantState
         });
   }
 
+  _viewEstimate() {
+    if (_appointmentConsultantProvider
+                .selectedAppointmentDetail.workEstimateId !=
+            null &&
+        _appointmentConsultantProvider
+                .selectedAppointmentDetail.workEstimateId !=
+            0) {
+      Provider.of<WorkEstimatesProvider>(context).initValues();
+      Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+          _appointmentConsultantProvider
+              .selectedAppointmentDetail.workEstimateId;
+      Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+          _appointmentConsultantProvider.selectedAppointment.serviceProvider;
+
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return EstimatorModal(mode: EstimatorMode.ReadOnly);
+            });
+          });
+    }
+  }
+
   _createWorkEstimate(WorkEstimateRequest workEstimateRequest) {
     _appointmentConsultantProvider
         .createWorkEstimate(
@@ -289,7 +322,9 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return AssignEmployeeConsultantModal();
+            return AssignEmployeeConsultantModal(
+                appointment:
+                    _appointmentConsultantProvider.selectedAppointment);
           });
         });
   }
@@ -304,8 +339,8 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return PickUpCarFormConsultantModal();
-              });
+            return PickUpCarFormConsultantModal();
+          });
         });
   }
 }

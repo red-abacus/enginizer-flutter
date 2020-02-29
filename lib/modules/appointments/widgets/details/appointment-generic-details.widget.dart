@@ -15,14 +15,14 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
   AppointmentDetail appointmentDetail;
 
   Function cancelAppointment;
-  Function seeAppointment;
+  Function viewEstimate;
   Function acceptAppointment;
 
   AppointmentGenericDetailsWidget(
       {this.appointment,
       this.appointmentDetail,
       this.cancelAppointment,
-      this.seeAppointment,
+      this.viewEstimate,
       this.acceptAppointment});
 
   @override
@@ -110,8 +110,7 @@ class AppointmentGenericDetailsWidgetState
   }
 
   _issuesContainer() {
-    if (widget.appointmentDetail.workEstimateId == null ||
-        widget.appointmentDetail.workEstimateId == 0) {
+    if (!widget.appointmentDetail.hasWorkEstimate()) {
       return Column(
         children: <Widget>[
           for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
@@ -139,9 +138,9 @@ class AppointmentGenericDetailsWidgetState
           ),
           FlatButton(
             splashColor: Theme.of(context).primaryColor,
-            onPressed: () => {widget.seeAppointment()},
+            onPressed: () => {widget.viewEstimate()},
             child: Text(
-              S.of(context).auction_bid_estimate.toUpperCase(),
+              S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
             ),
           ),

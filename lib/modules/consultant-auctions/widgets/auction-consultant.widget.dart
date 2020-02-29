@@ -249,7 +249,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
           return FlatButton(
             child: Text(
               // TODO - need proper translation for english version
-              S.of(context).auction_bid_estimate.toUpperCase(),
+              S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
             ),
             onPressed: () {

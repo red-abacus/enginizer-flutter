@@ -1,7 +1,9 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/enums/tank-quantity.enum.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/employee-timetable-consultant.widget.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,23 +29,22 @@ class _AssignEmployeeConsultantModalState
 
   @override
   void didChangeDependencies() {
-    // TODO - need to fetch Employees after API is in place
-    /*
-    String startDate = DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
-    String endDate = startDate;
-
-    String scheduleDateTime = widget.appointment.scheduleDateTime;
-
-    if (scheduleDateTime.isNotEmpty) {
-      DateTime dateTime = DateUtils.dateFromString(
-          scheduleDateTime, Appointment.scheduledTimeFormat());
-
-      if (dateTime != null) {
-        startDate = DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy');
-        endDate = startDate;
-      }
-    }
-     */
+//    String startDate = DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
+//    String endDate = startDate;
+//
+//    String scheduleDateTime = widget.appointment.scheduleDateTime;
+//
+//    if (scheduleDateTime.isNotEmpty) {
+//      DateTime dateTime = DateUtils.dateFromString(
+//          scheduleDateTime, Appointment.scheduledTimeFormat());
+//
+//      if (dateTime != null) {
+//        startDate = DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy');
+//        endDate = startDate;
+//      }
+//    }
+//
+//    Provider.of<AppointmentConsultantProvider>(context).getProviderEmployees(widget.appointment.id, startDate, endDate);
 
     super.didChangeDependencies();
   }

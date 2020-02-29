@@ -45,4 +45,12 @@ class AppointmentDetail {
     });
     return services;
   }
+
+  bool hasWorkEstimate() {
+    if (workEstimateId != null && workEstimateId > 0) {
+      return true;
+    }
+
+    return false;
+  }
 }

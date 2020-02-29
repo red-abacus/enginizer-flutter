@@ -19,6 +19,7 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   Function declineAppointment;
   Function createEstimate;
   Function editEstimate;
+  Function viewEstimate;
   Function assignMechanic;
   Function createPickUpCarForm;
 
@@ -30,6 +31,7 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.declineAppointment,
       this.createEstimate,
       this.editEstimate,
+      this.viewEstimate,
       this.assignMechanic,
       this.createPickUpCarForm});
 
@@ -94,13 +96,14 @@ class AppointmentDetailsGenericConsultantWidgetState
               if (widget.appointment.getState() ==
                   AppointmentStatusState.SCHEDULED)
                 _scheduledSpecificContainer(),
+              if (widget.appointment.getState() ==
+                  AppointmentStatusState.IN_WORK)
+                _inWorkSpecificContainer(),
               _titleContainer(S.of(context).appointment_details_services_title),
               _servicesContainer(),
               _buildSeparator(),
               _titleContainer(_appointmentDateTitle(context)),
-              if (widget.appointmentDetail != null)
-                for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
-                  _appointmentIssueType(widget.appointmentDetail.issues[i], i),
+              _issuesContainer(),
               _buildSeparator(),
               _titleContainer(
                   S.of(context).appointment_details_services_appointment_date),
@@ -133,6 +136,46 @@ class AppointmentDetailsGenericConsultantWidgetState
       default:
         return Container();
     }
+  }
+
+  _issuesContainer() {
+    if (!widget.appointmentDetail.hasWorkEstimate()) {
+      return Column(
+        children: <Widget>[
+          for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
+            _appointmentIssueType(widget.appointmentDetail.issues[i], i)
+        ],
+      );
+    }
+
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  if (widget.appointmentDetail != null)
+                    for (int i = 0;
+                    i < widget.appointmentDetail?.issues?.length;
+                    i++)
+                      _appointmentIssueType(
+                          widget.appointmentDetail.issues[i], i)
+                ],
+              ),
+            ),
+          ),
+          FlatButton(
+            splashColor: Theme.of(context).primaryColor,
+            onPressed: () => {widget.viewEstimate()},
+            child: Text(
+              S.of(context).appointment_details_estimator.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   _pendingButtons() {
@@ -377,6 +420,17 @@ class AppointmentDetailsGenericConsultantWidgetState
     );
   }
 
+  _inWorkSpecificContainer() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _titleContainer(S.of(context).appointment_details_assiged_mechanic),
+        _mechanicRow(),
+        _buildSeparator(),
+      ],
+    );
+  }
+
   _mechanicRow() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -416,7 +470,6 @@ class AppointmentDetailsGenericConsultantWidgetState
 
   _pickUpCarForm() {
     return Container(
-      margin: EdgeInsets.only(top: 15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

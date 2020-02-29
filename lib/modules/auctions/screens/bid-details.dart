@@ -263,7 +263,7 @@ class BidDetailsState extends State<BidDetails> {
             splashColor: Theme.of(context).primaryColor,
             onPressed: () => _openEstimator(context),
             child: Text(
-              S.of(context).auction_bid_estimate.toUpperCase(),
+              S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(
                   null, Theme.of(context).accentColor, FontWeight.bold, 16),
             ),
