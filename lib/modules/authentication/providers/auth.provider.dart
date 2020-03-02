@@ -42,6 +42,10 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password);
   }
 
+  Future<bool> forgotPassword(String email) async {
+    return _forgotPassword(email);
+  }
+
   Future<void> logout() async {
     _token = null;
     final prefs = await SharedPreferences.getInstance();
@@ -106,6 +110,16 @@ class Auth with ChangeNotifier {
         this.authUserDetails = await _userService.getUserDetails(authUser.userId);
       }
 
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<bool> _forgotPassword(String email) async {
+    try {
+      final response = await _authService.forgotPassword(email: email);
       notifyListeners();
       return response;
     } catch (error) {

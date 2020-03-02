@@ -21,7 +21,8 @@ class AuthService {
     try {
       response = await _dio.post('$AUTH_API_PATH/login',
           data: payload,
-          options: Options(headers: {}, contentType: ContentType.json.toString()));
+          options:
+              Options(headers: {}, contentType: ContentType.json.toString()));
     } catch (e) {
       if (e.response.statusCode == 401) {
         throw HttpException('INVALID_CREDENTIALS');
@@ -58,5 +59,20 @@ class AuthService {
     }
 
     return AuthResponse.fromJson(response.data);
+  }
+
+  Future<bool> forgotPassword({String email}) async {
+    var payload = json.encode({"email": email});
+    try {
+      await _dio.post('$AUTH_API_PATH/forgotPassword', data: payload);
+    } catch (e) {
+      if (e.response.statusCode == 404) {
+        throw HttpException('USER_NOT_FOUND');
+      } else {
+        throw HttpException('PROBLEM_SENDING_EMAIL');
+      }
+    }
+
+    return true;
   }
 }
