@@ -15,8 +15,8 @@ class CarFuelConsumptionResponse {
 
   factory CarFuelConsumptionResponse.fromJson(Map<String, dynamic> json) {
     return CarFuelConsumptionResponse(
-        price: json['price'],
-        quantity: json['quantity'],
+        price: int.tryParse('${json['price']}'),
+        quantity: int.tryParse('${json['quantity']}'),
         createdDate: json['createdDate'],
         carId: json['carId'],
         id: json['id']);

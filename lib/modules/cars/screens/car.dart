@@ -1,19 +1,18 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
 import 'package:enginizer_flutter/utils/api_response.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/text_widget.dart';
+import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:bezier_chart/bezier_chart.dart';
-import 'package:bezier_chart/src/bezier_chart_config.dart';
-import 'package:bezier_chart/src/bezier_line.dart';
-import 'package:bezier_chart/src/bezier_chart_widget.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class CarDetails extends StatefulWidget {
@@ -32,18 +31,28 @@ class CarDetailsState extends State<CarDetails> {
   Car model;
   File uploadImage;
   CarProvider carProvider;
-  var initDone = false;
+
+  var _initDone = false;
+  var _isLoading = true;
 
   @override
   void didChangeDependencies() {
-    if (!initDone) {
-      carProvider = Provider.of<CarProvider>(context);
-      carProvider.getCarDetails();
-      carProvider.getCarFuelConsumptionGraphic();
+    if (!_initDone) {
       setState(() {
-        initDone = true;
+        _isLoading = true;
+      });
+
+      carProvider = Provider.of<CarProvider>(context);
+      carProvider.getCarDetails().then((_) {
+        carProvider.getCarFuelConsumptionGraphic().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
       });
     }
+
+    _initDone = true;
     super.didChangeDependencies();
   }
 
@@ -52,10 +61,12 @@ class CarDetailsState extends State<CarDetails> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('${carProvider.selectedCar.brand.name}'),
+        title: Text('${carProvider.selectedCar?.brand?.name}'),
         iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
       ),
-      body: getCarDetailsListener(),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : showCarDetails(carProvider.carDetails),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 1,
@@ -65,67 +76,18 @@ class CarDetailsState extends State<CarDetails> {
     );
   }
 
-  getCarDetailsListener() {
-    switch (carProvider.getCarDetailsAPI.status) {
-      case Status.LOADING:
-        return Container(
-            padding: EdgeInsets.all(10),
-            child: Center(child: CircularProgressIndicator()));
-        break;
-      case Status.ERROR:
-        return Text(carProvider.getCarFuelConsumptionAPI.toString());
-        break;
-      case Status.COMPLETED:
-        return showCarDetails(carProvider.selectedCar);
-        break;
-    }
-  }
-
-  uploadCarImageListener(car) {
-    switch (carProvider.uploadImageAPI.status) {
-      case Status.LOADING:
-        return Container(
-            padding: EdgeInsets.all(10),
-            child: Center(child: CircularProgressIndicator()));
-        break;
-      case Status.ERROR:
-//        return Text(carProvider.getCarFuelConsumptionAPI.toString());
-      return  showPicture(car);
-        break;
-      case Status.COMPLETED:
-        return  showPicture(car);
-        break;
-    }
-  }
-
-  showPicture(car){
+  showPicture(car) {
     return (uploadImage == null)
         ? Image.network(
-      '${car.image}',
-      fit: BoxFit.contain,
-      height: MediaQuery.of(context).size.height * 0.3,
-    )
+            '${car.image}',
+            fit: BoxFit.contain,
+            height: MediaQuery.of(context).size.height * 0.3,
+          )
         : Image.file(
-      uploadImage,
-      fit: BoxFit.contain,
-      height: MediaQuery.of(context).size.height * 0.3,
-    );
-  }
-
-  getChartDataLister() {
-    switch (carProvider.getCarFuelConsumptionAPI.status) {
-      case Status.LOADING:
-        return Container(
-            padding: EdgeInsets.all(10),
-            child: Center(child: CircularProgressIndicator()));
-        break;
-      case Status.ERROR:
-        return Text(carProvider.getCarFuelConsumptionAPI.toString());
-        break;
-      case Status.COMPLETED:
-        return showChart();
-        break;
-    }
+            uploadImage,
+            fit: BoxFit.contain,
+            height: MediaQuery.of(context).size.height * 0.3,
+          );
   }
 
   showCarDetails(Car car) {
@@ -156,7 +118,8 @@ class CarDetailsState extends State<CarDetails> {
                   children: [
                     (car.brand?.name != null && car.model?.name != null)
                         ? Padding(
-                            padding: EdgeInsets.all(20),
+                            padding:
+                                EdgeInsets.only(top: 20, left: 20, right: 20),
                             child: TextWidget(
                               "${car.brand?.name} - ${car.model?.name} ",
                               fontSize: 20,
@@ -166,33 +129,39 @@ class CarDetailsState extends State<CarDetails> {
                         : Container(),
                     (car.year?.name != null && car.color?.name != null)
                         ? Padding(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.only(
+                                left: 20, right: 20, bottom: 20),
                             child: TextWidget(
-                                "${car.year?.name}, ${car.color?.name}"),
+                              '${car.year?.name}, ${car.color?.name}',
+                              color: gray2,
+                            ),
                           )
                         : Container(),
                     (car.power?.name != null && car.motor?.name != null)
-                        ? Padding(
-                            padding: EdgeInsets.only(left: 20, top: 10),
-                            child: TextWidget(
-                                "${car.power?.name}CP, ${car.motor?.name}"))
+                        ? _carDetailsContainer(
+                            '${car.power?.name}CP, ${car.motor?.name}')
                         : Container(),
                     (car.mileage != null)
-                        ? Padding(
-                            padding: EdgeInsets.only(left: 20, top: 10),
-                            child: TextWidget("${car.mileage}KM"),
-                          )
+                        ? _carDetailsContainer('${car.mileage}KM')
+                        : Container(),
+                    (car.vin != null)
+                        ? _carDetailsContainer('VIN: ${car.vin}')
                         : Container(),
                     (car.registrationNumber != null)
-                        ? Padding(
-                            padding: EdgeInsets.only(left: 20, top: 10),
-                            child: TextWidget("${car.registrationNumber}"),
-                          )
+                        ? _carDetailsContainer('${car.registrationNumber}')
+                        : Container(),
+                    (car.rcaExpireDate != null)
+                        ? _carDetailsContainer(
+                            '${S.of(context).car_details_rca_availability}: ${DateUtils.stringFromDate(car.rcaExpireDate, 'dd.MM.yyyy')}')
+                        : Container(),
+                    (car.itpExpireDate != null)
+                        ? _carDetailsContainer(
+                            '${S.of(context).car_details_itp_availability}: ${DateUtils.stringFromDate(car.itpExpireDate, 'dd.MM.yyyy')}')
                         : Container(),
                     Padding(
                       padding: EdgeInsets.all(10),
                     ),
-                    getChartDataLister()
+                    showChart(),
                   ],
                 ),
               ],
@@ -217,9 +186,21 @@ class CarDetailsState extends State<CarDetails> {
     );
   }
 
+  _carDetailsContainer(String text) {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20, top: 5),
+      child: TextWidget(
+        text,
+        color: gray2,
+      ),
+    );
+  }
+
   showChart() {
     var now = DateTime.now();
     var fromDate = DateTime(now.year, now.month - 1, now.day);
+
+    List<DataPoint> points = getGraphicData();
 
     return Center(
       child: Container(
@@ -228,11 +209,11 @@ class CarDetailsState extends State<CarDetails> {
         width: MediaQuery.of(context).size.width,
         child: BezierChart(
           bezierChartScale: BezierChartScale.WEEKLY,
-          fromDate: fromDate,
-          toDate: now,
+          fromDate: points.first.xAxis,
+          toDate: points.last.xAxis,
           selectedDate: now,
           series: [
-            BezierLine(label: "Consum", data: getGraphicData()),
+            BezierLine(label: "Consum", data: points),
           ],
           config: BezierChartConfig(
             verticalIndicatorStrokeWidth: 3.0,
@@ -250,19 +231,17 @@ class CarDetailsState extends State<CarDetails> {
   List<DataPoint> getGraphicData() {
     List<DataPoint> dataPoints = [];
     dataPoints.clear();
-    CarFuelGraphicResponse response =
-        carProvider?.getCarFuelConsumptionAPI?.data;
+    CarFuelGraphicResponse response = carProvider?.carFuelGraphicResponse;
 
-    if (response?.labels != null && response.labels.length > 0)
+    if (response?.labels != null && response.labels.length > 0) {
       for (var i = 0; i < response.labels.length; i++) {
         if (response.datasets[i] != null && response.labels[i] != null)
-          // TODO sterge random si si schimba dataset pentru ca vine doar 0 de pe api
           dataPoints.add(DataPoint<DateTime>(
-              value: double.parse(
-                  (response.datasets[i] + Random().nextInt(35)).toString()),
+              value: double.parse((response.datasets[i]).toString()),
               xAxis: DateTime(DateTime.now().year, DateTime.now().month - 1,
                   response.labels[i])));
       }
+    }
     return dataPoints;
   }
 
@@ -313,9 +292,8 @@ class CarDetailsState extends State<CarDetails> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CarFuelConsumptionForm(() {
-//              Navigator.pop(context);
-            });
+            return CarFuelConsumptionForm(
+                createFuelConsumption: _createCarConsumption);
           });
         });
   }
@@ -348,11 +326,44 @@ class CarDetailsState extends State<CarDetails> {
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
-        )
-    );
-    if(croppedFile!=null)
+        ));
+    if (croppedFile != null)
       carProvider.uploadImage(croppedFile);
     else
       carProvider.uploadImage(image);
+  }
+
+  uploadCarImageListener(car) {
+    switch (carProvider.uploadImageAPI.status) {
+      case Status.LOADING:
+        return Container(
+            padding: EdgeInsets.all(10),
+            child: Center(
+                child: Container(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(),
+            )));
+        break;
+      case Status.ERROR:
+//        return Text(carProvider.getCarFuelConsumptionAPI.toString());
+        return showPicture(car);
+        break;
+      case Status.COMPLETED:
+        return showPicture(car);
+        break;
+    }
+  }
+
+  _createCarConsumption() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    carProvider?.getCarFuelConsumptionGraphic()?.then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 }

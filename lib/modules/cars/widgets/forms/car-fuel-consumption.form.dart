@@ -1,76 +1,146 @@
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-comsumtion.model.dart';
+import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.model.dart';
 import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
-import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/datepicker.widget.dart';
+import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarFuelConsumptionForm extends StatefulWidget {
-  Function callback;
+  Function createFuelConsumption;
 
-  CarFuelConsumptionForm(this.callback);
+  CarFuelConsumptionForm({this.createFuelConsumption});
 
   @override
   CarFuelConsumptionFormState createState() => CarFuelConsumptionFormState();
 }
 
 class CarFuelConsumptionFormState extends State<CarFuelConsumptionForm> {
-  final dateController = TextEditingController();
   final nrKmsController = TextEditingController();
   final quantityController = TextEditingController();
   final priceController = TextEditingController();
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  DateTime fuelDate;
+
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    var carProvider = Provider.of<CarProvider>(context);
+    return _isLoading
+        ? Container(
+            margin: EdgeInsets.only(left: 40, right: 40, top: 120, bottom: 120),
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : _container();
+  }
+
+  _container() {
     return Dialog(
-        child: Container(
-//                height: MediaQuery.of(context).size.height / 2,
-            padding: EdgeInsets.only(left: 30, right: 30),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Date"),
-                  keyboardType: TextInputType.datetime,
-                  controller: dateController,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: "Km drove until last gas fueling"),
-                  controller: nrKmsController,
-                  keyboardType: TextInputType.number,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Quantity"),
-                  keyboardType: TextInputType.number,
-                  controller: quantityController,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Gas price"),
-                  keyboardType: TextInputType.number,
-                  controller: priceController,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                RaisedButton(
-                  child: Text("Add data"),
-                  onPressed: () {
-                    carProvider.addCarFuelConsumption(CarFuelConsumption(
-                        createdDate: dateController.text,
-                        price: int.parse(priceController.text),
-                        quantity: int.parse(priceController.text),
-                        nrOfKms: int.parse(nrKmsController.text)));
-                    widget.callback();
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+        child: Form(
+            key: _formKey,
+            child: Container(
+              padding: EdgeInsets.only(left: 30, right: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  BasicDateField(
+                      labelText: S.of(context).car_details_fuel_date,
+                      validator: (value) {
+                        if (value == null) {
+                          return S.of(context).car_details_fuel_date_error;
+                        } else {
+                          return null;
+                        }
+                      },
+                      onChange: (value) {
+                        this.fuelDate = value;
+                      }),
+                  TextFormField(
+                      decoration: InputDecoration(
+                          labelText: S.of(context).car_details_fuel_date_km),
+                      controller: nrKmsController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || int.tryParse(value) == null) {
+                          return S.of(context).car_details_fuel_date_km_error;
+                        } else {
+                          return null;
+                        }
+                      }),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: S.of(context).car_details_fuel_price),
+                    keyboardType: TextInputType.number,
+                    controller: quantityController,
+                    validator: (value) {
+                      if (value == null || double.tryParse(value) == null) {
+                        return S.of(context).car_details_fuel_price_error;
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.button.color,
-                ),
-              ],
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: S.of(context).car_details_quantity),
+                    keyboardType: TextInputType.number,
+                    controller: priceController,
+                    validator: (value) {
+                      if (value == null || double.tryParse(value) == null) {
+                        return S.of(context).car_details_quantity_empty;
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  RaisedButton(
+                    child: Text("Add data"),
+                    onPressed: () {
+                      _createFuelConsumption();
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  ),
+                ],
+              ),
             )));
+  }
+
+  _createFuelConsumption() {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      CarFuelConsumption carFuelConsumption = CarFuelConsumption(
+          createdDate: DateUtils.stringFromDate(this.fuelDate, 'dd/MM/yyyy'),
+          price: double.tryParse(priceController.text),
+          quantity: double.tryParse(quantityController.text),
+          nrOfKms: int.tryParse(nrKmsController.text));
+
+      CarProvider carProvider = Provider.of<CarProvider>(context);
+      carProvider.addCarFuelConsumption(carFuelConsumption).then((value) {
+        if (value != null) {
+          widget.createFuelConsumption();
+          Navigator.pop(context);
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
+    }
   }
 }

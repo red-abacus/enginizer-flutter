@@ -1,8 +1,6 @@
 class CarFuelGraphicResponse {
-
   List labels;
   List datasets;
-
 
   CarFuelGraphicResponse({
     this.labels,
@@ -19,7 +17,6 @@ class CarFuelGraphicResponse {
         'labels': labels,
         'datasets': datasets
       };
-
 
   static mapData(List<dynamic> response) {
     List list = [];
