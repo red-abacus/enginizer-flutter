@@ -8,7 +8,7 @@ class BidsService {
   static const String BIDS_PATH = '${Environment.BIDS_BASE_API}/bids';
 
   static const String AUCTION_BIDS_PREFIX =
-      '${Environment.AUCTIONS_BASE_API}/auctions/';
+      '${Environment.BIDS_BASE_API}/auctions/';
   static const String AUCTION_BIDS_SUFFIX = '/bids';
 
   static const String ACCEPT_BID_PREFIX = '${Environment.BIDS_BASE_API}/bids/';

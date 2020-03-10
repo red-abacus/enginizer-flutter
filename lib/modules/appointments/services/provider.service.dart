@@ -242,7 +242,6 @@ class ProviderService {
       int providerId, Map<String, dynamic> query) async {
     final response = await _dio.get(_buildProviderItemsPath(providerId),
         queryParameters: query);
-
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
 
@@ -270,7 +269,7 @@ class ProviderService {
   Future<ServiceProviderItemsResponse> getProviderServiceItems(
       int providerId) async {
     final response =
-        await _dio.get(_buildGetProviderServiceItemsPath(providerId));
+    await _dio.get(_buildGetProviderServiceItemsPath(providerId));
 
     if (response.statusCode == 200) {
       return _mapProviderServiceItems(response.data);
@@ -292,7 +291,7 @@ class ProviderService {
   Future<ServiceProviderReview> getServiceProviderReviews(
       int providerId) async {
     final response =
-        await _dio.get(_buildGetServiceProviderReviews(providerId));
+    await _dio.get(_buildGetServiceProviderReviews(providerId));
 
     if (response.statusCode == 200) {
       return ServiceProviderReview.fromJson(response.data);

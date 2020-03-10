@@ -8,7 +8,7 @@ import 'package:enginizer_flutter/modules/authentication/models/http_exception.d
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 
 class AuthService {
-  static const String AUTH_API_PATH = '${Environment.API_BASE_URL}/auth';
+  static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
   static const headers = {'Content-Type': 'application/json'};
 
   Dio _dio = inject<Dio>();

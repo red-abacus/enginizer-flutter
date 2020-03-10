@@ -16,11 +16,11 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
   static const String APPOINTMENTS_DETAILS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String SERVICES_PATH = '${Environment.API_BASE_URL}/services';
+  static const String SERVICES_PATH = '${Environment.PROVIDERS_BASE_API}/services';
   static const String TIMETABLE_PATH =
-      '${Environment.API_BASE_URL}/providers/timetable';
+      '${Environment.PROVIDERS_BASE_API}/providers/timetable';
   static const String PROVIDER_TIMETABLE_PREFIX =
-      '${Environment.API_BASE_URL}/api/providers/';
+      '${Environment.PROVIDERS_BASE_API}/api/providers/';
   static const String PROVIDER_TIMETABLE_SUFFIX = '/timetable';
   static const String PROVIDER_SERVICES_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';

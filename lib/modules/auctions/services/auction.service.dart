@@ -4,17 +4,16 @@ import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 
 import '../../../config/injection.dart';
 import '../../../utils/environment.constants.dart';
 
 class AuctionsService {
   static const String AUCTIONS_PATH =
-      '${Environment.AUCTIONS_BASE_API}/auctions';
+      '${Environment.BIDS_BASE_API}/auctions';
 
   static const String CREATE_BID_PATH_PREFIX =
-      '${Environment.AUCTIONS_BASE_API}/auctions/';
+      '${Environment.BIDS_BASE_API}/auctions/';
   static const String CREATE_BID_PATH_SUFFIX = '/bids';
 
   Dio _dio = inject<Dio>();
