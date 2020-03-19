@@ -187,6 +187,8 @@
   "estimator_add_section_name": "Adaugă numele secțiunii",
   "estimator_section_name": "Numele secțiunii",
   "estimator_add_new_product": "Adaugă produs nou",
+  "estimator_create_from_selection": "Deviz nou din selecție",
+  "estimator_operations_history": "Istoric operații",
   "user_profile_current_password": "Parola Curentă",
   "user_profile_new_password": "Parola Nouă",
   "user_profile_confirm_password": "Confirmă parola",

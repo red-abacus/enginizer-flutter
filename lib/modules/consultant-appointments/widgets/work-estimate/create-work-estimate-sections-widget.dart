@@ -7,17 +7,19 @@ import 'package:flutter/cupertino.dart';
 class CreateWorkEstimateSectionsWidget extends StatefulWidget {
   final IssueRefactor issueRefactor;
 
-  Function setSectionName;
-  Function expandSection;
-  Function addIssueItem;
-  Function removeIssueItem;
+  final Function setSectionName;
+  final Function expandSection;
+  final Function addIssueItem;
+  final Function removeIssueItem;
+  final Function selectIssueSection;
 
   CreateWorkEstimateSectionsWidget(
       {this.issueRefactor,
       this.setSectionName,
       this.expandSection,
       this.addIssueItem,
-      this.removeIssueItem});
+      this.removeIssueItem,
+      this.selectIssueSection});
 
   @override
   _CreateWorkEstimateSectionsWidgetState createState() =>
@@ -39,7 +41,8 @@ class _CreateWorkEstimateSectionsWidgetState
                 addSectionName: _setSectionName,
                 expandSection: _expandSection,
                 addIssueItem: _addIssueItem,
-                removeIssueItem: _removeIssueItem)
+                removeIssueItem: _removeIssueItem,
+            selectIssueSection: _selectIssueSection)
         ],
       ),
     );
@@ -59,5 +62,9 @@ class _CreateWorkEstimateSectionsWidgetState
 
   _removeIssueItem(IssueSection issueSection, IssueItem issueItem) {
     widget.removeIssueItem(widget.issueRefactor, issueSection, issueItem);
+  }
+
+  _selectIssueSection(IssueSection issueSection) {
+    widget.selectIssueSection(widget.issueRefactor, issueSection);
   }
 }

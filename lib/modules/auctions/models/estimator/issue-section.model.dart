@@ -6,6 +6,7 @@ class IssueSection {
   List<IssueItem> items;
   bool isNew = false;
   bool expanded = false;
+  bool selected = false;
 
   clearItems() {
     items = [];

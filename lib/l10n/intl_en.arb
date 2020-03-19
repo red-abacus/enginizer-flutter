@@ -190,6 +190,8 @@
   "estimator_add_section_name": "Add Section Name",
   "estimator_section_name": "Section Name",
   "estimator_add_new_product": "Add New Product",
+  "estimator_create_from_selection": "New estimate from selection",
+  "estimator_operations_history": "Operations history",
   "user_profile_current_password": "Current Password",
   "user_profile_new_password": "New Password",
   "user_profile_confirm_password": "Confirm Password",

@@ -11,6 +11,7 @@ import 'package:enginizer_flutter/modules/consultant-appointments/screens/appoin
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/work-estimate/create-work-estimate-sections-widget.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-date.widget.dart';
+import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,12 +95,59 @@ class _CreateWorkEstimateConsultantState
     }
 
     steps = _buildSteps(context);
+
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          _buildStepper(context),
+          new Align(
+              alignment: Alignment.bottomCenter,
+              child: new Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 50,
+                      child: FlatButton(
+                        color: yellow,
+                        child: Text(
+                          S.of(context).estimator_create_from_selection,
+                          textAlign: TextAlign.center,
+                          style: TextHelper.customTextStyle(
+                              null, Colors.white, FontWeight.bold, 16),
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 50,
+                      child: FlatButton(
+                        color: green,
+                        child: Text(
+                          S.of(context).estimator_operations_history,
+                          textAlign: TextAlign.center,
+                          style: TextHelper.customTextStyle(
+                              null, Colors.white, FontWeight.bold, 16),
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              ))
+        ],
+      ),
+    );
     return _buildStepper(context);
   }
 
   Widget _buildStepper(BuildContext context) => ClipRRect(
         borderRadius: new BorderRadius.circular(5.0),
         child: Container(
+          padding: EdgeInsets.only(bottom: 40),
           decoration: new BoxDecoration(
 //            color: Theme.of(context).cardColor,
             borderRadius: new BorderRadius.only(
@@ -120,19 +168,7 @@ class _CreateWorkEstimateConsultantState
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        RaisedButton(
-                          elevation: 0,
-                          child:
-                              Text(S.of(context).estimator_add_new_operation),
-                          textColor: Theme.of(context).cardColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            _addOperation();
-                          },
-                        ),
+                        _newOperationContainer(),
                       ],
                     );
                   },
@@ -159,6 +195,7 @@ class _CreateWorkEstimateConsultantState
               setSectionName: _setSectionName,
               expandSection: _expandSection,
               removeIssueItem: _removeIssueItem,
+              selectIssueSection: _selectIssueSection,
             )),
       );
     });
@@ -170,6 +207,23 @@ class _CreateWorkEstimateConsultantState
     ));
 
     return stepsList;
+  }
+
+  _newOperationContainer() {
+    return _currentStepIndex == steps.length - 1
+        ? Container()
+        : RaisedButton(
+            elevation: 0,
+            child: Text(S.of(context).estimator_add_new_operation),
+            textColor: Theme.of(context).cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            color: Theme.of(context).primaryColor,
+            onPressed: () {
+              _addOperation();
+            },
+          );
   }
 
   _showIssue(int stepIndex) {
@@ -235,6 +289,13 @@ class _CreateWorkEstimateConsultantState
     setState(() {
       _createWorkEstimateProvider.removeIssueRefactorItem(
           issueRefactor, issueSection, issueItem);
+    });
+  }
+
+  _selectIssueSection(IssueRefactor issueRefactor, IssueSection issueSection) {
+    setState(() {
+      _createWorkEstimateProvider.selectIssueSection(
+          issueRefactor, issueSection);
     });
   }
 }

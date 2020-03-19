@@ -15,13 +15,15 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
   final Function expandSection;
   final Function addIssueItem;
   final Function removeIssueItem;
+  final Function selectIssueSection;
 
   CreateWorkEstimateSectionWidget(
       {this.issueSection,
       this.addSectionName,
       this.expandSection,
       this.addIssueItem,
-      this.removeIssueItem});
+      this.removeIssueItem,
+      this.selectIssueSection});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
               color: gray_10,
               child: Row(
                 children: <Widget>[
+                  _checkmarkContainer(context),
                   Expanded(
                     flex: 5,
                     child: Container(
@@ -104,6 +107,32 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
             _issuesContainer(),
           ],
         ));
+  }
+
+  _checkmarkContainer(BuildContext context) {
+    return issueSection.isNew ? Container()
+        : Expanded(
+      child: Align(
+        child: Container(
+          child: FlatButton(
+            materialTapTargetSize:
+            MaterialTapTargetSize.shrinkWrap,
+            child: SvgPicture.asset(
+              this.issueSection.selected
+                  ? 'assets/images/icons/check_box.svg'
+                  : 'assets/images/icons/check_box_empty.svg',
+              semanticsLabel: 'Up Arrow',
+              color: Theme.of(context).primaryColor,
+              height: 24,
+              width: 24,
+            ),
+            onPressed: () {
+              this.selectIssueSection(issueSection);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   _issuesContainer() {

@@ -144,4 +144,24 @@ class CreateWorkEstimateProvider with ChangeNotifier {
       }
     }
   }
+
+  selectIssueSection(IssueRefactor issueRefactor, IssueSection issueSection) {
+    for (IssueRefactor temp in workEstimateRequestRefactor.issues) {
+      if (temp == issueRefactor) {
+        List<IssueSection> sections = temp.sections;
+
+        for (IssueSection tempIssueSection in sections) {
+          if (tempIssueSection == issueSection) {
+            tempIssueSection.selected = !tempIssueSection.selected;
+
+            if (tempIssueSection.selected) {
+              tempIssueSection.expanded = true;
+            }
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
 }
