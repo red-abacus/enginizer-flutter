@@ -1,5 +1,4 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-form.widget.dart';

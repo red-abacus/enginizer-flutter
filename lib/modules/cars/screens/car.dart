@@ -57,6 +57,7 @@ class CarDetailsState extends State<CarDetails> {
       ),
       body: getCarDetailsListener(),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 1,
         onPressed: () => openModalAddFuelConsumption(context),

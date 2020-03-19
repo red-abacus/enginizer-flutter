@@ -28,6 +28,7 @@ const Color gray2 = Color.fromRGBO(120, 120, 120, 1);
 const Color gray3 = Color.fromRGBO(33, 33, 33, 1);
 const Color gray_80 = Color.fromRGBO(70, 70, 72, 0.4);
 const Color gray_20 = Color.fromRGBO(70, 70, 72, 0.2);
+const Color gray_10 = Color.fromRGBO(120, 120, 120, 0.1);
 
 const Color red = Color.fromRGBO(153, 0, 0, 1);
 

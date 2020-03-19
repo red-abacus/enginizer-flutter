@@ -258,6 +258,7 @@ class CreateWorkEstimatorFormState extends State<CreateWorkEstimatorForm> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 15),
               child: FloatingActionButton(
+                  heroTag: null,
                   onPressed: () => {
                         widget.addIssueItem(widget.issue)
                       },

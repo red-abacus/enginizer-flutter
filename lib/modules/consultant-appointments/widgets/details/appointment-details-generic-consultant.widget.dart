@@ -185,6 +185,7 @@ class AppointmentDetailsGenericConsultantWidgetState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.declineAppointment(widget.appointment);
             },
@@ -195,6 +196,7 @@ class AppointmentDetailsGenericConsultantWidgetState
             backgroundColor: Colors.white,
           ),
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.editEstimate();
             },
@@ -216,6 +218,7 @@ class AppointmentDetailsGenericConsultantWidgetState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.declineAppointment(widget.appointment);
             },
@@ -226,6 +229,7 @@ class AppointmentDetailsGenericConsultantWidgetState
             backgroundColor: Colors.white,
           ),
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.createEstimate();
             },

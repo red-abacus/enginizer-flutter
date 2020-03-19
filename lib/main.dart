@@ -19,6 +19,7 @@ import 'package:enginizer_flutter/modules/consultant-appointments/screens/appoin
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auction-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
@@ -106,8 +107,10 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentsMechanicProvider()),
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
           ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider()),
-          ChangeNotifierProvider.value(value: WorkEstimatesConsultantProvider()),
-          ChangeNotifierProvider.value(value: PickUpCarFormConsultantProvider()),
+          ChangeNotifierProvider.value(
+              value: WorkEstimatesConsultantProvider()),
+          ChangeNotifierProvider.value(
+              value: PickUpCarFormConsultantProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return MaterialApp(
@@ -170,7 +173,10 @@ class AppState extends State<App> {
                   AppointmentDetailsMechanic(),
               UserDetails.route: (context) => UserDetails(),
               UserDetailsConsultant.route: (context) => UserDetailsConsultant(),
-              WorkEstimatesConsultant.route: (context) => WorkEstimatesConsultant()
+              WorkEstimatesConsultant.route: (context) =>
+                  WorkEstimatesConsultant(),
+              CreateWorkEstimateConsultant.route: (context) =>
+                  CreateWorkEstimateConsultant()
             },
           );
         }));

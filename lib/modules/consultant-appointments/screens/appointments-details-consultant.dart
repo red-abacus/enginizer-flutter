@@ -12,7 +12,7 @@ import 'package:enginizer_flutter/modules/consultant-appointments/providers/appo
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-modal.widget.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,11 +50,12 @@ class AppointmentDetailsConsultantState
     _appointmentConsultantProvider =
         Provider.of<AppointmentConsultantProvider>(context);
 
-    if (_appointmentConsultantProvider.selectedAppointment == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pop();
-      });
-    }
+    // TODO - remove this
+//    if (_appointmentConsultantProvider.selectedAppointment == null) {
+//      WidgetsBinding.instance.addPostFrameCallback((_) {
+//        Navigator.of(context).pop();
+//      });
+//    }
 
     return Consumer<AppointmentConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
@@ -232,18 +233,22 @@ class AppointmentDetailsConsultantState
       Provider.of<CreateWorkEstimateProvider>(context).setIssues(
           _appointmentConsultantProvider.selectedAppointmentDetail.issues);
 
-      showModalBottomSheet<void>(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return CreateEstimatorModal(createBid: _createWorkEstimate);
-            });
-          });
+      Navigator.pushNamed(context, CreateWorkEstimateConsultant.route);
+//      Navigator.of(context).pushNamed(CreateWorkEstimateConsultant.route);
+
+//       TODO - removed old estimator
+//      showModalBottomSheet<void>(
+//          shape: RoundedRectangleBorder(
+//            borderRadius: BorderRadius.circular(10.0),
+//          ),
+//          context: context,
+//          isScrollControlled: true,
+//          builder: (BuildContext context) {
+//            return StatefulBuilder(
+//                builder: (BuildContext context, StateSetter state) {
+//              return CreateEstimatorModal(createBid: _createWorkEstimate);
+//            });
+//          });
     }
   }
 

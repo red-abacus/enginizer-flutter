@@ -6,6 +6,7 @@ import 'package:enginizer_flutter/modules/appointments/widgets/appointment-creat
 import 'package:enginizer_flutter/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,7 @@ class AppointmentsState extends State<Appointments> {
           child: _renderAppointments(_isLoading, _appointmentsProvider.appointments),
         ),
         floatingActionButton: FloatingActionButton(
+          heroTag: null,
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 1,
           onPressed: () => _openAppointmentCreateModal(context),
