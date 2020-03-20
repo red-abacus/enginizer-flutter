@@ -30,6 +30,7 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
                 widget.issues != null ? listbox : CircularProgressIndicator(),
           ),
           FloatingActionButton(
+              heroTag: null,
               onPressed: widget.addIssue, child: Icon(Icons.add))
         ],
       ),

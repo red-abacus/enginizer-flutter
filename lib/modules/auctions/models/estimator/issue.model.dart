@@ -1,3 +1,5 @@
+import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-refactor.model.dart';
+
 import 'issue-item.model.dart';
 
 class Issue {
@@ -46,5 +48,13 @@ class Issue {
 
   clearItems() {
     items = [];
+  }
+
+  IssueRefactor toRefactor() {
+    IssueRefactor issueRefactor = new IssueRefactor();
+    issueRefactor.id = id;
+    issueRefactor.name = name;
+    issueRefactor.sections = [];
+    return issueRefactor;
   }
 }

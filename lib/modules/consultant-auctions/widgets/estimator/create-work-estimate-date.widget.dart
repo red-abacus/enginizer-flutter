@@ -19,14 +19,14 @@ class CreateWorkEstimateDateWidgetState
         Provider.of<CreateWorkEstimateProvider>(context);
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .6,
+      height: MediaQuery.of(context).size.height * .7,
       child: SchedulerWidget(
         // TODO - for now, this feature will be on next versions of app.
         //        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
         calendarEntries: CalendarEntry.getDateEntriesFromTimetable(
             DateTime.now(), [], provider.serviceProviderTimetable),
         dateEntrySelected: _dateEntrySelected,
-        dateEntry: provider.workEstimateRequest.dateEntry,
+        dateEntry: provider.workEstimateRequestRefactor.dateEntry,
       ),
     );
   }
@@ -34,7 +34,7 @@ class CreateWorkEstimateDateWidgetState
   _dateEntrySelected(DateEntry dateEntry) {
     setState(() {
       Provider.of<CreateWorkEstimateProvider>(context)
-          .workEstimateRequest
+          .workEstimateRequestRefactor
           .dateEntry = dateEntry;
     });
   }

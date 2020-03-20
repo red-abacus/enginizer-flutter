@@ -256,6 +256,7 @@ class AppointmentGenericDetailsWidgetState
         children: <Widget>[
           Spacer(),
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.cancelAppointment(widget.appointment);
             },
@@ -280,6 +281,7 @@ class AppointmentGenericDetailsWidgetState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.cancelAppointment(widget.appointment);
             },
@@ -293,6 +295,7 @@ class AppointmentGenericDetailsWidgetState
             backgroundColor: Colors.white,
           ),
           FloatingActionButton.extended(
+            heroTag: null,
             onPressed: () {
               widget.acceptAppointment();
             },

@@ -10,7 +10,7 @@ import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-m
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-modal.widget.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -200,18 +200,22 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       Provider.of<CreateWorkEstimateProvider>(context)
           .setIssues(widget.auctionDetails.issues);
 
-      showModalBottomSheet<void>(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return CreateEstimatorModal(createBid: widget.createBid);
-            });
-          });
+      Navigator.of(context).pushNamed(CreateWorkEstimateConsultant.route);
+//      Navigator.of(context).pushNamed(CreateWorkEstimateConsultant.route);
+
+      // TODO - removed old estimator
+//      showModalBottomSheet<void>(
+//          shape: RoundedRectangleBorder(
+//            borderRadius: BorderRadius.circular(10.0),
+//          ),
+//          context: context,
+//          isScrollControlled: true,
+//          builder: (BuildContext context) {
+//            return StatefulBuilder(
+//                builder: (BuildContext context, StateSetter state) {
+//              return CreateEstimatorModal(createBid: widget.createBid);
+//            });
+//          });
     }
   }
 

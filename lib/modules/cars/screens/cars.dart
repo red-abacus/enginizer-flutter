@@ -34,6 +34,7 @@ class CarsState extends State<Cars> {
       builder: (context, carsProvider, _) => Scaffold(
           body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
           floatingActionButton: FloatingActionButton(
+            heroTag: null,
             backgroundColor: Theme.of(context).primaryColor,
             elevation: 1,
             onPressed: () => _openCarCreateModal(context),

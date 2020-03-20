@@ -68,6 +68,7 @@ class CarDetailsState extends State<CarDetails> {
           ? Center(child: CircularProgressIndicator())
           : showCarDetails(carProvider.carDetails),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 1,
         onPressed: () => openModalAddFuelConsumption(context),
