@@ -2,6 +2,7 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user-type.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
+import 'package:enginizer_flutter/utils/app_config.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,9 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm>
     with SingleTickerProviderStateMixin {
   final double loginCardHeight = 350;
-  final double registerCardHeight = 480;
+  double registerCardHeight(BuildContext context) {
+    return AppConfig.of(context).enviroment == Enviroment.Dev ? 480 : 420;
+}
   final double forgotPasswordCardHeight = 260;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -235,10 +238,12 @@ class _AuthFormState extends State<AuthForm>
       animation = _opacityHideAnimation;
     }
 
+    double maxHeight = AppConfig.of(context).enviroment == Enviroment.Dev ? 125 : 60;
+
     return AnimatedContainer(
         constraints: BoxConstraints(
           minHeight: _authMode == AuthMode.ForgotPassword ? 0 : 60,
-          maxHeight: _authMode == AuthMode.ForgotPassword ? 0 : 125,
+          maxHeight: _authMode == AuthMode.ForgotPassword ? 0 : maxHeight,
         ),
         duration: Duration(milliseconds: 300),
         curve: Curves.easeIn,
@@ -264,10 +269,11 @@ class _AuthFormState extends State<AuthForm>
   }
 
   _confirmPasswordContainer() {
+    double maxHeight = AppConfig.of(context).enviroment == Enviroment.Dev ? 125 : 60;
     return AnimatedContainer(
       constraints: BoxConstraints(
         minHeight: _authMode == AuthMode.Signup ? 60 : 0,
-        maxHeight: _authMode == AuthMode.Signup ? 125 : 0,
+        maxHeight: _authMode == AuthMode.Signup ? maxHeight : 0,
       ),
       duration: Duration(milliseconds: 300),
       curve: Curves.easeIn,
@@ -293,28 +299,7 @@ class _AuthFormState extends State<AuthForm>
                       }
                     : null,
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Text(S.of(context).auth_register_client,
-                        style: Theme.of(context).textTheme.body1),
-                  ),
-                  Switch(
-                      inactiveThumbColor: Theme.of(context).accentColor,
-                      inactiveTrackColor: Theme.of(context).primaryColor,
-                      activeTrackColor: Theme.of(context).primaryColor,
-                      value: _userTypeSwitch,
-                      onChanged: (value) => _toggleSwitch(value)),
-                  Expanded(
-                    child: Text(
-                      S.of(context).auth_register_provider,
-                      style: Theme.of(context).textTheme.body1,
-                    ),
-                  )
-                ],
-              )
+              _userTypeContainer(),
             ],
           ),
         ),
@@ -340,12 +325,39 @@ class _AuthFormState extends State<AuthForm>
         ));
   }
 
+  _userTypeContainer() {
+    return AppConfig.of(context).enviroment == Enviroment.Dev
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(S.of(context).auth_register_client,
+                    style: Theme.of(context).textTheme.body1),
+              ),
+              Switch(
+                  inactiveThumbColor: Theme.of(context).accentColor,
+                  inactiveTrackColor: Theme.of(context).primaryColor,
+                  activeTrackColor: Theme.of(context).primaryColor,
+                  value: _userTypeSwitch,
+                  onChanged: (value) => _toggleSwitch(value)),
+              Expanded(
+                child: Text(
+                  S.of(context).auth_register_provider,
+                  style: Theme.of(context).textTheme.body1,
+                ),
+              )
+            ],
+          )
+        : Container();
+  }
+
   double _getCardHeight() {
     switch (_authMode) {
       case AuthMode.Login:
         return loginCardHeight;
       case AuthMode.Signup:
-        return registerCardHeight;
+        return registerCardHeight(context);
         break;
       case AuthMode.ForgotPassword:
         return forgotPasswordCardHeight;
@@ -458,7 +470,7 @@ class _AuthFormState extends State<AuthForm>
     _controller.forward();
   }
 
-  bool _toggleSwitch(value) {
+  _toggleSwitch(value) {
     if (value == true) {
       _authData['userType'] = UserType.Provider;
     } else {

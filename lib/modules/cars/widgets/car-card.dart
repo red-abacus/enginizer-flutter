@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:enginizer_flutter/utils/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -71,33 +72,37 @@ class CarCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    FlatButton(
-                      padding: EdgeInsets.all(0),
-                      splashColor: Theme.of(context).primaryColor,
-                      onPressed: () =>
-                      {
-                        this.openAppointmentCreateModal(context, this.car)
-                      },
-                      child: Text('SCHEDULE',
-                          style: TextStyle(
-                              color: Theme.of(context).accentColor,
-                              fontFamily: 'Lato',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14)),
-                    ),
-                  ],
-                ),
-              )
+              _scheduleButton(context)
             ],
           ),
         ),
       );
     });
+  }
+
+  _scheduleButton(BuildContext context) {
+    return AppConfig.of(context).enviroment == Enviroment.Dev
+        ? Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                FlatButton(
+                  padding: EdgeInsets.all(0),
+                  splashColor: Theme.of(context).primaryColor,
+                  onPressed: () =>
+                      {this.openAppointmentCreateModal(context, this.car)},
+                  child: Text('SCHEDULE',
+                      style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14)),
+                ),
+              ],
+            ),
+          )
+        : Container();
   }
 }

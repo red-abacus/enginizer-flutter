@@ -13,6 +13,7 @@ import 'package:enginizer_flutter/modules/mechanic-appointments/screens/appointm
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:enginizer_flutter/modules/user-details/screens/user-details.dart';
+import 'package:enginizer_flutter/utils/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,12 +34,17 @@ class NavigationApp extends StatefulWidget {
 
   static final List<DrawerItem> adminDrawerItems = [];
 
-  static final List<DrawerItem> userDrawerItems = [
-    new DrawerItem("Dashboard", Dashboard.route, Icons.dashboard),
-    new DrawerItem("Cars", Cars.route, Icons.directions_car),
-    new DrawerItem("Appointments", Appointments.route, Icons.event_available),
-    new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
-  ];
+  static List<DrawerItem> userDrawerItems(BuildContext context) {
+    return AppConfig.of(context).enviroment == Enviroment.Dev
+        ? [
+            new DrawerItem("Dashboard", Dashboard.route, Icons.dashboard),
+            new DrawerItem("Cars", Cars.route, Icons.directions_car),
+            new DrawerItem(
+                "Appointments", Appointments.route, Icons.event_available),
+            new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
+          ]
+        : [new DrawerItem("Cars", Cars.route, Icons.directions_car)];
+  }
 
   static final List<DrawerItem> providerAdminDrawerItems = [];
 
@@ -46,7 +52,8 @@ class NavigationApp extends StatefulWidget {
     new DrawerItem(
         "Appointments", AppointmentsConsultant.route, Icons.event_available),
     new DrawerItem("Auctions", AuctionsConsultant.route, Icons.dashboard),
-    new DrawerItem("Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard)
+    new DrawerItem(
+        "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard)
   ];
 
   static final List<DrawerItem> mechanicDrawerItems = [
@@ -74,22 +81,7 @@ class NavigationApp extends StatefulWidget {
     }
   }
 
-  List<DrawerItem> get activeDrawerItems {
-    switch (this.authUser.role) {
-      case Roles.Super:
-        return NavigationApp.adminDrawerItems;
-      case Roles.Client:
-        return NavigationApp.userDrawerItems;
-      case Roles.ProviderAdmin:
-        return NavigationApp.providerAdminDrawerItems;
-      case Roles.ProviderConsultant:
-        return NavigationApp.consultantDrawerItems;
-      case Roles.ProviderPersonnel:
-        return NavigationApp.mechanicDrawerItems;
-      default:
-        return [];
-    }
-  }
+  List<DrawerItem> activeDrawerItems;
 
   @override
   _NavigationAppState createState() => _NavigationAppState();
@@ -102,6 +94,10 @@ class _NavigationAppState extends State<NavigationApp> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.activeDrawerItems == null) {
+      widget.activeDrawerItems = _initActiveDrawerItems();
+    }
+
     var auth = Provider.of<Auth>(context);
     if (_selectedDrawerRoute == null) {
       _selectedDrawerRoute = widget.activeDrawerRoute;
@@ -160,6 +156,23 @@ class _NavigationAppState extends State<NavigationApp> {
     );
   }
 
+  _initActiveDrawerItems() {
+    switch (widget.authUser.role) {
+      case Roles.Super:
+        return NavigationApp.adminDrawerItems;
+      case Roles.Client:
+        return NavigationApp.userDrawerItems(context);
+      case Roles.ProviderAdmin:
+        return NavigationApp.providerAdminDrawerItems;
+      case Roles.ProviderConsultant:
+        return NavigationApp.consultantDrawerItems;
+      case Roles.ProviderPersonnel:
+        return NavigationApp.mechanicDrawerItems;
+      default:
+        return [];
+    }
+  }
+
   _onSelectItem(String route) {
     setState(() => _selectedDrawerRoute = route);
     Navigator.of(context).pop(); // close the drawer
@@ -209,11 +222,13 @@ class _NavigationAppState extends State<NavigationApp> {
   _showUserDetails() {
     switch (widget.authUser.role) {
       case Roles.Client:
-        Provider.of<UserProvider>(context, listen: false).userDetails =
-            Provider.of<Auth>(context).authUserDetails;
+        if (AppConfig.of(context).enviroment == Enviroment.Dev) {
+          Provider.of<UserProvider>(context, listen: false).userDetails =
+              Provider.of<Auth>(context).authUserDetails;
 
-        setState(() => _selectedDrawerRoute = UserDetails.route);
-        Navigator.of(context).pop(); // close the drawer
+          setState(() => _selectedDrawerRoute = UserDetails.route);
+          Navigator.of(context).pop(); // close the drawer
+        }
         break;
       case Roles.ProviderConsultant:
         Provider.of<UserConsultantProvider>(context, listen: false)

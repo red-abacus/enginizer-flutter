@@ -71,7 +71,7 @@ void main() async {
   setupDependencyInjection(prefs);
 
   var configuredApp = AppConfig(
-    appInternalId: 1,
+    enviroment: Enviroment.Dev,
     child: App(),
   );
   runApp(configuredApp);

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 
+enum Enviroment {Dev, Beta}
+
 class AppConfig extends InheritedWidget {
-  AppConfig({this.appInternalId,
+  AppConfig({this.enviroment,
     Widget child}):super(child: child);
 
-  final int appInternalId;
+  final Enviroment enviroment;
 
   static AppConfig of(BuildContext context) {
     return context.inheritFromWidgetOfExactType(AppConfig);
