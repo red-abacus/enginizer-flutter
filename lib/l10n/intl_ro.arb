@@ -55,6 +55,16 @@
   "cars_create_error_ITPExpiryEmpty": "Expirare ITP necompletată!",
   "cars_create_error_vinEmpty": "VIN necompletat!",
   "cars_list_search_hint": "Număr înmatriculare sau model mașină",
+  "car_details_rca_availability": "RCA valabil până în",
+  "car_details_itp_availability": "ITP valabil până în",
+  "car_details_fuel_date": "Dată alimentare",
+  "car_details_fuel_date_error": "Dată alimentare necompletată!",
+  "car_details_fuel_date_km": "Km parcursi până la ultima alimentare",
+  "car_details_fuel_date_km_error": "Km parcursi necompletati!",
+  "car_details_gas_price": "Preț carburant",
+  "car_details_gas_price_error": "Preț carburant necompletat",
+  "car_general_quantity": "Cantitate",
+  "car_general_quantity_error": "Cantitate necompletă!",
   "COLOR_RED": "Roșu",
   "COLOR_BLACK": "Negru",
   "COLOR_GREEN": "Verde",
@@ -239,5 +249,5 @@
   "general_add_image": "Adaugă Imagine",
   "general_save": "Salvează",
   "general_create": "Crează",
-  "general_rejected": "Respins"
+  "general_rejected": "Respins",
 }

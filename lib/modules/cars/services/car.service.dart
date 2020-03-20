@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-comsumtion.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-comsumtion.response.dart';
+import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.model.dart';
+import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.response.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/cars-reponse.model.dart';
@@ -77,8 +77,6 @@ class CarService {
     final response = await _dio.get('$CAR_API_PATH/$id');
 
     if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
       return Car.fromJson(response.data);
     } else {
       // If that response was not OK, throw an error.
