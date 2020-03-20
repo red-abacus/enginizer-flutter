@@ -24,6 +24,7 @@ import 'package:enginizer_flutter/modules/consultant-estimators/providers/work-e
 import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
+import 'package:enginizer_flutter/utils/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,7 +69,12 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final prefs = await SharedPreferences.getInstance();
   setupDependencyInjection(prefs);
-  runApp(App());
+
+  var configuredApp = AppConfig(
+    appInternalId: 1,
+    child: App(),
+  );
+  runApp(configuredApp);
 }
 
 class App extends StatefulWidget {
