@@ -26,7 +26,7 @@ class CreateWorkEstimateDateWidgetState
         calendarEntries: CalendarEntry.getDateEntriesFromTimetable(
             DateTime.now(), [], provider.serviceProviderTimetable),
         dateEntrySelected: _dateEntrySelected,
-        dateEntry: provider.workEstimateRequest.dateEntry,
+        dateEntry: provider.workEstimateRequestRefactor.dateEntry,
       ),
     );
   }
@@ -34,7 +34,7 @@ class CreateWorkEstimateDateWidgetState
   _dateEntrySelected(DateEntry dateEntry) {
     setState(() {
       Provider.of<CreateWorkEstimateProvider>(context)
-          .workEstimateRequest
+          .workEstimateRequestRefactor
           .dateEntry = dateEntry;
     });
   }

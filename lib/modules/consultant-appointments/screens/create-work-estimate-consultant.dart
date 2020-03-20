@@ -4,13 +4,14 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-refactor.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-details-consultant.dart';
+import 'package:enginizer_flutter/modules/consultant-appointments/widgets/work-estimate/create-work-estimate-final-info.widget.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/work-estimate/create-work-estimate-sections-widget.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-date.widget.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
@@ -46,11 +47,16 @@ class _CreateWorkEstimateConsultantState
     return Consumer<AppointmentConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
             appBar: AppBar(
-              title: Text(
-                'test',
-                style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 20),
-              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(S.of(context).general_save,
+                      style: TextHelper.customTextStyle(
+                          null, Colors.white, FontWeight.bold, 16)),
+                  onPressed: () {
+                    _save();
+                  },
+                )
+              ],
               iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
             ),
             body: _buildContent(context)));
@@ -297,5 +303,28 @@ class _CreateWorkEstimateConsultantState
       _createWorkEstimateProvider.selectIssueSection(
           issueRefactor, issueSection);
     });
+  }
+
+  _save() {
+    String validationString = _createWorkEstimateProvider
+        .workEstimateRequestRefactor
+        .isValid(context);
+
+    if (validationString != null) {
+      AlertWarningDialog.showAlertDialog(
+          context, S.of(context).general_warning, validationString);
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CreateWorkEstimateFinalInfoWidget(
+            infoAdded: _infoAdded,
+          );
+        },
+      );
+    }
+  }
+
+  _infoAdded(String percentage, String time) {
   }
 }

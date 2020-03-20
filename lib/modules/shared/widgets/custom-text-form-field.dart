@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool enabled;
   final String errorText;
   bool validate = true;
+  TextInputType textInputType = TextInputType.text;
 
   CustomTextFormField(
       {this.labelText,
@@ -16,7 +17,8 @@ class CustomTextFormField extends StatelessWidget {
       this.currentValue,
       this.enabled = true,
       this.errorText,
-      this.validate});
+      this.validate,
+      this.textInputType});
 
   TextEditingController _textController;
 
@@ -27,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
       ..selection = TextSelection.collapsed(offset: currentValue.length);
 
     return TextFormField(
+      keyboardType: textInputType,
         decoration: InputDecoration(labelText: labelText),
         onChanged: (value) {
           listener(value);
