@@ -40,7 +40,9 @@ class CarsMakeProvider with ChangeNotifier {
     'registrationNumber': null,
     'activeKm': null,
     'rcaExpiryDate': null,
+    'rcaExpiryDateNotification': false,
     'itpExpiryDate': null,
+    'itpExpiryDateNotification': false
   };
 
   CarMakeService carMakeService = inject<CarMakeService>();
