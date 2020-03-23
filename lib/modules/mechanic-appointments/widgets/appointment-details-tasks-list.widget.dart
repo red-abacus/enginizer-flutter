@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/timer-config.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';

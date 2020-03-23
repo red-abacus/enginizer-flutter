@@ -2,7 +2,7 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment.model.d
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 
-import 'estimator/issue.model.dart';
+import '../../work-estimate-form/models/issue.model.dart';
 
 class WorkEstimateDetails {
   int id;

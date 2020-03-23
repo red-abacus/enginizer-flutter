@@ -4,7 +4,6 @@ import 'package:enginizer_flutter/modules/appointments/providers/appointment.pro
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
 import 'package:enginizer_flutter/modules/auctions/screens/bid-details.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
@@ -16,10 +15,8 @@ import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
 import 'package:enginizer_flutter/modules/cars/screens/car.dart';
 import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-consultant.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auction-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
@@ -62,6 +59,7 @@ import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart'
 import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'modules/user-details/screens/user-details.dart';
+import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,8 +98,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionsConsultantProvider()),
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
-          ChangeNotifierProvider.value(value: CreateWorkEstimateProvider()),
-          ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
+          ChangeNotifierProvider.value(value: WorkEstimateProvider()),
           ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentsMechanicProvider()),
@@ -174,9 +171,7 @@ class AppState extends State<App> {
               UserDetails.route: (context) => UserDetails(),
               UserDetailsConsultant.route: (context) => UserDetailsConsultant(),
               WorkEstimatesConsultant.route: (context) =>
-                  WorkEstimatesConsultant(),
-              CreateWorkEstimateConsultant.route: (context) =>
-                  CreateWorkEstimateConsultant()
+                  WorkEstimatesConsultant()
             },
           );
         }));

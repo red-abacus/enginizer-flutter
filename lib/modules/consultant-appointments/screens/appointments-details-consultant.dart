@@ -2,17 +2,14 @@ import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/request/work-estimate-request.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -229,49 +226,31 @@ class AppointmentDetailsConsultantState
 
   _createEstimate() {
     if (_appointmentConsultantProvider.selectedAppointmentDetail != null) {
-      Provider.of<CreateWorkEstimateProvider>(context).refreshValues();
-      Provider.of<CreateWorkEstimateProvider>(context).setIssues(
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).setIssues(
           _appointmentConsultantProvider.selectedAppointmentDetail.issues);
 
-      Navigator.pushNamed(context, CreateWorkEstimateConsultant.route);
-//      Navigator.of(context).pushNamed(CreateWorkEstimateConsultant.route);
-
-//       TODO - removed old estimator
-//      showModalBottomSheet<void>(
-//          shape: RoundedRectangleBorder(
-//            borderRadius: BorderRadius.circular(10.0),
-//          ),
-//          context: context,
-//          isScrollControlled: true,
-//          builder: (BuildContext context) {
-//            return StatefulBuilder(
-//                builder: (BuildContext context, StateSetter state) {
-//              return CreateEstimatorModal(createBid: _createWorkEstimate);
-//            });
-//          });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
+      );
     }
   }
 
   _editEstimate() {
-    Provider.of<WorkEstimatesProvider>(context).initValues();
+    Provider.of<WorkEstimateProvider>(context).initValues();
     Provider.of<ProviderServiceProvider>(context).loadItemTypes();
-    Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+    Provider.of<WorkEstimateProvider>(context).workEstimateId =
         _appointmentConsultantProvider.selectedAppointmentDetail.workEstimateId;
-    Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+    Provider.of<WorkEstimateProvider>(context).serviceProvider =
         _appointmentConsultantProvider.selectedAppointment.serviceProvider;
 
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return EstimatorModal(mode: EstimatorMode.Edit);
-          });
-        });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WorkEstimateForm(mode: EstimatorMode.Edit)),
+    );
   }
 
   _viewEstimate() {
@@ -281,40 +260,19 @@ class AppointmentDetailsConsultantState
         _appointmentConsultantProvider
                 .selectedAppointmentDetail.workEstimateId !=
             0) {
-      Provider.of<WorkEstimatesProvider>(context).initValues();
-      Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+      Provider.of<WorkEstimateProvider>(context).initValues();
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
           _appointmentConsultantProvider
               .selectedAppointmentDetail.workEstimateId;
-      Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+      Provider.of<WorkEstimateProvider>(context).serviceProvider =
           _appointmentConsultantProvider.selectedAppointment.serviceProvider;
 
-      showModalBottomSheet<void>(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return EstimatorModal(mode: EstimatorMode.ReadOnly);
-            });
-          });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+      );
     }
-  }
-
-  _createWorkEstimate(WorkEstimateRequest workEstimateRequest) {
-    _appointmentConsultantProvider
-        .createWorkEstimate(
-            _appointmentConsultantProvider.selectedAppointment.id,
-            _appointmentConsultantProvider.selectedAppointmentDetail.car.id,
-            _appointmentConsultantProvider.selectedAppointmentDetail.user.uid,
-            workEstimateRequest)
-        .then((_) {
-      setState(() {
-        _initDone = false;
-      });
-    });
   }
 
   _assignMechanic() {

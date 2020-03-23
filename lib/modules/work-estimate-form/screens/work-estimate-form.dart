@@ -1,16 +1,17 @@
 import 'dart:math';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-refactor.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-section.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-details-consultant.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/work-estimate/create-work-estimate-final-info.widget.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/work-estimate/create-work-estimate-sections-widget.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/widgets/estimator/create-work-estimate-date.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-sections-widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-date.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
@@ -19,18 +20,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CreateWorkEstimateConsultant extends StatefulWidget {
+class WorkEstimateForm extends StatefulWidget {
   static const String route =
-      '${AppointmentDetailsConsultant.route}/create-work-estimate-consultant';
+      '${AppointmentDetailsConsultant.route}/work-estimate-form';
 
+  final EstimatorMode mode;
+
+  WorkEstimateForm({this.mode});
+
+  // TODO - check route
   @override
   State<StatefulWidget> createState() {
-    return _CreateWorkEstimateConsultantState(route: route);
+    return _WorkEstimateFormState(route: route);
   }
 }
 
-class _CreateWorkEstimateConsultantState
-    extends State<CreateWorkEstimateConsultant> {
+class _WorkEstimateFormState
+    extends State<WorkEstimateForm> {
   String route;
 
   bool _initDone = false;
@@ -38,9 +44,9 @@ class _CreateWorkEstimateConsultantState
   int _currentStepIndex = 0;
   List<Step> steps = [];
 
-  CreateWorkEstimateProvider _createWorkEstimateProvider;
+  WorkEstimateProvider _workEstimateProvider;
 
-  _CreateWorkEstimateConsultantState({this.route});
+  _WorkEstimateFormState({this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +75,15 @@ class _CreateWorkEstimateConsultantState
         _isLoading = true;
       });
 
-      _createWorkEstimateProvider =
-          Provider.of<CreateWorkEstimateProvider>(context);
-      _createWorkEstimateProvider.loadItemTypes().then((_) {
+      _workEstimateProvider =
+          Provider.of<WorkEstimateProvider>(context);
+      _workEstimateProvider.loadItemTypes().then((_) {
         String startDate =
             DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
         String endDate = DateUtils.stringFromDate(
             DateUtils.addDayToDate(DateTime.now(), 7), 'dd/MM/yyyy');
 
-        _createWorkEstimateProvider
+        _workEstimateProvider
             .loadServiceProviderSchedule(
                 Provider.of<Auth>(context).authUserDetails.userProvider.id,
                 startDate,
@@ -147,7 +153,6 @@ class _CreateWorkEstimateConsultantState
         ],
       ),
     );
-    return _buildStepper(context);
   }
 
   Widget _buildStepper(BuildContext context) => ClipRRect(
@@ -185,8 +190,8 @@ class _CreateWorkEstimateConsultantState
 
   List<Step> _buildSteps(BuildContext context) {
     List<Step> stepsList = [];
-    List<IssueRefactor> issues =
-        _createWorkEstimateProvider?.workEstimateRequestRefactor?.issues;
+    List<Issue> issues =
+        _workEstimateProvider?.workEstimateRequest?.issues;
 
     issues.asMap().forEach((index, issueRefactor) {
       stepsList.add(
@@ -195,8 +200,8 @@ class _CreateWorkEstimateConsultantState
             title: Text((issueRefactor.name?.isNotEmpty ?? false)
                 ? issueRefactor.name
                 : 'N/A'),
-            content: CreateWorkEstimateSectionsWidget(
-              issueRefactor: issues[index],
+            content: WorkEstimateSectionsWidget(
+              issue: issues[index],
               addIssueItem: _addIssueItem,
               setSectionName: _setSectionName,
               expandSection: _expandSection,
@@ -209,7 +214,7 @@ class _CreateWorkEstimateConsultantState
     stepsList.add(Step(
       isActive: _isStepActive(issues.length),
       title: Text(S.of(context).auction_proposed_date),
-      content: CreateWorkEstimateDateWidget(),
+      content: WorkEstimateDateWidget(),
     ));
 
     return stepsList;
@@ -244,11 +249,11 @@ class _CreateWorkEstimateConsultantState
 
   _addOperation() {
     setState(() {
-      List<IssueRefactor> issues =
-          _createWorkEstimateProvider.workEstimateRequestRefactor.issues;
+      List<Issue> issues =
+          _workEstimateProvider.workEstimateRequest.issues;
 
       if (_currentStepIndex < issues.length) {
-        IssueRefactor issue = issues[_currentStepIndex];
+        Issue issue = issues[_currentStepIndex];
 
         IssueSection section = IssueSection.defaultSection();
         issue.sections.add(section);
@@ -257,9 +262,9 @@ class _CreateWorkEstimateConsultantState
   }
 
   _setSectionName(
-      IssueRefactor issueRefactor, String name, IssueSection issueSection) {
+      Issue issue, String name, IssueSection issueSection) {
     setState(() {
-      for (IssueSection section in issueRefactor.sections) {
+      for (IssueSection section in issue.sections) {
         section.expanded = false;
       }
 
@@ -269,7 +274,7 @@ class _CreateWorkEstimateConsultantState
     });
   }
 
-  _expandSection(IssueRefactor issueRefactor, IssueSection issueSection) {
+  _expandSection(Issue issueRefactor, IssueSection issueSection) {
     setState(() {
       if (issueSection.expanded) {
         issueSection.expanded = false;
@@ -283,31 +288,31 @@ class _CreateWorkEstimateConsultantState
     });
   }
 
-  _addIssueItem(IssueRefactor issueRefactor, IssueSection issueSection) {
+  _addIssueItem(Issue issueRefactor, IssueSection issueSection) {
     setState(() {
-      _createWorkEstimateProvider.addRequestToIssueSection(
+      _workEstimateProvider.addRequestToIssueSection(
           issueRefactor, issueSection);
     });
   }
 
-  _removeIssueItem(IssueRefactor issueRefactor, IssueSection issueSection,
+  _removeIssueItem(Issue issueRefactor, IssueSection issueSection,
       IssueItem issueItem) {
     setState(() {
-      _createWorkEstimateProvider.removeIssueRefactorItem(
+      _workEstimateProvider.removeIssueRefactorItem(
           issueRefactor, issueSection, issueItem);
     });
   }
 
-  _selectIssueSection(IssueRefactor issueRefactor, IssueSection issueSection) {
+  _selectIssueSection(Issue issueRefactor, IssueSection issueSection) {
     setState(() {
-      _createWorkEstimateProvider.selectIssueSection(
+      _workEstimateProvider.selectIssueSection(
           issueRefactor, issueSection);
     });
   }
 
   _save() {
-    String validationString = _createWorkEstimateProvider
-        .workEstimateRequestRefactor
+    String validationString = _workEstimateProvider
+        .workEstimateRequest
         .isValid(context);
 
     if (validationString != null) {
@@ -317,7 +322,7 @@ class _CreateWorkEstimateConsultantState
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return CreateWorkEstimateFinalInfoWidget(
+          return WorkEstimateFinalInfoWidget(
             infoAdded: _infoAdded,
           );
         },

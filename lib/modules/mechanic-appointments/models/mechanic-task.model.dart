@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 
 class MechanicTask {
   int id;

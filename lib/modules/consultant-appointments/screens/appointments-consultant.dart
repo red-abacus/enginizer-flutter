@@ -4,7 +4,7 @@ import 'package:enginizer_flutter/modules/consultant-appointments/providers/appo
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/widgets/appointments-list-consultant.widget.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

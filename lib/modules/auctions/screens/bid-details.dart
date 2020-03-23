@@ -5,12 +5,11 @@ import 'package:enginizer_flutter/modules/appointments/providers/service-provide
 import 'package:enginizer_flutter/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
@@ -38,12 +37,12 @@ class BidDetailsState extends State<BidDetails> {
   BidDetailsState({this.route});
 
   AuctionProvider auctionProvider;
-  WorkEstimatesProvider workEstimatesProvider;
+  WorkEstimateProvider _createWorkEstimateProvider;
 
   @override
   Widget build(BuildContext context) {
     auctionProvider = Provider.of<AuctionProvider>(context);
-    workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
+    _createWorkEstimateProvider = Provider.of<WorkEstimateProvider>(context);
 
     return Consumer<AuctionProvider>(
         builder: (context, auctionProvider, _) => Scaffold(
@@ -70,14 +69,14 @@ class BidDetailsState extends State<BidDetails> {
   void didChangeDependencies() {
     if (!_initDone) {
       auctionProvider = Provider.of<AuctionProvider>(context);
-      workEstimatesProvider = Provider.of<WorkEstimatesProvider>(context);
+      _createWorkEstimateProvider = Provider.of<WorkEstimateProvider>(context);
 
       setState(() {
         _isLoading = true;
       });
 
       auctionProvider.getBidDetails().then((bidDetails) {
-        workEstimatesProvider
+        _createWorkEstimateProvider
             .getWorkEstimateDetails(bidDetails.workEstimateId)
             .then((_) {
           setState(() {
@@ -273,25 +272,18 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   void _openEstimator(BuildContext ctx) {
-    Provider.of<WorkEstimatesProvider>(context).initValues();
+    Provider.of<WorkEstimateProvider>(context).initValues();
     Provider.of<ProviderServiceProvider>(context).loadItemTypes();
-    Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+    Provider.of<WorkEstimateProvider>(context).workEstimateId =
         Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
-    Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+    Provider.of<WorkEstimateProvider>(context).serviceProvider =
         Provider.of<AuctionProvider>(context).bidDetails.serviceProvider;
 
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return EstimatorModal(mode: EstimatorMode.Client);
-          });
-        });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+    );
   }
 
   _appointmentDateContainer() {

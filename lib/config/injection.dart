@@ -7,7 +7,6 @@ import 'package:enginizer_flutter/modules/appointments/services/appointments.ser
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
 import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/services/auction.service.dart';
 import 'package:enginizer_flutter/modules/auctions/services/bid.service.dart';
 import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
@@ -23,11 +22,11 @@ import 'package:enginizer_flutter/modules/consultant-appointments/providers/appo
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-auctions/providers/auctions-consultant.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -78,8 +77,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AuctionsConsultantProvider());
   inject.registerFactory(() => AuctionProvider());
   inject.registerFactory(() => AuctionConsultantProvider());
-  inject.registerFactory(() => CreateWorkEstimateProvider());
-  inject.registerFactory(() => WorkEstimatesProvider());
+  inject.registerFactory(() => WorkEstimateProvider());
   inject.registerFactory(() => AppointmentsConsultantProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());
   inject.registerFactory(() => AppointmentsMechanicProvider());

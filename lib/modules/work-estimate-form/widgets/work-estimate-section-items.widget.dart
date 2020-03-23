@@ -1,25 +1,25 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'create-work-estimate-add-issue-modal.widget.dart';
-import 'create-work-estimate-issue.widget.dart';
+import 'work-estimate-add-issue-modal.widget.dart';
+import 'work-estimate-issue.widget.dart';
 
 final createWorkEstimateAddIssueKey =
-    new GlobalKey<CreateWorkEstimateAddIssueModalWidgetState>();
+    new GlobalKey<WorkEstimateAddIssueModalWidgetState>();
 
-class CreateWorkEstimateSectionItemsWidget extends StatelessWidget {
+class WorkEstimateSectionItemsWidget extends StatelessWidget {
   final IssueSection issueSection;
   final Function addIssueItem;
   final Function removeIssueItem;
 
-  CreateWorkEstimateSectionItemsWidget({this.issueSection, this.addIssueItem, this.removeIssueItem});
+  WorkEstimateSectionItemsWidget({this.issueSection, this.addIssueItem, this.removeIssueItem});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class CreateWorkEstimateSectionItemsWidget extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 for (IssueItem issueItem in issueSection.items)
-                  CreateWorkEstimateIssueWidget(
+                  WorkEstimateIssueWidget(
                       issueItem: issueItem,
                       removeIssueItem: _removeIssueItem),
               ],
@@ -77,7 +77,7 @@ class CreateWorkEstimateSectionItemsWidget extends StatelessWidget {
   }
 
   _openAddIssueModal(BuildContext context) {
-    CreateWorkEstimateProvider provider = Provider.of<CreateWorkEstimateProvider>(context);
+    WorkEstimateProvider provider = Provider.of<WorkEstimateProvider>(context);
     provider.initValues();
 
     showModalBottomSheet<void>(
@@ -89,7 +89,7 @@ class CreateWorkEstimateSectionItemsWidget extends StatelessWidget {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CreateWorkEstimateAddIssueModalWidget(
+            return WorkEstimateAddIssueModalWidget(
                 key: createWorkEstimateAddIssueKey,
                 addIssueItem: this.addIssueItem,
                 issueSection: this.issueSection);

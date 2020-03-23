@@ -1,5 +1,5 @@
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 

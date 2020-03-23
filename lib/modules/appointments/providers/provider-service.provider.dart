@@ -10,7 +10,7 @@ import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user.model.dart';
