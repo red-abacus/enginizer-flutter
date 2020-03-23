@@ -7,10 +7,9 @@ import 'package:enginizer_flutter/modules/appointments/providers/provider-servic
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -158,7 +157,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           child: Center(
             child: FlatButton(
               child: Text(
-                stateTitle(state, context),
+                _stateTitle(state, context),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: "Lato",
@@ -180,13 +179,15 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     );
   }
 
-  String stateTitle(AppointmentDetailsTabBarState state, BuildContext context) {
+  _stateTitle(AppointmentDetailsTabBarState state, BuildContext context) {
     switch (state) {
       case AppointmentDetailsTabBarState.REQUEST:
         return S.of(context).appointment_details_request;
       case AppointmentDetailsTabBarState.CAR:
         return S.of(context).appointment_details_car;
     }
+
+    return '';
   }
 
   _cancelAppointment(Appointment appointment) {
@@ -203,24 +204,17 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
         _appointmentProvider.selectedAppointmentDetail.workEstimateId;
 
     if (workEstimateId != null && workEstimateId != 0) {
-      Provider.of<WorkEstimatesProvider>(context).initValues();
+      Provider.of<WorkEstimateProvider>(context).initValues();
       Provider.of<ProviderServiceProvider>(context).loadItemTypes();
-      Provider.of<WorkEstimatesProvider>(context).workEstimateId = workEstimateId;
-      Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+      Provider.of<WorkEstimateProvider>(context).workEstimateId = workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).serviceProvider =
           _appointmentProvider.selectedAppointment.serviceProvider;
 
-      showModalBottomSheet<void>(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return EstimatorModal(mode: EstimatorMode.Client);
-            });
-          });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+      );
     }
   }
 

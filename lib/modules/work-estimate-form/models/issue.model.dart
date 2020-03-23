@@ -1,26 +1,34 @@
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-refactor.model.dart';
-
 import 'issue-item.model.dart';
+import 'issue-section.model.dart';
 
 class Issue {
   int id;
   String name;
-  List<IssueItem> items;
+  List<IssueSection> sections;
 
-  Issue({this.id, this.name, this.items = const []});
+  Issue({this.id, this.name, this.sections = const []});
+
+
+  clearItems() {
+    for(IssueSection section in sections) {
+      section.clearItems();
+    }
+
+    sections = [];
+  }
 
   factory Issue.fromJson(Map<String, dynamic> json) {
     return Issue(
         id: json['id'],
         name: json['name'],
-        items: json['items'] != null ? _mapIssueItems(json['items']) : []);
+        sections: []);
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
       'id': id,
       'name': name,
-      'items': items.map((item) => item.toJson()).toList()
+      'sections': []
     };
 
     return propMap;
@@ -29,7 +37,6 @@ class Issue {
   Map<String, dynamic> toCreateJson() {
     Map<String, dynamic> propMap = {
       'id': id,
-      'items': items.map((item) => item.toJson()).toList()
     };
 
     return propMap;
@@ -44,17 +51,5 @@ class Issue {
       });
     }
     return issuesItems;
-  }
-
-  clearItems() {
-    items = [];
-  }
-
-  IssueRefactor toRefactor() {
-    IssueRefactor issueRefactor = new IssueRefactor();
-    issueRefactor.id = id;
-    issueRefactor.name = name;
-    issueRefactor.sections = [];
-    return issueRefactor;
   }
 }

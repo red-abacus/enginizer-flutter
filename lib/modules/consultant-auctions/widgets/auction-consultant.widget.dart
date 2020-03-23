@@ -3,14 +3,12 @@ import 'package:enginizer_flutter/modules/appointments/model/service-item.model.
 import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/work-estimates.provider.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/estimator/estimator-modal.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/screens/create-work-estimate-consultant.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -196,49 +194,31 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
   _createEstimate() {
     if (widget.auctionDetails != null) {
-      Provider.of<CreateWorkEstimateProvider>(context).refreshValues();
-      Provider.of<CreateWorkEstimateProvider>(context)
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context)
           .setIssues(widget.auctionDetails.issues);
 
-      Navigator.of(context).pushNamed(CreateWorkEstimateConsultant.route);
-//      Navigator.of(context).pushNamed(CreateWorkEstimateConsultant.route);
-
-      // TODO - removed old estimator
-//      showModalBottomSheet<void>(
-//          shape: RoundedRectangleBorder(
-//            borderRadius: BorderRadius.circular(10.0),
-//          ),
-//          context: context,
-//          isScrollControlled: true,
-//          builder: (BuildContext context) {
-//            return StatefulBuilder(
-//                builder: (BuildContext context, StateSetter state) {
-//              return CreateEstimatorModal(createBid: widget.createBid);
-//            });
-//          });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
+      );
     }
   }
 
   _seeEstimate(Bid bid) {
     if (bid != null && bid.workEstimateId != 0) {
-      Provider.of<WorkEstimatesProvider>(context).initValues();
-      Provider.of<WorkEstimatesProvider>(context).workEstimateId =
+      Provider.of<WorkEstimateProvider>(context).initValues();
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
           bid.workEstimateId;
-      Provider.of<WorkEstimatesProvider>(context).serviceProvider =
+      Provider.of<WorkEstimateProvider>(context).serviceProvider =
           bid.serviceProvider;
 
-      showModalBottomSheet<void>(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return EstimatorModal(mode: EstimatorMode.ReadOnly);
-            });
-          });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+      );
     }
   }
 

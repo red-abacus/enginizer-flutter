@@ -1,7 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 
-import 'estimator/issue.model.dart';
+import '../../work-estimate-form/models/issue.model.dart';
 
 class BidDetails {
   int id;

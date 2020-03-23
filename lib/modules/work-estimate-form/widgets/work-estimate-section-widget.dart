@@ -1,6 +1,6 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/work-estimate/create-work-estimate-section-items.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-section-items.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CreateWorkEstimateSectionWidget extends StatelessWidget {
+class WorkEstimateSectionWidget extends StatelessWidget {
   final IssueSection issueSection;
 
   final Function addSectionName;
@@ -17,7 +17,7 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
   final Function removeIssueItem;
   final Function selectIssueSection;
 
-  CreateWorkEstimateSectionWidget(
+  WorkEstimateSectionWidget(
       {this.issueSection,
       this.addSectionName,
       this.expandSection,
@@ -45,7 +45,7 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
               color: gray_10,
               child: Row(
                 children: <Widget>[
-                  _checkmarkContainer(context),
+                  _checkMarkContainer(context),
                   Expanded(
                     flex: 5,
                     child: Container(
@@ -109,7 +109,7 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
         ));
   }
 
-  _checkmarkContainer(BuildContext context) {
+  _checkMarkContainer(BuildContext context) {
     return issueSection.isNew ? Container()
         : Expanded(
       child: Align(
@@ -139,7 +139,7 @@ class CreateWorkEstimateSectionWidget extends StatelessWidget {
     if (issueSection.expanded) {
       return Container(
         margin: EdgeInsets.only(top: 4),
-        child: CreateWorkEstimateSectionItemsWidget(
+        child: WorkEstimateSectionItemsWidget(
             issueSection: issueSection,
             addIssueItem: addIssueItem,
             removeIssueItem: removeIssueItem),

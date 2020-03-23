@@ -7,7 +7,7 @@ import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CreateWorkEstimateFinalInfoWidget extends StatelessWidget {
+class WorkEstimateFinalInfoWidget extends StatelessWidget {
   final Function infoAdded;
 
   String percentage = '';
@@ -15,7 +15,7 @@ class CreateWorkEstimateFinalInfoWidget extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  CreateWorkEstimateFinalInfoWidget({this.infoAdded});
+  WorkEstimateFinalInfoWidget({this.infoAdded});
 
   @override
   Widget build(BuildContext context) {

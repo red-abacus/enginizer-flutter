@@ -1,15 +1,15 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CreateWorkEstimateIssueWidget extends StatelessWidget {
+class WorkEstimateIssueWidget extends StatelessWidget {
   final IssueItem issueItem;
   final Function removeIssueItem;
 
-  CreateWorkEstimateIssueWidget(
+  WorkEstimateIssueWidget(
       {this.issueItem, this.removeIssueItem});
 
   @override

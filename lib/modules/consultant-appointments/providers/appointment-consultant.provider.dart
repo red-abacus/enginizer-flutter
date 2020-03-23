@@ -5,10 +5,10 @@ import 'package:enginizer_flutter/modules/appointments/model/appointment.model.d
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
-import 'package:enginizer_flutter/modules/auctions/models/request/work-estimate-request.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/models/employee.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/work-estimate-request.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentConsultantProvider with ChangeNotifier {

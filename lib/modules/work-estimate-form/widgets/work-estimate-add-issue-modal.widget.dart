@@ -1,35 +1,35 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-section.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/create-work-estimate.provider.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CreateWorkEstimateAddIssueModalWidget extends StatefulWidget {
+class WorkEstimateAddIssueModalWidget extends StatefulWidget {
   Function addIssueItem;
   IssueSection issueSection;
 
-  CreateWorkEstimateAddIssueModalWidget(
+  WorkEstimateAddIssueModalWidget(
       {Key key, this.addIssueItem, this.issueSection})
       : super(key: key);
 
   @override
-  CreateWorkEstimateAddIssueModalWidgetState createState() =>
-      CreateWorkEstimateAddIssueModalWidgetState();
+  WorkEstimateAddIssueModalWidgetState createState() =>
+      WorkEstimateAddIssueModalWidgetState();
 }
 
-class CreateWorkEstimateAddIssueModalWidgetState
-    extends State<CreateWorkEstimateAddIssueModalWidget> {
+class WorkEstimateAddIssueModalWidgetState
+    extends State<WorkEstimateAddIssueModalWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     var authProvider = Provider.of<Auth>(context);
-    var provider = Provider.of<CreateWorkEstimateProvider>(context);
+    var provider = Provider.of<WorkEstimateProvider>(context);
 
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 40),

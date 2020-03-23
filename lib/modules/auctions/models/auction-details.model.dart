@@ -1,10 +1,11 @@
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
 import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+
+import '../../work-estimate-form/models/issue.model.dart';
 
 class AuctionDetail {
   int id;

@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';

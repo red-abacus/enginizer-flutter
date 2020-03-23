@@ -1,19 +1,21 @@
 import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-refactor.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue.model.dart';
+import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/request/work-estimate-request-refactor.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/request/work-estimate-request.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/work-estimate-request.model.dart';
 import 'package:flutter/cupertino.dart';
 
-class CreateWorkEstimateProvider with ChangeNotifier {
+class WorkEstimateProvider with ChangeNotifier {
   ProviderService providerService = inject<ProviderService>();
+  WorkEstimatesService workEstimatesService = inject<WorkEstimatesService>();
 
   static final Map<String, dynamic> initialEstimatorFormState = {
     'type': null,
@@ -28,7 +30,10 @@ class CreateWorkEstimateProvider with ChangeNotifier {
   List<ProviderItem> providerItems = [];
   List<ServiceProviderTimetable> serviceProviderTimetable = [];
   WorkEstimateRequest workEstimateRequest;
-  WorkEstimateRequestRefactor workEstimateRequestRefactor;
+  WorkEstimateDetails workEstimateDetails;
+
+  int workEstimateId;
+  ServiceProvider serviceProvider;
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
@@ -39,7 +44,6 @@ class CreateWorkEstimateProvider with ChangeNotifier {
   void refreshValues() {
     initValues();
     workEstimateRequest = WorkEstimateRequest();
-    workEstimateRequestRefactor = WorkEstimateRequestRefactor();
   }
 
   void setIssues(List<Issue> issues) {
@@ -47,13 +51,6 @@ class CreateWorkEstimateProvider with ChangeNotifier {
       issue.clearItems();
     }
     workEstimateRequest.issues = issues;
-
-    List<IssueRefactor> list = new List();
-
-    for (Issue issue in issues) {
-      list.add(issue.toRefactor());
-    }
-    workEstimateRequestRefactor.issues = list;
   }
 
   Future<List<ItemType>> loadItemTypes() async {
@@ -80,7 +77,16 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     return this.serviceProviderTimetable;
   }
 
-  addRequestToIssue(Issue issue) {
+  Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
+    workEstimateDetails =
+    await this.workEstimatesService.getWorkEstimateDetails(workEstimateId);
+    notifyListeners();
+    return workEstimateDetails;
+  }
+
+
+  addRequestToIssueSection(
+      Issue issue, IssueSection issueSection) {
     var issueItem = IssueItem(
       type: estimatorFormState['type'],
       code: estimatorFormState['code'].code,
@@ -91,26 +97,7 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     );
 
     for (Issue temp in workEstimateRequest.issues) {
-      if (temp.id == issue.id) {
-        issueItem.issueId = issueItem.issueId;
-        temp.items.add(issueItem);
-      }
-    }
-  }
-
-  addRequestToIssueSection(
-      IssueRefactor issueRefactor, IssueSection issueSection) {
-    var issueItem = IssueItem(
-      type: estimatorFormState['type'],
-      code: estimatorFormState['code'].code,
-      name: estimatorFormState['name'].name,
-      quantity: estimatorFormState['quantity'],
-      price: estimatorFormState['price'],
-      priceVAT: estimatorFormState['priceVAT'],
-    );
-
-    for (IssueRefactor temp in workEstimateRequestRefactor.issues) {
-      if (temp == issueRefactor) {
+      if (temp == issue) {
         List<IssueSection> sections = temp.sections;
 
         for (IssueSection tempIssueSection in sections) {
@@ -124,14 +111,10 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  removeIssueItem(Issue issue, IssueItem issueItem) {
-    issue.items.remove(issueItem);
-  }
-
-  removeIssueRefactorItem(IssueRefactor issueRefactor,
+  removeIssueRefactorItem(Issue issue,
       IssueSection issueSection, IssueItem issueItem) {
-    for (IssueRefactor temp in workEstimateRequestRefactor.issues) {
-      if (temp == issueRefactor) {
+    for (Issue temp in workEstimateRequest.issues) {
+      if (temp == issue) {
         List<IssueSection> sections = temp.sections;
 
         for (IssueSection tempIssueSection in sections) {
@@ -145,9 +128,9 @@ class CreateWorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  selectIssueSection(IssueRefactor issueRefactor, IssueSection issueSection) {
-    for (IssueRefactor temp in workEstimateRequestRefactor.issues) {
-      if (temp == issueRefactor) {
+  selectIssueSection(Issue issue, IssueSection issueSection) {
+    for (Issue temp in workEstimateRequest.issues) {
+      if (temp == issue) {
         List<IssueSection> sections = temp.sections;
 
         for (IssueSection tempIssueSection in sections) {

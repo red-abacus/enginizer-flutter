@@ -76,9 +76,7 @@ class NavigationApp extends StatefulWidget {
       case Roles.Super:
         return Dashboard.route;
       case Roles.Client:
-        // TODO - remove this
-//        return Cars.route;
-        return Notifications.route;
+        return Cars.route;
       case Roles.ProviderAdmin:
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
