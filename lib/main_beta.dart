@@ -23,12 +23,14 @@ import 'package:enginizer_flutter/modules/consultant-appointments/screens/create
 import 'package:enginizer_flutter/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/notifications-manager.dart';
 import 'package:enginizer_flutter/screens/splash.screen.dart';
 import 'package:enginizer_flutter/utils/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,6 +64,7 @@ import 'modules/mechanic-appointments/providers/appointments-mechanic.provider.d
 import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart';
 import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/notifications/screens/notifications.dart';
 import 'modules/user-details/screens/user-details.dart';
 
 void main() async {
@@ -119,71 +122,76 @@ class AppState extends State<App> {
               value: PickUpCarFormConsultantProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
-          return MaterialApp(
-            home: authProvider.isAuth
-                ? NavigationApp(
-                    authUser: authProvider.authUser,
-                    authUserDetails: authProvider.authUserDetails)
-                : FutureBuilder(
-                    future: authProvider.tryAutoLogin(),
-                    builder: (ctx, authResultSnapshot) =>
-                        authResultSnapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? SplashScreen()
-                            : AuthScreen()),
-            theme: ThemeData(
-              primaryColor: Color.fromRGBO(153, 0, 0, 1),
-              accentColor: Color.fromRGBO(206, 49, 47, 1),
-              primaryColorLight: Color.fromRGBO(193, 193, 193, 1),
-              primaryColorDark: Color.fromRGBO(80, 80, 70, 1),
-              cardColor: Colors.white,
-              fontFamily: 'Lato',
-              pageTransitionsTheme: PageTransitionsTheme(
-                builders: {
-                  TargetPlatform.android: CustomPageTransitionBuilder(),
-                  TargetPlatform.iOS: CustomPageTransitionBuilder(),
-                },
+          return OverlaySupport(
+            child: MaterialApp(
+              home: authProvider.isAuth
+                  ? NavigationApp(
+                      authUser: authProvider.authUser,
+                      authUserDetails: authProvider.authUserDetails)
+                  : FutureBuilder(
+                      future: authProvider.tryAutoLogin(),
+                      builder: (ctx, authResultSnapshot) =>
+                          authResultSnapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? SplashScreen()
+                              : AuthScreen()),
+              theme: ThemeData(
+                primaryColor: Color.fromRGBO(153, 0, 0, 1),
+                accentColor: Color.fromRGBO(206, 49, 47, 1),
+                primaryColorLight: Color.fromRGBO(193, 193, 193, 1),
+                primaryColorDark: Color.fromRGBO(80, 80, 70, 1),
+                cardColor: Colors.white,
+                fontFamily: 'Lato',
+                pageTransitionsTheme: PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: CustomPageTransitionBuilder(),
+                    TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                  },
+                ),
+                textTheme: TextTheme(
+                  headline:
+                      TextStyle(fontFamily: 'Lato', color: Colors.black54),
+                  title: TextStyle(fontFamily: 'Lato', color: Colors.black54),
+                  body1: TextStyle(
+                      fontSize: 16, fontFamily: 'Lato', color: Colors.black54),
+                ),
               ),
-              textTheme: TextTheme(
-                headline: TextStyle(fontFamily: 'Lato', color: Colors.black54),
-                title: TextStyle(fontFamily: 'Lato', color: Colors.black54),
-                body1: TextStyle(
-                    fontSize: 16, fontFamily: 'Lato', color: Colors.black54),
-              ),
+              localizationsDelegates: [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                DefaultCupertinoLocalizations.delegate
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              routes: {
+                '/auth': (context) => AuthScreen(),
+                '/cars': (context) => Cars(),
+                '/cars/details': (context) => CarDetails(),
+                Appointments.route: (context) => Appointments(),
+                AppointmentDetails.route: (context) => AppointmentDetails(),
+                Auctions.route: (context) => Auctions(),
+                AuctionsConsultant.route: (context) => AuctionsConsultant(),
+                AuctionDetails.route: (context) => AuctionDetails(),
+                AuctionConsultant.route: (context) => AuctionConsultant(),
+                BidDetails.route: (context) => BidDetails(),
+                AppointmentsConsultant.route: (context) =>
+                    AppointmentsConsultant(),
+                AppointmentDetailsConsultant.route: (context) =>
+                    AppointmentDetailsConsultant(),
+                AppointmentsMechanic.route: (context) => AppointmentsMechanic(),
+                AppointmentDetailsMechanic.route: (context) =>
+                    AppointmentDetailsMechanic(),
+                UserDetails.route: (context) => UserDetails(),
+                UserDetailsConsultant.route: (context) =>
+                    UserDetailsConsultant(),
+                WorkEstimatesConsultant.route: (context) =>
+                    WorkEstimatesConsultant(),
+                CreateWorkEstimateConsultant.route: (context) =>
+                    CreateWorkEstimateConsultant(),
+                Notifications.route: (context) => Notifications()
+              },
             ),
-            localizationsDelegates: [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              DefaultCupertinoLocalizations.delegate
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            routes: {
-              '/auth': (context) => AuthScreen(),
-              '/cars': (context) => Cars(),
-              '/cars/details': (context) => CarDetails(),
-              Appointments.route: (context) => Appointments(),
-              AppointmentDetails.route: (context) => AppointmentDetails(),
-              Auctions.route: (context) => Auctions(),
-              AuctionsConsultant.route: (context) => AuctionsConsultant(),
-              AuctionDetails.route: (context) => AuctionDetails(),
-              AuctionConsultant.route: (context) => AuctionConsultant(),
-              BidDetails.route: (context) => BidDetails(),
-              AppointmentsConsultant.route: (context) =>
-                  AppointmentsConsultant(),
-              AppointmentDetailsConsultant.route: (context) =>
-                  AppointmentDetailsConsultant(),
-              AppointmentsMechanic.route: (context) => AppointmentsMechanic(),
-              AppointmentDetailsMechanic.route: (context) =>
-                  AppointmentDetailsMechanic(),
-              UserDetails.route: (context) => UserDetails(),
-              UserDetailsConsultant.route: (context) => UserDetailsConsultant(),
-              WorkEstimatesConsultant.route: (context) =>
-                  WorkEstimatesConsultant(),
-              CreateWorkEstimateConsultant.route: (context) =>
-                  CreateWorkEstimateConsultant()
-            },
           );
         }));
   }

@@ -12,8 +12,12 @@ import 'package:enginizer_flutter/modules/consultant-estimators/screens/work-est
 import 'package:enginizer_flutter/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-user-details/screens/user-details-consultant.dart';
+import 'package:enginizer_flutter/modules/notifications/screens/notifications.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/notifications-manager.dart';
 import 'package:enginizer_flutter/modules/user-details/screens/user-details.dart';
 import 'package:enginizer_flutter/utils/app_config.dart';
+import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +45,9 @@ class NavigationApp extends StatefulWidget {
             new DrawerItem("Cars", Cars.route, Icons.directions_car),
             new DrawerItem(
                 "Appointments", Appointments.route, Icons.event_available),
-            new DrawerItem("Auctions", Auctions.route, Icons.dashboard)
+            new DrawerItem("Auctions", Auctions.route, Icons.dashboard),
+            new DrawerItem(
+                'Notifications', Notifications.route, NotificationsManager.notificationsCount == 0 ? Icons.notifications : Icons.notifications_active)
           ]
         : [new DrawerItem("Cars", Cars.route, Icons.directions_car)];
   }
@@ -53,12 +59,14 @@ class NavigationApp extends StatefulWidget {
         "Appointments", AppointmentsConsultant.route, Icons.event_available),
     new DrawerItem("Auctions", AuctionsConsultant.route, Icons.dashboard),
     new DrawerItem(
-        "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard)
+        "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard),
+    new DrawerItem('Notifications', Notifications.route, Icons.notifications)
   ];
 
   static final List<DrawerItem> mechanicDrawerItems = [
     new DrawerItem(
-        "Appointments", AppointmentsMechanic.route, Icons.event_available)
+        "Appointments", AppointmentsMechanic.route, Icons.event_available),
+    new DrawerItem('Notifications', Notifications.route, Icons.notifications)
   ];
 
   NavigationApp({this.authUser, this.authUserDetails});
@@ -68,7 +76,9 @@ class NavigationApp extends StatefulWidget {
       case Roles.Super:
         return Dashboard.route;
       case Roles.Client:
-        return Cars.route;
+        // TODO - remove this
+//        return Cars.route;
+        return Notifications.route;
       case Roles.ProviderAdmin:
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
@@ -84,16 +94,18 @@ class NavigationApp extends StatefulWidget {
   List<DrawerItem> activeDrawerItems;
 
   @override
-  _NavigationAppState createState() => _NavigationAppState();
+  NavigationAppState createState() => NavigationAppState();
 }
 
-class _NavigationAppState extends State<NavigationApp> {
+class NavigationAppState extends State<NavigationApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _selectedDrawerRoute;
 
   @override
   Widget build(BuildContext context) {
+    NotificationsManager.navigationAppState = this;
+
     if (widget.activeDrawerItems == null) {
       widget.activeDrawerItems = _initActiveDrawerItems();
     }
@@ -102,6 +114,7 @@ class _NavigationAppState extends State<NavigationApp> {
     if (_selectedDrawerRoute == null) {
       _selectedDrawerRoute = widget.activeDrawerRoute;
     }
+
     List<Widget> drawerOptions = _buildDrawerOptions();
     return Scaffold(
       key: _scaffoldKey,
@@ -200,6 +213,8 @@ class _NavigationAppState extends State<NavigationApp> {
         return UserDetailsConsultant();
       case WorkEstimatesConsultant.route:
         return WorkEstimatesConsultant();
+      case Notifications.route:
+        return Notifications();
       default:
         return new Text("Error");
     }
@@ -209,14 +224,62 @@ class _NavigationAppState extends State<NavigationApp> {
     var drawerOptions = <Widget>[];
     for (var i = 0; i < widget.activeDrawerItems.length; i++) {
       var d = widget.activeDrawerItems[i];
-      drawerOptions.add(new ListTile(
-        leading: new Icon(d.icon),
-        title: new Text(d.title),
-        selected: d.route == _selectedDrawerRoute,
-        onTap: () => _onSelectItem(d.route),
-      ));
+
+      if (d.route == Notifications.route &&
+          NotificationsManager.notificationsCount != 0) {
+        drawerOptions.add(new ListTile(
+          leading: new Icon(d.icon),
+          title: new Row(
+            children: <Widget>[
+              Text(d.title),
+              Container(
+                margin: EdgeInsets.only(left: 4),
+                decoration: new BoxDecoration(
+                  color: red,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+                width: 20,
+                height: 20,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('${NotificationsManager.notificationsCount}',
+                        style: TextHelper.customTextStyle(
+                            null, Colors.white, FontWeight.bold, 12))
+                  ],
+                ),
+              )
+            ],
+          ),
+          selected: d.route == _selectedDrawerRoute,
+          onTap: () => _onSelectItem(d.route),
+        ));
+      } else {
+        drawerOptions.add(new ListTile(
+          leading: new Icon(d.icon),
+          title: new Text(d.title),
+          selected: d.route == _selectedDrawerRoute,
+          onTap: () => _onSelectItem(d.route),
+        ));
+      }
     }
     return drawerOptions;
+  }
+
+  selectNotifications() {
+    setState(() {
+      _selectedDrawerRoute = Notifications.route;
+    });
+  }
+
+  updateNotifications() {
+    setState(() {
+      widget.activeDrawerItems = null;
+    });
   }
 
   _showUserDetails() {
