@@ -268,5 +268,6 @@
   "general_save": "Save",
   "general_create": "Create",
   "general_rejected": "Rejected",
-  "general_send": "Send"
+  "general_send": "Send",
+  "general_edit": "Edit"
 }

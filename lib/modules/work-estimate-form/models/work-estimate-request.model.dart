@@ -39,16 +39,15 @@ class WorkEstimateRequest {
     map['proposedDate'] = this.dateEntry != null
         ? DateUtils.stringFromDate(this.dateEntry.dateTime, 'dd/MM/yyyy HH:mm')
         : '';
-    // TODO - need to change when API structure is defined
-    return map;
-  }
 
-  Map<String, dynamic> toCreateJson() {
-    Map<String, dynamic> map = new Map();
-    map['proposedDate'] = this.dateEntry != null
-        ? DateUtils.stringFromDate(this.dateEntry.dateTime, 'dd/MM/yyyy HH:mm')
-        : '';
-    // TODO - need to change when API structure is defined
+    List<dynamic> issuesList = [];
+
+    for (Issue issue in issues) {
+      issuesList.add(issue.toCreateJson());
+    }
+
+    map['estimateIssues'] = issuesList;
+
     return map;
   }
 }

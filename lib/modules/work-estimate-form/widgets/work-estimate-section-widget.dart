@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-section-items.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-text-form-widget.dart';
@@ -16,6 +17,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   final Function addIssueItem;
   final Function removeIssueItem;
   final Function selectIssueSection;
+  final EstimatorMode estimatorMode;
 
   WorkEstimateSectionWidget(
       {this.issueSection,
@@ -23,7 +25,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       this.expandSection,
       this.addIssueItem,
       this.removeIssueItem,
-      this.selectIssueSection});
+      this.selectIssueSection,
+      this.estimatorMode});
 
   @override
   Widget build(BuildContext context) {
@@ -110,29 +113,33 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   }
 
   _checkMarkContainer(BuildContext context) {
-    return issueSection.isNew ? Container()
+    if (estimatorMode == EstimatorMode.ReadOnly) {
+      return Container();
+    }
+
+    return issueSection.isNew
+        ? Container()
         : Expanded(
-      child: Align(
-        child: Container(
-          child: FlatButton(
-            materialTapTargetSize:
-            MaterialTapTargetSize.shrinkWrap,
-            child: SvgPicture.asset(
-              this.issueSection.selected
-                  ? 'assets/images/icons/check_box.svg'
-                  : 'assets/images/icons/check_box_empty.svg',
-              semanticsLabel: 'Up Arrow',
-              color: Theme.of(context).primaryColor,
-              height: 24,
-              width: 24,
+            child: Align(
+              child: Container(
+                child: FlatButton(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  child: SvgPicture.asset(
+                    this.issueSection.selected
+                        ? 'assets/images/icons/check_box.svg'
+                        : 'assets/images/icons/check_box_empty.svg',
+                    semanticsLabel: 'Up Arrow',
+                    color: Theme.of(context).primaryColor,
+                    height: 24,
+                    width: 24,
+                  ),
+                  onPressed: () {
+                    this.selectIssueSection(issueSection);
+                  },
+                ),
+              ),
             ),
-            onPressed: () {
-              this.selectIssueSection(issueSection);
-            },
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   _issuesContainer() {
@@ -142,7 +149,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
         child: WorkEstimateSectionItemsWidget(
             issueSection: issueSection,
             addIssueItem: addIssueItem,
-            removeIssueItem: removeIssueItem),
+            removeIssueItem: removeIssueItem,
+            estimatorMode: estimatorMode),
       );
     } else {
       return Container();

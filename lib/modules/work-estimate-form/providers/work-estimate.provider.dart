@@ -1,4 +1,6 @@
 import 'package:enginizer_flutter/config/injection.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
+import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
@@ -14,8 +16,8 @@ import 'package:enginizer_flutter/modules/work-estimate-form/models/work-estimat
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimateProvider with ChangeNotifier {
-  ProviderService providerService = inject<ProviderService>();
-  WorkEstimatesService workEstimatesService = inject<WorkEstimatesService>();
+  ProviderService _providerService = inject<ProviderService>();
+  WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
 
   static final Map<String, dynamic> initialEstimatorFormState = {
     'type': null,
@@ -32,17 +34,27 @@ class WorkEstimateProvider with ChangeNotifier {
   WorkEstimateRequest workEstimateRequest;
   WorkEstimateDetails workEstimateDetails;
 
+  Appointment selectedAppointment;
+  AppointmentDetail selectedAppointmentDetail;
+
   int workEstimateId;
   ServiceProvider serviceProvider;
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
-  void initValues() {
+  _initValues() {
     estimatorFormState = Map.from(initialEstimatorFormState);
+    itemTypes = [];
+    providerItems = [];
+    serviceProviderTimetable = [];
+    workEstimateRequest = null;
+    workEstimateDetails = null;
+    selectedAppointment = null;
+    selectedAppointmentDetail = null;
   }
 
   void refreshValues() {
-    initValues();
+    _initValues();
     workEstimateRequest = WorkEstimateRequest();
   }
 
@@ -54,7 +66,7 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   Future<List<ItemType>> loadItemTypes() async {
-    var response = await providerService.getItemTypes();
+    var response = await _providerService.getItemTypes();
     itemTypes = response;
     notifyListeners();
     return response;
@@ -62,7 +74,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<List<ProviderItem>> loadProviderItems(
       int serviceProviderId, IssueItemQuery query) async {
-    var response = await providerService.getProviderItems(
+    var response = await _providerService.getProviderItems(
         serviceProviderId, query.toJson());
     providerItems = response;
     notifyListeners();
@@ -71,7 +83,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<List<ServiceProviderTimetable>> loadServiceProviderSchedule(
       int providerId, String startDate, String endDate) async {
-    this.serviceProviderTimetable = await providerService
+    this.serviceProviderTimetable = await _providerService
         .getServiceProviderTimetables(providerId, startDate, endDate);
     notifyListeners();
     return this.serviceProviderTimetable;
@@ -79,11 +91,20 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
     workEstimateDetails =
-    await this.workEstimatesService.getWorkEstimateDetails(workEstimateId);
+    await this._workEstimatesService.getWorkEstimateDetails(workEstimateId);
     notifyListeners();
     return workEstimateDetails;
   }
 
+  Future<WorkEstimateDetails> createWorkEstimate(int appointmentId, int carId,
+      int clientId, WorkEstimateRequest workEstimateRequest) async {
+    Map<String, dynamic> content = workEstimateRequest.toJson();
+
+    WorkEstimateDetails workEstimateDetails =
+    await _workEstimatesService.addNewWorkEstimate(content);
+    notifyListeners();
+    return workEstimateDetails;
+  }
 
   addRequestToIssueSection(
       Issue issue, IssueSection issueSection) {
@@ -146,5 +167,9 @@ class WorkEstimateProvider with ChangeNotifier {
         break;
       }
     }
+  }
+
+  createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
+    this.workEstimateRequest = workEstimateDetails.workEstimateRequest();
   }
 }

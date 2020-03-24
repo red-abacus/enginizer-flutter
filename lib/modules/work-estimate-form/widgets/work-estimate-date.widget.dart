@@ -1,22 +1,24 @@
 import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/scheduler.widget.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class WorkEstimateDateWidget extends StatefulWidget {
+  final EstimatorMode estimatorMode;
+
+  WorkEstimateDateWidget({this.estimatorMode});
+
   @override
-  WorkEstimateDateWidgetState createState() =>
-      WorkEstimateDateWidgetState();
+  WorkEstimateDateWidgetState createState() => WorkEstimateDateWidgetState();
 }
 
-class WorkEstimateDateWidgetState
-    extends State<WorkEstimateDateWidget> {
+class WorkEstimateDateWidgetState extends State<WorkEstimateDateWidget> {
   @override
   Widget build(BuildContext context) {
-    WorkEstimateProvider provider =
-        Provider.of<WorkEstimateProvider>(context);
+    WorkEstimateProvider provider = Provider.of<WorkEstimateProvider>(context);
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * .7,
@@ -27,15 +29,15 @@ class WorkEstimateDateWidgetState
             DateTime.now(), [], provider.serviceProviderTimetable),
         dateEntrySelected: _dateEntrySelected,
         dateEntry: provider.workEstimateRequest.dateEntry,
+        disableSelect: widget.estimatorMode == EstimatorMode.ReadOnly,
       ),
     );
   }
 
   _dateEntrySelected(DateEntry dateEntry) {
     setState(() {
-      Provider.of<WorkEstimateProvider>(context)
-          .workEstimateRequest
-          .dateEntry = dateEntry;
+      Provider.of<WorkEstimateProvider>(context).workEstimateRequest.dateEntry =
+          dateEntry;
     });
   }
 }

@@ -204,8 +204,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
         _appointmentProvider.selectedAppointmentDetail.workEstimateId;
 
     if (workEstimateId != null && workEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).initValues();
-      Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId = workEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProvider =
           _appointmentProvider.selectedAppointment.serviceProvider;

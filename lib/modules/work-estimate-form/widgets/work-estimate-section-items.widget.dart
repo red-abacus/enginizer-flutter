@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
@@ -18,8 +19,13 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
   final IssueSection issueSection;
   final Function addIssueItem;
   final Function removeIssueItem;
+  final EstimatorMode estimatorMode;
 
-  WorkEstimateSectionItemsWidget({this.issueSection, this.addIssueItem, this.removeIssueItem});
+  WorkEstimateSectionItemsWidget(
+      {this.issueSection,
+      this.addIssueItem,
+      this.removeIssueItem,
+      this.estimatorMode});
 
   @override
   Widget build(BuildContext context) {
@@ -41,44 +47,47 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                 for (IssueItem issueItem in issueSection.items)
                   WorkEstimateIssueWidget(
                       issueItem: issueItem,
-                      removeIssueItem: _removeIssueItem),
+                      removeIssueItem: _removeIssueItem,
+                      estimatorMode: estimatorMode),
               ],
             ),
           );
   }
 
   _addContainer(BuildContext context) {
-    return InkWell(
-      onTap: () => _openAddIssueModal(context),
-      child: Row(
-        children: <Widget>[
-          Container(
-            decoration: new BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: new BorderRadius.all(Radius.circular(15))),
-            width: 30,
-            height: 30,
-            child: IconTheme(
-              data: new IconThemeData(color: Colors.white),
-              child: new Icon(Icons.add),
+    return estimatorMode == EstimatorMode.ReadOnly
+        ? Container()
+        : InkWell(
+            onTap: () => _openAddIssueModal(context),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  decoration: new BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: new BorderRadius.all(Radius.circular(15))),
+                  width: 30,
+                  height: 30,
+                  child: IconTheme(
+                    data: new IconThemeData(color: Colors.white),
+                    child: new Icon(Icons.add),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Text(
+                    S.of(context).estimator_add_new_product,
+                    style: TextHelper.customTextStyle(
+                        null, black_text, FontWeight.normal, 14),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 10),
-            child: Text(
-              S.of(context).estimator_add_new_product,
-              style: TextHelper.customTextStyle(
-                  null, black_text, FontWeight.normal, 14),
-            ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   _openAddIssueModal(BuildContext context) {
     WorkEstimateProvider provider = Provider.of<WorkEstimateProvider>(context);
-    provider.initValues();
+    provider.refreshValues();
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(

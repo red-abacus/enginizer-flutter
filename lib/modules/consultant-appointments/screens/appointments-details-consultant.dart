@@ -1,6 +1,5 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
@@ -47,12 +46,11 @@ class AppointmentDetailsConsultantState
     _appointmentConsultantProvider =
         Provider.of<AppointmentConsultantProvider>(context);
 
-    // TODO - remove this
-//    if (_appointmentConsultantProvider.selectedAppointment == null) {
-//      WidgetsBinding.instance.addPostFrameCallback((_) {
-//        Navigator.of(context).pop();
-//      });
-//    }
+    if (_appointmentConsultantProvider.selectedAppointment == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
+    }
 
     return Consumer<AppointmentConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
@@ -229,18 +227,23 @@ class AppointmentDetailsConsultantState
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).setIssues(
           _appointmentConsultantProvider.selectedAppointmentDetail.issues);
+      Provider.of<WorkEstimateProvider>(context).selectedAppointment =
+          _appointmentConsultantProvider.selectedAppointment;
+      Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
+          _appointmentConsultantProvider.selectedAppointmentDetail;
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
+            builder: (context) => WorkEstimateForm(
+                mode: EstimatorMode.Create,
+                createWorkEstimateFinished: _createWorkEstimateFinished)),
       );
     }
   }
 
   _editEstimate() {
-    Provider.of<WorkEstimateProvider>(context).initValues();
-    Provider.of<ProviderServiceProvider>(context).loadItemTypes();
+    Provider.of<WorkEstimateProvider>(context).refreshValues();
     Provider.of<WorkEstimateProvider>(context).workEstimateId =
         _appointmentConsultantProvider.selectedAppointmentDetail.workEstimateId;
     Provider.of<WorkEstimateProvider>(context).serviceProvider =
@@ -260,7 +263,7 @@ class AppointmentDetailsConsultantState
         _appointmentConsultantProvider
                 .selectedAppointmentDetail.workEstimateId !=
             0) {
-      Provider.of<WorkEstimateProvider>(context).initValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           _appointmentConsultantProvider
               .selectedAppointmentDetail.workEstimateId;
@@ -270,7 +273,8 @@ class AppointmentDetailsConsultantState
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
       );
     }
   }
@@ -305,5 +309,11 @@ class AppointmentDetailsConsultantState
             return PickUpCarFormConsultantModal();
           });
         });
+  }
+
+  _createWorkEstimateFinished() {
+    setState(() {
+      _initDone = false;
+    });
   }
 }

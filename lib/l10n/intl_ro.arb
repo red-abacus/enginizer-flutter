@@ -268,5 +268,6 @@
   "general_save": "Salvează",
   "general_create": "Crează",
   "general_rejected": "Respins",
-  "general_send": "Trimite"
+  "general_send": "Trimite",
+  "general_edit": "Editează"
 }

@@ -8,9 +8,8 @@ class Issue {
 
   Issue({this.id, this.name, this.sections = const []});
 
-
   clearItems() {
-    for(IssueSection section in sections) {
+    for (IssueSection section in sections) {
       section.clearItems();
     }
 
@@ -18,25 +17,39 @@ class Issue {
   }
 
   factory Issue.fromJson(Map<String, dynamic> json) {
-    return Issue(
-        id: json['id'],
-        name: json['name'],
-        sections: []);
+    IssueSection issueSection = new IssueSection();
+    issueSection.name = "Hardcoded Section";
+
+    List<IssueItem> items = [];
+
+    if (json['items'] != null) {
+      List<dynamic> temp = json['items'];
+      temp.forEach((item) {
+        items.add(IssueItem.fromJson(item));
+      });
+    }
+
+    issueSection.items = items;
+
+    return Issue(id: json['id'], name: json['name'], sections: [issueSection]);
   }
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> propMap = {
-      'id': id,
-      'name': name,
-      'sections': []
-    };
+    Map<String, dynamic> propMap = {'id': id, 'name': name, 'sections': []};
 
     return propMap;
   }
 
   Map<String, dynamic> toCreateJson() {
+    List<IssueItem> items = [];
+
+    for (IssueSection section in sections) {
+      items.addAll(section.items);
+    }
+
     Map<String, dynamic> propMap = {
       'id': id,
+      'items': items.map((item) => item.toJson()).toList()
     };
 
     return propMap;

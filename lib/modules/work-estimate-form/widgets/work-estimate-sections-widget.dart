@@ -1,3 +1,4 @@
+import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 
 class WorkEstimateSectionsWidget extends StatefulWidget {
   final Issue issue;
-
+  final EstimatorMode estimatorMode;
   final Function setSectionName;
   final Function expandSection;
   final Function addIssueItem;
@@ -19,7 +20,8 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
       this.expandSection,
       this.addIssueItem,
       this.removeIssueItem,
-      this.selectIssueSection});
+      this.selectIssueSection,
+      this.estimatorMode});
 
   @override
   _WorkEstimateSectionsWidgetState createState() =>
@@ -42,7 +44,8 @@ class _WorkEstimateSectionsWidgetState
                 expandSection: _expandSection,
                 addIssueItem: _addIssueItem,
                 removeIssueItem: _removeIssueItem,
-            selectIssueSection: _selectIssueSection)
+                selectIssueSection: _selectIssueSection,
+                estimatorMode: widget.estimatorMode)
         ],
       ),
     );

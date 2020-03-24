@@ -370,7 +370,8 @@ class AppointmentDetailsGenericConsultantWidgetState
                   Container(
                     width: 30,
                     height: 30,
-                    color: red,
+                    child: Icon(Icons.check_box,
+                    color: red,),
                   )
                 ],
               ),

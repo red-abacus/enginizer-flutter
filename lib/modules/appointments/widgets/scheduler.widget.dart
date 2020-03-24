@@ -10,8 +10,9 @@ class SchedulerWidget extends StatefulWidget {
   DateEntry dateEntry;
 
   Function dateEntrySelected;
+  bool disableSelect = false;
 
-  SchedulerWidget({this.calendarEntries = const [], this.dateEntrySelected, this.dateEntry});
+  SchedulerWidget({this.calendarEntries = const [], this.dateEntrySelected, this.dateEntry, this.disableSelect});
 
   @override
   SchedulerWidgetState createState() {
@@ -156,8 +157,10 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
   }
 
   onClicked(DateEntry dateEntry) {
-    if (dateEntry.status == DateEntryStatus.Free) {
-      widget.dateEntrySelected(dateEntry);
+    if (!widget.disableSelect) {
+      if (dateEntry.status == DateEntryStatus.Free) {
+        widget.dateEntrySelected(dateEntry);
+      }
     }
   }
 }

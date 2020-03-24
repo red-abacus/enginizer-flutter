@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/work-estimate-request.model.dart';
 
 import '../../work-estimate-form/models/issue.model.dart';
 
@@ -35,6 +36,12 @@ class WorkEstimateDetails {
             ? ServiceProvider.fromJson(json['providerDto'])
             : null,
         status: json['status']);
+  }
+
+  workEstimateRequest() {
+    WorkEstimateRequest request = new WorkEstimateRequest();
+    request.issues = this.issues;
+    return request;
   }
 
   static _mapIssues(List<dynamic> response) {

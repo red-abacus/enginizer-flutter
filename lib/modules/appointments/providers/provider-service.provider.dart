@@ -24,7 +24,6 @@ class ProviderServiceProvider with ChangeNotifier {
   List<ServiceProvider> serviceProviders = [];
   List<ServiceProviderItem> serviceProviderItems = [];
   List<ServiceProviderSchedule> serviceProviderSchedules = [];
-  List<ItemType> itemTypes = [];
   List<ProviderItem> providerItems = [];
 
   ProviderService providerService = inject<ProviderService>();
@@ -95,13 +94,6 @@ class ProviderServiceProvider with ChangeNotifier {
     var response = await providerService.getServiceProviderTimetables(
         serviceProvider.id, startDate, endDate);
     serviceProvider.timetables = response;
-    notifyListeners();
-    return response;
-  }
-
-  Future<List<ItemType>> loadItemTypes() async {
-    var response = await providerService.getItemTypes();
-    itemTypes = response;
     notifyListeners();
     return response;
   }
