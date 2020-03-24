@@ -226,6 +226,7 @@
   "user_profile_cui_error": "CUI is required!",
   "work_estimate_status_pending": "Pending",
   "work_estimate_status_accepted": "Accepted",
+  "mechanic_another_work_estimate_warning": "You are already working on another appointment",
   "notifications_title": "Notifications",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",

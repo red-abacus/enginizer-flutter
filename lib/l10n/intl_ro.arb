@@ -236,6 +236,7 @@
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",
   "service_promotions": "Promotions",
+  "mechanic_another_work_estimate_warning": "Ai deja o programare la care lucrezi",
   "notifications_title": "Notificări",
   "general_at": "la",
   "appointment_create_step0": "Alege mașină",

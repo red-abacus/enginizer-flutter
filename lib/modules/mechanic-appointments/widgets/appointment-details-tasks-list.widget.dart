@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/mechanic-appointments/managers/mechanic-timer.manager.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/timer-config.model.dart';
@@ -95,7 +97,7 @@ class AppointmentDetailsTasksListState
                         heroTag: 'stopTimerBtn',
                         backgroundColor: stop,
                         onPressed: _stopTimer,
-                        child: Icon(Icons.stop))
+                        child: Icon(Icons.navigate_next))
                   ],
                 )
               : FloatingActionButton(
@@ -144,7 +146,7 @@ class AppointmentDetailsTasksListState
           isActive: _isStepActive(index),
           title: Text(
               (task.name?.isNotEmpty ?? false)
-                  ? _translateTaskName(task.name)
+                  ? task.translatedName(context)
                   : 'N/A',
               style: TextStyle(color: Colors.black87)),
           content: AppointmentDetailsTaskIssuesList(
@@ -187,23 +189,39 @@ class AppointmentDetailsTasksListState
   }
 
   _startTimer() {
-    setState(() {
-      _timer = Timer.periodic(
-        Duration(seconds: 1),
-        (timer) => setState(() {
-          _timerConfig.seconds += 1;
-          if (_timerConfig.seconds > 59) {
-            _timerConfig.seconds = 0;
-            _timerConfig.minutes += 1;
-          }
-          if (_timerConfig.minutes > 59) {
-            _timerConfig.minutes = 0;
-            _timerConfig.hours += 1;
-          }
-        }),
-      );
-      _showTimer = true;
-    });
+    if (appointmentMechanicProvider.workEstimateDetails != null) {
+      MechanicTimerManager.hasWorkEstimateInProgress(
+              appointmentMechanicProvider.workEstimateDetails.id)
+          .then((hasWorkEstimateInProgress) {
+        if (hasWorkEstimateInProgress) {
+          AlertWarningDialog.showAlertDialog(
+              context,
+              S.of(context).general_warning,
+              S.of(context).mechanic_another_work_estimate_warning);
+        } else {
+          MechanicTimerManager.startWorkEstimate(
+              appointmentMechanicProvider.workEstimateDetails.id);
+
+          setState(() {
+            _timer = Timer.periodic(
+              Duration(seconds: 1),
+                  (timer) => setState(() {
+                _timerConfig.seconds += 1;
+                if (_timerConfig.seconds > 59) {
+                  _timerConfig.seconds = 0;
+                  _timerConfig.minutes += 1;
+                }
+                if (_timerConfig.minutes > 59) {
+                  _timerConfig.minutes = 0;
+                  _timerConfig.hours += 1;
+                }
+              }),
+            );
+            _showTimer = true;
+          });
+        }
+      });
+    }
   }
 
   _pauseTimer() {
@@ -222,22 +240,5 @@ class AppointmentDetailsTasksListState
 
   bool _isStepActive(int stepIndex) {
     return _currentStepIndex == stepIndex;
-  }
-
-  _translateTaskName(String taskName) {
-    switch (taskName) {
-      case 'CHECK_LIGHTS':
-        return S.of(context).appointment_details_task_check_lights;
-      case 'CHECK_BATTERY':
-        return S.of(context).appointment_details_task_check_battery;
-      case 'CHECK_LIQUIDS':
-        return S.of(context).appointment_details_task_check_liquids;
-      case 'CHECK_BRAKES':
-        return S.of(context).appointment_details_task_check_brakes;
-      case 'CHECK_STEERING':
-        return S.of(context).appointment_details_task_check_steering;
-      case 'CHECK_BRAKING_MECHANISM':
-        return S.of(context).appointment_details_task_check_braking_mechanism;
-    }
   }
 }

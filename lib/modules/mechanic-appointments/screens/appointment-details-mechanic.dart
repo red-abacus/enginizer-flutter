@@ -90,12 +90,17 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
               appointmentMechanicProvider.selectedAppointment)
           .then((_) {
         appointmentMechanicProvider
-            .getStandardTasks(
-                appointmentMechanicProvider.selectedAppointment.id)
-            .then((mechanicTasks) {
-          appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
-          appointmentMechanicProvider.initFormValues();
-          _isLoading = false;
+            .getWorkEstimateDetails(appointmentMechanicProvider
+                .selectedAppointmentDetails.workEstimateId)
+            .then((_) {
+          appointmentMechanicProvider
+              .getStandardTasks(
+                  appointmentMechanicProvider.selectedAppointment.id)
+              .then((mechanicTasks) {
+            appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
+            appointmentMechanicProvider.initFormValues();
+            _isLoading = false;
+          });
         });
       });
 

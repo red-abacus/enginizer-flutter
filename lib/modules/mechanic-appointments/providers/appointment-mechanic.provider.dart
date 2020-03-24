@@ -2,12 +2,15 @@ import 'package:enginizer_flutter/config/injection.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
+import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentMechanicProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
+  WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
 
   Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetails;
@@ -16,11 +19,13 @@ class AppointmentMechanicProvider with ChangeNotifier {
 
   MechanicTask selectedMechanicTask;
 
+  WorkEstimateDetails workEstimateDetails;
+
   List<dynamic> serviceHistory = [];
 
   void initFormValues() {
-    standardTasks.forEach((task) => task.issues = List.of(task.issues)
-      ..add(Issue(id: null, name: '')));
+    standardTasks.forEach((task) =>
+        task.issues = List.of(task.issues)..add(Issue(id: null, name: '')));
   }
 
   Future<AppointmentDetail> getAppointmentDetails(
@@ -32,8 +37,6 @@ class AppointmentMechanicProvider with ChangeNotifier {
   }
 
   Future<List<MechanicTask>> getStandardTasks(int appointmentId) async {
-//    standardTasks =
-//        await this.appointmentsService.getStandardTasks(appointmentId);
     standardTasks = _mockStandardTasks();
     notifyListeners();
     return standardTasks;
@@ -48,5 +51,12 @@ class AppointmentMechanicProvider with ChangeNotifier {
       new MechanicTask(id: 5, name: "CHECK_STEERING", completed: false),
       new MechanicTask(id: 6, name: "CHECK_BRAKING_MECHANISM", completed: false)
     ];
+  }
+
+  Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
+    workEstimateDetails =
+        await this._workEstimatesService.getWorkEstimateDetails(workEstimateId);
+    notifyListeners();
+    return workEstimateDetails;
   }
 }
