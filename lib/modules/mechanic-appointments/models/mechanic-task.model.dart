@@ -42,4 +42,16 @@ class MechanicTask {
         return S.of(context).appointment_details_task_check_braking_mechanism;
     }
   }
+
+  bool isValid() {
+    if (issues.length == 0) {
+      return false;
+    }
+
+    if (issues.length == 1 && issues[0].name.isEmpty) {
+      return false;
+    }
+
+    return true;
+  }
 }

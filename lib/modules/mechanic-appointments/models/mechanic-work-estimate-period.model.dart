@@ -13,7 +13,9 @@ class MechanicWorkEstimatePeriod {
   factory MechanicWorkEstimatePeriod.fromJson(Map<String, dynamic> json) {
     return MechanicWorkEstimatePeriod(
         startDate: DateUtils.dateFromString(json['start_date'], timeFormat),
-        endDate: DateUtils.dateFromString(json['end_date'], timeFormat));
+        endDate: json['end_date'] != null
+            ? DateUtils.dateFromString(json['end_date'], timeFormat)
+            : null);
   }
 
   HashMap<String, dynamic> toJson() {
@@ -24,5 +26,14 @@ class MechanicWorkEstimatePeriod {
       map['end_date'] = DateUtils.stringFromDate(endDate, timeFormat);
     }
     return map;
+  }
+
+  int period() {
+    if (startDate != null && endDate != null) {
+      return endDate.difference(startDate).inSeconds;
+    }
+    else {
+      return DateTime.now().difference(startDate).inSeconds;
+    }
   }
 }

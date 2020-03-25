@@ -26,6 +26,7 @@ class AppointmentDetailsTasksListState
     extends State<AppointmentDetailsTasksList> {
   int _currentStepIndex = 0;
   List<Step> steps = [];
+  bool _initDone = false;
 
   Timer _timer;
   TimerConfig _timerConfig = TimerConfig();
@@ -43,9 +44,6 @@ class AppointmentDetailsTasksListState
 
   @override
   Widget build(BuildContext context) {
-    appointmentMechanicProvider =
-        Provider.of<AppointmentMechanicProvider>(context, listen: false);
-
     steps = _buildSteps(context);
 
     return Column(
@@ -94,9 +92,9 @@ class AppointmentDetailsTasksListState
                         child: Icon(Icons.pause)),
                     SizedBox(width: 48),
                     FloatingActionButton(
-                        heroTag: 'stopTimerBtn',
+                        heroTag: 'nextIssueBtn',
                         backgroundColor: stop,
-                        onPressed: _stopTimer,
+                        onPressed: _nextIssue,
                         child: Icon(Icons.navigate_next))
                   ],
                 )
@@ -108,6 +106,62 @@ class AppointmentDetailsTasksListState
         ),
       ],
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      appointmentMechanicProvider =
+          Provider.of<AppointmentMechanicProvider>(context, listen: false);
+
+      MechanicTimerManager.getWorkPeriodTime(
+              appointmentMechanicProvider.workEstimateDetails.id)
+          .then((period) {
+        if (period != 0) {
+          setState(() {
+            _timer = Timer.periodic(Duration(seconds: 1), null);
+            _timer.cancel();
+
+            int hours = period ~/ 3600;
+            _timerConfig.hours = hours;
+            int minutes = (period - hours * 3600) ~/ 60;
+            _timerConfig.minutes = minutes;
+            int seconds = period - hours * 3600 - minutes * 60;
+            _timerConfig.seconds = seconds;
+            _showTimer = true;
+          });
+        }
+
+        MechanicTimerManager.getLastPeriod(
+                appointmentMechanicProvider.workEstimateDetails.id)
+            .then((lastPeriod) {
+          if (lastPeriod != null && lastPeriod.endDate == null) {
+            MechanicTimerManager.startWorkEstimate(
+                appointmentMechanicProvider.workEstimateDetails.id);
+
+            setState(() {
+              _timer = Timer.periodic(
+                Duration(seconds: 1),
+                (timer) => setState(() {
+                  _timerConfig.seconds += 1;
+                  if (_timerConfig.seconds > 59) {
+                    _timerConfig.seconds = 0;
+                    _timerConfig.minutes += 1;
+                  }
+                  if (_timerConfig.minutes > 59) {
+                    _timerConfig.minutes = 0;
+                    _timerConfig.hours += 1;
+                  }
+                }),
+              );
+              _showTimer = true;
+            });
+          }
+        });
+      });
+    }
+    _initDone = true;
+    super.didChangeDependencies();
   }
 
   Widget _buildTimer(BuildContext context) {
@@ -144,11 +198,7 @@ class AppointmentDetailsTasksListState
       stepsList.add(
         Step(
           isActive: _isStepActive(index),
-          title: Text(
-              (task.name?.isNotEmpty ?? false)
-                  ? task.translatedName(context)
-                  : 'N/A',
-              style: TextStyle(color: Colors.black87)),
+          title: _stepperTitle(task),
           content: AppointmentDetailsTaskIssuesList(
             issues: appointmentMechanicProvider.selectedMechanicTask.issues,
             addIssue: _addIssue,
@@ -158,6 +208,16 @@ class AppointmentDetailsTasksListState
       );
     });
     return stepsList;
+  }
+
+  _stepperTitle(MechanicTask task) {
+    return Text(
+        (task.name?.isNotEmpty ?? false) ? task.translatedName(context) : 'N/A',
+        style: TextStyle(
+            color: Colors.black87,
+            decoration: task.completed
+                ? TextDecoration.lineThrough
+                : TextDecoration.none));
   }
 
   _addIssue(Issue issue) {
@@ -180,12 +240,14 @@ class AppointmentDetailsTasksListState
   }
 
   _showTask(int stepIndex) {
-    setState(() {
-      appointmentMechanicProvider.selectedMechanicTask =
-          appointmentMechanicProvider.standardTasks[stepIndex];
+    if (appointmentMechanicProvider.selectedMechanicTask.isValid()) {
+      setState(() {
+        appointmentMechanicProvider.selectedMechanicTask =
+        appointmentMechanicProvider.standardTasks[stepIndex];
 
-      _currentStepIndex = stepIndex;
-    });
+        _currentStepIndex = stepIndex;
+      });
+    }
   }
 
   _startTimer() {
@@ -205,7 +267,7 @@ class AppointmentDetailsTasksListState
           setState(() {
             _timer = Timer.periodic(
               Duration(seconds: 1),
-                  (timer) => setState(() {
+              (timer) => setState(() {
                 _timerConfig.seconds += 1;
                 if (_timerConfig.seconds > 59) {
                   _timerConfig.seconds = 0;
@@ -225,17 +287,40 @@ class AppointmentDetailsTasksListState
   }
 
   _pauseTimer() {
+    MechanicTimerManager.pauseWorkEstimate(
+        appointmentMechanicProvider.workEstimateDetails.id);
+
     setState(() {
       _timer.cancel();
     });
   }
 
-  _stopTimer() {
-    setState(() {
-      _timer.cancel();
-      _timerConfig = TimerConfig();
-      _showTimer = false;
-    });
+  _nextIssue() {
+    bool allTasksCompleted = true;
+
+    for(MechanicTask task in appointmentMechanicProvider.standardTasks) {
+      if (!task.completed) {
+        allTasksCompleted = false;
+      }
+    }
+
+    if (allTasksCompleted) {
+
+    }
+    else {
+      if (appointmentMechanicProvider.selectedMechanicTask.isValid()) {
+        setState(() {
+          appointmentMechanicProvider.selectedMechanicTask.completed = true;
+          if (_currentStepIndex + 1 < appointmentMechanicProvider.standardTasks.length) {
+            _currentStepIndex += 1;
+            appointmentMechanicProvider.selectedMechanicTask =
+            appointmentMechanicProvider.standardTasks[_currentStepIndex];
+
+            _currentStepIndex = _currentStepIndex;
+          }
+        });
+      }
+    }
   }
 
   bool _isStepActive(int stepIndex) {

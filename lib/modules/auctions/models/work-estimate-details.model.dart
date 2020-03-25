@@ -24,7 +24,6 @@ class WorkEstimateDetails {
       this.status});
 
   factory WorkEstimateDetails.fromJson(Map<String, dynamic> json) {
-    print('work estimate details $json');
     return WorkEstimateDetails(
         id: json['id'],
         appointment: json['appointment'] != null
