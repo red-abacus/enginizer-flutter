@@ -231,6 +231,8 @@ class AppointmentDetailsConsultantState
           _appointmentConsultantProvider.selectedAppointment;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
           _appointmentConsultantProvider.selectedAppointmentDetail;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
       Navigator.push(
         context,
@@ -249,6 +251,7 @@ class AppointmentDetailsConsultantState
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =
         _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
+    print("EEEE");
     Navigator.push(
       context,
       MaterialPageRoute(

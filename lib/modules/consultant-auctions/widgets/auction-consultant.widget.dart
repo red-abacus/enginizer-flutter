@@ -214,7 +214,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           bid.workEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          Provider.of<Auth>(context).authUserDetails.userProvider.id;
+          bid.serviceProvider.id;
 
       Navigator.push(
         context,
