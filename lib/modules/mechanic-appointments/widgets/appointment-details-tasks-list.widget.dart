@@ -240,14 +240,12 @@ class AppointmentDetailsTasksListState
   }
 
   _showTask(int stepIndex) {
-    if (appointmentMechanicProvider.selectedMechanicTask.isValid()) {
-      setState(() {
-        appointmentMechanicProvider.selectedMechanicTask =
-        appointmentMechanicProvider.standardTasks[stepIndex];
+    setState(() {
+      appointmentMechanicProvider.selectedMechanicTask =
+          appointmentMechanicProvider.standardTasks[stepIndex];
 
-        _currentStepIndex = stepIndex;
-      });
-    }
+      _currentStepIndex = stepIndex;
+    });
   }
 
   _startTimer() {
@@ -298,29 +296,30 @@ class AppointmentDetailsTasksListState
   _nextIssue() {
     bool allTasksCompleted = true;
 
-    for(MechanicTask task in appointmentMechanicProvider.standardTasks) {
+    for (MechanicTask task in appointmentMechanicProvider.standardTasks) {
       if (!task.completed) {
         allTasksCompleted = false;
       }
     }
 
     if (allTasksCompleted) {
+      _editWorkEstimate();
+    } else {
+      setState(() {
+        appointmentMechanicProvider.selectedMechanicTask.completed = true;
+        if (_currentStepIndex + 1 <
+            appointmentMechanicProvider.standardTasks.length) {
+          _currentStepIndex += 1;
+          appointmentMechanicProvider.selectedMechanicTask =
+              appointmentMechanicProvider.standardTasks[_currentStepIndex];
 
+          _currentStepIndex = _currentStepIndex;
+        }
+      });
     }
-    else {
-      if (appointmentMechanicProvider.selectedMechanicTask.isValid()) {
-        setState(() {
-          appointmentMechanicProvider.selectedMechanicTask.completed = true;
-          if (_currentStepIndex + 1 < appointmentMechanicProvider.standardTasks.length) {
-            _currentStepIndex += 1;
-            appointmentMechanicProvider.selectedMechanicTask =
-            appointmentMechanicProvider.standardTasks[_currentStepIndex];
+  }
 
-            _currentStepIndex = _currentStepIndex;
-          }
-        });
-      }
-    }
+  _editWorkEstimate() {
   }
 
   bool _isStepActive(int stepIndex) {
