@@ -205,14 +205,16 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
     if (workEstimateId != null && workEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
-      Provider.of<WorkEstimateProvider>(context).workEstimateId = workEstimateId;
-      Provider.of<WorkEstimateProvider>(context).serviceProvider =
-          _appointmentProvider.selectedAppointment.serviceProvider;
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+          workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          _appointmentProvider.selectedAppointment.serviceProvider.id;
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
       );
     }
   }

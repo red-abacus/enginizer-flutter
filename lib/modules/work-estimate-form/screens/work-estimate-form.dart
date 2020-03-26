@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
@@ -42,7 +43,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   bool _initDone = false;
   bool _isLoading = false;
   int _currentStepIndex = 0;
-  List<Step> steps = [];
+  List<FAStep> steps = [];
 
   WorkEstimateProvider _workEstimateProvider;
 
@@ -77,9 +78,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
         _workEstimateProvider
             .loadServiceProviderSchedule(
-                Provider.of<Auth>(context).authUserDetails.userProvider.id,
-                startDate,
-                endDate)
+                _workEstimateProvider.serviceProviderId, startDate, endDate)
             .then((_) {
           if (widget.mode == EstimatorMode.ReadOnly ||
               widget.mode == EstimatorMode.Edit) {
@@ -159,34 +158,39 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             ),
           ),
           child: steps.isNotEmpty
-              ? Stepper(
-                  key: Key(Random.secure().nextDouble().toString()),
-                  currentStep: _currentStepIndex,
-                  onStepTapped: (stepIndex) => _showIssue(stepIndex),
-                  type: StepperType.horizontal,
-                  steps: steps,
-                  controlsBuilder: (BuildContext context,
-                      {VoidCallback onStepContinue,
-                      VoidCallback onStepCancel}) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        _newOperationContainer(),
-                      ],
-                    );
-                  },
+              ? Container(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: FAStepper(
+                    stepNumberColor: red,
+                    titleIconArrange: FAStepperTitleIconArrange.row,
+                    type: FAStepperType.horizontal,
+                    key: Key(Random.secure().nextDouble().toString()),
+                    currentStep: _currentStepIndex,
+                    onStepTapped: (stepIndex) => _showIssue(stepIndex),
+                    steps: steps,
+                    controlsBuilder: (BuildContext context,
+                        {VoidCallback onStepContinue,
+                        VoidCallback onStepCancel}) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          _newOperationContainer(),
+                        ],
+                      );
+                    },
+                  ),
                 )
               : Container(),
         ),
       );
 
-  List<Step> _buildSteps(BuildContext context) {
-    List<Step> stepsList = [];
+  List<FAStep> _buildSteps(BuildContext context) {
+    List<FAStep> stepsList = [];
     List<Issue> issues = _workEstimateProvider?.workEstimateRequest?.issues;
 
     issues.asMap().forEach((index, issueRefactor) {
       stepsList.add(
-        Step(
+        FAStep(
             isActive: _isStepActive(index),
             title: Text((issueRefactor.name?.isNotEmpty ?? false)
                 ? issueRefactor.name
@@ -202,7 +206,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       );
     });
 
-    stepsList.add(Step(
+    stepsList.add(FAStep(
       isActive: _isStepActive(issues.length),
       title: Text(S.of(context).auction_proposed_date),
       content: WorkEstimateDateWidget(estimatorMode: widget.mode),

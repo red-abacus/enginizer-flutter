@@ -87,7 +87,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
 
   _openAddIssueModal(BuildContext context) {
     WorkEstimateProvider provider = Provider.of<WorkEstimateProvider>(context);
-    provider.refreshValues();
+    provider.refreshForm();
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(

@@ -275,8 +275,8 @@ class BidDetailsState extends State<BidDetails> {
     Provider.of<WorkEstimateProvider>(context).refreshValues();
     Provider.of<WorkEstimateProvider>(context).workEstimateId =
         Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
-    Provider.of<WorkEstimateProvider>(context).serviceProvider =
-        Provider.of<AuctionProvider>(context).bidDetails.serviceProvider;
+    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+        Provider.of<AuctionProvider>(context).bidDetails.serviceProvider.id;
 
     Navigator.push(
       context,

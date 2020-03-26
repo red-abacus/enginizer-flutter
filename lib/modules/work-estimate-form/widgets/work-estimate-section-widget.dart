@@ -56,19 +56,24 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                           top: 4, bottom: 4, right: 4, left: 10),
                       child: InkWell(
                         onTap: () => {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertTextFormWidget(
-                                title: S.of(context).estimator_add_section_name,
-                                placeholder: issueSection.isNew
-                                    ? S.of(context).estimator_section_name
-                                    : issueSection.name,
-                                buttonName: S.of(context).general_add,
-                                addTextFunction: _addSectionName,
-                              );
-                            },
-                          )
+                          if (estimatorMode != EstimatorMode.ReadOnly)
+                            {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertTextFormWidget(
+                                    title: S
+                                        .of(context)
+                                        .estimator_add_section_name,
+                                    placeholder: issueSection.isNew
+                                        ? S.of(context).estimator_section_name
+                                        : issueSection.name,
+                                    buttonName: S.of(context).general_add,
+                                    addTextFunction: _addSectionName,
+                                  );
+                                },
+                              )
+                            }
                         },
                         child: Text(
                           issueSection.isNew

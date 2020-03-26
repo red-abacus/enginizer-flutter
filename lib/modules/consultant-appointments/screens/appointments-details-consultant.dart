@@ -246,8 +246,8 @@ class AppointmentDetailsConsultantState
     Provider.of<WorkEstimateProvider>(context).refreshValues();
     Provider.of<WorkEstimateProvider>(context).workEstimateId =
         _appointmentConsultantProvider.selectedAppointmentDetail.workEstimateId;
-    Provider.of<WorkEstimateProvider>(context).serviceProvider =
-        _appointmentConsultantProvider.selectedAppointment.serviceProvider;
+    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+        _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
     Navigator.push(
       context,
@@ -267,8 +267,8 @@ class AppointmentDetailsConsultantState
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           _appointmentConsultantProvider
               .selectedAppointmentDetail.workEstimateId;
-      Provider.of<WorkEstimateProvider>(context).serviceProvider =
-          _appointmentConsultantProvider.selectedAppointment.serviceProvider;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
       Navigator.push(
         context,

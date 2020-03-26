@@ -38,12 +38,11 @@ class WorkEstimateProvider with ChangeNotifier {
   AppointmentDetail selectedAppointmentDetail;
 
   int workEstimateId;
-  ServiceProvider serviceProvider;
+  int serviceProviderId;
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
   _initValues() {
-    estimatorFormState = Map.from(initialEstimatorFormState);
     itemTypes = [];
     providerItems = [];
     serviceProviderTimetable = [];
@@ -53,9 +52,14 @@ class WorkEstimateProvider with ChangeNotifier {
     selectedAppointmentDetail = null;
   }
 
-  void refreshValues() {
+  refreshValues() {
     _initValues();
+    refreshForm();
     workEstimateRequest = WorkEstimateRequest();
+  }
+
+  refreshForm() {
+    estimatorFormState = Map.from(initialEstimatorFormState);
   }
 
   void setIssues(List<Issue> issues) {

@@ -197,6 +197,8 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(widget.auctionDetails.issues);
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          Provider.of<Auth>(context).authUserDetails.userProvider.id;
 
       Navigator.push(
         context,
@@ -211,13 +213,14 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           bid.workEstimateId;
-      Provider.of<WorkEstimateProvider>(context).serviceProvider =
-          bid.serviceProvider;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          Provider.of<Auth>(context).authUserDetails.userProvider.id;
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
       );
     }
   }
