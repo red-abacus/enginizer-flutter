@@ -18,30 +18,33 @@ class AppointmentCard extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
         margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.grey,
+              color: Constants.gray_80,
               offset: Offset(1.0, 1.0),
               blurRadius: 1.0,
             ),
           ],
         ),
-        child: Material(
-          color: Colors.white,
-          child: InkWell(
-            splashColor: Theme.of(context).primaryColor,
-            onTap: () => this.selectAppointment(context, this.appointment),
-            child: ClipRRect(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  _imageContainer(),
-                  _textContainer(),
-                  _statusContainer(context),
-                ],
+        child: Container(
+          child: Material(
+            color: Colors.white,
+            child: InkWell(
+              splashColor: Theme.of(context).primaryColor,
+              onTap: () => this.selectAppointment(context, this.appointment),
+              child: ClipRRect(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    _imageContainer(),
+                    _textContainer(),
+                    _statusContainer(context),
+                  ],
+                ),
               ),
             ),
           ),
@@ -125,7 +128,8 @@ class AppointmentCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(right: 10),
         child: Text(
-          AppointmentStatusStateUtils.title(context, appointment.getState()).toUpperCase(),
+          AppointmentStatusStateUtils.title(context, appointment.getState())
+              .toUpperCase(),
           textAlign: TextAlign.right,
           style: TextHelper.customTextStyle(
               null, appointment.resolveStatusColor(), FontWeight.bold, 12),

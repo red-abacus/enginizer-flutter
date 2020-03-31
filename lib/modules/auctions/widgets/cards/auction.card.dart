@@ -18,10 +18,11 @@ class AuctionCard extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
         margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.grey,
+              color: gray_80,
               offset: Offset(1.0, 1.0),
               blurRadius: 1.0,
             ),
