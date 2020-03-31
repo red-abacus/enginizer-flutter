@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
@@ -9,6 +8,7 @@ import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:enginizer_flutter/modules/cars/widgets/text_widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:enginizer_flutter/utils/snack_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -38,22 +38,40 @@ class CarDetailsState extends State<CarDetails> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      setState(() {
-        _isLoading = true;
-      });
+      _loadData();
+    }
+    _initDone = true;
+    super.didChangeDependencies();
+  }
 
-      carProvider = Provider.of<CarProvider>(context);
-      carProvider.getCarDetails().then((_) {
-        carProvider.getCarFuelConsumptionGraphic().then((_) {
+  _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    carProvider = Provider.of<CarProvider>(context);
+
+    try {
+      await carProvider.getCarDetails().then((_) async {
+        await carProvider.getCarFuelConsumptionGraphic().then((_) {
           setState(() {
             _isLoading = false;
           });
         });
       });
-    }
+    } catch (error) {
+      if (error.toString().contains(CarProvider.CAR_FUEL_EXCEPITON)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_car_fuel, _scaffoldKey.currentState);
 
-    _initDone = true;
-    super.didChangeDependencies();
+        setState(() {
+          _isLoading = false;
+        });
+      } else if (error.toString().contains(CarProvider.CAR_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_car_details, _scaffoldKey.currentState);
+      }
+    }
   }
 
   @override
@@ -210,8 +228,8 @@ class CarDetailsState extends State<CarDetails> {
         width: MediaQuery.of(context).size.width,
         child: BezierChart(
           bezierChartScale: BezierChartScale.WEEKLY,
-          fromDate: points.first.xAxis,
-          toDate: points.last.xAxis,
+          fromDate: fromDate,
+          toDate: now,
           selectedDate: now,
           series: [
             BezierLine(label: "Consum", data: points),
@@ -356,15 +374,27 @@ class CarDetailsState extends State<CarDetails> {
     }
   }
 
-  _createCarConsumption() {
+  _createCarConsumption() async {
     setState(() {
       _isLoading = true;
     });
 
-    carProvider?.getCarFuelConsumptionGraphic()?.then((_) {
-      setState(() {
-        _isLoading = false;
+    try {
+      await carProvider?.getCarFuelConsumptionGraphic()?.then((_) {
+        setState(() {
+          _isLoading = false;
+        });
       });
-    });
+    }
+    catch(error) {
+      if (error.toString().contains(CarProvider.CAR_FUEL_EXCEPITON)) {
+        SnackBarManager.showSnackBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_car_fuel, _scaffoldKey.currentState);
+      }
+    }
   }
 }

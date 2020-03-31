@@ -8,6 +8,7 @@ import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.respo
 import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/models/cars-reponse.model.dart';
+import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
 import 'package:enginizer_flutter/utils/environment.constants.dart';
 
 class CarService {
@@ -61,15 +62,25 @@ class CarService {
   }
 
   Future<CarFuelGraphicResponse> getFuelConsumption(int id) async {
-    final response = await _dio.get('$CAR_API_PATH/$id/fuel', queryParameters: {
-      "month": DateTime.now().month,
-      'year': DateTime.now().year
-    });
+    try {
+      final response = await _dio.get(
+          '$CAR_API_PATH/$id/fuel', queryParameters: {
+        "month": DateTime
+            .now()
+            .month,
+        'year': DateTime
+            .now()
+            .year
+      });
 
-    if (response.statusCode < 300) {
-      return CarFuelGraphicResponse.fromJson(response.data);
-    } else {
-      throw Exception('GET_FUEL_FAILED');
+      if (response.statusCode < 300) {
+        return CarFuelGraphicResponse.fromJson(response.data);
+      } else {
+        throw Exception(CarProvider.CAR_FUEL_EXCEPITON);
+      }
+    }
+    catch(error) {
+      throw Exception(CarProvider.CAR_FUEL_EXCEPITON);
     }
   }
 
@@ -79,8 +90,8 @@ class CarService {
     if (response.statusCode < 300) {
       return Car.fromJson(response.data);
     } else {
-      // If that response was not OK, throw an error.
-      throw Exception('CAR_DETAILS_FAILED');
+      // If that response was not OK, throw an error
+      throw Exception(CarProvider.CAR_DETAILS_EXCEPTION);
     }
   }
 

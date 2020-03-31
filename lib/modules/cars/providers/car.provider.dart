@@ -8,8 +8,12 @@ import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
 import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
 import 'package:enginizer_flutter/utils/api_response.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CarProvider with ChangeNotifier {
+  static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
+  static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
+
   CarService carService = inject<CarService>();
 
   Car selectedCar;
@@ -26,20 +30,31 @@ class CarProvider with ChangeNotifier {
   }
 
   Future<Car> getCarDetails() async {
-    carDetails = await carService.getCarDetails(selectedCar.id);
-    notifyListeners();
-    return carDetails;
+    try {
+      carDetails = await carService.getCarDetails(selectedCar.id);
+      notifyListeners();
+      return carDetails;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<CarFuelGraphicResponse> getCarFuelConsumptionGraphic() async {
-    carFuelGraphicResponse = await carService.getFuelConsumption(selectedCar.id);
-    notifyListeners();
-    return carFuelGraphicResponse;
+    try {
+      carFuelGraphicResponse =
+          await carService.getFuelConsumption(selectedCar.id);
+      notifyListeners();
+      return carFuelGraphicResponse;
+    } catch (error) {
+      throw(error);
+    }
   }
 
-  Future<CarFuelConsumptionResponse> addCarFuelConsumption(CarFuelConsumption fuelConsumption) async {
+  Future<CarFuelConsumptionResponse> addCarFuelConsumption(
+      CarFuelConsumption fuelConsumption) async {
     if (selectedCar != null) {
-      CarFuelConsumptionResponse response = await carService.addFuelConsumption(fuelConsumption, selectedCar.id);
+      CarFuelConsumptionResponse response =
+          await carService.addFuelConsumption(fuelConsumption, selectedCar.id);
       notifyListeners();
       return response;
     }

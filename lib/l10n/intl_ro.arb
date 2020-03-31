@@ -271,5 +271,8 @@
   "general_create": "Crează",
   "general_rejected": "Respins",
   "general_send": "Trimite",
-  "general_edit": "Editează"
+  "general_edit": "Editează",
+  "general_error": "Eroare",
+  "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
+  "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii."
 }

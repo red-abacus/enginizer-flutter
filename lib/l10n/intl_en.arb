@@ -271,5 +271,8 @@
   "general_create": "Create",
   "general_rejected": "Rejected",
   "general_send": "Send",
-  "general_edit": "Edit"
+  "general_edit": "Edit",
+  "general_error": "Error",
+  "exception_get_car_fuel": "There was an error trying to load car fuel.",
+  "exception_get_car_details": "There was an error trying to get car details."
 }
