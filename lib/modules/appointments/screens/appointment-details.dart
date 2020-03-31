@@ -3,7 +3,6 @@ import 'package:enginizer_flutter/modules/appointments/enum/appointment.details.
 import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointment.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/providers/appointments.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:enginizer_flutter/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
@@ -115,7 +114,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           case AppointmentStatusState.SCHEDULED:
           case AppointmentStatusState.IN_WORK:
           case AppointmentStatusState.CANCELED:
-          case AppointmentStatusState.COMPLETED:
+          case AppointmentStatusState.DONE:
             return AppointmentGenericDetailsWidget(
                 appointment: _appointmentProvider.selectedAppointment,
                 appointmentDetail:

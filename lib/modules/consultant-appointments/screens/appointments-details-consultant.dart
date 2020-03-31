@@ -133,7 +133,7 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.SCHEDULED:
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.CANCELED:
-      case AppointmentStatusState.COMPLETED:
+      case AppointmentStatusState.DONE:
         return AppointmentDetailsGenericConsultantWidget(
           appointment: _appointmentConsultantProvider.selectedAppointment,
           appointmentDetail:

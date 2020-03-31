@@ -154,7 +154,7 @@ class Appointment {
         return yellow;
       case AppointmentStatusState.CANCELED:
         return red;
-      case AppointmentStatusState.COMPLETED:
+      case AppointmentStatusState.DONE:
         return green;
       default:
     }
@@ -170,6 +170,8 @@ class Appointment {
         return 'in_bid';
       case AppointmentStatusState.PENDING:
         return 'waiting';
+      case AppointmentStatusState.DONE:
+        return 'completed';
       default:
         return status.name.toLowerCase();
     }
@@ -189,8 +191,8 @@ class Appointment {
         return AppointmentStatusState.CANCELED;
       case 'openbid':
         return AppointmentStatusState.OPEN_BID;
-      case 'completed':
-        return AppointmentStatusState.COMPLETED;
+      case 'done':
+        return AppointmentStatusState.DONE;
       default:
         return AppointmentStatusState.ALL;
     }

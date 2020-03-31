@@ -16,8 +16,8 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_canceled;
       case AppointmentStatusState.OPEN_BID:
         return S.of(context).appointment_status_open_bid;
-      case AppointmentStatusState.COMPLETED:
-        return S.of(context).appointment_status_completed;
+      case AppointmentStatusState.DONE:
+        return S.of(context).appointment_status_done;
       case AppointmentStatusState.ALL:
         return S.of(context).general_all;
         break;
@@ -33,7 +33,7 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.IN_WORK,
       AppointmentStatusState.OPEN_BID,
       AppointmentStatusState.CANCELED,
-      AppointmentStatusState.COMPLETED
+      AppointmentStatusState.DONE
     ];
   }
 }
@@ -46,5 +46,5 @@ enum AppointmentStatusState {
   SCHEDULED,
   CANCELED,
   OPEN_BID,
-  COMPLETED
+  DONE,
 }

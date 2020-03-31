@@ -153,7 +153,7 @@
   "appointment_status_scheduled": "Scheduled",
   "appointment_status_canceled": "Canceled",
   "appointment_status_open_bid": "Auction",
-  "appointment_status_completed": "Completed",
+  "appointment_status_done": "Done",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",

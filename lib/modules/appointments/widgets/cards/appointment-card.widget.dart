@@ -129,7 +129,7 @@ class AppointmentCard extends StatelessWidget {
         margin: EdgeInsets.only(right: 10),
         child: Text(
           AppointmentStatusStateUtils.title(context, appointment.getState())
-              .toUpperCase(),
+            .toUpperCase(),
           textAlign: TextAlign.right,
           style: TextHelper.customTextStyle(
               null, appointment.resolveStatusColor(), FontWeight.bold, 12),

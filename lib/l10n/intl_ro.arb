@@ -225,7 +225,7 @@
   "work_estimate_status_accepted": "Acceptată",
   "appointment_status_canceled": "Anulată",
   "appointment_status_open_bid": "Licitație",
-  "appointment_status_completed": "Finalizată",
+  "appointment_status_done": "Finalizată",
   "SERVICE": "Service",
   "CAR_WASHING": "Spălătorie",
   "PAINT_SHOP": "Vopsire",
