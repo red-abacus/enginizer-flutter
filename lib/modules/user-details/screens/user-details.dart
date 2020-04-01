@@ -194,14 +194,18 @@ class UserDetailsState extends State<UserDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
-              child: Text(
-                '${S.of(context).user_profile_current_password} : ',
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+            Expanded(
+              flex: 4,
+              child: Container(
+                child: Text(
+                  '${S.of(context).user_profile_current_password} : ',
+                  style: TextHelper.customTextStyle(
+                      null, gray2, FontWeight.normal, 16),
+                ),
               ),
             ),
             Expanded(
+              flex: 6,
                 child: Container(
               margin: EdgeInsets.only(left: 20),
               child: TextFormField(
@@ -223,14 +227,18 @@ class UserDetailsState extends State<UserDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
-              child: Text(
-                '${S.of(context).user_profile_new_password} : ',
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+            Expanded(
+              flex: 4,
+              child: Container(
+                child: Text(
+                  '${S.of(context).user_profile_new_password} : ',
+                  style: TextHelper.customTextStyle(
+                      null, gray2, FontWeight.normal, 16),
+                ),
               ),
             ),
             Expanded(
+              flex: 6,
                 child: Container(
               margin: EdgeInsets.only(left: 20),
               child: TextFormField(
@@ -252,14 +260,18 @@ class UserDetailsState extends State<UserDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
-              child: Text(
-                '${S.of(context).user_profile_confirm_password} : ',
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+            Expanded(
+              flex: 4,
+              child: Container(
+                child: Text(
+                  '${S.of(context).user_profile_confirm_password} : ',
+                  style: TextHelper.customTextStyle(
+                      null, gray2, FontWeight.normal, 16),
+                ),
               ),
             ),
             Expanded(
+              flex: 6,
                 child: Container(
               margin: EdgeInsets.only(left: 20),
               child: TextFormField(
@@ -289,7 +301,8 @@ class UserDetailsState extends State<UserDetails> {
   }
 
   _saveDetails() {
-    userProvider.updateUserDetails(userProvider.email, userProvider.name).then((_) {
-    });
+    userProvider
+        .updateUserDetails(userProvider.email, userProvider.name)
+        .then((_) {});
   }
 }
