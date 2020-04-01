@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 class AppointmentDateTimeForm extends StatefulWidget {
   List<ServiceProviderSchedule> providerSchedules;
 
-  AppointmentDateTimeForm({Key key, this.providerSchedules}) : super(key: key);
+  AppointmentDateTimeForm({Key key, this.providerSchedules})
+      : super(key: key);
 
   @override
   AppointmentDateTimeFormState createState() => AppointmentDateTimeFormState();
@@ -29,7 +30,8 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
           calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), [],
               Provider.of<ProviderServiceProvider>(context).selectedProvider),
           dateEntrySelected: _dateEntrySelected,
-          dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry),
+          dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry,
+          disableSelect: false),
     );
   }
 

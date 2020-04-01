@@ -403,7 +403,9 @@ class AppointmentDetailsGenericConsultantWidgetState
               "(${S.of(context).appointment_details_request_reprogramming.toLowerCase()})",
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
             ),
-            onPressed: () {},
+            onPressed: () {
+              widget.viewEstimate();
+            },
           )
         ],
       ),

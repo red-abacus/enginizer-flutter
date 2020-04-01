@@ -210,6 +210,7 @@
   "estimator_percent_max_100": "Procentul nu trebuie sa depăsească 100%",
   "estimator_max_time": "Timp maxim de răspuns (în ore)",
   "estimator_max_time_warning": "Adaug timpul maxim de răspuns",
+  "estimator_open_menu": "Descide Meniu",
   "user_profile_current_password": "Parola Curentă",
   "user_profile_new_password": "Parola Nouă",
   "user_profile_confirm_password": "Confirmă parola",

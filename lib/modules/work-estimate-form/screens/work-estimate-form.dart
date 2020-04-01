@@ -6,7 +6,6 @@ import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estima
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:enginizer_flutter/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
@@ -19,6 +18,8 @@ import 'package:enginizer_flutter/utils/date_utils.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class WorkEstimateForm extends StatefulWidget {
@@ -52,14 +53,14 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppointmentConsultantProvider>(
-        builder: (context, appointmentsProvider, _) => Scaffold(
-            appBar: AppBar(
-              actions: <Widget>[
-                _saveButton(),
-              ],
-              iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-            ),
-            body: _buildContent(context)));
+      builder: (context, appointmentsProvider, _) => Scaffold(
+        appBar: AppBar(
+          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+        ),
+        body: _buildContent(context),
+        floatingActionButton: _floatingActionButtonContainer(),
+      ),
+    );
   }
 
   @override
@@ -118,29 +119,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       child: Stack(
         children: <Widget>[
           _buildStepper(context),
-          new Align(
-              alignment: Alignment.bottomCenter,
-              child: new Row(
-                children: <Widget>[
-                  _createSelectionContainer(),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      height: 50,
-                      child: FlatButton(
-                        color: green,
-                        child: Text(
-                          S.of(context).estimator_operations_history,
-                          textAlign: TextAlign.center,
-                          style: TextHelper.customTextStyle(
-                              null, Colors.white, FontWeight.bold, 16),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ],
-              ))
         ],
       ),
     );
@@ -171,12 +149,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                     controlsBuilder: (BuildContext context,
                         {VoidCallback onStepContinue,
                         VoidCallback onStepCancel}) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          _newOperationContainer(),
-                        ],
-                      );
+                      return Container();
                     },
                   ),
                 )
@@ -215,66 +188,89 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     return stepsList;
   }
 
-  _createSelectionContainer() {
-    return widget.mode == EstimatorMode.ReadOnly
-        ? Expanded(
-            flex: 0,
-            child: Container(height: 50),
-          )
-        : Expanded(
-            flex: 1,
-            child: Container(
-              height: 50,
-              child: FlatButton(
-                color: yellow,
-                child: Text(
-                  S.of(context).estimator_create_from_selection,
-                  textAlign: TextAlign.center,
-                  style: TextHelper.customTextStyle(
-                      null, Colors.white, FontWeight.bold, 16),
-                ),
-                onPressed: () {},
-              ),
-            ),
-          );
-  }
+  _floatingActionButtonContainer() {
+    var buttons = List<SpeedDialChild>();
 
-  _saveButton() {
-    String buttonTitle = widget.mode == EstimatorMode.Create
-        ? S.of(context).general_save
-        : S.of(context).general_edit;
+    if (widget.mode != EstimatorMode.ReadOnly) {
+      String buttonTitle = widget.mode == EstimatorMode.Create
+          ? S.of(context).general_save
+          : S.of(context).general_edit;
 
-    return widget.mode == EstimatorMode.ReadOnly
-        ? Container()
-        : FlatButton(
-            child: Text(buttonTitle,
-                style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 16)),
-            onPressed: () {
-              _save();
-            },
-          );
-  }
-
-  _newOperationContainer() {
-    if (widget.mode == EstimatorMode.ReadOnly) {
-      return Container();
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.save),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: buttonTitle,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => _save()));
     }
 
-    return _currentStepIndex == steps.length - 1
-        ? Container()
-        : RaisedButton(
-            elevation: 0,
-            child: Text(S.of(context).estimator_add_new_operation),
-            textColor: Theme.of(context).cardColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            color: Theme.of(context).primaryColor,
-            onPressed: () {
-              _addOperation();
-            },
-          );
+    if (widget.mode == EstimatorMode.ReadOnly) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.schedule),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S
+              .of(context)
+              .auction_proposed_date,
+          labelStyle:
+          TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => print('schedule')));
+    }
+
+    if (widget.mode != EstimatorMode.ReadOnly && _currentStepIndex < steps.length - 1) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.add),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S
+              .of(context)
+              .estimator_add_new_operation,
+          labelStyle:
+          TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => _addOperation()));
+    }
+
+    buttons.add(SpeedDialChild(
+        child: Icon(Icons.history),
+        foregroundColor: red,
+        backgroundColor: Colors.white,
+        label: S.of(context).estimator_operations_history,
+        labelStyle:
+            TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+        onTap: () => print('operation history')));
+
+    if (widget.mode != EstimatorMode.ReadOnly) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.create),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S.of(context).estimator_create_from_selection,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => print('create from selection')));
+    }
+
+    return SpeedDial(
+      // both default to 16
+      marginRight: 18,
+      marginBottom: 20,
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      visible: true,
+      closeManually: false,
+      curve: Curves.linear,
+      overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      tooltip: S.of(context).estimator_open_menu,
+      heroTag: 'open-menu-tag',
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      elevation: 8.0,
+      shape: CircleBorder(),
+      children: buttons,
+    );
   }
 
   _showIssue(int stepIndex) {
