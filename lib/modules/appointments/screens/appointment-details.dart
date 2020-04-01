@@ -199,41 +199,23 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   }
 
   _seeEstimate() {
-//    int workEstimateId =
-//        _appointmentProvider.selectedAppointmentDetail.workEstimateId;
-//
-//    if (workEstimateId != null && workEstimateId != 0) {
-//      Provider.of<WorkEstimateProvider>(context).refreshValues();
-//      Provider.of<WorkEstimateProvider>(context).workEstimateId =
-//          workEstimateId;
-//      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-//          _appointmentProvider.selectedAppointment.serviceProvider.id;
-//
-//      Navigator.push(
-//        context,
-//        MaterialPageRoute(
-//            builder: (context) =>
-//                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
-//      );
-//    }
+    int workEstimateId =
+        _appointmentProvider.selectedAppointmentDetail.workEstimateId;
 
-    Provider.of<WorkEstimateProvider>(context).refreshValues();
-    Provider.of<WorkEstimateProvider>(context).setIssues(
-        _appointmentProvider.selectedAppointmentDetail.issues);
-    Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-        _appointmentProvider.selectedAppointment;
-    Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
-        _appointmentProvider.selectedAppointmentDetail;
-    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-        _appointmentProvider.selectedAppointment.serviceProvider.id;
+    if (workEstimateId != null && workEstimateId != 0) {
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+          workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          _appointmentProvider.selectedAppointment.serviceProvider.id;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => WorkEstimateForm(
-              mode: EstimatorMode.Create,
-              createWorkEstimateFinished: null)),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+      );
+    }
   }
 
   _acceptAppointment() {
