@@ -1,6 +1,7 @@
 import 'package:enginizer_flutter/generated/l10n.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-section-items.widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
@@ -11,21 +12,23 @@ import 'package:flutter_svg/svg.dart';
 
 class WorkEstimateSectionWidget extends StatelessWidget {
   final IssueSection issueSection;
+  final Issue issue;
 
-  final Function addSectionName;
   final Function expandSection;
   final Function addIssueItem;
   final Function removeIssueItem;
   final Function selectIssueSection;
+  final Function showSectionName;
   final EstimatorMode estimatorMode;
 
   WorkEstimateSectionWidget(
-      {this.issueSection,
-      this.addSectionName,
+      {this.issue,
+      this.issueSection,
       this.expandSection,
       this.addIssueItem,
       this.removeIssueItem,
       this.selectIssueSection,
+      this.showSectionName,
       this.estimatorMode});
 
   @override
@@ -55,26 +58,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                       margin: EdgeInsets.only(
                           top: 4, bottom: 4, right: 4, left: 10),
                       child: InkWell(
-                        onTap: () => {
-                          if (estimatorMode != EstimatorMode.ReadOnly)
-                            {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertTextFormWidget(
-                                    title: S
-                                        .of(context)
-                                        .estimator_add_section_name,
-                                    placeholder: issueSection.isNew
-                                        ? S.of(context).estimator_section_name
-                                        : issueSection.name,
-                                    buttonName: S.of(context).general_add,
-                                    addTextFunction: _addSectionName,
-                                  );
-                                },
-                              )
-                            }
-                        },
+                        onTap: () => {showSectionName(this.issue, this.issueSection)},
                         child: Text(
                           issueSection.isNew
                               ? S.of(context).estimator_add_section_name
@@ -160,9 +144,5 @@ class WorkEstimateSectionWidget extends StatelessWidget {
     } else {
       return Container();
     }
-  }
-
-  _addSectionName(String name) {
-    this.addSectionName(name, this.issueSection);
   }
 }

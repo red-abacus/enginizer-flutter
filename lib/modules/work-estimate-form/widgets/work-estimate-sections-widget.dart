@@ -8,19 +8,19 @@ import 'package:flutter/cupertino.dart';
 class WorkEstimateSectionsWidget extends StatefulWidget {
   final Issue issue;
   final EstimatorMode estimatorMode;
-  final Function setSectionName;
   final Function expandSection;
   final Function addIssueItem;
   final Function removeIssueItem;
   final Function selectIssueSection;
+  final Function showSectionName;
 
   WorkEstimateSectionsWidget(
       {this.issue,
-      this.setSectionName,
       this.expandSection,
       this.addIssueItem,
       this.removeIssueItem,
       this.selectIssueSection,
+      this.showSectionName,
       this.estimatorMode});
 
   @override
@@ -39,20 +39,17 @@ class _WorkEstimateSectionsWidgetState
         children: <Widget>[
           for (IssueSection section in widget.issue.sections)
             WorkEstimateSectionWidget(
+                issue: widget.issue,
                 issueSection: section,
-                addSectionName: _setSectionName,
                 expandSection: _expandSection,
                 addIssueItem: _addIssueItem,
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
+                showSectionName: widget.showSectionName,
                 estimatorMode: widget.estimatorMode)
         ],
       ),
     );
-  }
-
-  _setSectionName(String name, IssueSection issueSection) {
-    widget.setSectionName(widget.issue, name, issueSection);
   }
 
   _expandSection(IssueSection issueSection) {

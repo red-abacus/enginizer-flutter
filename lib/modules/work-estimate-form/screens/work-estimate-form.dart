@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:enginizer_flutter/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:enginizer_flutter/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
@@ -171,10 +172,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             content: WorkEstimateSectionsWidget(
                 issue: issues[index],
                 addIssueItem: _addIssueItem,
-                setSectionName: _setSectionName,
                 expandSection: _expandSection,
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
+                showSectionName: _showSectionName,
                 estimatorMode: widget.mode)),
       );
     });
@@ -211,24 +212,21 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           child: Icon(Icons.schedule),
           foregroundColor: red,
           backgroundColor: Colors.white,
-          label: S
-              .of(context)
-              .auction_proposed_date,
-          labelStyle:
-          TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+          label: S.of(context).auction_proposed_date,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
           onTap: () => print('schedule')));
     }
 
-    if (widget.mode != EstimatorMode.ReadOnly && _currentStepIndex < steps.length - 1) {
+    if (widget.mode != EstimatorMode.ReadOnly &&
+        _currentStepIndex < steps.length - 1) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.add),
           foregroundColor: red,
           backgroundColor: Colors.white,
-          label: S
-              .of(context)
-              .estimator_add_new_operation,
-          labelStyle:
-          TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+          label: S.of(context).estimator_add_new_operation,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
           onTap: () => _addOperation()));
     }
 
@@ -253,7 +251,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
 
     return SpeedDial(
-      // both default to 16
       marginRight: 18,
       marginBottom: 20,
       animatedIcon: AnimatedIcons.menu_close,
@@ -292,11 +289,13 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
         IssueSection section = IssueSection.defaultSection();
         issue.sections.add(section);
+
+        _showSectionName(issue, section);
       }
     });
   }
 
-  _setSectionName(Issue issue, String name, IssueSection issueSection) {
+  _setSectionName(Issue issue, IssueSection issueSection, String name) {
     setState(() {
       for (IssueSection section in issue.sections) {
         section.expanded = false;
@@ -378,5 +377,25 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         }
       }
     });
+  }
+
+  _showSectionName(Issue issue, IssueSection issueSection) {
+    if (widget.mode != EstimatorMode.ReadOnly) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertTextFormWidget(
+            title: S.of(context).estimator_add_section_name,
+            placeholder: issueSection.isNew
+                ? S.of(context).estimator_section_name
+                : issueSection.name,
+            buttonName: S.of(context).general_add,
+            addTextFunction: (name) {
+              _setSectionName(issue, issueSection, name);
+            },
+          );
+        },
+      );
+    }
   }
 }
