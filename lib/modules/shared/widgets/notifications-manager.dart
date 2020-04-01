@@ -1,4 +1,5 @@
 import 'package:enginizer_flutter/layout/navigation.app.dart';
+import 'package:enginizer_flutter/layout/navigation_toolbar.app.dart';
 import 'package:enginizer_flutter/utils/constants.dart';
 import 'package:enginizer_flutter/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,12 +9,17 @@ import 'package:overlay_support/overlay_support.dart';
 
 class NotificationsManager {
   static NavigationAppState navigationAppState;
+  static NavigationToolbarAppState navigationToolbarAppState;
   static var notificationsCount = 0;
 
   static showNotificationBanner(BuildContext context) {
     notificationsCount += 1;
     if (navigationAppState != null) {
       navigationAppState.updateNotifications();
+    }
+
+    if (navigationToolbarAppState != null) {
+      navigationToolbarAppState.updateNotifications();
     }
 
     showSimpleNotification(
@@ -48,6 +54,10 @@ class NotificationsManager {
   static _showNotificationsScreen(BuildContext context) {
     if (navigationAppState != null) {
       navigationAppState.selectNotifications();
+    }
+
+    if (navigationToolbarAppState != null) {
+      navigationToolbarAppState.selectNotifications();
     }
   }
 }
