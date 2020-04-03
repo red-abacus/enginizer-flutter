@@ -251,7 +251,6 @@ class AppointmentDetailsConsultantState
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =
         _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
-    print("EEEE");
     Navigator.push(
       context,
       MaterialPageRoute(

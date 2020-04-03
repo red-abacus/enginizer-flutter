@@ -22,6 +22,8 @@ import 'package:app/modules/consultant-estimators/screens/work-estimates-consult
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
+import 'package:app/utils/firebase/firebase_manager.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,6 +77,8 @@ void main() async {
     child: App(),
   );
   runApp(configuredApp);
+
+  FirebaseManager.getInstance().initialise();
 }
 
 class App extends StatefulWidget {

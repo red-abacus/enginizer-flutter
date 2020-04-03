@@ -1,4 +1,4 @@
-package com.example.enginizer_flutter
+package autowass.app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

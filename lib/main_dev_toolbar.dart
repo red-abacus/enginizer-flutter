@@ -74,6 +74,8 @@ void main() async {
     child: App(),
   );
   runApp(configuredApp);
+
+  FirebaseManager.getInstance().initialise();
 }
 
 class App extends StatefulWidget {

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "617758597624",
+    "firebase_url": "https://autowass-dev.firebaseio.com",
+    "project_id": "autowass-dev",
+    "storage_bucket": "autowass-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617758597624:android:1ce45d11b056053b87b60d",
+        "android_client_info": {
+          "package_name": "autowass.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "617758597624-sco1s6avnv1m7t9v4sfk8nht4d27fa0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsA-lBjHv66qgd2TFvcV805w1Sq9LJNWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "617758597624-sco1s6avnv1m7t9v4sfk8nht4d27fa0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
