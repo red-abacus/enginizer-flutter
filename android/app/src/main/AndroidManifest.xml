@@ -11,6 +11,14 @@
         android:name=".Application"
         android:label="Autowass"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/ic_stat_ic_notification_icon" />
+
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorRed" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -27,7 +35,6 @@
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
 
 

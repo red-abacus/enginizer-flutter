@@ -23,6 +23,7 @@ import 'package:app/modules/consultant-user-details/screens/user-details-consult
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
+import 'package:app/utils/firebase/firebase_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
