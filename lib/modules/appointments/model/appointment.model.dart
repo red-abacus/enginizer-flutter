@@ -1,11 +1,11 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-status.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/operating-unit.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment-status.model.dart';
+import 'package:app/modules/appointments/model/operating-unit.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

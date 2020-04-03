@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/managers/mechanic-timer.manager.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/alert-warning-dialog.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/models/timer-config.model.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/widgets/appointment-details-task-issues-list.widget.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/mechanic-appointments/managers/mechanic-timer.manager.dart';
+import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
+import 'package:app/modules/mechanic-appointments/models/timer-config.model.dart';
+import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-task-issues-list.widget.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

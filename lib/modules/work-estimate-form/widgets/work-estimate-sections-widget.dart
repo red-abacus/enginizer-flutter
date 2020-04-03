@@ -1,8 +1,8 @@
-import 'package:enginizer_flutter/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/widgets/work-estimate-section-widget.dart';
+import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-widget.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimateSectionsWidget extends StatefulWidget {

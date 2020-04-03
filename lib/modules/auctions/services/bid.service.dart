@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/auctions/models/bid-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/response/bid-response.model.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/auctions/models/bid-details.model.dart';
+import 'package:app/modules/auctions/models/response/bid-response.model.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class BidsService {
   static const String BIDS_PATH = '${Environment.BIDS_BASE_API}/bids';

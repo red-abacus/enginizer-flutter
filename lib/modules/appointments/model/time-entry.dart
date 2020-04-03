@@ -1,7 +1,7 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/utils/date_utils.dart';
 
 enum DateEntryStatus { Free, Booked }
 

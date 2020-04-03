@@ -1,7 +1,7 @@
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/authentication/models/user.model.dart';
+import 'package:app/modules/cars/models/car.model.dart';
 
 class AppointmentDetail {
   Car car;

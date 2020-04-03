@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
-import 'package:enginizer_flutter/modules/auctions/services/auction.service.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/auctions/enum/auction-status.enum.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/response/auction-response.model.dart';
+import 'package:app/modules/auctions/services/auction.service.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:flutter/foundation.dart';
 
 class AuctionsProvider with ChangeNotifier {

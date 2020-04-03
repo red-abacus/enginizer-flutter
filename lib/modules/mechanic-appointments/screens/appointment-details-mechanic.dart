@@ -1,8 +1,8 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/widgets/appointment-details-car-details.widget.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-car-details.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

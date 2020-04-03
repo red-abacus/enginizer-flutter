@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/employee-status.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/consultant-appointments/enums/employee-status.dart';
+import 'package:app/utils/date_utils.dart';
 
 class EmployeeTimetableEntry {
   String hour;

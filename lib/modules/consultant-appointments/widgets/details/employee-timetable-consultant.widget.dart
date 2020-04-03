@@ -1,7 +1,7 @@
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/employee-status.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/models/employee-timetable-entry.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/modules/consultant-appointments/enums/employee-status.dart';
+import 'package:app/modules/consultant-appointments/models/employee-timetable-entry.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/authentication/widgets/auth-form.widget.dart';
+import 'package:app/modules/authentication/widgets/auth-form.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

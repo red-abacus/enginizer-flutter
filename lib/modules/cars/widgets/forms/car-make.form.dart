@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-model.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-query.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-year.model.dart';
-import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/models/car-fuel.model.dart';
+import 'package:app/modules/cars/models/car-model.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
+import 'package:app/modules/cars/models/car-year.model.dart';
+import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

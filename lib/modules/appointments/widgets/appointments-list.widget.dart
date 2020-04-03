@@ -1,8 +1,8 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/datepicker.widget.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/shared/widgets/datepicker.widget.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

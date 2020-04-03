@@ -1,8 +1,8 @@
-import 'package:enginizer_flutter/modules/consultant-auctions/providers/auction-consultant.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/screens/auctions-consultant.dart';
-import 'package:enginizer_flutter/modules/consultant-auctions/widgets/auction-consultant.widget.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/work-estimate-request.model.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/modules/consultant-auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
+import 'package:app/modules/consultant-auctions/widgets/auction-consultant.widget.dart';
+import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

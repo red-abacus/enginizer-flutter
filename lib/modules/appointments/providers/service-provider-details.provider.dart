@@ -1,8 +1,8 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-review.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class ServiceProviderDetailsProvider with ChangeNotifier {

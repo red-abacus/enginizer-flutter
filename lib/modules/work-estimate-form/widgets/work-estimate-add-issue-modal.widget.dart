@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
+import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

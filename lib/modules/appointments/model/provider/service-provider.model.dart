@@ -1,7 +1,7 @@
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-rating.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user-provider-schedule.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-rating.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:app/modules/authentication/models/user-provider-schedule.model.dart';
 
 class ServiceProvider {
   int id;

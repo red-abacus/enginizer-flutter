@@ -1,7 +1,7 @@
 
-import 'package:enginizer_flutter/modules/notifications/cards/notification.card.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/notifications-manager.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
+import 'package:app/modules/notifications/cards/notification.card.dart';
+import 'package:app/modules/shared/widgets/notifications-manager.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

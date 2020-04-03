@@ -1,7 +1,7 @@
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/appointment-create-select-car-list.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/cars/providers/cars.provider.dart';
+import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/widgets/appointment-create-select-car-list.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 

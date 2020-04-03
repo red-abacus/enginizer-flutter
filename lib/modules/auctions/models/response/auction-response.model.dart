@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
 
 class AuctionResponse {
   int total;

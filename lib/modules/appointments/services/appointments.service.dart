@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class AppointmentsService {
   static const String APPOINTMENTS_API_PATH =

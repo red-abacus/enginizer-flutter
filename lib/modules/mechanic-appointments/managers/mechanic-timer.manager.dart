@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-work-estimate-period.model.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-work-estimate-period.model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicTimerManager {

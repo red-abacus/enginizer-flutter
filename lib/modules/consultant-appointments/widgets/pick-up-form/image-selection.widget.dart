@@ -1,5 +1,5 @@
-import 'package:enginizer_flutter/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/pick-up-form/image-container.widget.dart';
+import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
+import 'package:app/modules/consultant-appointments/widgets/pick-up-form/image-container.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

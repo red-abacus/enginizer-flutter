@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/cards/bid.card.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/auctions/models/bid.model.dart';
+import 'package:app/modules/auctions/widgets/cards/bid.card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

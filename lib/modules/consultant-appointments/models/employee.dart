@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/consultant-appointments/models/employee-timeserie.dart';
+import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 
 class Employee {
   int id;

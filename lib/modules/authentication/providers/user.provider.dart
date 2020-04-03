@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
-import 'package:enginizer_flutter/modules/authentication/services/user.service.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
+import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserProvider with ChangeNotifier {

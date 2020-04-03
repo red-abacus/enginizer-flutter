@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/auctions/enum/bid-status.enum.dart';
+import 'package:app/utils/date_utils.dart';
 
 class Bid {
   int id;

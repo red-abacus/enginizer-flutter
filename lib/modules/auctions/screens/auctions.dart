@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auction-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/providers/auctions-provider.dart';
-import 'package:enginizer_flutter/modules/auctions/screens/auction-details.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/auctions-list.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/auctions/enum/auction-status.enum.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/providers/auction-provider.dart';
+import 'package:app/modules/auctions/providers/auctions-provider.dart';
+import 'package:app/modules/auctions/screens/auction-details.dart';
+import 'package:app/modules/auctions/widgets/auctions-list.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

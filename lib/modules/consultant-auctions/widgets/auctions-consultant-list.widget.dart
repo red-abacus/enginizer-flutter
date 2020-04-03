@@ -1,11 +1,11 @@
-import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/widgets/cards/auction.card.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/modules/auctions/enum/auction-status.enum.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/widgets/cards/auction.card.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:app/generated/l10n.dart';
 
 class AuctionsConsultantList extends StatelessWidget {
   final List<CarBrand> carBrands;

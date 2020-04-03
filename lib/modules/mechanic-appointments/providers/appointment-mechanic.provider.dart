@@ -1,11 +1,11 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
-import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/models/mechanic-task.model.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentMechanicProvider with ChangeNotifier {

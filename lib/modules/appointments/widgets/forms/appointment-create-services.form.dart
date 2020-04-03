@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

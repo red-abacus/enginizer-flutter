@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/car.model.dart';
 
 class CarsResponse {
   int total;

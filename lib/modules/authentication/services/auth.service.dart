@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/authentication/models/auth.model.dart';
-import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/authentication/models/auth.model.dart';
+import 'package:app/modules/authentication/models/http_exception.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class AuthService {
   static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';

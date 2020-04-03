@@ -1,9 +1,9 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
-import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {

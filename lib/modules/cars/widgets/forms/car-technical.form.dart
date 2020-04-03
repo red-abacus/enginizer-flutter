@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-color.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-cylinder-capacity.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-power.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-query.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-transmissions.model.dart';
-import 'package:enginizer_flutter/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/models/car-color.model.dart';
+import 'package:app/modules/cars/models/car-cylinder-capacity.model.dart';
+import 'package:app/modules/cars/models/car-power.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
+import 'package:app/modules/cars/models/car-transmissions.model.dart';
+import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

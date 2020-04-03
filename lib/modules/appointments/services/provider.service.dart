@@ -1,19 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-client-review.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-review.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timeserie.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/provider-service-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/service-providers-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/models/employee.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-client-review.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-timeserie.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/model/response/provider-service-response.model.dart';
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
+import 'package:app/modules/consultant-appointments/models/employee.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class ProviderService {
   static const String SERVICES_PATH =

@@ -1,8 +1,8 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/widgets/appointments-list.widget.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'package:enginizer_flutter/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
+import 'package:app/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

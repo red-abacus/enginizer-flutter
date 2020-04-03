@@ -2,12 +2,12 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
+import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class WorkEstimatesService {
   static const String WORK_ESTIMATES_PATH =

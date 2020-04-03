@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:app/utils/date_utils.dart';
 
 class MechanicWorkEstimatePeriod {
   static const String timeFormat = 'dd-MM-yyyy HH:mm:ss';

@@ -1,18 +1,18 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/issue-item-query.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue-section.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
+import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimateProvider with ChangeNotifier {

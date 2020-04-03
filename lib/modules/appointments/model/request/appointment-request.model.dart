@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment-provider-type.dart';
+import 'package:app/modules/appointments/model/appointment-provider-type.dart';
 
 class AppointmentRequest {
   String address;

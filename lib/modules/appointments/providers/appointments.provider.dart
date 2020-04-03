@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/request/appointment-request.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/appointments-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/service-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
+import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:flutter/widgets.dart';
 
 class AppointmentsProvider with ChangeNotifier {

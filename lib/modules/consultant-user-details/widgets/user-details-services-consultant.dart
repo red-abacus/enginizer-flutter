@@ -1,9 +1,9 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-sub-item.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-sub-item.model.dart';
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

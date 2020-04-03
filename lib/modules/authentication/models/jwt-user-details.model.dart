@@ -1,5 +1,5 @@
-import 'package:enginizer_flutter/modules/authentication/models/user-provider.model.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user-role.model.dart';
+import 'package:app/modules/authentication/models/user-provider.model.dart';
+import 'package:app/modules/authentication/models/user-role.model.dart';
 
 class JwtUserDetails {
   int id;

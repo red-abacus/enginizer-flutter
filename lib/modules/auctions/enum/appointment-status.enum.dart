@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
+import 'package:app/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentStatusStateUtils {

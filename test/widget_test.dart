@@ -5,7 +5,7 @@
 // gestures. You can also use WidgetTester to find child modules.cars.widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:enginizer_flutter/modules/cars/screens/cars.dart';
+import 'package:app/modules/cars/screens/cars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

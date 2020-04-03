@@ -1,5 +1,5 @@
-import 'package:enginizer_flutter/modules/appointments/widgets/cards/appointment-car-card.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
+import 'package:app/modules/appointments/widgets/cards/appointment-car-card.dart';
+import 'package:app/modules/cars/models/car.model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

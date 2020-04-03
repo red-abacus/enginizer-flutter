@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
-import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
-import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
-import 'package:enginizer_flutter/modules/authentication/services/user.service.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
+import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserConsultantProvider with ChangeNotifier {

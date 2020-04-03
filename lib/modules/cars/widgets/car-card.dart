@@ -1,5 +1,5 @@
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/utils/app_config.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/utils/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

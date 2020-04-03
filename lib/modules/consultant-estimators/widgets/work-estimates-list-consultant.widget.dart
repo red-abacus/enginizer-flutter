@@ -1,9 +1,9 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/widgets/cards/work-estimate-card-consultant.widget.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
+import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:app/modules/consultant-estimators/widgets/cards/work-estimate-card-consultant.widget.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

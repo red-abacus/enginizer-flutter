@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.response.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/cars-reponse.model.dart';
-import 'package:enginizer_flutter/modules/cars/providers/car.provider.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
+import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
+import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/cars-reponse.model.dart';
+import 'package:app/modules/cars/providers/car.provider.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class CarService {
   static const String CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';

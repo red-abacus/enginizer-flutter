@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 
 class IssueItem {
   int id;

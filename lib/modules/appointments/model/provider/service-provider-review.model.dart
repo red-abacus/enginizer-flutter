@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-client-review.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-rating.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider-review-details.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-client-review.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-rating.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-review-details.model.dart';
 
 class ServiceProviderReview {
   ServiceProviderRating serviceProviderRating;

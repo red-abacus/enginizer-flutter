@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/tank-quantity.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/details/employee-timetable-consultant.widget.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
+import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
+import 'package:app/modules/consultant-appointments/widgets/details/employee-timetable-consultant.widget.dart';
+import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/modules/auctions/enum/auction-status.enum.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/utils/string.utils.dart';
+import 'package:app/modules/auctions/enum/auction-status.enum.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/utils/string.utils.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../appointments/model/appointment.model.dart';

@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

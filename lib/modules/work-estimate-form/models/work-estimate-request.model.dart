@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/appointments/model/time-entry.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'issue-section.model.dart';

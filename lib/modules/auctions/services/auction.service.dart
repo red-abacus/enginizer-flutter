@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/response/auction-response.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/auctions/models/auction-details.model.dart';
+import 'package:app/modules/auctions/models/response/auction-response.model.dart';
+import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 
 import '../../../config/injection.dart';
 import '../../../utils/environment.constants.dart';

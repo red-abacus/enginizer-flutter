@@ -1,6 +1,6 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/work-estimate-form/models/issue.model.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/custom-text-form-field.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
+import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

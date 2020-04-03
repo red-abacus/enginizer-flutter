@@ -1,4 +1,4 @@
-import 'package:enginizer_flutter/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
 
 class AppointmentsResponse {
   int total;

@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/payment-method.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/tank-quantity.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/widgets/pick-up-form/image-selection.widget.dart';
-import 'package:enginizer_flutter/modules/shared/widgets/custom-text-form-field.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/consultant-appointments/enums/payment-method.enum.dart';
+import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
+import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
+import 'package:app/modules/consultant-appointments/widgets/pick-up-form/image-selection.widget.dart';
+import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';

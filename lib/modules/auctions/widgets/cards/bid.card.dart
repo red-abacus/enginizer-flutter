@@ -1,9 +1,9 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/auctions/enum/bid-status.enum.dart';
-import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/date_utils.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/auctions/enum/bid-status.enum.dart';
+import 'package:app/modules/auctions/models/bid.model.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

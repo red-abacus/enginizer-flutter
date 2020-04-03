@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/auctions/services/work-estimates.service.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-brand.model.dart';
-import 'package:enginizer_flutter/modules/cars/services/car-make.service.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/services/car-make.service.dart';
+import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
+import 'package:app/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
+import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimatesConsultantProvider with ChangeNotifier {

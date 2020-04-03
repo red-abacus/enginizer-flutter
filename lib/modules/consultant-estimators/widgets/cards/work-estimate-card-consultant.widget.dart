@@ -1,7 +1,7 @@
-import 'package:enginizer_flutter/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-estimators/models/work-estimate.model.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
+import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

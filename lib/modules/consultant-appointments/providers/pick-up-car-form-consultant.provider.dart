@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/payment-method.enum.dart';
-import 'package:enginizer_flutter/modules/consultant-appointments/enums/tank-quantity.enum.dart';
+import 'package:app/modules/consultant-appointments/enums/payment-method.enum.dart';
+import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
 import 'package:flutter/cupertino.dart';
 
 class PickUpCarFormConsultantProvider with ChangeNotifier {

@@ -1,13 +1,13 @@
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/appointments/model/appointment-details.model.dart';
-import 'package:enginizer_flutter/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:enginizer_flutter/modules/appointments/services/appointments.service.dart';
-import 'package:enginizer_flutter/modules/appointments/services/provider.service.dart';
-import 'package:enginizer_flutter/modules/auctions/models/auction.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/bid-details.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/bid.model.dart';
-import 'package:enginizer_flutter/modules/auctions/models/response/bid-response.model.dart';
-import 'package:enginizer_flutter/modules/auctions/services/bid.service.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/bid-details.model.dart';
+import 'package:app/modules/auctions/models/bid.model.dart';
+import 'package:app/modules/auctions/models/response/bid-response.model.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class AuctionProvider with ChangeNotifier {

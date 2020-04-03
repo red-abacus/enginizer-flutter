@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.model.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-consumption.response.dart';
-import 'package:enginizer_flutter/modules/cars/models/car-fuel-graphic.response.dart';
-import 'package:enginizer_flutter/modules/cars/models/car.model.dart';
-import 'package:enginizer_flutter/modules/cars/services/car.service.dart';
-import 'package:enginizer_flutter/utils/api_response.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
+import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
+import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/utils/api_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

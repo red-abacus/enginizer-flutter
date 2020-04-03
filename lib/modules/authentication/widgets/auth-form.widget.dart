@@ -1,10 +1,10 @@
-import 'package:enginizer_flutter/generated/l10n.dart';
-import 'package:enginizer_flutter/modules/authentication/models/http_exception.dart';
-import 'package:enginizer_flutter/modules/authentication/models/user-type.model.dart';
-import 'package:enginizer_flutter/modules/authentication/providers/auth.provider.dart';
-import 'package:enginizer_flutter/utils/app_config.dart';
-import 'package:enginizer_flutter/utils/constants.dart';
-import 'package:enginizer_flutter/utils/text.helper.dart';
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/authentication/models/http_exception.dart';
+import 'package:app/modules/authentication/models/user-type.model.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/utils/app_config.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';

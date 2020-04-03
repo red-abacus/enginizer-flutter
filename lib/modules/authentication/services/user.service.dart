@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:enginizer_flutter/config/injection.dart';
-import 'package:enginizer_flutter/modules/authentication/models/jwt-user-details.model.dart';
-import 'package:enginizer_flutter/utils/environment.constants.dart';
+import 'package:app/config/injection.dart';
+import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
+import 'package:app/utils/environment.constants.dart';
 
 class UserService {
   static const String GET_USER_DETAILS_PATH = '${Environment.USERS_BASE_API}/users/';
