@@ -33,9 +33,6 @@ class CarMakeFormState extends State<CarMakeForm> {
           children: <Widget>[
             _brandDropdownWidget(),
             _modelDropdownWidget(),
-            _typeDropdownWidget(),
-            _yearDropdownWidget(),
-            _fuelTypeDropdownWidget(),
           ],
         ),
       ),
@@ -105,93 +102,6 @@ class CarMakeFormState extends State<CarMakeForm> {
             hint: Text(S.of(context).cars_create_selectModel));
   }
 
-  _typeDropdownWidget() {
-    return _carsMakeProvider.carMakeFormState['model'] != null
-        ? DropdownButtonFormField(
-            hint: Text(S.of(context).cars_create_select_type),
-            items: _buildCarTypeDropdownItems(_carsMakeProvider.carTypes),
-            value: _carsMakeProvider.carMakeFormState['type'],
-            validator: (value) {
-              if (value == null) {
-                return S.of(context).cars_create_error_type_not_selected;
-              } else {
-                return null;
-              }
-            },
-            onChanged: (selectedType) {
-              Provider.of<CarsMakeProvider>(context)
-                  .loadCarYears(CarQuery(
-                      language: LocaleManager.language(context),
-                      brand: _carsMakeProvider.carMakeFormState['brand'],
-                      model: _carsMakeProvider.carMakeFormState['model'],
-                      carType: selectedType))
-                  .then((_) => {
-                        setState(() {
-                          _carsMakeProvider.carMakeFormState['type'] =
-                              selectedType;
-                        })
-                      });
-            })
-        : DropdownButtonFormField(
-            hint: Text(S.of(context).cars_create_select_type));
-  }
-
-  _yearDropdownWidget() {
-    return _carsMakeProvider.carMakeFormState['model'] != null
-        ? DropdownButtonFormField(
-            hint: Text(S.of(context).cars_create_selectYear),
-            items: _buildCarYearDropdownItems(_carsMakeProvider.carYears),
-            value: _carsMakeProvider.carMakeFormState['year'],
-            validator: (value) {
-              if (value == null) {
-                return S.of(context).cars_create_error_yearNotSelected;
-              } else {
-                return null;
-              }
-            },
-            onChanged: (selectedYear) {
-              Provider.of<CarsMakeProvider>(context)
-                  .loadCarFuelTypes(CarQuery(
-                      language: LocaleManager.language(context),
-                      brand: _carsMakeProvider.carMakeFormState['brand'],
-                      model: _carsMakeProvider.carMakeFormState['model'],
-                      carType: _carsMakeProvider.carMakeFormState['type'],
-                      year: _carsMakeProvider.carMakeFormState['year']))
-                  .then((_) => {
-                        setState(() {
-                          _carsMakeProvider.carMakeFormState['year'] =
-                              selectedYear;
-                        })
-                      });
-            })
-        : DropdownButtonFormField(
-            hint: Text(S.of(context).cars_create_selectYear));
-  }
-
-  _fuelTypeDropdownWidget() {
-    return _carsMakeProvider.carMakeFormState['year'] != null
-        ? DropdownButtonFormField(
-            hint: Text(S.of(context).cars_create_selectFuelType),
-            items:
-                _buildCarFuelTypeDropdownItems(_carsMakeProvider.carFuelTypes),
-            value: _carsMakeProvider.carMakeFormState['fuelType'],
-            validator: (value) {
-              if (value == null) {
-                return S.of(context).cars_create_selectFuelType;
-              } else {
-                return null;
-              }
-            },
-            onChanged: (selectedFuelType) {
-              setState(() {
-                _carsMakeProvider.carMakeFormState['fuelType'] =
-                    selectedFuelType;
-              });
-            })
-        : DropdownButtonFormField(
-            hint: Text(S.of(context).cars_create_selectFuelType));
-  }
-
   List<DropdownMenuItem<CarBrand>> _buildBrandDropdownItems(
       List<CarBrand> brands) {
     List<DropdownMenuItem<CarBrand>> brandDropdownList = [];
@@ -206,29 +116,5 @@ class CarMakeFormState extends State<CarMakeForm> {
     carModels.forEach((carModel) => brandDropdownList
         .add(DropdownMenuItem(value: carModel, child: Text(carModel.name))));
     return brandDropdownList;
-  }
-
-  List<DropdownMenuItem<CarType>> _buildCarTypeDropdownItems(
-      List<CarType> carTypes) {
-    List<DropdownMenuItem<CarType>> typeDropdownList = [];
-    carTypes.forEach((carType) => typeDropdownList
-        .add(DropdownMenuItem(value: carType, child: Text(carType.name))));
-    return typeDropdownList;
-  }
-
-  List<DropdownMenuItem<CarYear>> _buildCarYearDropdownItems(
-      List<CarYear> carYears) {
-    List<DropdownMenuItem<CarYear>> yearDropdownList = [];
-    carYears.forEach((carYear) => yearDropdownList
-        .add(DropdownMenuItem(value: carYear, child: Text(carYear.name))));
-    return yearDropdownList;
-  }
-
-  List<DropdownMenuItem<CarFuelType>> _buildCarFuelTypeDropdownItems(
-      List<CarFuelType> carFuelTypes) {
-    List<DropdownMenuItem<CarFuelType>> fuelTypeDropdownList = [];
-    carFuelTypes.forEach((carFuelType) => fuelTypeDropdownList.add(
-        DropdownMenuItem(value: carFuelType, child: Text(carFuelType.name))));
-    return fuelTypeDropdownList;
   }
 }

@@ -12,9 +12,4 @@ class CarType {
         'id': id,
         'name': name,
       };
-
-  @override
-  bool operator ==(other) {
-    return id == other.id;
-  }
 }

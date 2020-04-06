@@ -62,7 +62,8 @@ class CarsState extends State<Cars> {
   }
 
   void _openCarCreateModal(BuildContext ctx) {
-    Provider.of<CarsMakeProvider>(context).loadCarBrands(CarQuery(language: LocaleManager.language(context)));
+    Provider.of<CarsMakeProvider>(context).initParams();
+
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -72,9 +73,7 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return CarCreateModal(
-                    brands: Provider.of<CarsMakeProvider>(context).brands,
-                    addCar: _addCar);
+                return CarCreateModal(addCar: _addCar);
               });
         });
   }

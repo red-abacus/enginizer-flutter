@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
@@ -16,20 +15,22 @@ final carTechnicalStateKey = new GlobalKey<CarTechnicalFormState>();
 final carExtraStateKey = new GlobalKey<CarExtraFormState>();
 
 class CarCreateModal extends StatefulWidget {
-  final List<CarBrand> brands;
   final Function addCar;
 
-  CarCreateModal({this.brands = const [], this.addCar});
+  CarCreateModal({this.addCar});
 
   @override
   _CarCreateModalState createState() => _CarCreateModalState();
 }
 
 class _CarCreateModalState extends State<CarCreateModal> {
-  CarsMakeProvider carMakeProvider;
+  CarsMakeProvider _carsMakeProvider;
   int _currentStepIndex = 0;
   bool isLastStep = false;
   List<Step> steps = [];
+
+  bool _initDone = false;
+  bool _isLoading = false;
 
   Map<int, dynamic> _stepStateData = {
     0: {"state": StepState.indexed, "active": true},
@@ -38,63 +39,90 @@ class _CarCreateModalState extends State<CarCreateModal> {
   };
 
   @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      _carsMakeProvider = Provider.of<CarsMakeProvider>(context);
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      _carsMakeProvider
+          .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
+          .then((_) {
+        _carsMakeProvider.loadCarColors().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      });
+
+      _initDone = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     steps = _buildSteps(context);
-    carMakeProvider = Provider.of<CarsMakeProvider>(context);
-    carMakeProvider.loadCarBrands(CarQuery(language: LocaleManager.language(context)));
+
     return FractionallySizedBox(
         heightFactor: .8,
         child: Container(
-          child: _buildStepper(context),
-        ));
+            child: ClipRRect(
+          borderRadius: new BorderRadius.circular(5.0),
+          child: Container(
+            decoration: new BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(40.0),
+                    topRight: const Radius.circular(40.0))),
+            child: Theme(
+                data: ThemeData(
+                    accentColor: Theme.of(context).primaryColor,
+                    primaryColor: Theme.of(context).primaryColor),
+                child: _getBodyContainer()),
+          ),
+        )));
   }
 
-  Widget _buildStepper(BuildContext context) => ClipRRect(
-        borderRadius: new BorderRadius.circular(5.0),
-        child: Container(
-          decoration: new BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(40.0),
-                  topRight: const Radius.circular(40.0))),
-          child: Theme(
-            data: ThemeData(
-                accentColor: Theme.of(context).primaryColor,
-                primaryColor: Theme.of(context).primaryColor),
-            child: Stepper(
-                currentStep: _currentStepIndex,
-                onStepContinue: _next,
-                onStepCancel: _back,
-                onStepTapped: (step) => _goTo(step),
-                type: StepperType.horizontal,
-                steps: steps,
-                controlsBuilder: (BuildContext context,
-                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-                  return Row(
-                    children: <Widget>[
-                      SizedBox(height: 70),
-                      FlatButton(
-                        child: Text(S.of(context).general_back),
-                        onPressed: onStepCancel,
-                      ),
-                      RaisedButton(
-                        elevation: 0,
-                        child: isLastStep
-                            ? Text(S.of(context).general_add)
-                            : Text(S.of(context).general_continue),
-                        textColor: Theme.of(context).cardColor,
-                        onPressed: onStepContinue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        color: Theme.of(context).primaryColor,
-                      )
-                    ],
-                  );
-                }),
-          ),
-        ),
-      );
+  _getBodyContainer() {
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _buildStepper(context);
+  }
+
+  Widget _buildStepper(BuildContext context) => Stepper(
+      currentStep: _currentStepIndex,
+      onStepContinue: _next,
+      onStepCancel: _back,
+      onStepTapped: (step) => _goTo(step),
+      type: StepperType.horizontal,
+      steps: steps,
+      controlsBuilder: (BuildContext context,
+          {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+        return Row(
+          children: <Widget>[
+            SizedBox(height: 70),
+            FlatButton(
+              child: Text(S.of(context).general_back),
+              onPressed: onStepCancel,
+            ),
+            RaisedButton(
+              elevation: 0,
+              child: isLastStep
+                  ? Text(S.of(context).general_add)
+                  : Text(S.of(context).general_continue),
+              textColor: Theme.of(context).cardColor,
+              onPressed: onStepContinue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              color: Theme.of(context).primaryColor,
+            )
+          ],
+        );
+      });
 
   List<Step> _buildSteps(BuildContext context) {
     return [
@@ -122,24 +150,13 @@ class _CarCreateModalState extends State<CarCreateModal> {
         if (!carMakeStateKey.currentState.valid()) {
           return;
         } else {
-          var carMakeState = carMakeProvider.carMakeFormState;
-          carMakeProvider
-              .loadCarCylinderCapacity(CarQuery(
-                  brand: carMakeState['brand'],
-                  model: carMakeState['model'],
-                  year: carMakeState['year'],
-                  fuelType: carMakeState['fuelType']))
-              .then((_) => {
-                    setState(() {
-                      _stepStateData[_currentStepIndex]['state'] =
-                          StepState.complete;
-                      _stepStateData[_currentStepIndex + 1]['state'] =
-                          StepState.indexed;
-                      _stepStateData[_currentStepIndex + 1]['active'] = true;
-                      _goTo(_currentStepIndex + 1);
-                      isLastStep = false;
-                    })
-                  });
+          setState(() {
+            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
+            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
+            _stepStateData[_currentStepIndex + 1]['active'] = true;
+            _goTo(_currentStepIndex + 1);
+            isLastStep = false;
+          });
         }
         break;
       case 1:
@@ -184,20 +201,20 @@ class _CarCreateModalState extends State<CarCreateModal> {
 
   _submit() {
     var car = Car(
-        brand: carMakeProvider.carMakeFormState['brand'],
-        model: carMakeProvider.carMakeFormState['model'],
-        year: carMakeProvider.carMakeFormState['year'],
-        fuelType: carMakeProvider.carMakeFormState['fuelType'],
-        motor: carMakeProvider.carTechnicalFormState['cylinderCapacity'],
-        power: carMakeProvider.carTechnicalFormState['power'],
-        transmission: carMakeProvider.carTechnicalFormState['transmission'],
-        color: carMakeProvider.carTechnicalFormState['color'],
-        vin: carMakeProvider.carTechnicalFormState['vin'],
+        brand: _carsMakeProvider.carMakeFormState['brand'],
+        model: _carsMakeProvider.carMakeFormState['model'],
+        year: _carsMakeProvider.carMakeFormState['year'],
+        fuelType: _carsMakeProvider.carMakeFormState['fuelType'],
+        motor: _carsMakeProvider.carTechnicalFormState['cylinderCapacity'],
+        power: _carsMakeProvider.carTechnicalFormState['power'],
+        transmission: _carsMakeProvider.carTechnicalFormState['transmission'],
+        color: _carsMakeProvider.carTechnicalFormState['color'],
+        vin: _carsMakeProvider.carTechnicalFormState['vin'],
         registrationNumber:
-            carMakeProvider.carExtraFormState['registrationNumber'],
-        mileage: carMakeProvider.carExtraFormState['mileage'],
-        rcaExpireDate: carMakeProvider.carExtraFormState['rcaExpiryDate'],
-        itpExpireDate: carMakeProvider.carExtraFormState['itpExpiryDate']);
+            _carsMakeProvider.carExtraFormState['registrationNumber'],
+        mileage: _carsMakeProvider.carExtraFormState['mileage'],
+        rcaExpireDate: _carsMakeProvider.carExtraFormState['rcaExpiryDate'],
+        itpExpireDate: _carsMakeProvider.carExtraFormState['itpExpiryDate']);
 
     widget.addCar(car);
   }

@@ -1,4 +1,5 @@
 import 'package:app/modules/cars/models/car-type.model.dart';
+import 'package:app/modules/cars/models/car-variant.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
@@ -161,9 +162,24 @@ class CarMakeService {
     }
   }
 
+  Future<List<CarVariant>> getCarVariants(CarQuery carQuery) async {
+    final response = await _dio.get('$CAR_MAKE_API_PATH/variants',
+        queryParameters: {
+          'language': carQuery.language,
+          'typeId': carQuery.carType.id
+        });
+
+    if (response.statusCode == 200) {
+      return _mapVariants(response.data);
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('LOAD_CAR_VARIANTS_FAILED');
+    }
+  }
+
   _mapBrands(List<dynamic> brands) {
     List<CarBrand> brandList = [];
-    brands.forEach((brnd) => brandList.add(CarBrand.fromJson(brnd)));
+    brands.forEach((brand) => brandList.add(CarBrand.fromJson(brand)));
     return brandList;
   }
 
@@ -215,5 +231,11 @@ class CarMakeService {
     List<CarColor> carColors = [];
     colors.forEach((model) => carColors.add(CarColor.fromJson(model)));
     return carColors;
+  }
+
+  _mapVariants(List<dynamic> variants) {
+    List<CarVariant> carVariant = [];
+    variants.forEach((model) => carVariant.add(CarVariant.fromJson(model)));
+    return carVariant;
   }
 }
