@@ -45,6 +45,7 @@ class CarMakeFormState extends State<CarMakeForm> {
 
   _brandDropdownWidget() {
     return DropdownButtonFormField(
+      isExpanded: true,
       hint: Text(S.of(context).cars_create_selectBrand),
       // Not necessary for Option 1
       items: _buildBrandDropdownItems(_carsMakeProvider.brands),
@@ -74,6 +75,7 @@ class CarMakeFormState extends State<CarMakeForm> {
   _modelDropdownWidget() {
     return _carsMakeProvider.carMakeFormState['brand'] != null
         ? DropdownButtonFormField(
+            isExpanded: true,
             hint: Text(S.of(context).cars_create_selectModel),
             items: _buildCarModelDropdownItems(_carsMakeProvider.carModels),
             value: _carsMakeProvider.carMakeFormState['model'],

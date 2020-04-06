@@ -23,7 +23,6 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
 
   CarsMakeProvider _carsMakeProvider;
 
-  @override
   Widget build(BuildContext context) {
     _carsMakeProvider = Provider.of<CarsMakeProvider>(context);
     return Form(
@@ -45,6 +44,7 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
 
   _typeDropdownWidget() {
     return DropdownButtonFormField(
+        isExpanded: true,
         hint: Text(S.of(context).cars_create_select_type),
         items: _buildCarTypeDropdownItems(_carsMakeProvider.carTypes),
         value: _carsMakeProvider.carTechnicalFormState['type'],
@@ -72,6 +72,7 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
   _yearDropdownWidget() {
     return _carsMakeProvider.carTechnicalFormState['type'] != null
         ? DropdownButtonFormField(
+            isExpanded: true,
             hint: Text(S.of(context).cars_create_selectYear),
             items: _buildCarYearDropdownItems(_carsMakeProvider.carYears),
             value: _carsMakeProvider.carTechnicalFormState['year'],
@@ -101,6 +102,7 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
   _fuelTypeDropdownWidget() {
     return _carsMakeProvider.carTechnicalFormState['year'] != null
         ? DropdownButtonFormField(
+            isExpanded: true,
             hint: Text(S.of(context).cars_create_selectFuelType),
             items:
                 _buildCarFuelTypeDropdownItems(_carsMakeProvider.carFuelTypes),
@@ -125,6 +127,7 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
   _variantDropdownWidget() {
     return _carsMakeProvider.carTechnicalFormState['type'] != null
         ? DropdownButtonFormField(
+            isExpanded: true,
             hint: Text(S.of(context).cars_create_select_variant),
             items: _buildVariantsDropdownItems(_carsMakeProvider.carVariants),
             value: _carsMakeProvider.carTechnicalFormState['variant'],
@@ -147,6 +150,7 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
 
   _colorDropdownWidget() {
     return DropdownButtonFormField(
+        isExpanded: true,
         hint: Text(S.of(context).cars_create_selectColor),
         items: _buildCarColorDropdownItems(_carsMakeProvider.carColors),
         value: _carsMakeProvider.carTechnicalFormState['color'],
@@ -220,8 +224,10 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
   List<DropdownMenuItem<CarType>> _buildCarTypeDropdownItems(
       List<CarType> carTypes) {
     List<DropdownMenuItem<CarType>> typeDropdownList = [];
-    carTypes.forEach((carType) => typeDropdownList
-        .add(DropdownMenuItem(value: carType, child: Text(carType.name))));
+    carTypes.forEach((carType) => typeDropdownList.add(DropdownMenuItem(
+          value: carType,
+          child: Text(carType.name),
+        )));
     return typeDropdownList;
   }
 
