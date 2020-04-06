@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/widgets/forms/car-extra.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-make.form.dart';
@@ -70,20 +71,20 @@ class _CarCreateModalState extends State<CarCreateModal> {
         heightFactor: .8,
         child: Container(
             child: ClipRRect(
-          borderRadius: new BorderRadius.circular(5.0),
-          child: Container(
-            decoration: new BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(40.0),
-                    topRight: const Radius.circular(40.0))),
-            child: Theme(
-                data: ThemeData(
-                    accentColor: Theme.of(context).primaryColor,
-                    primaryColor: Theme.of(context).primaryColor),
-                child: _getBodyContainer()),
-          ),
-        )));
+              borderRadius: new BorderRadius.circular(5.0),
+              child: Container(
+                decoration: new BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(40.0),
+                        topRight: const Radius.circular(40.0))),
+                child: Theme(
+                    data: ThemeData(
+                        accentColor: Theme.of(context).primaryColor,
+                        primaryColor: Theme.of(context).primaryColor),
+                    child: _getBodyContainer()),
+              ),
+            )));
   }
 
   _getBodyContainer() {
@@ -200,22 +201,21 @@ class _CarCreateModalState extends State<CarCreateModal> {
   }
 
   _submit() {
-    var car = Car(
-        brand: _carsMakeProvider.carMakeFormState['brand'],
-        model: _carsMakeProvider.carMakeFormState['model'],
-        year: _carsMakeProvider.carMakeFormState['year'],
-        fuelType: _carsMakeProvider.carMakeFormState['fuelType'],
-        motor: _carsMakeProvider.carTechnicalFormState['cylinderCapacity'],
-        power: _carsMakeProvider.carTechnicalFormState['power'],
-        transmission: _carsMakeProvider.carTechnicalFormState['transmission'],
-        color: _carsMakeProvider.carTechnicalFormState['color'],
+    var carRequest = CarRequest(
+        carBrand: _carsMakeProvider.carMakeFormState['brand'],
+        carModel: _carsMakeProvider.carMakeFormState['model'],
+        carType: _carsMakeProvider.carTechnicalFormState['type'],
+        carYear: _carsMakeProvider.carTechnicalFormState['year'],
+        carFuelType: _carsMakeProvider.carTechnicalFormState['fuelType'],
+        carColor: _carsMakeProvider.carTechnicalFormState['color'],
+        carVariant: _carsMakeProvider.carTechnicalFormState['variant'],
         vin: _carsMakeProvider.carTechnicalFormState['vin'],
         registrationNumber:
-            _carsMakeProvider.carExtraFormState['registrationNumber'],
-        mileage: _carsMakeProvider.carExtraFormState['mileage'],
-        rcaExpireDate: _carsMakeProvider.carExtraFormState['rcaExpiryDate'],
-        itpExpireDate: _carsMakeProvider.carExtraFormState['itpExpiryDate']);
+        _carsMakeProvider.carExtraFormState['registrationNumber'],
+        mileage: int.parse(_carsMakeProvider.carExtraFormState['mileage']),
+        rcaExpiryDate: _carsMakeProvider.carExtraFormState['rcaExpiryDate'],
+        itpExpiryDate: _carsMakeProvider.carExtraFormState['itpExpiryDate']);
 
-    widget.addCar(car);
+    widget.addCar(carRequest);
   }
 }

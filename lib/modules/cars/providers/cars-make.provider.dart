@@ -35,7 +35,7 @@ class CarsMakeProvider with ChangeNotifier {
 
   Map<String, dynamic> carExtraFormState = {
     'registrationNumber': null,
-    'activeKm': null,
+    'mileage': null,
     'rcaExpiryDate': null,
     'rcaExpiryDateNotification': false,
     'itpExpiryDate': null,
@@ -62,7 +62,7 @@ class CarsMakeProvider with ChangeNotifier {
     carTechnicalFormState['variant'] = null;
 
     carExtraFormState['registrationNumber'] = null;
-    carExtraFormState['activeKm'] = null;
+    carExtraFormState['mileage'] = null;
     carExtraFormState['rcaExpiryDate'] = null;
     carExtraFormState['rcaExpiryDateNotification'] = false;
     carExtraFormState['itpExpiryDate'] = null;

@@ -48,7 +48,6 @@ class Car {
       this.ownerId});
 
   factory Car.fromJson(Map<String, dynamic> json) {
-    print('car $json');
     return Car(
         id: json['id'],
         image: json['image'],

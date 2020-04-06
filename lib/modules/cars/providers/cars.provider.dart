@@ -1,5 +1,6 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -24,8 +25,8 @@ class CarsProvider with ChangeNotifier {
     return _cars;
   }
 
-  Future<Car> addCar(Car car) async {
-    var newCar = await this.carService.addCar(car);
+  Future<Car> addCar(CarRequest carRequest) async {
+    var newCar = await this.carService.addCar(carRequest);
     _cars.add(newCar);
     notifyListeners();
     return newCar;

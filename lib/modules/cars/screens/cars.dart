@@ -4,6 +4,7 @@ import 'package:app/modules/appointments/providers/provider-service.provider.dar
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
@@ -118,8 +119,8 @@ class CarsState extends State<Cars> {
         openAppointmentCreateModal: _openAppointmentCreateModal);
   }
 
-  _addCar(Car car) {
-    Provider.of<CarsProvider>(context).addCar(car).then((_) {
+  _addCar(CarRequest carRequest) {
+    Provider.of<CarsProvider>(context).addCar(carRequest).then((_) {
       Navigator.pop(context);
     });
   }

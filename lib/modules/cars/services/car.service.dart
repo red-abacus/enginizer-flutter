@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:dio/dio.dart';
 
 import 'package:app/config/injection.dart';
@@ -31,15 +32,23 @@ class CarService {
     }
   }
 
-  Future<Car> addCar(Car car) async {
+  Future<Car> addCar(CarRequest carRequest) async {
+    print('json ${carRequest.toJson()}');
     final response =
-        await _dio.post(CAR_API_PATH, data: jsonEncode(car.toJson()));
+        await _dio.post(CAR_API_PATH, data: jsonEncode(carRequest.toJson()));
+
+    print('response status code ${response.statusCode}');
+    print('response data ${response.data}');
+    print('response error ${response.statusMessage}');
+    print('response extra ${response.extra}');
+    print('response to string ${response.toString()}');
 
     if (response.statusCode < 300) {
       // If server returns an OK response, parse the JSON.
 
       return _mapCar(response.data);
     } else {
+      print('error ${response.statusMessage}');
       // If that response was not OK, throw an error.
       throw Exception('CREATE_CAR_FAILED');
     }
