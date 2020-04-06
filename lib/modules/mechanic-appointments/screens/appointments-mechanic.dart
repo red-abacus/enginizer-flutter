@@ -50,7 +50,11 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
       Provider.of<AppointmentsMechanicProvider>(context, listen: false)
           .loadAppointments()
           .then((_) {
-        _isLoading = false;
+            setState(() {
+              _isLoading = false;
+            });
+
+            _selectAppointment(context, null);
       });
 
       _initDone = true;

@@ -131,14 +131,7 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
           ),
         ]),
       ),
-      bottomNavigationBar: _getBottomBar(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: red,
-        onPressed: () => {},
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      bottomNavigationBar: bottomBarApp,
       body: _getDrawerItemWidget(_selectedDrawerRoute),
     );
   }
@@ -286,22 +279,20 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
     BottomBarItem('Notifications', Notifications.route, Icons.notifications),
   ];
 
-  _getBottomBar(BuildContext context) {
-    return BottomAppBar(
-      child: Container(
-        height: 50,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: _buildBottomBarOptions(),
-        ),
+  static final BottomAppBar bottomBarApp = new BottomAppBar(
+    child: Container(
+      height: 50,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: _buildBottomBarOptions(),
       ),
-      shape: CircularNotchedRectangle(),
-      color: red,
-    );
-  }
+    ),
+    shape: CircularNotchedRectangle(),
+    color: red,
+  );
 
-  List<Widget> _buildBottomBarOptions() {
+  static List<Widget> _buildBottomBarOptions() {
     List<Widget> items = [];
     for (BottomBarItem item in mechanicBarItems) {
       items.add(
@@ -323,7 +314,8 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
               ],
             ),
             onPressed: () {
-              _onSelectItem(item.route);
+              NotificationsManager.navigationToolbarAppState
+                  ._onSelectItem(item.route);
             },
           ),
         ),

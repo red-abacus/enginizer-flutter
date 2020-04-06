@@ -1,8 +1,11 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-car-details.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
+import 'package:app/utils/app_config.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -49,30 +52,52 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     appointmentMechanicProvider =
         Provider.of<AppointmentMechanicProvider>(context, listen: false);
 
-    if (appointmentMechanicProvider.selectedAppointment == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pop();
-      });
-    }
+//    if (appointmentMechanicProvider.selectedAppointment == null) {
+//      WidgetsBinding.instance.addPostFrameCallback((_) {
+//        Navigator.of(context).pop();
+//      });
+//    }
 
     return Consumer<AppointmentMechanicProvider>(
       builder: (context, appointmentMechanicProvider, _) => Scaffold(
-        appBar: AppBar(
-          key: _scaffoldKey,
-          iconTheme: IconThemeData(color: Theme.of(context).cardColor),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(text: S.of(context).appointment_details_car_details),
-              Tab(text: S.of(context).appointment_details_tasks_list),
-              Tab(text: S.of(context).appointment_details_service_history),
-            ],
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Theme.of(context).cardColor),
+            bottom: TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: S.of(context).appointment_details_car_details),
+                Tab(text: S.of(context).appointment_details_tasks_list),
+                Tab(text: S.of(context).appointment_details_service_history),
+              ],
+            ),
+            title: _titleText(),
           ),
-          title: _titleText(),
-        ),
-        body: _buildContent(),
-      ),
+          body: _buildContent(),
+          bottomNavigationBar: _getBottomBar(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: _getBottomBarFloatingAction()),
     );
+  }
+
+//
+
+  _getBottomBar() {
+    return AppConfig.of(context).enviroment == Enviroment.Dev_Toolbar
+        ? NavigationToolbarAppState.bottomBarApp
+        : Container();
+  }
+
+  _getBottomBarFloatingAction() {
+    return AppConfig.of(context).enviroment == Enviroment.Dev_Toolbar
+        ? FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: red,
+            tooltip: S.of(context).general_add,
+            child: Icon(Icons.add),
+            elevation: 2.0,
+          )
+        : Container();
   }
 
   @override
@@ -99,7 +124,9 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
               .then((mechanicTasks) {
             appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
             appointmentMechanicProvider.initFormValues();
-            _isLoading = false;
+            setState(() {
+              _isLoading = false;
+            });
           });
         });
       });
