@@ -4,6 +4,7 @@ import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -20,8 +21,8 @@ class AuctionsConsultantProvider with ChangeNotifier {
 
   AuctionResponse auctionResponse;
 
-  Future<List<CarBrand>> loadCarBrands() async {
-    carBrands = await carMakeService.getCarBrands();
+  Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
+    carBrands = await carMakeService.getCarBrands(carQuery);
     return carBrands;
   }
 

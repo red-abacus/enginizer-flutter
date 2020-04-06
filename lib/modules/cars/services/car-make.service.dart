@@ -1,3 +1,4 @@
+import 'package:app/modules/cars/models/car-type.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
@@ -19,9 +20,9 @@ class CarMakeService {
 
   CarMakeService();
 
-  Future<List<CarBrand>> getCarBrands() async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/brands');
-
+  Future<List<CarBrand>> getCarBrands(CarQuery query) async {
+    final response = await _dio.get('$CAR_MAKE_API_PATH/brands',
+        queryParameters: {'language': query.language});
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
 
@@ -34,7 +35,10 @@ class CarMakeService {
 
   Future<List<CarModel>> getCarModels(CarQuery query) async {
     final response = await _dio.get('$CAR_MAKE_API_PATH/models',
-        queryParameters: {"brandId": query.brand.id});
+        queryParameters: {
+          'language': query.language,
+          'brandId': query.brand.id
+        });
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
@@ -46,25 +50,41 @@ class CarMakeService {
     }
   }
 
-  Future<List<CarYear>> getCarYears(CarQuery query) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/years',
+  Future<List<CarType>> getCarTypes(CarQuery query) async {
+    final response = await _dio.get('$CAR_MAKE_API_PATH/types',
         queryParameters: {
-          "brandId": query.brand.id,
-          "modelId": query.model.id
+          'language': query.language,
+          'modelId': query.model.id
         });
 
     if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapYears(response.data);
+      return _mapTypes(response.data);
     } else {
       // If that response was not OK, throw an error.
+      throw Exception('LOAD_CAR_TYPE_FAILED');
+    }
+  }
+
+  Future<List<CarYear>> getCarYears(CarQuery query) async {
+    final response = await _dio.get('$CAR_MAKE_API_PATH/years',
+        queryParameters: {
+          'language': query.language,
+          'typeId': query.carType.id
+        });
+
+    if (response.statusCode == 200) {
+      return _mapYears(response.data);
+    } else {
       throw Exception('LOAD_CAR_YEAR_FAILED');
     }
   }
 
-  Future<List<CarFuelType>> getCarFuelTypes() async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/fuelType');
+  Future<List<CarFuelType>> getCarFuelTypes(CarQuery query) async {
+    final response = await _dio.get('$CAR_MAKE_API_PATH/fuelTypes',
+        queryParameters: {
+          'language': query.language,
+          'typeDetailsId': query.carType.id
+        });
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
@@ -151,6 +171,12 @@ class CarMakeService {
     List<CarModel> carModels = [];
     models.forEach((model) => carModels.add(CarModel.fromJson(model)));
     return carModels;
+  }
+
+  _mapTypes(List<dynamic> types) {
+    List<CarType> carTypes = [];
+    types.forEach((model) => carTypes.add(CarType.fromJson(model)));
+    return carTypes;
   }
 
   _mapYears(List<dynamic> years) {

@@ -2,12 +2,14 @@ import 'package:app/modules/appointments/model/request/appointment-request.model
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/widgets/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
+import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +62,7 @@ class CarsState extends State<Cars> {
   }
 
   void _openCarCreateModal(BuildContext ctx) {
-    Provider.of<CarsMakeProvider>(context).loadCarBrands();
+    Provider.of<CarsMakeProvider>(context).loadCarBrands(CarQuery(language: LocaleManager.language(context)));
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

@@ -1,4 +1,6 @@
+import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<CarsMakeProvider>(context).loadCarBrands();
+    Provider.of<CarsMakeProvider>(context).loadCarBrands(CarQuery(language: LocaleManager.language(context)));
     return new Center(child: CircularProgressIndicator());
   }
 }

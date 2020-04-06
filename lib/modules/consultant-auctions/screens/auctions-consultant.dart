@@ -1,10 +1,12 @@
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/consultant-auctions/providers/auctions-consultant.provider.dart';
 import 'package:app/modules/consultant-auctions/screens/auction-consultant.dart';
 import 'package:app/modules/consultant-auctions/widgets/auctions-consultant-list.widget.dart';
+import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,14 +45,13 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
   void didChangeDependencies() {
     if (!_initDone) {
       setState(() {
-        _isLoading = false;
         _isLoading = true;
       });
 
       auctionsProvider = Provider.of<AuctionsConsultantProvider>(context);
       auctionsProvider.resetParameters();
 
-      auctionsProvider.loadCarBrands().then((_) {
+      auctionsProvider.loadCarBrands(CarQuery(language: LocaleManager.language(context))).then((_) {
         auctionsProvider.loadAuctions().then((_) {
           setState(() {
             _isLoading = false;

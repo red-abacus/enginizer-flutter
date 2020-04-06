@@ -1,6 +1,7 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
@@ -35,8 +36,8 @@ class WorkEstimatesConsultantProvider with ChangeNotifier {
     return workEstimates;
   }
 
-  Future<List<CarBrand>> loadCarBrands() async {
-    carBrands = await _carMakeService.getCarBrands();
+  Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
+    carBrands = await _carMakeService.getCarBrands(carQuery);
     return carBrands;
   }
 

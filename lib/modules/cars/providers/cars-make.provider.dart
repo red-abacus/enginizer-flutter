@@ -7,6 +7,7 @@ import 'package:app/modules/cars/models/car-model.model.dart';
 import 'package:app/modules/cars/models/car-power.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car-transmissions.model.dart';
+import 'package:app/modules/cars/models/car-type.model.dart';
 import 'package:app/modules/cars/models/car-year.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 class CarsMakeProvider with ChangeNotifier {
   List<CarBrand> brands = [];
   List<CarModel> carModels = [];
+  List<CarType> carTypes = [];
   List<CarYear> carYears = [];
   List<CarFuelType> carFuelTypes = [];
   List<CarCylinderCapacity> carCylinderCapacities = [];
@@ -24,6 +26,7 @@ class CarsMakeProvider with ChangeNotifier {
   Map<String, dynamic> carMakeFormState = {
     'brand': null,
     'model': null,
+    'type': null,
     'year': null,
     'fuelType': null
   };
@@ -47,8 +50,8 @@ class CarsMakeProvider with ChangeNotifier {
 
   CarMakeService carMakeService = inject<CarMakeService>();
 
-  Future<List<CarBrand>> loadCarBrands() async {
-    brands = await carMakeService.getCarBrands();
+  Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
+    brands = await carMakeService.getCarBrands(carQuery);
     notifyListeners();
     return brands;
   }
@@ -59,14 +62,20 @@ class CarsMakeProvider with ChangeNotifier {
     return carModels;
   }
 
+  Future<List<CarType>> loadCarTypes(CarQuery query) async {
+    carTypes = await carMakeService.getCarTypes(query);
+    notifyListeners();
+    return carTypes;
+  }
+
   Future<List<CarYear>> loadCarYears(CarQuery query) async {
     carYears = await carMakeService.getCarYears(query);
     notifyListeners();
     return carYears;
   }
 
-  Future<List<CarFuelType>> loadCarFuelTypes() async {
-    carFuelTypes = await carMakeService.getCarFuelTypes();
+  Future<List<CarFuelType>> loadCarFuelTypes(CarQuery query) async {
+    carFuelTypes = await carMakeService.getCarFuelTypes(query);
     notifyListeners();
     return carFuelTypes;
   }

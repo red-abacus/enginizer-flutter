@@ -6,6 +6,7 @@ import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/widgets/forms/car-extra.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-make.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-technical.form.dart';
+import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,7 @@ class _CarCreateModalState extends State<CarCreateModal> {
   Widget build(BuildContext context) {
     steps = _buildSteps(context);
     carMakeProvider = Provider.of<CarsMakeProvider>(context);
-    carMakeProvider.loadCarBrands();
+    carMakeProvider.loadCarBrands(CarQuery(language: LocaleManager.language(context)));
     return FractionallySizedBox(
         heightFactor: .8,
         child: Container(

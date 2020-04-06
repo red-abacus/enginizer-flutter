@@ -5,6 +5,8 @@ import 'package:app/modules/auctions/providers/auctions-provider.dart';
 import 'package:app/modules/auctions/screens/auction-details.dart';
 import 'package:app/modules/auctions/widgets/auctions-list.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
+import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,8 +53,7 @@ class AuctionsState extends State<Auctions> {
 
       auctionsProvider = Provider.of<AuctionsProvider>(context);
       auctionsProvider.resetParameters();
-
-      auctionsProvider.loadCarBrands().then((_) {
+      auctionsProvider.loadCarBrands(CarQuery(language: LocaleManager.language(context))).then((_) {
         auctionsProvider.loadAuctions().then((_) {
           setState(() {
             _isLoading = false;
