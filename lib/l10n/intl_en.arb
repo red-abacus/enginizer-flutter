@@ -287,5 +287,6 @@
   "exception_load_car_fuel_types": "There was an error trying to get car fuel types.",
   "exception_load_car_colors": "There was an error trying to get car colors.",
   "exception_load_car_variants": "There was an error trying to get car variants.",
-  "exception_car_create": "There was an error in car creation process. Try again later and if the problem persists, please contact us."
+  "exception_car_create": "There was an error in car creation process. Try again later and if the problem persists, please contact us.",
+  "exception_car_get": "There was an error trying to get your cars."
 }

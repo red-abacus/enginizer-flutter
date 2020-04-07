@@ -287,5 +287,6 @@
   "exception_load_car_fuel_types": "A intervenit o problemă la încărcarea tipului de combustibil.",
   "exception_load_car_colors": "A intervenit o problemă la încărcarea culorilor pentru mașini.",
   "exception_load_car_variants": "A intervenit o problemă la încărcarea variantelor de mașini.",
-  "exception_car_create": "A intervenit o problema în procesul de creare a mașinii. Încearcă mai târziu iar dacă problema persistă, te rog să ne contactezi."
+  "exception_car_create": "A intervenit o problema în procesul de creare a mașinii. Încearcă mai târziu iar dacă problema persistă, te rog să ne contactezi.",
+  "exception_car_get": "A intervenit o problema la încărcarea mașinilor tale."
 }

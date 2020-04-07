@@ -4,7 +4,6 @@ import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/cars/models/car.model.dart';
-import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
@@ -56,14 +55,30 @@ class CarsState extends State<Cars> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<CarsProvider>(context).loadCars().then((_) {
+
+      _loadData();
+    }
+    _initDone = true;
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await Provider.of<CarsProvider>(context).loadCars().then((_) {
         setState(() {
           _isLoading = false;
         });
       });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_GET_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_car_get, _scaffoldKey.currentState);
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
-    _initDone = true;
-    super.didChangeDependencies();
   }
 
   void _openCarCreateModal(BuildContext ctx) {
@@ -103,8 +118,16 @@ class CarsState extends State<Cars> {
         });
   }
 
-  void _filterCars(BuildContext ctx, String filterValue) {
-    Provider.of<CarsProvider>(ctx).loadCars(filterValue: filterValue);
+  Future<void> _filterCars(BuildContext ctx, String filterValue) async {
+    try {
+      await Provider.of<CarsProvider>(ctx).loadCars(filterValue: filterValue);
+    }
+    catch (error) {
+      if (error.toString() == CarService.CAR_GET_EXCEPTION) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_car_get, _scaffoldKey.currentState);
+      }
+    }
   }
 
   void _selectCar(BuildContext ctx, Car selectedCar) {

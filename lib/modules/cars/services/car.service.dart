@@ -15,6 +15,7 @@ class CarService {
   static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
   static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
   static String CAR_CREATE_EXCEPTION = 'CAR_CREATE_FAILED';
+  static String CAR_GET_EXCEPTION = 'CAR_GET_EXCEPTION';
 
   static const String CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -23,15 +24,16 @@ class CarService {
   CarService();
 
   Future<CarsResponse> getCars() async {
-    final response = await _dio.get(CAR_API_PATH);
+    try {
+      final response = await _dio.get(CAR_API_PATH);
 
-    if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
-      return CarsResponse.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load post');
+      if (response.statusCode < 300) {
+        return CarsResponse.fromJson(response.data);
+      } else {
+        throw Exception(CAR_GET_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_GET_EXCEPTION);
     }
   }
 

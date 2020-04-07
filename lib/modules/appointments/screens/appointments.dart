@@ -1,3 +1,4 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
@@ -6,6 +7,8 @@ import 'package:app/modules/appointments/widgets/appointment-create-modal.widget
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
+import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +27,8 @@ class Appointments extends StatefulWidget {
 }
 
 class AppointmentsState extends State<Appointments> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   String route;
 
   var _isLoading = false;
@@ -39,8 +44,10 @@ class AppointmentsState extends State<Appointments> {
 
     return Consumer<AppointmentsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
+        key: _scaffoldKey,
         body: Center(
-          child: _renderAppointments(_isLoading, _appointmentsProvider.appointments),
+          child: _renderAppointments(
+              _isLoading, _appointmentsProvider.appointments),
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: null,
@@ -105,7 +112,15 @@ class AppointmentsState extends State<Appointments> {
   void _openAppointmentCreateModal(BuildContext buildContext) {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
 
-    Provider.of<CarsProvider>(context).loadCars();
+    try {
+      Provider.of<CarsProvider>(context).loadCars();
+    } catch (error) {
+      if (error.toString() == CarService.CAR_GET_EXCEPTION) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_car_get, _scaffoldKey.currentState);
+      }
+    }
+
     Provider.of<ProviderServiceProvider>(context).loadServices();
 
     showModalBottomSheet<void>(

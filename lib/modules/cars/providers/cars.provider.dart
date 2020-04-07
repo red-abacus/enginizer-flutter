@@ -14,15 +14,19 @@ class CarsProvider with ChangeNotifier {
   }
 
   Future<List<Car>> loadCars({String filterValue = ''}) async {
-    var response = await this.carService.getCars();
-    _cars = response.items;
+    try {
+      var response = await this.carService.getCars();
+      _cars = response.items;
 
-    if (filterValue.isNotEmpty) {
-      _cars = _cars.where((car) => car.filtered(filterValue)).toList();
+      if (filterValue.isNotEmpty) {
+        _cars = _cars.where((car) => car.filtered(filterValue)).toList();
+      }
+
+      notifyListeners();
+      return _cars;
+    } catch (error) {
+      throw (error);
     }
-
-    notifyListeners();
-    return _cars;
   }
 
   Future<Car> addCar(CarRequest carRequest) async {
