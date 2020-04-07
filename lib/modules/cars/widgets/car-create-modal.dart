@@ -2,7 +2,9 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/forms/car-extra.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-make.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-technical.form.dart';
@@ -17,10 +19,6 @@ final carTechnicalStateKey = new GlobalKey<CarTechnicalFormState>();
 final carExtraStateKey = new GlobalKey<CarExtraFormState>();
 
 class CarCreateModal extends StatefulWidget {
-  final Function addCar;
-
-  CarCreateModal({this.addCar});
-
   @override
   _CarCreateModalState createState() => _CarCreateModalState();
 }
@@ -228,7 +226,7 @@ class _CarCreateModalState extends State<CarCreateModal> {
     }
   }
 
-  _submit() {
+  _submit() async {
     var carRequest = CarRequest(
         carBrand: _carsMakeProvider.carMakeFormState['brand'],
         carModel: _carsMakeProvider.carMakeFormState['model'],
@@ -244,6 +242,15 @@ class _CarCreateModalState extends State<CarCreateModal> {
         rcaExpiryDate: _carsMakeProvider.carExtraFormState['rcaExpiryDate'],
         itpExpiryDate: _carsMakeProvider.carExtraFormState['itpExpiryDate']);
 
-    widget.addCar(carRequest);
+    try {
+      await Provider.of<CarsProvider>(context).addCar(carRequest).then((_) {
+        Navigator.pop(context);
+      });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_CREATE_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_car_create, _scaffoldKey.currentState);
+      }
+    }
   }
 }

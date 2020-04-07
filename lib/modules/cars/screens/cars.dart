@@ -1,16 +1,17 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
-import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
-import 'package:app/utils/locale.manager.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,8 @@ class Cars extends StatefulWidget {
 }
 
 class CarsState extends State<Cars> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -34,18 +37,16 @@ class CarsState extends State<Cars> {
   @override
   Widget build(BuildContext context) {
     return Consumer<CarsProvider>(
-      builder: (context, carsProvider, _) =>
-          Scaffold(
-              body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
-              floatingActionButton: FloatingActionButton(
-                heroTag: null,
-                backgroundColor: Theme
-                    .of(context)
-                    .primaryColor,
-                elevation: 1,
-                onPressed: () => _openCarCreateModal(context),
-                child: Icon(Icons.add),
-              )),
+      builder: (context, carsProvider, _) => Scaffold(
+          key: _scaffoldKey,
+          body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
+          floatingActionButton: FloatingActionButton(
+            heroTag: null,
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 1,
+            onPressed: () => _openCarCreateModal(context),
+            child: Icon(Icons.add),
+          )),
     );
   }
 
@@ -77,8 +78,8 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return CarCreateModal(addCar: _addCar);
-              });
+            return CarCreateModal();
+          });
         });
   }
 
@@ -96,9 +97,9 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentCreateModal(
-                    _createAppointment, false, selectedCar);
-              });
+            return AppointmentCreateModal(
+                _createAppointment, false, selectedCar);
+          });
         });
   }
 
@@ -117,16 +118,10 @@ class CarsState extends State<Cars> {
     return _isLoading
         ? CircularProgressIndicator()
         : CarList(
-        cars: cars,
-        filterCars: _filterCars,
-        selectCar: _selectCar,
-        openAppointmentCreateModal: _openAppointmentCreateModal);
-  }
-
-  _addCar(CarRequest carRequest) {
-    Provider.of<CarsProvider>(context).addCar(carRequest).then((_) {
-      Navigator.pop(context);
-    });
+            cars: cars,
+            filterCars: _filterCars,
+            selectCar: _selectCar,
+            openAppointmentCreateModal: _openAppointmentCreateModal);
   }
 
   _createAppointment(AppointmentRequest appointmentRequest) {

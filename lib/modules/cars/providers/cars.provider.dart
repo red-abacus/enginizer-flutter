@@ -26,9 +26,13 @@ class CarsProvider with ChangeNotifier {
   }
 
   Future<Car> addCar(CarRequest carRequest) async {
-    var newCar = await this.carService.addCar(carRequest);
-    _cars.add(newCar);
-    notifyListeners();
-    return newCar;
+    try {
+      var newCar = await this.carService.addCar(carRequest);
+      _cars.add(newCar);
+      notifyListeners();
+      return newCar;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

@@ -14,6 +14,7 @@ import 'package:app/utils/environment.constants.dart';
 class CarService {
   static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
   static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
+  static String CAR_CREATE_EXCEPTION = 'CAR_CREATE_FAILED';
 
   static const String CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -35,24 +36,17 @@ class CarService {
   }
 
   Future<Car> addCar(CarRequest carRequest) async {
-    print('json ${carRequest.toJson()}');
-    final response =
-        await _dio.post(CAR_API_PATH, data: jsonEncode(carRequest.toJson()));
+    try {
+      final response =
+          await _dio.post(CAR_API_PATH, data: jsonEncode(carRequest.toJson()));
 
-    print('response status code ${response.statusCode}');
-    print('response data ${response.data}');
-    print('response error ${response.statusMessage}');
-    print('response extra ${response.extra}');
-    print('response to string ${response.toString()}');
-
-    if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapCar(response.data);
-    } else {
-      print('error ${response.statusMessage}');
-      // If that response was not OK, throw an error.
-      throw Exception('CREATE_CAR_FAILED');
+      if (response.statusCode < 300) {
+        return _mapCar(response.data);
+      } else {
+        throw Exception(CAR_CREATE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_CREATE_EXCEPTION);
     }
   }
 
@@ -74,23 +68,18 @@ class CarService {
 
   Future<CarFuelGraphicResponse> getFuelConsumption(int id) async {
     try {
-      final response = await _dio.get(
-          '$CAR_API_PATH/$id/fuel', queryParameters: {
-        "month": DateTime
-            .now()
-            .month,
-        'year': DateTime
-            .now()
-            .year
-      });
+      final response = await _dio.get('$CAR_API_PATH/$id/fuel',
+          queryParameters: {
+            "month": DateTime.now().month,
+            'year': DateTime.now().year
+          });
 
       if (response.statusCode < 300) {
         return CarFuelGraphicResponse.fromJson(response.data);
       } else {
         throw Exception(CAR_FUEL_EXCEPITON);
       }
-    }
-    catch(error) {
+    } catch (error) {
       throw Exception(CAR_FUEL_EXCEPITON);
     }
   }

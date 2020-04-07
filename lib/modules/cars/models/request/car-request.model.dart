@@ -5,6 +5,7 @@ import 'package:app/modules/cars/models/car-model.model.dart';
 import 'package:app/modules/cars/models/car-type.model.dart';
 import 'package:app/modules/cars/models/car-variant.model.dart';
 import 'package:app/modules/cars/models/car-year.model.dart';
+import 'package:app/utils/date_utils.dart';
 
 class CarRequest {
   CarBrand carBrand;
@@ -52,8 +53,8 @@ class CarRequest {
       'vin': vin,
       'registrationNumber': registrationNumber,
       'mileage': mileage,
-      'itpExpireDate': itpExpiryDate.toIso8601String(),
-      'rcaExpireDate': rcaExpiryDate.toIso8601String(),
+      'itpExpireDate': DateUtils.stringFromDate(itpExpiryDate, 'dd/MM/yyyy'),
+      'rcaExpireDate': DateUtils.stringFromDate(rcaExpiryDate, 'dd/MM/yyyy'),
     };
 
     return propMap;
