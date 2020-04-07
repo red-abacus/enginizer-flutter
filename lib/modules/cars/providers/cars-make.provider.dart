@@ -72,44 +72,72 @@ class CarsMakeProvider with ChangeNotifier {
   CarMakeService carMakeService = inject<CarMakeService>();
 
   Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
-    brands = await carMakeService.getCarBrands(carQuery);
-    notifyListeners();
-    return brands;
+    try {
+      brands = await carMakeService.getCarBrands(carQuery);
+      notifyListeners();
+      return brands;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarModel>> loadCarModel(CarQuery query) async {
-    carModels = await carMakeService.getCarModels(query);
-    notifyListeners();
-    return carModels;
+    try {
+      carModels = await carMakeService.getCarModels(query);
+      notifyListeners();
+      return carModels;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarType>> loadCarTypes(CarQuery query) async {
-    carTypes = await carMakeService.getCarTypes(query);
-    notifyListeners();
-    return carTypes;
+    try {
+      carTypes = await carMakeService.getCarTypes(query);
+      notifyListeners();
+      return carTypes;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarYear>> loadCarYears(CarQuery query) async {
-    carYears = await carMakeService.getCarYears(query);
-    notifyListeners();
-    return carYears;
+    try {
+      carYears = await carMakeService.getCarYears(query);
+      notifyListeners();
+      return carYears;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarFuelType>> loadCarFuelTypes(CarQuery query) async {
-    carFuelTypes = await carMakeService.getCarFuelTypes(query);
-    notifyListeners();
-    return carFuelTypes;
+    try {
+      carFuelTypes = await carMakeService.getCarFuelTypes(query);
+      notifyListeners();
+      return carFuelTypes;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarColor>> loadCarColors() async {
-    carColors = await carMakeService.getCarColors();
-    notifyListeners();
-    return carColors;
+    try {
+      carColors = await carMakeService.getCarColors();
+      notifyListeners();
+      return carColors;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarVariant>> loadCarVariants(CarQuery query) async {
-    carVariants = await carMakeService.getCarVariants(query);
-    notifyListeners();
-    return carVariants;
+    try {
+      carVariants = await carMakeService.getCarVariants(query);
+      notifyListeners();
+      return carVariants;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

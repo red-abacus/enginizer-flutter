@@ -6,13 +6,17 @@ import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car-type.model.dart';
 import 'package:app/modules/cars/models/car-year.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/utils/locale.manager.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarMakeForm extends StatefulWidget {
-  CarMakeForm({Key key}) : super(key: key);
+  GlobalKey<ScaffoldState> scaffoldKey;
+
+  CarMakeForm({Key key, this.scaffoldKey}) : super(key: key);
 
   @override
   CarMakeFormState createState() => CarMakeFormState();
@@ -57,17 +61,32 @@ class CarMakeFormState extends State<CarMakeForm> {
           return null;
         }
       },
-      onChanged: (newValue) {
-        _carsMakeProvider
-            .loadCarModel(CarQuery(
-                language: LocaleManager.language(context), brand: newValue))
-            .then((_) => {
-                  setState(() {
-                    _carsMakeProvider.carMakeFormState['brand'] = newValue;
-                    _carsMakeProvider.carMakeFormState['model'] = null;
-                    _carsMakeProvider.carMakeFormState['year'] = null;
-                  })
-                });
+      onChanged: (newValue) async {
+        try {
+          await _carsMakeProvider
+              .loadCarModel(CarQuery(
+                  language: LocaleManager.language(context), brand: newValue))
+              .then((_) => {
+                    setState(() {
+                      _carsMakeProvider.carMakeFormState['brand'] = newValue;
+                      _carsMakeProvider.carMakeFormState['model'] = null;
+                      _carsMakeProvider.carMakeFormState['year'] = null;
+                    })
+                  });
+        } catch (error) {
+          setState(() {
+            _carsMakeProvider.carMakeFormState['brand'] = newValue;
+          });
+
+          if (error
+              .toString()
+              .contains(CarMakeService.LOAD_CAR_MODELS_FAILED_EXCEPTION)) {
+            SnackBarManager.showSnackBar(
+                S.of(context).general_error,
+                S.of(context).exception_load_car_models,
+                widget.scaffoldKey.currentState);
+          }
+        }
       },
     );
   }
@@ -86,19 +105,34 @@ class CarMakeFormState extends State<CarMakeForm> {
                 return null;
               }
             },
-            onChanged: (selectedModel) {
-              _carsMakeProvider
-                  .loadCarTypes(CarQuery(
-                      language: LocaleManager.language(context),
-                      brand: _carsMakeProvider.carMakeFormState['brand'],
-                      model: selectedModel))
-                  .then((_) => {
-                        setState(() {
-                          _carsMakeProvider.carMakeFormState['model'] =
-                              selectedModel;
-                          _carsMakeProvider.carMakeFormState['type'] = null;
-                        })
-                      });
+            onChanged: (selectedModel) async {
+              try {
+                await _carsMakeProvider
+                    .loadCarTypes(CarQuery(
+                        language: LocaleManager.language(context),
+                        brand: _carsMakeProvider.carMakeFormState['brand'],
+                        model: selectedModel))
+                    .then((_) => {
+                          setState(() {
+                            _carsMakeProvider.carMakeFormState['model'] =
+                                selectedModel;
+                            _carsMakeProvider.carMakeFormState['type'] = null;
+                          })
+                        });
+              } catch (error) {
+                if (error
+                    .toString()
+                    .contains(CarMakeService.LOAD_CAR_TYPE_FAILED_EXCEPTION)) {
+                  SnackBarManager.showSnackBar(
+                      S.of(context).general_error,
+                      S.of(context).exception_load_car_types,
+                      widget.scaffoldKey.currentState);
+
+                  setState(() {
+                    _carsMakeProvider.carMakeFormState['model'] = selectedModel;
+                  });
+                }
+              }
             })
         : DropdownButtonFormField(
             hint: Text(S.of(context).cars_create_selectModel));

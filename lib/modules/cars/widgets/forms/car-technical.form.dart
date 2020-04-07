@@ -6,13 +6,18 @@ import 'package:app/modules/cars/models/car-type.model.dart';
 import 'package:app/modules/cars/models/car-variant.model.dart';
 import 'package:app/modules/cars/models/car-year.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/modules/cars/services/car-make.service.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/utils/locale.manager.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarTechnicalForm extends StatefulWidget {
-  CarTechnicalForm({Key key}) : super(key: key);
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  CarTechnicalForm({Key key, this.scaffoldKey}) : super(key: key);
 
   @override
   CarTechnicalFormState createState() => CarTechnicalFormState();
@@ -55,17 +60,39 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
             return null;
           }
         },
-        onChanged: (selectedType) {
+        onChanged: (selectedType) async {
           CarQuery carQuery = CarQuery(
               language: LocaleManager.language(context), carType: selectedType);
-          _carsMakeProvider.loadCarYears(carQuery).then((_) {
-            _carsMakeProvider.loadCarVariants(carQuery).then((_) => {
-                  setState(() {
-                    _carsMakeProvider.carTechnicalFormState['type'] =
-                        selectedType;
-                  })
-                });
-          });
+          try {
+            await _carsMakeProvider.loadCarYears(carQuery).then((_) async {
+              await _carsMakeProvider.loadCarVariants(carQuery).then((_) => {
+                    setState(() {
+                      _carsMakeProvider.carTechnicalFormState['type'] =
+                          selectedType;
+                    })
+                  });
+            });
+          } catch (error) {
+            if (error
+                .toString()
+                .contains(CarMakeService.LOAD_CAR_YEAR_FAILED_EXCEPTION)) {
+              SnackBarManager.showSnackBar(
+                  S.of(context).general_error,
+                  S.of(context).exception_load_car_years,
+                  widget.scaffoldKey.currentState);
+            } else if (error
+                .toString()
+                .contains(CarMakeService.LOAD_CAR_VARIANTS_FAILED_EXCEPTION)) {
+              SnackBarManager.showSnackBar(
+                  S.of(context).general_error,
+                  S.of(context).exception_load_car_variants,
+                  widget.scaffoldKey.currentState);
+            }
+
+            setState(() {
+              _carsMakeProvider.carTechnicalFormState['type'] = selectedType;
+            });
+          }
         });
   }
 
@@ -83,17 +110,34 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
                 return null;
               }
             },
-            onChanged: (selectedYear) {
-              Provider.of<CarsMakeProvider>(context)
-                  .loadCarFuelTypes(CarQuery(
-                      language: LocaleManager.language(context),
-                      carType: _carsMakeProvider.carTechnicalFormState['type']))
-                  .then((_) => {
-                        setState(() {
-                          _carsMakeProvider.carTechnicalFormState['year'] =
-                              selectedYear;
-                        })
-                      });
+            onChanged: (selectedYear) async {
+              try {
+                await _carsMakeProvider
+                    .loadCarFuelTypes(CarQuery(
+                        language: LocaleManager.language(context),
+                        carType:
+                            _carsMakeProvider.carTechnicalFormState['type']))
+                    .then((_) => {
+                          setState(() {
+                            _carsMakeProvider.carTechnicalFormState['year'] =
+                                selectedYear;
+                          })
+                        });
+              } catch (error) {
+                if (error
+                    .toString()
+                    .contains(CarMakeService.LOAD_CAR_FUEL_FAILED_EXCEPTION)) {
+                  SnackBarManager.showSnackBar(
+                      S.of(context).general_error,
+                      S.of(context).exception_load_car_fuel_types,
+                      widget.scaffoldKey.currentState);
+
+                  setState(() {
+                    _carsMakeProvider.carTechnicalFormState['year'] =
+                        selectedYear;
+                  });
+                }
+              }
             })
         : DropdownButtonFormField(
             hint: Text(S.of(context).cars_create_selectYear));

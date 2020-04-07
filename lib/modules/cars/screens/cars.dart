@@ -34,15 +34,18 @@ class CarsState extends State<Cars> {
   @override
   Widget build(BuildContext context) {
     return Consumer<CarsProvider>(
-      builder: (context, carsProvider, _) => Scaffold(
-          body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
-          floatingActionButton: FloatingActionButton(
-            heroTag: null,
-            backgroundColor: Theme.of(context).primaryColor,
-            elevation: 1,
-            onPressed: () => _openCarCreateModal(context),
-            child: Icon(Icons.add),
-          )),
+      builder: (context, carsProvider, _) =>
+          Scaffold(
+              body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
+              floatingActionButton: FloatingActionButton(
+                heroTag: null,
+                backgroundColor: Theme
+                    .of(context)
+                    .primaryColor,
+                elevation: 1,
+                onPressed: () => _openCarCreateModal(context),
+                child: Icon(Icons.add),
+              )),
     );
   }
 
@@ -93,7 +96,8 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentCreateModal(_createAppointment, false, selectedCar);
+                return AppointmentCreateModal(
+                    _createAppointment, false, selectedCar);
               });
         });
   }

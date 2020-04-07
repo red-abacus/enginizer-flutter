@@ -9,10 +9,12 @@ import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/cars-reponse.model.dart';
-import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class CarService {
+  static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
+  static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
+
   static const String CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
   Dio _dio = inject<Dio>();
@@ -85,11 +87,11 @@ class CarService {
       if (response.statusCode < 300) {
         return CarFuelGraphicResponse.fromJson(response.data);
       } else {
-        throw Exception(CarProvider.CAR_FUEL_EXCEPITON);
+        throw Exception(CAR_FUEL_EXCEPITON);
       }
     }
     catch(error) {
-      throw Exception(CarProvider.CAR_FUEL_EXCEPITON);
+      throw Exception(CAR_FUEL_EXCEPITON);
     }
   }
 
@@ -100,7 +102,7 @@ class CarService {
       return Car.fromJson(response.data);
     } else {
       // If that response was not OK, throw an error
-      throw Exception(CarProvider.CAR_DETAILS_EXCEPTION);
+      throw Exception(CAR_DETAILS_EXCEPTION);
     }
   }
 

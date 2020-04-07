@@ -1,12 +1,13 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
-import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
+import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/modules/cars/widgets/forms/car-extra.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-make.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-technical.form.dart';
 import 'package:app/utils/locale.manager.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,8 @@ class CarCreateModal extends StatefulWidget {
 }
 
 class _CarCreateModalState extends State<CarCreateModal> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   CarsMakeProvider _carsMakeProvider;
   int _currentStepIndex = 0;
   bool isLastStep = false;
@@ -48,19 +51,41 @@ class _CarCreateModalState extends State<CarCreateModal> {
         _isLoading = true;
       });
 
-      _carsMakeProvider
+      _loadData();
+
+      _initDone = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await _carsMakeProvider
           .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
-          .then((_) {
-        _carsMakeProvider.loadCarColors().then((_) {
+          .then((_) async {
+        await _carsMakeProvider.loadCarColors().then((_) {
           setState(() {
             _isLoading = false;
           });
         });
       });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
+      } else if (error
+          .toString()
+          .contains(CarMakeService.LOAD_CAR_COLOR_FAILED_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_load_car_colors, _scaffoldKey.currentState);
+      }
 
-      _initDone = true;
+      setState(() {
+        _isLoading = false;
+      });
     }
-    super.didChangeDependencies();
   }
 
   @override
@@ -71,20 +96,22 @@ class _CarCreateModalState extends State<CarCreateModal> {
         heightFactor: .8,
         child: Container(
             child: ClipRRect(
-              borderRadius: new BorderRadius.circular(5.0),
-              child: Container(
-                decoration: new BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(40.0),
-                        topRight: const Radius.circular(40.0))),
-                child: Theme(
-                    data: ThemeData(
-                        accentColor: Theme.of(context).primaryColor,
-                        primaryColor: Theme.of(context).primaryColor),
-                    child: _getBodyContainer()),
-              ),
-            )));
+                borderRadius: new BorderRadius.circular(5.0),
+                child: Scaffold(
+                  key: _scaffoldKey,
+                  body: Container(
+                    decoration: new BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(40.0),
+                            topRight: const Radius.circular(40.0))),
+                    child: Theme(
+                        data: ThemeData(
+                            accentColor: Theme.of(context).primaryColor,
+                            primaryColor: Theme.of(context).primaryColor),
+                        child: _getBodyContainer()),
+                  ),
+                ))));
   }
 
   _getBodyContainer() {
@@ -130,12 +157,13 @@ class _CarCreateModalState extends State<CarCreateModal> {
       Step(
           isActive: _stepStateData[0]['active'],
           title: Text(S.of(context).cars_create_step1),
-          content: CarMakeForm(key: carMakeStateKey),
+          content: CarMakeForm(key: carMakeStateKey, scaffoldKey: _scaffoldKey),
           state: _stepStateData[0]['state']),
       Step(
           isActive: _stepStateData[1]['active'],
           title: Text(S.of(context).cars_create_step2),
-          content: CarTechnicalForm(key: carTechnicalStateKey),
+          content: CarTechnicalForm(
+              key: carTechnicalStateKey, scaffoldKey: _scaffoldKey),
           state: _stepStateData[1]['state']),
       Step(
           isActive: _stepStateData[2]['active'],
@@ -211,7 +239,7 @@ class _CarCreateModalState extends State<CarCreateModal> {
         carVariant: _carsMakeProvider.carTechnicalFormState['variant'],
         vin: _carsMakeProvider.carTechnicalFormState['vin'],
         registrationNumber:
-        _carsMakeProvider.carExtraFormState['registrationNumber'],
+            _carsMakeProvider.carExtraFormState['registrationNumber'],
         mileage: int.parse(_carsMakeProvider.carExtraFormState['mileage']),
         rcaExpiryDate: _carsMakeProvider.carExtraFormState['rcaExpiryDate'],
         itpExpiryDate: _carsMakeProvider.carExtraFormState['itpExpiryDate']);

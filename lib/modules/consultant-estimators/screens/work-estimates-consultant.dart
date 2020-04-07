@@ -1,9 +1,12 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
+import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:app/modules/consultant-estimators/widgets/work-estimates-list-consultant.widget.dart';
 import 'package:app/utils/locale.manager.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +22,8 @@ class WorkEstimatesConsultant extends StatefulWidget {
 }
 
 class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -34,6 +39,7 @@ class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
 
     return Consumer<WorkEstimatesConsultantProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
+        key: _scaffoldKey,
         body: Center(
           child: _renderAuctions(_isLoading),
         ),
@@ -48,21 +54,41 @@ class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
         _isLoading = true;
       });
 
-      _workEstimatesConsultantProvider =
-          Provider.of<WorkEstimatesConsultantProvider>(context);
-      _workEstimatesConsultantProvider.resetParameters();
-      _workEstimatesConsultantProvider.getWorkEstimates().then((_) {
-        _workEstimatesConsultantProvider.loadCarBrands(CarQuery(language: LocaleManager.language(context))).then((_) {
-          setState(() {
-            _isLoading = false;
-          });
-        });
-      });
+      _loadData();
     }
 
     _initDone = true;
 
     super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    _workEstimatesConsultantProvider =
+        Provider.of<WorkEstimatesConsultantProvider>(context);
+    _workEstimatesConsultantProvider.resetParameters();
+
+    try {
+      await _workEstimatesConsultantProvider.getWorkEstimates().then((_) {
+        _workEstimatesConsultantProvider
+            .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   _renderAuctions(bool _isLoading) {

@@ -279,5 +279,12 @@
   "general_edit": "Editează",
   "general_error": "Eroare",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
-  "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii."
+  "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
+  "exception_load_car_brands": "A intervenit o problemă la încărcarea brandurilor de mașini.",
+  "exception_load_car_models": "A intervenit o problemă la încărcarea modelelor de mașini.",
+  "exception_load_car_types": "A intervenit o problemă la încărcarea motorizărilor de mașini.",
+  "exception_load_car_years": "A intervenit o problemă la încărcarea anilor mașinii.",
+  "exception_load_car_fuel_types": "A intervenit o problemă la încărcarea tipului de combustibil.",
+  "exception_load_car_colors": "A intervenit o problemă la încărcarea culorilor pentru mașini.",
+  "exception_load_car_variants": "A intervenit o problemă la încărcarea variantelor de mașini."
 }

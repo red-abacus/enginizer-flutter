@@ -21,8 +21,13 @@ class AuctionsProvider with ChangeNotifier {
   AuctionResponse auctionResponse;
 
   Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
-    carBrands = await carMakeService.getCarBrands(carQuery);
-    return carBrands;
+    try {
+      carBrands = await carMakeService.getCarBrands(carQuery);
+      return carBrands;
+    }
+    catch(error) {
+      throw(error);
+    }
   }
 
   Future<AuctionResponse> loadAuctions() async {

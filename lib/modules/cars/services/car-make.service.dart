@@ -14,6 +14,18 @@ import 'package:app/modules/cars/models/car-year.model.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class CarMakeService {
+  static const String LOAD_CAR_BRANDS_FAILED_EXCEPTION =
+      'LOAD_CAR_BRANDS_FAILED';
+  static const String LOAD_CAR_MODELS_FAILED_EXCEPTION =
+      'LOAD_CAR_MODELS_FAILED';
+  static const String LOAD_CAR_TYPE_FAILED_EXCEPTION = 'LOAD_CAR_TYPE_FAILED';
+  static const String LOAD_CAR_YEAR_FAILED_EXCEPTION = 'LOAD_CAR_YEAR_FAILED';
+  static const String LOAD_CAR_FUEL_FAILED_EXCEPTION = 'LOAD_CAR_FUEL_FAILED';
+  static const String LOAD_CAR_COLOR_FAILED_EXCEPTION =
+      'LOAD_CAR_COLORS_FAILED';
+  static const String LOAD_CAR_VARIANTS_FAILED_EXCEPTION =
+      'LOAD_CAR_VARIANTS_FAILED';
+
   static const String CAR_MAKE_API_PATH =
       '${Environment.CARS_BASE_API}/carmake';
 
@@ -22,78 +34,88 @@ class CarMakeService {
   CarMakeService();
 
   Future<List<CarBrand>> getCarBrands(CarQuery query) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/brands',
-        queryParameters: {'language': query.language});
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapBrands(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_BRANDS_FAILED');
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/brands',
+          queryParameters: {'language': query.language});
+      if (response.statusCode == 200) {
+        return _mapBrands(response.data);
+      } else {
+        throw Exception(LOAD_CAR_BRANDS_FAILED_EXCEPTION);
+      }
+    } catch (_) {
+      throw Exception(LOAD_CAR_BRANDS_FAILED_EXCEPTION);
     }
   }
 
   Future<List<CarModel>> getCarModels(CarQuery query) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/models',
-        queryParameters: {
-          'language': query.language,
-          'brandId': query.brand.id
-        });
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/models',
+          queryParameters: {
+            'language': query.language,
+            'brandId': query.brand.id
+          });
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapModels(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_MODELS_FAILED');
+      if (response.statusCode == 200) {
+        return _mapModels(response.data);
+      } else {
+        throw Exception(LOAD_CAR_MODELS_FAILED_EXCEPTION);
+      }
+    } catch (_) {
+      throw Exception(LOAD_CAR_MODELS_FAILED_EXCEPTION);
     }
   }
 
   Future<List<CarType>> getCarTypes(CarQuery query) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/types',
-        queryParameters: {
-          'language': query.language,
-          'modelId': query.model.id
-        });
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/types',
+          queryParameters: {
+            'language': query.language,
+            'modelId': query.model.id
+          });
 
-    if (response.statusCode == 200) {
-      return _mapTypes(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_TYPE_FAILED');
+      if (response.statusCode == 200) {
+        return _mapTypes(response.data);
+      } else {
+        throw Exception(LOAD_CAR_TYPE_FAILED_EXCEPTION);
+      }
+    } catch (_) {
+      throw Exception(LOAD_CAR_TYPE_FAILED_EXCEPTION);
     }
   }
 
   Future<List<CarYear>> getCarYears(CarQuery query) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/years',
-        queryParameters: {
-          'language': query.language,
-          'typeId': query.carType.id
-        });
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/years',
+          queryParameters: {
+            'language': query.language,
+            'typeId': query.carType.id
+          });
 
-    if (response.statusCode == 200) {
-      return _mapYears(response.data);
-    } else {
-      throw Exception('LOAD_CAR_YEAR_FAILED');
+      if (response.statusCode == 200) {
+        return _mapYears(response.data);
+      } else {
+        throw Exception(LOAD_CAR_YEAR_FAILED_EXCEPTION);
+      }
+    } catch (_) {
+      throw Exception(LOAD_CAR_YEAR_FAILED_EXCEPTION);
     }
   }
 
   Future<List<CarFuelType>> getCarFuelTypes(CarQuery query) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/fuelTypes',
-        queryParameters: {
-          'language': query.language,
-          'typeDetailsId': query.carType.id
-        });
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/fuelTypes',
+          queryParameters: {
+            'language': query.language,
+            'typeDetailsId': query.carType.id
+          });
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapFuelTypes(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_FUEL_FAILED');
+      if (response.statusCode == 200) {
+        return _mapFuelTypes(response.data);
+      } else {
+        throw Exception(LOAD_CAR_FUEL_FAILED_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(LOAD_CAR_FUEL_FAILED_EXCEPTION);
     }
   }
 
@@ -150,30 +172,34 @@ class CarMakeService {
   }
 
   Future<List<CarColor>> getCarColors() async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/colors');
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/colors');
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapColors(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_COLORS_FAILED');
+      if (response.statusCode == 200) {
+        return _mapColors(response.data);
+      } else {
+        throw Exception(LOAD_CAR_COLOR_FAILED_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(LOAD_CAR_COLOR_FAILED_EXCEPTION);
     }
   }
 
   Future<List<CarVariant>> getCarVariants(CarQuery carQuery) async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/variants',
-        queryParameters: {
-          'language': carQuery.language,
-          'typeId': carQuery.carType.id
-        });
+    try {
+      final response = await _dio.get('$CAR_MAKE_API_PATH/variants',
+          queryParameters: {
+            'language': carQuery.language,
+            'typeId': carQuery.carType.id
+          });
 
-    if (response.statusCode == 200) {
-      return _mapVariants(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_VARIANTS_FAILED');
+      if (response.statusCode == 200) {
+        return _mapVariants(response.data);
+      } else {
+        throw Exception(LOAD_CAR_VARIANTS_FAILED_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(LOAD_CAR_VARIANTS_FAILED_EXCEPTION);
     }
   }
 

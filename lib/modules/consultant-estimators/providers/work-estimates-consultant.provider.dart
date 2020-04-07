@@ -37,8 +37,13 @@ class WorkEstimatesConsultantProvider with ChangeNotifier {
   }
 
   Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
-    carBrands = await _carMakeService.getCarBrands(carQuery);
-    return carBrands;
+    try {
+      carBrands = await _carMakeService.getCarBrands(carQuery);
+      return carBrands;
+    }
+    catch(error) {
+      throw(error);
+    }
   }
 
   Future<List<WorkEstimate>> filterWorkEstimates(String filterString,
