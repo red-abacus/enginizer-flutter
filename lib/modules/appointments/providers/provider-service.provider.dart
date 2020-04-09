@@ -50,10 +50,14 @@ class ProviderServiceProvider with ChangeNotifier {
   }
 
   Future<List<ServiceItem>> loadServices() async {
-    var response = await providerService.getServices();
-    serviceItems = response.items;
-    notifyListeners();
-    return serviceItems;
+    try {
+      var response = await providerService.getServices();
+      serviceItems = response.items;
+      notifyListeners();
+      return serviceItems;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<ServiceProvider>> loadProviders() async {

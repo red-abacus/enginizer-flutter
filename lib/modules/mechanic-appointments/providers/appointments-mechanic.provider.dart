@@ -32,9 +32,13 @@ class AppointmentsMechanicProvider with ChangeNotifier {
   }
 
   Future<List<Appointment>> loadAppointments() async {
-    _appointmentsResponse = await this.appointmentsService.getAppointments();
-    appointments = _appointmentsResponse.items;
-    notifyListeners();
-    return appointments;
+    try {
+      _appointmentsResponse = await this.appointmentsService.getAppointments();
+      appointments = _appointmentsResponse.items;
+      notifyListeners();
+      return appointments;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

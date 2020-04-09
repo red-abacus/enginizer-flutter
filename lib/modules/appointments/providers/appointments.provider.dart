@@ -38,20 +38,28 @@ class AppointmentsProvider with ChangeNotifier {
   }
 
   Future<List<Appointment>> loadAppointments() async {
-    this.appointmentsResponse =
-        await this.appointmentsService.getAppointments();
-    appointments = this.appointmentsResponse.items;
-    notifyListeners();
-    return appointments;
+    try {
+      this.appointmentsResponse =
+          await this.appointmentsService.getAppointments();
+      appointments = this.appointmentsResponse.items;
+      notifyListeners();
+      return appointments;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<Appointment> createAppointment(
       AppointmentRequest appointmentRequest) async {
-    var newAppointment =
-        await this.appointmentsService.createAppointment(appointmentRequest);
-    appointments.add(newAppointment);
-    notifyListeners();
-    return newAppointment;
+    try {
+      var newAppointment =
+          await this.appointmentsService.createAppointment(appointmentRequest);
+      appointments.add(newAppointment);
+      notifyListeners();
+      return newAppointment;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<Appointment>> filterAppointments(String searchString,

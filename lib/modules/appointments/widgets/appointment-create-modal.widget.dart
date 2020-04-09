@@ -1,13 +1,16 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-services.form.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +68,8 @@ class AppointmentCreateModal extends StatefulWidget {
 }
 
 class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   static const FORM_HEIGHT_PERCENTAGE = .58;
 
   int _currentStepIndex = 0;
@@ -76,10 +81,11 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
 
   ProviderServiceProvider providerServiceProvider;
 
+  bool _initDone = false;
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-
     final authProvider = Provider.of<Auth>(context);
     providerServiceProvider.authUser = authProvider.authUser;
 
@@ -92,56 +98,102 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     return FractionallySizedBox(
         heightFactor: .8,
         child: Container(
-          child: _buildStepper(context),
-        ));
+            child: ClipRRect(
+          borderRadius: new BorderRadius.circular(5.0),
+          child: Container(
+            decoration: new BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(40.0),
+                    topRight: const Radius.circular(40.0))),
+            child: Theme(
+              data: ThemeData(
+                  accentColor: Theme.of(context).primaryColor,
+                  primaryColor: Theme.of(context).primaryColor),
+              child: _buildContent(context),
+            ),
+          ),
+        )));
   }
 
-  Widget _buildStepper(BuildContext context) => ClipRRect(
-        borderRadius: new BorderRadius.circular(5.0),
-        child: Container(
-          decoration: new BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(40.0),
-                  topRight: const Radius.circular(40.0))),
-          child: Theme(
-            data: ThemeData(
-                accentColor: Theme.of(context).primaryColor,
-                primaryColor: Theme.of(context).primaryColor),
-            child: Stepper(
-                currentStep: _currentStepIndex,
-                onStepContinue: _next,
-                onStepCancel: _back,
-                onStepTapped: (step) => _goTo(step),
-                type: StepperType.horizontal,
-                steps: steps,
-                controlsBuilder: (BuildContext context,
-                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-                  return Row(
-                    children: <Widget>[
-                      SizedBox(height: 70),
-                      btnPrev = FlatButton(
-                        child: Text(S.of(context).general_back),
-                        onPressed: onStepCancel,
-                      ),
-                      btnNext = RaisedButton(
-                        elevation: 0,
-                        child: isLastStep
-                            ? Text(S.of(context).general_add)
-                            : Text(S.of(context).general_continue),
-                        textColor: Theme.of(context).cardColor,
-                        onPressed: onStepContinue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        color: Theme.of(context).primaryColor,
-                      )
-                    ],
-                  );
-                }),
-          ),
-        ),
-      );
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      setState(() {
+        _isLoading = true;
+      });
+      providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+      _loadData();
+    }
+    _initDone = true;
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await providerServiceProvider.loadServices().then((_) async {
+        if (widget.showCarSelection) {
+          await Provider.of<CarsProvider>(context).loadCars().then((_) {
+            setState(() {
+              _isLoading = false;
+            });
+          });
+        }
+        else {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
+    } catch (error) {
+      if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_services, _scaffoldKey.currentState);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _buildStepper(context);
+  }
+
+  Widget _buildStepper(BuildContext context) => Stepper(
+      currentStep: _currentStepIndex,
+      onStepContinue: _next,
+      onStepCancel: _back,
+      onStepTapped: (step) => _goTo(step),
+      type: StepperType.horizontal,
+      steps: steps,
+      controlsBuilder: (BuildContext context,
+          {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+        return Row(
+          children: <Widget>[
+            SizedBox(height: 70),
+            btnPrev = FlatButton(
+              child: Text(S.of(context).general_back),
+              onPressed: onStepCancel,
+            ),
+            btnNext = RaisedButton(
+              elevation: 0,
+              child: isLastStep
+                  ? Text(S.of(context).general_add)
+                  : Text(S.of(context).general_continue),
+              textColor: Theme.of(context).cardColor,
+              onPressed: onStepContinue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              color: Theme.of(context).primaryColor,
+            )
+          ],
+        );
+      });
 
   List<Step> _buildSteps(BuildContext context) {
     if (widget.showCarSelection) {

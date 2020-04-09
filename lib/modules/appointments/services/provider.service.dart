@@ -16,6 +16,9 @@ import 'package:app/modules/consultant-appointments/models/employee.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class ProviderService {
+  static const String GET_SERVICES_EXCEPTION =
+      'GET_APPOINTMENT_SERVICES_EXCEPTION';
+
   static const String SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
 
@@ -60,15 +63,16 @@ class ProviderService {
   ProviderService();
 
   Future<ProviderServiceResponse> getServices() async {
-    final response = await _dio.get(SERVICES_PATH);
+    try {
+      final response = await _dio.get(SERVICES_PATH);
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapServices(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_SERVICES_FAILED');
+      if (response.statusCode == 200) {
+        return _mapServices(response.data);
+      } else {
+        throw Exception(GET_SERVICES_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_SERVICES_EXCEPTION);
     }
   }
 
@@ -269,7 +273,7 @@ class ProviderService {
   Future<ServiceProviderItemsResponse> getProviderServiceItems(
       int providerId) async {
     final response =
-    await _dio.get(_buildGetProviderServiceItemsPath(providerId));
+        await _dio.get(_buildGetProviderServiceItemsPath(providerId));
 
     if (response.statusCode == 200) {
       return _mapProviderServiceItems(response.data);
@@ -291,7 +295,7 @@ class ProviderService {
   Future<ServiceProviderReview> getServiceProviderReviews(
       int providerId) async {
     final response =
-    await _dio.get(_buildGetServiceProviderReviews(providerId));
+        await _dio.get(_buildGetServiceProviderReviews(providerId));
 
     if (response.statusCode == 200) {
       return ServiceProviderReview.fromJson(response.data);
@@ -306,15 +310,15 @@ class ProviderService {
         SERVICE_PROVIDER_REVIEWS_SUFFIX;
   }
 
-  Future<ServiceProvider> updateServiceProviderDetails(int providerId, String body) async {
+  Future<ServiceProvider> updateServiceProviderDetails(
+      int providerId, String body) async {
     String path = APPOINTMENTS_PATH + providerId.toString();
 
     final response = await _dio.patch(path);
 
     if (response.statusCode == 200) {
       return ServiceProvider.fromJson(response.data);
-    }
-    else {
+    } else {
       throw Exception("UPDATE_PROVIDER_DETAILS_FAILED");
     }
   }

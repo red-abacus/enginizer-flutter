@@ -1,8 +1,11 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,8 @@ class AppointmentsMechanic extends StatefulWidget {
 }
 
 class AppointmentsMechanicState extends State<AppointmentsMechanic> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -30,6 +35,7 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
   Widget build(BuildContext context) {
     return Consumer<AppointmentsMechanicProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
+        key: _scaffoldKey,
         body: Center(
           child: Container(
             child: _renderAppointments(
@@ -47,19 +53,33 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
         _isLoading = true;
       });
 
-      Provider.of<AppointmentsMechanicProvider>(context, listen: false)
-          .loadAppointments()
-          .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-
-            _selectAppointment(context, null);
-      });
-
+      _loadData();
       _initDone = true;
     }
     super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await Provider.of<AppointmentsMechanicProvider>(context)
+          .loadAppointments()
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_appointments,
+            _scaffoldKey.currentState);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {

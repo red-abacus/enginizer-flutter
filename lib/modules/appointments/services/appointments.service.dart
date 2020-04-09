@@ -7,16 +7,19 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class AppointmentsService {
+  static const String GET_APPOINTMENTS_EXCEPTION = 'GET_APPOINTMENTS_FAILED';
+  static const String CREATE_APPOINTMENT_EXCEPTION =
+      'CREATE_APPOINTMENT_EXCEPTION';
+
   static const String APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
   static const String APPOINTMENTS_DETAILS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String SERVICES_PATH = '${Environment.PROVIDERS_BASE_API}/services';
+  static const String SERVICES_PATH =
+      '${Environment.PROVIDERS_BASE_API}/services';
   static const String TIMETABLE_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers/timetable';
   static const String PROVIDER_TIMETABLE_PREFIX =
@@ -35,13 +38,15 @@ class AppointmentsService {
   AppointmentsService();
 
   Future<AppointmentsResponse> getAppointments() async {
-    final response = await _dio.get(APPOINTMENTS_API_PATH);
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return AppointmentsResponse.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load post');
+    try {
+      final response = await _dio.get(APPOINTMENTS_API_PATH);
+      if (response.statusCode == 200) {
+        return AppointmentsResponse.fromJson(response.data);
+      } else {
+        throw Exception(GET_APPOINTMENTS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_APPOINTMENTS_EXCEPTION);
     }
   }
 
@@ -51,27 +56,19 @@ class AppointmentsService {
         PROVIDER_TIMETABLE_SUFFIX;
   }
 
-  Future<List<ServiceItem>> getServices() async {
-    final response = await _dio.get('$SERVICES_PATH');
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return _mapServices(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_SERVICES_FAILED');
-    }
-  }
-
   Future<Appointment> createAppointment(
       AppointmentRequest appointmentRequest) async {
-    final response = await _dio.post(APPOINTMENTS_API_PATH,
-        data: jsonEncode(appointmentRequest.toJson()));
+    try {
+      final response = await _dio.post(APPOINTMENTS_API_PATH,
+          data: jsonEncode(appointmentRequest.toJson()));
 
-    if (response.statusCode == 201) {
-      return _mapAppointment(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('CREATE_APPOINTMENT_FAILED');
+      if (response.statusCode == 201) {
+        return _mapAppointment(response.data);
+      } else {
+        throw Exception(CREATE_APPOINTMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CREATE_APPOINTMENT_EXCEPTION);
     }
   }
 
@@ -85,16 +82,6 @@ class AppointmentsService {
       // If that response was not OK, throw an error.
       throw Exception('CREATE_CAR_FAILED');
     }
-  }
-
-  Future<List<DateEntry>> scheduleItems(providerId) async {
-    final response = await _dio.get(buildProviderTimetablePath(providerId));
-  }
-
-  List<ServiceItem> _mapServices(List<dynamic> brands) {
-    List<ServiceItem> serviceList = [];
-    brands.forEach((brnd) => serviceList.add(ServiceItem.fromJson(brnd)));
-    return serviceList;
   }
 
   Appointment _mapAppointment(dynamic response) {

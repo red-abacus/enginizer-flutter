@@ -275,5 +275,8 @@
   "general_edit": "Editează",
   "general_error": "Eroare",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
-  "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii."
+  "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
+  "exception_get_appointments": "A intervenit o problemă la încărcarea programărilor tale.",
+  "exception_get_services": "A intervenit o problemă la încărcarea serviciilor.",
+  "exception_create_appointment": "A intervenit o problema în procesul de creare a programării."
 }
