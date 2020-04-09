@@ -1,5 +1,6 @@
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/utils/app_config.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -45,23 +46,31 @@ class CarCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${car.model.name} (${car.year.name})",
-                                    style: TextStyle(
-                                        fontFamily: 'Lato',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16)),
+                                Expanded(
+                                  child: Text(
+                                      "${car.model.name} (${car.year.name})",
+                                      style: TextStyle(
+                                          fontFamily: 'Lato',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16)),
+                                ),
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${car.registrationNumber}",
-                                    style: TextStyle(
-                                        fontFamily: 'Lato',
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black87,
-                                        fontSize: 14)),
+                                Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    child: Text("${car.registrationNumber}",
+                                        style: TextStyle(
+                                            fontFamily: 'Lato',
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black87,
+                                            fontSize: 14)),
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(height: 36),

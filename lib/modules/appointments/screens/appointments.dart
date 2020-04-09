@@ -8,6 +8,7 @@ import 'package:app/modules/appointments/widgets/appointment-create-modal.widget
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
@@ -60,14 +61,14 @@ class CarDetailsState extends State<CarDetails> {
         });
       });
     } catch (error) {
-      if (error.toString().contains(CarProvider.CAR_FUEL_EXCEPITON)) {
+      if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
         SnackBarManager.showSnackBar(S.of(context).general_error,
             S.of(context).exception_get_car_fuel, _scaffoldKey.currentState);
 
         setState(() {
           _isLoading = false;
         });
-      } else if (error.toString().contains(CarProvider.CAR_DETAILS_EXCEPTION)) {
+      } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
         SnackBarManager.showSnackBar(S.of(context).general_error,
             S.of(context).exception_get_car_details, _scaffoldKey.currentState);
       }
@@ -387,7 +388,7 @@ class CarDetailsState extends State<CarDetails> {
       });
     }
     catch(error) {
-      if (error.toString().contains(CarProvider.CAR_FUEL_EXCEPITON)) {
+      if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
         SnackBarManager.showSnackBar(S
             .of(context)
             .general_error,

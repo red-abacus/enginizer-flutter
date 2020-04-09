@@ -11,9 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CarProvider with ChangeNotifier {
-  static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
-  static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
-
   CarService carService = inject<CarService>();
 
   Car selectedCar;

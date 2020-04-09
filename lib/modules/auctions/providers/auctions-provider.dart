@@ -4,6 +4,7 @@ import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
+import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,9 +20,14 @@ class AuctionsProvider with ChangeNotifier {
 
   AuctionResponse auctionResponse;
 
-  Future<List<CarBrand>> loadCarBrands() async {
-    carBrands = await carMakeService.getCarBrands();
-    return carBrands;
+  Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
+    try {
+      carBrands = await carMakeService.getCarBrands(carQuery);
+      return carBrands;
+    }
+    catch(error) {
+      throw(error);
+    }
   }
 
   Future<AuctionResponse> loadAuctions() async {

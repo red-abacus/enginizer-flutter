@@ -53,9 +53,9 @@ class CarExtraFormState extends State<CarExtraForm> {
                 decoration: InputDecoration(
                     labelText: S.of(context).cars_create_mileage),
                 onChanged: (value) {
-                  carMakeProvider.carExtraFormState['activeKm'] = value;
+                  carMakeProvider.carExtraFormState['mileage'] = value;
                 },
-                initialValue: carMakeProvider.carExtraFormState['activeKm'],
+                initialValue: carMakeProvider.carExtraFormState['mileage'],
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly
                 ],

@@ -8,6 +8,7 @@ import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
 import 'package:app/utils/snack_bar.helper.dart';
@@ -55,18 +56,35 @@ class CarsState extends State<Cars> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<CarsProvider>(context).loadCars().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
+
+      _loadData();
     }
     _initDone = true;
     super.didChangeDependencies();
   }
 
+  _loadData() async {
+    try {
+      await Provider.of<CarsProvider>(context).loadCars().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_GET_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_car_get, _scaffoldKey.currentState);
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   void _openCarCreateModal(BuildContext ctx) {
-    Provider.of<CarsMakeProvider>(context).loadCarBrands();
+    Provider.of<CarsMakeProvider>(context).initParams();
+
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -76,9 +94,7 @@ class CarsState extends State<Cars> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CarCreateModal(
-                brands: Provider.of<CarsMakeProvider>(context).brands,
-                addCar: _addCar);
+            return CarCreateModal();
           });
         });
   }
@@ -102,8 +118,16 @@ class CarsState extends State<Cars> {
         });
   }
 
-  void _filterCars(BuildContext ctx, String filterValue) {
-    Provider.of<CarsProvider>(ctx).loadCars(filterValue: filterValue);
+  Future<void> _filterCars(BuildContext ctx, String filterValue) async {
+    try {
+      await Provider.of<CarsProvider>(ctx).loadCars(filterValue: filterValue);
+    }
+    catch (error) {
+      if (error.toString() == CarService.CAR_GET_EXCEPTION) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_car_get, _scaffoldKey.currentState);
+      }
+    }
   }
 
   void _selectCar(BuildContext ctx, Car selectedCar) {
@@ -121,12 +145,6 @@ class CarsState extends State<Cars> {
             filterCars: _filterCars,
             selectCar: _selectCar,
             openAppointmentCreateModal: _openAppointmentCreateModal);
-  }
-
-  _addCar(Car car) {
-    Provider.of<CarsProvider>(context).addCar(car).then((_) {
-      Navigator.pop(context);
-    });
   }
 
   _createAppointment(AppointmentRequest appointmentRequest) async {

@@ -1,5 +1,6 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,21 +14,29 @@ class CarsProvider with ChangeNotifier {
   }
 
   Future<List<Car>> loadCars({String filterValue = ''}) async {
-    var response = await this.carService.getCars();
-    _cars = response.items;
+    try {
+      var response = await this.carService.getCars();
+      _cars = response.items;
 
-    if (filterValue.isNotEmpty) {
-      _cars = _cars.where((car) => car.filtered(filterValue)).toList();
+      if (filterValue.isNotEmpty) {
+        _cars = _cars.where((car) => car.filtered(filterValue)).toList();
+      }
+
+      notifyListeners();
+      return _cars;
+    } catch (error) {
+      throw (error);
     }
-
-    notifyListeners();
-    return _cars;
   }
 
-  Future<Car> addCar(Car car) async {
-    var newCar = await this.carService.addCar(car);
-    _cars.add(newCar);
-    notifyListeners();
-    return newCar;
+  Future<Car> addCar(CarRequest carRequest) async {
+    try {
+      var newCar = await this.carService.addCar(carRequest);
+      _cars.add(newCar);
+      notifyListeners();
+      return newCar;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

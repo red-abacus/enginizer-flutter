@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:dio/dio.dart';
 
 import 'package:app/config/injection.dart';
@@ -8,10 +9,14 @@ import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/cars-reponse.model.dart';
-import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class CarService {
+  static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
+  static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
+  static String CAR_CREATE_EXCEPTION = 'CAR_CREATE_FAILED';
+  static String CAR_GET_EXCEPTION = 'CAR_GET_EXCEPTION';
+
   static const String CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
   Dio _dio = inject<Dio>();
@@ -19,29 +24,31 @@ class CarService {
   CarService();
 
   Future<CarsResponse> getCars() async {
-    final response = await _dio.get(CAR_API_PATH);
+    try {
+      final response = await _dio.get(CAR_API_PATH);
 
-    if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
-      return CarsResponse.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('Failed to load post');
+      if (response.statusCode < 300) {
+        return CarsResponse.fromJson(response.data);
+      } else {
+        throw Exception(CAR_GET_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_GET_EXCEPTION);
     }
   }
 
-  Future<Car> addCar(Car car) async {
-    final response =
-        await _dio.post(CAR_API_PATH, data: jsonEncode(car.toJson()));
+  Future<Car> addCar(CarRequest carRequest) async {
+    try {
+      final response =
+          await _dio.post(CAR_API_PATH, data: jsonEncode(carRequest.toJson()));
 
-    if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapCar(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('CREATE_CAR_FAILED');
+      if (response.statusCode < 300) {
+        return _mapCar(response.data);
+      } else {
+        throw Exception(CAR_CREATE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_CREATE_EXCEPTION);
     }
   }
 
@@ -63,24 +70,19 @@ class CarService {
 
   Future<CarFuelGraphicResponse> getFuelConsumption(int id) async {
     try {
-      final response = await _dio.get(
-          '$CAR_API_PATH/$id/fuel', queryParameters: {
-        "month": DateTime
-            .now()
-            .month,
-        'year': DateTime
-            .now()
-            .year
-      });
+      final response = await _dio.get('$CAR_API_PATH/$id/fuel',
+          queryParameters: {
+            "month": DateTime.now().month,
+            'year': DateTime.now().year
+          });
 
       if (response.statusCode < 300) {
         return CarFuelGraphicResponse.fromJson(response.data);
       } else {
-        throw Exception(CarProvider.CAR_FUEL_EXCEPITON);
+        throw Exception(CAR_FUEL_EXCEPITON);
       }
-    }
-    catch(error) {
-      throw Exception(CarProvider.CAR_FUEL_EXCEPITON);
+    } catch (error) {
+      throw Exception(CAR_FUEL_EXCEPITON);
     }
   }
 
@@ -91,7 +93,7 @@ class CarService {
       return Car.fromJson(response.data);
     } else {
       // If that response was not OK, throw an error
-      throw Exception(CarProvider.CAR_DETAILS_EXCEPTION);
+      throw Exception(CAR_DETAILS_EXCEPTION);
     }
   }
 
