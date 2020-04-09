@@ -278,5 +278,7 @@
   "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
   "exception_get_appointments": "A intervenit o problemă la încărcarea programărilor tale.",
   "exception_get_services": "A intervenit o problemă la încărcarea serviciilor.",
-  "exception_create_appointment": "A intervenit o problema în procesul de creare a programării."
+  "exception_create_appointment": "A intervenit o problemă în procesul de creare a programării.",
+  "exception_get_appointment_details": "A intervenit o problemă la încărcarea detaliilor programării.",
+  "exception_cancel_appointment": "A intervenit o problemă la anularea acestei programări."
 }

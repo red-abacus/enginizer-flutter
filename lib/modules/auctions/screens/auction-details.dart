@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/enum/auction-details-state.enum.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
@@ -6,6 +7,7 @@ import 'package:app/modules/auctions/screens/bid-details.dart';
 import 'package:app/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details/auction-bids.widget.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +36,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   Widget build(BuildContext context) {
-    auctionProvider = Provider.of<AuctionProvider>(context);
-
-    if (auctionProvider.selectedAuction == null) {
+    if (auctionProvider != null && auctionProvider.selectedAuction == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -54,28 +54,47 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   void didChangeDependencies() {
-    if (!Provider.of<AuctionProvider>(context).initDone) {
-      auctionProvider = Provider.of<AuctionProvider>(context);
+    auctionProvider = Provider.of<AuctionProvider>(context);
 
-      if (auctionProvider.selectedAuction == null) return;
+    if (!auctionProvider.initDone) {
+      if (auctionProvider.selectedAuction != null) {
+        setState(() {
+          auctionProvider.isLoading = true;
+        });
 
-      setState(() {
-        Provider.of<AuctionProvider>(context).isLoading = true;
-      });
+        _loadData();
+      }
 
-      auctionProvider
+      auctionProvider.initDone = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await auctionProvider
           .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
           .then((_) {
         auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
           setState(() {
-            Provider.of<AuctionProvider>(context).isLoading = false;
+            auctionProvider.isLoading = false;
           });
         });
       });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_appointment_details,
+            _scaffoldKey.currentState);
+      }
 
-      Provider.of<AuctionProvider>(context).initDone = true;
+      setState(() {
+        auctionProvider.isLoading = false;
+      });
     }
-    super.didChangeDependencies();
   }
 
   _titleText() {

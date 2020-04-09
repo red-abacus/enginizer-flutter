@@ -27,17 +27,25 @@ class AppointmentProvider with ChangeNotifier {
 
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
-    _selectedAppointmentDetail =
-        await this.appointmentsService.getAppointmentDetails(appointment.id);
-    notifyListeners();
-    return _selectedAppointmentDetail;
+    try {
+      _selectedAppointmentDetail =
+          await this.appointmentsService.getAppointmentDetails(appointment.id);
+      notifyListeners();
+      return _selectedAppointmentDetail;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<Appointment> cancelAppointment(Appointment appointment) async {
-    _selectedAppointment =
-        await this.appointmentsService.cancelAppointment(appointment.id);
-    notifyListeners();
-    return _selectedAppointment;
+    try {
+      _selectedAppointment =
+          await this.appointmentsService.cancelAppointment(appointment.id);
+      notifyListeners();
+      return _selectedAppointment;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<WorkEstimate> acceptWorkEstimate(

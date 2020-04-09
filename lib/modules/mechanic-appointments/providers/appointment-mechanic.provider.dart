@@ -30,10 +30,14 @@ class AppointmentMechanicProvider with ChangeNotifier {
 
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
-    selectedAppointmentDetails =
-        await this.appointmentsService.getAppointmentDetails(appointment.id);
-    notifyListeners();
-    return selectedAppointmentDetails;
+    try {
+      selectedAppointmentDetails =
+          await this.appointmentsService.getAppointmentDetails(appointment.id);
+      notifyListeners();
+      return selectedAppointmentDetails;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<MechanicTask>> getStandardTasks(int appointmentId) async {

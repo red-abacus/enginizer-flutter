@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 class UserConsultantProvider with ChangeNotifier {
   final UserService _userService = inject<UserService>();
   final ProviderService _providerService = inject<ProviderService>();
-  final AppointmentsService _appointmentService = inject<AppointmentsService>();
 
   JwtUserDetails userDetails;
   ServiceProvider serviceProvider;
@@ -53,7 +51,7 @@ class UserConsultantProvider with ChangeNotifier {
   }
 
   Future<ServiceProviderItemsResponse> getProviderServices(int id) async {
-    this.serviceProviderItemsResponse = await _appointmentService.getServiceProviderItems(id);
+    this.serviceProviderItemsResponse = await _providerService.getProviderServiceItems(id);
     notifyListeners();
     return this.serviceProviderItemsResponse;
   }

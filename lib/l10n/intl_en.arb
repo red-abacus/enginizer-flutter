@@ -278,5 +278,7 @@
   "exception_get_car_details": "There was an error trying to get car details.",
   "exception_get_appointments": "There was an error trying to load your appointments.",
   "exception_get_services": "There was an error trying to load services.",
-  "exception_create_appointment": "There was an error in creating appointment process."
+  "exception_create_appointment": "There was an error in creating appointment process.",
+  "exception_get_appointment_details": "There was an error trying to get appointment details.",
+  "exception_cancel_appointment": "There was an error trying to cancel this appointment."
 }

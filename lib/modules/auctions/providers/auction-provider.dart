@@ -44,10 +44,14 @@ class AuctionProvider with ChangeNotifier {
   }
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
-    appointmentDetails =
-        await this.appointmentsService.getAppointmentDetails(appointmentId);
-    notifyListeners();
-    return appointmentDetails;
+    try {
+      appointmentDetails =
+          await this.appointmentsService.getAppointmentDetails(appointmentId);
+      notifyListeners();
+      return appointmentDetails;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<Bid>> loadBids(int auctionId) async {
@@ -67,9 +71,7 @@ class AuctionProvider with ChangeNotifier {
     this.filterSearchString = filterSearchString;
 
     bids = bidResponse.bids;
-    bids = bids
-        .where((bid) => bid.filtered(this.filterSearchString))
-        .toList();
+    bids = bids.where((bid) => bid.filtered(this.filterSearchString)).toList();
     notifyListeners();
     return bids;
   }

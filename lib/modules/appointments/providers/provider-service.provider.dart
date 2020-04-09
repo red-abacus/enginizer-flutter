@@ -11,7 +11,6 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
-import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
@@ -78,7 +77,7 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<ServiceProviderItem>> loadProviderServices(
       ServiceProvider serviceProvider) async {
     var response =
-        await appointmentsService.getServiceProviderItems(serviceProvider.id);
+        await providerService.getProviderServiceItems(serviceProvider.id);
     serviceProviderItems = response.items;
     notifyListeners();
     return serviceProviderItems;

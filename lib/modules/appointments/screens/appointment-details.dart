@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/enum/appointment.details.tabbar.state.d
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -10,6 +11,7 @@ import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class AppointmentDetails extends StatefulWidget {
 }
 
 class AppointmentDetailsState extends State<AppointmentDetails> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
   var _initDone = false;
@@ -39,7 +42,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_appointmentProvider == null ||
+    if (_appointmentProvider != null &&
         _appointmentProvider.selectedAppointment == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
@@ -49,6 +52,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
     return Consumer<AppointmentProvider>(
         builder: (context, appointmentProvider, _) => Scaffold(
+              key: _scaffoldKey,
               appBar: AppBar(
                 title: Text(
                   _appointmentProvider.selectedAppointment.name,
@@ -67,20 +71,42 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     if (!_initDone) {
       _appointmentProvider = Provider.of<AppointmentProvider>(context);
 
-      setState(() {
-        _isLoading = true;
-      });
+      if (_appointmentProvider.selectedAppointment != null) {
+        setState(() {
+          _isLoading = true;
+        });
 
-      _appointmentProvider
+        _loadData();
+      }
+    }
+
+    _initDone = true;
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await _appointmentProvider
           .getAppointmentDetails(_appointmentProvider.selectedAppointment)
           .then((_) {
         setState(() {
           _isLoading = false;
         });
       });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_appointment_details,
+            _scaffoldKey.currentState);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
-    _initDone = true;
-    super.didChangeDependencies();
   }
 
   Widget _content() {
@@ -189,13 +215,26 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     return '';
   }
 
-  _cancelAppointment(Appointment appointment) {
-    setState(() {
-      _appointmentProvider.cancelAppointment(appointment).then((appointment) {
-        Provider.of<AppointmentsProvider>(context)
-            .refreshAppointment(appointment);
+  _cancelAppointment(Appointment appointment) async {
+    try {
+      await _appointmentProvider
+          .cancelAppointment(appointment)
+          .then((appointment) {
+        setState(() {
+          Provider.of<AppointmentsProvider>(context)
+              .refreshAppointment(appointment);
+        });
       });
-    });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.CANCEL_APPOINTMENT_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_cancel_appointment,
+            _scaffoldKey.currentState);
+      }
+    }
   }
 
   _seeEstimate() {
