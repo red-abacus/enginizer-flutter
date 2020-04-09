@@ -4,6 +4,7 @@ import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class UserDetails extends StatefulWidget {
@@ -65,15 +66,19 @@ class UserDetailsState extends State<UserDetails> {
       child: SingleChildScrollView(
         key: _formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _avatarContainer(),
-            _nameContainer(),
-            _emailContainer(),
-            _saveButtonContainer(),
-            _currentPasswordContainer(),
-            _newPasswordContainer(),
-            _confirmPasswordContainer(),
-            _savePasswordButtonContainer(),
+            _detailsContainer(),
+            _cardContainer(),
+            _changePasswordContainer()
+//            _nameContainer(),
+//            _emailContainer(),
+//            _saveButtonContainer(),
+//            _currentPasswordContainer(),
+//            _newPasswordContainer(),
+//            _confirmPasswordContainer(),
+//            _savePasswordButtonContainer(),
           ],
         ),
       ),
@@ -81,12 +86,189 @@ class UserDetailsState extends State<UserDetails> {
   }
 
   _avatarContainer() {
-    return Center(
-      child: Container(
-        width: 140,
-        height: 140,
-        margin: EdgeInsets.only(top: 20),
-        child: CircleAvatar(),
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          Container(
+            color: red,
+            height: 90,
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Center(
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    child: CircleAvatar(),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(
+                  userProvider.name,
+                  style: TextHelper.customTextStyle(
+                      null, gray3, FontWeight.bold, 20),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  _detailsContainer() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+      child: Column(
+        children: <Widget>[
+          _getEmailDetails(Icons.email, userProvider.email),
+          _getEmailDetails(Icons.pin_drop,
+              'Str. Memorandumului, nr. 7, bl. H, sc. 2, ap. 6, Cluj-Napoca'),
+          _getEmailDetails(Icons.perm_identity, 'Persoana fizica'),
+        ],
+      ),
+    );
+  }
+
+  _cardContainer() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            '${S.of(context).user_profile_payment_method}:',
+            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 15),
+          ),
+          _cardDetailsContainer(),
+        ],
+      ),
+    );
+  }
+
+  _cardDetailsContainer() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Material(
+        elevation: 2,
+        borderRadius: new BorderRadius.circular(10.0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(10),
+                  width: 60,
+                  height: 60,
+                  child: SvgPicture.asset(
+                    'assets/images/icons/visa.svg',
+                    semanticsLabel: 'Visa Icon',
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Visa •••• 0033',
+                          style: TextHelper.customTextStyle(
+                              null, gray3, FontWeight.bold, 13),
+                        ),
+                        Text(
+                          '${S.of(context).user_profile_expires_in} Ianuarie / 2022',
+                          maxLines: 3,
+                          style: TextHelper.customTextStyle(
+                              null, gray3, FontWeight.bold, 13),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Opacity(
+              opacity: 0.2,
+              child: Container(
+                height: 1,
+                color: gray3,
+              ),
+            ),
+            Container(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FlatButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      child: Text(
+                        S.of(context).user_profile_add_new_card,
+                        style: TextHelper.customTextStyle(
+                            null, gray3, FontWeight.bold, 13),
+                      ),
+                      onPressed: () {},
+                    ),
+                    FlatButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      child: Text(
+                        S.of(context).general_delete,
+                        style: TextHelper.customTextStyle(
+                            null, gray3, FontWeight.bold, 13),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ]),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  _getEmailDetails(dynamic icon, String title) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            icon,
+            color: gray3,
+            size: 24.0,
+            semanticLabel: 'Selected car check',
+          ),
+          Flexible(
+            child: Container(
+              margin: EdgeInsets.only(left: 30),
+              child: Text(
+                title,
+                style: TextHelper.customTextStyle(
+                    null, gray3, FontWeight.bold, 15),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _changePasswordContainer() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: Align(
+        alignment: Alignment.center,
+        child: FlatButton(
+          child: Text(
+            S.of(context).user_profile_change_password,
+            style: TextHelper.customTextStyle(
+                null, Colors.blue, FontWeight.bold, 16),
+          ),
+          onPressed: () {},
+        ),
       ),
     );
   }
@@ -205,16 +387,16 @@ class UserDetailsState extends State<UserDetails> {
               ),
             ),
             Expanded(
-              flex: 6,
+                flex: 6,
                 child: Container(
-              margin: EdgeInsets.only(left: 20),
-              child: TextFormField(
-                obscureText: true,
-                initialValue: 'password',
-                style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
-              ),
-            ))
+                  margin: EdgeInsets.only(left: 20),
+                  child: TextFormField(
+                    obscureText: true,
+                    initialValue: 'password',
+                    style: TextHelper.customTextStyle(
+                        null, black_text, FontWeight.bold, 16),
+                  ),
+                ))
           ],
         ));
   }
@@ -238,16 +420,16 @@ class UserDetailsState extends State<UserDetails> {
               ),
             ),
             Expanded(
-              flex: 6,
+                flex: 6,
                 child: Container(
-              margin: EdgeInsets.only(left: 20),
-              child: TextFormField(
-                obscureText: true,
-                initialValue: 'password',
-                style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
-              ),
-            ))
+                  margin: EdgeInsets.only(left: 20),
+                  child: TextFormField(
+                    obscureText: true,
+                    initialValue: 'password',
+                    style: TextHelper.customTextStyle(
+                        null, black_text, FontWeight.bold, 16),
+                  ),
+                ))
           ],
         ));
   }
@@ -271,16 +453,16 @@ class UserDetailsState extends State<UserDetails> {
               ),
             ),
             Expanded(
-              flex: 6,
+                flex: 6,
                 child: Container(
-              margin: EdgeInsets.only(left: 20),
-              child: TextFormField(
-                obscureText: true,
-                initialValue: 'password',
-                style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
-              ),
-            ))
+                  margin: EdgeInsets.only(left: 20),
+                  child: TextFormField(
+                    obscureText: true,
+                    initialValue: 'password',
+                    style: TextHelper.customTextStyle(
+                        null, black_text, FontWeight.bold, 16),
+                  ),
+                ))
           ],
         ));
   }

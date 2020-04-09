@@ -1,5 +1,6 @@
 import 'package:app/modules/authentication/models/user-provider.model.dart';
 import 'package:app/modules/authentication/models/user-role.model.dart';
+import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 
 class JwtUserDetails {
   int id;
@@ -22,6 +23,7 @@ class JwtUserDetails {
       this.active});
 
   factory JwtUserDetails.fromJson(Map<String, dynamic> json) {
+    print('user details json $json');
     return JwtUserDetails(
       id: json['id'],
       name: json['name'] != null ? json['name'] : "",
