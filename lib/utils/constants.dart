@@ -29,8 +29,10 @@ const Color gray3 = Color.fromRGBO(33, 33, 33, 1);
 const Color gray_80 = Color.fromRGBO(70, 70, 72, 0.4);
 const Color gray_20 = Color.fromRGBO(70, 70, 72, 0.2);
 const Color gray_10 = Color.fromRGBO(120, 120, 120, 0.1);
+const Color grey_graph = Color.fromRGBO(188, 193, 195, 1.0);
 
 const Color red = Color.fromRGBO(153, 0, 0, 1);
+const Color red_graph = Color.fromRGBO(215, 178, 178, 1.0);
 
 const Color dark_gray = Color.fromRGBO(169, 169, 169, 1);
 const Color switch_dark_gray = Color.fromRGBO(70, 70, 72, 1);

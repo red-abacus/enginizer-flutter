@@ -23,7 +23,6 @@ class JwtUserDetails {
       this.active});
 
   factory JwtUserDetails.fromJson(Map<String, dynamic> json) {
-    print('user details json $json');
     return JwtUserDetails(
       id: json['id'],
       name: json['name'] != null ? json['name'] : "",

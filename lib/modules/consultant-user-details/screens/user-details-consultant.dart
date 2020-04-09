@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/widgets/scheduler.widget.dart';
-import 'package:app/modules/authentication/providers/user.provider.dart';
+import 'package:app/modules/consultant-user-details/enums/user-details-tabbar-state-consultant.enum.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
-import 'package:app/modules/consultant-user-details/widgets/user-details-services-consultant.dart';
-import 'package:app/modules/consultant-user-details/widgets/user-details-timetable-consultant.dart';
+import 'package:app/modules/consultant-user-details/widgets/user-details-graph-consultant.widget.dart';
+import 'package:app/modules/consultant-user-details/widgets/user-details-index-consultant.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,6 +29,8 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
   var _isLoading = false;
 
   UserConsultantProvider userConsultantProvider;
+  UserDetailsTabbarStateConsultant _currentState =
+      UserDetailsTabbarStateConsultant.GRAPH;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -49,31 +50,93 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      setState(() {
-        _isLoading = true;
-      });
+//      setState(() {
+//        _isLoading = true;
+//      });
 
       userConsultantProvider = Provider.of<UserConsultantProvider>(context);
-      userConsultantProvider.getUserDetails().then((_) {
-        userConsultantProvider
-            .getServiceProvider(
-                userConsultantProvider.userDetails.userProvider.id)
-            .then((_) {
-          userConsultantProvider
-              .getProviderServices(
-                  userConsultantProvider.userDetails.userProvider.id)
-              .then((_) {
-            userConsultantProvider.initialiseParams();
-            setState(() {
-              _isLoading = false;
-            });
-          });
-        });
-      });
+//      userConsultantProvider.getUserDetails().then((_) {
+//        userConsultantProvider
+//            .getServiceProvider(
+//                userConsultantProvider.userDetails.userProvider.id)
+//            .then((_) {
+//          userConsultantProvider
+//              .getProviderServices(
+//                  userConsultantProvider.userDetails.userProvider.id)
+//              .then((_) {
+//            userConsultantProvider.initialiseParams();
+//            setState(() {
+//              _isLoading = false;
+//            });
+//          });
+//        });
+//      });
     }
 
     _initDone = true;
     super.didChangeDependencies();
+  }
+
+  _avatarContainer() {
+    return Container(
+      color: red,
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 120,
+            height: 120,
+            margin: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+            child: InkWell(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              onTap: () => showCameraDialog(),
+              child: CircleAvatar(
+                child: Image.network(
+                  '${userConsultantProvider.serviceProvider?.image}',
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    userConsultantProvider.userDetails.name,
+                    style: TextHelper.customTextStyle(
+                        null, Colors.white, FontWeight.bold, 16),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Text(
+                      userConsultantProvider.userDetails.email,
+                      textAlign: TextAlign.center,
+                      style: TextHelper.customTextStyle(
+                          null, Colors.white, FontWeight.normal, 14),
+                    ),
+                  ),
+                  Container(
+                    child: FlatButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      child: Text(
+                        S.of(context).user_profile_change_password,
+                        style: TextHelper.customTextStyle(null,
+                            Colors.lightBlueAccent, FontWeight.normal, 14),
+                      ),
+                      onPressed: () {},
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   _userDetailsContainer() {
@@ -86,18 +149,22 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               _avatarContainer(),
-              _nameContainer(),
-              _fiscalNameContainer(),
-              _registrationNumberContainer(),
-              _vtaPayerContainer(),
-              _cuiContainer(),
-              _saveButtonContainer(),
-              UserDetailsTimetableConsultant(
-                  schedules: userConsultantProvider
-                      .serviceProvider.userProviderSchedules),
-              UserDetailsServicesConsultant(
-                  response:
-                      userConsultantProvider.serviceProviderItemsResponse),
+              Container(
+                child: _buildTabBar(),
+              ),
+              _getContent(),
+//              _nameContainer(),
+//              _fiscalNameContainer(),
+//              _registrationNumberContainer(),
+//              _vtaPayerContainer(),
+//              _cuiContainer(),
+//              _saveButtonContainer(),
+//              UserDetailsTimetableConsultant(
+//                  schedules: userConsultantProvider
+//                      .serviceProvider.userProviderSchedules),
+//              UserDetailsServicesConsultant(
+//                  response:
+//                      userConsultantProvider.serviceProviderItemsResponse),
             ],
           ),
         ),
@@ -105,25 +172,62 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
     );
   }
 
-  _avatarContainer() {
-    return Center(
-      child: Container(
-        width: 140,
-        height: 140,
-        margin: EdgeInsets.only(top: 20),
-        child: InkWell(
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: () => showCameraDialog(),
-          child: CircleAvatar(
-            child: Image.network(
-              '${userConsultantProvider.serviceProvider?.image}',
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
+  _buildTabBar() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      height: 40,
+      child: new Row(
+        children: <Widget>[
+          _buildTabBarButton(UserDetailsTabbarStateConsultant.GRAPH),
+          _buildTabBarButton(UserDetailsTabbarStateConsultant.INDEX)
+        ],
       ),
     );
+  }
+
+  _buildTabBarButton(UserDetailsTabbarStateConsultant state) {
+    Color bottomColor = (_currentState == state) ? red : gray_80;
+    return Expanded(
+      flex: 1,
+      child: Container(
+          child: Center(
+            child: FlatButton(
+              child: Text(
+                _stateTitle(state, context),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: "Lato",
+                    color: red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12),
+              ),
+              onPressed: () {
+                setState(() {
+                  _currentState = state;
+                });
+              },
+            ),
+          ),
+          decoration: BoxDecoration(
+              border: Border(
+            bottom: BorderSide(width: 1.0, color: bottomColor),
+          ))),
+    );
+  }
+
+  _stateTitle(UserDetailsTabbarStateConsultant state, BuildContext context) {
+    switch (state) {
+      case UserDetailsTabbarStateConsultant.GRAPH:
+        return S.of(context).user_profile_consultant_graph;
+      case UserDetailsTabbarStateConsultant.INDEX:
+        return S.of(context).user_profile_index;
+    }
+
+    return '';
+  }
+
+  _getContent() {
+    return _currentState == UserDetailsTabbarStateConsultant.GRAPH ? UserDetailsGraphConsultantWidget() : UserDetailsIndexConsultantWidget();
   }
 
   _nameContainer() {
