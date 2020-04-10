@@ -150,16 +150,15 @@ class Appointment {
     switch (getState()) {
       case AppointmentStatusState.SUBMITTED:
         return gray;
-      case AppointmentStatusState.IN_WORK:
-        return yellow;
       case AppointmentStatusState.CANCELED:
         return red;
       case AppointmentStatusState.DONE:
         return green;
+      case AppointmentStatusState.NONE:
+        return gray2;
       default:
+        return yellow;
     }
-
-    return gray2;
   }
 
   String assetName() {

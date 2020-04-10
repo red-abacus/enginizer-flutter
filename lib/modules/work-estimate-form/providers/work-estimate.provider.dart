@@ -146,7 +146,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
         for (IssueSection tempIssueSection in sections) {
           if (tempIssueSection == issueSection) {
-            tempIssueSection.items.add(issueItem);
+            tempIssueSection.items.insert(0, issueItem);
             break;
           }
         }
