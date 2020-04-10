@@ -3,7 +3,6 @@ import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.
 import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-items.widget.dart';
-import 'package:app/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +19,6 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   final Function selectIssueSection;
   final Function showSectionName;
   final EstimatorMode estimatorMode;
-  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateSectionWidget(
       {this.issue,
@@ -30,8 +28,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       this.removeIssueItem,
       this.selectIssueSection,
       this.showSectionName,
-      this.estimatorMode,
-      this.scaffoldKey});
+      this.estimatorMode});
 
   @override
   Widget build(BuildContext context) {
@@ -142,8 +139,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
             issueSection: issueSection,
             addIssueItem: addIssueItem,
             removeIssueItem: removeIssueItem,
-            estimatorMode: estimatorMode,
-            scaffoldKey: scaffoldKey),
+            estimatorMode: estimatorMode),
       );
     } else {
       return Container();

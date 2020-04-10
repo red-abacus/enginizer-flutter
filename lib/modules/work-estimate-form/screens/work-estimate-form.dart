@@ -18,12 +18,11 @@ import 'package:app/modules/work-estimate-form/widgets/work-estimate-date.widget
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class WorkEstimateForm extends StatefulWidget {
@@ -43,7 +42,6 @@ class WorkEstimateForm extends StatefulWidget {
 }
 
 class _WorkEstimateFormState extends State<WorkEstimateForm> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
   bool _initDone = false;
@@ -59,7 +57,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   Widget build(BuildContext context) {
     return Consumer<AppointmentConsultantProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
-        key: _scaffoldKey,
         appBar: AppBar(
           iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
         ),
@@ -72,11 +69,12 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
+      _workEstimateProvider = Provider.of<WorkEstimateProvider>(context);
+
       setState(() {
         _isLoading = true;
       });
 
-      _workEstimateProvider = Provider.of<WorkEstimateProvider>(context);
       _loadData();
       _initDone = true;
     }
@@ -94,10 +92,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         await _workEstimateProvider
             .loadServiceProviderSchedule(
                 _workEstimateProvider.serviceProviderId, startDate, endDate)
-            .then((_) {
+            .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
               widget.mode == EstimatorMode.Edit) {
-            _workEstimateProvider
+            await _workEstimateProvider
                 .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
                 .then((workEstimateDetails) {
               if (workEstimateDetails != null) {
@@ -119,16 +117,27 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_provider_timetable,
-            _scaffoldKey.currentState);
+            context);
       } else if (error
           .toString()
           .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_item_types, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_item_types, context);
+      } else if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_details,
+            context);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -199,8 +208,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               removeIssueItem: _removeIssueItem,
               selectIssueSection: _selectIssueSection,
               showSectionName: _showSectionName,
-              estimatorMode: widget.mode,
-              scaffoldKey: _scaffoldKey,
+              estimatorMode: widget.mode
             )),
       );
     });
@@ -407,10 +415,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       if (error
           .toString()
           .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_add_new_work_estimate,
-            _scaffoldKey.currentState);
+            context);
       }
     }
   }

@@ -1,6 +1,5 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
-import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/bid-status.enum.dart';
@@ -14,7 +13,7 @@ import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,6 @@ class BidDetails extends StatefulWidget {
 }
 
 class BidDetailsState extends State<BidDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
   var _initDone = false;
@@ -49,7 +47,6 @@ class BidDetailsState extends State<BidDetails> {
 
     return Consumer<AuctionProvider>(
         builder: (context, auctionProvider, _) => Scaffold(
-            key: _scaffoldKey,
             appBar: AppBar(
               iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
             ),
@@ -98,15 +95,15 @@ class BidDetailsState extends State<BidDetails> {
       });
     } catch (error) {
       if (error.toString().contains(BidsService.GET_BID_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_bid_details, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_bid_details, context);
       } else if (error
           .toString()
           .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_work_estimate_details,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {
@@ -457,8 +454,8 @@ class BidDetailsState extends State<BidDetails> {
       });
     } catch (error) {
       if (error.toString().contains(BidsService.REJECT_BID_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_reject_bid, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_reject_bid, context);
       }
     }
   }
@@ -512,8 +509,8 @@ class BidDetailsState extends State<BidDetails> {
       });
     } catch (error) {
       if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_accept_bid, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_accept_bid, context);
       }
     }
   }

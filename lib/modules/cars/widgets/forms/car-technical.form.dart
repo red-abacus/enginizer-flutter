@@ -7,17 +7,14 @@ import 'package:app/modules/cars/models/car-variant.model.dart';
 import 'package:app/modules/cars/models/car-year.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
-import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/locale.manager.dart';
-import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarTechnicalForm extends StatefulWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey;
-
-  CarTechnicalForm({Key key, this.scaffoldKey}) : super(key: key);
+  CarTechnicalForm({Key key}) : super(key: key);
 
   @override
   CarTechnicalFormState createState() => CarTechnicalFormState();
@@ -76,17 +73,17 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
             if (error
                 .toString()
                 .contains(CarMakeService.LOAD_CAR_YEAR_FAILED_EXCEPTION)) {
-              SnackBarManager.showSnackBar(
+              FlushBarHelper.showFlushBar(
                   S.of(context).general_error,
                   S.of(context).exception_load_car_years,
-                  widget.scaffoldKey.currentState);
+                  context);
             } else if (error
                 .toString()
                 .contains(CarMakeService.LOAD_CAR_VARIANTS_FAILED_EXCEPTION)) {
-              SnackBarManager.showSnackBar(
+              FlushBarHelper.showFlushBar(
                   S.of(context).general_error,
                   S.of(context).exception_load_car_variants,
-                  widget.scaffoldKey.currentState);
+                  context);
             }
 
             setState(() {
@@ -127,10 +124,10 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
                 if (error
                     .toString()
                     .contains(CarMakeService.LOAD_CAR_FUEL_FAILED_EXCEPTION)) {
-                  SnackBarManager.showSnackBar(
+                  FlushBarHelper.showFlushBar(
                       S.of(context).general_error,
                       S.of(context).exception_load_car_fuel_types,
-                      widget.scaffoldKey.currentState);
+                      context);
 
                   setState(() {
                     _carsMakeProvider.carTechnicalFormState['year'] =

@@ -4,7 +4,7 @@ import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/utils/date_utils.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:app/modules/appointments/widgets/scheduler.widget.dart';
 import 'package:flutter/widgets.dart';
@@ -12,9 +12,8 @@ import 'package:provider/provider.dart';
 
 class AppointmentDateTimeForm extends StatefulWidget {
   List<ServiceProviderSchedule> providerSchedules;
-  GlobalKey<ScaffoldState> scaffoldKey;
 
-  AppointmentDateTimeForm({Key key, this.providerSchedules, this.scaffoldKey})
+  AppointmentDateTimeForm({Key key, this.providerSchedules})
       : super(key: key);
 
   @override
@@ -87,10 +86,10 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_provider_timetable,
-            widget.scaffoldKey.currentState);
+            context);
       }
 
       setState(() {

@@ -12,7 +12,7 @@ import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,6 @@ class AppointmentDetailsConsultant extends StatefulWidget {
 
 class AppointmentDetailsConsultantState
     extends State<AppointmentDetailsConsultant> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   AppointmentConsultantProvider _appointmentConsultantProvider;
 
   String route;
@@ -56,7 +55,6 @@ class AppointmentDetailsConsultantState
 
     return Consumer<AppointmentConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
-            key: _scaffoldKey,
             appBar: AppBar(
               title: Text(
                 _appointmentConsultantProvider.selectedAppointment?.name,
@@ -104,17 +102,15 @@ class AppointmentDetailsConsultantState
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointment_details,
-            _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointment_details, context);
       } else if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_provider_service_items,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {
@@ -256,10 +252,10 @@ class AppointmentDetailsConsultantState
       if (error
           .toString()
           .contains(AppointmentsService.CANCEL_APPOINTMENT_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_cancel_appointment,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {

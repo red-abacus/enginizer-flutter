@@ -25,12 +25,10 @@ class UserDetailsState extends State<UserDetails> {
   UserProvider userProvider;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
       builder: (context, userProvider, _) => Scaffold(
-        key: scaffoldKey,
         body: _isLoading == true
             ? Center(
                 child: CircularProgressIndicator(),

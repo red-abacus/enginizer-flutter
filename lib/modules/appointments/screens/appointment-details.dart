@@ -12,7 +12,7 @@ import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,6 @@ class AppointmentDetails extends StatefulWidget {
 }
 
 class AppointmentDetailsState extends State<AppointmentDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
   var _initDone = false;
@@ -53,7 +52,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
     return Consumer<AppointmentProvider>(
         builder: (context, appointmentProvider, _) => Scaffold(
-              key: _scaffoldKey,
+
               appBar: AppBar(
                 title: Text(
                   _appointmentProvider.selectedAppointment.name,
@@ -98,10 +97,10 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_appointment_details,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {
@@ -230,10 +229,10 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.CANCEL_APPOINTMENT_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_cancel_appointment,
-            _scaffoldKey.currentState);
+            context);
       }
     }
   }
@@ -278,10 +277,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           if (error
               .toString()
               .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
-            SnackBarManager.showSnackBar(
-                S.of(context).general_error,
-                S.of(context).exception_accept_work_estimate,
-                _scaffoldKey.currentState);
+            FlushBarHelper.showFlushBar(S.of(context).general_error,
+                S.of(context).exception_accept_work_estimate, context);
           }
         }
       }

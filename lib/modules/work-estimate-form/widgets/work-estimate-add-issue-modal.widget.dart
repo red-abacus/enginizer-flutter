@@ -6,7 +6,7 @@ import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +14,9 @@ import 'package:provider/provider.dart';
 class WorkEstimateAddIssueModalWidget extends StatefulWidget {
   final Function addIssueItem;
   final IssueSection issueSection;
-  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateAddIssueModalWidget(
-      {Key key, this.addIssueItem, this.issueSection, this.scaffoldKey})
+      {Key key, this.addIssueItem, this.issueSection})
       : super(key: key);
 
   @override
@@ -83,10 +82,10 @@ class WorkEstimateAddIssueModalWidgetState
                         } catch (error) {
                           if (error.toString().contains(
                               ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
-                            SnackBarManager.showSnackBar(
+                            FlushBarHelper.showFlushBar(
                                 S.of(context).general_error,
                                 S.of(context).exception_get_car_fuel,
-                                widget.scaffoldKey.currentState);
+                                context);
                           }
                         }
                       },
@@ -137,10 +136,10 @@ class WorkEstimateAddIssueModalWidgetState
                           } catch (error) {
                             if (error.toString().contains(
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
-                              SnackBarManager.showSnackBar(
+                              FlushBarHelper.showFlushBar(
                                   S.of(context).general_error,
                                   S.of(context).exception_get_car_fuel,
-                                  widget.scaffoldKey.currentState);
+                                  context);
                             }
                           }
                         }),
@@ -203,10 +202,10 @@ class WorkEstimateAddIssueModalWidgetState
                           } catch (error) {
                             if (error.toString().contains(
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
-                              SnackBarManager.showSnackBar(
+                              FlushBarHelper.showFlushBar(
                                   S.of(context).general_error,
                                   S.of(context).exception_get_car_fuel,
-                                  widget.scaffoldKey.currentState);
+                                  context);
                             }
                           }
                         }),

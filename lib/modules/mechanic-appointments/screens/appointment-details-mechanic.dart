@@ -1,13 +1,14 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-car-details.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +25,6 @@ class AppointmentDetailsMechanic extends StatefulWidget {
 
 class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     with SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
 
   var _initDone = false;
@@ -60,7 +59,6 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
     return Consumer<AppointmentMechanicProvider>(
       builder: (context, appointmentMechanicProvider, _) => Scaffold(
-          key: _scaffoldKey,
           appBar: AppBar(
             iconTheme: IconThemeData(color: Theme.of(context).cardColor),
             bottom: TabBar(
@@ -85,7 +83,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   void didChangeDependencies() {
     if (!_initDone) {
       appointmentMechanicProvider =
-          Provider.of<AppointmentMechanicProvider>(context, listen: false);
+          Provider.of<AppointmentMechanicProvider>(context);
 
       if (appointmentMechanicProvider.selectedAppointment != null) {
         _loadData();
@@ -105,11 +103,11 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       await appointmentMechanicProvider
           .getAppointmentDetails(
               appointmentMechanicProvider.selectedAppointment)
-          .then((_) {
-        appointmentMechanicProvider
+          .then((_) async {
+        await appointmentMechanicProvider
             .getWorkEstimateDetails(appointmentMechanicProvider
                 .selectedAppointmentDetails.workEstimateId)
-            .then((_) {
+            .then((_) async {
           appointmentMechanicProvider
               .getStandardTasks(
                   appointmentMechanicProvider.selectedAppointment.id)
@@ -123,11 +121,17 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
         });
       });
     } catch (error) {
-      if (error.toString().contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointment_details,
-            _scaffoldKey.currentState);
+      print(error);
+      if (error
+          .toString()
+          .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointment_details, context);
+      } else if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_details, context);
       }
 
       setState(() {

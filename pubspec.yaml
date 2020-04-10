@@ -45,6 +45,7 @@ dependencies:
   intl: ^0.16.0
   flutter_speed_dial: ^1.2.5
   firebase_messaging: ^6.0.13
+  flushbar: 1.6.0
 
 dev_dependencies:
   flutter_test:

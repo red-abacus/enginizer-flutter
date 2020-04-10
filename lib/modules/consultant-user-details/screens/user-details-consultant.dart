@@ -1,14 +1,13 @@
 import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/consultant-user-details/enums/user-details-tabbar-state-consultant.enum.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-graph-consultant.widget.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-index-consultant.widget.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +34,9 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
   UserDetailsTabbarStateConsultant _currentState =
       UserDetailsTabbarStateConsultant.GRAPH;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   Widget build(BuildContext context) {
     return Consumer<UserConsultantProvider>(
       builder: (context, userProvider, _) => Scaffold(
-        key: _scaffoldKey,
         body: _isLoading == true
             ? Center(
                 child: CircularProgressIndicator(),
@@ -88,17 +84,17 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_provider_details,
-            _scaffoldKey.currentState);
+            context);
       } else if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_provider_service_items,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {
@@ -471,10 +467,10 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
       if (error
           .toString()
           .contains(ProviderService.UPDATE_PROVIDER_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_update_provider_details,
-            _scaffoldKey.currentState);
+            context);
       }
     }
   }

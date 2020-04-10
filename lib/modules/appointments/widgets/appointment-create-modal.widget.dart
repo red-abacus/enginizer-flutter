@@ -9,7 +9,7 @@ import 'package:app/modules/appointments/widgets/forms/appointment-create-servic
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,8 +67,6 @@ class AppointmentCreateModal extends StatefulWidget {
 }
 
 class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   static const FORM_HEIGHT_PERCENTAGE = .58;
 
   int _currentStepIndex = 0;
@@ -97,7 +95,6 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     return FractionallySizedBox(
         heightFactor: .8,
         child: Scaffold(
-          key: _scaffoldKey,
           body: Container(
             child: ClipRRect(
               borderRadius: new BorderRadius.circular(5.0),
@@ -149,8 +146,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
       });
     } catch (error) {
       if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_services, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_services, context);
       }
 
       setState(() {
@@ -241,7 +238,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
                 ? Text(S.of(context).appointment_create_step4)
                 : Text(''),
             content: AppointmentDateTimeForm(
-                key: appointmentDateTimeStateKey, scaffoldKey: _scaffoldKey),
+                key: appointmentDateTimeStateKey),
             state: widget._stepStateData[4]['state'])
       ];
     } else {
@@ -278,7 +275,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
                 ? Text(S.of(context).appointment_create_step4)
                 : Text(''),
             content: AppointmentDateTimeForm(
-                key: appointmentDateTimeStateKey, scaffoldKey: _scaffoldKey),
+                key: appointmentDateTimeStateKey),
             state: widget._stepStateData[3]['state'])
       ];
     }
@@ -361,8 +358,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         if (error
             .toString()
             .contains(ProviderService.GET_PROVIDERS_EXCEPTION)) {
-          SnackBarManager.showSnackBar(S.of(context).general_error,
-              S.of(context).exception_get_providers, _scaffoldKey.currentState);
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_providers, context);
         }
       }
 

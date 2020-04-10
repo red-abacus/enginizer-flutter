@@ -2,7 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/details/service-provider/service-details-widget.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,6 @@ class ServiceDetailsModal extends StatefulWidget {
 }
 
 class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _initDone = false;
   var _isLoading = false;
 
@@ -29,14 +28,10 @@ class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
                   topLeft: const Radius.circular(20.0),
                   topRight: const Radius.circular(20.0))),
           child: Theme(
-            data: ThemeData(
-                accentColor: Theme.of(context).primaryColor,
-                primaryColor: Theme.of(context).primaryColor),
-            child: Scaffold(
-              key: _scaffoldKey,
-              body: _buildContent(context, _isLoading),
-            ),
-          ),
+              data: ThemeData(
+                  accentColor: Theme.of(context).primaryColor,
+                  primaryColor: Theme.of(context).primaryColor),
+              child: _buildContent(context, _isLoading)),
         ),
       ),
     );
@@ -92,17 +87,13 @@ class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_details,
-            _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_details, context);
       } else if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_service_items,
-            _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_service_items, context);
       }
 
       setState(() {

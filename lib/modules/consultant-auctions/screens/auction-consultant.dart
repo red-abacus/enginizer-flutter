@@ -4,7 +4,7 @@ import 'package:app/modules/consultant-auctions/providers/auction-consultant.pro
 import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:app/modules/consultant-auctions/widgets/auction-consultant.widget.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,6 @@ class AuctionConsultant extends StatefulWidget {
 }
 
 class AuctionConsultantState extends State<AuctionConsultant> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
 
   var _initDone = false;
@@ -44,7 +42,6 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
     return Consumer<AuctionConsultantProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
-            key: _scaffoldKey,
             appBar: AppBar(
               title: _titleText(),
               iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
@@ -83,10 +80,10 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       if (error
           .toString()
           .contains(AuctionsService.GET_AUCTION_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_auction_details,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {
@@ -136,8 +133,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       });
     } catch (error) {
       if (error.toString().contains(AuctionsService.CREATE_BID_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_create_bid, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_create_bid, context);
       }
     }
   }

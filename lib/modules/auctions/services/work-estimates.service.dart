@@ -67,7 +67,6 @@ class WorkEstimatesService {
   Future<WorkEstimateDetails> getWorkEstimateDetails(int id) async {
     try {
       final response = await _dio.get('$_WORK_ESTIMATES_PATH/$id');
-
       if (response.statusCode < 300) {
         return WorkEstimateDetails.fromJson(response.data);
       } else {

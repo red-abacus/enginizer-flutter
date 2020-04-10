@@ -9,7 +9,7 @@ import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +28,6 @@ class CarDetails extends StatefulWidget {
 }
 
 class CarDetailsState extends State<CarDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Car model;
   File uploadImage;
   CarProvider carProvider;
@@ -62,15 +61,15 @@ class CarDetailsState extends State<CarDetails> {
       });
     } catch (error) {
       if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_car_fuel, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_car_fuel, context);
 
         setState(() {
           _isLoading = false;
         });
       } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_car_details, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_car_details, context);
       }
     }
   }
@@ -78,7 +77,6 @@ class CarDetailsState extends State<CarDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('${carProvider.selectedCar?.brand?.name}'),
         iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
@@ -313,8 +311,7 @@ class CarDetailsState extends State<CarDetails> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return CarFuelConsumptionForm(
-                createFuelConsumption: _createCarConsumption,
-                scaffoldKey: _scaffoldKey);
+                createFuelConsumption: _createCarConsumption);
           });
         });
   }
@@ -389,8 +386,8 @@ class CarDetailsState extends State<CarDetails> {
       });
     } catch (error) {
       if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_car_fuel, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_car_fuel, context);
       }
     }
   }

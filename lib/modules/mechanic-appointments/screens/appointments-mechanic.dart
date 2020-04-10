@@ -5,7 +5,7 @@ import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +23,6 @@ class AppointmentsMechanic extends StatefulWidget {
 }
 
 class AppointmentsMechanicState extends State<AppointmentsMechanic> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -35,7 +33,6 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
   Widget build(BuildContext context) {
     return Consumer<AppointmentsMechanicProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
-        key: _scaffoldKey,
         body: Center(
           child: Container(
             child: _renderAppointments(
@@ -70,10 +67,10 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
       });
     } catch (error) {
       if (error.toString().contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_appointments,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {

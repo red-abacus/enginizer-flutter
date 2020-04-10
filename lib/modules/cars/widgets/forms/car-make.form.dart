@@ -1,22 +1,17 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
-import 'package:app/modules/cars/models/car-fuel.model.dart';
 import 'package:app/modules/cars/models/car-model.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
-import 'package:app/modules/cars/models/car-type.model.dart';
-import 'package:app/modules/cars/models/car-year.model.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/utils/locale.manager.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarMakeForm extends StatefulWidget {
-  GlobalKey<ScaffoldState> scaffoldKey;
-
-  CarMakeForm({Key key, this.scaffoldKey}) : super(key: key);
+  CarMakeForm({Key key}) : super(key: key);
 
   @override
   CarMakeFormState createState() => CarMakeFormState();
@@ -81,10 +76,10 @@ class CarMakeFormState extends State<CarMakeForm> {
           if (error
               .toString()
               .contains(CarMakeService.LOAD_CAR_MODELS_FAILED_EXCEPTION)) {
-            SnackBarManager.showSnackBar(
+            FlushBarHelper.showFlushBar(
                 S.of(context).general_error,
                 S.of(context).exception_load_car_models,
-                widget.scaffoldKey.currentState);
+                context);
           }
         }
       },
@@ -123,10 +118,10 @@ class CarMakeFormState extends State<CarMakeForm> {
                 if (error
                     .toString()
                     .contains(CarMakeService.LOAD_CAR_TYPE_FAILED_EXCEPTION)) {
-                  SnackBarManager.showSnackBar(
+                  FlushBarHelper.showFlushBar(
                       S.of(context).general_error,
                       S.of(context).exception_load_car_types,
-                      widget.scaffoldKey.currentState);
+                      context);
 
                   setState(() {
                     _carsMakeProvider.carMakeFormState['model'] = selectedModel;

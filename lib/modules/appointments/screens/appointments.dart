@@ -7,9 +7,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/cars/providers/cars.provider.dart';
-import 'package:app/modules/cars/services/car.service.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +26,6 @@ class Appointments extends StatefulWidget {
 }
 
 class AppointmentsState extends State<Appointments> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
 
   var _isLoading = false;
@@ -45,7 +41,6 @@ class AppointmentsState extends State<Appointments> {
 
     return Consumer<AppointmentsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
-        key: _scaffoldKey,
         body: Center(
           child: _renderAppointments(
               _isLoading, _appointmentsProvider.appointments),
@@ -92,10 +87,8 @@ class AppointmentsState extends State<Appointments> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointments,
-            _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointments, context);
       }
 
       setState(() {
@@ -161,10 +154,8 @@ class AppointmentsState extends State<Appointments> {
       if (error
           .toString()
           .contains(AppointmentsService.CREATE_APPOINTMENT_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
-            S.of(context).general_error,
-            S.of(context).exception_create_appointment,
-            _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_create_appointment, context);
       }
     }
   }

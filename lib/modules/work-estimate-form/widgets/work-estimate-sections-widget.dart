@@ -14,7 +14,6 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
   final Function removeIssueItem;
   final Function selectIssueSection;
   final Function showSectionName;
-  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateSectionsWidget(
       {this.issue,
@@ -23,8 +22,7 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
       this.removeIssueItem,
       this.selectIssueSection,
       this.showSectionName,
-      this.estimatorMode,
-      this.scaffoldKey});
+      this.estimatorMode});
 
   @override
   _WorkEstimateSectionsWidgetState createState() =>
@@ -49,8 +47,7 @@ class _WorkEstimateSectionsWidgetState
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
                 showSectionName: widget.showSectionName,
-                estimatorMode: widget.estimatorMode,
-                scaffoldKey: widget.scaffoldKey)
+                estimatorMode: widget.estimatorMode)
         ],
       ),
     );

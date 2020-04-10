@@ -8,7 +8,7 @@ import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details/auction-bids.widget.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +24,6 @@ class AuctionDetails extends StatefulWidget {
 }
 
 class AuctionDetailsState extends State<AuctionDetails> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
 
   AuctionDetailsScreenState currentState =
@@ -45,7 +43,6 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
     return Consumer<AuctionProvider>(
         builder: (context, appointmentsProvider, _) => Scaffold(
-            key: _scaffoldKey,
             appBar: AppBar(
               title: _titleText(),
               iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
@@ -88,13 +85,13 @@ class AuctionDetailsState extends State<AuctionDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_appointment_details,
-            _scaffoldKey.currentState);
+            context);
       } else if (error.toString().contains(BidsService.GET_BIDS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_bids, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_bids, context);
       }
 
       setState(() {

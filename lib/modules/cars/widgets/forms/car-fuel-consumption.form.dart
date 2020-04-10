@@ -4,16 +4,15 @@ import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/date_utils.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarFuelConsumptionForm extends StatefulWidget {
   Function createFuelConsumption;
-  GlobalKey<ScaffoldState> scaffoldKey;
 
-  CarFuelConsumptionForm({this.createFuelConsumption, this.scaffoldKey});
+  CarFuelConsumptionForm({this.createFuelConsumption});
 
   @override
   CarFuelConsumptionFormState createState() => CarFuelConsumptionFormState();
@@ -148,10 +147,10 @@ class CarFuelConsumptionFormState extends State<CarFuelConsumptionForm> {
         });
       } catch (error) {
         if (error.toString().contains(CarService.CAR_ADD_FUEL_EXCEPTION)) {
-          SnackBarManager.showSnackBar(
+          FlushBarHelper.showFlushBar(
               S.of(context).general_error,
               S.of(context).exception_car_add_fuel_consumption,
-              widget.scaffoldKey.currentState);
+              context);
         }
 
         setState(() {

@@ -9,7 +9,7 @@ import 'package:app/modules/consultant-auctions/providers/auctions-consultant.pr
 import 'package:app/modules/consultant-auctions/screens/auction-consultant.dart';
 import 'package:app/modules/consultant-auctions/widgets/auctions-consultant-list.widget.dart';
 import 'package:app/utils/locale.manager.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +25,6 @@ class AuctionsConsultant extends StatefulWidget {
 }
 
 class AuctionsConsultantState extends State<AuctionsConsultant> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -39,7 +37,6 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
   Widget build(BuildContext context) {
     return Consumer<AuctionsConsultantProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
-        key: _scaffoldKey,
         body: Center(
           child: _renderAuctions(_isLoading),
         ),
@@ -80,13 +77,13 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
       if (error
           .toString()
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_load_car_brands, context);
       } else if (error
           .toString()
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_auctions, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_auctions, context);
       }
 
       setState(() {

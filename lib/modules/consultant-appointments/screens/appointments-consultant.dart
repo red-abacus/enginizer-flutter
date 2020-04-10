@@ -6,7 +6,7 @@ import 'package:app/modules/consultant-appointments/providers/appointment-consul
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/consultant-appointments/widgets/appointments-list-consultant.widget.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +22,6 @@ class AppointmentsConsultant extends StatefulWidget {
 }
 
 class AppointmentsConsultantState extends State<AppointmentsConsultant> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -34,7 +32,6 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
   Widget build(BuildContext context) {
     return Consumer<AppointmentsConsultantProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
-        key: _scaffoldKey,
         body: Center(
           child: Container(
             child: _renderAppointments(
@@ -70,10 +67,10 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        SnackBarManager.showSnackBar(
+        FlushBarHelper.showFlushBar(
             S.of(context).general_error,
             S.of(context).exception_get_appointments,
-            _scaffoldKey.currentState);
+            context);
       }
 
       setState(() {

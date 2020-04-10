@@ -9,7 +9,7 @@ import 'package:app/modules/cars/widgets/forms/car-extra.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-make.form.dart';
 import 'package:app/modules/cars/widgets/forms/car-technical.form.dart';
 import 'package:app/utils/locale.manager.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +24,6 @@ class CarCreateModal extends StatefulWidget {
 }
 
 class _CarCreateModalState extends State<CarCreateModal> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   CarsMakeProvider _carsMakeProvider;
   int _currentStepIndex = 0;
   bool isLastStep = false;
@@ -71,13 +69,13 @@ class _CarCreateModalState extends State<CarCreateModal> {
       if (error
           .toString()
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_load_car_brands, context);
       } else if (error
           .toString()
           .contains(CarMakeService.LOAD_CAR_COLOR_FAILED_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_load_car_colors, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_load_car_colors, context);
       }
 
       setState(() {
@@ -96,7 +94,6 @@ class _CarCreateModalState extends State<CarCreateModal> {
             child: ClipRRect(
                 borderRadius: new BorderRadius.circular(5.0),
                 child: Scaffold(
-                  key: _scaffoldKey,
                   body: Container(
                     decoration: new BoxDecoration(
                         color: Theme.of(context).cardColor,
@@ -155,13 +152,13 @@ class _CarCreateModalState extends State<CarCreateModal> {
       Step(
           isActive: _stepStateData[0]['active'],
           title: Text(S.of(context).cars_create_step1),
-          content: CarMakeForm(key: carMakeStateKey, scaffoldKey: _scaffoldKey),
+          content: CarMakeForm(key: carMakeStateKey),
           state: _stepStateData[0]['state']),
       Step(
           isActive: _stepStateData[1]['active'],
           title: Text(S.of(context).cars_create_step2),
           content: CarTechnicalForm(
-              key: carTechnicalStateKey, scaffoldKey: _scaffoldKey),
+              key: carTechnicalStateKey),
           state: _stepStateData[1]['state']),
       Step(
           isActive: _stepStateData[2]['active'],
@@ -248,8 +245,8 @@ class _CarCreateModalState extends State<CarCreateModal> {
       });
     } catch (error) {
       if (error.toString().contains(CarService.CAR_CREATE_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_car_create, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_create, context);
       }
     }
   }

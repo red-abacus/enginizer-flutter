@@ -10,7 +10,7 @@ import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/utils/locale.manager.dart';
-import 'package:app/utils/snack_bar.helper.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +28,6 @@ class Auctions extends StatefulWidget {
 }
 
 class AuctionsState extends State<Auctions> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String route;
   var _initDone = false;
   var _isLoading = false;
@@ -42,7 +40,6 @@ class AuctionsState extends State<Auctions> {
   Widget build(BuildContext context) {
     return Consumer<AuctionsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
-        key: _scaffoldKey,
         body: Center(
           child: _renderAuctions(_isLoading),
         ),
@@ -81,13 +78,13 @@ class AuctionsState extends State<Auctions> {
       if (error
           .toString()
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_load_car_brands, context);
       } else if (error
           .toString()
           .contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
-        SnackBarManager.showSnackBar(S.of(context).general_error,
-            S.of(context).exception_get_auctions, _scaffoldKey.currentState);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_auctions, context);
       }
 
       setState(() {
