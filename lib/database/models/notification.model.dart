@@ -15,14 +15,25 @@ class AppNotification {
   }
 
   static AppNotification fromNotification(Map<String, dynamic> json) {
-    Map notificationMap = json['data'];
+    Map notificationMap = json['notification'];
 
     if (notificationMap != null) {
       return AppNotification(
           title:
-              notificationMap['title'] != null ? notificationMap['title'] : '',
+          notificationMap['title'] != null ? notificationMap['title'] : '',
           body: notificationMap['body'] != null ? notificationMap['body'] : '',
           read: false);
+    }
+    else {
+      notificationMap = json['data'];
+
+      if (notificationMap != null) {
+        return AppNotification(
+            title:
+            notificationMap['title'] != null ? notificationMap['title'] : '',
+            body: notificationMap['body'] != null ? notificationMap['body'] : '',
+            read: false);
+      }
     }
 
     return null;

@@ -121,7 +121,7 @@ class Appointment {
     if (state == null) {
       statusFilter = true;
     } else {
-      if (state == AppointmentStatusState.ALL) {
+      if (state == AppointmentStatusState.NONE) {
         statusFilter = true;
       } else {
         statusFilter = state == getState();
@@ -194,7 +194,7 @@ class Appointment {
       case 'done':
         return AppointmentStatusState.DONE;
       default:
-        return AppointmentStatusState.ALL;
+        return AppointmentStatusState.NONE;
     }
   }
 }

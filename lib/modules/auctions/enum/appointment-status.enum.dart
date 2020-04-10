@@ -18,15 +18,15 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_open_bid;
       case AppointmentStatusState.DONE:
         return S.of(context).appointment_status_done;
-      case AppointmentStatusState.ALL:
-        return S.of(context).general_all;
+      case AppointmentStatusState.NONE:
+        return '';
         break;
     }
   }
 
   static List<AppointmentStatusState> statuses() {
     return [
-      AppointmentStatusState.ALL,
+      AppointmentStatusState.NONE,
       AppointmentStatusState.SUBMITTED,
       AppointmentStatusState.PENDING,
       AppointmentStatusState.SCHEDULED,
@@ -39,7 +39,7 @@ class AppointmentStatusStateUtils {
 }
 
 enum AppointmentStatusState {
-  ALL,
+  NONE,
   SUBMITTED,
   IN_WORK,
   PENDING,
