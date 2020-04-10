@@ -70,48 +70,67 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   Future<List<ItemType>> loadItemTypes() async {
-    var response = await _providerService.getItemTypes();
-    itemTypes = response;
-    notifyListeners();
-    return response;
+    try {
+      var response = await _providerService.getItemTypes();
+      itemTypes = response;
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<ProviderItem>> loadProviderItems(
       int serviceProviderId, IssueItemQuery query) async {
-    var response = await _providerService.getProviderItems(
-        serviceProviderId, query.toJson());
-    providerItems = response;
-    notifyListeners();
-    return response;
+    try {
+      var response = await _providerService.getProviderItems(
+          serviceProviderId, query.toJson());
+      providerItems = response;
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<List<ServiceProviderTimetable>> loadServiceProviderSchedule(
       int providerId, String startDate, String endDate) async {
-    this.serviceProviderTimetable = await _providerService
-        .getServiceProviderTimetables(providerId, startDate, endDate);
-    notifyListeners();
-    return this.serviceProviderTimetable;
+    try {
+      this.serviceProviderTimetable = await _providerService
+          .getServiceProviderTimetables(providerId, startDate, endDate);
+      notifyListeners();
+      return this.serviceProviderTimetable;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
-    workEstimateDetails =
-    await this._workEstimatesService.getWorkEstimateDetails(workEstimateId);
-    notifyListeners();
-    return workEstimateDetails;
+    try {
+      workEstimateDetails =
+      await this._workEstimatesService.getWorkEstimateDetails(workEstimateId);
+      notifyListeners();
+      return workEstimateDetails;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<WorkEstimateDetails> createWorkEstimate(int appointmentId, int carId,
       int clientId, WorkEstimateRequest workEstimateRequest) async {
     Map<String, dynamic> content = workEstimateRequest.toJson();
 
-    WorkEstimateDetails workEstimateDetails =
-    await _workEstimatesService.addNewWorkEstimate(content);
-    notifyListeners();
-    return workEstimateDetails;
+    try {
+      WorkEstimateDetails workEstimateDetails =
+      await _workEstimatesService.addNewWorkEstimate(content);
+      notifyListeners();
+      return workEstimateDetails;
+    } catch (error) {
+      throw(error);
+    }
   }
 
-  addRequestToIssueSection(
-      Issue issue, IssueSection issueSection) {
+  addRequestToIssueSection(Issue issue, IssueSection issueSection) {
     var issueItem = IssueItem(
       type: estimatorFormState['type'],
       code: estimatorFormState['code'].code,
@@ -136,8 +155,8 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  removeIssueRefactorItem(Issue issue,
-      IssueSection issueSection, IssueItem issueItem) {
+  removeIssueRefactorItem(
+      Issue issue, IssueSection issueSection, IssueItem issueItem) {
     for (Issue temp in workEstimateRequest.issues) {
       if (temp == issue) {
         List<IssueSection> sections = temp.sections;

@@ -17,19 +17,31 @@ class AuctionConsultantProvider with ChangeNotifier {
   AuctionDetail auctionDetails;
 
   Future<AuctionDetail> getAuctionDetails(int auctionId) async {
-    auctionDetails = await this._auctionsService.getAuctionDetails(auctionId);
-    notifyListeners();
-    return auctionDetails;
+    try {
+      auctionDetails = await this._auctionsService.getAuctionDetails(auctionId);
+      notifyListeners();
+      return auctionDetails;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<ServiceProvider> getServiceProviderDetails(int providerId) async {
-    return await this.providerService.getProviderDetails(providerId);
+    try {
+      return await this.providerService.getProviderDetails(providerId);
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<WorkEstimateDetails> createBid(Map<String, dynamic> content) async {
-    WorkEstimateDetails workEstimateDetails =
-        await _auctionsService.createBid(content, selectedAuction.id);
-    notifyListeners();
-    return workEstimateDetails;
+    try {
+      WorkEstimateDetails workEstimateDetails =
+          await _auctionsService.createBid(content, selectedAuction.id);
+      notifyListeners();
+      return workEstimateDetails;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:app/modules/auctions/enum/auction-details-state.enum.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/screens/bid-details.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details/auction-bids.widget.dart';
 import 'package:app/utils/constants.dart';
@@ -74,8 +75,10 @@ class AuctionDetailsState extends State<AuctionDetails> {
     try {
       await auctionProvider
           .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
-          .then((_) {
-        auctionProvider.loadBids(auctionProvider.selectedAuction.id).then((_) {
+          .then((_) async {
+        await auctionProvider
+            .loadBids(auctionProvider.selectedAuction.id)
+            .then((_) {
           setState(() {
             auctionProvider.isLoading = false;
           });
@@ -89,6 +92,9 @@ class AuctionDetailsState extends State<AuctionDetails> {
             S.of(context).general_error,
             S.of(context).exception_get_appointment_details,
             _scaffoldKey.currentState);
+      } else if (error.toString().contains(BidsService.GET_BIDS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_bids, _scaffoldKey.currentState);
       }
 
       setState(() {

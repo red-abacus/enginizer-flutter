@@ -69,8 +69,8 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
 
       await auctionsProvider
           .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
-          .then((_) {
-        auctionsProvider.loadAuctions().then((_) {
+          .then((_) async {
+        await auctionsProvider.loadAuctions().then((_) {
           setState(() {
             _isLoading = false;
           });
@@ -82,11 +82,16 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
         SnackBarManager.showSnackBar(S.of(context).general_error,
             S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
-
-        setState(() {
-          _isLoading = false;
-        });
+      } else if (error
+          .toString()
+          .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_auctions, _scaffoldKey.currentState);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

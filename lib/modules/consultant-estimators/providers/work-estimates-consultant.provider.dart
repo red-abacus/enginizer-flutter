@@ -30,10 +30,14 @@ class WorkEstimatesConsultantProvider with ChangeNotifier {
   }
 
   Future<List<WorkEstimate>> getWorkEstimates() async {
-    _workEstimateResponse = await _workEstimatesService.getWorkEstimates();
-    workEstimates = _workEstimateResponse.workEstimates;
-    notifyListeners();
-    return workEstimates;
+    try {
+      _workEstimateResponse = await _workEstimatesService.getWorkEstimates();
+      workEstimates = _workEstimateResponse.workEstimates;
+      notifyListeners();
+      return workEstimates;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {

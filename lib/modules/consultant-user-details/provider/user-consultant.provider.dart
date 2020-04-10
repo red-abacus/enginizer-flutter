@@ -39,21 +39,32 @@ class UserConsultantProvider with ChangeNotifier {
   Future<JwtUserDetails> updateUserDetails(String email, String name) async {
     var payload = json.encode({'email': email, 'name': name});
 
-    this.userDetails = await _userService.updateUserDetails(userDetails.id, payload);
+    this.userDetails =
+        await _userService.updateUserDetails(userDetails.id, payload);
     notifyListeners();
     return this.userDetails;
   }
 
-  Future<ServiceProvider> getServiceProvider(int providerId) async {
-    this.serviceProvider = await _providerService.getProviderDetails(providerId);
-    notifyListeners();
-    return this.serviceProvider;
+  Future<ServiceProvider> getServiceProviderDetails(int providerId) async {
+    try {
+      this.serviceProvider =
+          await _providerService.getProviderDetails(providerId);
+      notifyListeners();
+      return this.serviceProvider;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<ServiceProviderItemsResponse> getProviderServices(int id) async {
-    this.serviceProviderItemsResponse = await _providerService.getProviderServiceItems(id);
-    notifyListeners();
-    return this.serviceProviderItemsResponse;
+    try {
+      this.serviceProviderItemsResponse =
+          await _providerService.getProviderServiceItems(id);
+      notifyListeners();
+      return this.serviceProviderItemsResponse;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<ServiceProvider> updateServiceProviderDetails() async {
@@ -64,8 +75,13 @@ class UserConsultantProvider with ChangeNotifier {
       "cui": cui
     });
 
-    this.serviceProvider = await _providerService.updateServiceProviderDetails(serviceProvider.id, payload);
-    notifyListeners();
-    return this.serviceProvider;
+    try {
+      this.serviceProvider = await _providerService
+          .updateServiceProviderDetails(serviceProvider.id, payload);
+      notifyListeners();
+      return this.serviceProvider;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

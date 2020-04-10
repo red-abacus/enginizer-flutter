@@ -4,6 +4,7 @@ import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
 import 'package:app/modules/auctions/screens/auction-details.dart';
+import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/auctions-list.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
@@ -67,25 +68,31 @@ class AuctionsState extends State<Auctions> {
     auctionsProvider.resetParameters();
 
     try {
-      await auctionsProvider.loadCarBrands(CarQuery(language: LocaleManager.language(context))).then((_) {
-        auctionsProvider.loadAuctions().then((_) {
+      await auctionsProvider
+          .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
+          .then((_) async {
+        await auctionsProvider.loadAuctions().then((_) {
           setState(() {
             _isLoading = false;
           });
         });
       });
-    }
-    catch(error) {
+    } catch (error) {
       if (error
           .toString()
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
         SnackBarManager.showSnackBar(S.of(context).general_error,
             S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
-
-        setState(() {
-          _isLoading = false;
-        });
+      } else if (error
+          .toString()
+          .contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_auctions, _scaffoldKey.currentState);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

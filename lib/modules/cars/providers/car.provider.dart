@@ -50,10 +50,14 @@ class CarProvider with ChangeNotifier {
   Future<CarFuelConsumptionResponse> addCarFuelConsumption(
       CarFuelConsumption fuelConsumption) async {
     if (selectedCar != null) {
-      CarFuelConsumptionResponse response =
-          await carService.addFuelConsumption(fuelConsumption, selectedCar.id);
-      notifyListeners();
-      return response;
+      try {
+        CarFuelConsumptionResponse response =
+        await carService.addFuelConsumption(fuelConsumption, selectedCar.id);
+        notifyListeners();
+        return response;
+      } catch (error) {
+        throw(error);
+      }
     }
 
     return null;

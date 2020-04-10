@@ -1,7 +1,8 @@
-import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/details/service-provider/service-details-widget.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class ServiceDetailsModal extends StatefulWidget {
 }
 
 class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var _initDone = false;
   var _isLoading = false;
 
@@ -30,7 +32,10 @@ class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
             data: ThemeData(
                 accentColor: Theme.of(context).primaryColor,
                 primaryColor: Theme.of(context).primaryColor),
-            child: _buildContent(context, _isLoading),
+            child: Scaffold(
+              key: _scaffoldKey,
+              body: _buildContent(context, _isLoading),
+            ),
           ),
         ),
       ),
@@ -58,18 +63,51 @@ class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
         _isLoading = true;
       });
 
-      ServiceProviderDetailsProvider provider = Provider.of<ServiceProviderDetailsProvider>(context);
-      provider.getServiceProviderDetails(provider.serviceProviderId).then((_) {
-        provider.getServiceProviderItems(provider.serviceProviderId).then((_) {
-          provider.getServiceProviderReviews(provider.serviceProviderId).then((_) {
+      _loadData();
+      _initDone = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      ServiceProviderDetailsProvider provider =
+          Provider.of<ServiceProviderDetailsProvider>(context);
+      await provider
+          .getServiceProviderDetails(provider.serviceProviderId)
+          .then((_) async {
+        await provider
+            .getServiceProviderItems(provider.serviceProviderId)
+            .then((_) {
+          provider
+              .getServiceProviderReviews(provider.serviceProviderId)
+              .then((_) {
             setState(() {
               _isLoading = false;
             });
           });
         });
       });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_provider_details,
+            _scaffoldKey.currentState);
+      } else if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_provider_service_items,
+            _scaffoldKey.currentState);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
-    _initDone = true;
-    super.didChangeDependencies();
   }
 }

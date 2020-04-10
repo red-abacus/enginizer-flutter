@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
@@ -16,6 +18,7 @@ import 'package:app/modules/work-estimate-form/widgets/work-estimate-date.widget
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,7 @@ class WorkEstimateForm extends StatefulWidget {
 }
 
 class _WorkEstimateFormState extends State<WorkEstimateForm> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String route;
 
   bool _initDone = false;
@@ -55,6 +59,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   Widget build(BuildContext context) {
     return Consumer<AppointmentConsultantProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
         ),
@@ -72,13 +77,21 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       });
 
       _workEstimateProvider = Provider.of<WorkEstimateProvider>(context);
-      _workEstimateProvider.loadItemTypes().then((_) {
+      _loadData();
+      _initDone = true;
+    }
+
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await _workEstimateProvider.loadItemTypes().then((_) async {
         String startDate =
             DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
         String endDate = DateUtils.stringFromDate(
             DateUtils.addDayToDate(DateTime.now(), 7), 'dd/MM/yyyy');
-
-        _workEstimateProvider
+        await _workEstimateProvider
             .loadServiceProviderSchedule(
                 _workEstimateProvider.serviceProviderId, startDate, endDate)
             .then((_) {
@@ -102,11 +115,21 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           }
         });
       });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_provider_timetable,
+            _scaffoldKey.currentState);
+      } else if (error
+          .toString()
+          .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_item_types, _scaffoldKey.currentState);
+      }
     }
-
-    _initDone = true;
-
-    super.didChangeDependencies();
   }
 
   _buildContent(BuildContext context) {
@@ -170,13 +193,15 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 ? issueRefactor.name
                 : 'N/A'),
             content: WorkEstimateSectionsWidget(
-                issue: issues[index],
-                addIssueItem: _addIssueItem,
-                expandSection: _expandSection,
-                removeIssueItem: _removeIssueItem,
-                selectIssueSection: _selectIssueSection,
-                showSectionName: _showSectionName,
-                estimatorMode: widget.mode)),
+              issue: issues[index],
+              addIssueItem: _addIssueItem,
+              expandSection: _expandSection,
+              removeIssueItem: _removeIssueItem,
+              selectIssueSection: _selectIssueSection,
+              showSectionName: _showSectionName,
+              estimatorMode: widget.mode,
+              scaffoldKey: _scaffoldKey,
+            )),
       );
     });
 
@@ -361,22 +386,33 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
   }
 
-  _infoAdded(String percentage, String time) {
-    _workEstimateProvider
-        .createWorkEstimate(
-            _workEstimateProvider.selectedAppointment.id,
-            _workEstimateProvider.selectedAppointmentDetail.car.id,
-            _workEstimateProvider.selectedAppointmentDetail.user.uid,
-            _workEstimateProvider.workEstimateRequest)
-        .then((workEstimateDetails) {
-      if (workEstimateDetails != null) {
-        Navigator.of(context).pop();
+  _infoAdded(String percentage, String time) async {
+    try {
+      await _workEstimateProvider
+          .createWorkEstimate(
+              _workEstimateProvider.selectedAppointment.id,
+              _workEstimateProvider.selectedAppointmentDetail.car.id,
+              _workEstimateProvider.selectedAppointmentDetail.user.uid,
+              _workEstimateProvider.workEstimateRequest)
+          .then((workEstimateDetails) {
+        if (workEstimateDetails != null) {
+          Navigator.of(context).pop();
 
-        if (widget.createWorkEstimateFinished != null) {
-          widget.createWorkEstimateFinished();
+          if (widget.createWorkEstimateFinished != null) {
+            widget.createWorkEstimateFinished();
+          }
         }
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_add_new_work_estimate,
+            _scaffoldKey.currentState);
       }
-    });
+    }
   }
 
   _showSectionName(Issue issue, IssueSection issueSection) {

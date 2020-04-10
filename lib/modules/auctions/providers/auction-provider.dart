@@ -55,16 +55,22 @@ class AuctionProvider with ChangeNotifier {
   }
 
   Future<List<Bid>> loadBids(int auctionId) async {
-    this.bidResponse = await this.bidsService.getBids(auctionId);
-    bids = bidResponse.bids;
-    notifyListeners();
-    return bids;
+    try {
+      this.bidResponse = await this.bidsService.getBids(auctionId);
+      bids = bidResponse.bids;
+      notifyListeners();
+      return bids;
+    } catch (error) {}
   }
 
   Future<BidDetails> getBidDetails() async {
-    bidDetails = await this.bidsService.getBidDetails(selectedBid.id);
-    notifyListeners();
-    return bidDetails;
+    try {
+      bidDetails = await this.bidsService.getBidDetails(selectedBid.id);
+      notifyListeners();
+      return bidDetails;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   List<Bid> filterBids(String filterSearchString) {
@@ -77,14 +83,26 @@ class AuctionProvider with ChangeNotifier {
   }
 
   Future<bool> acceptBid(int bidId) async {
-    return await this.bidsService.acceptBid(bidId);
+    try {
+      return await this.bidsService.acceptBid(bidId);
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<bool> rejectBid(int bidId) async {
-    return await this.bidsService.rejectBid(bidId);
+    try {
+      return await this.bidsService.rejectBid(bidId);
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<ServiceProvider> getServiceProviderDetails(int providerId) async {
-    return await this.providerService.getProviderDetails(providerId);
+    try {
+      return await this.providerService.getProviderDetails(providerId);
+    } catch (error) {
+      throw (error);
+    }
   }
 }

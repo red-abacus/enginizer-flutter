@@ -5,6 +5,8 @@ import 'package:app/modules/appointments/providers/service-provider-details.prov
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/bid-status.enum.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -12,6 +14,7 @@ import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -75,8 +78,17 @@ class BidDetailsState extends State<BidDetails> {
         _isLoading = true;
       });
 
-      auctionProvider.getBidDetails().then((bidDetails) {
-        _createWorkEstimateProvider
+      _loadData();
+      _initDone = true;
+    }
+
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await auctionProvider.getBidDetails().then((bidDetails) async {
+        await _createWorkEstimateProvider
             .getWorkEstimateDetails(bidDetails.workEstimateId)
             .then((_) {
           setState(() {
@@ -84,9 +96,23 @@ class BidDetailsState extends State<BidDetails> {
           });
         });
       });
+    } catch (error) {
+      if (error.toString().contains(BidsService.GET_BID_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_bid_details, _scaffoldKey.currentState);
+      } else if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_details,
+            _scaffoldKey.currentState);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
-    _initDone = true;
-    super.didChangeDependencies();
   }
 
   _buildContent() {
@@ -136,8 +162,7 @@ class BidDetailsState extends State<BidDetails> {
           child: Container(
             margin: EdgeInsets.all(8),
             child: SvgPicture.asset(
-              'assets/images/statuses/in_bid.svg'
-                  .toLowerCase(),
+              'assets/images/statuses/in_bid.svg'.toLowerCase(),
               semanticsLabel: 'Appointment Status Image',
             ),
           ),
@@ -262,8 +287,7 @@ class BidDetailsState extends State<BidDetails> {
             onPressed: () => _openEstimator(context),
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(
-                  null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
             ),
           ),
         ],
@@ -423,13 +447,20 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
-  _cancelBid(Bid bid) {
-    auctionProvider.rejectBid(bid.id).then((success) {
-      if (success != null && success) {
-        Provider.of<AuctionProvider>(context, listen: false).initDone = false;
-        Navigator.pop(context);
+  _cancelBid(Bid bid) async {
+    try {
+      await auctionProvider.rejectBid(bid.id).then((success) {
+        if (success != null && success) {
+          Provider.of<AuctionProvider>(context, listen: false).initDone = false;
+          Navigator.pop(context);
+        }
+      });
+    } catch (error) {
+      if (error.toString().contains(BidsService.REJECT_BID_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_reject_bid, _scaffoldKey.currentState);
       }
-    });
+    }
   }
 
   _showAcceptBidAlert() {
@@ -471,36 +502,37 @@ class BidDetailsState extends State<BidDetails> {
     );
   }
 
-  _acceptBid(Bid bid) {
-    auctionProvider.acceptBid(bid.id).then((success) {
-      if (success != null && success) {
-        Provider.of<AuctionProvider>(context, listen: false).initDone = false;
-        Navigator.pop(context);
+  _acceptBid(Bid bid) async {
+    try {
+      await auctionProvider.acceptBid(bid.id).then((success) {
+        if (success != null && success) {
+          Provider.of<AuctionProvider>(context, listen: false).initDone = false;
+          Navigator.pop(context);
+        }
+      });
+    } catch (error) {
+      if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_accept_bid, _scaffoldKey.currentState);
       }
-    });
+    }
   }
 
   _showServiceProviderDetails() {
     int providerId = auctionProvider.selectedBid.serviceProvider.id;
-    auctionProvider
-        .getServiceProviderDetails(providerId)
-        .then((serviceProvider) {
-      if (serviceProvider != null) {
-        showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (_) {
-              Provider.of<ServiceProviderDetailsProvider>(context,
-                      listen: false)
-                  .serviceProviderId = providerId;
 
-              return StatefulBuilder(
-                  builder: (BuildContext context, StateSetter state) {
-                return ServiceDetailsModal();
-              });
-            });
-      }
-    });
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (_) {
+          Provider.of<ServiceProviderDetailsProvider>(context, listen: false)
+              .serviceProviderId = providerId;
+
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return ServiceDetailsModal();
+          });
+        });
   }
 
   _floatingButtonsContainer() {

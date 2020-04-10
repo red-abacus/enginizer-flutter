@@ -7,6 +7,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -257,21 +258,32 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     }
   }
 
-  _acceptAppointment() {
+  _acceptAppointment() async {
     if (_appointmentProvider.selectedAppointmentDetail != null) {
       if (_appointmentProvider.selectedAppointmentDetail.workEstimateId !=
               null &&
           _appointmentProvider.selectedAppointmentDetail.workEstimateId != 0) {
-        _appointmentProvider
-            .acceptWorkEstimate(
-                _appointmentProvider.selectedAppointmentDetail.workEstimateId,
-                _appointmentProvider.selectedAppointmentDetail.scheduledDate)
-            .then((_) {
-          setState(() {
-            Provider.of<AppointmentsProvider>(context).initDone = false;
-            _initDone = false;
+        try {
+          await _appointmentProvider
+              .acceptWorkEstimate(
+                  _appointmentProvider.selectedAppointmentDetail.workEstimateId,
+                  _appointmentProvider.selectedAppointmentDetail.scheduledDate)
+              .then((_) {
+            setState(() {
+              Provider.of<AppointmentsProvider>(context).initDone = false;
+              _initDone = false;
+            });
           });
-        });
+        } catch (error) {
+          if (error
+              .toString()
+              .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
+            SnackBarManager.showSnackBar(
+                S.of(context).general_error,
+                S.of(context).exception_accept_work_estimate,
+                _scaffoldKey.currentState);
+          }
+        }
       }
     }
   }

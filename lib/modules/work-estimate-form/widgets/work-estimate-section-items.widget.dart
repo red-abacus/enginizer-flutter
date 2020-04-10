@@ -20,12 +20,14 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
   final Function addIssueItem;
   final Function removeIssueItem;
   final EstimatorMode estimatorMode;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateSectionItemsWidget(
       {this.issueSection,
       this.addIssueItem,
       this.removeIssueItem,
-      this.estimatorMode});
+      this.estimatorMode,
+      this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +101,11 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return WorkEstimateAddIssueModalWidget(
-                key: createWorkEstimateAddIssueKey,
-                addIssueItem: this.addIssueItem,
-                issueSection: this.issueSection);
+              key: createWorkEstimateAddIssueKey,
+              addIssueItem: this.addIssueItem,
+              issueSection: this.issueSection,
+              scaffoldKey: scaffoldKey,
+            );
           });
         });
   }

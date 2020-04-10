@@ -4,6 +4,7 @@ import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class WorkEstimateSectionsWidget extends StatefulWidget {
   final Issue issue;
@@ -13,6 +14,7 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
   final Function removeIssueItem;
   final Function selectIssueSection;
   final Function showSectionName;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateSectionsWidget(
       {this.issue,
@@ -21,7 +23,8 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
       this.removeIssueItem,
       this.selectIssueSection,
       this.showSectionName,
-      this.estimatorMode});
+      this.estimatorMode,
+      this.scaffoldKey});
 
   @override
   _WorkEstimateSectionsWidgetState createState() =>
@@ -46,7 +49,8 @@ class _WorkEstimateSectionsWidgetState
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
                 showSectionName: widget.showSectionName,
-                estimatorMode: widget.estimatorMode)
+                estimatorMode: widget.estimatorMode,
+                scaffoldKey: widget.scaffoldKey)
         ],
       ),
     );

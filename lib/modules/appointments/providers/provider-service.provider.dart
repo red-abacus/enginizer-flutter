@@ -60,54 +60,40 @@ class ProviderServiceProvider with ChangeNotifier {
   }
 
   Future<List<ServiceProvider>> loadProviders() async {
-    var response = await providerService.getProviders();
-    serviceProviders = response.items;
-    notifyListeners();
-    return serviceProviders;
-  }
-
-  Future<List<ServiceProvider>> loadProvidersByServiceItems(
-      List<int> servicesIds) async {
-    var response = await providerService.getProvidersByServices(servicesIds);
-    serviceProviders = response.items;
-    notifyListeners();
-    return serviceProviders;
-  }
-
-  Future<List<ServiceProviderItem>> loadProviderServices(
-      ServiceProvider serviceProvider) async {
-    var response =
-        await providerService.getProviderServiceItems(serviceProvider.id);
-    serviceProviderItems = response.items;
-    notifyListeners();
-    return serviceProviderItems;
-  }
-
-  Future<List<ServiceProviderSchedule>> loadProviderSchedules(
-      ServiceProvider serviceProvider) async {
-    var response =
-        await providerService.getProviderSchedules(serviceProvider.id);
-    serviceProviderSchedules = response;
-    notifyListeners();
-    return serviceProviderSchedules;
+    try {
+      var response = await providerService.getProviders();
+      serviceProviders = response.items;
+      notifyListeners();
+      return serviceProviders;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<ServiceProviderTimetable>> loadServiceProviderTimetables(
       ServiceProvider serviceProvider, String startDate, String endDate) async {
-    var response = await providerService.getServiceProviderTimetables(
-        serviceProvider.id, startDate, endDate);
-    serviceProvider.timetables = response;
-    notifyListeners();
-    return response;
+    try {
+      var response = await providerService.getServiceProviderTimetables(
+          serviceProvider.id, startDate, endDate);
+      serviceProvider.timetables = response;
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<ProviderItem>> loadProviderItems(
       ServiceProvider serviceProvider, IssueItemQuery query) async {
-    var response = await providerService.getProviderItems(
-        serviceProvider.id, query.toJson());
-    providerItems = response;
-    notifyListeners();
-    return response;
+    try {
+      var response = await providerService.getProviderItems(
+          serviceProvider.id, query.toJson());
+      providerItems = response;
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   AppointmentRequest appointmentRequest() {

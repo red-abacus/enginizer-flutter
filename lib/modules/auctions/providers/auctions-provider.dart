@@ -31,9 +31,13 @@ class AuctionsProvider with ChangeNotifier {
   }
 
   Future<AuctionResponse> loadAuctions() async {
-    auctionResponse = await auctionsService.getAuctions();
-    this.auctions = auctionResponse.auctions;
-    return auctionResponse;
+    try {
+      auctionResponse = await auctionsService.getAuctions();
+      this.auctions = auctionResponse.auctions;
+      return auctionResponse;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<List<Auction>> filterAuctions(String searchString,

@@ -26,7 +26,7 @@ class CarMakeService {
   static const String LOAD_CAR_VARIANTS_FAILED_EXCEPTION =
       'LOAD_CAR_VARIANTS_FAILED';
 
-  static const String CAR_MAKE_API_PATH =
+  static const String _CAR_MAKE_API_PATH =
       '${Environment.CARS_BASE_API}/carmake';
 
   Dio _dio = inject<Dio>();
@@ -35,7 +35,7 @@ class CarMakeService {
 
   Future<List<CarBrand>> getCarBrands(CarQuery query) async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/brands',
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/brands',
           queryParameters: {'language': query.language});
       if (response.statusCode == 200) {
         return _mapBrands(response.data);
@@ -49,7 +49,7 @@ class CarMakeService {
 
   Future<List<CarModel>> getCarModels(CarQuery query) async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/models',
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/models',
           queryParameters: {
             'language': query.language,
             'brandId': query.brand.id
@@ -67,7 +67,7 @@ class CarMakeService {
 
   Future<List<CarType>> getCarTypes(CarQuery query) async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/types',
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/types',
           queryParameters: {
             'language': query.language,
             'modelId': query.model.id
@@ -85,7 +85,7 @@ class CarMakeService {
 
   Future<List<CarYear>> getCarYears(CarQuery query) async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/years',
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/years',
           queryParameters: {
             'language': query.language,
             'typeId': query.carType.id
@@ -103,7 +103,7 @@ class CarMakeService {
 
   Future<List<CarFuelType>> getCarFuelTypes(CarQuery query) async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/fuelTypes',
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/fuelTypes',
           queryParameters: {
             'language': query.language,
             'typeDetailsId': query.carType.id
@@ -119,61 +119,9 @@ class CarMakeService {
     }
   }
 
-  Future<List<CarCylinderCapacity>> getCarCylinderCapacities(
-      CarQuery query) async {
-    final response =
-        await _dio.get('$CAR_MAKE_API_PATH/cylinderCapacity', queryParameters: {
-      'brandId': query.brand.id,
-      'modelId': query.model.id,
-      'year': query.year.id,
-      'fuelType': query.fuelType.id
-    });
-
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapCylinderCapacities(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_CC_FAILED');
-    }
-  }
-
-  Future<List<CarPower>> getCarPowers(CarQuery query) async {
-    final response =
-        await _dio.get('$CAR_MAKE_API_PATH/power', queryParameters: {
-      'brandId': query.brand.id,
-      'modelId': query.model.id,
-      'year': query.year.id,
-      'fuelType': query.fuelType.id
-    });
-
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapPowers(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_POWERS_FAILED');
-    }
-  }
-
-  Future<List<CarTransmission>> getCarTransmissions() async {
-    final response = await _dio.get('$CAR_MAKE_API_PATH/transmissions');
-
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-
-      return _mapTransmissions(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('LOAD_CAR_TRANSMISSIONS_FAILED');
-    }
-  }
-
   Future<List<CarColor>> getCarColors() async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/colors');
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/colors');
 
       if (response.statusCode == 200) {
         return _mapColors(response.data);
@@ -187,7 +135,7 @@ class CarMakeService {
 
   Future<List<CarVariant>> getCarVariants(CarQuery carQuery) async {
     try {
-      final response = await _dio.get('$CAR_MAKE_API_PATH/variants',
+      final response = await _dio.get('$_CAR_MAKE_API_PATH/variants',
           queryParameters: {
             'language': carQuery.language,
             'typeId': carQuery.carType.id

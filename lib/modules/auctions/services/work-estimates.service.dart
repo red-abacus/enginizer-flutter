@@ -10,16 +10,25 @@ import 'package:app/modules/consultant-estimators/models/work-estimate.model.dar
 import 'package:app/utils/environment.constants.dart';
 
 class WorkEstimatesService {
-  static const String WORK_ESTIMATES_PATH =
+  static const String GET_WORK_ESTIMATES_EXCEPTION =
+      'GET_WORK_ESTIMATE_EXCEPTION';
+  static const String ADD_NEW_WORK_ESTIMATE_EXCEPTION =
+      'ADD_NEW_WORK_ESTIMATE_EXCEPTION';
+  static const String GET_WORK_ESTIMATE_DETAILS_EXCEPTION =
+      'GET_WORK_ESTIMATE_DETIALS_EXCEPTION';
+  static const String ACCEPT_WORK_ESTIMATE_EXCEPTION =
+      'ACCEPT_WORK_ESTIMATE_EXCEPTION';
+
+  static const String _WORK_ESTIMATES_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates';
 
-  static const String WORK_ESTIMATE_ITEMS_PREFIX =
+  static const String _WORK_ESTIMATE_ITEMS_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
-  static const String WORK_ESTIMATE_ITEMS_SUFFIX = '/items';
+  static const String _WORK_ESTIMATE_ITEMS_SUFFIX = '/items';
 
-  static const String WORK_ESTIMATE_ACCEPT_PREFIX =
+  static const String _WORK_ESTIMATE_ACCEPT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
-  static const String WORK_ESTIMATE_ACCEPT_SUFFIX = '/accept';
+  static const String _WORK_ESTIMATE_ACCEPT_SUFFIX = '/accept';
 
   Dio _dio = inject<Dio>();
 
@@ -27,98 +36,110 @@ class WorkEstimatesService {
 
   Future<WorkEstimateDetails> addNewWorkEstimate(
       Map<String, dynamic> content) async {
-    final response =
-        await _dio.post('$WORK_ESTIMATES_PATH', data: jsonEncode(content));
+    try {
+      final response =
+          await _dio.post('$_WORK_ESTIMATES_PATH', data: jsonEncode(content));
 
-    if (response.statusCode == 200) {
-      return WorkEstimateDetails.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('ADD_NEW_WORK_ESTIMATE_FAILED');
+      if (response.statusCode == 200) {
+        return WorkEstimateDetails.fromJson(response.data);
+      } else {
+        throw Exception(ADD_NEW_WORK_ESTIMATE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(ADD_NEW_WORK_ESTIMATE_EXCEPTION);
     }
   }
 
   Future<WorkEstimateResponse> getWorkEstimates() async {
-    final response = await _dio.get('$WORK_ESTIMATES_PATH');
+    try {
+      final response = await _dio.get('$_WORK_ESTIMATES_PATH');
 
-    if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
-      return WorkEstimateResponse.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('WORK_ESTIMATE_DETAILS_FAILED');
+      if (response.statusCode < 300) {
+        return WorkEstimateResponse.fromJson(response.data);
+      } else {
+        throw Exception(GET_WORK_ESTIMATES_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_WORK_ESTIMATES_EXCEPTION);
     }
   }
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int id) async {
-    final response = await _dio.get('$WORK_ESTIMATES_PATH/$id');
+    try {
+      final response = await _dio.get('$_WORK_ESTIMATES_PATH/$id');
 
-    if (response.statusCode < 300) {
-      // If server returns an OK response, parse the JSON.
-
-      return WorkEstimateDetails.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('WORK_ESTIMATE_DETAILS_FAILED');
+      if (response.statusCode < 300) {
+        return WorkEstimateDetails.fromJson(response.data);
+      } else {
+        throw Exception(GET_WORK_ESTIMATE_DETAILS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_WORK_ESTIMATE_DETAILS_EXCEPTION);
     }
   }
 
   Future<Issue> addWorkEstimateItem(int id, Issue issue) async {
-    final response = await _dio.post(_buildWorkEstimateItemsPath(id),
-        data: jsonEncode(issue.toJson()));
+    try {
+      final response = await _dio.post(_buildWorkEstimateItemsPath(id),
+          data: jsonEncode(issue.toJson()));
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return _mapIssue(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('ADD_WORK_ESTIMATE_ITEM_FAILED');
+      if (response.statusCode == 200) {
+        return _mapIssue(response.data);
+      } else {
+        throw Exception('TODO');
+      }
+    } catch (error) {
+      throw Exception('TODO');
     }
   }
 
   Future<bool> deleteWorkEstimateItem(int id, int itemId) async {
-    final response =
-        await _dio.delete('${_buildWorkEstimateItemsPath(id)}/$itemId');
+    try {
+      final response =
+          await _dio.delete('${_buildWorkEstimateItemsPath(id)}/$itemId');
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, return true.
-      return true;
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('DELETE_WORK_ESTIMATE_ITEM_FAILED');
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('TODO');
+      }
+    } catch (error) {
+      throw Exception('TODO');
     }
   }
 
   _buildWorkEstimateItemsPath(int workEstimateId) {
-    return WORK_ESTIMATE_ITEMS_PREFIX +
+    return _WORK_ESTIMATE_ITEMS_PREFIX +
         workEstimateId.toString() +
-        WORK_ESTIMATE_ITEMS_SUFFIX;
-  }
-
-  Issue _mapIssue(dynamic response) {
-    return Issue.fromJson(response);
+        _WORK_ESTIMATE_ITEMS_SUFFIX;
   }
 
   Future<WorkEstimate> acceptWorkEstimate(
       int workEstimateId, String proposedDate) async {
-    Map<String, dynamic> map = new Map();
-    
-    final response = await _dio.patch(_buildAcceptWorkEstimate(workEstimateId),
-        data: jsonEncode(map));
+    try {
+      Map<String, dynamic> map = new Map();
 
-    if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
-      return WorkEstimate.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error.
-      throw Exception('ADD_WORK_ESTIMATE_ITEM_FAILED');
+      final response = await _dio.patch(
+          _buildAcceptWorkEstimate(workEstimateId),
+          data: jsonEncode(map));
+
+      if (response.statusCode == 200) {
+        return WorkEstimate.fromJson(response.data);
+      } else {
+        throw Exception(ACCEPT_WORK_ESTIMATE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(ACCEPT_WORK_ESTIMATE_EXCEPTION);
     }
   }
 
   _buildAcceptWorkEstimate(int workEstimateId) {
-    return WORK_ESTIMATE_ACCEPT_PREFIX +
+    return _WORK_ESTIMATE_ACCEPT_PREFIX +
         workEstimateId.toString() +
-        WORK_ESTIMATE_ACCEPT_SUFFIX;
+        _WORK_ESTIMATE_ACCEPT_SUFFIX;
+  }
+
+  Issue _mapIssue(dynamic response) {
+    return Issue.fromJson(response);
   }
 }

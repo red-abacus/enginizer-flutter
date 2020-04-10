@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
@@ -89,8 +90,8 @@ class AppointmentDetailsConsultantState
       await _appointmentConsultantProvider
           .getAppointmentDetails(
               _appointmentConsultantProvider.selectedAppointment)
-          .then((_) {
-        _appointmentConsultantProvider
+          .then((_) async {
+        await _appointmentConsultantProvider
             .getProviderServices(_appointmentConsultantProvider
                 .selectedAppointment.serviceProvider.id)
             .then((_) {
@@ -107,7 +108,15 @@ class AppointmentDetailsConsultantState
             S.of(context).general_error,
             S.of(context).exception_get_appointment_details,
             _scaffoldKey.currentState);
+      } else if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_provider_service_items,
+            _scaffoldKey.currentState);
       }
+
       setState(() {
         _isLoading = false;
       });

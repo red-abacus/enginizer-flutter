@@ -1,20 +1,23 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class WorkEstimateAddIssueModalWidget extends StatefulWidget {
-  Function addIssueItem;
-  IssueSection issueSection;
+  final Function addIssueItem;
+  final IssueSection issueSection;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateAddIssueModalWidget(
-      {Key key, this.addIssueItem, this.issueSection})
+      {Key key, this.addIssueItem, this.issueSection, this.scaffoldKey})
       : super(key: key);
 
   @override
@@ -58,22 +61,34 @@ class WorkEstimateAddIssueModalWidgetState
                           return null;
                         }
                       },
-                      onChanged: (selectedType) {
-                        provider
-                            .loadProviderItems(
-                                authProvider?.authUser?.providerId,
-                                IssueItemQuery(typeId: selectedType.id))
-                            .then((_) => {
-                                  setState(() {
-                                    provider.estimatorFormState['type'] =
-                                        selectedType;
-                                    provider.estimatorFormState['code'] = null;
-                                    provider.estimatorFormState['name'] = null;
-                                    provider.estimatorFormState['price'] = '';
-                                    provider.estimatorFormState['priceVAT'] =
-                                        '';
-                                  })
-                                });
+                      onChanged: (selectedType) async {
+                        try {
+                          await provider
+                              .loadProviderItems(
+                                  authProvider?.authUser?.providerId,
+                                  IssueItemQuery(typeId: selectedType.id))
+                              .then((_) => {
+                                    setState(() {
+                                      provider.estimatorFormState['type'] =
+                                          selectedType;
+                                      provider.estimatorFormState['code'] =
+                                          null;
+                                      provider.estimatorFormState['name'] =
+                                          null;
+                                      provider.estimatorFormState['price'] = '';
+                                      provider.estimatorFormState['priceVAT'] =
+                                          '';
+                                    })
+                                  });
+                        } catch (error) {
+                          if (error.toString().contains(
+                              ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
+                            SnackBarManager.showSnackBar(
+                                S.of(context).general_error,
+                                S.of(context).exception_get_car_fuel,
+                                widget.scaffoldKey.currentState);
+                          }
+                        }
                       },
                     ),
                   ),
@@ -98,25 +113,36 @@ class WorkEstimateAddIssueModalWidgetState
                             return null;
                           }
                         },
-                        onChanged: (selectedProviderItem) {
-                          provider
-                              .loadProviderItems(
-                                  authProvider?.authUser?.providerId,
-                                  IssueItemQuery(
-                                      typeId: selectedProviderItem.itemType.id,
-                                      code: selectedProviderItem.code))
-                              .then((providerItems) => {
-                                    setState(() {
-                                      var foundProviderItem =
-                                          providerItems.firstWhere(
-                                              (provider) =>
-                                                  provider.id ==
-                                                  selectedProviderItem.id,
-                                              orElse: () => null);
-                                      provider.estimatorFormState['code'] =
-                                          foundProviderItem;
-                                    })
-                                  });
+                        onChanged: (selectedProviderItem) async {
+                          try {
+                            await provider
+                                .loadProviderItems(
+                                    authProvider?.authUser?.providerId,
+                                    IssueItemQuery(
+                                        typeId:
+                                            selectedProviderItem.itemType.id,
+                                        code: selectedProviderItem.code))
+                                .then((providerItems) => {
+                                      setState(() {
+                                        var foundProviderItem =
+                                            providerItems.firstWhere(
+                                                (provider) =>
+                                                    provider.id ==
+                                                    selectedProviderItem.id,
+                                                orElse: () => null);
+                                        provider.estimatorFormState['code'] =
+                                            foundProviderItem;
+                                      })
+                                    });
+                          } catch (error) {
+                            if (error.toString().contains(
+                                ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
+                              SnackBarManager.showSnackBar(
+                                  S.of(context).general_error,
+                                  S.of(context).exception_get_car_fuel,
+                                  widget.scaffoldKey.currentState);
+                            }
+                          }
                         }),
                   ),
                 ],
@@ -143,34 +169,46 @@ class WorkEstimateAddIssueModalWidgetState
                             return null;
                           }
                         },
-                        onChanged: (selectedProviderItem) {
-                          provider
-                              .loadProviderItems(
-                                  authProvider?.authUser?.providerId,
-                                  IssueItemQuery(
-                                      typeId: selectedProviderItem.itemType.id,
-                                      code: selectedProviderItem.code,
-                                      name: selectedProviderItem.name))
-                              .then((providerItems) => {
-                                    setState(() {
-                                      var foundProviderItem =
-                                          providerItems.firstWhere(
-                                              (provider) =>
-                                                  provider.id ==
-                                                  selectedProviderItem.id,
-                                              orElse: () => null);
-                                      provider.estimatorFormState['code'] =
-                                          foundProviderItem;
-                                      provider.estimatorFormState['name'] =
-                                          foundProviderItem;
-                                      provider.estimatorFormState['quantity'] =
-                                          1;
-                                      provider.estimatorFormState['price'] =
-                                          foundProviderItem.price;
-                                      provider.estimatorFormState['priceVAT'] =
-                                          foundProviderItem.priceVAT;
-                                    })
-                                  });
+                        onChanged: (selectedProviderItem) async {
+                          try {
+                            await provider
+                                .loadProviderItems(
+                                    authProvider?.authUser?.providerId,
+                                    IssueItemQuery(
+                                        typeId:
+                                            selectedProviderItem.itemType.id,
+                                        code: selectedProviderItem.code,
+                                        name: selectedProviderItem.name))
+                                .then((providerItems) => {
+                                      setState(() {
+                                        var foundProviderItem =
+                                            providerItems.firstWhere(
+                                                (provider) =>
+                                                    provider.id ==
+                                                    selectedProviderItem.id,
+                                                orElse: () => null);
+                                        provider.estimatorFormState['code'] =
+                                            foundProviderItem;
+                                        provider.estimatorFormState['name'] =
+                                            foundProviderItem;
+                                        provider
+                                            .estimatorFormState['quantity'] = 1;
+                                        provider.estimatorFormState['price'] =
+                                            foundProviderItem.price;
+                                        provider.estimatorFormState[
+                                                'priceVAT'] =
+                                            foundProviderItem.priceVAT;
+                                      })
+                                    });
+                          } catch (error) {
+                            if (error.toString().contains(
+                                ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
+                              SnackBarManager.showSnackBar(
+                                  S.of(context).general_error,
+                                  S.of(context).exception_get_car_fuel,
+                                  widget.scaffoldKey.currentState);
+                            }
+                          }
                         }),
                   ),
                   SizedBox(width: 10),

@@ -16,13 +16,13 @@ class AppointmentsService {
       'GET_APPOINTMENT_DETAILS_EXCEPTION';
   static const String CANCEL_APPOINTMENT_EXCEPTION = 'CANCEL_APPOINTMENT_EXCEPTION';
 
-  static const String APPOINTMENTS_API_PATH =
+  static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
-  static const String APPOINTMENTS_DETAILS_API_PATH =
+  static const String _APPOINTMENTS_DETAILS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String CANCEL_APPOINTMENT_PREFIX =
+  static const String _CANCEL_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String CANCEL_APPOINTMENT_SUFFIX = '/cancel';
+  static const String _CANCEL_APPOINTMENT_SUFFIX = '/cancel';
 
   Dio _dio = inject<Dio>();
 
@@ -30,7 +30,7 @@ class AppointmentsService {
 
   Future<AppointmentsResponse> getAppointments() async {
     try {
-      final response = await _dio.get(APPOINTMENTS_API_PATH);
+      final response = await _dio.get(_APPOINTMENTS_API_PATH);
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {
@@ -44,7 +44,7 @@ class AppointmentsService {
   Future<Appointment> createAppointment(
       AppointmentRequest appointmentRequest) async {
     try {
-      final response = await _dio.post(APPOINTMENTS_API_PATH,
+      final response = await _dio.post(_APPOINTMENTS_API_PATH,
           data: jsonEncode(appointmentRequest.toJson()));
 
       if (response.statusCode == 201) {
@@ -60,7 +60,7 @@ class AppointmentsService {
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
     try {
       final response = await _dio
-          .get(APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString());
+          .get(_APPOINTMENTS_DETAILS_API_PATH + appointmentId.toString());
       if (response.statusCode == 200) {
         return _mapAppointmentDetails(response.data);
       } else {
@@ -95,8 +95,8 @@ class AppointmentsService {
   }
 
   String buildCancelAppointmentPath(int appointmentId) {
-    return CANCEL_APPOINTMENT_PREFIX +
+    return _CANCEL_APPOINTMENT_PREFIX +
         appointmentId.toString() +
-        CANCEL_APPOINTMENT_SUFFIX;
+        _CANCEL_APPOINTMENT_SUFFIX;
   }
 }

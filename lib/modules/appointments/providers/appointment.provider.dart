@@ -50,9 +50,14 @@ class AppointmentProvider with ChangeNotifier {
 
   Future<WorkEstimate> acceptWorkEstimate(
       int workEstimateId, String proposedDate) async {
-    WorkEstimate workEstimate = await _workEstimatesService.acceptWorkEstimate(
-        workEstimateId, proposedDate);
-    notifyListeners();
-    return workEstimate;
+    try {
+      WorkEstimate workEstimate = await _workEstimatesService.acceptWorkEstimate(
+          workEstimateId, proposedDate);
+      notifyListeners();
+      return workEstimate;
+    }
+    catch (error) {
+      throw(error);
+    }
   }
 }

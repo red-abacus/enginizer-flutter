@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
@@ -55,9 +56,8 @@ class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
       });
 
       _loadData();
+      _initDone = true;
     }
-
-    _initDone = true;
 
     super.didChangeDependencies();
   }
@@ -68,8 +68,8 @@ class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
     _workEstimatesConsultantProvider.resetParameters();
 
     try {
-      await _workEstimatesConsultantProvider.getWorkEstimates().then((_) {
-        _workEstimatesConsultantProvider
+      await _workEstimatesConsultantProvider.getWorkEstimates().then((_) async {
+        await _workEstimatesConsultantProvider
             .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
             .then((_) {
           setState(() {
@@ -83,11 +83,18 @@ class WorkEstimatesConsultantState extends State<WorkEstimatesConsultant> {
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
         SnackBarManager.showSnackBar(S.of(context).general_error,
             S.of(context).exception_load_car_brands, _scaffoldKey.currentState);
-
-        setState(() {
-          _isLoading = false;
-        });
+      } else if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATES_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_work_estimates,
+            _scaffoldKey.currentState);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

@@ -15,18 +15,26 @@ class ServiceProviderDetailsProvider with ChangeNotifier {
   ServiceProviderReview serviceProviderReview;
 
   Future<ServiceProvider> getServiceProviderDetails(int providerId) async {
-    this.serviceProvider =
-        await this.providerService.getProviderDetails(providerId);
-    notifyListeners();
-    return this.serviceProvider;
+    try {
+      this.serviceProvider =
+      await this.providerService.getProviderDetails(providerId);
+      notifyListeners();
+      return this.serviceProvider;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<ServiceProviderItemsResponse> getServiceProviderItems(
       int providerId) async {
-    this.serviceProviderItemsResponse =
-        await this.providerService.getProviderServiceItems(providerId);
-    notifyListeners();
-    return this.serviceProviderItemsResponse;
+    try {
+      this.serviceProviderItemsResponse =
+      await this.providerService.getProviderServiceItems(providerId);
+      notifyListeners();
+      return this.serviceProviderItemsResponse;
+    } catch (error) {
+      throw(error);
+    }
   }
 
   Future<ServiceProviderReview> getServiceProviderReviews(

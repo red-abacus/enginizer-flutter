@@ -9,7 +9,6 @@ import 'package:app/modules/appointments/widgets/forms/appointment-create-servic
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,23 +96,27 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
 
     return FractionallySizedBox(
         heightFactor: .8,
-        child: Container(
+        child: Scaffold(
+          key: _scaffoldKey,
+          body: Container(
             child: ClipRRect(
-          borderRadius: new BorderRadius.circular(5.0),
-          child: Container(
-            decoration: new BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(40.0),
-                    topRight: const Radius.circular(40.0))),
-            child: Theme(
-              data: ThemeData(
-                  accentColor: Theme.of(context).primaryColor,
-                  primaryColor: Theme.of(context).primaryColor),
-              child: _buildContent(context),
+              borderRadius: new BorderRadius.circular(5.0),
+              child: Container(
+                decoration: new BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(40.0),
+                        topRight: const Radius.circular(40.0))),
+                child: Theme(
+                  data: ThemeData(
+                      accentColor: Theme.of(context).primaryColor,
+                      primaryColor: Theme.of(context).primaryColor),
+                  child: _buildContent(context),
+                ),
+              ),
             ),
           ),
-        )));
+        ));
   }
 
   @override
@@ -138,8 +141,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               _isLoading = false;
             });
           });
-        }
-        else {
+        } else {
           setState(() {
             _isLoading = false;
           });
@@ -238,7 +240,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             title: widget._stepStateData[4]['active']
                 ? Text(S.of(context).appointment_create_step4)
                 : Text(''),
-            content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
+            content: AppointmentDateTimeForm(
+                key: appointmentDateTimeStateKey, scaffoldKey: _scaffoldKey),
             state: widget._stepStateData[4]['state'])
       ];
     } else {
@@ -274,7 +277,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             title: widget._stepStateData[3]['active']
                 ? Text(S.of(context).appointment_create_step4)
                 : Text(''),
-            content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
+            content: AppointmentDateTimeForm(
+                key: appointmentDateTimeStateKey, scaffoldKey: _scaffoldKey),
             state: widget._stepStateData[3]['state'])
       ];
     }
@@ -347,11 +351,21 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     }
   }
 
-  _issuesChecker() {
+  _issuesChecker() async {
     if (!appointmentIssuesStateKey.currentState.valid()) {
     } else {
-      Provider.of<ProviderServiceProvider>(context, listen: false)
-          .loadProviders();
+      try {
+        await Provider.of<ProviderServiceProvider>(context, listen: false)
+            .loadProviders();
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(ProviderService.GET_PROVIDERS_EXCEPTION)) {
+          SnackBarManager.showSnackBar(S.of(context).general_error,
+              S.of(context).exception_get_providers, _scaffoldKey.currentState);
+        }
+      }
+
       setState(() {
         widget._stepStateData[_currentStepIndex]['state'] = StepState.complete;
         widget._stepStateData[_currentStepIndex + 1]['state'] =

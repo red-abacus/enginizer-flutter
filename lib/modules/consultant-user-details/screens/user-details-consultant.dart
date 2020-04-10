@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/consultant-user-details/enums/user-details-tabbar-state-consultant.enum.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-graph-consultant.widget.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-index-consultant.widget.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +35,12 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
   UserDetailsTabbarStateConsultant _currentState =
       UserDetailsTabbarStateConsultant.GRAPH;
 
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Widget build(BuildContext context) {
     return Consumer<UserConsultantProvider>(
       builder: (context, userProvider, _) => Scaffold(
-        key: scaffoldKey,
+        key: _scaffoldKey,
         body: _isLoading == true
             ? Center(
                 child: CircularProgressIndicator(),
@@ -54,27 +57,54 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
 //        _isLoading = true;
 //      });
 
-      userConsultantProvider = Provider.of<UserConsultantProvider>(context);
-//      userConsultantProvider.getUserDetails().then((_) {
-//        userConsultantProvider
-//            .getServiceProvider(
-//                userConsultantProvider.userDetails.userProvider.id)
-//            .then((_) {
-//          userConsultantProvider
-//              .getProviderServices(
-//                  userConsultantProvider.userDetails.userProvider.id)
-//              .then((_) {
-//            userConsultantProvider.initialiseParams();
-//            setState(() {
-//              _isLoading = false;
-//            });
-//          });
-//        });
-//      });
+      _loadData();
+      _initDone = true;
     }
 
-    _initDone = true;
     super.didChangeDependencies();
+  }
+
+  _loadData() {
+    userConsultantProvider = Provider.of<UserConsultantProvider>(context);
+
+    try {
+      userConsultantProvider.getUserDetails().then((_) async {
+        await userConsultantProvider
+            .getServiceProviderDetails(
+                userConsultantProvider.userDetails.userProvider.id)
+            .then((_) async {
+          await userConsultantProvider
+              .getProviderServices(
+                  userConsultantProvider.userDetails.userProvider.id)
+              .then((_) {
+            userConsultantProvider.initialiseParams();
+            setState(() {
+              _isLoading = false;
+            });
+          });
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_provider_details,
+            _scaffoldKey.currentState);
+      } else if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_provider_service_items,
+            _scaffoldKey.currentState);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _avatarContainer() {
@@ -227,7 +257,9 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
   }
 
   _getContent() {
-    return _currentState == UserDetailsTabbarStateConsultant.GRAPH ? UserDetailsGraphConsultantWidget() : UserDetailsIndexConsultantWidget();
+    return _currentState == UserDetailsTabbarStateConsultant.GRAPH
+        ? UserDetailsGraphConsultantWidget()
+        : UserDetailsIndexConsultantWidget();
   }
 
   _nameContainer() {
@@ -432,8 +464,19 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
     );
   }
 
-  _saveDetails() {
-    userConsultantProvider.updateServiceProviderDetails().then((_) {});
+  _saveDetails() async {
+    try {
+      await userConsultantProvider.updateServiceProviderDetails().then((_) {});
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(ProviderService.UPDATE_PROVIDER_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_update_provider_details,
+            _scaffoldKey.currentState);
+      }
+    }
   }
 
   showCameraDialog() {

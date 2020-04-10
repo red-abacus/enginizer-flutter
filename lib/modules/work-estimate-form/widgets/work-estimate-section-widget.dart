@@ -20,6 +20,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   final Function selectIssueSection;
   final Function showSectionName;
   final EstimatorMode estimatorMode;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   WorkEstimateSectionWidget(
       {this.issue,
@@ -29,7 +30,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       this.removeIssueItem,
       this.selectIssueSection,
       this.showSectionName,
-      this.estimatorMode});
+      this.estimatorMode,
+      this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                       margin: EdgeInsets.only(
                           top: 4, bottom: 4, right: 4, left: 10),
                       child: InkWell(
-                        onTap: () => {showSectionName(this.issue, this.issueSection)},
+                        onTap: () =>
+                            {showSectionName(this.issue, this.issueSection)},
                         child: Text(
                           issueSection.isNew
                               ? S.of(context).estimator_add_section_name
@@ -139,7 +142,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
             issueSection: issueSection,
             addIssueItem: addIssueItem,
             removeIssueItem: removeIssueItem,
-            estimatorMode: estimatorMode),
+            estimatorMode: estimatorMode,
+            scaffoldKey: scaffoldKey),
       );
     } else {
       return Container();

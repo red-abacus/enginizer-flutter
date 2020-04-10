@@ -16,8 +16,10 @@ class CarService {
   static String CAR_DETAILS_EXCEPTION = 'CAR_DETAILS_FAILED';
   static String CAR_CREATE_EXCEPTION = 'CAR_CREATE_FAILED';
   static String CAR_GET_EXCEPTION = 'CAR_GET_EXCEPTION';
+  static String CAR_ADD_FUEL_EXCEPTION = 'CAR_ADD_FUEL_EXCEPTION';
+  static String CAR_ADD_IMAGE_EXCEPTION = 'CAR_ADD_IMAGE_EXCEPTION';
 
-  static const String CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
+  static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
   Dio _dio = inject<Dio>();
 
@@ -25,7 +27,7 @@ class CarService {
 
   Future<CarsResponse> getCars() async {
     try {
-      final response = await _dio.get(CAR_API_PATH);
+      final response = await _dio.get(_CAR_API_PATH);
 
       if (response.statusCode < 300) {
         return CarsResponse.fromJson(response.data);
@@ -40,7 +42,7 @@ class CarService {
   Future<Car> addCar(CarRequest carRequest) async {
     try {
       final response =
-          await _dio.post(CAR_API_PATH, data: jsonEncode(carRequest.toJson()));
+          await _dio.post(_CAR_API_PATH, data: jsonEncode(carRequest.toJson()));
 
       if (response.statusCode < 300) {
         return _mapCar(response.data);
@@ -58,19 +60,23 @@ class CarService {
 
   Future<CarFuelConsumptionResponse> addFuelConsumption(
       CarFuelConsumption fuelConsumption, int id) async {
-    final response = await _dio.post('$CAR_API_PATH/$id/fuel',
-        data: jsonEncode(fuelConsumption.toJson()));
+    try {
+      final response = await _dio.post('$_CAR_API_PATH/$id/fuel',
+          data: jsonEncode(fuelConsumption.toJson()));
 
-    if (response.statusCode < 300) {
-      return CarFuelConsumptionResponse.fromJson(response.data);
-    } else {
-      throw Exception('ADD_FUEL_FAILED');
+      if (response.statusCode < 300) {
+        return CarFuelConsumptionResponse.fromJson(response.data);
+      } else {
+        throw Exception(CAR_ADD_FUEL_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_ADD_FUEL_EXCEPTION);
     }
   }
 
   Future<CarFuelGraphicResponse> getFuelConsumption(int id) async {
     try {
-      final response = await _dio.get('$CAR_API_PATH/$id/fuel',
+      final response = await _dio.get('$_CAR_API_PATH/$id/fuel',
           queryParameters: {
             "month": DateTime.now().month,
             'year': DateTime.now().year
@@ -87,7 +93,7 @@ class CarService {
   }
 
   Future<Car> getCarDetails(int id) async {
-    final response = await _dio.get('$CAR_API_PATH/$id');
+    final response = await _dio.get('$_CAR_API_PATH/$id');
 
     if (response.statusCode < 300) {
       return Car.fromJson(response.data);
@@ -104,13 +110,17 @@ class CarService {
       ),
     });
 
-    final response =
-        await _dio.patch('$CAR_API_PATH/$id/image', data: formData);
+    try {
+      final response =
+          await _dio.patch('$_CAR_API_PATH/$id/image', data: formData);
 
-    if (response.statusCode < 300) {
-      return CarFuelConsumptionResponse.fromJson(response.data);
-    } else {
-      throw Exception('UPLOAD_IMAGE_FAILED');
+      if (response.statusCode < 300) {
+        return CarFuelConsumptionResponse.fromJson(response.data);
+      } else {
+        throw Exception(CAR_ADD_IMAGE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_ADD_IMAGE_EXCEPTION);
     }
   }
 }

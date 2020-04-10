@@ -1,16 +1,19 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CarFuelConsumptionForm extends StatefulWidget {
   Function createFuelConsumption;
+  GlobalKey<ScaffoldState> scaffoldKey;
 
-  CarFuelConsumptionForm({this.createFuelConsumption});
+  CarFuelConsumptionForm({this.createFuelConsumption, this.scaffoldKey});
 
   @override
   CarFuelConsumptionFormState createState() => CarFuelConsumptionFormState();
@@ -118,7 +121,7 @@ class CarFuelConsumptionFormState extends State<CarFuelConsumptionForm> {
             )));
   }
 
-  _createFuelConsumption() {
+  _createFuelConsumption() async {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
@@ -131,16 +134,30 @@ class CarFuelConsumptionFormState extends State<CarFuelConsumptionForm> {
           nrOfKms: int.tryParse(nrKmsController.text));
 
       CarProvider carProvider = Provider.of<CarProvider>(context);
-      carProvider.addCarFuelConsumption(carFuelConsumption).then((value) {
-        if (value != null) {
-          widget.createFuelConsumption();
-          Navigator.pop(context);
-        } else {
-          setState(() {
-            _isLoading = false;
-          });
+
+      try {
+        await carProvider.addCarFuelConsumption(carFuelConsumption).then((value) {
+          if (value != null) {
+            widget.createFuelConsumption();
+            Navigator.pop(context);
+          } else {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        });
+      } catch (error) {
+        if (error.toString().contains(CarService.CAR_ADD_FUEL_EXCEPTION)) {
+          SnackBarManager.showSnackBar(
+              S.of(context).general_error,
+              S.of(context).exception_car_add_fuel_consumption,
+              widget.scaffoldKey.currentState);
         }
-      });
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }

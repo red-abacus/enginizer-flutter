@@ -313,7 +313,8 @@ class CarDetailsState extends State<CarDetails> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return CarFuelConsumptionForm(
-                createFuelConsumption: _createCarConsumption);
+                createFuelConsumption: _createCarConsumption,
+                scaffoldKey: _scaffoldKey);
           });
         });
   }
@@ -386,15 +387,10 @@ class CarDetailsState extends State<CarDetails> {
           _isLoading = false;
         });
       });
-    }
-    catch(error) {
+    } catch (error) {
       if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
-        SnackBarManager.showSnackBar(S
-            .of(context)
-            .general_error,
-            S
-                .of(context)
-                .exception_get_car_fuel, _scaffoldKey.currentState);
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_get_car_fuel, _scaffoldKey.currentState);
       }
     }
   }

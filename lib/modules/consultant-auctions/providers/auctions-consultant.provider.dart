@@ -25,16 +25,19 @@ class AuctionsConsultantProvider with ChangeNotifier {
     try {
       carBrands = await carMakeService.getCarBrands(carQuery);
       return carBrands;
-    }
-    catch(error) {
-      throw(error);
+    } catch (error) {
+      throw (error);
     }
   }
 
   Future<AuctionResponse> loadAuctions() async {
-    auctionResponse = await auctionsService.getAuctions();
-    this.auctions = auctionResponse.auctions;
-    return auctionResponse;
+    try {
+      auctionResponse = await auctionsService.getAuctions();
+      this.auctions = auctionResponse.auctions;
+      return auctionResponse;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<Auction>> filterAuctions(String searchString,
@@ -47,7 +50,7 @@ class AuctionsConsultantProvider with ChangeNotifier {
 
     auctions = auctions
         .where((auction) => auction.filtered(
-        this.searchString, this.filterStatus, this.filterCarBrand))
+            this.searchString, this.filterStatus, this.filterCarBrand))
         .toList();
     notifyListeners();
     return auctions;

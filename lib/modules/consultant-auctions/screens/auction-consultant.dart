@@ -1,7 +1,10 @@
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:app/modules/consultant-auctions/widgets/auction-consultant.widget.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/utils/snack_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,23 +57,42 @@ class AuctionConsultantState extends State<AuctionConsultant> {
     if (!_initDone) {
       auctionProvider = Provider.of<AuctionConsultantProvider>(context);
 
-      if (auctionProvider.selectedAuction == null) return;
+      if (auctionProvider.selectedAuction != null) {
+        _loadData();
+      }
 
-      setState(() {
-        _isLoading = true;
-      });
+      _initDone = true;
+    }
+    super.didChangeDependencies();
+  }
 
-      auctionProvider
+  _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await auctionProvider
           .getAuctionDetails(auctionProvider.selectedAuction.id)
           .then((_) {
         setState(() {
           _isLoading = false;
         });
       });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AuctionsService.GET_AUCTION_DETAILS_EXCEPTION)) {
+        SnackBarManager.showSnackBar(
+            S.of(context).general_error,
+            S.of(context).exception_get_auction_details,
+            _scaffoldKey.currentState);
+      }
 
-      _initDone = true;
+      setState(() {
+        _isLoading = false;
+      });
     }
-    super.didChangeDependencies();
   }
 
   _titleText() {
@@ -104,12 +126,19 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _createBid(WorkEstimateRequest workEstimateRequest) {
-    auctionProvider.createBid(workEstimateRequest.toJson()).then((_) {
-      Navigator.pop(context);
+    try {
+      auctionProvider.createBid(workEstimateRequest.toJson()).then((_) {
+        Navigator.pop(context);
 
-      setState(() {
-        _initDone = false;
+        setState(() {
+          _initDone = false;
+        });
       });
-    });
+    } catch (error) {
+      if (error.toString().contains(AuctionsService.CREATE_BID_EXCEPTION)) {
+        SnackBarManager.showSnackBar(S.of(context).general_error,
+            S.of(context).exception_create_bid, _scaffoldKey.currentState);
+      }
+    }
   }
 }
