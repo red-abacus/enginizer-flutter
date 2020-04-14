@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/enums/appointment-type.enum.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -66,11 +67,11 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
         });
       });
     } catch (error) {
-      if (error.toString().contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointments,
-            context);
+      if (error
+          .toString()
+          .contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointments, context);
       }
 
       setState(() {
@@ -103,6 +104,7 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
             filterAppointments: _filterAppointments,
             searchString: appointmentsMechanicProvider.filterSearchString,
             appointmentStatusState: appointmentsMechanicProvider.filterStatus,
-            filterDateTime: appointmentsMechanicProvider.filterDateTime);
+            filterDateTime: appointmentsMechanicProvider.filterDateTime,
+            appointmentType: AppointmentType.MECHANIC);
   }
 }

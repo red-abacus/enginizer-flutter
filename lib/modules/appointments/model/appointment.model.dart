@@ -41,6 +41,7 @@ class Appointment {
       this.serviceProvider});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
+    print('status ${json['status']}');
     return Appointment(
         id: json['id'],
         date: json['date'] != null
@@ -192,6 +193,10 @@ class Appointment {
         return AppointmentStatusState.OPEN_BID;
       case 'done':
         return AppointmentStatusState.DONE;
+      case 'onhold':
+        return AppointmentStatusState.ON_HOLD;
+      case 'inunit':
+        return AppointmentStatusState.IN_UNIT;
       default:
         return AppointmentStatusState.NONE;
     }

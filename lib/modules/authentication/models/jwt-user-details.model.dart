@@ -1,6 +1,5 @@
 import 'package:app/modules/authentication/models/user-provider.model.dart';
 import 'package:app/modules/authentication/models/user-role.model.dart';
-import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 
 class JwtUserDetails {
   int id;

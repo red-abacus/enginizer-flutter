@@ -1,0 +1,4 @@
+enum AppointmentType {
+  CLIENT,
+  MECHANIC
+}

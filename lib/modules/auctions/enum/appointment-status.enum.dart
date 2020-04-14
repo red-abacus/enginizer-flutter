@@ -18,6 +18,10 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_open_bid;
       case AppointmentStatusState.DONE:
         return S.of(context).appointment_status_done;
+      case AppointmentStatusState.ON_HOLD:
+        return S.of(context).appointment_status_on_hold;
+      case AppointmentStatusState.IN_UNIT:
+        return S.of(context).appointment_status_in_unit;
       case AppointmentStatusState.NONE:
         return '';
         break;
@@ -36,6 +40,15 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.DONE
     ];
   }
+
+  static List<AppointmentStatusState> statusesMechanic() {
+    return [
+      AppointmentStatusState.NONE,
+      AppointmentStatusState.ON_HOLD,
+      AppointmentStatusState.SUBMITTED,
+      AppointmentStatusState.IN_UNIT
+    ];
+  }
 }
 
 enum AppointmentStatusState {
@@ -47,4 +60,6 @@ enum AppointmentStatusState {
   CANCELED,
   OPEN_BID,
   DONE,
+  ON_HOLD,
+  IN_UNIT
 }
