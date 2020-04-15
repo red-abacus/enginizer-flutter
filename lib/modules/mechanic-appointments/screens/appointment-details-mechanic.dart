@@ -1,10 +1,12 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-car-details.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
@@ -39,7 +41,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 3, initialIndex: 1);
+    _tabController = new TabController(vsync: this, length: 4, initialIndex: 3);
   }
 
   @override
@@ -57,25 +59,42 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       });
     }
 
+    var appointmentTitle = "";
+
+    switch (appointmentMechanicProvider.selectedAppointment.getState()) {
+      case AppointmentStatusState.SUBMITTED:
+        appointmentTitle = 'DEVIZ';
+        break;
+      case AppointmentStatusState.ON_HOLD:
+        appointmentTitle = 'ON HOLD';
+        break;
+      case AppointmentStatusState.IN_UNIT:
+        appointmentTitle = "in unit";
+        break;
+      default:
+        break;
+    }
+
     return Consumer<AppointmentMechanicProvider>(
       builder: (context, appointmentMechanicProvider, _) => Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: Theme.of(context).cardColor),
-            bottom: TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(text: S.of(context).appointment_details_car_details),
-                Tab(text: S.of(context).appointment_details_tasks_list),
-                Tab(text: S.of(context).appointment_details_service_history),
-              ],
-            ),
-            title: _titleText(),
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Theme.of(context).cardColor),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(text: S.of(context).general_details),
+              Tab(text: S.of(context).appointment_details_car_details),
+              Tab(text: S.of(context).appointment_details_tasks_list),
+              Tab(text: S.of(context).appointment_details_service_history),
+            ],
           ),
-          body: _buildContent(),
-          bottomNavigationBar: _getBottomBar(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: _getBottomBarFloatingAction()),
+          title: _titleText(),
+        ),
+        body: _buildContent(),
+        bottomNavigationBar: _getBottomBar(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: _getBottomBarFloatingAction(),
+      ),
     );
   }
 
@@ -88,7 +107,6 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       if (appointmentMechanicProvider.selectedAppointment != null) {
         _loadData();
       }
-
       _initDone = true;
     }
     super.didChangeDependencies();
@@ -104,21 +122,22 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           .getAppointmentDetails(
               appointmentMechanicProvider.selectedAppointment)
           .then((_) async {
-        await appointmentMechanicProvider
-            .getWorkEstimateDetails(appointmentMechanicProvider
-                .selectedAppointmentDetails.workEstimateId)
-            .then((_) async {
-          appointmentMechanicProvider
-              .getStandardTasks(
-                  appointmentMechanicProvider.selectedAppointment.id)
-              .then((mechanicTasks) {
-            appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
-            appointmentMechanicProvider.initFormValues();
-            setState(() {
-              _isLoading = false;
-            });
-          });
+        setState(() {
+          _isLoading = false;
         });
+
+//        await appointmentMechanicProvider
+//            .getWorkEstimateDetails(appointmentMechanicProvider
+//                .selectedAppointmentDetails.workEstimateId)
+//            .then((_) async {
+//          appointmentMechanicProvider
+//              .getStandardTasks(
+//                  appointmentMechanicProvider.selectedAppointment.id)
+//              .then((mechanicTasks) {
+//            appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
+//            appointmentMechanicProvider.initFormValues();
+//          });
+//        });
       });
     } catch (error) {
       print(error);
@@ -143,7 +162,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   _getBottomBar() {
     return AppConfig.of(context).enviroment == Enviroment.Dev_Toolbar
         ? NavigationToolbarAppState.bottomBarApp
-        : Container();
+        : null;
   }
 
   _getBottomBarFloatingAction() {
@@ -176,6 +195,10 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     return TabBarView(
       controller: _tabController,
       children: [
+        AppointmentDetailsMechanicWidget(
+            appointment: appointmentMechanicProvider.selectedAppointment,
+            appointmentDetail:
+                appointmentMechanicProvider.selectedAppointmentDetails),
         AppointmentDetailsCarDetails(),
         AppointmentDetailsTasksList(),
         AppointmentDetailsServiceHistory(),
