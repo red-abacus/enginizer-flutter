@@ -3,23 +3,26 @@ import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentDetailsMechanicWidget extends StatelessWidget {
   final Appointment appointment;
-  AppointmentDetail appointmentDetail;
+  final AppointmentDetail appointmentDetail;
 
   AppointmentDetailsMechanicWidget({this.appointment, this.appointmentDetail});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
+      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
       child: new ListView(
         shrinkWrap: true,
         children: <Widget>[
@@ -46,7 +49,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Text(
-                        '${appointment?.car?.brand?.name} ${appointment?.car?.model?.name} - ${appointment?.status?.name}',
+                        '${appointment?.car?.registrationNumber}',
                         maxLines: 3,
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),
@@ -55,6 +58,12 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
                   ),
                 ],
               ),
+              _buildTitleContainer(S.of(context).mechanic_appointment_number),
+              _defaultTextWidget(appointment?.name),
+              _buildSeparator(),
+              _buildTitleContainer(S.of(context).appointment_details_applicant),
+              _applicantWidget(),
+              _buildSeparator(),
               _buildTitleContainer(
                   S.of(context).appointment_details_services_title),
               for (ServiceItem item in appointmentDetail.serviceItems)
@@ -65,19 +74,11 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
               _issuesContainer(context),
               _buildSeparator(),
               _buildTitleContainer(_getAppointmentDateTitle(context)),
-              Container(
-                margin: EdgeInsets.only(top: 15, bottom: 15),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      appointment.scheduleDateTime
-                          .replaceAll(" ", " ${S.of(context).general_at} "),
-                      style: TextHelper.customTextStyle(
-                          null, Colors.black, null, 18),
-                    )
-                  ],
-                ),
-              )
+              _defaultTextWidget(appointment.scheduleDateTime
+                  .replaceAll(" ", " ${S.of(context).general_at} ")),
+              _buildSeparator(),
+              _buildTitleContainer(S.of(context).mechanic_appointment_mechanic_distributed),
+              _buildMechanicWidget(context)
             ],
           )
         ],
@@ -132,22 +133,31 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
     }
   }
 
-  Widget _serviceItemText(ServiceItem serviceItem) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-            child: Container(
-          margin: EdgeInsets.only(top: 4),
-          child: Text(
-            serviceItem.name,
-            style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+  _serviceItemText(ServiceItem serviceItem) {
+    return Container(
+      margin: EdgeInsets.only(top: 4),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.check_box,
+            size: 20,
+            color: red,
           ),
-        )),
-      ],
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 4),
+              child: Text(
+                serviceItem.name,
+                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
-  Widget _appointmentIssueType(Issue item, int index) {
+  _appointmentIssueType(Issue item, int index) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Row(
@@ -158,7 +168,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
             width: 20,
             height: 20,
             decoration: new BoxDecoration(
-              color: red,
+              color: gray3,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
@@ -185,7 +195,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSeparator() {
+  _buildSeparator() {
     return Row(
       children: <Widget>[
         Expanded(
@@ -204,78 +214,81 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Text(
-        text,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
+        '$text:',
+        style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 13),
       ),
     );
   }
 
-  _floatingButtonsContainer(BuildContext context) {
-    switch (appointment.getState()) {
-      case AppointmentStatusState.SUBMITTED:
-        return _getSubmittedFloatingButtons(context);
-      case AppointmentStatusState.PENDING:
-        return _getPendingFloatingButtons(context);
-      default:
-        return Container();
-    }
-  }
-
-  Widget _getSubmittedFloatingButtons(BuildContext context) {
+  _applicantWidget() {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
+      margin: EdgeInsets.only(top: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Spacer(),
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-
-            },
-            label: Text(
-              S
-                  .of(context)
-                  .appointment_details_services_appointment_cancel
-                  .toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+          Container(
+            decoration: new BoxDecoration(
+                color: red,
+                borderRadius: new BorderRadius.all(Radius.circular(12))),
+            width: 24,
+            height: 24,
+            child: Container(),
+          ),
+          Flexible(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                '${appointmentDetail.user?.name}',
+                maxLines: 3,
+                style: TextHelper.customTextStyle(
+                    null, gray3, FontWeight.bold, 16),
+              ),
             ),
-            backgroundColor: Colors.white,
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _getPendingFloatingButtons(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-            },
-            label: Text(
-              S
-                  .of(context)
-                  .appointment_details_services_appointment_cancel
-                  .toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
-            ),
-            backgroundColor: Colors.white,
+  _defaultTextWidget(String content) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+            child: Container(
+          margin: EdgeInsets.only(top: 4),
+          child: Text(
+            appointment.name,
+            style: TextHelper.customTextStyle(null, Colors.black, null, 13),
           ),
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-            },
-            label: Text(
-              S.of(context).general_accept.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+        )),
+      ],
+    );
+  }
+
+  _buildMechanicWidget(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Row(
+        children: <Widget>[
+          Container(
+            decoration: new BoxDecoration(
+                color: red,
+                borderRadius: new BorderRadius.all(Radius.circular(12))),
+            width: 24,
+            height: 24,
+            child: Container(),
+          ),
+          Flexible(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                // TODO - need to add name of assigned mechanic
+                'Nume mecanic',
+                maxLines: 3,
+                style: TextHelper.customTextStyle(
+                    null, gray3, FontWeight.bold, 16),
+              ),
             ),
-            backgroundColor: Colors.white,
-          )
+          ),
         ],
       ),
     );

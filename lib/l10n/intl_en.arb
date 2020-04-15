@@ -246,6 +246,8 @@
   "work_estimate_status_accepted": "Accepted",
   "mechanic_another_work_estimate_warning": "You are already working on another appointment",
   "mechanic_mechanic_recommendations": "Service recommendations",
+  "mechanic_appointment_number": "Appointment number",
+  "mechanic_appointment_mechanic_distributed": "Distributed mechanic",
   "notifications_title": "Notifications",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
