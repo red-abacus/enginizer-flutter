@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/mechanic-appointments/widgets/general/appointment-mechanic-receive-form.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
@@ -134,12 +135,29 @@ class AppointmentDetailsReceiveFormWidget extends StatelessWidget {
               child: FlatButton(
                 color: gray2,
                 child: Text(S.of(context).mechanic_appointment_i_received,
-                style: TextHelper.customTextStyle(null, Colors.white, FontWeight.normal, 16)), onPressed: () {},
+                style: TextHelper.customTextStyle(null, Colors.white, FontWeight.normal, 16)), onPressed: () {
+                  _showConfirmationAlert(context);
+              },
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  _showConfirmationAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AppointmentMechanicReceiveFormWidget(
+          confirmFunction: (confirmation) {
+            // TODO - need to do something this confirmation
+            if (confirmation) {
+            }
+          },
+        );
+      },
     );
   }
 }
