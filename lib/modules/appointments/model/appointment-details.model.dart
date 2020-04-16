@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
@@ -10,6 +11,7 @@ class AppointmentDetail {
   String scheduledDate;
   User user;
   int workEstimateId;
+  ServiceProvider serviceProvider;
 
   AppointmentDetail(
       {this.car,
@@ -17,7 +19,8 @@ class AppointmentDetail {
       this.serviceItems,
       this.scheduledDate,
       this.user,
-      this.workEstimateId});
+      this.workEstimateId,
+      this.serviceProvider});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -26,8 +29,9 @@ class AppointmentDetail {
         serviceItems:
             json["services"] != null ? _mapServiceItems(json["services"]) : [],
         scheduledDate: json["scheduledDateTime"],
-        user: User.fromJson(json["user"]),
-        workEstimateId: json['workEstimateId']);
+        user: json["user"] != null ? User.fromJson(json["user"]) : null,
+        workEstimateId: json['workEstimateId'],
+        serviceProvider: json['provider'] != null ? ServiceProvider.fromJson(json['provider']) : null);
   }
 
   static _mapIssuesList(List<dynamic> response) {

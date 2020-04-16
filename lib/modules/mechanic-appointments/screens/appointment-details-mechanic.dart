@@ -5,9 +5,9 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-car-details.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-receive-form.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic.widget.dart';
-import 'package:app/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -41,7 +41,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 4, initialIndex: 3);
+    _tabController = new TabController(vsync: this, length: 4, initialIndex: 2);
   }
 
   @override
@@ -59,43 +59,35 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       });
     }
 
-    var appointmentTitle = "";
-
-    switch (appointmentMechanicProvider.selectedAppointment.getState()) {
-      case AppointmentStatusState.SUBMITTED:
-        appointmentTitle = 'DEVIZ';
-        break;
-      case AppointmentStatusState.ON_HOLD:
-        appointmentTitle = 'ON HOLD';
-        break;
-      case AppointmentStatusState.IN_UNIT:
-        appointmentTitle = "in unit";
-        break;
-      default:
-        break;
-    }
-
     return Consumer<AppointmentMechanicProvider>(
-      builder: (context, appointmentMechanicProvider, _) => Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Theme.of(context).cardColor),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(text: S.of(context).general_details),
-              Tab(text: S.of(context).appointment_details_car_details),
-              Tab(text: S.of(context).appointment_details_tasks_list),
-              Tab(text: S.of(context).appointment_details_service_history),
-            ],
-          ),
-          title: _titleText(),
-        ),
-        body: _buildContent(),
-        bottomNavigationBar: _getBottomBar(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: _getBottomBarFloatingAction(),
-      ),
+      builder: (context, appointmentMechanicProvider, _) => _getContent(),
     );
+  }
+
+  _getContent() {
+    return _isLoading
+        ? Scaffold(
+            appBar: AppBar(
+              iconTheme: IconThemeData(color: Theme.of(context).cardColor),
+              title: _titleText(),
+            ),
+            body: Center(child: CircularProgressIndicator()),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              iconTheme: IconThemeData(color: Theme.of(context).cardColor),
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: _getTabs(),
+              ),
+              title: _titleText(),
+            ),
+            body: _buildContent(),
+            bottomNavigationBar: _getBottomBar(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: _getBottomBarFloatingAction(),
+          );
   }
 
   @override
@@ -186,23 +178,40 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   }
 
   _buildContent() {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : _buildTabBarView();
-  }
+    List<Widget> list = [];
 
-  TabBarView _buildTabBarView() {
-    return TabBarView(
-      controller: _tabController,
-      children: [
+    if (appointmentMechanicProvider.selectedAppointment.getState() ==
+        AppointmentStatusState.SUBMITTED) {
+      list = [
         AppointmentDetailsMechanicWidget(
             appointment: appointmentMechanicProvider.selectedAppointment,
             appointmentDetail:
                 appointmentMechanicProvider.selectedAppointmentDetails),
         AppointmentDetailsCarDetails(),
-        AppointmentDetailsTasksList(),
-        AppointmentDetailsServiceHistory(),
-      ],
+        AppointmentDetailsReceiveFormWidget(
+            appointmentDetails:
+                appointmentMechanicProvider.selectedAppointmentDetails),
+        AppointmentDetailsServiceHistory()
+      ];
+    }
+
+    return TabBarView(
+      controller: _tabController,
+      children: list,
     );
+  }
+
+  _getTabs() {
+    if (appointmentMechanicProvider.selectedAppointment.getState() ==
+        AppointmentStatusState.SUBMITTED) {
+      return [
+        Tab(text: S.of(context).general_details),
+        Tab(text: S.of(context).appointment_details_car_details),
+        Tab(text: S.of(context).mechanic_appointment_receive_form),
+        Tab(text: S.of(context).appointment_details_service_history)
+      ];
+    }
+
+    return List<Tab>();
   }
 }
