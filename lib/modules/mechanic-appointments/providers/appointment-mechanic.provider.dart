@@ -9,7 +9,7 @@ import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dar
 import 'package:flutter/cupertino.dart';
 
 class AppointmentMechanicProvider with ChangeNotifier {
-  AppointmentsService appointmentsService = inject<AppointmentsService>();
+  AppointmentsService _appointmentsService = inject<AppointmentsService>();
   WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
 
   Appointment selectedAppointment;
@@ -19,20 +19,13 @@ class AppointmentMechanicProvider with ChangeNotifier {
 
   MechanicTask selectedMechanicTask;
 
-  WorkEstimateDetails workEstimateDetails;
-
   List<dynamic> serviceHistory = [];
-
-  void initFormValues() {
-    standardTasks.forEach((task) =>
-        task.issues = List.of(task.issues)..add(Issue(id: null, name: '')));
-  }
 
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
     try {
       selectedAppointmentDetails =
-          await this.appointmentsService.getAppointmentDetails(appointment.id);
+          await _appointmentsService.getAppointmentDetails(appointment.id);
       notifyListeners();
       return selectedAppointmentDetails;
     } catch (error) {
@@ -44,6 +37,10 @@ class AppointmentMechanicProvider with ChangeNotifier {
     standardTasks = _mockStandardTasks();
     notifyListeners();
     return standardTasks;
+  }
+
+  Future getTestStandardTasks(int appointmentId) async {
+    _appointmentsService.getAppointmentStandardTasks(appointmentId);
   }
 
   List<MechanicTask> _mockStandardTasks() {
@@ -59,11 +56,11 @@ class AppointmentMechanicProvider with ChangeNotifier {
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
     try {
-      workEstimateDetails = await this
-          ._workEstimatesService
-          .getWorkEstimateDetails(workEstimateId);
-      notifyListeners();
-      return workEstimateDetails;
+//      workEstimateDetails = await this
+//          ._workEstimatesService
+//          .getWorkEstimateDetails(workEstimateId);
+//      notifyListeners();
+//      return workEstimateDetails;
     } catch (error) {
       throw (error);
     }

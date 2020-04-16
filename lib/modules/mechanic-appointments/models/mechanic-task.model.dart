@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/mechanic-appointments/enums/mechanic-task-state.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -6,9 +7,10 @@ class MechanicTask {
   int id;
   String name;
   bool completed;
-  List<Issue> issues;
+  List<Issue> issues = [];
+  MechanicTaskState state = MechanicTaskState.NOT_SELECTED;
 
-  MechanicTask({this.id, this.name, this.completed, this.issues = const []});
+  MechanicTask({this.id, this.name, this.completed, this.issues});
 
   factory MechanicTask.fromJson(Map<String, dynamic> json) {
     return MechanicTask(

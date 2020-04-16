@@ -8,6 +8,7 @@ import 'package:app/modules/mechanic-appointments/widgets/appointment-details-ca
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-receive-form.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-service-history.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-tasks-list.widget.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -114,25 +115,18 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           .getAppointmentDetails(
               appointmentMechanicProvider.selectedAppointment)
           .then((_) async {
-        setState(() {
-          _isLoading = false;
-        });
+        appointmentMechanicProvider
+            .getStandardTasks(
+            appointmentMechanicProvider.selectedAppointment.id)
+            .then((mechanicTasks) {
+          appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
 
-//        await appointmentMechanicProvider
-//            .getWorkEstimateDetails(appointmentMechanicProvider
-//                .selectedAppointmentDetails.workEstimateId)
-//            .then((_) async {
-//          appointmentMechanicProvider
-//              .getStandardTasks(
-//                  appointmentMechanicProvider.selectedAppointment.id)
-//              .then((mechanicTasks) {
-//            appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
-//            appointmentMechanicProvider.initFormValues();
-//          });
-//        });
+          setState(() {
+            _isLoading = false;
+          });
+        });
       });
     } catch (error) {
-      print(error);
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
@@ -178,21 +172,25 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   }
 
   _buildContent() {
-    List<Widget> list = [];
+    List<Widget> list = [
+      AppointmentDetailsMechanicWidget(
+          appointment: appointmentMechanicProvider.selectedAppointment,
+          appointmentDetail:
+              appointmentMechanicProvider.selectedAppointmentDetails),
+      AppointmentDetailsCarDetails(),
+      AppointmentDetailsServiceHistory()
+    ];
 
     if (appointmentMechanicProvider.selectedAppointment.getState() ==
         AppointmentStatusState.SUBMITTED) {
-      list = [
-        AppointmentDetailsMechanicWidget(
-            appointment: appointmentMechanicProvider.selectedAppointment,
-            appointmentDetail:
-                appointmentMechanicProvider.selectedAppointmentDetails),
-        AppointmentDetailsCarDetails(),
-        AppointmentDetailsReceiveFormWidget(
-            appointmentDetails:
-                appointmentMechanicProvider.selectedAppointmentDetails),
-        AppointmentDetailsServiceHistory()
-      ];
+      list.insert(
+          2,
+          AppointmentDetailsReceiveFormWidget(
+              appointmentDetails:
+                  appointmentMechanicProvider.selectedAppointmentDetails));
+    } else if (appointmentMechanicProvider.selectedAppointment.getState() ==
+        AppointmentStatusState.ON_HOLD) {
+      list.insert(2, AppointmentDetailsTasksList());
     }
 
     return TabBarView(
@@ -202,16 +200,23 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   }
 
   _getTabs() {
-    if (appointmentMechanicProvider.selectedAppointment.getState() ==
-        AppointmentStatusState.SUBMITTED) {
-      return [
-        Tab(text: S.of(context).general_details),
-        Tab(text: S.of(context).appointment_details_car_details),
-        Tab(text: S.of(context).mechanic_appointment_receive_form),
-        Tab(text: S.of(context).appointment_details_service_history)
-      ];
+    List<Tab> tabs = [
+      Tab(text: S.of(context).general_details),
+      Tab(text: S.of(context).appointment_details_car_details),
+      Tab(text: S.of(context).appointment_details_service_history)
+    ];
+
+    switch (appointmentMechanicProvider.selectedAppointment.getState()) {
+      case AppointmentStatusState.SUBMITTED:
+        tabs.insert(2, Tab(text: S.of(context).mechanic_appointment_receive_form));
+        break;
+      case AppointmentStatusState.ON_HOLD:
+        tabs.insert(2, Tab(text: S.of(context).mechanic_appointment_tasks_title));
+        break;
+      default:
+        break;
     }
 
-    return List<Tab>();
+    return tabs;
   }
 }

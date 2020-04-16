@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:app/generated/l10n.dart';
-import 'package:app/modules/mechanic-appointments/managers/mechanic-timer.manager.dart';
-import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
+import 'package:app/modules/mechanic-appointments/enums/mechanic-task-state.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/mechanic-appointments/models/timer-config.model.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'package:app/modules/mechanic-appointments/widgets/appointment-details-task-issues-list.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/items/appointment-details-task-issues-list.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +22,7 @@ class AppointmentDetailsTasksList extends StatefulWidget {
 
 class AppointmentDetailsTasksListState
     extends State<AppointmentDetailsTasksList> {
-  int _currentStepIndex = 0;
+  int _currentStepIndex = -1;
   List<Step> steps = [];
   bool _initDone = false;
 
@@ -58,8 +56,6 @@ class AppointmentDetailsTasksListState
         Expanded(
           child: steps.isNotEmpty
               ? Stepper(
-                  currentStep: _currentStepIndex,
-                  onStepTapped: (stepIndex) => _showTask(stepIndex),
                   type: StepperType.vertical,
                   steps: steps,
                   controlsBuilder: (BuildContext context,
@@ -114,51 +110,51 @@ class AppointmentDetailsTasksListState
       appointmentMechanicProvider =
           Provider.of<AppointmentMechanicProvider>(context, listen: false);
 
-      MechanicTimerManager.getWorkPeriodTime(
-              appointmentMechanicProvider.workEstimateDetails.id)
-          .then((period) {
-        if (period != 0) {
-          setState(() {
-            _timer = Timer.periodic(Duration(seconds: 1), null);
-            _timer.cancel();
-
-            int hours = period ~/ 3600;
-            _timerConfig.hours = hours;
-            int minutes = (period - hours * 3600) ~/ 60;
-            _timerConfig.minutes = minutes;
-            int seconds = period - hours * 3600 - minutes * 60;
-            _timerConfig.seconds = seconds;
-            _showTimer = true;
-          });
-        }
-
-        MechanicTimerManager.getLastPeriod(
-                appointmentMechanicProvider.workEstimateDetails.id)
-            .then((lastPeriod) {
-          if (lastPeriod != null && lastPeriod.endDate == null) {
-            MechanicTimerManager.startWorkEstimate(
-                appointmentMechanicProvider.workEstimateDetails.id);
-
-            setState(() {
-              _timer = Timer.periodic(
-                Duration(seconds: 1),
-                (timer) => setState(() {
-                  _timerConfig.seconds += 1;
-                  if (_timerConfig.seconds > 59) {
-                    _timerConfig.seconds = 0;
-                    _timerConfig.minutes += 1;
-                  }
-                  if (_timerConfig.minutes > 59) {
-                    _timerConfig.minutes = 0;
-                    _timerConfig.hours += 1;
-                  }
-                }),
-              );
-              _showTimer = true;
-            });
-          }
-        });
-      });
+//      MechanicTimerManager.getWorkPeriodTime(
+//              appointmentMechanicProvider.workEstimateDetails.id)
+//          .then((period) {
+//        if (period != 0) {
+//          setState(() {
+//            _timer = Timer.periodic(Duration(seconds: 1), null);
+//            _timer.cancel();
+//
+//            int hours = period ~/ 3600;
+//            _timerConfig.hours = hours;
+//            int minutes = (period - hours * 3600) ~/ 60;
+//            _timerConfig.minutes = minutes;
+//            int seconds = period - hours * 3600 - minutes * 60;
+//            _timerConfig.seconds = seconds;
+//            _showTimer = true;
+//          });
+//        }
+//
+//        MechanicTimerManager.getLastPeriod(
+//                appointmentMechanicProvider.workEstimateDetails.id)
+//            .then((lastPeriod) {
+//          if (lastPeriod != null && lastPeriod.endDate == null) {
+//            MechanicTimerManager.startWorkEstimate(
+//                appointmentMechanicProvider.workEstimateDetails.id);
+//
+//            setState(() {
+//              _timer = Timer.periodic(
+//                Duration(seconds: 1),
+//                (timer) => setState(() {
+//                  _timerConfig.seconds += 1;
+//                  if (_timerConfig.seconds > 59) {
+//                    _timerConfig.seconds = 0;
+//                    _timerConfig.minutes += 1;
+//                  }
+//                  if (_timerConfig.minutes > 59) {
+//                    _timerConfig.minutes = 0;
+//                    _timerConfig.hours += 1;
+//                  }
+//                }),
+//              );
+//              _showTimer = true;
+//            });
+//          }
+//        });
+//      });
     }
     _initDone = true;
     super.didChangeDependencies();
@@ -199,11 +195,13 @@ class AppointmentDetailsTasksListState
         Step(
           isActive: _isStepActive(index),
           title: _stepperTitle(task),
-          content: AppointmentDetailsTaskIssuesList(
-            issues: appointmentMechanicProvider.selectedMechanicTask.issues,
-            addIssue: _addIssue,
-            removeIssue: _removeIssue,
-          ),
+          content: task.state == MechanicTaskState.SELECTED
+              ? AppointmentDetailsTaskIssuesListWidget(
+                  mechanicTask: task,
+                  addIssue: _addIssue,
+                  removeIssue: _removeIssue,
+                )
+              : Container(),
         ),
       );
     });
@@ -239,54 +237,21 @@ class AppointmentDetailsTasksListState
     });
   }
 
-  _showTask(int stepIndex) {
-    setState(() {
-      appointmentMechanicProvider.selectedMechanicTask =
-          appointmentMechanicProvider.standardTasks[stepIndex];
-
-      _currentStepIndex = stepIndex;
-    });
-  }
-
   _startTimer() {
-    if (appointmentMechanicProvider.workEstimateDetails != null) {
-      MechanicTimerManager.hasWorkEstimateInProgress(
-              appointmentMechanicProvider.workEstimateDetails.id)
-          .then((hasWorkEstimateInProgress) {
-        if (hasWorkEstimateInProgress) {
-          AlertWarningDialog.showAlertDialog(
-              context,
-              S.of(context).general_warning,
-              S.of(context).mechanic_another_work_estimate_warning);
-        } else {
-          MechanicTimerManager.startWorkEstimate(
-              appointmentMechanicProvider.workEstimateDetails.id);
+    if (appointmentMechanicProvider.standardTasks.length > 0) {
+      setState(() {
+        appointmentMechanicProvider.standardTasks[0].state =
+            MechanicTaskState.SELECTED;
+        appointmentMechanicProvider.standardTasks[0].issues = List.of(appointmentMechanicProvider.standardTasks[0].issues)..add(Issue(id: null, name: ''));
 
-          setState(() {
-            _timer = Timer.periodic(
-              Duration(seconds: 1),
-              (timer) => setState(() {
-                _timerConfig.seconds += 1;
-                if (_timerConfig.seconds > 59) {
-                  _timerConfig.seconds = 0;
-                  _timerConfig.minutes += 1;
-                }
-                if (_timerConfig.minutes > 59) {
-                  _timerConfig.minutes = 0;
-                  _timerConfig.hours += 1;
-                }
-              }),
-            );
-            _showTimer = true;
-          });
-        }
+        _currentStepIndex = 0;
       });
     }
   }
 
   _pauseTimer() {
-    MechanicTimerManager.pauseWorkEstimate(
-        appointmentMechanicProvider.workEstimateDetails.id);
+//    MechanicTimerManager.pauseWorkEstimate(
+//        appointmentMechanicProvider.workEstimateDetails.id);
 
     setState(() {
       _timer.cancel();
@@ -319,8 +284,7 @@ class AppointmentDetailsTasksListState
     }
   }
 
-  _editWorkEstimate() {
-  }
+  _editWorkEstimate() {}
 
   bool _isStepActive(int stepIndex) {
     return _currentStepIndex == stepIndex;

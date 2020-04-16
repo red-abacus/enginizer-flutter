@@ -1,51 +1,44 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AppointmentDetailsTaskIssuesList extends StatefulWidget {
-  final List<Issue> issues;
+class AppointmentDetailsTaskIssuesListWidget extends StatelessWidget {
+  final MechanicTask mechanicTask;
 
   final Function addIssue;
   final Function removeIssue;
 
-  AppointmentDetailsTaskIssuesList(
-      {this.issues = const [], this.addIssue, this.removeIssue});
+  AppointmentDetailsTaskIssuesListWidget(
+      {this.mechanicTask, this.addIssue, this.removeIssue});
 
-  @override
-  _AppointmentDetailsTaskIssuesListState createState() =>
-      _AppointmentDetailsTaskIssuesListState();
-}
-
-class _AppointmentDetailsTaskIssuesListState
-    extends State<AppointmentDetailsTaskIssuesList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: widget.issues.length,
+        itemCount: mechanicTask.issues.length,
         itemBuilder: (context, index) {
-          return _buildListTile(context, index, widget.issues);
+          return _buildListTile(context, index, mechanicTask.issues);
         });
   }
 
-  ListTile _buildListTile(
-      BuildContext context, int index, List<Issue> issues) {
+  ListTile _buildListTile(BuildContext context, int index, List<Issue> issues) {
     return ListTile(
-      title: _tileTextFormField(issues[index], _isLastTile(index)),
+      title: _tileTextFormField(context, issues[index], _isLastTile(index)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _isLastTile(index)
               ? GestureDetector(
-                  onTap: () => widget.addIssue(issues[index]),
+                  onTap: () => addIssue(issues[index]),
                   child: Icon(Icons.add_circle,
                       color: Theme.of(context).accentColor, size: 32))
               : GestureDetector(
-                  onTap: () => widget.removeIssue(index),
+                  onTap: () => removeIssue(index),
                   child: Icon(Icons.close,
                       color: Theme.of(context).accentColor, size: 32)),
         ],
@@ -53,7 +46,7 @@ class _AppointmentDetailsTaskIssuesListState
     );
   }
 
-  _tileTextFormField(Issue issue, bool enabled) {
+  _tileTextFormField(BuildContext context, Issue issue, bool enabled) {
     return CustomTextFormField(
       labelText: S.of(context).appointment_details_task_add_issue,
       enabled: enabled,
@@ -67,6 +60,6 @@ class _AppointmentDetailsTaskIssuesListState
   }
 
   _isLastTile(int index) {
-    return index == widget.issues.length - 1;
+    return index == mechanicTask.issues.length - 1;
   }
 }

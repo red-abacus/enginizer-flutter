@@ -1,11 +1,12 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/mechanic-appointments/widgets/general/appointment-mechanic-receive-form.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'items/appointment-mechanic-receive-form.widget.dart';
 
 class AppointmentDetailsReceiveFormWidget extends StatelessWidget {
   final AppointmentDetail appointmentDetails;
