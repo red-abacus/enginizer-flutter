@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:app/modules/mechanic-appointments/enums/task-priority.enum.dart';
+
 import 'issue-item.model.dart';
 import 'issue-section.model.dart';
 
@@ -5,6 +9,8 @@ class Issue {
   int id;
   String name;
   List<IssueSection> sections;
+  TaskPriority priority;
+  File image;
 
   Issue({this.id, this.name, this.sections = const []});
 
