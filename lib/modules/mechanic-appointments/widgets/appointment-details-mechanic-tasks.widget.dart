@@ -21,8 +21,9 @@ class AppointmentDetailsTasksList extends StatefulWidget {
 
 class AppointmentDetailsTasksListState
     extends State<AppointmentDetailsTasksList> {
-
   Timer _timer;
+  bool _timerStart = false;
+  MechanicTask _currentTask;
 
   AppointmentMechanicProvider appointmentMechanicProvider;
 
@@ -47,7 +48,6 @@ class AppointmentDetailsTasksListState
           margin: EdgeInsets.only(left: 10, right: 10, top: 10),
           child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
               itemCount: appointmentMechanicProvider.standardTasks.length,
               itemBuilder: (context, index) {
                 return AppointmentDetailsMechanicTaskSectionWidget(
@@ -57,7 +57,7 @@ class AppointmentDetailsTasksListState
         )),
         Container(
           padding: EdgeInsets.symmetric(vertical: 20),
-          child: (_timer != null && _timer.isActive)
+          child: (_timerStart)
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -104,13 +104,13 @@ class AppointmentDetailsTasksListState
   }
 
   _startTimer() {
-    if (appointmentMechanicProvider.standardTasks.length > 0) {
+    if (!_timerStart) {
       setState(() {
-        appointmentMechanicProvider.standardTasks[0].state =
-            MechanicTaskState.SELECTED;
-        appointmentMechanicProvider.standardTasks[0].issues = [
-          Issue(id: -1, name: '')
-        ];
+        _timerStart = true;
+
+        _currentTask = appointmentMechanicProvider.standardTasks[0];
+        _currentTask.state = MechanicTaskState.SELECTED;
+        _currentTask.issues = [Issue(id: -1, name: '')];
       });
     }
   }
@@ -122,20 +122,18 @@ class AppointmentDetailsTasksListState
   }
 
   _nextIssue() {
-    bool allTasksCompleted = true;
+    if (_currentTask != null) {
+      _currentTask.state = MechanicTaskState.FINISHED;
+      int index =
+          appointmentMechanicProvider.standardTasks.indexOf(_currentTask);
 
-    for (MechanicTask task in appointmentMechanicProvider.standardTasks) {
-      if (!task.completed) {
-        allTasksCompleted = false;
+      if (index < appointmentMechanicProvider.standardTasks.length - 1) {
+        setState(() {
+          _currentTask = appointmentMechanicProvider.standardTasks[index + 1];
+          _currentTask.state = MechanicTaskState.SELECTED;
+          _currentTask.issues = [Issue(id: null, name: '')];
+        });
       }
-    }
-
-    if (allTasksCompleted) {
-      _editWorkEstimate();
-    } else {
-      setState(() {
-
-      });
     }
   }
 

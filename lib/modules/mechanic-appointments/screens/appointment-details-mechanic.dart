@@ -117,7 +117,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           .then((_) async {
         appointmentMechanicProvider
             .getStandardTasks(
-            appointmentMechanicProvider.selectedAppointment.id)
+                appointmentMechanicProvider.selectedAppointment.id)
             .then((mechanicTasks) {
           appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
 
@@ -208,10 +208,12 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
     switch (appointmentMechanicProvider.selectedAppointment.getState()) {
       case AppointmentStatusState.SUBMITTED:
-        tabs.insert(2, Tab(text: S.of(context).mechanic_appointment_receive_form));
+        tabs.insert(
+            2, Tab(text: S.of(context).mechanic_appointment_receive_form));
         break;
       case AppointmentStatusState.ON_HOLD:
-        tabs.insert(2, Tab(text: S.of(context).mechanic_appointment_tasks_title));
+        tabs.insert(
+            2, Tab(text: S.of(context).mechanic_appointment_tasks_title));
         break;
       default:
         break;

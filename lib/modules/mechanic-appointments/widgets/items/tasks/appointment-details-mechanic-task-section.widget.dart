@@ -28,7 +28,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 20),
       child: Column(
         children: <Widget>[
           Row(
