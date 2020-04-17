@@ -280,6 +280,7 @@
   "mechanic_appointment_task_add_recommendation": "Adaugă recomandare",
   "mechanic_appointment_task_add_recommendation_error": "Recomandare necompletat!",
   "mechanic_appointment_task_add_priority": "Adaugă prioritate",
+  "mechanic_appointment_task_add_priority_error": "Prioritate necompletată",
   "mechanic_appointment_task_add_image": "Adaugă imagine",
   "notifications_title": "Notificări",
   "general_at": "la",

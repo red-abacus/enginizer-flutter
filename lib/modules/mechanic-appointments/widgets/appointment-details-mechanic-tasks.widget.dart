@@ -109,7 +109,7 @@ class AppointmentDetailsTasksListState
         appointmentMechanicProvider.standardTasks[0].state =
             MechanicTaskState.SELECTED;
         appointmentMechanicProvider.standardTasks[0].issues = [
-          Issue(id: 0, name: '')
+          Issue(id: -1, name: '')
         ];
       });
     }
@@ -134,15 +134,7 @@ class AppointmentDetailsTasksListState
       _editWorkEstimate();
     } else {
       setState(() {
-//        appointmentMechanicProvider.selectedMechanicTask.completed = true;
-//        if (_currentStepIndex + 1 <
-//            appointmentMechanicProvider.standardTasks.length) {
-//          _currentStepIndex += 1;
-//          appointmentMechanicProvider.selectedMechanicTask =
-//              appointmentMechanicProvider.standardTasks[_currentStepIndex];
-//
-//          _currentStepIndex = _currentStepIndex;
-//        }
+
       });
     }
   }

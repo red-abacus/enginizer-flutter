@@ -269,6 +269,7 @@
   "mechanic_appointment_task_priority_high": "High",
   "mechanic_appointment_task_add_recommendation": "Add recommendation",
   "mechanic_appointment_task_add_recommendation_error": "Recommendation not completed!",
+  "mechanic_appointment_task_add_priority_error": "Priority not completed!",
   "mechanic_appointment_task_add_image": "Add image",
   "mechanic_appointment_task_add_priority": "Add priority",
   "notifications_title": "Notifications",

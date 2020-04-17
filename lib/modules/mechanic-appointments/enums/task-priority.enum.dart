@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 
 class TaskPriorityUtils {
@@ -12,10 +13,17 @@ class TaskPriorityUtils {
         return S.of(context).mechanic_appointment_task_priority_high;
     }
   }
+
+  static Color color(BuildContext context, TaskPriority priority) {
+    switch (priority) {
+      case TaskPriority.LOW:
+        return gray;
+      case TaskPriority.MEDIUM:
+        return yellow;
+      case TaskPriority.HIGH:
+        return red;
+    }
+  }
 }
 
-enum TaskPriority {
-  LOW,
-  MEDIUM,
-  HIGH
-}
+enum TaskPriority { LOW, MEDIUM, HIGH }

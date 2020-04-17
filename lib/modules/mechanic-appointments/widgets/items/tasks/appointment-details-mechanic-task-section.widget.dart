@@ -1,12 +1,13 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-state.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'appointment-details-mechanic-tasks-list.widget.dart';
+import 'appointment-details-mechanic-task-issue.widget.dart';
 
 class AppointmentDetailsMechanicTaskSectionWidget extends StatefulWidget {
   final MechanicTask task;
@@ -47,7 +48,16 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
 
   _issuesContainer() {
     return widget.task.state == MechanicTaskState.SELECTED
-        ? AppointmentDetailsMechanicTasksListWidget(mechanicTask: widget.task)
+        ? ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: widget.task.issues.length,
+            itemBuilder: (context, index) {
+              return AppointmentDetailsTaskIssueWidget(
+                issue: widget.task.issues[index],
+                issueAdded: _issueAdded,
+              );
+            })
         : Container();
   }
 
@@ -154,6 +164,13 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
       setState(() {
         _bestTimeActivated = false;
       });
+    });
+  }
+
+  _issueAdded(Issue issue) {
+    setState(() {
+      widget.task.state = MechanicTaskState.SELECTED;
+      widget.task.issues.add(Issue(id: -1, name: ''));
     });
   }
 }

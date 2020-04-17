@@ -9,13 +9,13 @@ import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AppointmentDetailsDetailsMechanicTaskIssueModal extends StatefulWidget {
   final Issue issue;
+  final Function issueAdded;
 
-  AppointmentDetailsDetailsMechanicTaskIssueModal({this.issue});
+  AppointmentDetailsDetailsMechanicTaskIssueModal(
+      {this.issue, this.issueAdded});
 
   @override
   _AppointmentDetailsDetailsMechanicTaskIssueModalState createState() =>
@@ -24,61 +24,74 @@ class AppointmentDetailsDetailsMechanicTaskIssueModal extends StatefulWidget {
 
 class _AppointmentDetailsDetailsMechanicTaskIssueModalState
     extends State<AppointmentDetailsDetailsMechanicTaskIssueModal> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: new BorderRadius.circular(5.0),
-      child: Container(
-        decoration: new BoxDecoration(
-            borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(20.0),
-                topRight: const Radius.circular(20.0))),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: Center(
-                child: Container(
-              margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _descriptionContainer(context),
-                  _priorityContainer(context),
-                  _bottomContainer(),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: FlatButton(
-                        color: red,
-                        onPressed: () => _setIssueParameters(),
-                        child: Text(
-                            S
-                                .of(context)
-                                .mechanic_appointment_task_issue_finish,
-                            style: TextHelper.customTextStyle(
-                                null, Colors.white, null, 14))),
-                  ),
-                ],
-              ),
-            )),
+    return Form(
+      key: _formKey,
+      child: ClipRRect(
+        borderRadius: new BorderRadius.circular(5.0),
+        child: Container(
+          decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20.0),
+                  topRight: const Radius.circular(20.0))),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Container(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              child: Center(
+                  child: Container(
+                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _descriptionContainer(context),
+                    _priorityContainer(context),
+                    _bottomContainer(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: FlatButton(
+                          color: red,
+                          onPressed: () => _setIssueParameters(),
+                          child: Text(
+                              S
+                                  .of(context)
+                                  .mechanic_appointment_task_issue_finish,
+                              style: TextHelper.customTextStyle(
+                                  null, Colors.white, null, 14))),
+                    ),
+                  ],
+                ),
+              )),
+            ),
           ),
         ),
       ),
     );
   }
 
-  _setIssueParameters() {}
+  _setIssueParameters() {
+    if (_formKey.currentState.validate()) {
+      Navigator.pop(context);
+      widget.issue.id = 0;
+      widget.issueAdded(widget.issue);
+    }
+  }
 
   _descriptionContainer(BuildContext context) {
     return CustomTextFormField(
       labelText: S.of(context).mechanic_appointment_task_add_recommendation,
+      errorText:
+          S.of(context).mechanic_appointment_task_add_recommendation_error,
       listener: (value) {
         setState(() {
           widget.issue.name = value;
         });
       },
       currentValue: widget.issue.name,
-      validate: false,
+      validate: true,
       textInputType: TextInputType.text,
     );
   }
@@ -87,6 +100,13 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: DropdownButtonFormField(
+        validator: (value) {
+          if (value == null) {
+            return S.of(context).mechanic_appointment_task_add_priority_error;
+          } else {
+            return null;
+          }
+        },
         isDense: true,
         value: widget.issue.priority,
         hint: Text(S.of(context).mechanic_appointment_task_add_priority),
