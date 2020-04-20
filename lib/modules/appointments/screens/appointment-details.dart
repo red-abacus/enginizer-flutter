@@ -52,7 +52,6 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
     return Consumer<AppointmentProvider>(
         builder: (context, appointmentProvider, _) => Scaffold(
-
               appBar: AppBar(
                 title: Text(
                   _appointmentProvider.selectedAppointment.name,
@@ -97,10 +96,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointment_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointment_details, context);
       }
 
       setState(() {
@@ -229,10 +226,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.CANCEL_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_cancel_appointment,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_cancel_appointment, context);
       }
     }
   }

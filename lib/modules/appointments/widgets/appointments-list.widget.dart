@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/enums/appointment-type.enum.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,7 @@ class AppointmentsList extends StatelessWidget {
 
   Function selectAppointment;
   Function filterAppointments;
+  final AppointmentType appointmentType;
 
   AppointmentsList(
       {this.appointments,
@@ -24,7 +26,8 @@ class AppointmentsList extends StatelessWidget {
       this.filterAppointments,
       this.searchString,
       this.appointmentStatusState,
-      this.filterDateTime});
+      this.filterDateTime,
+      this.appointmentType});
 
   @override
   Widget build(BuildContext context) {
@@ -129,12 +132,23 @@ class AppointmentsList extends StatelessWidget {
   _statusDropdownItems(BuildContext context) {
     List<DropdownMenuItem<AppointmentStatusState>> list = [];
 
-    AppointmentStatusStateUtils.statuses().forEach((status) {
+    var statuses = List<AppointmentStatusState>();
+
+    switch (appointmentType) {
+      case AppointmentType.CLIENT:
+        statuses = AppointmentStatusStateUtils.statuses();
+        break;
+      case AppointmentType.MECHANIC:
+        statuses = AppointmentStatusStateUtils.statusesMechanic();
+        break;
+    }
+
+    statuses.forEach((status) {
       list.add(DropdownMenuItem(
           value: status,
-          child: Text(AppointmentStatusStateUtils.title(
-              context, status))));
+          child: Text(AppointmentStatusStateUtils.title(context, status))));
     });
+
     return list;
   }
 }

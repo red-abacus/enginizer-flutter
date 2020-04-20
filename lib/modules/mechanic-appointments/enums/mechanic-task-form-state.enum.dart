@@ -1,0 +1,4 @@
+enum MechanicTaskFormState {
+  TASKS,
+  EFFICIENCY
+}

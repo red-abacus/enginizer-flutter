@@ -192,6 +192,10 @@ class Appointment {
         return AppointmentStatusState.OPEN_BID;
       case 'done':
         return AppointmentStatusState.DONE;
+      case 'onhold':
+        return AppointmentStatusState.ON_HOLD;
+      case 'inunit':
+        return AppointmentStatusState.IN_UNIT;
       default:
         return AppointmentStatusState.NONE;
     }

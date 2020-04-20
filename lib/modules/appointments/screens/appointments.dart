@@ -7,6 +7,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/enums/appointment-type.enum.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +121,9 @@ class AppointmentsState extends State<Appointments> {
             filterAppointments: _filterAppointments,
             searchString: provider.filterSearchString,
             appointmentStatusState: provider.filterStatus,
-            filterDateTime: provider.filterDateTime);
+            filterDateTime: provider.filterDateTime,
+            appointmentType: AppointmentType.CLIENT,
+          );
   }
 
   void _openAppointmentCreateModal(BuildContext buildContext) {

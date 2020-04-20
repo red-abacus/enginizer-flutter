@@ -24,6 +24,9 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _CANCEL_APPOINTMENT_SUFFIX = '/cancel';
 
+  static const String _STANDARD_TASKS_PREFIX = '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _STANDARD_TASKS_SUFFIX = '/standardTasks';
+
   Dio _dio = inject<Dio>();
 
   AppointmentsService();
@@ -94,9 +97,30 @@ class AppointmentsService {
     }
   }
 
+  Future getAppointmentStandardTasks(int appointmentId) async {
+    try {
+      final response =
+      await _dio.get(_buildAppointmentStandardTasks(appointmentId));
+
+      if (response.statusCode == 200) {
+        return _mapAppointment(response.data);
+      } else {
+        throw Exception(CANCEL_APPOINTMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CANCEL_APPOINTMENT_EXCEPTION);
+    }
+  }
+
   String buildCancelAppointmentPath(int appointmentId) {
     return _CANCEL_APPOINTMENT_PREFIX +
         appointmentId.toString() +
         _CANCEL_APPOINTMENT_SUFFIX;
+  }
+
+  String _buildAppointmentStandardTasks(int appointmentId) {
+    return _STANDARD_TASKS_PREFIX +
+    appointmentId.toString() +
+    _STANDARD_TASKS_SUFFIX;
   }
 }

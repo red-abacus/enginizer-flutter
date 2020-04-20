@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -55,11 +56,11 @@ class AppointmentDetailsCarDetailsState
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                (car.brand?.name != null && car.model?.name != null)
+                (car.brand?.name != null)
                     ? Padding(
                         padding: EdgeInsets.only(left: 20, top: 20, right: 20),
                         child: TextWidget(
-                          "${car.brand?.name} - ${car.model?.name} ",
+                          "${car.brand?.name}",
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -87,11 +88,29 @@ class AppointmentDetailsCarDetailsState
                             "${NumberFormat.decimalPattern().format(car.mileage)} KM"),
                       )
                     : Container(),
+                (car.vin != null)
+                    ? Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: TextWidget('${S.of(context).cars_create_vin}: ${car.vin}'),
+                )
+                    : Container(),
                 (car.registrationNumber != null)
                     ? Padding(
                         padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                         child: TextWidget("${car.registrationNumber}"),
                       )
+                    : Container(),
+                (car.rcaExpireDate != null)
+                    ? Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: TextWidget('${S.of(context).car_details_rca_availability} ${DateUtils.stringFromDate(car.rcaExpireDate, 'dd.MM.yyyy')}'),
+                )
+                    : Container(),
+                (car.itpExpireDate != null)
+                    ? Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: TextWidget('${S.of(context).car_details_itp_availability} ${DateUtils.stringFromDate(car.itpExpireDate, 'dd.MM.yyyy')}'),
+                )
                     : Container(),
               ],
             ),
