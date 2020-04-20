@@ -1,8 +1,11 @@
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppointmentDetail {
   Car car;
@@ -56,5 +59,15 @@ class AppointmentDetail {
     }
 
     return false;
+  }
+
+  List<MechanicTask> tasksFromIssues() {
+    List<MechanicTask> tasks = [];
+
+    for(Issue issue in this.issues) {
+      tasks.add(MechanicTask.from(issue));
+    }
+
+    return tasks;
   }
 }

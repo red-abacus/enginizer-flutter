@@ -70,10 +70,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
                 ? widget.task.translatedName(context)
                 : 'N/A',
             style: TextStyle(
-                color: Colors.black87,
-                decoration: widget.task.completed
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none)),
+                color: Colors.black87)),
       ),
     );
   }

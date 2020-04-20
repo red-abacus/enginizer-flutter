@@ -6,18 +6,20 @@ import 'package:flutter/cupertino.dart';
 class MechanicTask {
   int id;
   String name;
-  bool completed;
   List<Issue> issues = [];
   MechanicTaskState state = MechanicTaskState.NOT_SELECTED;
 
-  MechanicTask({this.id, this.name, this.completed, this.issues});
+  MechanicTask({this.id, this.name, this.issues});
 
   factory MechanicTask.fromJson(Map<String, dynamic> json) {
     return MechanicTask(
         id: json['id'],
         name: json['name'],
-        completed: json['completed'],
         issues: json['issues'] != null ? _mapIssues(json['issues']) : []);
+  }
+
+  factory MechanicTask.from(Issue issue) {
+    return MechanicTask(id: -1, name: issue.name, issues: []);
   }
 
   static _mapIssues(List<dynamic> response) {
@@ -42,6 +44,8 @@ class MechanicTask {
         return S.of(context).appointment_details_task_check_steering;
       case 'CHECK_BRAKING_MECHANISM':
         return S.of(context).appointment_details_task_check_braking_mechanism;
+      default:
+        return name;
     }
   }
 }

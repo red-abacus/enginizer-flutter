@@ -115,6 +115,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           .getAppointmentDetails(
               appointmentMechanicProvider.selectedAppointment)
           .then((_) async {
+
         appointmentMechanicProvider
             .getStandardTasks(
                 appointmentMechanicProvider.selectedAppointment.id)
