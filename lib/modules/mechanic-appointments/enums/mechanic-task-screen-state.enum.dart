@@ -1,5 +1,5 @@
 enum MechanicTaskScreenState {
   TASK,
   CLIENT,
-  FINISHED
+  FINISHED,
 }

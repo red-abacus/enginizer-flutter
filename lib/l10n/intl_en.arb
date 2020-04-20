@@ -275,6 +275,8 @@
   "mechanic_appointment_standard_verifications": "Standard verifications",
   "mechanic_appointment_client_requests": "Client requests",
   "mechanic_appointment_tasks_form_title": "Automobile verification finished?",
+  "mechanic_appointment_chart_your_time": "Your time",
+  "mechanic_appointment_chart_standard_time": "Standard time",
   "notifications_title": "Notifications",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
