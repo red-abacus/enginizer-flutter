@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../modules/auctions/screens/auctions.dart';
-import '../modules/cars/screens/dashboard.dart';
+import '../modules/dashboard/screens/dashboard.dart';
 import 'navigation.app.dart';
 
 class BottomBarItem {

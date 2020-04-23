@@ -56,6 +56,7 @@ import 'modules/consultant-appointments/providers/pick-up-car-form-consultant.pr
 import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'modules/consultant-auctions/providers/auctions-consultant.provider.dart';
+import 'modules/dashboard/providers/dashboard.provider.dart';
 import 'modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart';
@@ -118,6 +119,7 @@ class AppState extends State<App> {
               value: WorkEstimatesConsultantProvider()),
           ChangeNotifierProvider.value(
               value: PickUpCarFormConsultantProvider()),
+          ChangeNotifierProvider.value(value: DashboardProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(

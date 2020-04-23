@@ -9,7 +9,10 @@ class BasicDateField extends StatelessWidget {
   String labelText;
   DateTime dateTime;
 
-  BasicDateField({this.onChange, this.labelText = '', this.validator});
+  DateTime minDate;
+  DateTime maxDate;
+
+  BasicDateField({this.onChange, this.labelText = '', this.validator, this.minDate, this.maxDate});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +24,9 @@ class BasicDateField extends StatelessWidget {
         onShowPicker: (context, currentValue) {
           return showDatePicker(
               context: context,
-              firstDate: DateTime(1900),
+              firstDate: minDate != null ? minDate : DateTime(1900),
               initialDate: currentValue ?? DateTime.now(),
-              lastDate: DateTime(2100));
+              lastDate: maxDate != null ? maxDate : DateTime.now());
         },
         validator: (value) {
           return validator(value);
