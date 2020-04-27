@@ -1,6 +1,5 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
-  Appointment appointment;
   AppointmentDetail appointmentDetail;
   List<ServiceItem> serviceItems;
   List<ServiceProviderItem> serviceProviderItems;
@@ -24,8 +22,7 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   Function createPickUpCarForm;
 
   AppointmentDetailsGenericConsultantWidget(
-      {this.appointment,
-      this.appointmentDetail,
+      {this.appointmentDetail,
       this.serviceItems = const [],
       this.serviceProviderItems = const [],
       this.declineAppointment,
@@ -66,13 +63,13 @@ class AppointmentDetailsGenericConsultantWidgetState
               Row(
                 children: <Widget>[
                   Container(
-                      color: widget.appointment?.resolveStatusColor(),
+                      color: widget.appointmentDetail?.status?.resolveStatusColor(),
                       width: 50,
                       height: 50,
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: SvgPicture.asset(
-                          'assets/images/statuses/${widget.appointment.assetName()}.svg'
+                          'assets/images/statuses/${widget.appointmentDetail?.status?.assetName()}.svg'
                               .toLowerCase(),
                           semanticsLabel: 'Appointment Status Image',
                         ),
@@ -81,7 +78,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                     child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Text(
-                        "${widget.appointment?.name ?? 'N/A'}",
+                        "${widget.appointmentDetail?.name ?? 'N/A'}",
                         maxLines: 3,
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),
@@ -93,10 +90,10 @@ class AppointmentDetailsGenericConsultantWidgetState
               _titleContainer(S.of(context).appointment_details_applicant),
               _applicantContainer(),
               _buildSeparator(),
-              if (widget.appointment.getState() ==
+              if (widget.appointmentDetail.status.getState() ==
                   AppointmentStatusState.SCHEDULED)
                 _scheduledSpecificContainer(),
-              if (widget.appointment.getState() ==
+              if (widget.appointmentDetail.status.getState() ==
                   AppointmentStatusState.IN_WORK)
                 _inWorkSpecificContainer(),
               _titleContainer(S.of(context).appointment_details_services_title),
@@ -116,7 +113,7 @@ class AppointmentDetailsGenericConsultantWidgetState
   }
 
   String _appointmentDateTitle(BuildContext context) {
-    switch (widget.appointment.getState()) {
+    switch (widget.appointmentDetail.status.getState()) {
       case AppointmentStatusState.SUBMITTED:
         return S.of(context).appointment_details_services_appointment_date;
       case AppointmentStatusState.PENDING:
@@ -128,7 +125,7 @@ class AppointmentDetailsGenericConsultantWidgetState
   }
 
   _buttonsWidget() {
-    switch (widget.appointment.getState()) {
+    switch (widget.appointmentDetail.status.getState()) {
       case AppointmentStatusState.PENDING:
         return _pendingButtons();
       case AppointmentStatusState.SUBMITTED:
@@ -187,7 +184,7 @@ class AppointmentDetailsGenericConsultantWidgetState
           FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
-              widget.declineAppointment(widget.appointment);
+              widget.declineAppointment();
             },
             label: Text(
               S.of(context).general_decline.toUpperCase(),
@@ -220,7 +217,7 @@ class AppointmentDetailsGenericConsultantWidgetState
           FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
-              widget.declineAppointment(widget.appointment);
+              widget.declineAppointment();
             },
             label: Text(
               S.of(context).general_decline.toUpperCase(),
@@ -389,26 +386,34 @@ class AppointmentDetailsGenericConsultantWidgetState
             child: Container(
               margin: EdgeInsets.only(top: 5),
               child: Text(
-                (widget.appointment != null &&
-                        widget.appointment.scheduleDateTime != null)
-                    ? widget.appointment.scheduleDateTime
+                (widget.appointmentDetail != null &&
+                        widget.appointmentDetail.scheduledDate != null)
+                    ? widget.appointmentDetail.scheduledDate
                         .replaceAll(" ", " ${S.of(context).general_at} ")
                     : 'N/A',
                 style: TextHelper.customTextStyle(null, Colors.black, null, 18),
               ),
             ),
           ),
-          FlatButton(
-            child: Text(
-              "(${S.of(context).appointment_details_request_reprogramming.toLowerCase()})",
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
-            ),
-            onPressed: () {
-              widget.viewEstimate();
-            },
-          )
+          _requestReprogrammingButton(),
         ],
       ),
+    );
+  }
+
+  _requestReprogrammingButton() {
+    if (widget.appointmentDetail.status.getState() == AppointmentStatusState.CANCELED) {
+      return Container();
+    }
+
+    return FlatButton(
+      child: Text(
+        "(${S.of(context).appointment_details_request_reprogramming.toLowerCase()})",
+        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+      ),
+      onPressed: () {
+        widget.viewEstimate();
+      },
     );
   }
 

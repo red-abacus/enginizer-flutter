@@ -48,6 +48,7 @@ class IssueItem {
     Map<String, dynamic> propMap = {
       'id': id != null ? id : 0,
       'typeId': type?.id,
+      'type': type?.toJson(),
       'code': code,
       'name': name,
       'quantity': quantity,
@@ -55,6 +56,7 @@ class IssueItem {
       'priceVAT': priceVAT,
       'total': (price + priceVAT).toString()
     };
+
 
     return propMap;
   }

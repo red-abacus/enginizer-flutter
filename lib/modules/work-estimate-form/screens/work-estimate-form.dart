@@ -1,13 +1,15 @@
 import 'dart:math';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
@@ -30,9 +32,8 @@ class WorkEstimateForm extends StatefulWidget {
       '${AppointmentDetailsConsultant.route}/work-estimate-form';
 
   final EstimatorMode mode;
-  final Function createWorkEstimateFinished;
 
-  WorkEstimateForm({this.mode, this.createWorkEstimateFinished});
+  WorkEstimateForm({this.mode});
 
   // TODO - check route
   @override
@@ -94,7 +95,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 _workEstimateProvider.serviceProviderId, startDate, endDate)
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
-              widget.mode == EstimatorMode.Edit) {
+              widget.mode == EstimatorMode.Edit ||
+              widget.mode == EstimatorMode.Client) {
             await _workEstimateProvider
                 .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
                 .then((workEstimateDetails) {
@@ -117,10 +119,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_timetable,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_timetable, context);
       } else if (error
           .toString()
           .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
@@ -129,10 +129,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       } else if (error
           .toString()
           .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_work_estimate_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_details, context);
       }
 
       setState(() {
@@ -152,6 +150,34 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       child: Stack(
         children: <Widget>[
           _buildStepper(context),
+        ],
+      ),
+    );
+  }
+
+  _clientWidget() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // TODO - hardcoded value
+          Text(
+            S.of(context).estimator_cost_estimate,
+            style: TextHelper.customTextStyle(null, red, FontWeight.normal, 24),
+          ),
+          // TODO - hardcoded value
+          Text(
+            '${S.of(context).estimator_percent}: 20%',
+            style:
+                TextHelper.customTextStyle(null, gray, FontWeight.normal, 16),
+          ),
+          // TODO - what happens if client does not responde in this time?
+          Text(
+            '${S.of(context).estimator_max_time}: 24h',
+            style:
+                TextHelper.customTextStyle(null, gray, FontWeight.normal, 16),
+          ),
         ],
       ),
     );
@@ -194,35 +220,49 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     List<FAStep> stepsList = [];
     List<Issue> issues = _workEstimateProvider?.workEstimateRequest?.issues;
 
-    issues.asMap().forEach((index, issueRefactor) {
+    if (widget.mode == EstimatorMode.Client) {
+      stepsList.add(FAStep(
+          isActive: _isStepActive(0),
+          title: Text(S.of(context).estimator_info),
+          content: _clientWidget()));
+    }
+
+    issues.asMap().forEach((index, issue) {
       stepsList.add(
         FAStep(
-            isActive: _isStepActive(index),
-            title: Text((issueRefactor.name?.isNotEmpty ?? false)
-                ? issueRefactor.name
-                : 'N/A'),
+            isActive: _isStepActive(
+                widget.mode == EstimatorMode.Client ? index + 1 : index),
+            title: Text((issue.name?.isNotEmpty ?? false) ? issue.name : 'N/A'),
             content: WorkEstimateSectionsWidget(
-              issue: issues[index],
-              addIssueItem: _addIssueItem,
-              expandSection: _expandSection,
-              removeIssueItem: _removeIssueItem,
-              selectIssueSection: _selectIssueSection,
-              showSectionName: _showSectionName,
-              estimatorMode: widget.mode
-            )),
+                issue: issues[index],
+                addIssueItem: _addIssueItem,
+                expandSection: _expandSection,
+                removeIssueItem: _removeIssueItem,
+                selectIssueSection: _selectIssueSection,
+                showSectionName: _showSectionName,
+                estimatorMode: widget.mode)),
       );
     });
 
     stepsList.add(FAStep(
-      isActive: _isStepActive(issues.length),
+      isActive: _isStepActive(widget.mode == EstimatorMode.Client
+          ? issues.length + 1
+          : issues.length),
       title: Text(S.of(context).auction_proposed_date),
-      content: WorkEstimateDateWidget(estimatorMode: widget.mode),
+      content: WorkEstimateDateWidget(
+          dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
+          estimateDateSelect: _estimateDateSelect,
+          estimatorMode: widget.mode),
     ));
 
     return stepsList;
   }
 
   _floatingActionButtonContainer() {
+    if (widget.mode == EstimatorMode.Client) {
+      return Container();
+    }
+
     var buttons = List<SpeedDialChild>();
 
     if (widget.mode != EstimatorMode.ReadOnly) {
@@ -263,16 +303,18 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => _addOperation()));
     }
 
-    buttons.add(SpeedDialChild(
-        child: Icon(Icons.history),
-        foregroundColor: red,
-        backgroundColor: Colors.white,
-        label: S.of(context).estimator_operations_history,
-        labelStyle:
-            TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
-        onTap: () => print('operation history')));
+    if (widget.mode != EstimatorMode.Create) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.history),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S.of(context).estimator_operations_history,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => print('operation history')));
+    }
 
-    if (widget.mode != EstimatorMode.ReadOnly) {
+    if (widget.mode == EstimatorMode.Edit) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.create),
           foregroundColor: red,
@@ -320,17 +362,18 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       if (_currentStepIndex < issues.length) {
         Issue issue = issues[_currentStepIndex];
 
-        IssueSection section = IssueSection.defaultSection();
-        issue.sections.add(section);
+        IssueRecommendation section =
+            IssueRecommendation.defaultRecommendation();
+        issue.recommendations.add(section);
 
         _showSectionName(issue, section);
       }
     });
   }
 
-  _setSectionName(Issue issue, IssueSection issueSection, String name) {
+  _setSectionName(Issue issue, IssueRecommendation issueSection, String name) {
     setState(() {
-      for (IssueSection section in issue.sections) {
+      for (IssueRecommendation section in issue.recommendations) {
         section.expanded = false;
       }
 
@@ -340,13 +383,13 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     });
   }
 
-  _expandSection(Issue issueRefactor, IssueSection issueSection) {
+  _expandSection(Issue issue, IssueRecommendation issueSection) {
     setState(() {
       if (issueSection.expanded) {
         issueSection.expanded = false;
       } else {
-        for (IssueSection section in issueRefactor.sections) {
-          section.expanded = false;
+        for (IssueRecommendation recommendation in issue.recommendations) {
+          recommendation.expanded = false;
         }
 
         issueSection.expanded = true;
@@ -354,24 +397,24 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     });
   }
 
-  _addIssueItem(Issue issueRefactor, IssueSection issueSection) {
+  _addIssueItem(Issue issue, IssueRecommendation issueRecommendation) {
     setState(() {
       _workEstimateProvider.addRequestToIssueSection(
-          issueRefactor, issueSection);
+          issue, issueRecommendation);
     });
   }
 
-  _removeIssueItem(
-      Issue issueRefactor, IssueSection issueSection, IssueItem issueItem) {
+  _removeIssueItem(Issue issue, IssueRecommendation issueRecommendation,
+      IssueItem issueItem) {
     setState(() {
-      _workEstimateProvider.removeIssueRefactorItem(
-          issueRefactor, issueSection, issueItem);
+      _workEstimateProvider.removeIssueItem(
+          issue, issueRecommendation, issueItem);
     });
   }
 
-  _selectIssueSection(Issue issueRefactor, IssueSection issueSection) {
+  _selectIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
     setState(() {
-      _workEstimateProvider.selectIssueSection(issueRefactor, issueSection);
+      _workEstimateProvider.selectIssueSection(issue, issueRecommendation);
     });
   }
 
@@ -395,6 +438,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _infoAdded(String percentage, String time) async {
+    // TODO - API doesn't support percentage and time
     try {
       await _workEstimateProvider
           .createWorkEstimate(
@@ -404,42 +448,44 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               _workEstimateProvider.workEstimateRequest)
           .then((workEstimateDetails) {
         if (workEstimateDetails != null) {
+          Provider.of<AppointmentConsultantProvider>(context).initDone = false;
+          Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
           Navigator.of(context).pop();
-
-          if (widget.createWorkEstimateFinished != null) {
-            widget.createWorkEstimateFinished();
-          }
         }
       });
     } catch (error) {
       if (error
           .toString()
           .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_add_new_work_estimate,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_add_new_work_estimate, context);
       }
     }
   }
 
-  _showSectionName(Issue issue, IssueSection issueSection) {
+  _showSectionName(Issue issue, IssueRecommendation issueRecommendation) {
     if (widget.mode != EstimatorMode.ReadOnly) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertTextFormWidget(
             title: S.of(context).estimator_add_section_name,
-            placeholder: issueSection.isNew
+            placeholder: issueRecommendation.isNew
                 ? S.of(context).estimator_section_name
-                : issueSection.name,
+                : issueRecommendation.name,
             buttonName: S.of(context).general_add,
             addTextFunction: (name) {
-              _setSectionName(issue, issueSection, name);
+              _setSectionName(issue, issueRecommendation, name);
             },
           );
         },
       );
     }
+  }
+
+  _estimateDateSelect(DateEntry dateEntry) {
+    setState(() {
+      _workEstimateProvider.workEstimateRequest.dateEntry = dateEntry;
+    });
   }
 }

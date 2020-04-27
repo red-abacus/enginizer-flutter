@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class WorkEstimateDateWidget extends StatefulWidget {
+  final Function estimateDateSelect;
   final EstimatorMode estimatorMode;
+  final DateEntry dateEntry;
 
-  WorkEstimateDateWidget({this.estimatorMode});
+  WorkEstimateDateWidget({this.estimateDateSelect, this.estimatorMode, this.dateEntry});
 
   @override
   WorkEstimateDateWidgetState createState() => WorkEstimateDateWidgetState();
@@ -20,6 +22,8 @@ class WorkEstimateDateWidgetState extends State<WorkEstimateDateWidget> {
   Widget build(BuildContext context) {
     WorkEstimateProvider provider = Provider.of<WorkEstimateProvider>(context);
 
+    // TODO - date entry is not set for Client when accepts new estimate
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * .7,
       child: SchedulerWidget(
@@ -28,16 +32,13 @@ class WorkEstimateDateWidgetState extends State<WorkEstimateDateWidget> {
         calendarEntries: CalendarEntry.getDateEntriesFromTimetable(
             DateTime.now(), [], provider.serviceProviderTimetable),
         dateEntrySelected: _dateEntrySelected,
-        dateEntry: provider.workEstimateRequest.dateEntry,
-        disableSelect: widget.estimatorMode == EstimatorMode.ReadOnly,
+        dateEntry: widget.dateEntry,
+        disableSelect: widget.estimatorMode == EstimatorMode.ReadOnly || widget.estimatorMode == EstimatorMode.Client,
       ),
     );
   }
 
   _dateEntrySelected(DateEntry dateEntry) {
-    setState(() {
-      Provider.of<WorkEstimateProvider>(context).workEstimateRequest.dateEntry =
-          dateEntry;
-    });
+    widget.estimateDateSelect(dateEntry);
   }
 }

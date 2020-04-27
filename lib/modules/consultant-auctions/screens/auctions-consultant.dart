@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
@@ -64,10 +65,10 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
       auctionsProvider = Provider.of<AuctionsConsultantProvider>(context);
       auctionsProvider.resetParameters();
 
-      await auctionsProvider
-          .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
-          .then((_) async {
-        await auctionsProvider.loadAuctions().then((_) {
+      await auctionsProvider.loadAuctions().then((_) async {
+        await auctionsProvider
+            .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
+            .then((_) {
           setState(() {
             _isLoading = false;
           });
@@ -81,7 +82,7 @@ class AuctionsConsultantState extends State<AuctionsConsultant> {
             S.of(context).exception_load_car_brands, context);
       } else if (error
           .toString()
-          .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
+          .contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_auctions, context);
       }

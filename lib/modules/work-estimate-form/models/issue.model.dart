@@ -3,28 +3,28 @@ import 'dart:io';
 import 'package:app/modules/mechanic-appointments/enums/task-priority.enum.dart';
 
 import 'issue-item.model.dart';
-import 'issue-section.model.dart';
+import 'issue-recommendation.model.dart';
 
 class Issue {
   int id;
   String name;
-  List<IssueSection> sections;
+  List<IssueRecommendation> recommendations;
   TaskPriority priority;
   File image;
 
-  Issue({this.id, this.name, this.sections = const []});
+  Issue({this.id, this.name, this.recommendations = const []});
 
   clearItems() {
-    for (IssueSection section in sections) {
+    for (IssueRecommendation section in recommendations) {
       section.clearItems();
     }
 
-    sections = [];
+    recommendations = [];
   }
 
   factory Issue.fromJson(Map<String, dynamic> json) {
-    IssueSection issueSection = new IssueSection();
-    issueSection.name = "Hardcoded Section";
+    IssueRecommendation issueRecommendation = new IssueRecommendation();
+    issueRecommendation.name = "Hardcoded Section";
 
     List<IssueItem> items = [];
 
@@ -35,9 +35,9 @@ class Issue {
       });
     }
 
-    issueSection.items = items;
+    issueRecommendation.items = items;
 
-    return Issue(id: json['id'], name: json['name'], sections: [issueSection]);
+    return Issue(id: json['id'], name: json['name'], recommendations: [issueRecommendation]);
   }
 
   Map<String, dynamic> toJson() {
@@ -47,15 +47,10 @@ class Issue {
   }
 
   Map<String, dynamic> toCreateJson() {
-    List<IssueItem> items = [];
-
-    for (IssueSection section in sections) {
-      items.addAll(section.items);
-    }
-
     Map<String, dynamic> propMap = {
       'id': id,
-      'items': items.map((item) => item.toJson()).toList()
+      'name': name,
+      'recommendations': recommendations.map((item) => item.toCreateJson()).toList()
     };
 
     return propMap;

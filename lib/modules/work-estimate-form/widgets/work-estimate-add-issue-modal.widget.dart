@@ -4,7 +4,7 @@ import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dar
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
-import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,10 +13,10 @@ import 'package:provider/provider.dart';
 
 class WorkEstimateAddIssueModalWidget extends StatefulWidget {
   final Function addIssueItem;
-  final IssueSection issueSection;
+  final IssueRecommendation issueRecommendation;
 
   WorkEstimateAddIssueModalWidget(
-      {Key key, this.addIssueItem, this.issueSection})
+      {Key key, this.addIssueItem, this.issueRecommendation})
       : super(key: key);
 
   @override
@@ -302,7 +302,7 @@ class WorkEstimateAddIssueModalWidgetState
                           if (valid())
                             {
                               Navigator.pop(context),
-                              widget.addIssueItem(widget.issueSection)
+                              widget.addIssueItem(widget.issueRecommendation)
                             }
                         },
                     child: Icon(Icons.add)),

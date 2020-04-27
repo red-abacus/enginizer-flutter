@@ -14,7 +14,8 @@ class AppointmentsService {
       'CREATE_APPOINTMENT_EXCEPTION';
   static const String GET_APPOINTMENT_DETAILS_EXCEPTION =
       'GET_APPOINTMENT_DETAILS_EXCEPTION';
-  static const String CANCEL_APPOINTMENT_EXCEPTION = 'CANCEL_APPOINTMENT_EXCEPTION';
+  static const String CANCEL_APPOINTMENT_EXCEPTION =
+      'CANCEL_APPOINTMENT_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -24,7 +25,8 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _CANCEL_APPOINTMENT_SUFFIX = '/cancel';
 
-  static const String _STANDARD_TASKS_PREFIX = '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _STANDARD_TASKS_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _STANDARD_TASKS_SUFFIX = '/standardTasks';
 
   Dio _dio = inject<Dio>();
@@ -85,7 +87,7 @@ class AppointmentsService {
   Future<Appointment> cancelAppointment(int appointmentId) async {
     try {
       final response =
-      await _dio.patch(buildCancelAppointmentPath(appointmentId));
+          await _dio.patch(buildCancelAppointmentPath(appointmentId));
 
       if (response.statusCode == 200) {
         return _mapAppointment(response.data);
@@ -100,7 +102,7 @@ class AppointmentsService {
   Future getAppointmentStandardTasks(int appointmentId) async {
     try {
       final response =
-      await _dio.get(_buildAppointmentStandardTasks(appointmentId));
+          await _dio.get(_buildAppointmentStandardTasks(appointmentId));
 
       if (response.statusCode == 200) {
         return _mapAppointment(response.data);
@@ -120,7 +122,7 @@ class AppointmentsService {
 
   String _buildAppointmentStandardTasks(int appointmentId) {
     return _STANDARD_TASKS_PREFIX +
-    appointmentId.toString() +
-    _STANDARD_TASKS_SUFFIX;
+        appointmentId.toString() +
+        _STANDARD_TASKS_SUFFIX;
   }
 }

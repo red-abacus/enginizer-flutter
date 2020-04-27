@@ -6,6 +6,7 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentsConsultantProvider with ChangeNotifier {
+  bool initDone = false;
   List<Appointment> appointments = [];
   AppointmentsResponse _appointmentsResponse;
 
@@ -48,15 +49,6 @@ class AppointmentsConsultantProvider with ChangeNotifier {
     }
     catch (error) {
       throw(error);
-    }
-  }
-
-  void refreshAppointment(Appointment appointment) {
-    for (int i = 0; i < appointments.length; i++) {
-      if (appointments[i].id == appointment.id) {
-        appointments[i] = appointment;
-        break;
-      }
     }
   }
 }

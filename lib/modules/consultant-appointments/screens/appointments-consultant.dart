@@ -23,8 +23,10 @@ class AppointmentsConsultant extends StatefulWidget {
 
 class AppointmentsConsultantState extends State<AppointmentsConsultant> {
   String route;
-  var _initDone = false;
+  var _viewDidAppeared = false;
   var _isLoading = false;
+
+  AppointmentsConsultantProvider _appointmentsConsultantProvider;
 
   AppointmentsConsultantState({this.route});
 
@@ -44,33 +46,33 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
 
   @override
   void didChangeDependencies() {
-    if (!_initDone) {
+    _appointmentsConsultantProvider = Provider.of<AppointmentsConsultantProvider>(context);
+
+    if (!_viewDidAppeared || !_appointmentsConsultantProvider.initDone) {
       setState(() {
         _isLoading = true;
       });
       _loadData();
     }
-    _initDone = true;
+
+    _viewDidAppeared = true;
+    _appointmentsConsultantProvider.initDone = true;
 
     super.didChangeDependencies();
   }
 
   _loadData() async {
     try {
-      Provider.of<AppointmentsConsultantProvider>(context).resetParameters();
-      await Provider.of<AppointmentsConsultantProvider>(context)
-          .loadAppointments()
-          .then((_) {
+      _appointmentsConsultantProvider.resetParameters();
+      await _appointmentsConsultantProvider.loadAppointments().then((_) {
         _isLoading = false;
       });
     } catch (error) {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointments,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointments, context);
       }
 
       setState(() {

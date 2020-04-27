@@ -1,3 +1,8 @@
+import 'dart:ui';
+
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/utils/constants.dart';
+
 class AppointmentStatus {
   int id;
   String name;
@@ -23,5 +28,60 @@ class AppointmentStatus {
     }
 
     return propMap;
+  }
+
+  Color resolveStatusColor() {
+    switch (getState()) {
+      case AppointmentStatusState.SUBMITTED:
+        return gray;
+      case AppointmentStatusState.CANCELED:
+        return red;
+      case AppointmentStatusState.DONE:
+        return green;
+      case AppointmentStatusState.NONE:
+        return gray2;
+      default:
+        return yellow;
+    }
+  }
+
+  String assetName() {
+    switch (getState()) {
+      case AppointmentStatusState.IN_WORK:
+        return 'in_work';
+      case AppointmentStatusState.OPEN_BID:
+        return 'in_bid';
+      case AppointmentStatusState.PENDING:
+        return 'waiting';
+      case AppointmentStatusState.DONE:
+        return 'completed';
+      default:
+        return name.toLowerCase();
+    }
+  }
+
+  AppointmentStatusState getState() {
+    switch (name.toLowerCase()) {
+      case 'inwork':
+        return AppointmentStatusState.IN_WORK;
+      case 'pending':
+        return AppointmentStatusState.PENDING;
+      case 'submitted':
+        return AppointmentStatusState.SUBMITTED;
+      case 'scheduled':
+        return AppointmentStatusState.SCHEDULED;
+      case 'canceled':
+        return AppointmentStatusState.CANCELED;
+      case 'openbid':
+        return AppointmentStatusState.OPEN_BID;
+      case 'done':
+        return AppointmentStatusState.DONE;
+      case 'onhold':
+        return AppointmentStatusState.ON_HOLD;
+      case 'inunit':
+        return AppointmentStatusState.IN_UNIT;
+      default:
+        return AppointmentStatusState.NONE;
+    }
   }
 }

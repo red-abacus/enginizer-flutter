@@ -43,7 +43,7 @@ class AppointmentDetailsNewConsultantWidgetState
             Row(
               children: <Widget>[
                 Container(
-                    color: widget.appointment?.resolveStatusColor(),
+                    color: widget.appointment?.status.resolveStatusColor(),
                     width: 50,
                     height: 50,
                     child: Container(

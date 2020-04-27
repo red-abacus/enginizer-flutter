@@ -5,9 +5,9 @@ import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
-import 'package:app/modules/appointments/widgets/details/appointment_details-car.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -131,7 +131,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
-        switch (_appointmentProvider.selectedAppointment.getState()) {
+        switch (_appointmentProvider.selectedAppointment.status.getState()) {
           case AppointmentStatusState.SUBMITTED:
           case AppointmentStatusState.PENDING:
           case AppointmentStatusState.SCHEDULED:
@@ -152,7 +152,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
         }
         break;
       case AppointmentDetailsTabBarState.CAR:
-        return AppointmentDetailsCarWidget();
+        return CarGeneralDetailsWidget(
+            car: _appointmentProvider.selectedAppointmentDetail.car);
       default:
         return Container();
     }
@@ -213,6 +214,10 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   }
 
   _cancelAppointment(Appointment appointment) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       await _appointmentProvider
           .cancelAppointment(appointment)
@@ -234,9 +239,9 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
   _seeEstimate() {
     int workEstimateId =
-        _appointmentProvider.selectedAppointmentDetail.workEstimateId;
+        _appointmentProvider.selectedAppointmentDetail.lastWorkEstimate();
 
-    if (workEstimateId != null && workEstimateId != 0) {
+    if (workEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           workEstimateId;
@@ -246,35 +251,37 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Client)),
       );
     }
   }
 
   _acceptAppointment() async {
-    if (_appointmentProvider.selectedAppointmentDetail != null) {
-      if (_appointmentProvider.selectedAppointmentDetail.workEstimateId !=
-              null &&
-          _appointmentProvider.selectedAppointmentDetail.workEstimateId != 0) {
-        try {
-          await _appointmentProvider
-              .acceptWorkEstimate(
-                  _appointmentProvider.selectedAppointmentDetail.workEstimateId,
-                  _appointmentProvider.selectedAppointmentDetail.scheduledDate)
-              .then((_) {
-            setState(() {
-              Provider.of<AppointmentsProvider>(context).initDone = false;
-              _initDone = false;
-            });
+    // TODO - need to add reject work estimate functionality
+    setState(() {
+      _isLoading = true;
+    });
+
+    int lastWorkEstimateId =
+        _appointmentProvider.selectedAppointmentDetail.lastWorkEstimate();
+
+    if (lastWorkEstimateId != 0) {
+      try {
+        await _appointmentProvider
+            .acceptWorkEstimate(lastWorkEstimateId,
+                _appointmentProvider.selectedAppointmentDetail.scheduledDate)
+            .then((_) {
+          setState(() {
+            Provider.of<AppointmentsProvider>(context).initDone = false;
+            _initDone = false;
           });
-        } catch (error) {
-          if (error
-              .toString()
-              .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
-            FlushBarHelper.showFlushBar(S.of(context).general_error,
-                S.of(context).exception_accept_work_estimate, context);
-          }
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_accept_work_estimate, context);
         }
       }
     }

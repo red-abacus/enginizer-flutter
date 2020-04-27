@@ -2,7 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,13 +16,13 @@ final createWorkEstimateAddIssueKey =
     new GlobalKey<WorkEstimateAddIssueModalWidgetState>();
 
 class WorkEstimateSectionItemsWidget extends StatelessWidget {
-  final IssueSection issueSection;
+  final IssueRecommendation issueRecommendation;
   final Function addIssueItem;
   final Function removeIssueItem;
   final EstimatorMode estimatorMode;
 
   WorkEstimateSectionItemsWidget(
-      {this.issueSection,
+      {this.issueRecommendation,
       this.addIssueItem,
       this.removeIssueItem,
       this.estimatorMode});
@@ -38,13 +38,13 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
   }
 
   _issuesContainer() {
-    return issueSection.items.length == 0
+    return issueRecommendation.items.length == 0
         ? Container()
         : Container(
             margin: EdgeInsets.only(top: 10),
             child: Column(
               children: <Widget>[
-                for (IssueItem issueItem in issueSection.items)
+                for (IssueItem issueItem in issueRecommendation.items)
                   WorkEstimateIssueWidget(
                       issueItem: issueItem,
                       removeIssueItem: _removeIssueItem,
@@ -99,15 +99,14 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return WorkEstimateAddIssueModalWidget(
-              key: createWorkEstimateAddIssueKey,
-              addIssueItem: this.addIssueItem,
-              issueSection: this.issueSection
-            );
+                key: createWorkEstimateAddIssueKey,
+                addIssueItem: this.addIssueItem,
+                issueRecommendation: this.issueRecommendation);
           });
         });
   }
 
   _removeIssueItem(IssueItem issueItem) {
-    removeIssueItem(issueSection, issueItem);
+    removeIssueItem(issueRecommendation, issueItem);
   }
 }

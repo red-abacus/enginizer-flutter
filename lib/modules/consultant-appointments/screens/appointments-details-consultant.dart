@@ -3,11 +3,13 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
 import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
+import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -36,7 +38,6 @@ class AppointmentDetailsConsultantState
 
   String route;
 
-  var _initDone = false;
   var _isLoading = false;
 
   AppointmentDetailsStatusState currentState =
@@ -47,10 +48,10 @@ class AppointmentDetailsConsultantState
   @override
   Widget build(BuildContext context) {
     if (_appointmentConsultantProvider != null &&
-        _appointmentConsultantProvider.selectedAppointment == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pop();
-      });
+            _appointmentConsultantProvider.selectedAppointment == null ||
+        _appointmentConsultantProvider != null &&
+            _appointmentConsultantProvider.selectedAppointmentDetail == null) {
+      return Container();
     }
 
     return Consumer<AppointmentConsultantProvider>(
@@ -68,18 +69,20 @@ class AppointmentDetailsConsultantState
 
   @override
   void didChangeDependencies() {
-    if (!_initDone) {
-      _appointmentConsultantProvider =
-          Provider.of<AppointmentConsultantProvider>(context);
+    _appointmentConsultantProvider =
+        Provider.of<AppointmentConsultantProvider>(context);
 
+    if (!_appointmentConsultantProvider.initDone) {
       if (_appointmentConsultantProvider.selectedAppointment != null) {
         setState(() {
           _isLoading = true;
         });
         _loadData();
       }
-      _initDone = true;
+
+      _appointmentConsultantProvider.initDone = true;
     }
+
     super.didChangeDependencies();
   }
 
@@ -107,10 +110,8 @@ class AppointmentDetailsConsultantState
       } else if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_service_items,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_service_items, context);
       }
 
       setState(() {
@@ -148,13 +149,15 @@ class AppointmentDetailsConsultantState
       case AppointmentDetailsStatusState.REQUEST:
         return _getAppointmentDetailsScreen();
       case AppointmentDetailsStatusState.CAR:
-        return Container();
+        return CarGeneralDetailsWidget(
+            car: _appointmentConsultantProvider.selectedAppointmentDetail.car);
         break;
     }
   }
 
   _getAppointmentDetailsScreen() {
-    switch (_appointmentConsultantProvider.selectedAppointment.getState()) {
+    switch (_appointmentConsultantProvider.selectedAppointmentDetail.status
+        .getState()) {
       case AppointmentStatusState.SUBMITTED:
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
@@ -162,7 +165,6 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.CANCELED:
       case AppointmentStatusState.DONE:
         return AppointmentDetailsGenericConsultantWidget(
-          appointment: _appointmentConsultantProvider.selectedAppointment,
           appointmentDetail:
               _appointmentConsultantProvider.selectedAppointmentDetail,
           serviceItems: _appointmentConsultantProvider
@@ -236,30 +238,50 @@ class AppointmentDetailsConsultantState
     return '';
   }
 
-  _declineAppointment(Appointment appointment) async {
+  _declineAppointment() {
+    if (_appointmentConsultantProvider.selectedAppointment != null) {
+      showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return AlertConfirmationDialogWidget(
+                  confirmFunction: (confirm) => {
+                        if (confirm)
+                          {
+                            _cancelAppointment(_appointmentConsultantProvider
+                                .selectedAppointment)
+                          }
+                      },
+                  title: S
+                      .of(context)
+                      .appointment_details_cancel_appointment_title);
+            });
+          });
+    }
+  }
+
+  _cancelAppointment(Appointment appointment) async {
     try {
       await _appointmentConsultantProvider
           .cancelAppointment(appointment)
           .then((appointment) {
-        Provider.of<AppointmentsConsultantProvider>(context)
-            .refreshAppointment(appointment);
+        Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
 
         setState(() {
-          _initDone = false;
+          _appointmentConsultantProvider.initDone = false;
         });
       });
     } catch (error) {
       if (error
           .toString()
           .contains(AppointmentsService.CANCEL_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_cancel_appointment,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_cancel_appointment, context);
       }
 
       setState(() {
-        _initDone = false;
+        _appointmentConsultantProvider.initDone = false;
       });
     }
   }
@@ -279,25 +301,29 @@ class AppointmentDetailsConsultantState
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(
-                mode: EstimatorMode.Create,
-                createWorkEstimateFinished: _createWorkEstimateFinished)),
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
       );
     }
   }
 
   _editEstimate() {
-    Provider.of<WorkEstimateProvider>(context).refreshValues();
-    Provider.of<WorkEstimateProvider>(context).workEstimateId =
-        _appointmentConsultantProvider.selectedAppointmentDetail.workEstimateId;
-    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-        _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
+    // TODO - need to check edit estimate
+    if (_appointmentConsultantProvider
+            .selectedAppointmentDetail.workEstimateIds.length >
+        0) {
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+          _appointmentConsultantProvider
+              .selectedAppointmentDetail.workEstimateIds[0];
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => WorkEstimateForm(mode: EstimatorMode.Edit)),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Edit)),
+      );
+    }
   }
 
   _viewEstimate() {
@@ -353,11 +379,5 @@ class AppointmentDetailsConsultantState
             return PickUpCarFormConsultantModal();
           });
         });
-  }
-
-  _createWorkEstimateFinished() {
-    setState(() {
-      _initDone = false;
-    });
   }
 }

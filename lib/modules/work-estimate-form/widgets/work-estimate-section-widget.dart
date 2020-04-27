@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-items.widget.dart';
 import 'package:app/utils/constants.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class WorkEstimateSectionWidget extends StatelessWidget {
-  final IssueSection issueSection;
+  final IssueRecommendation issueRecommendation;
   final Issue issue;
 
   final Function expandSection;
@@ -22,7 +22,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
 
   WorkEstimateSectionWidget(
       {this.issue,
-      this.issueSection,
+      this.issueRecommendation,
       this.expandSection,
       this.addIssueItem,
       this.removeIssueItem,
@@ -57,12 +57,13 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                       margin: EdgeInsets.only(
                           top: 4, bottom: 4, right: 4, left: 10),
                       child: InkWell(
-                        onTap: () =>
-                            {showSectionName(this.issue, this.issueSection)},
+                        onTap: () => {
+                          showSectionName(this.issue, this.issueRecommendation)
+                        },
                         child: Text(
-                          issueSection.isNew
+                          issueRecommendation.isNew
                               ? S.of(context).estimator_add_section_name
-                              : issueSection.name,
+                              : issueRecommendation.name,
                           style: TextHelper.customTextStyle(
                               null, black_text, FontWeight.bold, 14),
                         ),
@@ -79,7 +80,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
                           child: SvgPicture.asset(
-                            this.issueSection.expanded
+                            this.issueRecommendation.expanded
                                 ? 'assets/images/icons/down_arrow.svg'
                                 : 'assets/images/icons/up_arrow.svg',
                             semanticsLabel: 'Up Arrow',
@@ -87,7 +88,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                             width: 14,
                           ),
                           onPressed: () {
-                            this.expandSection(this.issueSection);
+                            this.expandSection(this.issueRecommendation);
                           },
                         ),
                       ),
@@ -102,11 +103,12 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   }
 
   _checkMarkContainer(BuildContext context) {
-    if (estimatorMode == EstimatorMode.ReadOnly) {
+    if (estimatorMode == EstimatorMode.ReadOnly ||
+        estimatorMode == EstimatorMode.Create) {
       return Container();
     }
 
-    return issueSection.isNew
+    return issueRecommendation.isNew
         ? Container()
         : Expanded(
             child: Align(
@@ -114,7 +116,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                 child: FlatButton(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: SvgPicture.asset(
-                    this.issueSection.selected
+                    this.issueRecommendation.selected
                         ? 'assets/images/icons/check_box.svg'
                         : 'assets/images/icons/check_box_empty.svg',
                     semanticsLabel: 'Up Arrow',
@@ -123,7 +125,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                     width: 24,
                   ),
                   onPressed: () {
-                    this.selectIssueSection(issueSection);
+                    this.selectIssueSection(issueRecommendation);
                   },
                 ),
               ),
@@ -132,11 +134,11 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   }
 
   _issuesContainer() {
-    if (issueSection.expanded) {
+    if (issueRecommendation.expanded) {
       return Container(
         margin: EdgeInsets.only(top: 4),
         child: WorkEstimateSectionItemsWidget(
-            issueSection: issueSection,
+            issueRecommendation: issueRecommendation,
             addIssueItem: addIssueItem,
             removeIssueItem: removeIssueItem,
             estimatorMode: estimatorMode),

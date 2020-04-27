@@ -17,6 +17,8 @@ class AppointmentConsultantProvider with ChangeNotifier {
 
   List<Employee> employees = [];
 
+  bool initDone = false;
+
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
     try {

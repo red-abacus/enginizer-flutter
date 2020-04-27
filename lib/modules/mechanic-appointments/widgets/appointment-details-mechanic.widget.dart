@@ -33,13 +33,13 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Container(
-                    color: appointment.resolveStatusColor(),
+                    color: appointment.status.resolveStatusColor(),
                     width: 50,
                     height: 50,
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${appointment?.assetName()}.svg'
+                        'assets/images/statuses/${appointment?.status.assetName()}.svg'
                             .toLowerCase(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
@@ -124,7 +124,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
   }
 
   String _getAppointmentDateTitle(BuildContext context) {
-    switch (appointment.getState()) {
+    switch (appointment.status.getState()) {
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
         return S.of(context).auction_bid_date_schedule;

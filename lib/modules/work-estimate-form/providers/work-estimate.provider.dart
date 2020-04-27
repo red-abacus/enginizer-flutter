@@ -2,13 +2,12 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
@@ -119,6 +118,9 @@ class WorkEstimateProvider with ChangeNotifier {
   Future<WorkEstimateDetails> createWorkEstimate(int appointmentId, int carId,
       int clientId, WorkEstimateRequest workEstimateRequest) async {
     Map<String, dynamic> content = workEstimateRequest.toJson();
+    content['appointmentId'] = appointmentId;
+    content['carId'] = carId;
+    content['clientId'] = clientId;
 
     try {
       WorkEstimateDetails workEstimateDetails =
@@ -130,7 +132,7 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  addRequestToIssueSection(Issue issue, IssueSection issueSection) {
+  addRequestToIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
     var issueItem = IssueItem(
       type: estimatorFormState['type'],
       code: estimatorFormState['code'].code,
@@ -142,11 +144,11 @@ class WorkEstimateProvider with ChangeNotifier {
 
     for (Issue temp in workEstimateRequest.issues) {
       if (temp == issue) {
-        List<IssueSection> sections = temp.sections;
+        List<IssueRecommendation> sections = temp.recommendations;
 
-        for (IssueSection tempIssueSection in sections) {
-          if (tempIssueSection == issueSection) {
-            tempIssueSection.items.insert(0, issueItem);
+        for (IssueRecommendation tempIssueRecommendation in sections) {
+          if (tempIssueRecommendation == issueRecommendation) {
+            tempIssueRecommendation.items.insert(0, issueItem);
             break;
           }
         }
@@ -155,15 +157,15 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  removeIssueRefactorItem(
-      Issue issue, IssueSection issueSection, IssueItem issueItem) {
+  removeIssueItem(
+      Issue issue, IssueRecommendation issueRecommendation, IssueItem issueItem) {
     for (Issue temp in workEstimateRequest.issues) {
       if (temp == issue) {
-        List<IssueSection> sections = temp.sections;
+        List<IssueRecommendation> sections = temp.recommendations;
 
-        for (IssueSection tempIssueSection in sections) {
-          if (tempIssueSection == issueSection) {
-            tempIssueSection.items.remove(issueItem);
+        for (IssueRecommendation tempIssueRecommendation in sections) {
+          if (tempIssueRecommendation == issueRecommendation) {
+            tempIssueRecommendation.items.remove(issueItem);
             break;
           }
         }
@@ -172,17 +174,17 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  selectIssueSection(Issue issue, IssueSection issueSection) {
+  selectIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
     for (Issue temp in workEstimateRequest.issues) {
       if (temp == issue) {
-        List<IssueSection> sections = temp.sections;
+        List<IssueRecommendation> sections = temp.recommendations;
 
-        for (IssueSection tempIssueSection in sections) {
-          if (tempIssueSection == issueSection) {
-            tempIssueSection.selected = !tempIssueSection.selected;
+        for (IssueRecommendation tempIssueRecommendation in sections) {
+          if (tempIssueRecommendation == issueRecommendation) {
+            tempIssueRecommendation.selected = !tempIssueRecommendation.selected;
 
-            if (tempIssueSection.selected) {
-              tempIssueSection.expanded = true;
+            if (tempIssueRecommendation.selected) {
+              tempIssueRecommendation.expanded = true;
             }
             break;
           }

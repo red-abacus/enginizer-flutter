@@ -54,13 +54,13 @@ class AppointmentGenericDetailsWidgetState
               Row(
                 children: <Widget>[
                   Container(
-                    color: widget.appointment.resolveStatusColor(),
+                    color: widget.appointment.status.resolveStatusColor(),
                     width: 50,
                     height: 50,
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${widget.appointment?.assetName()}.svg'
+                        'assets/images/statuses/${widget.appointment?.status?.assetName()}.svg'
                             .toLowerCase(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
@@ -150,7 +150,7 @@ class AppointmentGenericDetailsWidgetState
   }
 
   String _getAppointmentDateTitle(BuildContext context) {
-    switch (widget.appointment.getState()) {
+    switch (widget.appointment.status.getState()) {
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
         return S.of(context).auction_bid_date_schedule;
@@ -238,7 +238,7 @@ class AppointmentGenericDetailsWidgetState
   }
 
   _floatingButtonsContainer() {
-    switch (widget.appointment.getState()) {
+    switch (widget.appointment.status.getState()) {
       case AppointmentStatusState.SUBMITTED:
         return _getSubmittedFloatingButtons();
       case AppointmentStatusState.PENDING:

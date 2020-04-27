@@ -55,9 +55,9 @@ class AppointmentCardConsultant extends StatelessWidget {
       width: 132,
       height: 132,
       padding: EdgeInsets.all(20),
-      color: appointment.resolveStatusColor(),
+      color: appointment.status.resolveStatusColor(),
       child: SvgPicture.asset(
-        'assets/images/statuses/${appointment.assetName()}.svg'.toLowerCase(),
+        'assets/images/statuses/${appointment.status.assetName()}.svg'.toLowerCase(),
         semanticsLabel: 'Appointment Status Image',
       ),
     );
@@ -125,11 +125,11 @@ class AppointmentCardConsultant extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(right: 10),
         child: Text(
-          AppointmentStatusStateUtils.title(context, appointment.getState())
+          AppointmentStatusStateUtils.title(context, appointment.status.getState())
               .toUpperCase(),
           textAlign: TextAlign.right,
           style: TextHelper.customTextStyle(
-              null, appointment.resolveStatusColor(), FontWeight.bold, 12),
+              null, appointment.status.resolveStatusColor(), FontWeight.bold, 12),
         ),
       ),
     );

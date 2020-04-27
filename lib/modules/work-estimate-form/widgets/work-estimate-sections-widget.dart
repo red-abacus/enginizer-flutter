@@ -1,6 +1,6 @@
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue-section.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +31,7 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
 
 class _WorkEstimateSectionsWidgetState
     extends State<WorkEstimateSectionsWidget> {
+  // TODO - when service provider creates a new estimate, the items are not saved.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,10 +39,10 @@ class _WorkEstimateSectionsWidgetState
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          for (IssueSection section in widget.issue.sections)
+          for (IssueRecommendation recommendation in widget.issue.recommendations)
             WorkEstimateSectionWidget(
                 issue: widget.issue,
-                issueSection: section,
+                issueRecommendation: recommendation,
                 expandSection: _expandSection,
                 addIssueItem: _addIssueItem,
                 removeIssueItem: _removeIssueItem,
@@ -53,19 +54,19 @@ class _WorkEstimateSectionsWidgetState
     );
   }
 
-  _expandSection(IssueSection issueSection) {
-    widget.expandSection(widget.issue, issueSection);
+  _expandSection(IssueRecommendation issueRecommendation) {
+    widget.expandSection(widget.issue, issueRecommendation);
   }
 
-  _addIssueItem(IssueSection issueSection) {
-    widget.addIssueItem(widget.issue, issueSection);
+  _addIssueItem(IssueRecommendation issueRecommendation) {
+    widget.addIssueItem(widget.issue, issueRecommendation);
   }
 
-  _removeIssueItem(IssueSection issueSection, IssueItem issueItem) {
-    widget.removeIssueItem(widget.issue, issueSection, issueItem);
+  _removeIssueItem(IssueRecommendation issueRecommendation, IssueItem issueItem) {
+    widget.removeIssueItem(widget.issue, issueRecommendation, issueItem);
   }
 
-  _selectIssueSection(IssueSection issueSection) {
-    widget.selectIssueSection(widget.issue, issueSection);
+  _selectIssueSection(IssueRecommendation issueRecommendation) {
+    widget.selectIssueSection(widget.issue, issueRecommendation);
   }
 }

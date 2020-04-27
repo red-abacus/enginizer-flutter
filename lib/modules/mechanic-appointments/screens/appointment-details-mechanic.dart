@@ -182,14 +182,14 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       AppointmentDetailsServiceHistory()
     ];
 
-    if (appointmentMechanicProvider.selectedAppointment.getState() ==
+    if (appointmentMechanicProvider.selectedAppointment.status.getState() ==
         AppointmentStatusState.SUBMITTED) {
       list.insert(
           2,
           AppointmentDetailsReceiveFormWidget(
               appointmentDetails:
                   appointmentMechanicProvider.selectedAppointmentDetails));
-    } else if (appointmentMechanicProvider.selectedAppointment.getState() ==
+    } else if (appointmentMechanicProvider.selectedAppointment.status.getState() ==
         AppointmentStatusState.ON_HOLD) {
       list.insert(2, AppointmentDetailsTasksList());
     }
@@ -207,7 +207,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       Tab(text: S.of(context).appointment_details_service_history)
     ];
 
-    switch (appointmentMechanicProvider.selectedAppointment.getState()) {
+    switch (appointmentMechanicProvider.selectedAppointment.status.getState()) {
       case AppointmentStatusState.SUBMITTED:
         tabs.insert(
             2, Tab(text: S.of(context).mechanic_appointment_receive_form));

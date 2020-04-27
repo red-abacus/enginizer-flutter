@@ -65,10 +65,10 @@ class AuctionsState extends State<Auctions> {
     auctionsProvider.resetParameters();
 
     try {
-      await auctionsProvider
-          .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
-          .then((_) async {
-        await auctionsProvider.loadAuctions().then((_) {
+      await auctionsProvider.loadAuctions().then((_) async {
+        await auctionsProvider
+            .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
+            .then((_) async {
           setState(() {
             _isLoading = false;
           });

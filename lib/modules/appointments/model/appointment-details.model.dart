@@ -1,32 +1,39 @@
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
-import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'appointment-status.model.dart';
 
 class AppointmentDetail {
+  String name;
   Car car;
   List<Issue> issues = [];
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
   User user;
   int workEstimateId;
+  List<int> workEstimateIds;
   ServiceProvider serviceProvider;
+  AppointmentStatus status;
 
   AppointmentDetail(
-      {this.car,
+      {this.name,
+      this.car,
       this.issues,
       this.serviceItems,
       this.scheduledDate,
       this.user,
       this.workEstimateId,
-      this.serviceProvider});
+      this.workEstimateIds,
+      this.serviceProvider,
+      this.status});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
+        name: json['name'] != null ? json['name'] : '',
         car: Car.fromJson(json["car"]),
         issues: json["issues"] != null ? _mapIssuesList(json["issues"]) : [],
         serviceItems:
@@ -34,7 +41,15 @@ class AppointmentDetail {
         scheduledDate: json["scheduledDateTime"],
         user: json["user"] != null ? User.fromJson(json["user"]) : null,
         workEstimateId: json['workEstimateId'],
-        serviceProvider: json['provider'] != null ? ServiceProvider.fromJson(json['provider']) : null);
+        workEstimateIds: json["workEstimateIds"] != null
+            ? _mapWorkEstimateIds(json['workEstimateIds'])
+            : [],
+        serviceProvider: json['provider'] != null
+            ? ServiceProvider.fromJson(json['provider'])
+            : null,
+        status: json['status'] != null
+            ? AppointmentStatus.fromJson(json['status'])
+            : null);
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -53,18 +68,41 @@ class AppointmentDetail {
     return services;
   }
 
+  static _mapWorkEstimateIds(List<dynamic> response) {
+    List<int> ids = [];
+    response.forEach((item) {
+      if (item is int) {
+        ids.add(item);
+      }
+    });
+    return ids;
+  }
+
   bool hasWorkEstimate() {
-    if (workEstimateId != null && workEstimateId > 0) {
-      return true;
+    if (workEstimateIds.length > 0) {
+      int lastWorkEstimate = workEstimateIds[workEstimateIds.length - 1];
+      return lastWorkEstimate > 0;
     }
 
     return false;
   }
 
+  int lastWorkEstimate() {
+    if (workEstimateIds.length > 0) {
+      int lastWorkEstimate = workEstimateIds[workEstimateIds.length - 1];
+
+      if (lastWorkEstimate > 0) {
+        return lastWorkEstimate;
+      }
+    }
+
+    return 0;
+  }
+
   List<MechanicTask> tasksFromIssues() {
     List<MechanicTask> tasks = [];
 
-    for(Issue issue in this.issues) {
+    for (Issue issue in this.issues) {
       tasks.add(MechanicTask.from(issue));
     }
 
