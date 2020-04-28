@@ -65,6 +65,7 @@ class WorkEstimatesService {
   }
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int id) async {
+    print('work estimat eid $id');
     try {
       final response = await _dio.get('$_WORK_ESTIMATES_PATH/$id');
       if (response.statusCode < 300) {
@@ -73,6 +74,7 @@ class WorkEstimatesService {
         throw Exception(GET_WORK_ESTIMATE_DETAILS_EXCEPTION);
       }
     } catch (error) {
+      print('error $error');
       throw Exception(GET_WORK_ESTIMATE_DETAILS_EXCEPTION);
     }
   }

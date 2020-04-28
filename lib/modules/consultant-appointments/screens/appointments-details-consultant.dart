@@ -307,14 +307,15 @@ class AppointmentDetailsConsultantState
   }
 
   _editEstimate() {
-    // TODO - need to check edit estimate
-    if (_appointmentConsultantProvider
-            .selectedAppointmentDetail.workEstimateIds.length >
-        0) {
+    // TODO - consultant provider can edit it's estimator before client accepts it?
+    int lastWorkEstimateId = _appointmentConsultantProvider
+        .selectedAppointmentDetail
+        .lastWorkEstimate();
+
+    if (lastWorkEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
-          _appointmentConsultantProvider
-              .selectedAppointmentDetail.workEstimateIds[0];
+          lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
@@ -327,24 +328,25 @@ class AppointmentDetailsConsultantState
   }
 
   _viewEstimate() {
-    if (_appointmentConsultantProvider
-                .selectedAppointmentDetail.workEstimateId !=
-            null &&
-        _appointmentConsultantProvider
-                .selectedAppointmentDetail.workEstimateId !=
-            0) {
+    int lastWorkEstimateId = _appointmentConsultantProvider
+        .selectedAppointmentDetail
+        .lastWorkEstimate();
+
+    if (lastWorkEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
-          _appointmentConsultantProvider
-              .selectedAppointmentDetail.workEstimateId;
+          lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+            builder: (context) => WorkEstimateForm(
+                mode: EstimatorMode.ReadOnly,
+                dateEntry: _appointmentConsultantProvider
+                    .selectedAppointmentDetail
+                    .getWorkEstimateDateEntry())),
       );
     }
   }

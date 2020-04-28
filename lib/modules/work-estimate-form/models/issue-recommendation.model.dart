@@ -1,5 +1,3 @@
-import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
-
 import 'issue-item.model.dart';
 
 class IssueRecommendation {
@@ -9,6 +7,34 @@ class IssueRecommendation {
   bool isNew = false;
   bool expanded = false;
   bool selected = false;
+  String priority;
+  bool isStandard;
+  bool isAccepted;
+
+  IssueRecommendation({this.id,
+    this.name,
+    this.items,
+    this.priority,
+    this.isStandard,
+    this.isAccepted});
+
+  factory IssueRecommendation.fromJson(Map<String, dynamic> json) {
+    return IssueRecommendation(
+        id: json['id'],
+        name: json['name'] != null ? json['name'] : '',
+        items: json['items'] != null ? _mapItems(json['items']) : [],
+        priority: json['priority'] != null ? json['priority'] : '',
+        isStandard: json['isStandard'] != null ? json['isStandard'] : true,
+        isAccepted: json['isAccepted'] != null ? json['isAccepted'] : true);
+  }
+
+  static _mapItems(List<dynamic> response) {
+    List<IssueItem> issueItems = [];
+    response.forEach((item) {
+      issueItems.add(IssueItem.fromJson(item));
+    });
+    return issueItems;
+  }
 
   clearItems() {
     items = [];
@@ -26,8 +52,8 @@ class IssueRecommendation {
 
   Map<String, dynamic> toCreateJson() {
     Map<String, dynamic> propMap = {
-      'id': id,
-      'name': name,
+      'id': Null,
+      'name': Null,
       'items': items.map((item) => item.toJson()).toList()
     };
 

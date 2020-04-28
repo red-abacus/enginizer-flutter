@@ -19,6 +19,13 @@ class AppointmentConsultantProvider with ChangeNotifier {
 
   bool initDone = false;
 
+  initialise() {
+    initDone = false;
+    selectedAppointment = null;
+    selectedAppointmentDetail = null;
+    serviceProviderItems = [];
+  }
+
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
     try {

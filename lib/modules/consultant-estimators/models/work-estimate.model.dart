@@ -23,6 +23,7 @@ class WorkEstimate {
       this.status});
 
   factory WorkEstimate.fromJson(Map<String, dynamic> json) {
+    print('accepted work estimate $json');
     return WorkEstimate(
         appointment: json['appointment'] != null
             ? Appointment.fromJson(json['appointment'])

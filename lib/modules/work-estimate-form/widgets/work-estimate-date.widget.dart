@@ -22,8 +22,6 @@ class WorkEstimateDateWidgetState extends State<WorkEstimateDateWidget> {
   Widget build(BuildContext context) {
     WorkEstimateProvider provider = Provider.of<WorkEstimateProvider>(context);
 
-    // TODO - date entry is not set for Client when accepts new estimate
-
     return SizedBox(
       height: MediaQuery.of(context).size.height * .7,
       child: SchedulerWidget(

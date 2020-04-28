@@ -31,11 +31,21 @@ class DateUtils {
   }
 
   static DateTime dateFromString(String dateString, String format) {
-    return DateFormat(format).parse(dateString);
+    try {
+      return DateFormat(format).parse(dateString);
+    }
+    catch (_) {
+      return null;
+    }
   }
 
   static String stringFromDate(DateTime date, String format) {
-    return DateFormat(format).format(date);
+    try {
+      return DateFormat(format).format(date);
+    }
+    catch (_) {
+      return '';
+    }
   }
 
   static bool isSameDay(DateTime date1, DateTime date2) {

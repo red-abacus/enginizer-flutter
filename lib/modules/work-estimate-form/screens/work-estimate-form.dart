@@ -32,8 +32,9 @@ class WorkEstimateForm extends StatefulWidget {
       '${AppointmentDetailsConsultant.route}/work-estimate-form';
 
   final EstimatorMode mode;
+  DateEntry dateEntry;
 
-  WorkEstimateForm({this.mode});
+  WorkEstimateForm({this.mode, this.dateEntry});
 
   // TODO - check route
   @override
@@ -103,6 +104,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               if (workEstimateDetails != null) {
                 _workEstimateProvider
                     .createWorkEstimateRequest(workEstimateDetails);
+                _workEstimateProvider.workEstimateRequest.dateEntry = widget.dateEntry;
               }
               setState(() {
                 _isLoading = false;

@@ -23,21 +23,23 @@ class Issue {
   }
 
   factory Issue.fromJson(Map<String, dynamic> json) {
-    IssueRecommendation issueRecommendation = new IssueRecommendation();
-    issueRecommendation.name = "Hardcoded Section";
+    return Issue(
+        id: json['id'],
+        name: json['name'],
+        recommendations: json['recommendations'] != null
+            ? _mapRecommendation(json['recommendations'])
+            : []);
+  }
 
-    List<IssueItem> items = [];
+  static _mapRecommendation(List<dynamic> response) {
+    List<IssueRecommendation> recommendation = [];
 
-    if (json['items'] != null) {
-      List<dynamic> temp = json['items'];
-      temp.forEach((item) {
-        items.add(IssueItem.fromJson(item));
+    if (response != null) {
+      response.forEach((item) {
+        recommendation.add(IssueRecommendation.fromJson(item));
       });
     }
-
-    issueRecommendation.items = items;
-
-    return Issue(id: json['id'], name: json['name'], recommendations: [issueRecommendation]);
+    return recommendation;
   }
 
   Map<String, dynamic> toJson() {
@@ -50,20 +52,10 @@ class Issue {
     Map<String, dynamic> propMap = {
       'id': id,
       'name': name,
-      'recommendations': recommendations.map((item) => item.toCreateJson()).toList()
+      'recommendations':
+          recommendations.map((item) => item.toCreateJson()).toList()
     };
 
     return propMap;
-  }
-
-  static _mapIssueItems(List<dynamic> response) {
-    List<IssueItem> issuesItems = [];
-
-    if (response != null) {
-      response.forEach((item) {
-        issuesItems.add(IssueItem.fromJson(item));
-      });
-    }
-    return issuesItems;
   }
 }

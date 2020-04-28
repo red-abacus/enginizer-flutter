@@ -1,6 +1,5 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppointmentGenericDetailsWidget extends StatefulWidget {
-  Appointment appointment;
   AppointmentDetail appointmentDetail;
 
   Function cancelAppointment;
@@ -19,8 +17,7 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
   Function acceptAppointment;
 
   AppointmentGenericDetailsWidget(
-      {this.appointment,
-      this.appointmentDetail,
+      {this.appointmentDetail,
       this.cancelAppointment,
       this.viewEstimate,
       this.acceptAppointment});
@@ -54,13 +51,13 @@ class AppointmentGenericDetailsWidgetState
               Row(
                 children: <Widget>[
                   Container(
-                    color: widget.appointment.status.resolveStatusColor(),
+                    color: widget.appointmentDetail.status.resolveStatusColor(),
                     width: 50,
                     height: 50,
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${widget.appointment?.status?.assetName()}.svg'
+                        'assets/images/statuses/${widget.appointmentDetail?.status?.assetName()}.svg'
                             .toLowerCase(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
@@ -70,7 +67,7 @@ class AppointmentGenericDetailsWidgetState
                     child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Text(
-                        '${widget.appointment?.car?.brand?.name} ${widget.appointment?.car?.model?.name} - ${widget.appointment?.status?.name}',
+                        '${widget.appointmentDetail?.car?.brand?.name} ${widget.appointmentDetail?.car?.model?.name} - ${widget.appointmentDetail?.status?.name}',
                         maxLines: 3,
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),
@@ -94,7 +91,7 @@ class AppointmentGenericDetailsWidgetState
                 child: Row(
                   children: <Widget>[
                     Text(
-                      widget.appointment.scheduleDateTime
+                      widget.appointmentDetail.scheduledDate
                           .replaceAll(" ", " ${S.of(context).general_at} "),
                       style: TextHelper.customTextStyle(
                           null, Colors.black, null, 18),
@@ -150,7 +147,7 @@ class AppointmentGenericDetailsWidgetState
   }
 
   String _getAppointmentDateTitle(BuildContext context) {
-    switch (widget.appointment.status.getState()) {
+    switch (widget.appointmentDetail.status.getState()) {
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
         return S.of(context).auction_bid_date_schedule;
@@ -238,7 +235,7 @@ class AppointmentGenericDetailsWidgetState
   }
 
   _floatingButtonsContainer() {
-    switch (widget.appointment.status.getState()) {
+    switch (widget.appointmentDetail.status.getState()) {
       case AppointmentStatusState.SUBMITTED:
         return _getSubmittedFloatingButtons();
       case AppointmentStatusState.PENDING:
@@ -258,7 +255,7 @@ class AppointmentGenericDetailsWidgetState
           FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
-              widget.cancelAppointment(widget.appointment);
+              widget.cancelAppointment(widget.appointmentDetail);
             },
             label: Text(
               S
@@ -283,7 +280,7 @@ class AppointmentGenericDetailsWidgetState
           FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
-              widget.cancelAppointment(widget.appointment);
+              widget.cancelAppointment(widget.appointmentDetail);
             },
             label: Text(
               S

@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/appointment.details.tabbar.state.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -12,6 +13,7 @@ import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -131,7 +133,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
-        switch (_appointmentProvider.selectedAppointment.status.getState()) {
+        switch (_appointmentProvider.selectedAppointmentDetail.status.getState()) {
           case AppointmentStatusState.SUBMITTED:
           case AppointmentStatusState.PENDING:
           case AppointmentStatusState.SCHEDULED:
@@ -139,7 +141,6 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           case AppointmentStatusState.CANCELED:
           case AppointmentStatusState.DONE:
             return AppointmentGenericDetailsWidget(
-                appointment: _appointmentProvider.selectedAppointment,
                 appointmentDetail:
                     _appointmentProvider.selectedAppointmentDetail,
                 viewEstimate: _seeEstimate,
@@ -248,10 +249,12 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _appointmentProvider.selectedAppointment.serviceProvider.id;
 
+      DateEntry dateEntry = _appointmentProvider.selectedAppointmentDetail.getWorkEstimateDateEntry();
+
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Client)),
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Client, dateEntry: dateEntry)),
       );
     }
   }

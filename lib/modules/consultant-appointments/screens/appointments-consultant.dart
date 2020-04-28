@@ -82,6 +82,7 @@ class AppointmentsConsultantState extends State<AppointmentsConsultant> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
+    Provider.of<AppointmentConsultantProvider>(context).initialise();
     Provider.of<AppointmentConsultantProvider>(context).selectedAppointment =
         selectedAppointment;
     Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);

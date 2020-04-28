@@ -1,9 +1,11 @@
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/utils/date_utils.dart';
 
 import 'appointment-status.model.dart';
 
@@ -18,6 +20,7 @@ class AppointmentDetail {
   List<int> workEstimateIds;
   ServiceProvider serviceProvider;
   AppointmentStatus status;
+  String providerAcceptedDateTime;
 
   AppointmentDetail(
       {this.name,
@@ -29,9 +32,11 @@ class AppointmentDetail {
       this.workEstimateId,
       this.workEstimateIds,
       this.serviceProvider,
-      this.status});
+      this.status,
+      this.providerAcceptedDateTime});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
+    print('appointment details $json');
     return AppointmentDetail(
         name: json['name'] != null ? json['name'] : '',
         car: Car.fromJson(json["car"]),
@@ -49,7 +54,10 @@ class AppointmentDetail {
             : null,
         status: json['status'] != null
             ? AppointmentStatus.fromJson(json['status'])
-            : null);
+            : null,
+        providerAcceptedDateTime: json['providerAcceptedDateTime'] != null
+            ? json['providerAcceptedDateTime']
+            : '');
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -107,5 +115,22 @@ class AppointmentDetail {
     }
 
     return tasks;
+  }
+
+  DateEntry getWorkEstimateDateEntry() {
+    DateTime dateTime =
+        DateUtils.dateFromString(providerAcceptedDateTime, 'dd/MM/yyyy HH:mm');
+
+    if (dateTime == null) {
+      dateTime = DateUtils.dateFromString(scheduledDate, 'dd/MM/yyyy HH:mm');
+    }
+
+    if (dateTime != null) {
+      DateEntry dateEntry = new DateEntry(dateTime);
+      dateEntry.status = DateEntryStatus.Booked;
+      return dateEntry;
+    }
+
+    return null;
   }
 }
