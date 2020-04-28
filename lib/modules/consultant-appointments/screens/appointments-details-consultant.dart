@@ -7,7 +7,8 @@ import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
-import 'package:app/modules/consultant-appointments/screens/pick-up-car-form-consultant.modal.dart';
+import 'package:app/modules/consultant-appointments/widgets/pick-up-form/pick-up-car-form-consultant.modal.dart';
+import 'package:app/modules/consultant-appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -20,7 +21,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'assign-employee-consultant-modal.dart';
+import '../widgets/pick-up-form/pick-up-car-form-employees.widget.dart';
 
 class AppointmentDetailsConsultant extends StatefulWidget {
   static const String route =
@@ -361,9 +362,7 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return AssignEmployeeConsultantModal(
-                appointment:
-                    _appointmentConsultantProvider.selectedAppointment);
+            return Container();
           });
         });
   }
@@ -378,7 +377,7 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return PickUpCarFormConsultantModal();
+            return AppointmentCarReceiveFormModal(appointmentDetail: _appointmentConsultantProvider.selectedAppointmentDetail);
           });
         });
   }

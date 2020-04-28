@@ -33,7 +33,7 @@ class ImageSelectionWidget extends StatelessWidget {
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
-          for (int i = 0; i < _provider.files.length / _imagesPerRow; i++)
+          for (int i = 0; i < _provider.receiveFormRequest.files.length / _imagesPerRow; i++)
             _imagesRow(i),
         ],
       ),
@@ -54,9 +54,9 @@ class ImageSelectionWidget extends StatelessWidget {
   }
 
   _getImageContainer(int index) {
-    return index < _provider.files.length
+    return index < _provider.receiveFormRequest.files.length
         ? ImageContainerWidget(
-            file: _provider.files[index], index: index, addImage: addImage)
+            file: _provider.receiveFormRequest.files[index], index: index, addImage: addImage)
         : Container();
   }
 }

@@ -23,14 +23,14 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
 
   AppointmentDetailsGenericConsultantWidget(
       {this.appointmentDetail,
-      this.serviceItems = const [],
-      this.serviceProviderItems = const [],
-      this.declineAppointment,
-      this.createEstimate,
-      this.editEstimate,
-      this.viewEstimate,
-      this.assignMechanic,
-      this.createPickUpCarForm});
+        this.serviceItems = const [],
+        this.serviceProviderItems = const [],
+        this.declineAppointment,
+        this.createEstimate,
+        this.editEstimate,
+        this.viewEstimate,
+        this.assignMechanic,
+        this.createPickUpCarForm});
 
   @override
   AppointmentDetailsGenericConsultantWidgetState createState() {
@@ -321,8 +321,8 @@ class AppointmentDetailsGenericConsultantWidgetState
               ),
             ),
             child: Container(
-                // TODO - need to add icon for user
-                ),
+              // TODO - need to add icon for user
+            ),
           ),
           Expanded(
             child: Container(
@@ -354,25 +354,25 @@ class AppointmentDetailsGenericConsultantWidgetState
           children: <Widget>[
             Expanded(
                 child: Container(
-              margin: EdgeInsets.only(right: 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      item.name,
-                      style: TextHelper.customTextStyle(
-                          null, Colors.black, null, 14),
-                    ),
+                  margin: EdgeInsets.only(right: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          item.name,
+                          style: TextHelper.customTextStyle(
+                              null, Colors.black, null, 14),
+                        ),
+                      ),
+                      Container(
+                        width: 30,
+                        height: 30,
+                        child: Icon(Icons.check_box,
+                          color: red,),
+                      )
+                    ],
                   ),
-                  Container(
-                    width: 30,
-                    height: 30,
-                    child: Icon(Icons.check_box,
-                    color: red,),
-                  )
-                ],
-              ),
-            ))
+                ))
           ],
         ));
   }
@@ -387,9 +387,9 @@ class AppointmentDetailsGenericConsultantWidgetState
               margin: EdgeInsets.only(top: 5),
               child: Text(
                 (widget.appointmentDetail != null &&
-                        widget.appointmentDetail.scheduledDate != null)
+                    widget.appointmentDetail.scheduledDate != null)
                     ? widget.appointmentDetail.scheduledDate
-                        .replaceAll(" ", " ${S.of(context).general_at} ")
+                    .replaceAll(" ", " ${S.of(context).general_at} ")
                     : 'N/A',
                 style: TextHelper.customTextStyle(null, Colors.black, null, 18),
               ),
@@ -421,11 +421,7 @@ class AppointmentDetailsGenericConsultantWidgetState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _titleContainer(S.of(context).appointment_details_assiged_mechanic),
-        _mechanicRow(),
-        _buildSeparator(),
-        // TODO - need proper translation
-        _titleContainer(S.of(context).appointment_consultant_pick_up_car_title),
+        _titleContainer(S.of(context).mechanic_appointment_receive_form_title),
         _pickUpCarForm(),
         _buildSeparator(),
       ],
@@ -503,7 +499,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                 // TODO - need proper translation
                 S.of(context).appointment_consultant_no_pick_up_car_form,
                 style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+                TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
               ),
             ),
           ),

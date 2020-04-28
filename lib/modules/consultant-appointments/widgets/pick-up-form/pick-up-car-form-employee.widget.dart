@@ -1,16 +1,20 @@
-import 'package:app/modules/consultant-appointments/enums/employee-status.dart';
-import 'package:app/modules/consultant-appointments/models/employee-timetable-entry.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
+import 'package:app/modules/consultant-appointments/models/employee.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class EmployeeTimetableWidget extends StatelessWidget {
+class PickUpCarFormEmployeeWidget extends StatelessWidget {
+  final Employee employee;
+  final Function selectEmployeeTimeSerie;
+  final EmployeeTimeSerie selectedTimeSerie;
+
+  PickUpCarFormEmployeeWidget({this.employee, this.selectEmployeeTimeSerie, this.selectedTimeSerie});
+
   @override
   Widget build(BuildContext context) {
-    List<EmployeeTimetableEntry> list =
-        EmployeeTimetableEntry.generateRandomEntries();
-
     return Container(
       margin: EdgeInsets.only(right: 10),
       width: 100,
@@ -18,7 +22,7 @@ class EmployeeTimetableWidget extends StatelessWidget {
         children: <Widget>[
           _imageContainer(),
           _nameContainer(),
-          for (EmployeeTimetableEntry entry in list)
+          for (EmployeeTimeSerie entry in employee.timeSeries)
             _employeeTimeslotContainer(entry)
         ],
       ),
@@ -28,6 +32,7 @@ class EmployeeTimetableWidget extends StatelessWidget {
   _imageContainer() {
     return Container(
       child: Image.network(
+        // TODO - need to add image of mechanic
         'https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png',
         fit: BoxFit.fitHeight,
         height: 40,
@@ -40,23 +45,23 @@ class EmployeeTimetableWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 4),
       child: Text(
-        'Dorel Pop',
+        employee?.name,
+        textAlign: TextAlign.center,
         style: TextHelper.customTextStyle(null, Colors.black, null, 14),
       ),
     );
   }
 
-  _employeeTimeslotContainer(EmployeeTimetableEntry entry) {
+  _employeeTimeslotContainer(EmployeeTimeSerie entry) {
     Color boxBackground = Colors.transparent;
     Color textColor = black_text;
 
-//    if (selectedDateEntry != null &&
-//        selectedDateEntry.dateTime == dateEntry.dateTime) {
-//      boxBackground = Constants.red;
-//      textColor = Colors.white;
-//    }
+    if (entry == this.selectedTimeSerie) {
+      boxBackground = red;
+      textColor = Colors.white;
+    }
 
-    double opacity = (entry.status == EmployeeStatus.FREE) ? 1.0 : 0.4;
+    double opacity = (entry.getStatus() == DateEntryStatus.Free) ? 1.0 : 0.4;
 
     return Container(
       height: 50,
@@ -87,14 +92,7 @@ class EmployeeTimetableWidget extends StatelessWidget {
     );
   }
 
-  _onClicked(EmployeeTimetableEntry entry) {
-    if (entry.status == EmployeeStatus.FREE) {
-      if (entry.status == EmployeeStatus.FREE) {
-        entry.status = EmployeeStatus.BOOKED;
-      }
-      else {
-        entry.status = EmployeeStatus.FREE;
-      }
-    }
+  _onClicked(EmployeeTimeSerie entry) {
+    selectEmployeeTimeSerie(entry);
   }
 }

@@ -49,18 +49,6 @@ class AppointmentConsultantProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Employee>> getProviderEmployees(
-      int providerId, String startDate, String endDate) async {
-    try {
-      this.employees = await _providerService.getProviderEmployees(
-          providerId, startDate, endDate);
-      notifyListeners();
-      return this.employees;
-    } catch (error) {
-      throw (error);
-    }
-  }
-
   Future<Appointment> cancelAppointment(Appointment appointment) async {
     try {
       selectedAppointment =

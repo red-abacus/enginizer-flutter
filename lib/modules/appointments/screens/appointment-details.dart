@@ -5,6 +5,7 @@ import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/consultant-appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
@@ -133,7 +134,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
-        switch (_appointmentProvider.selectedAppointmentDetail.status.getState()) {
+        switch (
+            _appointmentProvider.selectedAppointmentDetail.status.getState()) {
           case AppointmentStatusState.SUBMITTED:
           case AppointmentStatusState.PENDING:
           case AppointmentStatusState.SCHEDULED:
@@ -145,7 +147,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
                     _appointmentProvider.selectedAppointmentDetail,
                 viewEstimate: _seeEstimate,
                 cancelAppointment: _cancelAppointment,
-                acceptAppointment: _acceptAppointment);
+                acceptAppointment: _acceptAppointment,
+                showHandoverCarForm: _showHandoverCarForm);
             break;
           default:
             return Container();
@@ -249,12 +252,14 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _appointmentProvider.selectedAppointment.serviceProvider.id;
 
-      DateEntry dateEntry = _appointmentProvider.selectedAppointmentDetail.getWorkEstimateDateEntry();
+      DateEntry dateEntry = _appointmentProvider.selectedAppointmentDetail
+          .getWorkEstimateDateEntry();
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Client, dateEntry: dateEntry)),
+            builder: (context) => WorkEstimateForm(
+                mode: EstimatorMode.ReadOnly, dateEntry: dateEntry)),
       );
     }
   }
@@ -288,5 +293,13 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
         }
       }
     }
+  }
+
+  _showHandoverCarForm() {
+    // TODO - need to complete handover car form?
+  }
+
+  _createHandoverCarForm() {
+    // TODO
   }
 }

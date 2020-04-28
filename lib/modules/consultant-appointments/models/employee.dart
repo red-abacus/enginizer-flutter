@@ -10,19 +10,29 @@ class Employee {
   Employee({this.id, this.name, this.image, this.timeSeries});
 
   factory Employee.fromJson(Map<String, dynamic> json) {
+    int employeeId = json['employee'] != null ? json['employee']['id'] : 0;
     return Employee(
-        id: json['id'] != null ? json['id'] : 0,
-        name: json['name'] != null ? json['name'] : '',
+        id: employeeId,
+        name: json['employee'] != null ? json['employee']['name'] : '',
         image: json['image'] != null ? json['image'] : '',
-        timeSeries: json['timeSeries'] != null
-            ? _mapTimeSeries(json['timeSeries'])
+        timeSeries: json['timetables'] != null
+            ? _mapTimeSeries(employeeId, json['timetables'])
             : []);
   }
 
-  static _mapTimeSeries(List<dynamic> response) {
+  static _mapTimeSeries(int employeeId, List<dynamic> response) {
     List<EmployeeTimeSerie> timeSeries = [];
     response.forEach((item) {
-      timeSeries.add(EmployeeTimeSerie.fromJson(item));
+      String date = item['localDate'];
+
+      if (item['timeSeries'] != null) {
+        List<dynamic> timeSeriesObjects = item['timeSeries'];
+
+        timeSeriesObjects.forEach((object) {
+          timeSeries.add(EmployeeTimeSerie.fromJson(employeeId, date, object));
+        });
+      }
+
     });
     return timeSeries;
   }

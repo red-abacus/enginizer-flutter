@@ -153,6 +153,7 @@ class ProviderService {
         throw Exception(GET_PROVIDER_EMPLOYEES_EXCEPTION);
       }
     } catch (error) {
+      print('error $error');
       throw Exception(GET_PROVIDER_EMPLOYEES_EXCEPTION);
     }
   }

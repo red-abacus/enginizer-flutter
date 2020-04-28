@@ -10,6 +10,7 @@ import 'package:app/utils/date_utils.dart';
 import 'appointment-status.model.dart';
 
 class AppointmentDetail {
+  int id;
   String name;
   Car car;
   List<Issue> issues = [];
@@ -23,7 +24,8 @@ class AppointmentDetail {
   String providerAcceptedDateTime;
 
   AppointmentDetail(
-      {this.name,
+      {this.id,
+      this.name,
       this.car,
       this.issues,
       this.serviceItems,
@@ -36,8 +38,8 @@ class AppointmentDetail {
       this.providerAcceptedDateTime});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
-    print('appointment details $json');
     return AppointmentDetail(
+        id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
         car: Car.fromJson(json["car"]),
         issues: json["issues"] != null ? _mapIssuesList(json["issues"]) : [],
@@ -132,5 +134,9 @@ class AppointmentDetail {
     }
 
     return null;
+  }
+
+  static String scheduledTimeFormat() {
+    return "dd/MM/yyyy HH:mm";
   }
 }

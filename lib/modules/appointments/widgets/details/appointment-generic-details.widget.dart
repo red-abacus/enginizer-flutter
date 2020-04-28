@@ -15,12 +15,14 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
   Function cancelAppointment;
   Function viewEstimate;
   Function acceptAppointment;
+  Function showHandoverCarForm;
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
       this.cancelAppointment,
       this.viewEstimate,
-      this.acceptAppointment});
+      this.acceptAppointment,
+      this.showHandoverCarForm});
 
   @override
   AppointmentGenericDetailsWidgetState createState() {
@@ -76,16 +78,18 @@ class AppointmentGenericDetailsWidgetState
                   ),
                 ],
               ),
-              _buildTitleContainer(
-                  S.of(context).appointment_details_services_title),
+              _titleContainer(S.of(context).appointment_details_services_title),
               for (ServiceItem item in widget.appointmentDetail.serviceItems)
                 _serviceItemText(item),
               _buildSeparator(),
-              _buildTitleContainer(
+              _titleContainer(
                   S.of(context).appointment_details_services_issues),
               _issuesContainer(),
               _buildSeparator(),
-              _buildTitleContainer(_getAppointmentDateTitle(context)),
+              if (widget.appointmentDetail.status.getState() ==
+                  AppointmentStatusState.SCHEDULED)
+                _specificScheduledContainer(),
+              _titleContainer(_getAppointmentDateTitle(context)),
               Container(
                 margin: EdgeInsets.only(top: 15, bottom: 15),
                 child: Row(
@@ -224,7 +228,7 @@ class AppointmentGenericDetailsWidgetState
     );
   }
 
-  _buildTitleContainer(String text) {
+  _titleContainer(String text) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Text(
@@ -304,6 +308,55 @@ class AppointmentGenericDetailsWidgetState
           )
         ],
       ),
+    );
+  }
+
+  _specificScheduledContainer() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _titleContainer(S.of(context).appointment_hand_over_car_form_title),
+        Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 20,
+                height: 20,
+                decoration: new BoxDecoration(
+                  color: gray,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Text(
+                    // TODO - need proper translation
+                    S.of(context).appointment_hand_over_car_form,
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 15),
+                  ),
+                ),
+              ),
+              FlatButton(
+                child: Text(
+                  S.of(context).general_create.toUpperCase(),
+                  style: TextHelper.customTextStyle(
+                      null, red, FontWeight.bold, 15),
+                ),
+                onPressed: () {
+                  widget.showHandoverCarForm();
+                },
+              )
+            ],
+          ),
+        ),
+        _buildSeparator(),
+      ],
     );
   }
 }
