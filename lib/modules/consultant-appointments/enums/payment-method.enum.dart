@@ -23,6 +23,17 @@ class PaymentMethodUtilities {
       PaymentMethod.CARD,
     ];
   }
+
+  static paymentMethod(PaymentMethod paymentMethod) {
+    switch (paymentMethod) {
+      case PaymentMethod.CASH:
+        return 'CASH';
+      case PaymentMethod.TRANSFER:
+        return 'TRANSFER';
+      case PaymentMethod.CARD:
+        return 'CARD';
+    }
+  }
 }
 
 enum PaymentMethod { CASH, TRANSFER, CARD }

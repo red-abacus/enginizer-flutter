@@ -376,5 +376,8 @@
   "exception_accept_bid": "There was an error trying to accept the bid.",
   "exception_reject_bid": "There was an error trying to reject the bid.",
   "exception_car_add_fuel_consumption": "There was an error trying to add fuel consumption.",
-  "exception_get_provider_employees": "There was an error trying to get mechanics."
+  "exception_get_provider_employees": "There was an error trying to get mechanics.",
+  "exception_create_receive_procedure": "There was an error trying to create the receive procedure.",
+  "exception_add_procedure_photos": "There was an error trying to add receive procedure photos.",
+  "exception_assign_mechanic_to_appointment": "There was an error trying to assign mechanic."
 }

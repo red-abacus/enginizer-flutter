@@ -39,7 +39,6 @@ class Appointment {
       this.serviceProvider});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
-    print('appointment ${json['status']} : ${json['id']}');
     return Appointment(
         id: json['id'],
         date: json['date'] != null

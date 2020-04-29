@@ -181,26 +181,6 @@ class CarMakeService {
     return carFuelTypes;
   }
 
-  _mapCylinderCapacities(List<dynamic> cylinderCaps) {
-    List<CarCylinderCapacity> cylinderCapacities = [];
-    cylinderCaps.forEach(
-        (model) => cylinderCapacities.add(CarCylinderCapacity.fromJson(model)));
-    return cylinderCapacities;
-  }
-
-  _mapPowers(List<dynamic> powers) {
-    List<CarPower> carPowers = [];
-    powers.forEach((model) => carPowers.add(CarPower.fromJson(model)));
-    return carPowers;
-  }
-
-  _mapTransmissions(List<dynamic> transmissions) {
-    List<CarTransmission> carTransmissions = [];
-    transmissions.forEach(
-        (model) => carTransmissions.add(CarTransmission.fromJson(model)));
-    return carTransmissions;
-  }
-
   _mapColors(List<dynamic> colors) {
     List<CarColor> carColors = [];
     colors.forEach((model) => carColors.add(CarColor.fromJson(model)));

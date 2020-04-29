@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 
 class AppointmentCarReceiveFormModal extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
-  final Function createCarReceiveForm;
+  final Function refreshState;
 
   AppointmentCarReceiveFormModal(
-      {this.appointmentDetail, this.createCarReceiveForm});
+      {this.appointmentDetail, this.refreshState});
 
   @override
   State<StatefulWidget> createState() {
@@ -25,9 +25,7 @@ class AppointmentCarReceiveFormModal extends StatefulWidget {
 class _AppointmentCarReceiveFormModalState
     extends State<AppointmentCarReceiveFormModal> {
   bool _showPickUpButton = false;
-  // tODO - remove this
-  ReceiveCarFormState _receiveCarFormState = ReceiveCarFormState.EXTENDED_FORM;
-//  ReceiveCarFormState _receiveCarFormState = ReceiveCarFormState.FORM;
+  ReceiveCarFormState _receiveCarFormState = ReceiveCarFormState.FORM;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +55,7 @@ class _AppointmentCarReceiveFormModalState
       return _formContainer();
     }
 
-    return PickUpCarFormConsultantWidget(appointmentDetail: widget.appointmentDetail);
+    return PickUpCarFormConsultantWidget(appointmentDetail: widget.appointmentDetail, refreshState: widget.refreshState);
   }
 
   _formContainer() {

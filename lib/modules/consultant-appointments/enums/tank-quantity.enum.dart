@@ -35,6 +35,21 @@ class TankQuantityUtils {
       TankQuantity.RESERV
     ];
   }
+
+  static int quantity(TankQuantity quantity) {
+    switch (quantity) {
+      case TankQuantity.FULL:
+        return 100;
+      case TankQuantity.HALF:
+        return 50;
+      case TankQuantity.THIRD:
+        return 33;
+      case TankQuantity.QUARTER:
+        return 25;
+      case TankQuantity.RESERV:
+        return 0;
+    }
+  }
 }
 
 enum TankQuantity { FULL, HALF, THIRD, QUARTER, RESERV }

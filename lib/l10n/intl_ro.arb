@@ -375,5 +375,8 @@
   "exception_accept_bid": "A intervenit o problemă la acceptarea ofertei.",
   "exception_reject_bid": "A intervenit o problemă la respingerea ofertei.",
   "exception_car_add_fuel_consumption": "A intervenit o problemă la adăugarea unui consum de combustibil.",
-  "exception_get_provider_employees": "A intervenit o problemă la încărcarea mecanicilor."
+  "exception_get_provider_employees": "A intervenit o problemă la încărcarea mecanicilor.",
+  "exception_create_receive_procedure": "A intervenit o problemă la create procedurii de primire.",
+  "exception_add_procedure_photos": "A intervenit o problemă la încărcarea imaginilor procedurii de primire.",
+  "exception_assign_mechanic_to_appointment": "A intervenit o problemă la alocarea mecanicului."
 }

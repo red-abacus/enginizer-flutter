@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:app/modules/consultant-appointments/models/assign-employee-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
@@ -30,6 +33,8 @@ class ProviderService {
       'GET_PROVIDER_SERVICE_ITEMS_EXCEPTION';
   static const String UPDATE_PROVIDER_DETAILS_EXCEPTION =
       'UPDATE_PROVIDER_DETAILS_FAILED';
+  static const String ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION =
+      'ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -42,10 +47,6 @@ class ProviderService {
 
   static const String _APPOINTMENTS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers';
-
-  static const String _PROVIDER_SCHEDULE_PREFIX =
-      '${Environment.PROVIDERS_BASE_API}/providers/';
-  static const String _PROVIDER_SCHEDULE_SUFFIX = "/schedule";
 
   static const String _PROVIDER_TIMETABLE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
@@ -69,6 +70,10 @@ class ProviderService {
   static const String _SERVICE_PROVIDER_REVIEWS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _SERVICE_PROVIDER_REVIEWS_SUFFIX = '/reviews';
+
+  static const String _ASSIGN_MECHANIC_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String _ASSIGN_MECHANIC_SUFFIX = '/people-timetable/';
 
   Dio _dio = inject<Dio>();
 
@@ -118,12 +123,6 @@ class ProviderService {
     }
   }
 
-  _buildProviderTimetablePath(int providerId) {
-    return _PROVIDER_TIMETABLE_PREFIX +
-        providerId.toString() +
-        _PROVIDER_TIMETABLE_SUFFIX;
-  }
-
   Future<ServiceProvider> getProviderDetails(int providerId) async {
     try {
       String path = _PROVIDER_DETAILS_PATH + providerId.toString();
@@ -153,15 +152,8 @@ class ProviderService {
         throw Exception(GET_PROVIDER_EMPLOYEES_EXCEPTION);
       }
     } catch (error) {
-      print('error $error');
       throw Exception(GET_PROVIDER_EMPLOYEES_EXCEPTION);
     }
-  }
-
-  _buildGetProviderEmployeesPath(int providerId) {
-    return _PROVIDER_EMPLOYEE_PREFIX +
-        providerId.toString() +
-        _PROVIDER_EMPLOYEE_SUFFIX;
   }
 
   Future<List<ItemType>> getItemTypes() async {
@@ -201,12 +193,6 @@ class ProviderService {
     }
   }
 
-  _buildProviderItemsPath(int providerId) {
-    return _PROVIDER_ITEMS_PREFIX +
-        providerId.toString() +
-        _PROVIDER_ITEMS_SUFFIX;
-  }
-
   Future<ServiceProviderItemsResponse> getProviderServiceItems(
       int providerId) async {
     try {
@@ -223,12 +209,6 @@ class ProviderService {
     }
   }
 
-  _buildGetProviderServiceItemsPath(int providerId) {
-    return _PROVIDER_SERVICE_ITEMS_PREFIX +
-        providerId.toString() +
-        _PROVIDER_SERVICE_ITEMS_SUFFIX;
-  }
-
   Future<ServiceProviderReview> getServiceProviderReviews(
       int providerId) async {
     try {
@@ -243,12 +223,6 @@ class ProviderService {
     } catch (error) {
       throw (error);
     }
-  }
-
-  _buildGetServiceProviderReviews(int providerId) {
-    return _SERVICE_PROVIDER_REVIEWS_PREFIX +
-        providerId.toString() +
-        _SERVICE_PROVIDER_REVIEWS_SUFFIX;
   }
 
   Future<ServiceProvider> updateServiceProviderDetails(
@@ -268,22 +242,25 @@ class ProviderService {
     }
   }
 
-  _mapServices(Map<String, dynamic> commingServices) {
-    var response = ProviderServiceResponse.fromJson(commingServices);
-    return response;
+  Future<bool> assignEmployeeToAppointment(
+      AssignEmployeeRequest assignEmployeeRequest) async {
+    try {
+      final response = await _dio.put(
+          _buildAssignMechanicToAppointment(assignEmployeeRequest.providerId,
+              assignEmployeeRequest.employeeId),
+          data: jsonEncode(assignEmployeeRequest.toJson()));
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION);
+    }
   }
 
-  _mapProviders(Map<String, dynamic> commingServices) {
-    var response = ServiceProviderResponse.fromJson(commingServices);
-    return response;
-  }
-
-  _mapProviderServiceItems(dynamic response) {
-    return ServiceProviderItemsResponse.fromJson(response);
-  }
-
-  List<ServiceProviderTimetable> _mapServiceProviderTimetable(
-      List<dynamic> response) {
+  _mapServiceProviderTimetable(List<dynamic> response) {
     List<ServiceProviderTimetable> list = [];
 
     response.forEach((item) {
@@ -299,7 +276,7 @@ class ProviderService {
     return list;
   }
 
-  List<ProviderItem> _mapProviderItems(List<dynamic> response) {
+  _mapProviderItems(List<dynamic> response) {
     List<ProviderItem> providerItems = [];
     response.forEach((item) {
       providerItems.add(ProviderItem.fromJson(item));
@@ -315,5 +292,56 @@ class ProviderService {
     });
 
     return list;
+  }
+
+  _mapServices(Map<String, dynamic> commingServices) {
+    var response = ProviderServiceResponse.fromJson(commingServices);
+    return response;
+  }
+
+  _mapProviders(Map<String, dynamic> commingServices) {
+    var response = ServiceProviderResponse.fromJson(commingServices);
+    return response;
+  }
+
+  _mapProviderServiceItems(dynamic response) {
+    return ServiceProviderItemsResponse.fromJson(response);
+  }
+
+  _buildGetServiceProviderReviews(int providerId) {
+    return _SERVICE_PROVIDER_REVIEWS_PREFIX +
+        providerId.toString() +
+        _SERVICE_PROVIDER_REVIEWS_SUFFIX;
+  }
+
+  _buildProviderTimetablePath(int providerId) {
+    return _PROVIDER_TIMETABLE_PREFIX +
+        providerId.toString() +
+        _PROVIDER_TIMETABLE_SUFFIX;
+  }
+
+  _buildGetProviderEmployeesPath(int providerId) {
+    return _PROVIDER_EMPLOYEE_PREFIX +
+        providerId.toString() +
+        _PROVIDER_EMPLOYEE_SUFFIX;
+  }
+
+  _buildProviderItemsPath(int providerId) {
+    return _PROVIDER_ITEMS_PREFIX +
+        providerId.toString() +
+        _PROVIDER_ITEMS_SUFFIX;
+  }
+
+  _buildGetProviderServiceItemsPath(int providerId) {
+    return _PROVIDER_SERVICE_ITEMS_PREFIX +
+        providerId.toString() +
+        _PROVIDER_SERVICE_ITEMS_SUFFIX;
+  }
+
+  _buildAssignMechanicToAppointment(int serviceProviderId, int mechanicId) {
+    return _ASSIGN_MECHANIC_PREFIX +
+        serviceProviderId.toString() +
+        _ASSIGN_MECHANIC_SUFFIX +
+        mechanicId.toString();
   }
 }

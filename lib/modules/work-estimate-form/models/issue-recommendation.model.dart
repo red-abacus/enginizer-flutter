@@ -52,8 +52,8 @@ class IssueRecommendation {
 
   Map<String, dynamic> toCreateJson() {
     Map<String, dynamic> propMap = {
-      'id': Null,
-      'name': Null,
+      'id': null,
+      'name': null,
       'items': items.map((item) => item.toJson()).toList()
     };
 
