@@ -1,19 +1,26 @@
+import 'dart:async';
+
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/mechanic-appointments/enums/mechanic-task-state.enum.dart';
+import 'package:app/modules/mechanic-appointments/enums/mechanic-task-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../appointment-details-mechanic-task-issue-modal.widget.dart';
 import 'appointment-details-mechanic-task-issue.widget.dart';
 
 class AppointmentDetailsMechanicTaskSectionWidget extends StatefulWidget {
   final MechanicTask task;
   final int index;
 
-  AppointmentDetailsMechanicTaskSectionWidget({this.task, this.index});
+  Function addMechanicTaskIssue;
+
+  AppointmentDetailsMechanicTaskSectionWidget(
+      {this.task, this.index, this.addMechanicTaskIssue});
 
   @override
   _AppointmentDetailsMechanicTaskSectionWidgetState createState() {
@@ -24,9 +31,46 @@ class AppointmentDetailsMechanicTaskSectionWidget extends StatefulWidget {
 class _AppointmentDetailsMechanicTaskSectionWidgetState
     extends State<AppointmentDetailsMechanicTaskSectionWidget> {
   bool _bestTimeActivated = false;
+  Timer _timer;
+
+  int _hours = 0;
+  int _minutes = 0;
+  int _seconds = 0;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    if (_timer != null) {
+      _timer.cancel();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+
+    _initialiseTime();
+
+    if (widget.task.status == MechanicTaskStatus.IN_PROGRESS) {
+      const oneDecimal = const Duration(seconds: 1);
+      _timer = new Timer.periodic(
+          oneDecimal,
+          (Timer timer) => setState(() {
+                setState(() {
+                  DateTime time = DateUtils.dateFromString(
+                      widget.task.timeValue, 'HH:mm:ss');
+                  if (time != null) {
+                    time = time.add(Duration(seconds: 1));
+                    widget.task.timeValue =
+                        DateUtils.stringFromDate(time, 'HH:mm:ss');
+                  }
+                });
+              }));
+    }
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
@@ -46,19 +90,50 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
     );
   }
 
+  _initialiseTime() {
+    DateTime time = DateUtils.dateFromString(widget.task.timeValue, 'HH:mm:ss');
+
+    if (time != null) {
+      _hours = time.hour;
+      _minutes = time.minute;
+      _seconds = time.second;
+    }
+  }
+
   _issuesContainer() {
-    return widget.task.state == MechanicTaskState.SELECTED
+    return widget.task.status != MechanicTaskStatus.NEW
         ? ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: widget.task.issues.length,
+            itemCount: _recommendationsNumber(),
             itemBuilder: (context, index) {
-              return AppointmentDetailsTaskIssueWidget(
-                issue: widget.task.issues[index],
-                issueAdded: _issueAdded,
-              );
+              return _recommendationWidget(index);
             })
         : Container();
+  }
+
+  _recommendationsNumber() {
+    switch (widget.task.status) {
+      case MechanicTaskStatus.NEW:
+      case MechanicTaskStatus.DONE:
+        return 0;
+      case MechanicTaskStatus.IN_PROGRESS:
+      case MechanicTaskStatus.ON_HOLD:
+        return widget.task.issues.length + 1;
+    }
+  }
+
+  _recommendationWidget(int index) {
+    if (index < widget.task.issues.length) {
+      return AppointmentDetailsTaskIssueWidget(
+          mechanicTaskIssue: widget.task.issues[index],
+          showMechanicTaskIssueModal: _showMechanicTaskIssueModal);
+    }
+
+    return AppointmentDetailsTaskIssueWidget(
+        mechanicTaskIssue: MechanicTaskIssue(
+            id: -1, name: '', taskId: widget.task.id),
+        showMechanicTaskIssueModal: _showMechanicTaskIssueModal);
   }
 
   _titleWidget() {
@@ -69,13 +144,16 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
             (widget.task.name?.isNotEmpty ?? false)
                 ? widget.task.translatedName(context)
                 : 'N/A',
-            style: TextStyle(
-                color: Colors.black87)),
+            style: TextStyle(color: Colors.black87)),
       ),
     );
   }
 
   _timerWidget() {
+    String hourString = (_hours < 10) ? '0$_hours' : _hours.toString();
+    String minutesString = (_minutes < 10) ? '0$_minutes' : _minutes.toString();
+    String secondsString = (_seconds < 10) ? '0$_seconds' : _seconds.toString();
+
     return Align(
       alignment: Alignment.topRight,
       child: ClipRRect(
@@ -87,8 +165,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                '00:00:00',
-//    '$hoursStr:$minutesStr:$secondsStr',
+                '$hourString:$minutesString:$secondsString',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -112,7 +189,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
                 child: Icon(Icons.timer, color: gray),
                 onTap: () => _showBestTime())
             : Text(
-                '${S.of(context).mechanic_appointment_tasks_best_time_title}: 05:00',
+                '${S.of(context).mechanic_appointment_tasks_reference_time_title}: ${widget.task.referenceTimeValue}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: gray,
@@ -142,12 +219,15 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
   }
 
   _getNumberColor() {
-    switch (widget.task.state) {
-      case MechanicTaskState.SELECTED:
-        return red;
-      case MechanicTaskState.FINISHED:
+    switch (widget.task.status) {
+      case MechanicTaskStatus.DONE:
         return green;
-      case MechanicTaskState.NOT_SELECTED:
+      case MechanicTaskStatus.ON_HOLD:
+      case MechanicTaskStatus.IN_PROGRESS:
+        return red;
+//      case MechanicTaskState.FINISHED:
+//        return green;
+      case MechanicTaskStatus.NEW:
         return gray;
     }
   }
@@ -164,10 +244,29 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
     });
   }
 
-  _issueAdded(Issue issue) {
-    setState(() {
-      widget.task.state = MechanicTaskState.SELECTED;
-      widget.task.issues.add(Issue(id: -1, name: ''));
-    });
+  _showMechanicTaskIssueModal(MechanicTaskIssue mechanicTaskIssue) {
+    if (mechanicTaskIssue.id != -1) {
+      // TODO - no endpoint for edit recommendation
+      return;
+    }
+
+    if (widget.task.status == MechanicTaskStatus.IN_PROGRESS) {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (_) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return AppointmentDetailsDetailsMechanicTaskIssueModal(
+                mechanicTaskIssue: mechanicTaskIssue,
+                mechanicTaskIssueAdded: _addMechanicTaskIssue,
+              );
+            });
+          });
+    }
+  }
+
+  _addMechanicTaskIssue(MechanicTaskIssue mechanicTaskIssue) {
+    widget.addMechanicTaskIssue(widget.task, mechanicTaskIssue);
   }
 }

@@ -5,10 +5,12 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-car-details.widget.dart';
-import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-receive-form.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-service-history.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-tasks.widget.dart';
+import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -37,7 +39,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   AppointmentDetailsMechanicState({this.route});
 
-  AppointmentMechanicProvider appointmentMechanicProvider;
+  AppointmentMechanicProvider _appointmentMechanicProvider;
 
   @override
   void initState() {
@@ -53,8 +55,8 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   @override
   Widget build(BuildContext context) {
-    if (appointmentMechanicProvider != null &&
-        appointmentMechanicProvider.selectedAppointment == null) {
+    if (_appointmentMechanicProvider != null &&
+        _appointmentMechanicProvider.selectedAppointment == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -94,10 +96,10 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      appointmentMechanicProvider =
+      _appointmentMechanicProvider =
           Provider.of<AppointmentMechanicProvider>(context);
 
-      if (appointmentMechanicProvider.selectedAppointment != null) {
+      if (_appointmentMechanicProvider.selectedAppointment != null) {
         _loadData();
       }
       _initDone = true;
@@ -111,19 +113,21 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     });
 
     try {
-      await appointmentMechanicProvider
+      await _appointmentMechanicProvider
           .getAppointmentDetails(
-              appointmentMechanicProvider.selectedAppointment)
+              _appointmentMechanicProvider.selectedAppointment)
           .then((_) async {
-
-        appointmentMechanicProvider
+        await _appointmentMechanicProvider
             .getStandardTasks(
-                appointmentMechanicProvider.selectedAppointment.id)
-            .then((mechanicTasks) {
-          appointmentMechanicProvider.selectedMechanicTask = mechanicTasks[0];
-
-          setState(() {
-            _isLoading = false;
+                _appointmentMechanicProvider.selectedAppointment.id)
+            .then((tasks) async {
+          await _appointmentMechanicProvider
+              .getClientTasks(
+                  _appointmentMechanicProvider.selectedAppointment.id)
+              .then((tasks) {
+            setState(() {
+              _isLoading = false;
+            });
           });
         });
       });
@@ -138,6 +142,16 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_work_estimate_details, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.GET_STANDARD_TASKS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_standard_tasks, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.GET_CLIENT_TASKS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_client_tasks, context);
       }
 
       setState(() {
@@ -166,7 +180,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   _titleText() {
     return Text(
-      appointmentMechanicProvider.selectedAppointment?.name ?? 'N/A',
+      _appointmentMechanicProvider.selectedAppointment?.name ?? 'N/A',
       style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     );
@@ -175,23 +189,24 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   _buildContent() {
     List<Widget> list = [
       AppointmentDetailsMechanicWidget(
-          appointment: appointmentMechanicProvider.selectedAppointment,
+          appointment: _appointmentMechanicProvider.selectedAppointment,
           appointmentDetail:
-              appointmentMechanicProvider.selectedAppointmentDetails),
+              _appointmentMechanicProvider.selectedAppointmentDetails,
+          viewEstimate: _viewEstimate),
       AppointmentDetailsCarDetails(),
       AppointmentDetailsServiceHistory()
     ];
 
-    if (appointmentMechanicProvider.selectedAppointment.status.getState() ==
-        AppointmentStatusState.SUBMITTED) {
-      list.insert(
-          2,
-          AppointmentDetailsReceiveFormWidget(
-              appointmentDetails:
-                  appointmentMechanicProvider.selectedAppointmentDetails));
-    } else if (appointmentMechanicProvider.selectedAppointment.status.getState() ==
-        AppointmentStatusState.ON_HOLD) {
-      list.insert(2, AppointmentDetailsTasksList());
+    switch (
+        _appointmentMechanicProvider.selectedAppointment.status.getState()) {
+      case AppointmentStatusState.IN_UNIT:
+      case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
+      case AppointmentStatusState.IN_REVIEW:
+        list.insert(2, AppointmentDetailsTasksList());
+        break;
+      default:
+        break;
     }
 
     return TabBarView(
@@ -207,19 +222,44 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       Tab(text: S.of(context).appointment_details_service_history)
     ];
 
-    switch (appointmentMechanicProvider.selectedAppointment.status.getState()) {
+    switch (
+        _appointmentMechanicProvider.selectedAppointment.status.getState()) {
+      case AppointmentStatusState.IN_UNIT:
+      case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
+      case AppointmentStatusState.IN_REVIEW:
+        tabs.insert(
+            2, Tab(text: S.of(context).mechanic_appointment_tasks_title));
+        break;
       case AppointmentStatusState.SUBMITTED:
         tabs.insert(
             2, Tab(text: S.of(context).mechanic_appointment_receive_form));
-        break;
-      case AppointmentStatusState.ON_HOLD:
-        tabs.insert(
-            2, Tab(text: S.of(context).mechanic_appointment_tasks_title));
         break;
       default:
         break;
     }
 
     return tabs;
+  }
+
+  _viewEstimate() {
+    int workEstimateId = _appointmentMechanicProvider.selectedAppointmentDetails
+        .lastWorkEstimate();
+
+    if (workEstimateId != 0) {
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+          workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          _appointmentMechanicProvider
+              .selectedAppointmentDetails.serviceProvider.id;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+      );
+    }
   }
 }

@@ -105,6 +105,7 @@
   "appointment_status_finished": "Finished",
   "appointment_status_on_hold": "On Pause",
   "appointment_status_in_unit": "In Unit",
+  "appointment_status_in_review": "In Review",
   "appointment_details_applicant": "Applicant",
   "appointment_details_request_reprogramming": "Request reprogramming",
   "appointment_details_assiged_mechanic": "Assigned Mechanics",
@@ -275,7 +276,7 @@
   "mechanic_appointment_receive_form_alert_title": "Confirm car receiving",
   "mechanic_appointment_handover_form_alert_title": "Confirm car handover",
   "mechanic_appointment_tasks_title": "Tasks",
-  "mechanic_appointment_tasks_best_time_title": "Best time",
+  "mechanic_appointment_tasks_reference_time_title": "Reference time",
   "mechanic_appointment_task_issue_finish": "Finished",
   "mechanic_appointment_task_issue_edit": "Edit",
   "mechanic_appointment_task_priority_low": "Low",
@@ -379,5 +380,13 @@
   "exception_get_provider_employees": "There was an error trying to get mechanics.",
   "exception_create_receive_procedure": "There was an error trying to create the receive procedure.",
   "exception_add_procedure_photos": "There was an error trying to add receive procedure photos.",
-  "exception_assign_mechanic_to_appointment": "There was an error trying to assign mechanic."
+  "exception_assign_mechanic_to_appointment": "There was an error trying to assign mechanic.",
+  "exception_get_standard_tasks": "There was an error trying to get standard tasks.",
+  "exception_get_client_tasks": "There was an error trying to get client tasks.",
+  "exception_start_appointment": "There was an error trying to start the appointment.",
+  "exception_start_appointment_task": "There was an error trying to start the appointment task.",
+  "exception_pause_appointment": "There was an error trying to pause the appointment.",
+  "exception_add_appointment_recommendation": "There was an error trying to add a recommendation.",
+  "exception_add_appointment_recommendation_image": "There was an error trying to add recommendation image.",
+  "exception_stop_appointment": "There was an error trying to stop the appointment."
 }

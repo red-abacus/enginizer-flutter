@@ -63,6 +63,28 @@ class WorkEstimateIssueWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
+                                '${S.of(context).car_details_quantity}:',
+                                style: TextHelper.customTextStyle(
+                                    null, black_text, null, 14),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 5),
+                                child: Text(
+                                  issueItem.quantity.toString(),
+                                  style: TextHelper.customTextStyle(
+                                      null, red, FontWeight.bold, 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
                                 '${S.of(context).general_price}:',
                                 style: TextHelper.customTextStyle(
                                     null, black_text, null, 14),

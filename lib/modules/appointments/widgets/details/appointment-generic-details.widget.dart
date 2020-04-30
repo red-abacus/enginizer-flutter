@@ -86,9 +86,6 @@ class AppointmentGenericDetailsWidgetState
                   S.of(context).appointment_details_services_issues),
               _issuesContainer(),
               _buildSeparator(),
-              if (widget.appointmentDetail.status.getState() ==
-                  AppointmentStatusState.SCHEDULED)
-                _specificScheduledContainer(),
               _titleContainer(_getAppointmentDateTitle(context)),
               Container(
                 margin: EdgeInsets.only(top: 15, bottom: 15),
@@ -308,55 +305,6 @@ class AppointmentGenericDetailsWidgetState
           )
         ],
       ),
-    );
-  }
-
-  _specificScheduledContainer() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _titleContainer(S.of(context).appointment_hand_over_car_form_title),
-        Container(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 20,
-                height: 20,
-                decoration: new BoxDecoration(
-                  color: gray,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text(
-                    // TODO - need proper translation
-                    S.of(context).appointment_hand_over_car_form,
-                    style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 15),
-                  ),
-                ),
-              ),
-              FlatButton(
-                child: Text(
-                  S.of(context).general_create.toUpperCase(),
-                  style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 15),
-                ),
-                onPressed: () {
-                  widget.showHandoverCarForm();
-                },
-              )
-            ],
-          ),
-        ),
-        _buildSeparator(),
-      ],
     );
   }
 }

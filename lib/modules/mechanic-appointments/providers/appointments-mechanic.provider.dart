@@ -15,6 +15,8 @@ class AppointmentsMechanicProvider with ChangeNotifier {
 
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
+  bool initDone = false;
+
   Future<List<Appointment>> filterAppointments(String searchString,
       AppointmentStatusState filterStatus, DateTime dateTime) async {
     this.filterSearchString = searchString;

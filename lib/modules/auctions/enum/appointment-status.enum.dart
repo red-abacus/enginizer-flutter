@@ -22,6 +22,8 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_on_hold;
       case AppointmentStatusState.IN_UNIT:
         return S.of(context).appointment_status_in_unit;
+      case AppointmentStatusState.IN_REVIEW:
+        return S.of(context).appointment_status_in_review;
       case AppointmentStatusState.NONE:
         return '';
         break;
@@ -37,6 +39,7 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.IN_WORK,
       AppointmentStatusState.OPEN_BID,
       AppointmentStatusState.CANCELED,
+      AppointmentStatusState.IN_REVIEW,
       AppointmentStatusState.DONE
     ];
   }
@@ -46,7 +49,8 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.NONE,
       AppointmentStatusState.ON_HOLD,
       AppointmentStatusState.SUBMITTED,
-      AppointmentStatusState.IN_UNIT
+      AppointmentStatusState.IN_UNIT,
+      AppointmentStatusState.IN_REVIEW
     ];
   }
 }
@@ -61,5 +65,6 @@ enum AppointmentStatusState {
   OPEN_BID,
   DONE,
   ON_HOLD,
-  IN_UNIT
+  IN_UNIT,
+  IN_REVIEW
 }

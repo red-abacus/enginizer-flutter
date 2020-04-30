@@ -24,6 +24,30 @@ class TaskPriorityUtils {
         return red;
     }
   }
+
+  static TaskPriority fromString(String sender) {
+    switch(sender.toLowerCase()) {
+      case 'high':
+        return TaskPriority.HIGH;
+      case 'medium':
+        return TaskPriority.MEDIUM;
+      case 'low':
+        return TaskPriority.LOW;
+    }
+
+    return null;
+  }
+
+  static String getString(TaskPriority priority) {
+    switch(priority) {
+      case TaskPriority.HIGH:
+        return 'HIGH';
+      case TaskPriority.MEDIUM:
+        return 'MEDIUM';
+      case TaskPriority.LOW:
+        return 'LOW';
+    }
+  }
 }
 
 enum TaskPriority { LOW, MEDIUM, HIGH }

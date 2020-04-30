@@ -3,8 +3,11 @@ import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/mechanic-appointments/enums/mechanic-task-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppointmentMechanicProvider with ChangeNotifier {
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
@@ -15,9 +18,9 @@ class AppointmentMechanicProvider with ChangeNotifier {
   List<MechanicTask> standardTasks = [];
   List<MechanicTask> issueTasks = [];
 
-  MechanicTask selectedMechanicTask;
-
   List<dynamic> serviceHistory = [];
+
+  MechanicTask currentTask;
 
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
@@ -25,9 +28,6 @@ class AppointmentMechanicProvider with ChangeNotifier {
       selectedAppointmentDetails =
           await _appointmentsService.getAppointmentDetails(appointment.id);
 
-      if (selectedAppointmentDetails != null) {
-        this.issueTasks = selectedAppointmentDetails.tasksFromIssues();
-      }
       notifyListeners();
       return selectedAppointmentDetails;
     } catch (error) {
@@ -35,25 +35,83 @@ class AppointmentMechanicProvider with ChangeNotifier {
     }
   }
 
-  Future<List<MechanicTask>> getStandardTasks(int appointmentId) async {
-    standardTasks = _mockStandardTasks();
-    notifyListeners();
-    return standardTasks;
+  Future getStandardTasks(int appointmentId) async {
+    try {
+      standardTasks =
+          await _appointmentsService.getAppointmentStandardTasks(appointmentId);
+      notifyListeners();
+      return standardTasks;
+    } catch (error) {
+      throw (error);
+    }
   }
 
-  Future getTestStandardTasks(int appointmentId) async {
-    _appointmentsService.getAppointmentStandardTasks(appointmentId);
+  Future getClientTasks(int appointmentId) async {
+    try {
+      issueTasks =
+          await _appointmentsService.getAppointmentClientTasks(appointmentId);
+      notifyListeners();
+      return issueTasks;
+    } catch (error) {
+      throw (error);
+    }
   }
 
-  List<MechanicTask> _mockStandardTasks() {
-    return [
-      new MechanicTask(id: 1, name: "CHECK_LIGHTS"),
-      new MechanicTask(id: 2, name: "CHECK_BATTERY"),
-      new MechanicTask(id: 3, name: "CHECK_LIQUIDS"),
-      new MechanicTask(id: 4, name: "CHECK_BRAKES"),
-      new MechanicTask(id: 5, name: "CHECK_STEERING"),
-      new MechanicTask(id: 6, name: "CHECK_BRAKING_MECHANISM")
-    ];
+  Future<AppointmentDetail> startAppointment(int appointmentId) async {
+    try {
+      selectedAppointmentDetails =
+          await _appointmentsService.startAppointment(appointmentId);
+      notifyListeners();
+      return selectedAppointmentDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AppointmentDetail> pauseAppointment(int appointmentId) async {
+    try {
+      selectedAppointmentDetails =
+          await _appointmentsService.pauseAppointment(appointmentId);
+      notifyListeners();
+      return selectedAppointmentDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AppointmentDetail> stopAppointment(int appointmentId) async {
+    try {
+      selectedAppointmentDetails =
+          await _appointmentsService.stopAppointment(appointmentId);
+      notifyListeners();
+      return selectedAppointmentDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<MechanicTask> startAppointmentTask(
+      int appointmentId, MechanicTask mechanicTask) async {
+    try {
+      MechanicTask task = await _appointmentsService.startAppointmentTask(
+          appointmentId, mechanicTask);
+      notifyListeners();
+      return task;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<MechanicTask> startAppointmentIssue(
+      int appointmentId, MechanicTask mechanicTask) async {
+    try {
+      MechanicTask task = await _appointmentsService.startAppointmentIssue(
+          appointmentId, mechanicTask);
+      notifyListeners();
+      return task;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
@@ -66,5 +124,61 @@ class AppointmentMechanicProvider with ChangeNotifier {
     } catch (error) {
       throw (error);
     }
+  }
+
+  Future<bool> addAppointmentRecommendation(
+      int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
+    try {
+      bool response = await _appointmentsService.addAppointmentRecommendation(
+          appointmentId, mechanicTaskIssue);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> addAppointmentRecommendationImage(
+      int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
+    try {
+      bool response = await _appointmentsService
+          .addAppointmentRecommendationImage(appointmentId, mechanicTaskIssue);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  MechanicTask firstTaskShouldStart() {
+    if (standardTasks.length > 0) {
+      if (standardTasks[0].status == MechanicTaskStatus.NEW) {
+        return standardTasks[0];
+      }
+    }
+
+    if (issueTasks.length > 0) {
+      if (issueTasks[0].status == MechanicTaskStatus.NEW) {
+        return issueTasks[0];
+      }
+    }
+
+    return null;
+  }
+
+  MechanicTask nextIssue() {
+    for (MechanicTask task in standardTasks) {
+      if (task.status == MechanicTaskStatus.NEW) {
+        return task;
+      }
+    }
+
+    for (MechanicTask task in issueTasks) {
+      if (task.status == MechanicTaskStatus.NEW) {
+        return task;
+      }
+    }
+
+    return null;
   }
 }

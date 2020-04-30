@@ -1,21 +1,45 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/mechanic-appointments/enums/mechanic-task-state.enum.dart';
+import 'package:app/modules/mechanic-appointments/enums/mechanic-task-status.enum.dart';
+import 'package:app/modules/mechanic-appointments/enums/mechanic-task-type.enum.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class MechanicTask {
   int id;
   String name;
-  List<Issue> issues = [];
-  MechanicTaskState state = MechanicTaskState.NOT_SELECTED;
+  MechanicTaskStatus status;
+  MechanicTaskType type;
+  String timeValue;
+  String referenceTimeValue;
 
-  MechanicTask({this.id, this.name, this.issues});
+  List<MechanicTaskIssue> issues = [];
 
-  factory MechanicTask.fromJson(Map<String, dynamic> json) {
+  MechanicTask(
+      {this.id,
+      this.name,
+      this.status,
+      this.issues,
+      this.timeValue,
+      this.referenceTimeValue,
+      this.type});
+
+  factory MechanicTask.fromJson(
+      MechanicTaskType type, Map<String, dynamic> json) {
     return MechanicTask(
         id: json['id'],
         name: json['name'],
-        issues: json['issues'] != null ? _mapIssues(json['issues']) : []);
+        status: json['status'] != null
+            ? MechanicTaskStatusUtilities.fromString(json['status'])
+            : '',
+        issues: json['recommendations'] != null
+            ? _mapIssues(json['recommendations'])
+            : [],
+        timeValue: json['timeValue'] != null ? json['timeValue'] : '',
+        referenceTimeValue: json['referenceTimeValue'] != null
+            ? json['referenceTimeValue']
+            : '',
+        type: type);
   }
 
   factory MechanicTask.from(Issue issue) {
@@ -23,9 +47,9 @@ class MechanicTask {
   }
 
   static _mapIssues(List<dynamic> response) {
-    List<Issue> issues = [];
+    List<MechanicTaskIssue> issues = [];
     response.forEach((item) {
-      issues.add(Issue.fromJson(item));
+      issues.add(MechanicTaskIssue.fromJson(item));
     });
     return issues;
   }

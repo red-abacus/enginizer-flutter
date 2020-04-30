@@ -246,22 +246,24 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       );
     });
 
-    stepsList.add(FAStep(
-      isActive: _isStepActive(widget.mode == EstimatorMode.Client
-          ? issues.length + 1
-          : issues.length),
-      title: Text(S.of(context).auction_proposed_date),
-      content: WorkEstimateDateWidget(
-          dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
-          estimateDateSelect: _estimateDateSelect,
-          estimatorMode: widget.mode),
-    ));
+    if (widget.mode != EstimatorMode.ReadOnly) {
+      stepsList.add(FAStep(
+        isActive: _isStepActive(widget.mode == EstimatorMode.Client
+            ? issues.length + 1
+            : issues.length),
+        title: Text(S.of(context).auction_proposed_date),
+        content: WorkEstimateDateWidget(
+            dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
+            estimateDateSelect: _estimateDateSelect,
+            estimatorMode: widget.mode),
+      ));
+    }
 
     return stepsList;
   }
 
   _floatingActionButtonContainer() {
-    if (widget.mode == EstimatorMode.Client) {
+    if (widget.mode == EstimatorMode.Client || widget.mode == EstimatorMode.ReadOnly) {
       return Container();
     }
 

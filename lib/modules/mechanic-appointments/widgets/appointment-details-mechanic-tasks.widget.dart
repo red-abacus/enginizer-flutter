@@ -1,21 +1,17 @@
-import 'dart:async';
-
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment-status.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-form-state.enum.dart';
-import 'package:app/modules/mechanic-appointments/enums/mechanic-task-screen-state.enum.dart';
-import 'package:app/modules/mechanic-appointments/enums/mechanic-task-state.enum.dart';
-import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-efficiency.widget.dart';
-import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-tasks-issues.widget.dart';
-import 'package:app/modules/mechanic-appointments/widgets/items/tasks/appointment-details-mechanic-task-section.widget.dart';
-import 'package:app/modules/work-estimate-form/models/issue.model.dart';
-import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'package:app/utils/constants.dart';
+import 'package:app/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
+import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-efficiency.widget.dart';
+import 'package:app/modules/mechanic-appointments/widgets/items/tasks/appointment-details-mechanic-tasks-issues.widget.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'items/appointment-mechanic-tasks-form.widget.dart';
 
 class AppointmentDetailsTasksList extends StatefulWidget {
   AppointmentDetailsTasksList();
@@ -28,19 +24,39 @@ class AppointmentDetailsTasksList extends StatefulWidget {
 
 class AppointmentDetailsTasksListState
     extends State<AppointmentDetailsTasksList> {
-  MechanicTaskFormState _currentState = MechanicTaskFormState.EFFICIENCY;
+  AppointmentMechanicProvider _provider;
+  MechanicTaskFormState _currentState = MechanicTaskFormState.TASKS;
 
   @override
   Widget build(BuildContext context) {
-    return _currentState == MechanicTaskFormState.TASKS
-        ? AppointmentDetailsMechanicTasksIssuesWidget(
-            showEfficiency: showEfficiency)
-        : AppointmentDetailsMechanicEfficiencyWidget();
+    _provider = Provider.of<AppointmentMechanicProvider>(context);
+
+    if (_provider.selectedAppointmentDetails != null) {
+      if (_provider.selectedAppointmentDetails.status.getState() != AppointmentStatusState.IN_REVIEW) {
+        return AppointmentDetailsMechanicTasksIssuesWidget(
+            stopAppointment: _stopAppointment);
+      }
+      else {
+        return AppointmentDetailsMechanicEfficiencyWidget();
+      }
+    }
+
+    return Container();
   }
 
-  showEfficiency() {
-    setState(() {
-      _currentState = MechanicTaskFormState.EFFICIENCY;
-    });
+  _stopAppointment(AppointmentDetail appointmentDetail) async {
+    try {
+      await _provider.stopAppointment(appointmentDetail.id).then((_) {
+        Provider.of<AppointmentsMechanicProvider>(context).initDone = false;
+        setState(() {});
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.STOP_APPOINTMENT_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_stop_appointment, context);
+      }
+    }
   }
 }

@@ -2,20 +2,20 @@ import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/mechanic-appointments/enums/task-priority.enum.dart';
+import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
-import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentDetailsDetailsMechanicTaskIssueModal extends StatefulWidget {
-  final Issue issue;
-  final Function issueAdded;
+  final MechanicTaskIssue mechanicTaskIssue;
+  final Function mechanicTaskIssueAdded;
 
   AppointmentDetailsDetailsMechanicTaskIssueModal(
-      {this.issue, this.issueAdded});
+      {this.mechanicTaskIssue, this.mechanicTaskIssueAdded});
 
   @override
   _AppointmentDetailsDetailsMechanicTaskIssueModalState createState() =>
@@ -75,8 +75,7 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
   _setIssueParameters() {
     if (_formKey.currentState.validate()) {
       Navigator.pop(context);
-      widget.issue.id = 0;
-      widget.issueAdded(widget.issue);
+      widget.mechanicTaskIssueAdded(widget.mechanicTaskIssue);
     }
   }
 
@@ -87,10 +86,10 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
           S.of(context).mechanic_appointment_task_add_recommendation_error,
       listener: (value) {
         setState(() {
-          widget.issue.name = value;
+          widget.mechanicTaskIssue.name = value;
         });
       },
-      currentValue: widget.issue.name,
+      currentValue: widget.mechanicTaskIssue.name,
       validate: true,
       textInputType: TextInputType.text,
     );
@@ -108,12 +107,12 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
           }
         },
         isDense: true,
-        value: widget.issue.priority,
+        value: widget.mechanicTaskIssue.priority,
         hint: Text(S.of(context).mechanic_appointment_task_add_priority),
         items: _priorityDropdownItems(context),
         onChanged: (newValue) {
           setState(() {
-            widget.issue.priority = newValue;
+            widget.mechanicTaskIssue.priority = newValue;
           });
         },
       ),
@@ -149,13 +148,13 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
   }
 
   _imageContainer() {
-    return widget.issue.image == null
+    return widget.mechanicTaskIssue.image == null
         ? Text(
             S.of(context).mechanic_appointment_task_add_image,
             style: TextHelper.customTextStyle(null, red, FontWeight.normal, 14),
           )
         : Container(
-            width: 60, height: 60, child: Image.file(widget.issue.image));
+            width: 60, height: 60, child: Image.file(widget.mechanicTaskIssue.image));
   }
 
   _priorityDropdownItems(BuildContext context) {
@@ -183,7 +182,7 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
 
   _imageSelected(File file) {
     setState(() {
-      widget.issue.image = file;
+      widget.mechanicTaskIssue.image = file;
     });
   }
 }

@@ -9,8 +9,6 @@ class Issue {
   int id;
   String name;
   List<IssueRecommendation> recommendations;
-  TaskPriority priority;
-  File image;
 
   Issue({this.id, this.name, this.recommendations = const []});
 

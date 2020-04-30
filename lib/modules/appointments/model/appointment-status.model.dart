@@ -33,6 +33,7 @@ class AppointmentStatus {
   Color resolveStatusColor() {
     switch (getState()) {
       case AppointmentStatusState.SUBMITTED:
+      case AppointmentStatusState.IN_REVIEW:
         return gray;
       case AppointmentStatusState.CANCELED:
         return red;
@@ -46,9 +47,12 @@ class AppointmentStatus {
   }
 
   String assetName() {
+    // TODO - need to check again these assets
     switch (getState()) {
       case AppointmentStatusState.IN_WORK:
         return 'in_work';
+      case AppointmentStatusState.IN_REVIEW:
+        return 'waiting';
       case AppointmentStatusState.OPEN_BID:
         return 'in_bid';
       case AppointmentStatusState.PENDING:
@@ -62,6 +66,8 @@ class AppointmentStatus {
 
   AppointmentStatusState getState() {
     switch (name.toLowerCase()) {
+      case 'inreview':
+        return AppointmentStatusState.IN_REVIEW;
       case 'inwork':
         return AppointmentStatusState.IN_WORK;
       case 'pending':

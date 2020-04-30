@@ -158,6 +158,7 @@
   "appointment_status_submitted": "Prezentat",
   "appointment_status_scheduled": "Programat",
   "appointment_status_in_unit": "În Unitate",
+  "appointment_status_in_review": "În revizuire",
   "appointment_hand_over_car_form_title": "Formular de predare autoturism",
   "appointment_hand_over_car_form": "Nu s-a completat niciun formular de predare autoturism!",
   "appointment_extended_form": "Formular extins",
@@ -284,7 +285,7 @@
   "mechanic_appointment_receive_form_alert_title": "Confirmă primirea autoturismului",
   "mechanic_appointment_handover_form_alert_title": "Confirmă predarea autoturismului",
   "mechanic_appointment_tasks_title": "Sarcini",
-  "mechanic_appointment_tasks_best_time_title": "Cel mai bun timp",
+  "mechanic_appointment_tasks_reference_time_title": "timp de referință",
   "mechanic_appointment_task_issue_finish": "Terminat",
   "mechanic_appointment_task_issue_edit": "Modifică",
   "mechanic_appointment_task_priority_low": "Scazută",
@@ -378,5 +379,13 @@
   "exception_get_provider_employees": "A intervenit o problemă la încărcarea mecanicilor.",
   "exception_create_receive_procedure": "A intervenit o problemă la create procedurii de primire.",
   "exception_add_procedure_photos": "A intervenit o problemă la încărcarea imaginilor procedurii de primire.",
-  "exception_assign_mechanic_to_appointment": "A intervenit o problemă la alocarea mecanicului."
+  "exception_assign_mechanic_to_appointment": "A intervenit o problemă la alocarea mecanicului.",
+  "exception_get_standard_tasks": "A intervenit o problemă la încărcarea sarcinilor standard.",
+  "exception_get_client_tasks": "A intervenit o problemă la încărcarea sarcinilor clientului.",
+  "exception_start_appointment": "A intervenit o problemă la inceperea programării.",
+  "exception_start_appointment_task": "A intervenit o problemă la inceperea sarcinii.",
+  "exception_pause_appointment": "A intervenit o problemă la suspendarea programării.",
+  "exception_add_appointment_recommendation": "A intervenit o problemă la adăugarea unei recomandări.",
+  "exception_add_appointment_recommendation_image": "A intervenit o problemă la adăugarea imaginii.",
+  "exception_stop_appointment": "A intervenit o problemă la oprirea programării."
 }

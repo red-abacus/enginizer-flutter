@@ -25,8 +25,10 @@ class AppointmentsMechanic extends StatefulWidget {
 
 class AppointmentsMechanicState extends State<AppointmentsMechanic> {
   String route;
-  var _initDone = false;
+  var _viewDidAppeared = false;
   var _isLoading = false;
+
+  AppointmentsMechanicProvider _appointmentsMechanicProvider;
 
   AppointmentsMechanicState({this.route});
 
@@ -46,14 +48,20 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
 
   @override
   void didChangeDependencies() {
-    if (!_initDone) {
+    _appointmentsMechanicProvider =
+        Provider.of<AppointmentsMechanicProvider>(context);
+
+    if (!_viewDidAppeared || !_appointmentsMechanicProvider.initDone) {
       setState(() {
         _isLoading = true;
       });
 
       _loadData();
-      _initDone = true;
     }
+
+    _viewDidAppeared = true;
+    _appointmentsMechanicProvider.initDone = true;
+
     super.didChangeDependencies();
   }
 

@@ -1,23 +1,22 @@
+
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
-import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class AppointmentDetailsMechanicWidget extends StatelessWidget {
   final Appointment appointment;
   final AppointmentDetail appointmentDetail;
+  final Function viewEstimate;
 
-  AppointmentDetailsMechanicWidget({this.appointment, this.appointmentDetail});
+  AppointmentDetailsMechanicWidget({this.appointment, this.appointmentDetail, this.viewEstimate});
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +111,9 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
           ),
           FlatButton(
             splashColor: Theme.of(context).primaryColor,
-            onPressed: () => {},
+            onPressed: () => {
+              viewEstimate()
+            },
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),

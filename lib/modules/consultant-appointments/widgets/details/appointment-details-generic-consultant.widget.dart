@@ -23,14 +23,14 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
 
   AppointmentDetailsGenericConsultantWidget(
       {this.appointmentDetail,
-        this.serviceItems = const [],
-        this.serviceProviderItems = const [],
-        this.declineAppointment,
-        this.createEstimate,
-        this.editEstimate,
-        this.viewEstimate,
-        this.assignMechanic,
-        this.createPickUpCarForm});
+      this.serviceItems = const [],
+      this.serviceProviderItems = const [],
+      this.declineAppointment,
+      this.createEstimate,
+      this.editEstimate,
+      this.viewEstimate,
+      this.assignMechanic,
+      this.createPickUpCarForm});
 
   @override
   AppointmentDetailsGenericConsultantWidgetState createState() {
@@ -63,7 +63,8 @@ class AppointmentDetailsGenericConsultantWidgetState
               Row(
                 children: <Widget>[
                   Container(
-                      color: widget.appointmentDetail?.status?.resolveStatusColor(),
+                      color: widget.appointmentDetail?.status
+                          ?.resolveStatusColor(),
                       width: 50,
                       height: 50,
                       child: Container(
@@ -154,8 +155,8 @@ class AppointmentDetailsGenericConsultantWidgetState
                 children: <Widget>[
                   if (widget.appointmentDetail != null)
                     for (int i = 0;
-                    i < widget.appointmentDetail?.issues?.length;
-                    i++)
+                        i < widget.appointmentDetail?.issues?.length;
+                        i++)
                       _appointmentIssueType(
                           widget.appointmentDetail.issues[i], i)
                 ],
@@ -321,8 +322,8 @@ class AppointmentDetailsGenericConsultantWidgetState
               ),
             ),
             child: Container(
-              // TODO - need to add icon for user
-            ),
+                // TODO - need to add icon for user
+                ),
           ),
           Expanded(
             child: Container(
@@ -354,25 +355,27 @@ class AppointmentDetailsGenericConsultantWidgetState
           children: <Widget>[
             Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          item.name,
-                          style: TextHelper.customTextStyle(
-                              null, Colors.black, null, 14),
-                        ),
-                      ),
-                      Container(
-                        width: 30,
-                        height: 30,
-                        child: Icon(Icons.check_box,
-                          color: red,),
-                      )
-                    ],
+              margin: EdgeInsets.only(right: 10),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      item.name,
+                      style: TextHelper.customTextStyle(
+                          null, Colors.black, null, 14),
+                    ),
                   ),
-                ))
+                  Container(
+                    width: 30,
+                    height: 30,
+                    child: Icon(
+                      Icons.check_box,
+                      color: red,
+                    ),
+                  )
+                ],
+              ),
+            ))
           ],
         ));
   }
@@ -387,9 +390,9 @@ class AppointmentDetailsGenericConsultantWidgetState
               margin: EdgeInsets.only(top: 5),
               child: Text(
                 (widget.appointmentDetail != null &&
-                    widget.appointmentDetail.scheduledDate != null)
+                        widget.appointmentDetail.scheduledDate != null)
                     ? widget.appointmentDetail.scheduledDate
-                    .replaceAll(" ", " ${S.of(context).general_at} ")
+                        .replaceAll(" ", " ${S.of(context).general_at} ")
                     : 'N/A',
                 style: TextHelper.customTextStyle(null, Colors.black, null, 18),
               ),
@@ -402,7 +405,8 @@ class AppointmentDetailsGenericConsultantWidgetState
   }
 
   _requestReprogrammingButton() {
-    if (widget.appointmentDetail.status.getState() == AppointmentStatusState.CANCELED) {
+    if (widget.appointmentDetail.status.getState() ==
+        AppointmentStatusState.CANCELED) {
       return Container();
     }
 
@@ -440,39 +444,37 @@ class AppointmentDetailsGenericConsultantWidgetState
   }
 
   _mechanicRow() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: 20,
-          height: 20,
-          decoration: new BoxDecoration(
-            color: gray,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 30,
+            height: 30,
+            decoration: new BoxDecoration(
+              color: red,
+              borderRadius: BorderRadius.all(
+                Radius.circular(15.0),
+              ),
+            ),
+            child: Container(
+                // TODO - need to add icon for mechanic
+                ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                // TODO - need to add mechanic name
+                'Mechanic name',
+                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(left: 10),
-            child: Text(
-              S.of(context).appointment_details_no_mechanic_alert,
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
-            ),
-          ),
-        ),
-        FlatButton(
-          child: Text(
-            S.of(context).general_assign.toUpperCase(),
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
-          ),
-          onPressed: () {
-            widget.assignMechanic();
-          },
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -499,7 +501,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                 // TODO - need proper translation
                 S.of(context).appointment_consultant_no_pick_up_car_form,
                 style:
-                TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
               ),
             ),
           ),
