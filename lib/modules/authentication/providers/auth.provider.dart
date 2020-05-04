@@ -43,7 +43,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> forgotPassword(String email) async {
-    return _forgotPassword(email);
+    try {
+      return _forgotPassword(email);
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<void> logout() async {
@@ -82,7 +86,8 @@ class Auth with ChangeNotifier {
       prefs.setString("email", email);
 
       if (authUser != null) {
-        this.authUserDetails = await _userService.getUserDetails(authUser.userId);
+        this.authUserDetails =
+            await _userService.getUserDetails(authUser.userId);
       }
 
       notifyListeners();
@@ -107,7 +112,8 @@ class Auth with ChangeNotifier {
       prefs.setString("email", email);
 
       if (authUser != null) {
-        this.authUserDetails = await _userService.getUserDetails(authUser.userId);
+        this.authUserDetails =
+            await _userService.getUserDetails(authUser.userId);
       }
 
       notifyListeners();

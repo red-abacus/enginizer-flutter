@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/authentication/models/http_exception.dart';
 import 'package:app/modules/authentication/models/user-type.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -24,9 +25,11 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm>
     with SingleTickerProviderStateMixin {
   final double loginCardHeight = 350;
+
   double registerCardHeight(BuildContext context) {
     return AppConfig.of(context).enviroment == Enviroment.Dev ? 480 : 420;
-}
+  }
+
   final double forgotPasswordCardHeight = 260;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -238,7 +241,8 @@ class _AuthFormState extends State<AuthForm>
       animation = _opacityHideAnimation;
     }
 
-    double maxHeight = AppConfig.of(context).enviroment == Enviroment.Dev ? 125 : 60;
+    double maxHeight =
+        AppConfig.of(context).enviroment == Enviroment.Dev ? 125 : 60;
 
     return AnimatedContainer(
         constraints: BoxConstraints(
@@ -269,7 +273,8 @@ class _AuthFormState extends State<AuthForm>
   }
 
   _confirmPasswordContainer() {
-    double maxHeight = AppConfig.of(context).enviroment == Enviroment.Dev ? 125 : 60;
+    double maxHeight =
+        AppConfig.of(context).enviroment == Enviroment.Dev ? 125 : 60;
     return AnimatedContainer(
       constraints: BoxConstraints(
         minHeight: _authMode == AuthMode.Signup ? 60 : 0,
@@ -408,7 +413,13 @@ class _AuthFormState extends State<AuthForm>
           _authData['userType'],
         );
       } else if (_authMode == AuthMode.ForgotPassword) {
-        await Provider.of<Auth>(context).forgotPassword(_authData['email']);
+        await Provider.of<Auth>(context)
+            .forgotPassword(_authData['email'])
+            .then((success) {
+          if (success) {
+            _showErrorDialog(S.of(context).auth_forgot_password_success);
+          }
+        });
       }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
@@ -424,16 +435,20 @@ class _AuthFormState extends State<AuthForm>
         errorMessage = 'Invalid password.';
       } else if (error.toString().contains('INVALID_CREDENTIALS')) {
         errorMessage = 'Credențiale invalide';
-      } else if (error.toString().contains("USER_NOT_FOUND")) {
-        errorMessage = S.of(context).auth_forgot_password_user_not_find;
-      } else if (error.toString().contains("PROBLEM_SENDING_EMAIL")) {
-        errorMessage = S.of(context).auth_forgot_password_user_email_error;
       }
 
       _showErrorDialog(errorMessage);
     } catch (error) {
-      const errorMessage =
+      String errorMessage =
           'Could not authenticate you. Please try again later.';
+
+      if (error.toString().contains(AuthService.FORGOT_PASSWORD_EXCEPTION)) {
+        errorMessage = S.of(context).auth_forgot_password_user_email_error;
+      } else if (error
+          .toString()
+          .contains(AuthService.FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND)) {
+        errorMessage = S.of(context).auth_forgot_password_user_not_find;
+      }
       _showErrorDialog(errorMessage);
     }
 

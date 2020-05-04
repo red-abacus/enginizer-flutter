@@ -8,6 +8,9 @@ import 'package:app/modules/authentication/models/http_exception.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class AuthService {
+  static const FORGOT_PASSWORD_EXCEPTION = 'FORGOT_PASSWORD_EXCEPTION';
+  static const FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND = 'FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND';
+
   static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
   static const headers = {'Content-Type': 'application/json'};
 
@@ -64,15 +67,19 @@ class AuthService {
   Future<bool> forgotPassword({String email}) async {
     var payload = json.encode({"email": email});
     try {
-      await _dio.post('$AUTH_API_PATH/forgotPassword', data: payload);
+      final response =
+          await _dio.post('$AUTH_API_PATH/forgotPassword', data: payload);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw (FORGOT_PASSWORD_EXCEPTION);
+      }
     } catch (e) {
       if (e.response.statusCode == 404) {
-        throw HttpException('USER_NOT_FOUND');
+        throw(FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND);
       } else {
-        throw HttpException('PROBLEM_SENDING_EMAIL');
+        throw (FORGOT_PASSWORD_EXCEPTION);
       }
     }
-
-    return true;
   }
 }
