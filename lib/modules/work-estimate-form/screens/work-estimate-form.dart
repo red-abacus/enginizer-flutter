@@ -16,7 +16,6 @@ import 'package:app/modules/consultant-appointments/screens/appointments-details
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-date.widget.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
@@ -54,6 +53,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   WorkEstimateProvider _workEstimateProvider;
 
   _WorkEstimateFormState({this.route});
+
+  // TODO - need to customise the work estimate if it's in edit mode (add items)
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +105,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               if (workEstimateDetails != null) {
                 _workEstimateProvider
                     .createWorkEstimateRequest(workEstimateDetails);
-                _workEstimateProvider.workEstimateRequest.dateEntry = widget.dateEntry;
+//                _workEstimateProvider.workEstimateRequest.dateEntry = widget.dateEntry;
               }
               setState(() {
                 _isLoading = false;
@@ -246,18 +247,18 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       );
     });
 
-    if (widget.mode != EstimatorMode.ReadOnly) {
-      stepsList.add(FAStep(
-        isActive: _isStepActive(widget.mode == EstimatorMode.Client
-            ? issues.length + 1
-            : issues.length),
-        title: Text(S.of(context).auction_proposed_date),
-        content: WorkEstimateDateWidget(
-            dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
-            estimateDateSelect: _estimateDateSelect,
-            estimatorMode: widget.mode),
-      ));
-    }
+//    if (widget.mode != EstimatorMode.ReadOnly) {
+//      stepsList.add(FAStep(
+//        isActive: _isStepActive(widget.mode == EstimatorMode.Client
+//            ? issues.length + 1
+//            : issues.length),
+//        title: Text(S.of(context).auction_proposed_date),
+//        content: WorkEstimateDateWidget(
+//            dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
+//            estimateDateSelect: _estimateDateSelect,
+//            estimatorMode: widget.mode),
+//      ));
+//    }
 
     return stepsList;
   }
@@ -295,8 +296,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => print('schedule')));
     }
 
-    if (widget.mode != EstimatorMode.ReadOnly &&
-        _currentStepIndex < steps.length - 1) {
+    if (widget.mode != EstimatorMode.ReadOnly) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.add),
           foregroundColor: red,
@@ -489,7 +489,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _estimateDateSelect(DateEntry dateEntry) {
     setState(() {
-      _workEstimateProvider.workEstimateRequest.dateEntry = dateEntry;
+//      _workEstimateProvider.workEstimateRequest.dateEntry = dateEntry;
     });
   }
 }
