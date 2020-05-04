@@ -81,8 +81,7 @@ class ProviderService {
 
   Future<ProviderServiceResponse> getServices() async {
     try {
-      final response = await _dio.get(_SERVICES_PATH);
-
+      final response = await _dio.get(_buildGetServicesPath());
       if (response.statusCode == 200) {
         return _mapServices(response.data);
       } else {
@@ -343,5 +342,9 @@ class ProviderService {
         serviceProviderId.toString() +
         _ASSIGN_MECHANIC_SUFFIX +
         mechanicId.toString();
+  }
+
+  _buildGetServicesPath() {
+    return _SERVICES_PATH + '?type=APPOINTMENT';
   }
 }

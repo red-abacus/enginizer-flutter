@@ -28,11 +28,11 @@ class AppointmentCreateServicesFormState
         height: MediaQuery.of(context).size.height * .5,
         child: ListView.builder(
           itemBuilder: (ctx, index) {
-            var serviceName =
-                _translateServiceName(services[index].name.toString());
+            var serviceName = services[index].getTranslatedServiceName(context);
 
-            bool visibility = services[index].name.toString() == "PICKUP_RETURN"
-                && providerServiceProvider.containsPickUpService();
+            bool visibility =
+                services[index].name.toString() == "PICKUP_RETURN" &&
+                    providerServiceProvider.containsPickUpService();
 
             return Column(
               children: <Widget>[
@@ -42,7 +42,9 @@ class AppointmentCreateServicesFormState
                     margin: EdgeInsets.only(left: 15, right: 15),
                     child: TextFormField(
                         decoration: InputDecoration(
-                            labelText: S.of(context).appointment_create_add_pickup_address),
+                            labelText: S
+                                .of(context)
+                                .appointment_create_add_pickup_address),
                         onChanged: (value) {
                           setState(() {
                             providerServiceProvider.pickupAddress = value;
@@ -57,8 +59,7 @@ class AppointmentCreateServicesFormState
                           } else {
                             return null;
                           }
-                        }
-                    ),
+                        }),
                   ),
                 ),
                 CheckboxListTile(
@@ -93,28 +94,11 @@ class AppointmentCreateServicesFormState
   }
 
   bool valid() {
-    bool servicesSelected = providerServiceProvider.selectedServiceItems.length > 0;
-    bool pickupAddressCompleted = providerServiceProvider.pickUpServiceValidation();
+    bool servicesSelected =
+        providerServiceProvider.selectedServiceItems.length > 0;
+    bool pickupAddressCompleted =
+        providerServiceProvider.pickUpServiceValidation();
 
     return servicesSelected && pickupAddressCompleted;
-  }
-
-  String _translateServiceName(String serviceName) {
-    switch (serviceName) {
-      case 'SERVICE':
-        return S.of(context).SERVICE;
-      case 'CAR_WASHING':
-        return S.of(context).CAR_WASHING;
-      case 'PAINT_SHOP':
-        return S.of(context).PAINT_SHOP;
-      case 'TIRE_SHOP':
-        return S.of(context).TIRE_SHOP;
-      case 'TOW_SERVICE':
-        return S.of(context).TOW_SERVICE;
-      case 'PICKUP_RETURN':
-        return S.of(context).PICKUP_RETURN;
-      default:
-        return '';
-    }
   }
 }

@@ -1,4 +1,6 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-sub-item.model.dart';
+import 'package:flutter/cupertino.dart';
 
 class ServiceProviderItem {
   int id;
@@ -38,5 +40,30 @@ class ServiceProviderItem {
     }
 
     return items;
+  }
+
+  String getTranslatedServiceName(BuildContext context) {
+    switch (name) {
+      case 'SERVICE':
+        return S.of(context).SERVICE;
+      case 'CAR_WASHING':
+        return S.of(context).CAR_WASHING;
+      case 'PAINT_SHOP':
+        return S.of(context).PAINT_SHOP;
+      case 'TIRE_SHOP':
+        return S.of(context).TIRE_SHOP;
+      case 'TOW_SERVICE':
+        return S.of(context).TOW_SERVICE;
+      case 'PICKUP_RETURN':
+        return S.of(context).PICKUP_RETURN;
+      case 'TINWARE_SHOP':
+        return S.of(context).TINWARE_SHOP;
+      case 'ITP_SERVICE':
+        return S.of(context).ITP_SERVICE;
+      case 'TENANCY_SERVICE':
+        return S.of(context).TENANCY_SERVICE;
+      default:
+        return name;
+    }
   }
 }

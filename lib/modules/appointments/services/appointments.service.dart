@@ -284,23 +284,6 @@ class AppointmentsService {
     try {
       final response = await _dio
           .patch(_buildStartAppointmentTaskPath(appointmentId, task.id));
-
-      if (response.statusCode == 200) {
-        return MechanicTask.fromJson(task.type, response.data);
-      } else {
-        throw Exception(START_APPOINTMENT_TASK_EXCEPTION);
-      }
-    } catch (error) {
-      throw Exception(START_APPOINTMENT_TASK_EXCEPTION);
-    }
-  }
-
-  Future<MechanicTask> startAppointmentIssue(
-      int appointmentId, MechanicTask task) async {
-    try {
-      final response = await _dio
-          .patch(_buildStartAppointmentIssuePath(appointmentId, task.id));
-
       if (response.statusCode == 200) {
         return MechanicTask.fromJson(task.type, response.data);
       } else {
@@ -430,14 +413,6 @@ class AppointmentsService {
         '/tasks/' +
         taskId.toString() +
         _START_APPOINTMENT_TASK_SUFFIX;
-  }
-
-  _buildStartAppointmentIssuePath(int appointmentId, int taskId) {
-    return _START_APPOINTMENT_ISSUE_PREFIX +
-        appointmentId.toString() +
-        '/issues/' +
-        taskId.toString() +
-        _START_APPOINTMENT_ISSUE_SUFFIX;
   }
 
   _buildPauseAppointmentTaskPath(int appointmentId) {

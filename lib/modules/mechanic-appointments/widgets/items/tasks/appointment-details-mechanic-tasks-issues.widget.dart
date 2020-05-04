@@ -84,8 +84,7 @@ class _AppointmentDetailsMechanicTasksIssuesWidgetState
               backgroundColor: stop,
               onPressed: _nextIssue,
               child: Icon(Icons.navigate_next)));
-        }
-        else {
+        } else {
           buttons.add(FloatingActionButton(
               heroTag: 'stopIssueBtn',
               backgroundColor: stop,
@@ -233,8 +232,7 @@ class _AppointmentDetailsMechanicTasksIssuesWidgetState
     } else {
       try {
         await _provider
-            .startAppointmentIssue(
-                _provider.selectedAppointmentDetails.id, task)
+            .startAppointmentTask(_provider.selectedAppointmentDetails.id, task)
             .then((_) {
           if (_provider.currentTask != null) {
             if (_provider.currentTask.type != task.type) {

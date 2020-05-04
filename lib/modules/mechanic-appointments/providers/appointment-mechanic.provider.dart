@@ -102,18 +102,6 @@ class AppointmentMechanicProvider with ChangeNotifier {
     }
   }
 
-  Future<MechanicTask> startAppointmentIssue(
-      int appointmentId, MechanicTask mechanicTask) async {
-    try {
-      MechanicTask task = await _appointmentsService.startAppointmentIssue(
-          appointmentId, mechanicTask);
-      notifyListeners();
-      return task;
-    } catch (error) {
-      throw (error);
-    }
-  }
-
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
     try {
 //      workEstimateDetails = await this
