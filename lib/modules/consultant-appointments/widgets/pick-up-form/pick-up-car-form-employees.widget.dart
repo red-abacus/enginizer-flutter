@@ -1,23 +1,22 @@
-import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/models/employee.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/widgets/pick-up-form/pick-up-car-form-employee.widget.dart';
-import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PickUpCarFormEmployeesWidget extends StatefulWidget {
   Appointment appointment;
+  Function selectEmployee;
 
   @override
   _PickUpCarFormEmployeesWidgetState createState() =>
       _PickUpCarFormEmployeesWidgetState();
 
-  PickUpCarFormEmployeesWidget({this.appointment});
+  PickUpCarFormEmployeesWidget({this.appointment, this.selectEmployee});
 }
 
 class _PickUpCarFormEmployeesWidgetState
@@ -55,8 +54,13 @@ class _PickUpCarFormEmployeesWidgetState
   }
 
   _selectEmployeeTimeSerie(EmployeeTimeSerie timeSerie) {
-    setState(() {
-      _provider.selectedTimeSerie = timeSerie;
-    });
+    if (widget.selectEmployee != null) {
+      widget.selectEmployee(timeSerie);
+    }
+    else {
+      setState(() {
+        _provider.selectedTimeSerie = timeSerie;
+      });
+    }
   }
 }

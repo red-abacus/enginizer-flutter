@@ -2,7 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-items.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-section-items.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,7 +104,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
 
   _checkMarkContainer(BuildContext context) {
     if (estimatorMode == EstimatorMode.ReadOnly ||
-        estimatorMode == EstimatorMode.Create) {
+        estimatorMode == EstimatorMode.Create ||
+        estimatorMode == EstimatorMode.Edit) {
       return Container();
     }
 

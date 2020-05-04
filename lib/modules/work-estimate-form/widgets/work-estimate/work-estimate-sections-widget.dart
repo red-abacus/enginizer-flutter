@@ -2,7 +2,7 @@ import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-section-widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-section-widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

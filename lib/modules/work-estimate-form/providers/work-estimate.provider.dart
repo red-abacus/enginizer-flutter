@@ -2,6 +2,7 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/cupertino.dart';
 class WorkEstimateProvider with ChangeNotifier {
   ProviderService _providerService = inject<ProviderService>();
   WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
+  AppointmentsService _appointmentsService = inject<AppointmentsService>();
 
   static final Map<String, dynamic> initialEstimatorFormState = {
     'type': null,
@@ -66,6 +68,18 @@ class WorkEstimateProvider with ChangeNotifier {
       issue.clearItems();
     }
     workEstimateRequest.issues = issues;
+  }
+
+  Future<AppointmentDetail> getAppointmentDetails(
+      Appointment appointment) async {
+    try {
+      selectedAppointmentDetail =
+      await this._appointmentsService.getAppointmentDetails(appointment.id);
+      notifyListeners();
+      return selectedAppointmentDetail;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<ItemType>> loadItemTypes() async {

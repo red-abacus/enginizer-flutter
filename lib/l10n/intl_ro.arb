@@ -212,6 +212,8 @@
   "estimator_form_error_priceIsEmpty": "Preț necompletat!",
   "estimator_form_error_priceVATIsEmpty": "Preț (cu TVA) necompletat!",
   "estimator_add_new_operation": "Adaugă secțiune",
+  "estimator_assign_mechanic": "Asignează mecanic",
+  "estimator_assign_mechanic_title": "Confirmă selecția mecanicului",
   "estimator_add_section_name": "Adaugă numele secțiunii",
   "estimator_section_name": "Numele secțiunii",
   "estimator_add_new_product": "Adaugă produs nou",

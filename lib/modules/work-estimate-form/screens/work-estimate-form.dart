@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
@@ -13,8 +15,9 @@ import 'package:app/modules/work-estimate-form/models/issue-recommendation.model
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-sections-widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/utils/constants.dart';
@@ -30,7 +33,7 @@ class WorkEstimateForm extends StatefulWidget {
   static const String route =
       '${AppointmentDetailsConsultant.route}/work-estimate-form';
 
-  final EstimatorMode mode;
+  EstimatorMode mode;
   DateEntry dateEntry;
 
   WorkEstimateForm({this.mode, this.dateEntry});
@@ -119,26 +122,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         });
       });
     } catch (error) {
-      if (error
-          .toString()
-          .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_provider_timetable, context);
-      } else if (error
-          .toString()
-          .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_item_types, context);
-      } else if (error
-          .toString()
-          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_work_estimate_details, context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      _handleError(error);
     }
   }
 
@@ -264,7 +248,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _floatingActionButtonContainer() {
-    if (widget.mode == EstimatorMode.Client || widget.mode == EstimatorMode.ReadOnly) {
+    if (widget.mode == EstimatorMode.Client ||
+        widget.mode == EstimatorMode.ReadOnly) {
       return Container();
     }
 
@@ -307,6 +292,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => _addOperation()));
     }
 
+    if (widget.mode == EstimatorMode.Edit) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.assignment),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S.of(context).estimator_assign_mechanic,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => _assignMechanic()));
+    }
+
     if (widget.mode != EstimatorMode.Create) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.history),
@@ -318,7 +314,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => print('operation history')));
     }
 
-    if (widget.mode == EstimatorMode.Edit) {
+    if (widget.mode == EstimatorMode.Client) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.create),
           foregroundColor: red,
@@ -374,6 +370,27 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       }
     });
   }
+
+  _assignMechanic() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return EstimateAssignMechanicModal(
+                appointment: _workEstimateProvider.selectedAppointment,
+                appointmentDetail:
+                    _workEstimateProvider.selectedAppointmentDetail,
+                refreshState: _refreshState);
+          });
+        });
+  }
+
+  _refreshState() {}
 
   _setSectionName(Issue issue, IssueRecommendation issueSection, String name) {
     setState(() {
@@ -443,6 +460,11 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _infoAdded(String percentage, String time) async {
     // TODO - API doesn't support percentage and time
+
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       await _workEstimateProvider
           .createWorkEstimate(
@@ -450,20 +472,49 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               _workEstimateProvider.selectedAppointmentDetail.car.id,
               _workEstimateProvider.selectedAppointmentDetail.user.uid,
               _workEstimateProvider.workEstimateRequest)
-          .then((workEstimateDetails) {
+          .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
           Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
-          Navigator.of(context).pop();
+
+          widget.mode = EstimatorMode.Edit;
+
+          await _workEstimateProvider
+              .getAppointmentDetails(_workEstimateProvider.selectedAppointment)
+              .then((_) async {
+            int lastWorkEstimate = _workEstimateProvider.selectedAppointmentDetail.lastWorkEstimate();
+
+            if (lastWorkEstimate != 0) {
+              _workEstimateProvider.workEstimateId = lastWorkEstimate;
+
+              await _workEstimateProvider
+                  .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
+                  .then((workEstimateDetails) {
+                if (workEstimateDetails != null) {
+                  _workEstimateProvider
+                      .createWorkEstimateRequest(workEstimateDetails);
+                }
+
+                setState(() {
+                  _isLoading = false;
+                });
+              });
+            }
+            else {
+              setState(() {
+                _isLoading = false;
+              });
+            }
+          });
+        }
+        else {
+          setState(() {
+            _isLoading = false;
+          });
         }
       });
     } catch (error) {
-      if (error
-          .toString()
-          .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_add_new_work_estimate, context);
-      }
+      _handleError(error);
     }
   }
 
@@ -490,6 +541,43 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   _estimateDateSelect(DateEntry dateEntry) {
     setState(() {
 //      _workEstimateProvider.workEstimateRequest.dateEntry = dateEntry;
+    });
+  }
+
+  _handleError(dynamic error) {
+    if (error
+        .toString()
+        .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_add_new_work_estimate, context);
+    } else if (error
+        .toString()
+        .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_provider_timetable, context);
+    } else if (error
+        .toString()
+        .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_item_types, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_work_estimate_details, context);
+    } else if (error
+        .toString()
+        .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_appointment_details, context);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    setState(() {
+      _isLoading = false;
     });
   }
 }

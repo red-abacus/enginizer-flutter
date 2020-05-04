@@ -317,6 +317,10 @@ class AppointmentDetailsConsultantState
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
+      Provider.of<WorkEstimateProvider>(context).selectedAppointment =
+          _appointmentConsultantProvider.selectedAppointment;
+      Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
+          _appointmentConsultantProvider.selectedAppointmentDetail;
 
       Navigator.push(
         context,

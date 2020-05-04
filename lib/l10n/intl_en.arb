@@ -216,6 +216,8 @@
   "estimator_form_error_priceIsEmpty": "Price is empty!",
   "estimator_form_error_priceVATIsEmpty": "Price VAT is empty!",
   "estimator_add_new_operation": "Add New Section",
+  "estimator_assign_mechanic": "Assign mechanic",
+  "estimator_assign_mechanic_title": "Assign mechanic confirmation",
   "estimator_add_section_name": "Add Section Name",
   "estimator_section_name": "Section Name",
   "estimator_add_new_product": "Add New Product",
