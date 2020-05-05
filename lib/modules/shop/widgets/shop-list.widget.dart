@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/consultant-auctions/cards/auction-consultant.card.dart';
 import 'package:app/modules/shared/widgets/multi-select-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/single-select-dialog.widget.dart';
+import 'package:app/modules/shop/cards/shop-item.card.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
@@ -279,10 +280,7 @@ class ShopListWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (ctx, index) {
-          return Container(
-            color: red,
-            height: 80,
-          );
+          return ShopItemCard(index: index);
         },
         itemCount: 10,
       ),

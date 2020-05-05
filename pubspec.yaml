@@ -47,7 +47,8 @@ dependencies:
   firebase_messaging: ^6.0.13
   flushbar: 1.6.0
   pie_chart: 3.1.1
-
+  rotated_corner_decoration: ^1.0.0
+  clippy_flutter: ^1.1.1
 
 dev_dependencies:
   flutter_test:
