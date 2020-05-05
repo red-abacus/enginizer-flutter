@@ -63,6 +63,8 @@ import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart'
 import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'modules/notifications/screens/notifications.dart';
+import 'modules/shop/providers/shop.provider.dart';
+import 'modules/shop/screens/shop.dart';
 import 'modules/user-details/screens/user-details.dart';
 import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
 
@@ -121,6 +123,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(
               value: PickUpCarFormConsultantProvider()),
           ChangeNotifierProvider.value(value: DashboardProvider()),
+          ChangeNotifierProvider.value(value: ShopProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -172,6 +175,7 @@ class AppState extends State<App> {
                 Appointments.route: (context) => Appointments(),
                 AppointmentDetails.route: (context) => AppointmentDetails(),
                 Auctions.route: (context) => Auctions(),
+                Shop.route: (context) => Shop(),
                 AuctionsConsultant.route: (context) => AuctionsConsultant(),
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),

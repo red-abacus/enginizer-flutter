@@ -1,3 +1,4 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
@@ -14,6 +15,7 @@ import 'package:app/modules/consultant-user-details/provider/user-consultant.pro
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
+import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
@@ -46,8 +48,13 @@ class NavigationApp extends StatefulWidget {
             new DrawerItem(
                 "Appointments", Appointments.route, Icons.event_available),
             new DrawerItem("Auctions", Auctions.route, Icons.dashboard),
+            new DrawerItem(S.of(context).online_shop_title, Shop.route, Icons.shopping_cart),
             new DrawerItem(
-                'Notifications', Notifications.route, NotificationsManager.notificationsCount == 0 ? Icons.notifications : Icons.notifications_active)
+                'Notifications',
+                Notifications.route,
+                NotificationsManager.notificationsCount == 0
+                    ? Icons.notifications
+                    : Icons.notifications_active)
           ]
         : [new DrawerItem("Cars", Cars.route, Icons.directions_car)];
   }
@@ -76,7 +83,9 @@ class NavigationApp extends StatefulWidget {
       case Roles.Super:
         return Dashboard.route;
       case Roles.Client:
-        return Cars.route;
+        // TODO - remove this
+        return Shop.route;
+//        return Cars.route;
       case Roles.ProviderAdmin:
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
@@ -201,6 +210,8 @@ class NavigationAppState extends State<NavigationApp> {
         return Appointments();
       case Auctions.route:
         return Auctions();
+      case Shop.route:
+        return Shop();
       case AuctionsConsultant.route:
         return AuctionsConsultant();
       case AppointmentsConsultant.route:

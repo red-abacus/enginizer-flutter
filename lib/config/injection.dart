@@ -1,3 +1,5 @@
+import 'package:app/modules/shop/providers/shop.provider.dart';
+import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
@@ -64,6 +66,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerLazySingleton(() => AuctionsService());
   inject.registerLazySingleton(() => BidsService());
   inject.registerLazySingleton(() => WorkEstimatesService());
+  inject.registerLazySingleton(() => ShopService());
 
   inject.registerFactory(() => Auth());
   inject.registerFactory(() => CarsMakeProvider());
@@ -84,4 +87,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AppointmentMechanicProvider());
   inject.registerFactory(() => WorkEstimatesConsultantProvider());
   inject.registerFactory(() => PickUpCarFormConsultantProvider());
+  inject.registerFactory(() => ShopProvider());
 }

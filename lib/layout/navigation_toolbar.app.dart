@@ -14,6 +14,7 @@ import 'package:app/modules/consultant-user-details/provider/user-consultant.pro
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
+import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
@@ -170,6 +171,8 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
         return Appointments();
       case Auctions.route:
         return Auctions();
+      case Shop.route:
+        return Shop();
       case AuctionsConsultant.route:
         return AuctionsConsultant();
       case AppointmentsConsultant.route:

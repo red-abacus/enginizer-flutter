@@ -62,6 +62,8 @@ import 'modules/mechanic-appointments/providers/appointments-mechanic.provider.d
 import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart';
 import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/shop/providers/shop.provider.dart';
+import 'modules/shop/screens/shop.dart';
 import 'modules/user-details/screens/user-details.dart';
 import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
 
@@ -120,21 +122,22 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(
               value: PickUpCarFormConsultantProvider()),
           ChangeNotifierProvider.value(value: DashboardProvider()),
+          ChangeNotifierProvider.value(value: ShopProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
             child: MaterialApp(
               home: authProvider.isAuth
                   ? NavigationToolbarApp(
-                  authUser: authProvider.authUser,
-                  authUserDetails: authProvider.authUserDetails)
+                      authUser: authProvider.authUser,
+                      authUserDetails: authProvider.authUserDetails)
                   : FutureBuilder(
-                  future: authProvider.tryAutoLogin(),
-                  builder: (ctx, authResultSnapshot) =>
-                  authResultSnapshot.connectionState ==
-                      ConnectionState.waiting
-                      ? SplashScreen()
-                      : AuthScreen()),
+                      future: authProvider.tryAutoLogin(),
+                      builder: (ctx, authResultSnapshot) =>
+                          authResultSnapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? SplashScreen()
+                              : AuthScreen()),
               theme: ThemeData(
                 primaryColor: Color.fromRGBO(153, 0, 0, 1),
                 accentColor: Color.fromRGBO(206, 49, 47, 1),
@@ -150,7 +153,7 @@ class AppState extends State<App> {
                 ),
                 textTheme: TextTheme(
                   headline:
-                  TextStyle(fontFamily: 'Lato', color: Colors.black54),
+                      TextStyle(fontFamily: 'Lato', color: Colors.black54),
                   title: TextStyle(fontFamily: 'Lato', color: Colors.black54),
                   body1: TextStyle(
                       fontSize: 16, fontFamily: 'Lato', color: Colors.black54),
@@ -171,6 +174,7 @@ class AppState extends State<App> {
                 Appointments.route: (context) => Appointments(),
                 AppointmentDetails.route: (context) => AppointmentDetails(),
                 Auctions.route: (context) => Auctions(),
+                Shop.route: (context) => Shop(),
                 AuctionsConsultant.route: (context) => AuctionsConsultant(),
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),
@@ -198,12 +202,12 @@ class AppState extends State<App> {
 class CustomPageTransitionBuilder extends PageTransitionsBuilder {
   @override
   Widget buildTransitions<T>(
-      PageRoute<T> route,
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,
-      ) {
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     if (route.settings.isInitialRoute) {
       return child;
     }
