@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 class ShopListWidget extends StatelessWidget {
   final Function filterShopItems;
   final Function selectCategoryType;
+  final Function selectShopItem;
   final ShopCategorySort searchCategorySort;
 
   String searchString;
@@ -29,7 +30,8 @@ class ShopListWidget extends StatelessWidget {
       this.categories,
       this.searchCategorySort,
       this.shopCategoryType,
-      this.selectCategoryType});
+      this.selectCategoryType,
+      this.selectShopItem});
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +282,7 @@ class ShopListWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (ctx, index) {
-          return ShopItemCard(index: index);
+          return ShopItemCard(index: index, selectShopItem: selectShopItem);
         },
         itemCount: 10,
       ),

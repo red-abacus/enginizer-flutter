@@ -1,12 +1,10 @@
-import 'package:app/modules/auctions/models/auction.model.dart';
-import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
-import 'package:app/modules/auctions/screens/auction-details.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/widgets/shop-list.widget.dart';
+import 'package:app/modules/shop/widgets/shop-service-details-modal.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +63,8 @@ class ShopState extends State<Shop> {
             filterShopItems: _filterShopItems,
             searchCategorySort: _provider.searchSort,
             shopCategoryType: shopCategoryType,
-      selectCategoryType: _selectCategoryType,
+            selectCategoryType: _selectCategoryType,
+      selectShopItem: _selectShopItem,
           );
   }
 
@@ -81,5 +80,17 @@ class ShopState extends State<Shop> {
       _provider.initialiseParameters();
       this.shopCategoryType = categoryType;
     });
+  }
+
+  _selectShopItem() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (_) {
+          return StatefulBuilder(builder:
+              (BuildContext context, StateSetter state) {
+            return ShopServiceDetailsModal();
+          });
+        });
   }
 }

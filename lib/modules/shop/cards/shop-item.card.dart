@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:app/generated/l10n.dart';
-import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 class ShopItemCard extends StatelessWidget {
   final Function selectShopItem;
