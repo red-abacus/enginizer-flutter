@@ -4,6 +4,7 @@ import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/widgets/shop-list.widget.dart';
+import 'package:app/modules/shop/widgets/shop-product-details-modal.widget.dart';
 import 'package:app/modules/shop/widgets/shop-service-details-modal.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +90,12 @@ class ShopState extends State<Shop> {
         builder: (_) {
           return StatefulBuilder(builder:
               (BuildContext context, StateSetter state) {
-            return ShopServiceDetailsModal();
+            if (shopCategoryType == ShopCategoryType.SERVICES) {
+              return ShopServiceDetailsModal();
+            }
+            else {
+              return ShopProductDetailsModal();
+            }
           });
         });
   }
