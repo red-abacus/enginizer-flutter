@@ -19,6 +19,9 @@ class WorkEstimatesService {
   static const String ACCEPT_WORK_ESTIMATE_EXCEPTION =
       'ACCEPT_WORK_ESTIMATE_EXCEPTION';
 
+  static const String _CREATE_WORK_ESTIMATE_PATH =
+      '${Environment.BIDS_BASE_API}/bids';
+
   static const String _WORK_ESTIMATES_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates';
 
@@ -37,10 +40,10 @@ class WorkEstimatesService {
   Future<WorkEstimateDetails> addNewWorkEstimate(
       Map<String, dynamic> content) async {
     try {
-      final response =
-          await _dio.post('$_WORK_ESTIMATES_PATH', data: jsonEncode(content));
+      final response = await _dio.post('$_CREATE_WORK_ESTIMATE_PATH',
+          data: jsonEncode(content));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return WorkEstimateDetails.fromJson(response.data);
       } else {
         throw Exception(ADD_NEW_WORK_ESTIMATE_EXCEPTION);

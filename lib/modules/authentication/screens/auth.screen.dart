@@ -1,6 +1,8 @@
+import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/widgets/auth-form.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
   static const route = '/auth';
@@ -59,12 +61,37 @@ class _AuthScreenState extends State<AuthScreen> {
                     child: AuthForm(
                         authFailedHandler: _handleAuthenticationFailure),
                   ),
+                  // TODO - remove this
+                  _testWidget(),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  _testWidget() {
+    return Row(
+      children: <Widget>[
+        FlatButton(child: Text('Client'), onPressed: () {
+          _login('client@autowass.com', 'password');
+        },),
+        FlatButton(child: Text('Consultant Provider'), onPressed: () {
+          _login('consultant.provider@autowass.com', 'password');
+        },),
+        FlatButton(child: Text('Mechanic'), onPressed: () {
+          _login('mechanic.provider@autowass.com', 'password');
+        },)
+      ],
+    );
+  }
+
+  _login(String email, String password) async {
+    await Provider.of<Auth>(context, listen: false).login(
+      email,
+      password,
     );
   }
 

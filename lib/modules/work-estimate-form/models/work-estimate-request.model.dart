@@ -1,4 +1,7 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'issue-recommendation.model.dart';
@@ -6,7 +9,9 @@ import 'issue.model.dart';
 
 class WorkEstimateRequest {
   List<Issue> issues = [];
-//  DateEntry dateEntry;
+  int percent;
+  DateTime timeToRespond;
+  EmployeeTimeSerie employeeTimeSerie;
 
   String isValid(BuildContext context) {
     for (Issue issue in issues) {
@@ -25,18 +30,18 @@ class WorkEstimateRequest {
       }
     }
 
-//    if (dateEntry == null) {
-//      return S.of(context).estimator_date_warning;
-//    }
+    if (employeeTimeSerie == null) {
+      return S.of(context).estimator_date_warning;
+    }
 
     return null;
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = new Map();
-//    map['proposedDate'] = this.dateEntry != null
-//        ? DateUtils.stringFromDate(this.dateEntry.dateTime, 'dd/MM/yyyy HH:mm')
-//        : '';
+    map['proposedDate'] = this.employeeTimeSerie != null
+        ? '${this.employeeTimeSerie.date} ${this.employeeTimeSerie.hour}'
+        : '';
 
     List<dynamic> issuesList = [];
 
@@ -45,6 +50,9 @@ class WorkEstimateRequest {
     }
 
     map['issues'] = issuesList;
+    map['forwardPaymentPercent'] = percent;
+    map['timeToRespond'] =
+        DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy');
 
     return map;
   }

@@ -130,7 +130,7 @@ class ProviderServiceProvider with ChangeNotifier {
       }
     }
 
-    appointmentRequest.scheduledTimes = [dateEntry.dateForAppointment()];
+    appointmentRequest.scheduledTime = dateEntry.dateForAppointment();
     return appointmentRequest;
   }
 

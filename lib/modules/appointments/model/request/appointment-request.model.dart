@@ -5,7 +5,7 @@ class AppointmentRequest {
   int carId;
   List<String> issues;
   int providerId;
-  List<String> scheduledTimes;
+  String scheduledTime;
   List<int> serviceIds;
   int userId;
   AppointmentProviderType providerType;
@@ -17,7 +17,7 @@ class AppointmentRequest {
       "clientId": userId,
       "issues": issues,
       "providerId": providerId,
-      "scheduledDateTimes": scheduledTimes,
+      "scheduledDateTime": scheduledTime,
       "serviceIds": serviceIds,
       'specific':
           providerType == AppointmentProviderType.Specific ? true : false

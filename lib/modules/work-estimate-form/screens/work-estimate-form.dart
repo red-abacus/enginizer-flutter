@@ -16,6 +16,7 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-date.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -281,6 +282,18 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => print('schedule')));
     }
 
+    if (widget.mode == EstimatorMode.Create ||
+        widget.mode == EstimatorMode.Edit) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.assignment),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S.of(context).estimator_assign_mechanic,
+          labelStyle: TextHelper.customTextStyle(
+              null, Colors.grey, FontWeight.bold, 16),
+          onTap: () => _assignMechanic()));
+    }
+
     if (widget.mode != EstimatorMode.ReadOnly) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.add),
@@ -290,17 +303,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           labelStyle: TextHelper.customTextStyle(
               null, Colors.grey, FontWeight.bold, 16),
           onTap: () => _addOperation()));
-    }
-
-    if (widget.mode == EstimatorMode.Edit) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.assignment),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).estimator_assign_mechanic,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => _assignMechanic()));
     }
 
     if (widget.mode != EstimatorMode.Create) {
@@ -385,9 +387,14 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 appointment: _workEstimateProvider.selectedAppointment,
                 appointmentDetail:
                     _workEstimateProvider.selectedAppointmentDetail,
-                refreshState: _refreshState);
+                refreshState: _refreshState,
+                assignEmployee: _assignEmployee);
           });
         });
+  }
+
+  _assignEmployee(EmployeeTimeSerie timeSerie) {
+    _workEstimateProvider.workEstimateRequest.employeeTimeSerie = timeSerie;
   }
 
   _refreshState() {}
@@ -452,14 +459,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         builder: (BuildContext context) {
           return WorkEstimateFinalInfoWidget(
             infoAdded: _infoAdded,
+            maxResponseTime:
+                _workEstimateProvider.workEstimateRequest.employeeTimeSerie.getDate(),
           );
         },
       );
     }
   }
 
-  _infoAdded(String percentage, String time) async {
-    // TODO - API doesn't support percentage and time
+  _infoAdded(int percentage, DateTime time) async {
+    _workEstimateProvider.workEstimateRequest.percent = percentage;
+    _workEstimateProvider.workEstimateRequest.timeToRespond = time;
 
     setState(() {
       _isLoading = true;
@@ -467,10 +477,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
     try {
       await _workEstimateProvider
-          .createWorkEstimate(
-              _workEstimateProvider.selectedAppointment.id,
-              _workEstimateProvider.selectedAppointmentDetail.car.id,
-              _workEstimateProvider.selectedAppointmentDetail.user.uid,
+          .createWorkEstimate(_workEstimateProvider.selectedAppointment.id,
               _workEstimateProvider.workEstimateRequest)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
@@ -482,7 +489,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           await _workEstimateProvider
               .getAppointmentDetails(_workEstimateProvider.selectedAppointment)
               .then((_) async {
-            int lastWorkEstimate = _workEstimateProvider.selectedAppointmentDetail.lastWorkEstimate();
+            int lastWorkEstimate = _workEstimateProvider
+                .selectedAppointmentDetail
+                .lastWorkEstimate();
 
             if (lastWorkEstimate != 0) {
               _workEstimateProvider.workEstimateId = lastWorkEstimate;
@@ -499,15 +508,13 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                   _isLoading = false;
                 });
               });
-            }
-            else {
+            } else {
               setState(() {
                 _isLoading = false;
               });
             }
           });
-        }
-        else {
+        } else {
           setState(() {
             _isLoading = false;
           });
@@ -538,11 +545,11 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
   }
 
-  _estimateDateSelect(DateEntry dateEntry) {
-    setState(() {
+//  _estimateDateSelect(DateEntry dateEntry) {
+//    setState(() {
 //      _workEstimateProvider.workEstimateRequest.dateEntry = dateEntry;
-    });
-  }
+//    });
+//  }
 
   _handleError(dynamic error) {
     if (error

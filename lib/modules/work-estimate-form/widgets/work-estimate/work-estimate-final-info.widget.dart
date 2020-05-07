@@ -2,20 +2,23 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/modules/shared/widgets/custom-show-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
+import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WorkEstimateFinalInfoWidget extends StatelessWidget {
   final Function infoAdded;
+  final DateTime maxResponseTime;
 
   String percentage = '';
-  String time = '';
+  DateTime time;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  WorkEstimateFinalInfoWidget({this.infoAdded});
+  WorkEstimateFinalInfoWidget({this.infoAdded, this.maxResponseTime});
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +51,20 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
                 validate: true,
                 textInputType: TextInputType.number,
               ),
-              CustomTextFormField(
+              BasicDateField(
+                minDate: DateUtils.addDayToDate(DateTime.now(), -1),
+                maxDate: maxResponseTime,
                 labelText: S.of(context).estimator_max_time,
-                listener: (value) {
-                  this.time = value;
+                validator: (value) {
+                  if (value == null) {
+                    return S.of(context).estimator_max_time_warning;
+                  } else {
+                    return null;
+                  }
                 },
-                currentValue: '',
-                errorText: S.of(context).estimator_max_time_warning,
-                validate: true,
-                textInputType: TextInputType.number,
+                onChange: (value) {
+                  time = value;
+                },
               ),
               new Container(
                 height: 50,
@@ -85,7 +93,7 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
 
   _save(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      int value = int.tryParse(time);
+      int value = int.tryParse(percentage);
 
       if (value != null) {
         if (value >= 100) {
@@ -93,12 +101,11 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
               context,
               S.of(context).general_warning,
               S.of(context).estimator_percent_max_100);
-        }
-        else {
+        } else {
           Navigator.pop(context);
 
           if (infoAdded != null) {
-            infoAdded(percentage, time);
+            infoAdded(value, time);
           }
         }
       }

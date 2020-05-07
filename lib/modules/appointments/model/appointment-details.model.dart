@@ -18,11 +18,11 @@ class AppointmentDetail {
   List<ServiceItem> serviceItems = [];
   String scheduledDate;
   User user;
-  int workEstimateId;
   List<int> workEstimateIds;
   ServiceProvider serviceProvider;
   AppointmentStatus status;
   String providerAcceptedDateTime;
+  int bidId;
 
   AppointmentDetail(
       {this.id,
@@ -32,11 +32,11 @@ class AppointmentDetail {
       this.serviceItems,
       this.scheduledDate,
       this.user,
-      this.workEstimateId,
       this.workEstimateIds,
       this.serviceProvider,
       this.status,
-      this.providerAcceptedDateTime});
+      this.providerAcceptedDateTime,
+      this.bidId});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -48,7 +48,6 @@ class AppointmentDetail {
             json["services"] != null ? _mapServiceItems(json["services"]) : [],
         scheduledDate: json["scheduledDateTime"],
         user: json["user"] != null ? User.fromJson(json["user"]) : null,
-        workEstimateId: json['workEstimateId'],
         workEstimateIds: json["workEstimateIds"] != null
             ? _mapWorkEstimateIds(json['workEstimateIds'])
             : [],
@@ -60,7 +59,8 @@ class AppointmentDetail {
             : null,
         providerAcceptedDateTime: json['providerAcceptedDateTime'] != null
             ? json['providerAcceptedDateTime']
-            : '');
+            : '',
+        bidId: json['bidId'] != null ? json['bidId'] : 0);
   }
 
   static _mapIssuesList(List<dynamic> response) {

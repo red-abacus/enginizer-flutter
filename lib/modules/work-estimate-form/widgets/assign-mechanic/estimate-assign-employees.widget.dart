@@ -1,30 +1,31 @@
+import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/models/employee.dart';
-import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
-import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/widgets/pick-up-form/pick-up-car-form-employee.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class PickUpCarFormEmployeesWidget extends StatefulWidget {
+class EstimateAssignEmployeesWidget extends StatefulWidget {
+  final Appointment appointment;
+  final Function selectEmployee;
+  final List<Employee> employees;
+  final EmployeeTimeSerie employeeTimeSerie;
+
   @override
-  _PickUpCarFormEmployeesWidgetState createState() =>
-      _PickUpCarFormEmployeesWidgetState();
+  _EstimateAssignEmployeesWidgetState createState() =>
+      _EstimateAssignEmployeesWidgetState();
+
+  EstimateAssignEmployeesWidget({this.appointment, this.selectEmployee, this.employees, this.employeeTimeSerie});
 }
 
-class _PickUpCarFormEmployeesWidgetState
-    extends State<PickUpCarFormEmployeesWidget> {
-  PickUpCarFormConsultantProvider _provider;
+class _EstimateAssignEmployeesWidgetState
+    extends State<EstimateAssignEmployeesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _provider = Provider.of<PickUpCarFormConsultantProvider>(context);
-
-    return Consumer<AppointmentConsultantProvider>(
-        builder: (context, appointmentsProvider, _) => Column(
-              children: <Widget>[_employeesContainer()],
-            ));
+    return Column(
+      children: <Widget>[_employeesContainer()],
+    );
   }
 
   _employeesContainer() {
@@ -36,10 +37,10 @@ class _PickUpCarFormEmployeesWidgetState
           scrollDirection: Axis.horizontal,
           child: Row(
             children: <Widget>[
-              for (Employee employee in _provider.employees)
+              for (Employee employee in widget.employees)
                 PickUpCarFormEmployeeWidget(
                   employee: employee,
-                  selectedTimeSerie: _provider.selectedTimeSerie,
+                  selectedTimeSerie: widget.employeeTimeSerie,
                   selectEmployeeTimeSerie: _selectEmployeeTimeSerie,
                 )
             ],
@@ -50,8 +51,8 @@ class _PickUpCarFormEmployeesWidgetState
   }
 
   _selectEmployeeTimeSerie(EmployeeTimeSerie timeSerie) {
-    setState(() {
-      _provider.selectedTimeSerie = timeSerie;
-    });
+    if (widget.selectEmployee != null) {
+      widget.selectEmployee(timeSerie);
+    }
   }
 }

@@ -139,6 +139,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           case AppointmentStatusState.SUBMITTED:
           case AppointmentStatusState.PENDING:
           case AppointmentStatusState.SCHEDULED:
+          case AppointmentStatusState.IN_UNIT:
+          case AppointmentStatusState.IN_REVIEW:
           case AppointmentStatusState.IN_WORK:
           case AppointmentStatusState.CANCELED:
           case AppointmentStatusState.DONE:
@@ -270,27 +272,21 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       _isLoading = true;
     });
 
-    int lastWorkEstimateId =
-        _appointmentProvider.selectedAppointmentDetail.lastWorkEstimate();
-
-    if (lastWorkEstimateId != 0) {
-      try {
-        await _appointmentProvider
-            .acceptWorkEstimate(lastWorkEstimateId,
-                _appointmentProvider.selectedAppointmentDetail.scheduledDate)
-            .then((_) {
-          setState(() {
-            Provider.of<AppointmentsProvider>(context).initDone = false;
-            _initDone = false;
-          });
+    try {
+      await _appointmentProvider
+          .acceptBid(_appointmentProvider.selectedAppointmentDetail.bidId)
+          .then((_) {
+        setState(() {
+          Provider.of<AppointmentsProvider>(context).initDone = false;
+          _initDone = false;
         });
-      } catch (error) {
-        if (error
-            .toString()
-            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_accept_work_estimate, context);
-        }
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_accept_work_estimate, context);
       }
     }
   }

@@ -160,6 +160,7 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.SUBMITTED:
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
+      case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.CANCELED:
       case AppointmentStatusState.DONE:

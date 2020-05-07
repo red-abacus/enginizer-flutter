@@ -13,13 +13,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'estimate-assign-employees.widget.dart';
+
 class EstimateAssignMechanicModal extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Appointment appointment;
+
   final Function refreshState;
+  final Function assignEmployee;
+  final EmployeeTimeSerie employeeTimeSerie;
 
   EstimateAssignMechanicModal(
-      {this.appointment, this.appointmentDetail, this.refreshState});
+      {this.appointment,
+      this.appointmentDetail,
+      this.refreshState,
+      this.assignEmployee,
+      this.employeeTimeSerie});
 
   @override
   State<StatefulWidget> createState() {
@@ -116,9 +125,11 @@ class _EstimateAssignMechanicModalState
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
-            child: PickUpCarFormEmployeesWidget(
+            child: EstimateAssignEmployeesWidget(
                 appointment: widget.appointment,
-                selectEmployee: _selectEmployee),
+                selectEmployee: _selectEmployee,
+                employees: _provider.employees,
+                employeeTimeSerie: _provider.selectedTimeSerie),
           );
   }
 
@@ -130,7 +141,8 @@ class _EstimateAssignMechanicModalState
           title: S.of(context).estimator_assign_mechanic_title,
           confirmFunction: (confirmation) async {
             if (confirmation) {
-              _assignEmployee(employeeTimeSerie);
+              widget.assignEmployee(employeeTimeSerie);
+              Navigator.pop(context);
             }
           },
         );
@@ -138,25 +150,25 @@ class _EstimateAssignMechanicModalState
     );
   }
 
-  _assignEmployee(EmployeeTimeSerie employeeTimeSerie) async {
-    AssignEmployeeRequest request = new AssignEmployeeRequest();
-    request.timeSerie = employeeTimeSerie;
-    request.appointmentId = widget.appointmentDetail.id;
-    request.employeeId = employeeTimeSerie.employeeId;
-    request.providerId = widget.appointmentDetail.serviceProvider.id;
-
-    try {
-      await _provider.assignEmployeeToAppointment(request).then((_) {
-        Navigator.of(context).pop();
-      });
-    } catch (error) {
-      if (error.toString().contains(
-          ProviderService.ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_assign_mechanic_to_appointment,
-            context);
-      }
-    }
-  }
+//  _assignEmployee(EmployeeTimeSerie employeeTimeSerie) async {
+//    AssignEmployeeRequest request = new AssignEmployeeRequest();
+//    request.timeSerie = employeeTimeSerie;
+//    request.appointmentId = widget.appointmentDetail.id;
+//    request.employeeId = employeeTimeSerie.employeeId;
+//    request.providerId = widget.appointmentDetail.serviceProvider.id;
+//
+//    try {
+//      await _provider.assignEmployeeToAppointment(request).then((_) {
+//        Navigator.of(context).pop();
+//      });
+//    } catch (error) {
+//      if (error.toString().contains(
+//          ProviderService.ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION)) {
+//        FlushBarHelper.showFlushBar(
+//            S.of(context).general_error,
+//            S.of(context).exception_assign_mechanic_to_appointment,
+//            context);
+//      }
+//    }
+//  }
 }

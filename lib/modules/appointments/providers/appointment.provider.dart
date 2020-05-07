@@ -2,13 +2,14 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
-  WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
+  BidsService _bidsService = inject<BidsService>();
 
   Appointment _selectedAppointment;
   AppointmentDetail _selectedAppointmentDetail;
@@ -48,13 +49,22 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
-  Future<WorkEstimate> acceptWorkEstimate(
-      int workEstimateId, String proposedDate) async {
+  Future<bool> cancelBid(int bidId) async {
     try {
-      WorkEstimate workEstimate = await _workEstimatesService.acceptWorkEstimate(
-          workEstimateId, proposedDate);
+      bool response = await this._bidsService.rejectBid(bidId);
       notifyListeners();
-      return workEstimate;
+      return response;
+    }
+    catch (error) {
+      throw(error);
+    }
+  }
+
+  Future<bool> acceptBid(int bidId) async {
+    try {
+      bool response = await this._bidsService.acceptBid(bidId);
+      notifyListeners();
+      return response;
     }
     catch (error) {
       throw(error);

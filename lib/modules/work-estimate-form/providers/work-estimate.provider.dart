@@ -2,6 +2,7 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
+import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
@@ -129,12 +130,9 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  Future<WorkEstimateDetails> createWorkEstimate(int appointmentId, int carId,
-      int clientId, WorkEstimateRequest workEstimateRequest) async {
+  Future<WorkEstimateDetails> createWorkEstimate(int appointmentId, WorkEstimateRequest workEstimateRequest) async {
     Map<String, dynamic> content = workEstimateRequest.toJson();
     content['appointmentId'] = appointmentId;
-    content['carId'] = carId;
-    content['clientId'] = clientId;
 
     try {
       WorkEstimateDetails workEstimateDetails =
