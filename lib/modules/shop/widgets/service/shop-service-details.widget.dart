@@ -7,8 +7,9 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 class ShopServiceDetailsWidget extends StatelessWidget {
   final Function showAppointment;
+  final Function showProviderDetails;
 
-  ShopServiceDetailsWidget({this.showAppointment});
+  ShopServiceDetailsWidget({this.showAppointment, this.showProviderDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +41,38 @@ class ShopServiceDetailsWidget extends StatelessWidget {
                 style: TextHelper.customTextStyle(null, gray3, null, 14),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
-                child: FlatButton(
-                  color: red,
-                  child: Text(
-                    S.of(context).online_shop_appointment_title,
-                    style: TextHelper.customTextStyle(
-                        null, Colors.white, null, 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 20, right: 10),
+                  child: FlatButton(
+                    color: red,
+                    child: Text(
+                      S.of(context).online_shop_appointment_title,
+                      style: TextHelper.customTextStyle(
+                          null, Colors.white, null, 14),
+                    ),
+                    onPressed: () {
+                      showAppointment();
+                    },
                   ),
-                  onPressed: () {
-                    showAppointment(true);
-                  },
                 ),
-              ),
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 10),
+                  child: FlatButton(
+                    color: red,
+                    child: Text(
+                      S.of(context).online_shop_appointment_provider_details,
+                      style: TextHelper.customTextStyle(
+                          null, Colors.white, null, 14),
+                    ),
+                    onPressed: () {
+                      showProviderDetails();
+                    },
+                  ),
+                ),
+              ],
             )
           ],
         ),

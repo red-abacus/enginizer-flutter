@@ -65,6 +65,8 @@ import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'modules/notifications/screens/notifications.dart';
 import 'modules/shop/providers/shop-appointment.provider.dart';
 import 'modules/shop/providers/shop.provider.dart';
+import 'modules/shop/screens/shop-product-details.dart';
+import 'modules/shop/screens/shop-service-details.dart';
 import 'modules/shop/screens/shop.dart';
 import 'modules/user-details/screens/user-details.dart';
 import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -178,6 +180,8 @@ class AppState extends State<App> {
                 AppointmentDetails.route: (context) => AppointmentDetails(),
                 Auctions.route: (context) => Auctions(),
                 Shop.route: (context) => Shop(),
+                ShopServiceDetails.route: (context) => ShopServiceDetails(),
+                ShopProductDetails.route: (context) => ShopProductDetails(),
                 AuctionsConsultant.route: (context) => AuctionsConsultant(),
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),

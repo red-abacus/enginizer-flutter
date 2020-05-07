@@ -21,6 +21,8 @@ import 'package:app/modules/consultant-estimators/providers/work-estimates-consu
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shop/screens/shop-product-details.dart';
+import 'package:app/modules/shop/screens/shop-service-details.dart';
 import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
@@ -178,6 +180,8 @@ class AppState extends State<App> {
                 AppointmentDetails.route: (context) => AppointmentDetails(),
                 Auctions.route: (context) => Auctions(),
                 Shop.route: (context) => Shop(),
+                ShopServiceDetails.route: (context) => ShopServiceDetails(),
+                ShopProductDetails.route: (context) => ShopProductDetails(),
                 AuctionsConsultant.route: (context) => AuctionsConsultant(),
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),
@@ -194,7 +198,7 @@ class AppState extends State<App> {
                     UserDetailsConsultant(),
                 WorkEstimatesConsultant.route: (context) =>
                     WorkEstimatesConsultant(),
-                Notifications.route: (context) => Notifications()
+                Notifications.route: (context) => Notifications(),
               },
             ),
           );

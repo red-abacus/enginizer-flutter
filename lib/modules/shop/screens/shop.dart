@@ -3,9 +3,9 @@ import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
+import 'package:app/modules/shop/screens/shop-product-details.dart';
+import 'package:app/modules/shop/screens/shop-service-details.dart';
 import 'package:app/modules/shop/widgets/shop-list.widget.dart';
-import 'package:app/modules/shop/widgets/shop-product-details-modal.widget.dart';
-import 'package:app/modules/shop/widgets/shop-service-modal.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -84,19 +84,11 @@ class ShopState extends State<Shop> {
   }
 
   _selectShopItem() {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (_) {
-          return StatefulBuilder(builder:
-              (BuildContext context, StateSetter state) {
-            if (shopCategoryType == ShopCategoryType.SERVICES) {
-              return ShopServiceDetailsModal();
-            }
-            else {
-              return ShopProductDetailsModal();
-            }
-          });
-        });
+    if (shopCategoryType == ShopCategoryType.SERVICES) {
+      Navigator.of(context).pushNamed(ShopServiceDetails.route);
+    }
+    else {
+      Navigator.of(context).pushNamed(ShopProductDetails.route);
+    }
   }
 }
