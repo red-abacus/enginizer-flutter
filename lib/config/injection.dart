@@ -1,3 +1,5 @@
+import 'package:app/modules/dashboard/providers/dashboard.provider.dart';
+import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:dio/dio.dart';
@@ -87,5 +89,8 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AppointmentMechanicProvider());
   inject.registerFactory(() => WorkEstimatesConsultantProvider());
   inject.registerFactory(() => PickUpCarFormConsultantProvider());
+  inject.registerFactory(() => DashboardProvider());
   inject.registerFactory(() => ShopProvider());
+  inject.registerFactory(() => ShopAppointmentProvider());
+
 }

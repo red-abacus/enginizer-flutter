@@ -25,9 +25,12 @@ class CarService {
 
   CarService();
 
-  Future<CarsResponse> getCars() async {
+  Future<CarsResponse> getCars({String searchString}) async {
     try {
-      final response = await _dio.get(_CAR_API_PATH);
+      var queryParams = searchString != null ? {'search': searchString} : {'search': ''};
+
+      final response = await _dio
+          .get(_CAR_API_PATH, queryParameters: queryParams);
 
       if (response.statusCode < 300) {
         return CarsResponse.fromJson(response.data);

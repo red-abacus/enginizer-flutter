@@ -1,45 +1,17 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/appointments/widgets/details/service-provider/service-details-widget.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:provider/provider.dart';
 
-class ShopServiceDetailsModal extends StatefulWidget {
-  @override
-  _ShopServiceDetailsModalState createState() =>
-      _ShopServiceDetailsModalState();
-}
+class ShopServiceDetailsWidget extends StatelessWidget {
+  final Function showAppointment;
 
-class _ShopServiceDetailsModalState extends State<ShopServiceDetailsModal> {
+  ShopServiceDetailsWidget({this.showAppointment});
+
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-        heightFactor: .8,
-        child: Scaffold(
-          body: Container(
-            child: ClipRRect(
-              child: Container(
-                decoration:
-                    new BoxDecoration(color: Theme.of(context).cardColor),
-                child: Theme(
-                  data: ThemeData(
-                      accentColor: Theme.of(context).primaryColor,
-                      primaryColor: Theme.of(context).primaryColor),
-                  child: _buildContent(context),
-                ),
-              ),
-            ),
-          ),
-        ));
-  }
-
-  _buildContent(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(bottom: 60),
@@ -52,7 +24,7 @@ class _ShopServiceDetailsModalState extends State<ShopServiceDetailsModal> {
               margin: EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Divider(),
             ),
-            _valabilityContainer(),
+            _valabilityContainer(context),
             Container(
               margin: EdgeInsets.only(left: 20, right: 20, top: 10),
               child: Text(
@@ -76,8 +48,12 @@ class _ShopServiceDetailsModalState extends State<ShopServiceDetailsModal> {
                   color: red,
                   child: Text(
                     S.of(context).online_shop_appointment_title,
-                    style: TextHelper.customTextStyle(null, Colors.white, null, 14),
-                  ), onPressed: () {},
+                    style: TextHelper.customTextStyle(
+                        null, Colors.white, null, 14),
+                  ),
+                  onPressed: () {
+                    showAppointment(true);
+                  },
                 ),
               ),
             )
@@ -151,7 +127,7 @@ class _ShopServiceDetailsModalState extends State<ShopServiceDetailsModal> {
     );
   }
 
-  _valabilityContainer() {
+  _valabilityContainer(BuildContext context) {
     String title =
         '${S.of(context).online_shop_card_valability_title}: 20 Mai - 15 Iunie';
 
