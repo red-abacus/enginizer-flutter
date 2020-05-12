@@ -8,6 +8,8 @@ import 'package:app/modules/consultant-estimators/models/work-estimate.model.dar
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {
+  bool initDone = false;
+
   AppointmentsService appointmentsService = inject<AppointmentsService>();
   BidsService _bidsService = inject<BidsService>();
 

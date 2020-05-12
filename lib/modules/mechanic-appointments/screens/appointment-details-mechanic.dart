@@ -8,7 +8,7 @@ import 'package:app/modules/mechanic-appointments/widgets/appointment-details-me
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-service-history.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-tasks.widget.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/app_config.dart';

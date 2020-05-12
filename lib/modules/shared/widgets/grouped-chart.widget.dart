@@ -29,8 +29,8 @@ class GroupedStackedWeightPatternBarChart extends StatelessWidget {
   /// Create series list with multiple series
   static List<charts.Series<OrdinalSales, String>> createSampleData() {
     final desktopSalesDataA = [
-      new OrdinalSales('1', 5, charts.Color.fromHex(code: '#c5a1a1')),
-      new OrdinalSales('1', 10, charts.Color.fromHex(code: '#e0e1e2')),
+      new OrdinalSales('1', 8, charts.Color.fromHex(code: '#c5a1a1')),
+      new OrdinalSales('1', 16, charts.Color.fromHex(code: '#e0e1e2')),
     ];
 
     final tableSalesDataA = [

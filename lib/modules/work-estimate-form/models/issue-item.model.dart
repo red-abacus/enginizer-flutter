@@ -10,6 +10,7 @@ class IssueItem {
   double price;
   double priceVAT;
   int issueId;
+  double total;
 
   IssueItem(
       {this.id,
@@ -19,20 +20,20 @@ class IssueItem {
       this.name,
       this.quantity,
       this.price,
-      this.priceVAT});
+      this.priceVAT,
+      this.total});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
     return IssueItem(
         id: json['id'],
-        type: json['type'] != null
-            ? ItemType.fromJson(json['type'])
-            : null,
+        type: json['type'] != null ? ItemType.fromJson(json['type']) : null,
         typeId: json['typeId'],
         code: json['code'],
         name: json['name'],
         quantity: json['quantity'],
         price: json['price'],
-        priceVAT: json['priceVAT']);
+        priceVAT: json['priceVAT'],
+        total: json['total'] != null ? json['total'] : 0.0);
   }
 
   Map<String, dynamic> toMap() => {
@@ -56,7 +57,6 @@ class IssueItem {
       'priceVAT': priceVAT,
       'total': (price + priceVAT).toString()
     };
-
 
     return propMap;
   }

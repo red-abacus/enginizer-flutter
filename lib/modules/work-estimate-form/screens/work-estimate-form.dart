@@ -2,21 +2,24 @@ import 'dart:math';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/appointments/providers/appointment.provider.dart';
+import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
+import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-date.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -68,7 +71,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
         ),
         body: _buildContent(context),
-        floatingActionButton: _floatingActionButtonContainer(),
+        floatingActionButton: _floatingButtons(),
       ),
     );
   }
@@ -102,14 +105,15 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
               widget.mode == EstimatorMode.Edit ||
-              widget.mode == EstimatorMode.Client) {
+              widget.mode == EstimatorMode.Client ||
+              widget.mode == EstimatorMode.ClientAccept) {
             await _workEstimateProvider
                 .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
                 .then((workEstimateDetails) {
               if (workEstimateDetails != null) {
                 _workEstimateProvider
                     .createWorkEstimateRequest(workEstimateDetails);
-//                _workEstimateProvider.workEstimateRequest.dateEntry = widget.dateEntry;
+                //                _workEstimateProvider.workEstimateRequest.dateEntry = widget.dateEntry;
               }
               setState(() {
                 _isLoading = false;
@@ -138,34 +142,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       child: Stack(
         children: <Widget>[
           _buildStepper(context),
-        ],
-      ),
-    );
-  }
-
-  _clientWidget() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          // TODO - hardcoded value
-          Text(
-            S.of(context).estimator_cost_estimate,
-            style: TextHelper.customTextStyle(null, red, FontWeight.normal, 24),
-          ),
-          // TODO - hardcoded value
-          Text(
-            '${S.of(context).estimator_percent}: 20%',
-            style:
-                TextHelper.customTextStyle(null, gray, FontWeight.normal, 16),
-          ),
-          // TODO - what happens if client does not responde in this time?
-          Text(
-            '${S.of(context).estimator_max_time}: 24h',
-            style:
-                TextHelper.customTextStyle(null, gray, FontWeight.normal, 16),
-          ),
+          if (widget.mode == EstimatorMode.Client ||
+              widget.mode == EstimatorMode.ReadOnly ||
+              widget.mode == EstimatorMode.ClientAccept)
+            _clientBottomContainer()
         ],
       ),
     );
@@ -174,14 +154,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   Widget _buildStepper(BuildContext context) => ClipRRect(
         borderRadius: new BorderRadius.circular(5.0),
         child: Container(
-          padding: EdgeInsets.only(bottom: 40),
-          decoration: new BoxDecoration(
-//            color: Theme.of(context).cardColor,
-            borderRadius: new BorderRadius.only(
-              topLeft: const Radius.circular(40.0),
-              topRight: const Radius.circular(40.0),
-            ),
-          ),
+          padding: EdgeInsets.only(bottom: 60),
           child: steps.isNotEmpty
               ? Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
@@ -208,18 +181,21 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     List<FAStep> stepsList = [];
     List<Issue> issues = _workEstimateProvider?.workEstimateRequest?.issues;
 
-    if (widget.mode == EstimatorMode.Client) {
+    if (widget.mode == EstimatorMode.Client ||
+        widget.mode == EstimatorMode.ClientAccept) {
       stepsList.add(FAStep(
           isActive: _isStepActive(0),
           title: Text(S.of(context).estimator_info),
-          content: _clientWidget()));
+          content: _costEstimateContainer()));
     }
 
     issues.asMap().forEach((index, issue) {
       stepsList.add(
         FAStep(
-            isActive: _isStepActive(
-                widget.mode == EstimatorMode.Client ? index + 1 : index),
+            isActive: _isStepActive(widget.mode == EstimatorMode.Client ||
+                    widget.mode == EstimatorMode.ClientAccept
+                ? index + 1
+                : index),
             title: Text((issue.name?.isNotEmpty ?? false) ? issue.name : 'N/A'),
             content: WorkEstimateSectionsWidget(
                 issue: issues[index],
@@ -232,26 +208,54 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       );
     });
 
-//    if (widget.mode != EstimatorMode.ReadOnly) {
-//      stepsList.add(FAStep(
-//        isActive: _isStepActive(widget.mode == EstimatorMode.Client
-//            ? issues.length + 1
-//            : issues.length),
-//        title: Text(S.of(context).auction_proposed_date),
-//        content: WorkEstimateDateWidget(
-//            dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
-//            estimateDateSelect: _estimateDateSelect,
-//            estimatorMode: widget.mode),
-//      ));
-//    }
+    //    if (widget.mode != EstimatorMode.ReadOnly) {
+    //      stepsList.add(FAStep(
+    //        isActive: _isStepActive(widget.mode == EstimatorMode.Client
+    //            ? issues.length + 1
+    //            : issues.length),
+    //        title: Text(S.of(context).auction_proposed_date),
+    //        content: WorkEstimateDateWidget(
+    //            dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
+    //            estimateDateSelect: _estimateDateSelect,
+    //            estimatorMode: widget.mode),
+    //      ));
+    //    }
 
     return stepsList;
   }
 
-  _floatingActionButtonContainer() {
-    if (widget.mode == EstimatorMode.Client ||
-        widget.mode == EstimatorMode.ReadOnly) {
-      return Container();
+  _costEstimateContainer() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            S.of(context).estimator_cost_estimate,
+            style: TextHelper.customTextStyle(null, red, FontWeight.normal, 22),
+          ),
+          Text(
+            '${S.of(context).estimator_percent}: ${_workEstimateProvider.selectedAppointmentDetail?.forwardPaymentPercent}',
+            style:
+                TextHelper.customTextStyle(null, gray, FontWeight.normal, 14),
+          ),
+          Text(
+            '${S.of(context).estimator_max_time}: ${_workEstimateProvider.selectedAppointmentDetail?.timeToRespond}',
+            style:
+                TextHelper.customTextStyle(null, gray, FontWeight.normal, 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _floatingButtons() {
+    switch (widget.mode) {
+      case EstimatorMode.Client:
+      case EstimatorMode.ReadOnly:
+      case EstimatorMode.ClientAccept:
+        return Container();
+      default:
+        break;
     }
 
     var buttons = List<SpeedDialChild>();
@@ -344,6 +348,64 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       elevation: 8.0,
       shape: CircleBorder(),
       children: buttons,
+    );
+  }
+
+  _clientBottomContainer() {
+    double totalCost = widget.mode == EstimatorMode.Client
+        ? _workEstimateProvider.selectedRecommendationTotalCost()
+        : _workEstimateProvider.workEstimateDetails?.totalCost;
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 60,
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _bottomContainerButton(),
+            Container(
+              child: Text(
+                '${S.of(context).estimator_total}: $totalCost RON',
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  _bottomContainerButton() {
+    if (widget.mode == EstimatorMode.ReadOnly ||
+    _workEstimateProvider.workEstimateDetails.status != WorkEstimateStatus.Pending) {
+      return Container();
+    }
+
+    return Row(
+      children: <Widget>[
+        FlatButton(
+          child: Text(
+            S.of(context).general_decline,
+            style: TextHelper.customTextStyle(
+                null, gray3, FontWeight.bold, 14),
+          ),
+          onPressed: () {
+            _declineEstimateAlert();
+          },
+        ),
+        FlatButton(
+          child: Text(
+            S.of(context).general_accept,
+            style: TextHelper.customTextStyle(
+                null, red, FontWeight.bold, 14),
+          ),
+          onPressed: () {
+            _acceptEstimateAlert();
+          },
+        )
+      ],
     );
   }
 
@@ -442,7 +504,13 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _selectIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
     setState(() {
-      _workEstimateProvider.selectIssueSection(issue, issueRecommendation);
+      if (!_workEstimateProvider.selectedRecommendations
+          .contains(issueRecommendation)) {
+        _workEstimateProvider.selectedRecommendations.add(issueRecommendation);
+      } else {
+        _workEstimateProvider.selectedRecommendations
+            .remove(issueRecommendation);
+      }
     });
   }
 
@@ -459,8 +527,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         builder: (BuildContext context) {
           return WorkEstimateFinalInfoWidget(
             infoAdded: _infoAdded,
-            maxResponseTime:
-                _workEstimateProvider.workEstimateRequest.employeeTimeSerie.getDate(),
+            maxResponseTime: _workEstimateProvider
+                .workEstimateRequest.employeeTimeSerie
+                .getDate(),
           );
         },
       );
@@ -545,11 +614,124 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
   }
 
-//  _estimateDateSelect(DateEntry dateEntry) {
-//    setState(() {
-//      _workEstimateProvider.workEstimateRequest.dateEntry = dateEntry;
-//    });
-//  }
+  _declineEstimateAlert() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AlertConfirmationDialogWidget(
+                confirmFunction: (confirm) => {
+                      if (confirm) {_declineWorkEstimate()}
+                    },
+                title: S.of(context).estimator_decline_alert_body);
+          });
+        });
+  }
+
+  _declineWorkEstimate() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _workEstimateProvider
+          .rejectWorkEstimate(_workEstimateProvider.workEstimateDetails.id)
+          .then((success) {
+        Provider.of<AppointmentProvider>(context).initDone = false;
+        Navigator.pop(context);
+      });
+    } catch (error) {
+      _handleError(error);
+    }
+  }
+
+  _acceptEstimateAlert() {
+    if (widget.mode == EstimatorMode.Client) {
+      if (_workEstimateProvider.selectedRecommendations.length == 0) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).estimator_no_recommendation_selected, context);
+      } else {
+        showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                return AlertConfirmationDialogWidget(
+                    confirmFunction: (confirm) => {
+                          if (confirm) {_acceptWorkEstimate()}
+                        },
+                    title: S
+                        .of(context)
+                        .estimator_accept_recommendations_alert_body);
+              });
+            });
+      }
+    } else {
+      showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return AlertConfirmationDialogWidget(
+                  confirmFunction: (confirm) => {
+                        if (confirm) {_acceptWorkEstimate()}
+                      },
+                  title: S.of(context).estimator_accept_alert_body);
+            });
+          });
+    }
+  }
+
+  _acceptWorkEstimate() async {
+    if (widget.mode == EstimatorMode.Client) {
+      try {
+//        await _workEstimateProvider
+//            .acceptBid(_appointmentProvider.selectedAppointmentDetail.bidId)
+//            .then((_) {
+//          setState(() {
+//            Provider.of<AppointmentProvider>(context).initDone = false;
+//            _initDone = false;
+//          });
+//        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_accept_work_estimate, context);
+        }
+      }
+    } else if (widget.mode == EstimatorMode.ClientAccept) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _workEstimateProvider
+            .acceptBid(_workEstimateProvider.selectedAppointmentDetail.bidId)
+            .then((_) {
+          setState(() {
+            Provider.of<AppointmentProvider>(context).initDone = false;
+            Provider.of<AppointmentsProvider>(context).initDone = false;
+
+            Navigator.pop(context);
+          });
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_accept_work_estimate, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   _handleError(dynamic error) {
     if (error
@@ -577,11 +759,12 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
       FlushBarHelper.showFlushBar(S.of(context).general_error,
           S.of(context).exception_get_appointment_details, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.REJECT_WORK_ESTIMATE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_reject_work_estimate, context);
     }
-
-    setState(() {
-      _isLoading = false;
-    });
 
     setState(() {
       _isLoading = false;

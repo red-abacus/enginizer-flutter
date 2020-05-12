@@ -3,7 +3,7 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
-import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimate {
@@ -12,7 +12,7 @@ class WorkEstimate {
   String createdDate;
   int id;
   ServiceProvider serviceProvider;
-  String status;
+  WorkEstimateStatus status;
 
   WorkEstimate(
       {this.appointment,
@@ -33,7 +33,7 @@ class WorkEstimate {
         serviceProvider: json['providerDto'] != null
             ? ServiceProvider.fromJson(json['providerDto'])
             : null,
-        status: json['status']);
+        status: json['status'] != null ? WorkEstimateStatusUtils.fromString(json['status']) : null);
   }
 
   bool filtered(
@@ -41,8 +41,8 @@ class WorkEstimate {
     bool filterStatus = false;
 
     if (workEstimateStatus != null) {
-      if (workEstimateStatus == WorkEstimateStatus.ALL ||
-          workEstimateStatus == getStatus()) {
+      if (workEstimateStatus == WorkEstimateStatus.All ||
+          workEstimateStatus == status) {
         filterStatus = true;
       }
     } else {
@@ -52,22 +52,16 @@ class WorkEstimate {
     return filterStatus;
   }
 
-  WorkEstimateStatus getStatus() {
-    if (this.status.toLowerCase() == "pending") {
-      return WorkEstimateStatus.PENDING;
-    }
-
-    return WorkEstimateStatus.ACCEPTED;
-  }
-
   String statusTitle(BuildContext context) {
-    switch (getStatus()) {
-      case WorkEstimateStatus.PENDING:
+    switch (this.status) {
+      case WorkEstimateStatus.Pending:
         return S.of(context).work_estimate_status_pending;
-      case WorkEstimateStatus.ACCEPTED:
+      case WorkEstimateStatus.Accepted:
         return S.of(context).work_estimate_status_accepted;
-      case WorkEstimateStatus.ALL:
+      case WorkEstimateStatus.All:
         return S.of(context).general_all;
+      default:
+        return '';
     }
   }
 }

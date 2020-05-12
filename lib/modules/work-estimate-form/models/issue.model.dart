@@ -1,8 +1,3 @@
-import 'dart:io';
-
-import 'package:app/modules/mechanic-appointments/enums/task-priority.enum.dart';
-
-import 'issue-item.model.dart';
 import 'issue-recommendation.model.dart';
 
 class Issue {

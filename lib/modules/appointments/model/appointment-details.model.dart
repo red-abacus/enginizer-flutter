@@ -1,7 +1,6 @@
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
-import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
@@ -23,6 +22,8 @@ class AppointmentDetail {
   AppointmentStatus status;
   String providerAcceptedDateTime;
   int bidId;
+  double forwardPaymentPercent;
+  String timeToRespond;
 
   AppointmentDetail(
       {this.id,
@@ -36,7 +37,9 @@ class AppointmentDetail {
       this.serviceProvider,
       this.status,
       this.providerAcceptedDateTime,
-      this.bidId});
+      this.bidId,
+      this.forwardPaymentPercent,
+      this.timeToRespond});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -60,7 +63,12 @@ class AppointmentDetail {
         providerAcceptedDateTime: json['providerAcceptedDateTime'] != null
             ? json['providerAcceptedDateTime']
             : '',
-        bidId: json['bidId'] != null ? json['bidId'] : 0);
+        bidId: json['bidId'] != null ? json['bidId'] : 0,
+        forwardPaymentPercent: json['forwardPaymentPercent'] != null
+            ? json['forwardPaymentPercent']
+            : 0,
+        timeToRespond:
+            json['timeToRespond'] != null ? json['timeToRespond'] : '');
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -139,16 +147,5 @@ class AppointmentDetail {
 
   static String scheduledTimeFormat() {
     return "dd/MM/yyyy HH:mm";
-  }
-
-  bool canStart() {
-    if (status != null) {
-      if (status.getState() != null) {
-        if (status.getState() == AppointmentStatusState.IN_UNIT) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 }

@@ -3,6 +3,8 @@ import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 
 class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   AppointmentDetail appointmentDetail;
+  WorkEstimateDetails workEstimateDetails;
   List<ServiceItem> serviceItems;
   List<ServiceProviderItem> serviceProviderItems;
   Function declineAppointment;
@@ -30,7 +33,8 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.editEstimate,
       this.viewEstimate,
       this.assignMechanic,
-      this.createPickUpCarForm});
+      this.createPickUpCarForm,
+      this.workEstimateDetails});
 
   @override
   AppointmentDetailsGenericConsultantWidgetState createState() {
@@ -126,14 +130,77 @@ class AppointmentDetailsGenericConsultantWidgetState
   }
 
   _buttonsWidget() {
+    List<Widget> buttons = [];
+
     switch (widget.appointmentDetail.status.getState()) {
       case AppointmentStatusState.PENDING:
-        return _pendingButtons();
+        buttons.add(FloatingActionButton.extended(
+          heroTag: null,
+          onPressed: () {
+            widget.declineAppointment();
+          },
+          label: Text(
+            S.of(context).general_decline.toUpperCase(),
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          ),
+          backgroundColor: Colors.white,
+        ));
+
+        if (widget.workEstimateDetails != null &&
+            widget.workEstimateDetails.status == WorkEstimateStatus.Rejected) {
+          buttons.add(FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () {
+              widget.createEstimate();
+            },
+            label: Text(
+              S.of(context).auction_create_estimate.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            ),
+            backgroundColor: Colors.white,
+          ));
+        }
+        break;
       case AppointmentStatusState.SUBMITTED:
-        return _submitButtons();
+        buttons.add(FloatingActionButton.extended(
+          heroTag: null,
+          onPressed: () {
+            widget.declineAppointment();
+          },
+          label: Text(
+            S.of(context).general_decline.toUpperCase(),
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          ),
+          backgroundColor: Colors.white,
+        ));
+
+        buttons.add(FloatingActionButton.extended(
+          heroTag: null,
+          onPressed: () {
+            widget.createEstimate();
+          },
+          label: Text(
+            S.of(context).auction_create_estimate.toUpperCase(),
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          ),
+          backgroundColor: Colors.white,
+        ));
+        break;
       default:
-        return Container();
+        break;
     }
+
+    if (buttons.length == 0) {
+      return Container();
+    }
+
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: buttons,
+      ),
+    );
   }
 
   _issuesContainer() {
@@ -144,6 +211,15 @@ class AppointmentDetailsGenericConsultantWidgetState
             _appointmentIssueType(widget.appointmentDetail.issues[i], i)
         ],
       );
+    }
+
+    String buttonTitle =
+        S.of(context).appointment_details_estimator.toUpperCase();
+
+    if (widget.workEstimateDetails != null &&
+        widget.workEstimateDetails.status == WorkEstimateStatus.Rejected) {
+      buttonTitle =
+          '${S.of(context).appointment_details_estimator.toUpperCase()} (${S.of(context).general_rejected.toUpperCase()})';
     }
 
     return Container(
@@ -167,76 +243,10 @@ class AppointmentDetailsGenericConsultantWidgetState
             splashColor: Theme.of(context).primaryColor,
             onPressed: () => {widget.viewEstimate()},
             child: Text(
-              S.of(context).appointment_details_estimator.toUpperCase(),
+              buttonTitle,
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  _pendingButtons() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-              widget.declineAppointment();
-            },
-            label: Text(
-              S.of(context).general_decline.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
-            ),
-            backgroundColor: Colors.white,
-          ),
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-              widget.editEstimate();
-            },
-            label: Text(
-              S.of(context).auction_edit_estimate.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
-            ),
-            backgroundColor: Colors.white,
-          )
-        ],
-      ),
-    );
-  }
-
-  _submitButtons() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-              widget.declineAppointment();
-            },
-            label: Text(
-              S.of(context).general_decline.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
-            ),
-            backgroundColor: Colors.white,
-          ),
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-              widget.createEstimate();
-            },
-            label: Text(
-              S.of(context).auction_create_estimate.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
-            ),
-            backgroundColor: Colors.white,
-          )
         ],
       ),
     );

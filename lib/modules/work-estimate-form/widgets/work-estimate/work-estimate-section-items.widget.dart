@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
@@ -55,7 +55,9 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
   }
 
   _addContainer(BuildContext context) {
-    return estimatorMode == EstimatorMode.ReadOnly
+    return estimatorMode == EstimatorMode.ReadOnly ||
+            estimatorMode == EstimatorMode.Client ||
+            estimatorMode == EstimatorMode.ClientAccept
         ? Container()
         : InkWell(
             onTap: () => _openAddIssueModal(context),
@@ -100,7 +102,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
               builder: (BuildContext context, StateSetter state) {
             return WorkEstimateAddIssueModalWidget(
                 key: createWorkEstimateAddIssueKey,
-                addIssueItem: this.addIssueItem,
+                addIssueItem: addIssueItem,
                 issueRecommendation: this.issueRecommendation);
           });
         });

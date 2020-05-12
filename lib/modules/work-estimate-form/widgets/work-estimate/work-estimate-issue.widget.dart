@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -136,7 +136,9 @@ class WorkEstimateIssueWidget extends StatelessWidget {
   }
 
   _getRemoveButton(BuildContext context, IssueItem issueItem) {
-    return estimatorMode == EstimatorMode.ReadOnly
+    return estimatorMode == EstimatorMode.ReadOnly ||
+            estimatorMode == EstimatorMode.Client ||
+            estimatorMode == EstimatorMode.ClientAccept
         ? Container()
         : Container(
             alignment: Alignment.center,

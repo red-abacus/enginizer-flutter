@@ -6,6 +6,7 @@ import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,20 @@ class AppointmentMechanicProvider with ChangeNotifier {
     try {
       issueTasks =
           await _appointmentsService.getAppointmentClientTasks(appointmentId);
+
+      for(MechanicTask mechanicTask in issueTasks) {
+        bool remove = true;
+        for(Issue issue in selectedAppointmentDetails.issues) {
+          if (issue.id == mechanicTask.id) {
+            remove = false;
+            break;
+          }
+        }
+
+        if (remove) {
+          issueTasks.remove(mechanicTask);
+        }
+      }
       notifyListeners();
       return issueTasks;
     } catch (error) {

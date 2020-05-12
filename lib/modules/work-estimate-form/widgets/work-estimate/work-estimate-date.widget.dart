@@ -1,6 +1,6 @@
 import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/widgets/scheduler.widget.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

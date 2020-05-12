@@ -6,7 +6,6 @@ class IssueRecommendation {
   List<IssueItem> items;
   bool isNew = false;
   bool expanded = false;
-  bool selected = false;
   String priority;
   bool isStandard;
   bool isAccepted;
@@ -58,5 +57,13 @@ class IssueRecommendation {
     };
 
     return propMap;
+  }
+
+  double totalCost() {
+    double total = 0.0;
+    for(IssueItem item in this.items) {
+      total += item.total;
+    }
+    return total;
   }
 }

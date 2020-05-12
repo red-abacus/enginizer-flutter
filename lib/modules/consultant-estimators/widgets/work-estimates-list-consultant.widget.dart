@@ -1,8 +1,8 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
-import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:app/modules/consultant-estimators/widgets/cards/work-estimate-card-consultant.widget.dart';
+import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -138,13 +138,13 @@ class WorkEstimatesListConsultantWidget extends StatelessWidget {
   _statusDropdownItems(BuildContext context) {
     List<DropdownMenuItem<WorkEstimateStatus>> brandDropdownList = [];
     brandDropdownList.add(DropdownMenuItem(
-        value: WorkEstimateStatus.PENDING,
+        value: WorkEstimateStatus.Pending,
         child: Text(S.of(context).work_estimate_status_pending)));
     brandDropdownList.add(DropdownMenuItem(
-        value: WorkEstimateStatus.ACCEPTED,
+        value: WorkEstimateStatus.Accepted,
         child: Text(S.of(context).work_estimate_status_accepted)));
     brandDropdownList.add(DropdownMenuItem(
-        value: WorkEstimateStatus.ALL,
+        value: WorkEstimateStatus.All,
         child: Text(S.of(context).general_all)));
     return brandDropdownList;
   }
@@ -162,12 +162,14 @@ class WorkEstimatesListConsultantWidget extends StatelessWidget {
 
   _titleFromState(WorkEstimateStatus status, BuildContext context) {
     switch (status) {
-      case WorkEstimateStatus.PENDING:
+      case WorkEstimateStatus.Pending:
         return S.of(context).work_estimate_status_pending;
-      case WorkEstimateStatus.ACCEPTED:
+      case WorkEstimateStatus.Accepted:
         return S.of(context).work_estimate_status_accepted;
-      case WorkEstimateStatus.ALL:
+      case WorkEstimateStatus.All:
         return S.of(context).general_all;
+      default:
+        return '';
     }
   }
 }

@@ -3,7 +3,7 @@ import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';

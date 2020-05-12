@@ -2,11 +2,11 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
@@ -20,6 +20,7 @@ class WorkEstimateProvider with ChangeNotifier {
   ProviderService _providerService = inject<ProviderService>();
   WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
+  BidsService _bidsService = inject<BidsService>();
 
   static final Map<String, dynamic> initialEstimatorFormState = {
     'type': null,
@@ -42,6 +43,8 @@ class WorkEstimateProvider with ChangeNotifier {
   int workEstimateId;
   int serviceProviderId;
 
+  List<IssueRecommendation> selectedRecommendations = [];
+
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
   _initValues() {
@@ -52,6 +55,7 @@ class WorkEstimateProvider with ChangeNotifier {
     workEstimateDetails = null;
     selectedAppointment = null;
     selectedAppointmentDetail = null;
+    selectedRecommendations = [];
   }
 
   refreshValues() {
@@ -75,7 +79,7 @@ class WorkEstimateProvider with ChangeNotifier {
       Appointment appointment) async {
     try {
       selectedAppointmentDetail =
-      await this._appointmentsService.getAppointmentDetails(appointment.id);
+          await this._appointmentsService.getAppointmentDetails(appointment.id);
       notifyListeners();
       return selectedAppointmentDetail;
     } catch (error) {
@@ -103,7 +107,7 @@ class WorkEstimateProvider with ChangeNotifier {
       notifyListeners();
       return response;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
@@ -121,30 +125,54 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
     try {
-      workEstimateDetails =
-      await this._workEstimatesService.getWorkEstimateDetails(workEstimateId);
+      workEstimateDetails = await this
+          ._workEstimatesService
+          .getWorkEstimateDetails(workEstimateId);
       notifyListeners();
       return workEstimateDetails;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
-  Future<WorkEstimateDetails> createWorkEstimate(int appointmentId, WorkEstimateRequest workEstimateRequest) async {
+  Future<WorkEstimateDetails> createWorkEstimate(
+      int appointmentId, WorkEstimateRequest workEstimateRequest) async {
     Map<String, dynamic> content = workEstimateRequest.toJson();
     content['appointmentId'] = appointmentId;
 
     try {
       WorkEstimateDetails workEstimateDetails =
-      await _workEstimatesService.addNewWorkEstimate(content);
+          await _workEstimatesService.addNewWorkEstimate(content);
       notifyListeners();
       return workEstimateDetails;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
-  addRequestToIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
+  Future<bool> rejectWorkEstimate(int workEstimateId) async {
+    try {
+      bool response =
+          await this._workEstimatesService.rejectWorkEstimate(workEstimateId);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> acceptBid(int bidId) async {
+    try {
+      bool response = await this._bidsService.acceptBid(bidId);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  addRequestToIssueSection(
+      Issue issue, IssueRecommendation issueRecommendation) {
     var issueItem = IssueItem(
       type: estimatorFormState['type'],
       code: estimatorFormState['code'].code,
@@ -169,8 +197,8 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  removeIssueItem(
-      Issue issue, IssueRecommendation issueRecommendation, IssueItem issueItem) {
+  removeIssueItem(Issue issue, IssueRecommendation issueRecommendation,
+      IssueItem issueItem) {
     for (Issue temp in workEstimateRequest.issues) {
       if (temp == issue) {
         List<IssueRecommendation> sections = temp.recommendations;
@@ -186,27 +214,15 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  selectIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
-    for (Issue temp in workEstimateRequest.issues) {
-      if (temp == issue) {
-        List<IssueRecommendation> sections = temp.recommendations;
-
-        for (IssueRecommendation tempIssueRecommendation in sections) {
-          if (tempIssueRecommendation == issueRecommendation) {
-            tempIssueRecommendation.selected = !tempIssueRecommendation.selected;
-
-            if (tempIssueRecommendation.selected) {
-              tempIssueRecommendation.expanded = true;
-            }
-            break;
-          }
-        }
-        break;
-      }
-    }
-  }
-
   createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
     this.workEstimateRequest = workEstimateDetails.workEstimateRequest();
+  }
+
+  double selectedRecommendationTotalCost() {
+    double total = 0;
+    for (IssueRecommendation recommendation in this.selectedRecommendations) {
+      total += recommendation.totalCost();
+    }
+    return total;
   }
 }

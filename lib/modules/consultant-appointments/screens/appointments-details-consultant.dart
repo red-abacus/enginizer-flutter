@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
@@ -11,7 +12,7 @@ import 'package:app/modules/consultant-appointments/widgets/appointment-car-rece
 import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -19,7 +20,6 @@ import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class AppointmentDetailsConsultant extends StatefulWidget {
   static const String route =
@@ -94,10 +94,24 @@ class AppointmentDetailsConsultantState
         await _appointmentConsultantProvider
             .getProviderServices(_appointmentConsultantProvider
                 .selectedAppointment.serviceProvider.id)
-            .then((_) {
-          setState(() {
-            _isLoading = false;
-          });
+            .then((_) async {
+          int lastWorkEstimate = _appointmentConsultantProvider
+              .selectedAppointmentDetail
+              .lastWorkEstimate();
+
+          if (lastWorkEstimate != 0) {
+            await _appointmentConsultantProvider
+                .getWorkEstimateDetails(lastWorkEstimate)
+                .then((_) {
+              setState(() {
+                _isLoading = false;
+              });
+            });
+          } else {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         });
       });
     } catch (error) {
@@ -111,6 +125,11 @@ class AppointmentDetailsConsultantState
           .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_provider_service_items, context);
+      } else if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_details, context);
       }
 
       setState(() {
@@ -177,6 +196,7 @@ class AppointmentDetailsConsultantState
           viewEstimate: _viewEstimate,
           assignMechanic: _assignMechanic,
           createPickUpCarForm: _createPickUpCarForm,
+          workEstimateDetails: _appointmentConsultantProvider.workEstimateDetails,
         );
       default:
         return Container();
@@ -380,7 +400,10 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return AppointmentCarReceiveFormModal(appointmentDetail: _appointmentConsultantProvider.selectedAppointmentDetail, refreshState: _refreshState);
+            return AppointmentCarReceiveFormModal(
+                appointmentDetail:
+                    _appointmentConsultantProvider.selectedAppointmentDetail,
+                refreshState: _refreshState);
           });
         });
   }

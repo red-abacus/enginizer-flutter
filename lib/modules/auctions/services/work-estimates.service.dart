@@ -18,6 +18,7 @@ class WorkEstimatesService {
       'GET_WORK_ESTIMATE_DETIALS_EXCEPTION';
   static const String ACCEPT_WORK_ESTIMATE_EXCEPTION =
       'ACCEPT_WORK_ESTIMATE_EXCEPTION';
+  static const String REJECT_WORK_ESTIMATE_EXCEPTION = 'REJECT_WORK_ESTIMATE_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -32,6 +33,10 @@ class WorkEstimatesService {
   static const String _WORK_ESTIMATE_ACCEPT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_ACCEPT_SUFFIX = '/accept';
+
+  static const String _WORK_ESTIMATE_REJECT_PREFIX =
+      '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
+  static const String _WORK_ESTIMATE_REJECT_SUFFIX = '/reject';
 
   Dio _dio = inject<Dio>();
 
@@ -110,12 +115,6 @@ class WorkEstimatesService {
     }
   }
 
-  _buildWorkEstimateItemsPath(int workEstimateId) {
-    return _WORK_ESTIMATE_ITEMS_PREFIX +
-        workEstimateId.toString() +
-        _WORK_ESTIMATE_ITEMS_SUFFIX;
-  }
-
   Future<WorkEstimate> acceptWorkEstimate(
       int workEstimateId, String proposedDate) async {
     try {
@@ -135,10 +134,37 @@ class WorkEstimatesService {
     }
   }
 
+  Future<bool> rejectWorkEstimate(int workEstimateId) async {
+    try {
+      final response =
+          await _dio.patch(_buildRejectWorkEstimate(workEstimateId));
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(REJECT_WORK_ESTIMATE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(REJECT_WORK_ESTIMATE_EXCEPTION);
+    }
+  }
+
   _buildAcceptWorkEstimate(int workEstimateId) {
     return _WORK_ESTIMATE_ACCEPT_PREFIX +
         workEstimateId.toString() +
         _WORK_ESTIMATE_ACCEPT_SUFFIX;
+  }
+
+  _buildRejectWorkEstimate(int workEstimateId) {
+    return _WORK_ESTIMATE_REJECT_PREFIX +
+        workEstimateId.toString() +
+        _WORK_ESTIMATE_REJECT_SUFFIX;
+  }
+
+  _buildWorkEstimateItemsPath(int workEstimateId) {
+    return _WORK_ESTIMATE_ITEMS_PREFIX +
+        workEstimateId.toString() +
+        _WORK_ESTIMATE_ITEMS_SUFFIX;
   }
 
   Issue _mapIssue(dynamic response) {

@@ -1,6 +1,7 @@
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
 
 import '../../work-estimate-form/models/issue.model.dart';
@@ -12,7 +13,8 @@ class WorkEstimateDetails {
   String createdDate;
   List<Issue> issues;
   ServiceProvider serviceProvider;
-  String status;
+  WorkEstimateStatus status;
+  double totalCost;
 
   WorkEstimateDetails(
       {this.id,
@@ -21,7 +23,8 @@ class WorkEstimateDetails {
       this.createdDate,
       this.issues,
       this.serviceProvider,
-      this.status});
+      this.status,
+      this.totalCost});
 
   factory WorkEstimateDetails.fromJson(Map<String, dynamic> json) {
     return WorkEstimateDetails(
@@ -35,7 +38,10 @@ class WorkEstimateDetails {
         serviceProvider: json['providerDto'] != null
             ? ServiceProvider.fromJson(json['providerDto'])
             : null,
-        status: json['status']);
+        status: json['status'] != null
+            ? WorkEstimateStatusUtils.fromString(json['status'])
+            : null,
+        totalCost: json['totalCost'] != null ? json['totalCost'] : 0);
   }
 
   workEstimateRequest() {

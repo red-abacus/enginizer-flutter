@@ -1,5 +1,6 @@
-import 'package:app/modules/consultant-estimators/enums/work-estimate-status.enum.dart';
+
 import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
+import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,7 +51,7 @@ class WorkEstimateCardConsultant extends StatelessWidget {
 
   _imageContainer() {
     Color color =
-        workEstimate.getStatus() == WorkEstimateStatus.PENDING ? red : yellow;
+        workEstimate.status == WorkEstimateStatus.Pending ? red : yellow;
 
     return Container(
       width: 100,
@@ -102,7 +103,7 @@ class WorkEstimateCardConsultant extends StatelessWidget {
 
   _statusContainer(BuildContext context) {
     Color color =
-        workEstimate.getStatus() == WorkEstimateStatus.PENDING ? red : yellow;
+        workEstimate.status == WorkEstimateStatus.Pending ? red : yellow;
 
     return Container(
       margin: EdgeInsets.only(right: 10),

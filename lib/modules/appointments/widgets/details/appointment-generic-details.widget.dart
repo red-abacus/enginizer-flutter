@@ -14,14 +14,12 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
 
   Function cancelAppointment;
   Function viewEstimate;
-  Function acceptAppointment;
   Function showHandoverCarForm;
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
       this.cancelAppointment,
       this.viewEstimate,
-      this.acceptAppointment,
       this.showHandoverCarForm});
 
   @override
@@ -292,17 +290,6 @@ class AppointmentGenericDetailsWidgetState
             ),
             backgroundColor: Colors.white,
           ),
-          FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-              widget.acceptAppointment();
-            },
-            label: Text(
-              S.of(context).general_accept.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
-            ),
-            backgroundColor: Colors.white,
-          )
         ],
       ),
     );

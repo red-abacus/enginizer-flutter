@@ -1,9 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment-status.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/mechanic-appointments/enums/mechanic-task-form-state.enum.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-efficiency.widget.dart';
@@ -25,7 +23,6 @@ class AppointmentDetailsTasksList extends StatefulWidget {
 class AppointmentDetailsTasksListState
     extends State<AppointmentDetailsTasksList> {
   AppointmentMechanicProvider _provider;
-  MechanicTaskFormState _currentState = MechanicTaskFormState.TASKS;
 
   @override
   Widget build(BuildContext context) {

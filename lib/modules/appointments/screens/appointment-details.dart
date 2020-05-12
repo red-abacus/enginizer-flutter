@@ -11,7 +11,7 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
@@ -70,6 +70,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   void didChangeDependencies() {
+    _initDone = _initDone == false ? false : _appointmentProvider.initDone;
+
     if (!_initDone) {
       _appointmentProvider = Provider.of<AppointmentProvider>(context);
 
@@ -83,6 +85,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     }
 
     _initDone = true;
+    _appointmentProvider.initDone = true;
     super.didChangeDependencies();
   }
 
@@ -149,7 +152,6 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
                     _appointmentProvider.selectedAppointmentDetail,
                 viewEstimate: _seeEstimate,
                 cancelAppointment: _cancelAppointment,
-                acceptAppointment: _acceptAppointment,
                 showHandoverCarForm: _showHandoverCarForm);
             break;
           default:
@@ -251,43 +253,26 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
+          _appointmentProvider.selectedAppointmentDetail;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _appointmentProvider.selectedAppointment.serviceProvider.id;
 
       DateEntry dateEntry = _appointmentProvider.selectedAppointmentDetail
           .getWorkEstimateDateEntry();
 
+      EstimatorMode mode =
+          _appointmentProvider.selectedAppointmentDetail.status.getState() ==
+                  AppointmentStatusState.PENDING
+              ? EstimatorMode.ClientAccept
+              : EstimatorMode.ReadOnly;
+
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(
-                mode: EstimatorMode.ReadOnly, dateEntry: dateEntry)),
+            builder: (context) =>
+                WorkEstimateForm(mode: mode, dateEntry: dateEntry)),
       );
-    }
-  }
-
-  _acceptAppointment() async {
-    // TODO - need to add reject work estimate functionality
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      await _appointmentProvider
-          .acceptBid(_appointmentProvider.selectedAppointmentDetail.bidId)
-          .then((_) {
-        setState(() {
-          Provider.of<AppointmentsProvider>(context).initDone = false;
-          _initDone = false;
-        });
-      });
-    } catch (error) {
-      if (error
-          .toString()
-          .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_accept_work_estimate, context);
-      }
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -417,7 +418,10 @@ class _AuthFormState extends State<AuthForm>
             .forgotPassword(_authData['email'])
             .then((success) {
           if (success) {
-            _showErrorDialog(S.of(context).auth_forgot_password_success);
+            FlushBarHelper.showFlushBar(
+                S.of(context).auth_forgot_password_success_title,
+                S.of(context).auth_forgot_password_success,
+                context);
           }
         });
       }

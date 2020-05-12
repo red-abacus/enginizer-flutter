@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/work-estimate-form/models/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-section-items.widget.dart';
@@ -19,6 +19,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   final Function selectIssueSection;
   final Function showSectionName;
   final EstimatorMode estimatorMode;
+  final bool selected;
 
   WorkEstimateSectionWidget(
       {this.issue,
@@ -28,7 +29,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       this.removeIssueItem,
       this.selectIssueSection,
       this.showSectionName,
-      this.estimatorMode});
+      this.estimatorMode,
+      this.selected});
 
   @override
   Widget build(BuildContext context) {
@@ -48,52 +50,60 @@ class WorkEstimateSectionWidget extends StatelessWidget {
           children: <Widget>[
             Container(
               color: gray_10,
-              child: Row(
+              child: Column(
                 children: <Widget>[
-                  _checkMarkContainer(context),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: 4, bottom: 4, right: 4, left: 10),
-                      child: InkWell(
-                        onTap: () => {
-                          showSectionName(this.issue, this.issueRecommendation)
-                        },
-                        child: Text(
-                          issueRecommendation.isNew
-                              ? S.of(context).estimator_add_section_name
-                              : issueRecommendation.name,
-                          style: TextHelper.customTextStyle(
-                              null, black_text, FontWeight.bold, 14),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: FlatButton(
-                          padding: EdgeInsets.all(4),
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          child: SvgPicture.asset(
-                            this.issueRecommendation.expanded
-                                ? 'assets/images/icons/down_arrow.svg'
-                                : 'assets/images/icons/up_arrow.svg',
-                            semanticsLabel: 'Up Arrow',
-                            height: 14,
-                            width: 14,
+                  Row(
+                    children: <Widget>[
+                      _checkMarkContainer(context),
+                      Expanded(
+                        flex: 5,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 4, bottom: 4, right: 4, left: 10),
+                          child: InkWell(
+                            onTap: () => {
+                              showSectionName(
+                                  this.issue, this.issueRecommendation)
+                            },
+                            child: Text(
+                              issueRecommendation.isNew
+                                  ? S.of(context).estimator_add_section_name
+                                  : issueRecommendation.name,
+                              style: TextHelper.customTextStyle(
+                                  null, black_text, FontWeight.bold, 14),
+                            ),
                           ),
-                          onPressed: () {
-                            this.expandSection(this.issueRecommendation);
-                          },
                         ),
                       ),
-                    ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10),
+                            child: FlatButton(
+                              padding: EdgeInsets.all(4),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              child: SvgPicture.asset(
+                                this.issueRecommendation.expanded
+                                    ? 'assets/images/icons/down_arrow.svg'
+                                    : 'assets/images/icons/up_arrow.svg',
+                                semanticsLabel: 'Up Arrow',
+                                height: 14,
+                                width: 14,
+                              ),
+                              onPressed: () {
+                                this.expandSection(this.issueRecommendation);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  if (estimatorMode == EstimatorMode.Client ||
+                      estimatorMode == EstimatorMode.ClientAccept)
+                    _priceContainer(context)
                 ],
               ),
             ),
@@ -105,7 +115,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   _checkMarkContainer(BuildContext context) {
     if (estimatorMode == EstimatorMode.ReadOnly ||
         estimatorMode == EstimatorMode.Create ||
-        estimatorMode == EstimatorMode.Edit) {
+        estimatorMode == EstimatorMode.Edit ||
+        estimatorMode == EstimatorMode.ClientAccept) {
       return Container();
     }
 
@@ -117,7 +128,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                 child: FlatButton(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: SvgPicture.asset(
-                    this.issueRecommendation.selected
+                    this.selected
                         ? 'assets/images/icons/check_box.svg'
                         : 'assets/images/icons/check_box_empty.svg',
                     semanticsLabel: 'Up Arrow',
@@ -132,6 +143,19 @@ class WorkEstimateSectionWidget extends StatelessWidget {
               ),
             ),
           );
+  }
+
+  _priceContainer(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Container(
+        margin: EdgeInsets.only(left: 10, top: 6, bottom: 6, right: 10),
+        child: Text(
+          '${S.of(context).estimator_total}: ${issueRecommendation.totalCost()} RON',
+          style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+        ),
+      ),
+    );
   }
 
   _issuesContainer() {
