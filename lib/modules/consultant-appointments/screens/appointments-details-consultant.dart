@@ -1,20 +1,21 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
-import 'package:app/modules/consultant-appointments/enums/appointment-details-status-state.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/widgets/appointment-car-receive-form.widget.dart';
+import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-documents.widget.dart';
 import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
+import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-parts-provider-estimate.widget.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
-import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,54 +33,31 @@ class AppointmentDetailsConsultant extends StatefulWidget {
 }
 
 class AppointmentDetailsConsultantState
-    extends State<AppointmentDetailsConsultant> {
-  AppointmentConsultantProvider _appointmentConsultantProvider;
+    extends State<AppointmentDetailsConsultant>
+    with SingleTickerProviderStateMixin {
+  AppointmentConsultantProvider _provider;
 
   String route;
 
   var _isLoading = false;
 
-  AppointmentDetailsStatusState currentState =
-      AppointmentDetailsStatusState.REQUEST;
-
   AppointmentDetailsConsultantState({this.route});
 
-  @override
-  Widget build(BuildContext context) {
-    if (_appointmentConsultantProvider != null &&
-            _appointmentConsultantProvider.selectedAppointment == null ||
-        _appointmentConsultantProvider != null &&
-            _appointmentConsultantProvider.selectedAppointmentDetail == null) {
-      return Container();
-    }
-
-    return Consumer<AppointmentConsultantProvider>(
-        builder: (context, appointmentsProvider, _) => Scaffold(
-            appBar: AppBar(
-              title: Text(
-                _appointmentConsultantProvider.selectedAppointment?.name,
-                style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 20),
-              ),
-              iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-            ),
-            body: _contentWidget()));
-  }
+  TabController _tabController;
 
   @override
   void didChangeDependencies() {
-    _appointmentConsultantProvider =
-        Provider.of<AppointmentConsultantProvider>(context);
+    _provider = Provider.of<AppointmentConsultantProvider>(context);
 
-    if (!_appointmentConsultantProvider.initDone) {
-      if (_appointmentConsultantProvider.selectedAppointment != null) {
+    if (!_provider.initDone) {
+      if (_provider.selectedAppointment != null) {
         setState(() {
           _isLoading = true;
         });
         _loadData();
       }
 
-      _appointmentConsultantProvider.initDone = true;
+      _provider.initDone = true;
     }
 
     super.didChangeDependencies();
@@ -87,30 +65,22 @@ class AppointmentDetailsConsultantState
 
   _loadData() async {
     try {
-      await _appointmentConsultantProvider
-          .getAppointmentDetails(
-              _appointmentConsultantProvider.selectedAppointment)
+      await _provider
+          .getAppointmentDetails(_provider.selectedAppointment)
           .then((_) async {
-        await _appointmentConsultantProvider
-            .getProviderServices(_appointmentConsultantProvider
-                .selectedAppointment.serviceProvider.id)
+        await _provider
+            .getProviderServices(
+                _provider.selectedAppointment.serviceProvider.id)
             .then((_) async {
-          int lastWorkEstimate = _appointmentConsultantProvider
-              .selectedAppointmentDetail
-              .lastWorkEstimate();
+          int lastWorkEstimate =
+              _provider.selectedAppointmentDetail.lastWorkEstimate();
 
           if (lastWorkEstimate != 0) {
-            await _appointmentConsultantProvider
-                .getWorkEstimateDetails(lastWorkEstimate)
-                .then((_) {
-              setState(() {
-                _isLoading = false;
-              });
+            await _provider.getWorkEstimateDetails(lastWorkEstimate).then((_) {
+              _downloadNextServiceProviders();
             });
           } else {
-            setState(() {
-              _isLoading = false;
-            });
+            _downloadNextServiceProviders();
           }
         });
       });
@@ -130,6 +100,11 @@ class AppointmentDetailsConsultantState
           .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_work_estimate_details, context);
+      } else if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDERS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_providers, context);
       }
 
       setState(() {
@@ -138,44 +113,89 @@ class AppointmentDetailsConsultantState
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    if (_provider != null && _provider.selectedAppointment == null ||
+        _provider != null && _provider.selectedAppointmentDetail == null) {
+      return Container();
+    }
+
+    if (_tabController == null) {
+      int lenght = 2;
+      int initialIndex = 2;
+
+      switch (_provider.selectedAppointmentDetail.status.getState()) {
+        case AppointmentStatusState.IN_REVIEW:
+          lenght = 4;
+          break;
+        default:
+          initialIndex = 0;
+          break;
+      }
+      _tabController = new TabController(
+          vsync: this, length: lenght, initialIndex: initialIndex);
+    }
+
+    return Consumer<AppointmentConsultantProvider>(
+        builder: (context, appointmentsProvider, _) => Scaffold(
+            appBar: AppBar(
+              bottom: TabBar(
+                isScrollable: true,
+                controller: _tabController,
+                tabs: _getTabs(),
+              ),
+              title: Text(
+                _provider.selectedAppointment?.name,
+                style: TextHelper.customTextStyle(
+                    null, Colors.white, FontWeight.bold, 20),
+              ),
+              iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+            ),
+            body: _contentWidget()));
+  }
+
+  _getTabs() {
+    List<Tab> tabs = [
+      Tab(text: S.of(context).appointment_details_request),
+      Tab(text: S.of(context).appointment_details_car),
+    ];
+
+    if (_provider.selectedAppointmentDetail.status.getState() ==
+        AppointmentStatusState.IN_REVIEW) {
+      tabs.addAll([
+        Tab(text: S.of(context).appointment_consultant_provider_estimate_title),
+        Tab(text: S.of(context).appoontment_consultant_provider_documents_title)
+      ]);
+    }
+
+    return tabs;
+  }
+
   _contentWidget() {
-    return Column(
-      children: <Widget>[
-        Container(
-          child: Container(
-            child: _buildTabBar(),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.only(top: 20),
-            child: _buildContent(),
-          ),
-        )
-      ],
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    List<Widget> list = [
+      _getAppointmentDetailsScreen(),
+      CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car),
+      AppointmentDetailsPartsProviderEstimateWidget(
+        serviceProviders: _provider.serviceProviders,
+        providerType: _provider.appointmentProviderType,
+        selectProviderType: _selectProviderType,
+        downloadNextServiceProviders: _downloadNextServiceProviders,
+      ),
+      AppointmentDetailsDocumentsWidget()
+    ];
+
+    return TabBarView(
+      controller: _tabController,
+      children: list,
     );
   }
 
-  _buildContent() {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : _getContent();
-  }
-
-  _getContent() {
-    switch (currentState) {
-      case AppointmentDetailsStatusState.REQUEST:
-        return _getAppointmentDetailsScreen();
-      case AppointmentDetailsStatusState.CAR:
-        return CarGeneralDetailsWidget(
-            car: _appointmentConsultantProvider.selectedAppointmentDetail.car);
-        break;
-    }
-  }
-
   _getAppointmentDetailsScreen() {
-    switch (_appointmentConsultantProvider.selectedAppointmentDetail.status
-        .getState()) {
+    switch (_provider.selectedAppointmentDetail.status.getState()) {
       case AppointmentStatusState.SUBMITTED:
       case AppointmentStatusState.PENDING:
       case AppointmentStatusState.SCHEDULED:
@@ -183,83 +203,27 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.CANCELED:
       case AppointmentStatusState.DONE:
+      case AppointmentStatusState.IN_REVIEW:
         return AppointmentDetailsGenericConsultantWidget(
-          appointmentDetail:
-              _appointmentConsultantProvider.selectedAppointmentDetail,
-          serviceItems: _appointmentConsultantProvider
-              .selectedAppointmentDetail.serviceItems,
-          serviceProviderItems:
-              _appointmentConsultantProvider.serviceProviderItems,
+          appointmentDetail: _provider.selectedAppointmentDetail,
+          serviceItems: _provider.selectedAppointmentDetail.serviceItems,
+          serviceProviderItems: _provider.serviceProviderItems,
           declineAppointment: _declineAppointment,
           createEstimate: _createEstimate,
           editEstimate: _editEstimate,
           viewEstimate: _viewEstimate,
           assignMechanic: _assignMechanic,
           createPickUpCarForm: _createPickUpCarForm,
-          workEstimateDetails: _appointmentConsultantProvider.workEstimateDetails,
+          workEstimateDetails: _provider.workEstimateDetails,
+          createPartProviderEstimate: _createPartProviderEstimate,
         );
       default:
         return Container();
     }
   }
 
-  Widget _buildTabBar() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 40,
-      child: new Row(
-        children: <Widget>[
-          _buildTabBarButton(AppointmentDetailsStatusState.REQUEST),
-          _buildTabBarButton(AppointmentDetailsStatusState.CAR)
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTabBarButton(AppointmentDetailsStatusState state) {
-    Color bottomColor = (currentState == state) ? red : gray_80;
-    return Expanded(
-      flex: 1,
-      child: Container(
-          child: Center(
-            child: FlatButton(
-              child: Text(
-                _stateTitle(state, context),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: "Lato",
-                    color: red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
-              ),
-              onPressed: () {
-                setState(() {
-                  currentState = state;
-                });
-              },
-            ),
-          ),
-          decoration: BoxDecoration(
-              border: Border(
-            bottom: BorderSide(width: 1.0, color: bottomColor),
-          ))),
-    );
-  }
-
-  String _stateTitle(
-      AppointmentDetailsStatusState state, BuildContext context) {
-    switch (state) {
-      case AppointmentDetailsStatusState.REQUEST:
-        return S.of(context).appointment_details_request;
-      case AppointmentDetailsStatusState.CAR:
-        return S.of(context).appointment_details_car;
-    }
-
-    return '';
-  }
-
   _declineAppointment() {
-    if (_appointmentConsultantProvider.selectedAppointment != null) {
+    if (_provider.selectedAppointment != null) {
       showDialog<void>(
           context: context,
           builder: (BuildContext context) {
@@ -268,10 +232,7 @@ class AppointmentDetailsConsultantState
               return AlertConfirmationDialogWidget(
                   confirmFunction: (confirm) => {
                         if (confirm)
-                          {
-                            _cancelAppointment(_appointmentConsultantProvider
-                                .selectedAppointment)
-                          }
+                          {_cancelAppointment(_provider.selectedAppointment)}
                       },
                   title: S
                       .of(context)
@@ -283,13 +244,11 @@ class AppointmentDetailsConsultantState
 
   _cancelAppointment(Appointment appointment) async {
     try {
-      await _appointmentConsultantProvider
-          .cancelAppointment(appointment)
-          .then((appointment) {
+      await _provider.cancelAppointment(appointment).then((appointment) {
         Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
 
         setState(() {
-          _appointmentConsultantProvider.initDone = false;
+          _provider.initDone = false;
         });
       });
     } catch (error) {
@@ -301,22 +260,22 @@ class AppointmentDetailsConsultantState
       }
 
       setState(() {
-        _appointmentConsultantProvider.initDone = false;
+        _provider.initDone = false;
       });
     }
   }
 
   _createEstimate() {
-    if (_appointmentConsultantProvider.selectedAppointmentDetail != null) {
+    if (_provider.selectedAppointmentDetail != null) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
-      Provider.of<WorkEstimateProvider>(context).setIssues(
-          _appointmentConsultantProvider.selectedAppointmentDetail.issues);
+      Provider.of<WorkEstimateProvider>(context)
+          .setIssues(_provider.selectedAppointmentDetail.issues);
       Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-          _appointmentConsultantProvider.selectedAppointment;
+          _provider.selectedAppointment;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
-          _appointmentConsultantProvider.selectedAppointmentDetail;
+          _provider.selectedAppointmentDetail;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
+          _provider.selectedAppointment.serviceProvider.id;
 
       Navigator.push(
         context,
@@ -327,21 +286,19 @@ class AppointmentDetailsConsultantState
   }
 
   _editEstimate() {
-    // TODO - consultant provider can edit it's estimator before client accepts it?
-    int lastWorkEstimateId = _appointmentConsultantProvider
-        .selectedAppointmentDetail
-        .lastWorkEstimate();
+    int lastWorkEstimateId =
+        _provider.selectedAppointmentDetail.lastWorkEstimate();
 
     if (lastWorkEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
+          _provider.selectedAppointment.serviceProvider.id;
       Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-          _appointmentConsultantProvider.selectedAppointment;
+          _provider.selectedAppointment;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
-          _appointmentConsultantProvider.selectedAppointmentDetail;
+          _provider.selectedAppointmentDetail;
 
       Navigator.push(
         context,
@@ -352,28 +309,28 @@ class AppointmentDetailsConsultantState
   }
 
   _viewEstimate() {
-    int lastWorkEstimateId = _appointmentConsultantProvider
-        .selectedAppointmentDetail
-        .lastWorkEstimate();
+    int lastWorkEstimateId =
+        _provider.selectedAppointmentDetail.lastWorkEstimate();
 
     if (lastWorkEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          _appointmentConsultantProvider.selectedAppointment.serviceProvider.id;
+          _provider.selectedAppointment.serviceProvider.id;
 
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WorkEstimateForm(
                 mode: EstimatorMode.ReadOnly,
-                dateEntry: _appointmentConsultantProvider
-                    .selectedAppointmentDetail
+                dateEntry: _provider.selectedAppointmentDetail
                     .getWorkEstimateDateEntry())),
       );
     }
   }
+
+  _createPartProviderEstimate() {}
 
   _assignMechanic() {
     showModalBottomSheet<void>(
@@ -401,8 +358,7 @@ class AppointmentDetailsConsultantState
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return AppointmentCarReceiveFormModal(
-                appointmentDetail:
-                    _appointmentConsultantProvider.selectedAppointmentDetail,
+                appointmentDetail: _provider.selectedAppointmentDetail,
                 refreshState: _refreshState);
           });
         });
@@ -414,5 +370,41 @@ class AppointmentDetailsConsultantState
     });
 
     _loadData();
+  }
+
+  _selectProviderType(AppointmentProviderType appointmentProviderType) {
+    setState(() {
+      _provider.appointmentProviderType = appointmentProviderType;
+    });
+  }
+
+  _downloadNextServiceProviders() async {
+    if (_provider.selectedAppointmentDetail.status.getState() ==
+        AppointmentStatusState.IN_REVIEW) {
+      try {
+        await _provider.loadProviders().then((list) async {
+          if (list != null) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(ProviderService.GET_PROVIDERS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_providers, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

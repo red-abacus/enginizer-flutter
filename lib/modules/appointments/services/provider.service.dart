@@ -39,8 +39,7 @@ class ProviderService {
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
 
-  static const String _PROVIDERS_PATH =
-      '${Environment.PROVIDERS_BASE_API}/providers';
+  static const String _PROVIDERS_PATH = 'api/providers';
 
   static const String _PROVIDER_DETAILS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers/';
@@ -92,16 +91,35 @@ class ProviderService {
     }
   }
 
-  Future<ServiceProviderResponse> getProviders() async {
-    try {
-      final response = await _dio.get(_PROVIDERS_PATH);
+  Future<ServiceProviderResponse> getProviders(
+      {int page, List<String> serviceNames}) async {
+    Map<String, dynamic> queryParameters = {};
 
+    if (serviceNames != null) {
+      queryParameters['serviceNames'] = serviceNames;
+    }
+
+    if (page != null) {
+      queryParameters['page'] = '$page';
+    }
+
+    print('query parameters ${queryParameters}');
+
+    try {
+      var uri = Uri(
+          scheme: Environment.PROVIDERS_SCHEME,
+          host: Environment.PROVIDERS_HOST,
+          path: _PROVIDERS_PATH,
+          queryParameters: queryParameters);
+      final response = await _dio.getUri(uri);
+      print('response ${response.data}');
       if (response.statusCode == 200) {
         return _mapProviders(response.data);
       } else {
         throw Exception(GET_PROVIDERS_EXCEPTION);
       }
     } catch (error) {
+      print('error $error');
       throw Exception(GET_PROVIDERS_EXCEPTION);
     }
   }
@@ -299,8 +317,7 @@ class ProviderService {
   }
 
   _mapProviders(Map<String, dynamic> commingServices) {
-    var response = ServiceProviderResponse.fromJson(commingServices);
-    return response;
+    return ServiceProviderResponse.fromJson(commingServices);
   }
 
   _mapProviderServiceItems(dynamic response) {

@@ -1,7 +1,10 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
@@ -20,6 +23,12 @@ class AppointmentConsultantProvider with ChangeNotifier {
   WorkEstimateDetails workEstimateDetails;
   List<ServiceProviderItem> serviceProviderItems = [];
 
+  AppointmentProviderType appointmentProviderType =
+      AppointmentProviderType.Specific;
+  ServiceProviderResponse _serviceProviderResponse;
+  List<ServiceProvider> serviceProviders = [];
+  int serviceProviderResponsePage = 0;
+
   List<Employee> employees = [];
 
   bool initDone = false;
@@ -29,6 +38,10 @@ class AppointmentConsultantProvider with ChangeNotifier {
     selectedAppointment = null;
     selectedAppointmentDetail = null;
     serviceProviderItems = [];
+    _serviceProviderResponse = null;
+    appointmentProviderType = AppointmentProviderType.Specific;
+    serviceProviderResponsePage = 0;
+    serviceProviders = [];
   }
 
   Future<AppointmentDetail> getAppointmentDetails(
@@ -72,6 +85,25 @@ class AppointmentConsultantProvider with ChangeNotifier {
           .getWorkEstimateDetails(workEstimateId);
       notifyListeners();
       return workEstimateDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<ServiceProvider>> loadProviders() async {
+    if (_serviceProviderResponse != null &&
+        serviceProviderResponsePage >= _serviceProviderResponse.totalPages) {
+      return null;
+    }
+
+    try {
+      _serviceProviderResponse = await _providerService.getProviders(
+          serviceNames: ['DISMANTLING_SHOP', 'PART_SHOP'],
+          page: serviceProviderResponsePage);
+      notifyListeners();
+      this.serviceProviders.addAll(_serviceProviderResponse.items);
+      serviceProviderResponsePage += 1;
+      return this.serviceProviders;
     } catch (error) {
       throw (error);
     }

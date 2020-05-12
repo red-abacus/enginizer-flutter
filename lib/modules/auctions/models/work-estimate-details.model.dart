@@ -27,6 +27,7 @@ class WorkEstimateDetails {
       this.totalCost});
 
   factory WorkEstimateDetails.fromJson(Map<String, dynamic> json) {
+    print('work estimate id ${json['id']}');
     return WorkEstimateDetails(
         id: json['id'],
         appointment: json['appointment'] != null

@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment-status.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -17,12 +18,13 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   WorkEstimateDetails workEstimateDetails;
   List<ServiceItem> serviceItems;
   List<ServiceProviderItem> serviceProviderItems;
-  Function declineAppointment;
-  Function createEstimate;
-  Function editEstimate;
-  Function viewEstimate;
-  Function assignMechanic;
-  Function createPickUpCarForm;
+  final Function declineAppointment;
+  final Function createEstimate;
+  final Function editEstimate;
+  final Function viewEstimate;
+  final Function assignMechanic;
+  final Function createPickUpCarForm;
+  final Function createPartProviderEstimate;
 
   AppointmentDetailsGenericConsultantWidget(
       {this.appointmentDetail,
@@ -34,7 +36,8 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.viewEstimate,
       this.assignMechanic,
       this.createPickUpCarForm,
-      this.workEstimateDetails});
+      this.workEstimateDetails,
+      this.createPartProviderEstimate});
 
   @override
   AppointmentDetailsGenericConsultantWidgetState createState() {
@@ -55,6 +58,7 @@ class AppointmentDetailsGenericConsultantWidgetState
 
   _content() {
     return Container(
+      padding: EdgeInsets.only(top: 20, bottom: 20),
       margin: EdgeInsets.only(left: 20, right: 20),
       child: ListView(
         padding: EdgeInsets.only(bottom: 80),
