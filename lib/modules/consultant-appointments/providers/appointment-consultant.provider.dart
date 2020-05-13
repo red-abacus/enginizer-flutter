@@ -28,6 +28,7 @@ class AppointmentConsultantProvider with ChangeNotifier {
   ServiceProviderResponse _serviceProviderResponse;
   List<ServiceProvider> serviceProviders = [];
   int serviceProviderResponsePage = 0;
+  ServiceProvider selectedServiceProvider;
 
   List<Employee> employees = [];
 
@@ -42,6 +43,7 @@ class AppointmentConsultantProvider with ChangeNotifier {
     appointmentProviderType = AppointmentProviderType.Specific;
     serviceProviderResponsePage = 0;
     serviceProviders = [];
+    selectedServiceProvider = null;
   }
 
   Future<AppointmentDetail> getAppointmentDetails(

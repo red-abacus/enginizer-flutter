@@ -14,13 +14,17 @@ class AppointmentDetailsPartsProviderEstimateWidget extends StatelessWidget {
 
   final Function selectProviderType;
   final Function downloadNextServiceProviders;
+  final Function selectServiceProvider;
+  final Function showServiceProviderDetails;
 
   AppointmentDetailsPartsProviderEstimateWidget(
       {this.providerType,
       this.serviceProviders,
       this.selectedServiceProvider,
       this.selectProviderType,
-      this.downloadNextServiceProviders});
+      this.downloadNextServiceProviders,
+      this.selectServiceProvider,
+      this.showServiceProviderDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +77,19 @@ class AppointmentDetailsPartsProviderEstimateWidget extends StatelessWidget {
     if (providerType == AppointmentProviderType.Specific) {
       return Expanded(
         child: Container(
-          margin: EdgeInsets.only(top: 10),
+          margin: EdgeInsets.only(top: 10, right: 20, left: 20),
           child: ListView.builder(
             itemCount: this.serviceProviders.length,
-            itemBuilder: (context, int) {
-              if (int == this.serviceProviders.length - 1) {
+            itemBuilder: (context, index) {
+              if (index == this.serviceProviders.length - 1) {
                 this.downloadNextServiceProviders();
               }
-              return ServiceProviderCard(serviceProvider: serviceProviders[int]);
+              return ServiceProviderCard(
+                serviceProvider: serviceProviders[index],
+                selectServiceProvider: selectServiceProvider,
+                selected: selectedServiceProvider == serviceProviders[index],
+                showServiceProviderDetails: showServiceProviderDetails,
+              );
             },
           ),
         ),

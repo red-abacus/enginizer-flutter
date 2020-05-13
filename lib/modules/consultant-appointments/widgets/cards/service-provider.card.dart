@@ -6,8 +6,16 @@ import 'package:flutter/material.dart';
 
 class ServiceProviderCard extends StatelessWidget {
   final ServiceProvider serviceProvider;
+  final bool selected;
 
-  ServiceProviderCard({this.serviceProvider});
+  final Function selectServiceProvider;
+  final Function showServiceProviderDetails;
+
+  ServiceProviderCard(
+      {this.serviceProvider,
+      this.selectServiceProvider,
+      this.selected,
+      this.showServiceProviderDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +30,7 @@ class ServiceProviderCard extends StatelessWidget {
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
-            onTap: () => {},
+            onTap: () => {selectServiceProvider(serviceProvider)},
             child: ClipRRect(
               borderRadius: new BorderRadius.circular(10.0),
               child: Row(
@@ -78,28 +86,17 @@ class ServiceProviderCard extends StatelessWidget {
                             fontFamily: "Lato"),
                       ),
                       onPressed: () {
-//                        Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = currentService.id;
-//
-//                        showModalBottomSheet(
-//                            isScrollControlled: true,
-//                            context: context,
-//                            builder: (_) {
-//                              return StatefulBuilder(builder:
-//                                  (BuildContext context, StateSetter state) {
-//                                return ServiceDetailsModal();
-//                              });
-//                            });
+                        showServiceProviderDetails(serviceProvider);
                       }),
                   Container(
                     width: LIST_ITEM_SELECTION_WIDTH,
                     child: Column(
                       children: [
-//                        if (providerServiceProvider.selectedProvider ==
-//                            currentService)
-//                          Container(
-//                            height: 100,
-//                            color: Theme.of(context).accentColor,
-//                          )
+                        if (selected)
+                          Container(
+                            height: 100,
+                            color: Theme.of(context).accentColor,
+                          )
                       ],
                     ),
                   ),
@@ -111,5 +108,4 @@ class ServiceProviderCard extends StatelessWidget {
       );
     });
   }
-
 }

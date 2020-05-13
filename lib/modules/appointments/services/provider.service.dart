@@ -103,8 +103,6 @@ class ProviderService {
       queryParameters['page'] = '$page';
     }
 
-    print('query parameters ${queryParameters}');
-
     try {
       var uri = Uri(
           scheme: Environment.PROVIDERS_SCHEME,
@@ -112,14 +110,12 @@ class ProviderService {
           path: _PROVIDERS_PATH,
           queryParameters: queryParameters);
       final response = await _dio.getUri(uri);
-      print('response ${response.data}');
       if (response.statusCode == 200) {
         return _mapProviders(response.data);
       } else {
         throw Exception(GET_PROVIDERS_EXCEPTION);
       }
     } catch (error) {
-      print('error $error');
       throw Exception(GET_PROVIDERS_EXCEPTION);
     }
   }

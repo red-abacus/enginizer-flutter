@@ -1,8 +1,11 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
@@ -122,16 +125,17 @@ class AppointmentDetailsConsultantState
 
     if (_tabController == null) {
       int lenght = 2;
-      int initialIndex = 2;
+      int initialIndex = 0;
 
       switch (_provider.selectedAppointmentDetail.status.getState()) {
         case AppointmentStatusState.IN_REVIEW:
           lenght = 4;
+          initialIndex = 2;
           break;
         default:
-          initialIndex = 0;
           break;
       }
+
       _tabController = new TabController(
           vsync: this, length: lenght, initialIndex: initialIndex);
     }
@@ -140,7 +144,7 @@ class AppointmentDetailsConsultantState
         builder: (context, appointmentsProvider, _) => Scaffold(
             appBar: AppBar(
               bottom: TabBar(
-                isScrollable: true,
+                isScrollable: _tabController.length > 3,
                 controller: _tabController,
                 tabs: _getTabs(),
               ),
@@ -179,14 +183,26 @@ class AppointmentDetailsConsultantState
     List<Widget> list = [
       _getAppointmentDetailsScreen(),
       CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car),
-      AppointmentDetailsPartsProviderEstimateWidget(
-        serviceProviders: _provider.serviceProviders,
-        providerType: _provider.appointmentProviderType,
-        selectProviderType: _selectProviderType,
-        downloadNextServiceProviders: _downloadNextServiceProviders,
-      ),
-      AppointmentDetailsDocumentsWidget()
     ];
+
+    switch (_provider.selectedAppointmentDetail.status.getState()) {
+      case AppointmentStatusState.IN_REVIEW:
+        list.addAll([
+          AppointmentDetailsPartsProviderEstimateWidget(
+            serviceProviders: _provider.serviceProviders,
+            providerType: _provider.appointmentProviderType,
+            selectedServiceProvider: _provider.selectedServiceProvider,
+            selectProviderType: _selectProviderType,
+            downloadNextServiceProviders: _downloadNextServiceProviders,
+            selectServiceProvider: _selectServiceProvider,
+            showServiceProviderDetails: _showServiceProviderDetails,
+          ),
+          AppointmentDetailsDocumentsWidget()
+        ]);
+        break;
+      default:
+        break;
+    }
 
     return TabBarView(
       controller: _tabController,
@@ -406,5 +422,25 @@ class AppointmentDetailsConsultantState
         _isLoading = false;
       });
     }
+  }
+
+  _selectServiceProvider(ServiceProvider serviceProvider) {
+    setState(() {
+      _provider.selectedServiceProvider = serviceProvider;
+    });
+  }
+
+  _showServiceProviderDetails(ServiceProvider serviceProvider) {
+    Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = serviceProvider.id;
+
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (_) {
+          return StatefulBuilder(builder:
+              (BuildContext context, StateSetter state) {
+            return ServiceDetailsModal();
+          });
+        });
   }
 }
