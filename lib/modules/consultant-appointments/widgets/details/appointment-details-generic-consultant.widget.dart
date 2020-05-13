@@ -20,7 +20,6 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   List<ServiceProviderItem> serviceProviderItems;
   final Function declineAppointment;
   final Function createEstimate;
-  final Function editEstimate;
   final Function viewEstimate;
   final Function assignMechanic;
   final Function createPickUpCarForm;
@@ -32,7 +31,6 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.serviceProviderItems = const [],
       this.declineAppointment,
       this.createEstimate,
-      this.editEstimate,
       this.viewEstimate,
       this.assignMechanic,
       this.createPickUpCarForm,

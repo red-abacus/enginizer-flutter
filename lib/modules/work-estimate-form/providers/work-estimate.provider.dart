@@ -218,6 +218,10 @@ class WorkEstimateProvider with ChangeNotifier {
     this.workEstimateRequest = workEstimateDetails.workEstimateRequest();
   }
 
+  createFinalWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
+    this.workEstimateRequest = workEstimateDetails.finalWorkEstimateRequest();
+  }
+
   double selectedRecommendationTotalCost() {
     double total = 0;
     for (IssueRecommendation recommendation in this.selectedRecommendations) {

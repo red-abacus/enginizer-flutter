@@ -195,7 +195,7 @@ class AppointmentDetailsConsultantState
             selectProviderType: _selectProviderType,
             downloadNextServiceProviders: _downloadNextServiceProviders,
             selectServiceProvider: _selectServiceProvider,
-            showServiceProviderDetails: _showServiceProviderDetails,
+            showServiceProviderDetails: _showServiceProviderDetails
           ),
           AppointmentDetailsDocumentsWidget()
         ]);
@@ -226,7 +226,6 @@ class AppointmentDetailsConsultantState
           serviceProviderItems: _provider.serviceProviderItems,
           declineAppointment: _declineAppointment,
           createEstimate: _createEstimate,
-          editEstimate: _editEstimate,
           viewEstimate: _viewEstimate,
           assignMechanic: _assignMechanic,
           createPickUpCarForm: _createPickUpCarForm,
@@ -297,29 +296,6 @@ class AppointmentDetailsConsultantState
         context,
         MaterialPageRoute(
             builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
-      );
-    }
-  }
-
-  _editEstimate() {
-    int lastWorkEstimateId =
-        _provider.selectedAppointmentDetail.lastWorkEstimate();
-
-    if (lastWorkEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
-      Provider.of<WorkEstimateProvider>(context).workEstimateId =
-          lastWorkEstimateId;
-      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          _provider.selectedAppointment.serviceProvider.id;
-      Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-          _provider.selectedAppointment;
-      Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
-          _provider.selectedAppointmentDetail;
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Edit)),
       );
     }
   }
@@ -431,16 +407,37 @@ class AppointmentDetailsConsultantState
   }
 
   _showServiceProviderDetails(ServiceProvider serviceProvider) {
-    Provider.of<ServiceProviderDetailsProvider>(context, listen: false).serviceProviderId = serviceProvider.id;
+    Provider.of<ServiceProviderDetailsProvider>(context, listen: false)
+        .serviceProviderId = serviceProvider.id;
 
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         builder: (_) {
-          return StatefulBuilder(builder:
-              (BuildContext context, StateSetter state) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
             return ServiceDetailsModal();
           });
         });
   }
+
+//  _createFinalEstimate() {
+//    Provider.of<WorkEstimateProvider>(context).refreshValues();
+//    Provider.of<WorkEstimateProvider>(context)
+//        .setIssues(_provider.selectedAppointmentDetail.issues);
+//    Provider.of<WorkEstimateProvider>(context).selectedAppointment =
+//        _provider.selectedAppointment;
+//    Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
+//        _provider.selectedAppointmentDetail;
+//    Provider.of<WorkEstimateProvider>(context).workEstimateId =
+//        _provider.selectedAppointmentDetail.lastWorkEstimate();
+//    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+//        _provider.selectedAppointment.serviceProvider.id;
+//
+//    Navigator.push(
+//      context,
+//      MaterialPageRoute(
+//          builder: (context) => WorkEstimateForm(mode: EstimatorMode.CreateFinal)),
+//    );
+//  }
 }

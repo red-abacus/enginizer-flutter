@@ -94,6 +94,9 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _STOP_APPOINTMENT_SUFFIX = '/stop';
 
+  static const String _APPOINTMENT_REQUEST_ITEMS_PREFIX = '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _APPOINTMENT_REQUEST_ITEMS_SUFFIX = '/requestItems';
+
   Dio _dio = inject<Dio>();
 
   AppointmentsService();

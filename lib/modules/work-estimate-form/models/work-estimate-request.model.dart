@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,7 +14,7 @@ class WorkEstimateRequest {
   DateTime timeToRespond;
   EmployeeTimeSerie employeeTimeSerie;
 
-  String isValid(BuildContext context) {
+  String isValid(BuildContext context, EstimatorMode estimatorMode) {
     for (Issue issue in issues) {
       if (issue.recommendations.length == 0) {
         return S.of(context).estimator_empty_items_warning;
@@ -30,8 +31,10 @@ class WorkEstimateRequest {
       }
     }
 
-    if (employeeTimeSerie == null) {
-      return S.of(context).estimator_date_warning;
+    if (estimatorMode == EstimatorMode.Create) {
+      if (employeeTimeSerie == null) {
+        return S.of(context).estimator_date_warning;
+      }
     }
 
     return null;
@@ -53,7 +56,6 @@ class WorkEstimateRequest {
     map['forwardPaymentPercent'] = percent;
     map['timeToRespond'] =
         DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy');
-
     return map;
   }
 }

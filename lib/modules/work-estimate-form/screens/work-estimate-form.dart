@@ -61,8 +61,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _WorkEstimateFormState({this.route});
 
-  // TODO - need to customise the work estimate if it's in edit mode (add items)
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AppointmentConsultantProvider>(
@@ -104,16 +102,20 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 _workEstimateProvider.serviceProviderId, startDate, endDate)
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
-              widget.mode == EstimatorMode.Edit ||
+              widget.mode == EstimatorMode.CreateFinal ||
               widget.mode == EstimatorMode.Client ||
               widget.mode == EstimatorMode.ClientAccept) {
             await _workEstimateProvider
                 .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
                 .then((workEstimateDetails) {
               if (workEstimateDetails != null) {
-                _workEstimateProvider
-                    .createWorkEstimateRequest(workEstimateDetails);
-                //                _workEstimateProvider.workEstimateRequest.dateEntry = widget.dateEntry;
+                if (widget.mode == EstimatorMode.CreateFinal) {
+                  _workEstimateProvider
+                      .createFinalWorkEstimateRequest(workEstimateDetails);
+                } else {
+                  _workEstimateProvider
+                      .createWorkEstimateRequest(workEstimateDetails);
+                }
               }
               setState(() {
                 _isLoading = false;
@@ -261,15 +263,11 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     var buttons = List<SpeedDialChild>();
 
     if (widget.mode != EstimatorMode.ReadOnly) {
-      String buttonTitle = widget.mode == EstimatorMode.Create
-          ? S.of(context).general_save
-          : S.of(context).general_edit;
-
       buttons.add(SpeedDialChild(
           child: Icon(Icons.save),
           foregroundColor: red,
           backgroundColor: Colors.white,
-          label: buttonTitle,
+          label: S.of(context).general_save,
           labelStyle: TextHelper.customTextStyle(
               null, Colors.grey, FontWeight.bold, 16),
           onTap: () => _save()));
@@ -287,7 +285,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
 
     if (widget.mode == EstimatorMode.Create ||
-        widget.mode == EstimatorMode.Edit) {
+        widget.mode == EstimatorMode.CreateFinal) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.assignment),
           foregroundColor: red,
@@ -298,7 +296,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => _assignMechanic()));
     }
 
-    if (widget.mode != EstimatorMode.ReadOnly) {
+    if (widget.mode != EstimatorMode.ReadOnly ||
+        widget.mode != EstimatorMode.CreateFinal) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.add),
           foregroundColor: red,
@@ -379,7 +378,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _bottomContainerButton() {
     if (widget.mode == EstimatorMode.ReadOnly ||
-    _workEstimateProvider.workEstimateDetails.status != WorkEstimateStatus.Pending) {
+        _workEstimateProvider.workEstimateDetails.status !=
+            WorkEstimateStatus.Pending) {
       return Container();
     }
 
@@ -388,8 +388,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         FlatButton(
           child: Text(
             S.of(context).general_decline,
-            style: TextHelper.customTextStyle(
-                null, gray3, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 14),
           ),
           onPressed: () {
             _declineEstimateAlert();
@@ -398,8 +397,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         FlatButton(
           child: Text(
             S.of(context).general_accept,
-            style: TextHelper.customTextStyle(
-                null, red, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
           ),
           onPressed: () {
             _acceptEstimateAlert();
@@ -516,20 +514,24 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _save() {
     String validationString =
-        _workEstimateProvider.workEstimateRequest.isValid(context);
+        _workEstimateProvider.workEstimateRequest.isValid(context, widget.mode);
 
     if (validationString != null) {
       AlertWarningDialog.showAlertDialog(
           context, S.of(context).general_warning, validationString);
     } else {
+      DateTime maxResponseTime = widget.mode == EstimatorMode.Create
+          ? _workEstimateProvider.workEstimateRequest.employeeTimeSerie
+              .getDate()
+          : new DateTime(DateTime.now().year + 1, DateTime.now().month,
+              DateTime.now().day);
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return WorkEstimateFinalInfoWidget(
             infoAdded: _infoAdded,
-            maxResponseTime: _workEstimateProvider
-                .workEstimateRequest.employeeTimeSerie
-                .getDate(),
+            maxResponseTime: maxResponseTime,
+            estimatorMode: widget.mode,
           );
         },
       );
@@ -553,36 +555,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
           Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
 
-          widget.mode = EstimatorMode.Edit;
-
-          await _workEstimateProvider
-              .getAppointmentDetails(_workEstimateProvider.selectedAppointment)
-              .then((_) async {
-            int lastWorkEstimate = _workEstimateProvider
-                .selectedAppointmentDetail
-                .lastWorkEstimate();
-
-            if (lastWorkEstimate != 0) {
-              _workEstimateProvider.workEstimateId = lastWorkEstimate;
-
-              await _workEstimateProvider
-                  .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
-                  .then((workEstimateDetails) {
-                if (workEstimateDetails != null) {
-                  _workEstimateProvider
-                      .createWorkEstimateRequest(workEstimateDetails);
-                }
-
-                setState(() {
-                  _isLoading = false;
-                });
-              });
-            } else {
-              setState(() {
-                _isLoading = false;
-              });
-            }
-          });
+          Navigator.pop(context);
         } else {
           setState(() {
             _isLoading = false;

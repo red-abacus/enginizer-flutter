@@ -115,7 +115,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   _checkMarkContainer(BuildContext context) {
     if (estimatorMode == EstimatorMode.ReadOnly ||
         estimatorMode == EstimatorMode.Create ||
-        estimatorMode == EstimatorMode.Edit ||
+        estimatorMode == EstimatorMode.CreateFinal ||
         estimatorMode == EstimatorMode.ClientAccept) {
       return Container();
     }

@@ -3,6 +3,7 @@ import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/modules/shared/widgets/custom-show-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
@@ -12,13 +13,15 @@ import 'package:flutter/material.dart';
 class WorkEstimateFinalInfoWidget extends StatelessWidget {
   final Function infoAdded;
   final DateTime maxResponseTime;
+  final EstimatorMode estimatorMode;
 
   String percentage = '';
   DateTime time;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  WorkEstimateFinalInfoWidget({this.infoAdded, this.maxResponseTime});
+  WorkEstimateFinalInfoWidget(
+      {this.infoAdded, this.maxResponseTime, this.estimatorMode});
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +44,17 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
               ),
-              CustomTextFormField(
-                labelText: S.of(context).estimator_percent,
-                listener: (value) {
-                  this.percentage = value;
-                },
-                currentValue: '',
-                errorText: S.of(context).estimator_percent_warning,
-                validate: true,
-                textInputType: TextInputType.number,
-              ),
+              if (estimatorMode != EstimatorMode.CreateFinal)
+                CustomTextFormField(
+                  labelText: S.of(context).estimator_percent,
+                  listener: (value) {
+                    this.percentage = value;
+                  },
+                  currentValue: '',
+                  errorText: S.of(context).estimator_percent_warning,
+                  validate: true,
+                  textInputType: TextInputType.number,
+                ),
               BasicDateField(
                 minDate: DateUtils.addDayToDate(DateTime.now(), -1),
                 maxDate: maxResponseTime,
@@ -93,20 +97,29 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
 
   _save(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      int value = int.tryParse(percentage);
+      if (estimatorMode == EstimatorMode.Create) {
+        int value = int.tryParse(percentage);
 
-      if (value != null) {
-        if (value >= 100) {
-          AlertWarningDialog.showAlertDialog(
-              context,
-              S.of(context).general_warning,
-              S.of(context).estimator_percent_max_100);
-        } else {
-          Navigator.pop(context);
+        if (value != null) {
+          if (value >= 100) {
+            AlertWarningDialog.showAlertDialog(
+                context,
+                S.of(context).general_warning,
+                S.of(context).estimator_percent_max_100);
+          } else {
+            Navigator.pop(context);
 
-          if (infoAdded != null) {
-            infoAdded(value, time);
+            if (infoAdded != null) {
+              infoAdded(value, time);
+            }
           }
+        }
+      }
+      else {
+        Navigator.pop(context);
+
+        if (infoAdded != null) {
+          infoAdded(0, time);
         }
       }
     }

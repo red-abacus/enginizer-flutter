@@ -175,6 +175,7 @@
   "appointment_consultant_provider_estimate_title": "Provider Estimate",
   "appoontment_consultant_provider_documents_title": "Documents",
   "appointment_consultant_provider_auction_alert": "In Auction mode, the services will bid to carry out your parts",
+  "appointment_consultant_final_estimate_title": "Final estimate",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",

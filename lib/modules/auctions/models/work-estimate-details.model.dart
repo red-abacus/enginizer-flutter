@@ -2,6 +2,7 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
 
 import '../../work-estimate-form/models/issue.model.dart';
@@ -27,7 +28,6 @@ class WorkEstimateDetails {
       this.totalCost});
 
   factory WorkEstimateDetails.fromJson(Map<String, dynamic> json) {
-    print('work estimate id ${json['id']}');
     return WorkEstimateDetails(
         id: json['id'],
         appointment: json['appointment'] != null
@@ -47,6 +47,21 @@ class WorkEstimateDetails {
 
   workEstimateRequest() {
     WorkEstimateRequest request = new WorkEstimateRequest();
+    request.issues = this.issues;
+    return request;
+  }
+
+  finalWorkEstimateRequest() {
+    WorkEstimateRequest request = new WorkEstimateRequest();
+    this.issues.forEach((issue) {
+      List<IssueRecommendation> recommendations = [];
+      issue.recommendations.forEach((recommendation) {
+        if (!recommendation.isStandard) {
+          recommendations.add(recommendation);
+        }
+      });
+      issue.recommendations = recommendations;
+    });
     request.issues = this.issues;
     return request;
   }

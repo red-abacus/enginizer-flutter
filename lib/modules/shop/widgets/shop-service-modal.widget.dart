@@ -236,9 +236,7 @@ class _ShopServiceDetailsModalState extends State<ShopServiceDetailsModal> {
     }
   }
 
-  _submit() async {
-
-  }
+  _submit() async {}
 
   _searchCars(String searchString) {
     _provider.selectedCar = null;
