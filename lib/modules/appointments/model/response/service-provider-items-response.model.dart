@@ -1,4 +1,5 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/shared/managers/permissions-manager.dart';
 
 class ServiceProviderItemsResponse {
   int totalPages;
@@ -20,5 +21,18 @@ class ServiceProviderItemsResponse {
       items.add(ServiceProviderItem.fromJson(item));
     });
     return items;
+  }
+
+  bool containsServiceType(List<ConsultantServiceType> consultantServiceType) {
+    for (ServiceProviderItem item in items) {
+      ConsultantServiceType serviceType =
+          ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
+
+      if (consultantServiceType.contains(serviceType)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

@@ -145,8 +145,8 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
         return NavigationApp.userDrawerItems(context);
       case Roles.ProviderAdmin:
         return NavigationApp.providerAdminDrawerItems;
-      case Roles.ProviderConsultant:
-        return NavigationApp.consultantDrawerItems;
+//      case Roles.ProviderConsultant:
+//        return NavigationApp.consultantDrawerItems;
       case Roles.ProviderPersonnel:
         return NavigationApp.mechanicDrawerItems;
       default:

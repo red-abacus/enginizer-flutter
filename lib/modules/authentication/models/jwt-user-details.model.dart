@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/authentication/models/user-provider.model.dart';
 import 'package:app/modules/authentication/models/user-role.model.dart';
 

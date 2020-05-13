@@ -25,6 +25,7 @@ class Bid {
       this.workEstimateId});
 
   factory Bid.fromJson(Map<String, dynamic> json) {
+    print('json $json');
     return Bid(
         id: json["id"],
         cost: json["cost"],

@@ -2,7 +2,10 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/consultant-auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
+import 'package:app/modules/consultant-auctions/widgets/auction-consultant-parts.widget.dart';
 import 'package:app/modules/consultant-auctions/widgets/auction-consultant.widget.dart';
+import 'package:app/modules/shared/managers/permissions-auction.dart';
+import 'package:app/modules/shared/managers/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -80,10 +83,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       if (error
           .toString()
           .contains(AuctionsService.GET_AUCTION_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_auction_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_auction_details, context);
       }
 
       setState(() {
@@ -106,7 +107,9 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         Expanded(
           child: Container(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-            child: _buildContent(),
+            child: _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : _buildContent(),
           ),
         )
       ],
@@ -114,12 +117,23 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _buildContent() {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : AuctionConsultantWidget(
-            auction: auctionProvider.selectedAuction,
-            auctionDetails: auctionProvider.auctionDetails,
-            createBid: _createBid);
+    if (PermissionsManager.getInstance().consultantHasAccess(
+        ConsultantMainPermissions.Auctions,
+        auctionPermission: ConsultantAuctionPermission.AppointmentDetails)) {
+      return AuctionConsultantWidget(
+          auction: auctionProvider.selectedAuction,
+          auctionDetails: auctionProvider.auctionDetails,
+          createBid: _createBid);
+    } else if (PermissionsManager.getInstance().consultantHasAccess(
+        ConsultantMainPermissions.Auctions,
+        auctionPermission: ConsultantAuctionPermission.CarDetails)) {
+      return AuctionConsultantPartsWidget(
+          auction: auctionProvider.selectedAuction,
+          auctionDetails: auctionProvider.auctionDetails,
+          createBid: _createBid);
+    }
+
+    return Container(child: Text('No permission !'));
   }
 
   _createBid(WorkEstimateRequest workEstimateRequest) {

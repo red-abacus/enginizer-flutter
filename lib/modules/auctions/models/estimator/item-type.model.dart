@@ -5,6 +5,7 @@ class ItemType {
   ItemType({this.id, this.name});
 
   factory ItemType.fromJson(Map<String, dynamic> json) {
+    print('item type $json');
     return ItemType(id: json['id'], name: json['name']);
   }
 

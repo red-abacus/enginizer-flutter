@@ -14,6 +14,8 @@ import 'package:app/modules/mechanic-appointments/screens/appointments-mechanic.
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shared/managers/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions-side-bar.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
@@ -48,7 +50,8 @@ class NavigationApp extends StatefulWidget {
             new DrawerItem(
                 "Appointments", Appointments.route, Icons.event_available),
             new DrawerItem("Auctions", Auctions.route, Icons.dashboard),
-            new DrawerItem(S.of(context).online_shop_title, Shop.route, Icons.shopping_cart),
+            new DrawerItem(S.of(context).online_shop_title, Shop.route,
+                Icons.shopping_cart),
             new DrawerItem(
                 'Notifications',
                 Notifications.route,
@@ -61,14 +64,31 @@ class NavigationApp extends StatefulWidget {
 
   static final List<DrawerItem> providerAdminDrawerItems = [];
 
-  static final List<DrawerItem> consultantDrawerItems = [
-    new DrawerItem(
-        "Appointments", AppointmentsConsultant.route, Icons.event_available),
-    new DrawerItem("Auctions", AuctionsConsultant.route, Icons.dashboard),
-    new DrawerItem(
-        "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard),
-    new DrawerItem('Notifications', Notifications.route, Icons.notifications)
-  ];
+  List<DrawerItem> get consultantDrawerItems {
+    List<DrawerItem> items = [];
+
+    if (PermissionsManager.getInstance().consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Appointments)) {
+      items.add(new DrawerItem(
+          "Appointments", AppointmentsConsultant.route, Icons.dashboard));
+    }
+
+    if (PermissionsManager.getInstance()
+        .consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Auctions)) {
+      items.add(new DrawerItem(
+          "Auctions", AuctionsConsultant.route, Icons.dashboard));
+    }
+
+    if (PermissionsManager.getInstance().consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.WorkEstimates)) {
+      items.add(new DrawerItem(
+          "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard));
+    }
+
+    if (PermissionsManager.getInstance().consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Notifications)) {
+      items.add(new DrawerItem(
+          'Notifications', Notifications.route, Icons.notifications));
+    }
+    return items;
+  }
 
   static final List<DrawerItem> mechanicDrawerItems = [
     new DrawerItem(
@@ -88,7 +108,7 @@ class NavigationApp extends StatefulWidget {
         // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
       case Roles.ProviderConsultant:
-        return AppointmentsConsultant.route;
+        return consultantDrawerItems.first.route;
       case Roles.ProviderPersonnel:
         return AppointmentsMechanic.route;
       default:
@@ -110,7 +130,6 @@ class NavigationAppState extends State<NavigationApp> {
   @override
   Widget build(BuildContext context) {
     NotificationsManager.navigationAppState = this;
-
     if (widget.activeDrawerItems == null) {
       widget.activeDrawerItems = _initActiveDrawerItems();
     }
@@ -183,7 +202,7 @@ class NavigationAppState extends State<NavigationApp> {
       case Roles.ProviderAdmin:
         return NavigationApp.providerAdminDrawerItems;
       case Roles.ProviderConsultant:
-        return NavigationApp.consultantDrawerItems;
+        return widget.consultantDrawerItems;
       case Roles.ProviderPersonnel:
         return NavigationApp.mechanicDrawerItems;
       default:

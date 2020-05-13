@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/authentication/models/auth.model.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
+import 'package:app/modules/shared/managers/permissions-manager.dart';
 import 'package:app/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth with ChangeNotifier {
   final AuthService _authService = inject<AuthService>();
   final UserService _userService = inject<UserService>();
+  final ProviderService _providerService = inject<ProviderService>();
 
   JwtUserDetails authUserDetails;
 
@@ -21,7 +25,7 @@ class Auth with ChangeNotifier {
   List<User> users = [];
 
   bool get isAuth {
-    print('is auth $_token');
+    print('token $_token');
     return _token != null && authUserDetails != null;
   }
 
@@ -71,6 +75,17 @@ class Auth with ChangeNotifier {
 
     if (authUser != null) {
       this.authUserDetails = await _userService.getUserDetails(authUser.userId);
+
+      if (this.authUserDetails != null) {
+        if (this.authUserDetails.userProvider != null) {
+          if (this.authUserDetails.userRole.name == 'PROVIDER_ADMIN' ||
+              this.authUserDetails.userRole.name == 'PROVIDER_CONSULTANT') {
+            PermissionsManager.getInstance().serviceItemsResponse =
+                await _providerService.getProviderServiceItems(
+                    this.authUserDetails.userProvider.id);
+          }
+        }
+      }
     }
 
     notifyListeners();
@@ -89,6 +104,16 @@ class Auth with ChangeNotifier {
       if (authUser != null) {
         this.authUserDetails =
             await _userService.getUserDetails(authUser.userId);
+        if (this.authUserDetails != null) {
+          if (this.authUserDetails.userProvider != null) {
+            if (this.authUserDetails.userRole.name == 'PROVIDER_ADMIN' ||
+                this.authUserDetails.userRole.name == 'PROVIDER_CONSULTANT') {
+              PermissionsManager.getInstance().serviceItemsResponse =
+                  await _providerService.getProviderServiceItems(
+                      this.authUserDetails.userProvider.id);
+            }
+          }
+        }
       }
 
       notifyListeners();
