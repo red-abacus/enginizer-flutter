@@ -284,8 +284,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => print('schedule')));
     }
 
-    if (widget.mode == EstimatorMode.Create &&
-        widget.mode == EstimatorMode.CreateFinal) {
+    if (widget.mode == EstimatorMode.Create) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.assignment),
           foregroundColor: red,
@@ -544,28 +543,62 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     _workEstimateProvider.workEstimateRequest.percent = percentage;
     _workEstimateProvider.workEstimateRequest.timeToRespond = time;
 
+    print('info added !');
+
     setState(() {
       _isLoading = true;
     });
 
-    try {
-      await _workEstimateProvider
-          .createWorkEstimate(_workEstimateProvider.selectedAppointment.id,
-              _workEstimateProvider.workEstimateRequest)
-          .then((workEstimateDetails) async {
-        if (workEstimateDetails != null) {
-          Provider.of<AppointmentConsultantProvider>(context).initDone = false;
-          Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
+    switch (widget.mode) {
+      case EstimatorMode.Create:
+      case EstimatorMode.CreateFinal:
+        try {
+          await _workEstimateProvider
+              .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
+                  appointmentId: _workEstimateProvider.selectedAppointment.id)
+              .then((workEstimateDetails) async {
+            if (workEstimateDetails != null) {
+              Provider.of<AppointmentConsultantProvider>(context).initDone =
+                  false;
+              Provider.of<AppointmentsConsultantProvider>(context).initDone =
+                  false;
 
-          Navigator.pop(context);
-        } else {
-          setState(() {
-            _isLoading = false;
+              Navigator.pop(context);
+            } else {
+              setState(() {
+                _isLoading = false;
+              });
+            }
           });
+        } catch (error) {
+          _handleError(error);
         }
-      });
-    } catch (error) {
-      _handleError(error);
+        break;
+      case EstimatorMode.CreatePart:
+        try {
+          await _workEstimateProvider
+              .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
+                  auctionId: _workEstimateProvider.selectedAuction.id)
+              .then((workEstimateDetails) async {
+            if (workEstimateDetails != null) {
+              Provider.of<AppointmentConsultantProvider>(context).initDone =
+                  false;
+              Provider.of<AppointmentsConsultantProvider>(context).initDone =
+                  false;
+
+              Navigator.pop(context);
+            } else {
+              setState(() {
+                _isLoading = false;
+              });
+            }
+          });
+        } catch (error) {
+          _handleError(error);
+        }
+        break;
+      default:
+        break;
     }
   }
 

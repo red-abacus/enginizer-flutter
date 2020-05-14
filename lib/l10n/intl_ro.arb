@@ -420,5 +420,6 @@
   "exception_pause_appointment": "A intervenit o problemă la suspendarea programării.",
   "exception_add_appointment_recommendation": "A intervenit o problemă la adăugarea unei recomandări.",
   "exception_add_appointment_recommendation_image": "A intervenit o problemă la adăugarea imaginii.",
-  "exception_stop_appointment": "A intervenit o problemă la oprirea programării."
+  "exception_stop_appointment": "A intervenit o problemă la oprirea programării.",
+  "exception_appointment_request_items": "A intervenit o problemă la crearea cererii pentru produsele programării."
 }

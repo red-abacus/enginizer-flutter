@@ -40,10 +40,7 @@ class AuctionsService {
     if (pageSize != null) {
       queryParameters['pageSize'] = '$pageSize';
     }
-    
-    print('query parameters $queryParameters');
-    
-    
+
     try {
       final response =
           await _dio.get(_AUCTIONS_PATH, queryParameters: queryParameters);

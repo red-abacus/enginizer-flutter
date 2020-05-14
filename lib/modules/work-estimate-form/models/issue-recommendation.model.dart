@@ -50,6 +50,7 @@ class IssueRecommendation {
   }
 
   Map<String, dynamic> toCreateJson() {
+    print('id $id and name $name');
     Map<String, dynamic> propMap = {
       'id': null,
       'name': null,

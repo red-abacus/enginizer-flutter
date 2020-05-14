@@ -4,6 +4,7 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
@@ -39,6 +40,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetail;
+  Auction selectedAuction;
 
   int workEstimateId;
   int serviceProviderId;
@@ -143,9 +145,16 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   Future<WorkEstimateDetails> createWorkEstimate(
-      int appointmentId, WorkEstimateRequest workEstimateRequest) async {
+      WorkEstimateRequest workEstimateRequest,
+      {int appointmentId,
+      int auctionId}) async {
     Map<String, dynamic> content = workEstimateRequest.toJson();
-    content['appointmentId'] = appointmentId;
+
+    if (appointmentId != null) {
+      content['appointmentId'] = appointmentId;
+    } else if (auctionId != null) {
+      content['auctionId'] = auctionId;
+    }
 
     try {
       WorkEstimateDetails workEstimateDetails =

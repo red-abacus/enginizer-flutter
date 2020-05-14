@@ -40,6 +40,8 @@ class AppointmentsService {
   static const String ADD_APPOINTMENT_RECOMMENDATION_IMAGE_EXCEPTION =
       'ADD_APPOINTMENT_RECOMMENDATION_IMAGE_EXCEPTION';
   static const String STOP_APPOINTMENT_EXCEPTION = 'STOP_APPOINTMENT_EXCEPTION';
+  static const String APPOINTMENT_REQUEST_ITEMS_EXCEPTION =
+      'APPOINTMENT_REQUEST_ITEMS_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -73,10 +75,6 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _START_APPOINTMENT_TASK_SUFFIX = '/start';
 
-  static const String _START_APPOINTMENT_ISSUE_PREFIX =
-      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String _START_APPOINTMENT_ISSUE_SUFFIX = '/start';
-
   static const String _PAUSE_APPOINTMENT_TASK_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _PAUSE_APPOINTMENT_TASK_SUFFIX = '/pause';
@@ -94,7 +92,8 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _STOP_APPOINTMENT_SUFFIX = '/stop';
 
-  static const String _APPOINTMENT_REQUEST_ITEMS_PREFIX = '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _APPOINTMENT_REQUEST_ITEMS_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENT_REQUEST_ITEMS_SUFFIX = '/requestItems';
 
   Dio _dio = inject<Dio>();
@@ -344,6 +343,30 @@ class AppointmentsService {
     }
   }
 
+  Future<bool> requestAppointmentItems(
+      int appointmentId, int providerId) async {
+    Map<String, dynamic> queryParameters = {};
+
+    if (providerId != null) {
+      queryParameters['providerId'] = providerId.toString();
+    }
+
+    try {
+      final response = await _dio.patch(_buildRequestItemsPath(appointmentId),
+          data: queryParameters);
+
+      print('response ${response.data}');
+      print('status code ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(APPOINTMENT_REQUEST_ITEMS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(APPOINTMENT_REQUEST_ITEMS_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -443,5 +466,11 @@ class AppointmentsService {
     return _STOP_APPOINTMENT_PREFIX +
         appointmentId.toString() +
         _STOP_APPOINTMENT_SUFFIX;
+  }
+
+  _buildRequestItemsPath(int appointmentId) {
+    return _APPOINTMENT_REQUEST_ITEMS_PREFIX +
+        appointmentId.toString() +
+        _APPOINTMENT_REQUEST_ITEMS_SUFFIX;
   }
 }

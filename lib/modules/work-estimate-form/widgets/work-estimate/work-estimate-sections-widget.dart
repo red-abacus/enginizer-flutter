@@ -36,7 +36,6 @@ class _WorkEstimateSectionsWidgetState
     extends State<WorkEstimateSectionsWidget> {
   @override
   Widget build(BuildContext context) {
-    print('issue recommendations ${widget.issue.recommendations}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,

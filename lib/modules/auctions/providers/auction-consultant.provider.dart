@@ -1,5 +1,7 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/screens/appointment-details.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
@@ -15,12 +17,23 @@ class AuctionConsultantProvider with ChangeNotifier {
 
   Auction selectedAuction;
   AuctionDetail auctionDetails;
+  AppointmentDetail appointmentDetails;
 
   Future<AuctionDetail> getAuctionDetails(int auctionId) async {
     try {
       auctionDetails = await this._auctionsService.getAuctionDetails(auctionId);
       notifyListeners();
       return auctionDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
+    try {
+      appointmentDetails = await this.appointmentsService.getAppointmentDetails(appointmentId);
+      notifyListeners();
+      return appointmentDetails;
     } catch (error) {
       throw (error);
     }

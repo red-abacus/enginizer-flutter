@@ -17,6 +17,7 @@ class AppointmentDetailsPartsProviderEstimateWidget extends StatelessWidget {
   final Function downloadNextServiceProviders;
   final Function selectServiceProvider;
   final Function showServiceProviderDetails;
+  final Function requestItems;
 
   AppointmentDetailsPartsProviderEstimateWidget(
       {this.providerType,
@@ -25,7 +26,8 @@ class AppointmentDetailsPartsProviderEstimateWidget extends StatelessWidget {
       this.selectProviderType,
       this.downloadNextServiceProviders,
       this.selectServiceProvider,
-      this.showServiceProviderDetails});
+      this.showServiceProviderDetails,
+      this.requestItems});
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +134,9 @@ class AppointmentDetailsPartsProviderEstimateWidget extends StatelessWidget {
                 S.of(context).general_send,
                 style: TextHelper.customTextStyle(null, Colors.white, null, 14),
               ),
-              onPressed: () {},
+              onPressed: () {
+                requestItems();
+              },
             )
           ],
         ),

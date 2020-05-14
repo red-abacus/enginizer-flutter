@@ -43,7 +43,6 @@ class AuctionsList extends StatelessWidget {
   }
 
   Widget _buildSearchWidget(BuildContext context) {
-    print('auction status ${this.auctionStatus}');
     return Container(
       margin: EdgeInsets.only(top: 10.0, bottom: 10),
       child: TextField(

@@ -13,7 +13,8 @@ import 'package:app/modules/consultant-appointments/models/employee.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentConsultantProvider with ChangeNotifier {
-  final AppointmentsService appointmentsService = inject<AppointmentsService>();
+  final AppointmentsService _appointmentsService =
+      inject<AppointmentsService>();
   final ProviderService _providerService = inject<ProviderService>();
   final WorkEstimatesService _workEstimatesService =
       inject<WorkEstimatesService>();
@@ -50,7 +51,7 @@ class AppointmentConsultantProvider with ChangeNotifier {
       Appointment appointment) async {
     try {
       selectedAppointmentDetail =
-          await this.appointmentsService.getAppointmentDetails(appointment.id);
+          await this._appointmentsService.getAppointmentDetails(appointment.id);
       notifyListeners();
       return selectedAppointmentDetail;
     } catch (error) {
@@ -72,7 +73,7 @@ class AppointmentConsultantProvider with ChangeNotifier {
   Future<Appointment> cancelAppointment(Appointment appointment) async {
     try {
       selectedAppointment =
-          await this.appointmentsService.cancelAppointment(appointment.id);
+          await this._appointmentsService.cancelAppointment(appointment.id);
       notifyListeners();
       return selectedAppointment;
     } catch (error) {
@@ -106,6 +107,18 @@ class AppointmentConsultantProvider with ChangeNotifier {
       this.serviceProviders.addAll(_serviceProviderResponse.items);
       serviceProviderResponsePage += 1;
       return this.serviceProviders;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> requestAppointmentItems(
+      int appointmentId, int providerId) async {
+    try {
+      bool response = await _appointmentsService.requestAppointmentItems(
+          appointmentId, providerId);
+      notifyListeners();
+      return response;
     } catch (error) {
       throw (error);
     }

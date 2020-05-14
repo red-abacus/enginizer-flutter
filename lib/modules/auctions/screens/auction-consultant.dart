@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
@@ -80,10 +81,22 @@ class AuctionConsultantState extends State<AuctionConsultant> {
     try {
       await auctionProvider
           .getAuctionDetails(auctionProvider.selectedAuction.id)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+          .then((_) async {
+        if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions,
+            auctionPermission: AuctionPermission.CarDetails)) {
+          await auctionProvider
+              .getAppointmentDetails(
+                  auctionProvider.selectedAuction.appointment.id)
+              .then((_) {
+            setState(() {
+              _isLoading = false;
+            });
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     } catch (error) {
       if (error
@@ -91,6 +104,11 @@ class AuctionConsultantState extends State<AuctionConsultant> {
           .contains(AuctionsService.GET_AUCTION_DETAILS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_auction_details, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointment_details, context);
       }
 
       setState(() {
@@ -122,8 +140,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _buildContent() {
-    if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Auctions,
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions,
         auctionPermission: AuctionPermission.AppointmentDetails)) {
       return AuctionConsultantWidget(
           auction: auctionProvider.selectedAuction,
@@ -133,8 +150,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         MainPermissions.Auctions,
         auctionPermission: AuctionPermission.CarDetails)) {
       return AuctionConsultantPartsWidget(
-          auction: auctionProvider.selectedAuction,
           auctionDetails: auctionProvider.auctionDetails,
+          appointmentDetail: auctionProvider.appointmentDetails,
           createEstimate: _createEstimate,
           showProviderDetails: _showProviderDetails);
     }
@@ -162,6 +179,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   _createEstimate() {
     if (auctionProvider.auctionDetails != null) {
       Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).selectedAuction =
+          auctionProvider.selectedAuction;
       Provider.of<WorkEstimateProvider>(context)
           .setIssuesWithRecommendations(auctionProvider.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
@@ -177,9 +196,9 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _showProviderDetails() {
-    if (auctionProvider.auctionDetails.serviceProvider != null) {
+    if (auctionProvider.appointmentDetails.serviceProvider != null) {
       Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
-          auctionProvider.auctionDetails.serviceProvider.id;
+          auctionProvider.appointmentDetails.serviceProvider.id;
 
       showModalBottomSheet(
           isScrollControlled: true,

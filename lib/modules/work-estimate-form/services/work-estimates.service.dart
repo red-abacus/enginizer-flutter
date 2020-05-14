@@ -44,9 +44,12 @@ class WorkEstimatesService {
 
   Future<WorkEstimateDetails> addNewWorkEstimate(
       Map<String, dynamic> content) async {
+    print('content $content');
     try {
       final response = await _dio.post('$_CREATE_WORK_ESTIMATE_PATH',
           data: jsonEncode(content));
+
+      print('response $response');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         return WorkEstimateDetails.fromJson(response.data);
@@ -54,6 +57,7 @@ class WorkEstimatesService {
         throw Exception(ADD_NEW_WORK_ESTIMATE_EXCEPTION);
       }
     } catch (error) {
+      print('error $error');
       throw Exception(ADD_NEW_WORK_ESTIMATE_EXCEPTION);
     }
   }

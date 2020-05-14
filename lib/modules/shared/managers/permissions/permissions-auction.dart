@@ -21,7 +21,6 @@ class PermissionsAuction {
   bool consultantHasAccess(
       ServiceProviderItemsResponse serviceProviderItemsResponse,
       AuctionPermission permission) {
-    print('permission $permission');
     if (serviceProviderItemsResponse != null) {
       switch (permission) {
         case AuctionPermission.ConsultantAuctionDetails:

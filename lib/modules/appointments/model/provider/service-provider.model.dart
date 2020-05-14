@@ -33,6 +33,7 @@ class ServiceProvider {
     this.userProviderSchedules});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
+    print('service provider id ${json['id']}');
     return ServiceProvider(
         id: json['id'],
         name: json['name'] != null ? json["name"] : "",

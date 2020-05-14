@@ -238,7 +238,6 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
         if (userBid != null) {
           return FlatButton(
             child: Text(
-              // TODO - need proper translation for english version
               S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
             ),
@@ -252,7 +251,6 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
     return FlatButton(
       child: Text(
-        // TODO - need proper translation for english version
         S.of(context).auction_create_estimate.toUpperCase(),
         style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
       ),

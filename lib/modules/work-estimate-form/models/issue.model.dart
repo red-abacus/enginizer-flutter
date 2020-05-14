@@ -28,7 +28,6 @@ class Issue {
   }
 
   factory Issue.fromJson(Map<String, dynamic> json) {
-    print('new issue $json');
     return Issue(
         id: json['id'],
         name: json['name'],

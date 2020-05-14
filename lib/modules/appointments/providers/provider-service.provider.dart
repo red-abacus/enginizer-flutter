@@ -130,6 +130,8 @@ class ProviderServiceProvider with ChangeNotifier {
       }
     }
 
+    print('request ${appointmentRequest.toJson()}');
+
     appointmentRequest.scheduledTime = dateEntry.dateForAppointment();
     return appointmentRequest;
   }

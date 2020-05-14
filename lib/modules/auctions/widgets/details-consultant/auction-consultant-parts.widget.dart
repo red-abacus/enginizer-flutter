@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
-import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
@@ -15,22 +15,23 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AuctionConsultantPartsWidget extends StatelessWidget {
-  final Auction auction;
   final AuctionDetail auctionDetails;
+  final AppointmentDetail appointmentDetail;
   final Function createEstimate;
   final Function showProviderDetails;
 
   AuctionConsultantPartsWidget(
-      {this.auction,
-        this.auctionDetails,
-        this.createEstimate,
-        this.showProviderDetails});
+      {this.auctionDetails,
+      this.appointmentDetail,
+      this.createEstimate,
+      this.showProviderDetails});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildCarDetails(context, auctionDetails.car),
       floatingActionButton: _floatingButtons(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -60,38 +61,38 @@ class AuctionConsultantPartsWidget extends StatelessWidget {
                 children: [
                   (car.brand?.name != null)
                       ? Padding(
-                    padding:
-                    EdgeInsets.only(left: 20, top: 20, right: 20),
-                    child: TextWidget(
-                      "${car.brand?.name}",
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
+                          padding:
+                              EdgeInsets.only(left: 20, top: 20, right: 20),
+                          child: TextWidget(
+                            "${car.brand?.name}",
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
                       : Container(),
                   (car.year?.name != null && car.color?.name != null)
                       ? Padding(
-                    padding: EdgeInsets.only(top: 5, left: 20, right: 20),
-                    child: TextWidget(
-                      "${car.year?.name}, ${car.color?.translateColorName(context)}",
-                      fontSize: 14,
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 5, left: 20, right: 20),
+                          child: TextWidget(
+                            "${car.year?.name}, ${car.color?.translateColorName(context)}",
+                            fontSize: 14,
+                          ),
+                        )
                       : Container(),
                   (car.power?.name != null && car.motor?.name != null)
                       ? Padding(
-                      padding:
-                      EdgeInsets.only(left: 20, right: 20, top: 25),
-                      child: TextWidget(
-                          "${car.power?.name}, ${car.motor?.name}"))
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, top: 25),
+                          child: TextWidget(
+                              "${car.power?.name}, ${car.motor?.name}"))
                       : Container(),
                   (car.mileage != null)
                       ? Padding(
-                    padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 10),
-                    child: TextWidget(
-                        "${NumberFormat.decimalPattern().format(car.mileage)} KM"),
-                  )
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, top: 10),
+                          child: TextWidget(
+                              "${NumberFormat.decimalPattern().format(car.mileage)} KM"),
+                        )
                       : Container()
                 ],
               ),
@@ -100,23 +101,6 @@ class AuctionConsultantPartsWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _seeEstimate(Bid bid, BuildContext context) {
-    if (bid != null && bid.workEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
-      Provider.of<WorkEstimateProvider>(context).workEstimateId =
-          bid.workEstimateId;
-      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          bid.serviceProvider.id;
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
-      );
-    }
   }
 
   _floatingButtons(BuildContext context) {
@@ -147,7 +131,7 @@ class AuctionConsultantPartsWidget extends StatelessWidget {
     ));
 
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: 20, right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: buttons,

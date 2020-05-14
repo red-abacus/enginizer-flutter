@@ -195,7 +195,8 @@ class AppointmentDetailsConsultantState
             selectProviderType: _selectProviderType,
             downloadNextServiceProviders: _downloadNextServiceProviders,
             selectServiceProvider: _selectServiceProvider,
-            showServiceProviderDetails: _showServiceProviderDetails
+            showServiceProviderDetails: _showServiceProviderDetails,
+            requestItems: _requestItems,
           ),
           AppointmentDetailsDocumentsWidget()
         ]);
@@ -419,6 +420,64 @@ class AppointmentDetailsConsultantState
             return ServiceDetailsModal();
           });
         });
+  }
+
+  _requestItems() async {
+    switch (_provider.appointmentProviderType) {
+      case AppointmentProviderType.Specific:
+        if (_provider.selectedServiceProvider != null) {
+          setState(() {
+            _isLoading = true;
+          });
+
+          try {
+            await _provider
+                .requestAppointmentItems(_provider.selectedAppointment.id,
+                    _provider.selectedAppointment.serviceProvider.id)
+                .then((success) {
+              if (success) {
+                // TODO = part shop
+              }
+            });
+          } catch (error) {
+            if (error.toString().contains(
+                AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
+              FlushBarHelper.showFlushBar(S.of(context).general_error,
+                  S.of(context).exception_appointment_request_items, context);
+            }
+
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        }
+        break;
+      case AppointmentProviderType.Auction:
+        setState(() {
+          _isLoading = true;
+        });
+
+        try {
+          await _provider
+              .requestAppointmentItems(_provider.selectedAppointment.id, null)
+              .then((success) {
+            if (success) {
+              // TODO = part shop
+            }
+          });
+        } catch (error) {
+          if (error.toString().contains(
+              AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
+            FlushBarHelper.showFlushBar(S.of(context).general_error,
+                S.of(context).exception_appointment_request_items, context);
+          }
+
+          setState(() {
+            _isLoading = false;
+          });
+        }
+        break;
+    }
   }
 
 //  _createFinalEstimate() {
