@@ -5,7 +5,7 @@ import 'package:app/modules/appointments/widgets/service-details-modal.widget.da
 import 'package:app/modules/auctions/enum/bid-status.enum.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';

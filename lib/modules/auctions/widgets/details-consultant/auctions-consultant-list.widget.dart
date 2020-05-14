@@ -20,12 +20,12 @@ class AuctionsConsultantList extends StatelessWidget {
 
   AuctionsConsultantList(
       {this.carBrands,
-        this.auctions,
-        this.filterAuctions,
-        this.selectAuction,
-        this.searchString,
-        this.auctionStatus,
-        this.carBrand});
+      this.auctions,
+      this.filterAuctions,
+      this.selectAuction,
+      this.searchString,
+      this.auctionStatus,
+      this.carBrand});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class AuctionsConsultantList extends StatelessWidget {
         key: Key('searchBar'),
         autofocus: false,
         decoration:
-        InputDecoration(labelText: S.of(context).auctions_search_hint),
+            InputDecoration(labelText: S.of(context).auctions_search_hint),
         onChanged: (val) {
           this.filterAuctions(val, this.auctionStatus, this.carBrand);
         },
@@ -70,7 +70,10 @@ class AuctionsConsultantList extends StatelessWidget {
             height: 40,
             child: DropdownButtonFormField(
               isDense: true,
-              hint: _statusText(context),
+              hint: Text(
+                AuctionStatusUtils.titleFromStatus(auctionStatus, context),
+                style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
+              ),
               items: _statusDropdownItems(context),
               onChanged: (newValue) {
                 this.filterAuctions(this.searchString, newValue, this.carBrand);
@@ -99,18 +102,7 @@ class AuctionsConsultantList extends StatelessWidget {
 
   Widget _brandText(BuildContext context) {
     String title =
-    (this.carBrand == null) ? S.of(context).general_car : carBrand.name;
-
-    return Text(
-      title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
-    );
-  }
-
-  Widget _statusText(BuildContext context) {
-    String title = (this.auctionStatus == null)
-        ? S.of(context).general_status
-        : _titleFromState(this.auctionStatus, context);
+        (this.carBrand == null) ? S.of(context).general_car : carBrand.name;
 
     return Text(
       title,
@@ -136,8 +128,7 @@ class AuctionsConsultantList extends StatelessWidget {
   _statusDropdownItems(BuildContext context) {
     List<DropdownMenuItem<AuctionStatus>> brandDropdownList = [];
     brandDropdownList.add(DropdownMenuItem(
-        value: AuctionStatus.IN_BID,
-        child: Text(S.of(context).general_auction)));
+        value: AuctionStatus.OPEN, child: Text(S.of(context).general_auction)));
     brandDropdownList.add(DropdownMenuItem(
         value: AuctionStatus.FINISHED,
         child: Text(S.of(context).auctions_finished)));
@@ -156,16 +147,5 @@ class AuctionsConsultantList extends StatelessWidget {
 
   _selectAuction(Auction auction) {
     this.selectAuction(auction);
-  }
-
-  _titleFromState(AuctionStatus status, BuildContext context) {
-    switch (status) {
-      case AuctionStatus.IN_BID:
-        return S.of(context).general_auction;
-      case AuctionStatus.FINISHED:
-        return S.of(context).auctions_finished;
-      case AuctionStatus.ALL:
-        return S.of(context).general_all;
-    }
   }
 }

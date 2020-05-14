@@ -2,7 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-car-details.widget.dart';
 import 'package:app/modules/mechanic-appointments/widgets/appointment-details-mechanic-service-history.widget.dart';

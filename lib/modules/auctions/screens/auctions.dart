@@ -1,15 +1,15 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
-import 'package:app/modules/auctions/screens/auction-details.dart';
+import 'package:app/modules/auctions/screens/auction-consultant.dart';
+import 'package:app/modules/auctions/screens/auction.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/auctions-list.dart';
-import 'package:app/modules/cars/models/car-brand.model.dart';
-import 'package:app/modules/cars/models/car-query.model.dart';
-import 'package:app/modules/cars/services/car-make.service.dart';
-import 'package:app/utils/locale.manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +53,9 @@ class AuctionsState extends State<Auctions> {
       setState(() {
         _isLoading = true;
       });
+
+      auctionsProvider = Provider.of<AuctionsProvider>(context);
+      auctionsProvider.resetParameters();
       _loadData();
     }
 
@@ -61,28 +64,14 @@ class AuctionsState extends State<Auctions> {
   }
 
   _loadData() async {
-    auctionsProvider = Provider.of<AuctionsProvider>(context);
-    auctionsProvider.resetParameters();
-
     try {
       await auctionsProvider.loadAuctions().then((_) async {
-        await auctionsProvider
-            .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
-            .then((_) async {
-          setState(() {
-            _isLoading = false;
-          });
+        setState(() {
+          _isLoading = false;
         });
       });
     } catch (error) {
-      if (error
-          .toString()
-          .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_load_car_brands, context);
-      } else if (error
-          .toString()
-          .contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
+      if (error.toString().contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_auctions, context);
       }
@@ -99,25 +88,34 @@ class AuctionsState extends State<Auctions> {
             child: CircularProgressIndicator(),
           )
         : AuctionsList(
-            carBrands: auctionsProvider.carBrands,
             auctions: auctionsProvider.auctions,
             filterAuctions: _filterAuctions,
             selectAuction: _selectAuction,
             searchString: auctionsProvider.searchString,
             auctionStatus: auctionsProvider.filterStatus,
-            carBrand: auctionsProvider.filterCarBrand);
+            downloadNextPage: _loadData);
   }
 
-  _filterAuctions(String value, AuctionStatus status, CarBrand carBrand) {
-    auctionsProvider.filterAuctions(value, status, carBrand);
+  _filterAuctions(String value, AuctionStatus status) {
+    auctionsProvider.filterAuctions(value, status);
+    _loadData();
   }
 
   _selectAuction(Auction auction) {
-    AuctionProvider provider =
-        Provider.of<AuctionProvider>(context, listen: false);
-    provider.initialiseParameters();
-    provider.selectedAuction = auction;
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions, auctionPermission: AuctionPermission.AuctionDetails)) {
+      AuctionProvider provider =
+      Provider.of<AuctionProvider>(context, listen: false);
+      provider.initialiseParameters();
+      provider.selectedAuction = auction;
 
-    Navigator.of(context).pushNamed(AuctionDetails.route);
+      Navigator.of(context).pushNamed(AuctionDetails.route);
+    }
+    else if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions, auctionPermission: AuctionPermission.ConsultantAuctionDetails)) {
+      AuctionConsultantProvider provider =
+      Provider.of<AuctionConsultantProvider>(context, listen: false);
+      provider.selectedAuction = auction;
+
+      Navigator.of(context).pushNamed(AuctionConsultant.route);
+    }
   }
 }

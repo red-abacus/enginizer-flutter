@@ -8,7 +8,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/consultant-appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';

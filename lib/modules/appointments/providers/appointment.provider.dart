@@ -3,7 +3,7 @@ import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:flutter/cupertino.dart';
 

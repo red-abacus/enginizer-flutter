@@ -8,14 +8,13 @@ import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-consultant.dart';
-import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
-import 'package:app/modules/shared/managers/permissions-manager.dart';
-import 'package:app/modules/shared/managers/permissions-side-bar.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
@@ -67,23 +66,23 @@ class NavigationApp extends StatefulWidget {
   List<DrawerItem> get consultantDrawerItems {
     List<DrawerItem> items = [];
 
-    if (PermissionsManager.getInstance().consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Appointments)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Appointments)) {
       items.add(new DrawerItem(
           "Appointments", AppointmentsConsultant.route, Icons.dashboard));
     }
 
     if (PermissionsManager.getInstance()
-        .consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Auctions)) {
+        .hasAccess(MainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Auctions)) {
       items.add(new DrawerItem(
-          "Auctions", AuctionsConsultant.route, Icons.dashboard));
+          "Auctions", Auctions.route, Icons.dashboard));
     }
 
-    if (PermissionsManager.getInstance().consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.WorkEstimates)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.WorkEstimates)) {
       items.add(new DrawerItem(
           "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard));
     }
 
-    if (PermissionsManager.getInstance().consultantHasAccess(ConsultantMainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Notifications)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Notifications)) {
       items.add(new DrawerItem(
           'Notifications', Notifications.route, Icons.notifications));
     }
@@ -229,8 +228,6 @@ class NavigationAppState extends State<NavigationApp> {
         return Auctions();
       case Shop.route:
         return Shop();
-      case AuctionsConsultant.route:
-        return AuctionsConsultant();
       case AppointmentsConsultant.route:
         return AppointmentsConsultant();
       case AppointmentsMechanic.route:

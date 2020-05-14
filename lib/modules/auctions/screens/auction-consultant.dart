@@ -1,12 +1,18 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
-import 'package:app/modules/consultant-auctions/providers/auction-consultant.provider.dart';
-import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
-import 'package:app/modules/consultant-auctions/widgets/auction-consultant-parts.widget.dart';
-import 'package:app/modules/consultant-auctions/widgets/auction-consultant.widget.dart';
-import 'package:app/modules/shared/managers/permissions-auction.dart';
-import 'package:app/modules/shared/managers/permissions-manager.dart';
+import 'package:app/modules/auctions/widgets/details-consultant/auction-consultant-parts.widget.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/auctions/widgets/details-consultant/auction-consultant.widget.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuctionConsultant extends StatefulWidget {
-  static const String route = '/${AuctionsConsultant.route}/auction-consultant';
+  static const String route = '/${Auctions.route}/auction-consultant';
 
   @override
   State<StatefulWidget> createState() {
@@ -106,7 +112,6 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       children: <Widget>[
         Expanded(
           child: Container(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: _isLoading
                 ? Center(child: CircularProgressIndicator())
                 : _buildContent(),
@@ -117,20 +122,21 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _buildContent() {
-    if (PermissionsManager.getInstance().consultantHasAccess(
-        ConsultantMainPermissions.Auctions,
-        auctionPermission: ConsultantAuctionPermission.AppointmentDetails)) {
+    if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions,
+        auctionPermission: AuctionPermission.AppointmentDetails)) {
       return AuctionConsultantWidget(
           auction: auctionProvider.selectedAuction,
           auctionDetails: auctionProvider.auctionDetails,
           createBid: _createBid);
-    } else if (PermissionsManager.getInstance().consultantHasAccess(
-        ConsultantMainPermissions.Auctions,
-        auctionPermission: ConsultantAuctionPermission.CarDetails)) {
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions,
+        auctionPermission: AuctionPermission.CarDetails)) {
       return AuctionConsultantPartsWidget(
           auction: auctionProvider.selectedAuction,
           auctionDetails: auctionProvider.auctionDetails,
-          createBid: _createBid);
+          createEstimate: _createEstimate,
+          showProviderDetails: _showProviderDetails);
     }
 
     return Container(child: Text('No permission !'));
@@ -150,6 +156,40 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_create_bid, context);
       }
+    }
+  }
+
+  _createEstimate() {
+    if (auctionProvider.auctionDetails != null) {
+      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context)
+          .setIssuesWithRecommendations(auctionProvider.auctionDetails.issues);
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          Provider.of<Auth>(context).authUserDetails.userProvider.id;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.CreatePart)),
+      );
+    }
+  }
+
+  _showProviderDetails() {
+    if (auctionProvider.auctionDetails.serviceProvider != null) {
+      Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
+          auctionProvider.auctionDetails.serviceProvider.id;
+
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (_) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return ServiceDetailsModal();
+            });
+          });
     }
   }
 }

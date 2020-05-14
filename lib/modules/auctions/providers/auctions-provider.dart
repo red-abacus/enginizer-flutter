@@ -3,8 +3,6 @@ import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
-import 'package:app/modules/cars/models/car-brand.model.dart';
-import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:flutter/foundation.dart';
 
@@ -13,55 +11,48 @@ class AuctionsProvider with ChangeNotifier {
   AuctionsService auctionsService = inject<AuctionsService>();
 
   AuctionStatus filterStatus;
-  CarBrand filterCarBrand;
-  String searchString = "";
-  List<CarBrand> carBrands = [];
+  String searchString;
   List<Auction> auctions = [];
 
   AuctionResponse auctionResponse;
 
-  Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
-    try {
-      carBrands = await carMakeService.getCarBrands(carQuery);
-      return carBrands;
-    }
-    catch(error) {
-      throw(error);
-    }
+  int _auctionPage = 0;
+  int _pageSize = 20;
+
+  void resetParameters() {
+    _auctionPage = 0;
+    this.filterStatus = null;
+    this.searchString = null;
+
+    auctions = [];
   }
 
   Future<AuctionResponse> loadAuctions() async {
+    if (auctionResponse != null) {
+      if (_auctionPage >= auctionResponse.totalPages) {
+        return null;
+      }
+    }
+
     try {
-      auctionResponse = await auctionsService.getAuctions();
-      this.auctions = auctionResponse.auctions;
+      auctionResponse = await auctionsService.getAuctions(_auctionPage,
+          pageSize: _pageSize,
+          searchString: this.searchString,
+          status: AuctionStatusUtils.rawStringFromStatus(this.filterStatus));
+      this.auctions.addAll(auctionResponse.auctions);
+      _auctionPage += 1;
       return auctionResponse;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
-  Future<List<Auction>> filterAuctions(String searchString,
-      AuctionStatus filterStatus, CarBrand filterCarBrand) async {
+  filterAuctions(String searchString, AuctionStatus filterStatus) {
+    this._auctionPage = 0;
+    this.auctionResponse = null;
+    this.auctions = [];
+
     this.searchString = searchString;
     this.filterStatus = filterStatus;
-    this.filterCarBrand = filterCarBrand;
-
-    auctions = auctionResponse.auctions;
-
-    auctions = auctions
-        .where((auction) => auction.filtered(
-            this.searchString, this.filterStatus, this.filterCarBrand))
-        .toList();
-    notifyListeners();
-    return auctions;
-  }
-
-  void resetParameters() {
-    this.filterStatus = null;
-    this.filterCarBrand = null;
-    this.searchString = "";
-
-    carBrands = [];
-    auctions = [];
   }
 }

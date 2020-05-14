@@ -1,15 +1,13 @@
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
-import 'package:app/modules/shared/managers/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsAuction {
   List<ConsultantServiceType> appointmentDetailsPermissions = [
     ConsultantServiceType.Service,
-    ConsultantServiceType.PartShop,
-    ConsultantServiceType.DismantlingShop
   ];
   List<ConsultantServiceType> carDetailsPermissions = [
-    ConsultantServiceType.Service
+    ConsultantServiceType.PartShop,
+    ConsultantServiceType.DismantlingShop
   ];
   List<ConsultantServiceType> createWorkEstimatePermissions = [
     ConsultantServiceType.Service,
@@ -20,24 +18,30 @@ class PermissionsAuction {
     ConsultantServiceType.Service
   ];
 
-  bool consultantHasAccess(ServiceProviderItemsResponse serviceProviderItemsResponse,
-      ConsultantAuctionPermission permission) {
+  bool consultantHasAccess(
+      ServiceProviderItemsResponse serviceProviderItemsResponse,
+      AuctionPermission permission) {
+    print('permission $permission');
     if (serviceProviderItemsResponse != null) {
       switch (permission) {
-        case ConsultantAuctionPermission.AppointmentDetails:
-          return serviceProviderItemsResponse.containsServiceType(
-              appointmentDetailsPermissions);
-        case ConsultantAuctionPermission.CreateWorkEstimate:
+        case AuctionPermission.ConsultantAuctionDetails:
+          return true;
+        case AuctionPermission.AppointmentDetails:
+          return serviceProviderItemsResponse
+              .containsServiceType(appointmentDetailsPermissions);
+        case AuctionPermission.CreateWorkEstimate:
           return serviceProviderItemsResponse
               .containsServiceType(carDetailsPermissions);
           break;
-        case ConsultantAuctionPermission.CarDetails:
+        case AuctionPermission.CarDetails:
           return serviceProviderItemsResponse
               .containsServiceType(createWorkEstimatePermissions);
           break;
-        case ConsultantAuctionPermission.CreatePartWorkEstimate:
+        case AuctionPermission.CreatePartWorkEstimate:
           return serviceProviderItemsResponse
               .containsServiceType(createPartWorkEstimatePermission);
+          break;
+        default:
           break;
       }
     }
@@ -46,7 +50,9 @@ class PermissionsAuction {
   }
 }
 
-enum ConsultantAuctionPermission {
+enum AuctionPermission {
+  AuctionDetails,
+  ConsultantAuctionDetails,
   AppointmentDetails,
   CarDetails,
   CreateWorkEstimate,

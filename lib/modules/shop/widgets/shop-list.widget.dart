@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/consultant-auctions/cards/auction-consultant.card.dart';
 import 'package:app/modules/shared/widgets/multi-select-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/single-select-dialog.widget.dart';
 import 'package:app/modules/shop/cards/shop-item.card.dart';

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
@@ -24,9 +25,28 @@ class AuctionsService {
 
   AuctionsService();
 
-  Future<AuctionResponse> getAuctions() async {
+  Future<AuctionResponse> getAuctions(int page,
+      {String status, String searchString, int pageSize}) async {
+    Map<String, dynamic> queryParameters = {'page': '$page'};
+
+    if (status != null) {
+      queryParameters['status'] = status;
+    }
+
+    if (searchString != null) {
+      queryParameters['search'] = searchString;
+    }
+
+    if (pageSize != null) {
+      queryParameters['pageSize'] = '$pageSize';
+    }
+    
+    print('query parameters $queryParameters');
+    
+    
     try {
-      final response = await _dio.get(_AUCTIONS_PATH);
+      final response =
+          await _dio.get(_AUCTIONS_PATH, queryParameters: queryParameters);
 
       if (response.statusCode == 200) {
         return AuctionResponse.fromJson(response.data);

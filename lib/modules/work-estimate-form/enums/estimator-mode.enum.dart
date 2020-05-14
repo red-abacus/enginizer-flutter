@@ -1,1 +1,1 @@
-enum EstimatorMode { Create, CreateFinal, ReadOnly, Client, ClientAccept }
+enum EstimatorMode { Create, CreatePart, CreateFinal, ReadOnly, Client, ClientAccept }

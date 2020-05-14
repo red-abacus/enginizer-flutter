@@ -6,10 +6,11 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/authentication/models/auth.model.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
+import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
-import 'package:app/modules/shared/managers/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,12 +75,14 @@ class Auth with ChangeNotifier {
     _token = prefs.getString('token');
 
     if (authUser != null) {
+      PermissionsManager.getInstance().userRole = authUser.role;
+
       this.authUserDetails = await _userService.getUserDetails(authUser.userId);
 
       if (this.authUserDetails != null) {
         if (this.authUserDetails.userProvider != null) {
-          if (this.authUserDetails.userRole.name == 'PROVIDER_ADMIN' ||
-              this.authUserDetails.userRole.name == 'PROVIDER_CONSULTANT') {
+          if (authUser.role == Roles.ProviderAdmin ||
+              authUser.role == Roles.ProviderConsultant) {
             PermissionsManager.getInstance().serviceItemsResponse =
                 await _providerService.getProviderServiceItems(
                     this.authUserDetails.userProvider.id);
@@ -102,12 +105,14 @@ class Auth with ChangeNotifier {
       prefs.setString("email", email);
 
       if (authUser != null) {
+        PermissionsManager.getInstance().userRole = authUser.role;
+
         this.authUserDetails =
             await _userService.getUserDetails(authUser.userId);
         if (this.authUserDetails != null) {
           if (this.authUserDetails.userProvider != null) {
-            if (this.authUserDetails.userRole.name == 'PROVIDER_ADMIN' ||
-                this.authUserDetails.userRole.name == 'PROVIDER_CONSULTANT') {
+            if (authUser.role == Roles.ProviderAdmin ||
+                authUser.role == Roles.ProviderConsultant) {
               PermissionsManager.getInstance().serviceItemsResponse =
                   await _providerService.getProviderServiceItems(
                       this.authUserDetails.userProvider.id);

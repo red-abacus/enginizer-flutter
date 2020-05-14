@@ -7,7 +7,7 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -71,6 +71,13 @@ class WorkEstimateProvider with ChangeNotifier {
   void setIssues(List<Issue> issues) {
     for (Issue issue in issues) {
       issue.clearItems();
+    }
+    workEstimateRequest.issues = issues;
+  }
+
+  void setIssuesWithRecommendations(List<Issue> issues) {
+    for (Issue issue in issues) {
+      issue.clearDefaultRecommendations();
     }
     workEstimateRequest.issues = issues;
   }

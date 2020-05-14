@@ -62,8 +62,10 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                               top: 4, bottom: 4, right: 4, left: 10),
                           child: InkWell(
                             onTap: () => {
-                              showSectionName(
-                                  this.issue, this.issueRecommendation)
+                              if (estimatorMode != EstimatorMode.CreatePart) {
+                                showSectionName(
+                                    this.issue, this.issueRecommendation)
+                              }
                             },
                             child: Text(
                               issueRecommendation.isNew
@@ -116,7 +118,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
     if (estimatorMode == EstimatorMode.ReadOnly ||
         estimatorMode == EstimatorMode.Create ||
         estimatorMode == EstimatorMode.CreateFinal ||
-        estimatorMode == EstimatorMode.ClientAccept) {
+        estimatorMode == EstimatorMode.ClientAccept ||
+        estimatorMode == EstimatorMode.CreatePart) {
       return Container();
     }
 

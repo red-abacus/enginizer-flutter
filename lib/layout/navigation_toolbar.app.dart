@@ -7,7 +7,6 @@ import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-consultant.dart';
-import 'package:app/modules/consultant-auctions/screens/auctions-consultant.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
@@ -173,8 +172,6 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
         return Auctions();
       case Shop.route:
         return Shop();
-      case AuctionsConsultant.route:
-        return AuctionsConsultant();
       case AppointmentsConsultant.route:
         return AppointmentsConsultant();
       case AppointmentsMechanic.route:

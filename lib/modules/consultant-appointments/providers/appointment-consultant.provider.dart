@@ -8,7 +8,7 @@ import 'package:app/modules/appointments/model/response/service-providers-respon
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee.dart';
 import 'package:flutter/cupertino.dart';
 

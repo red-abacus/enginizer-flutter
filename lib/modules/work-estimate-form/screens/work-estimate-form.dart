@@ -6,7 +6,7 @@ import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/auctions/services/work-estimates.service.dart';
+import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
@@ -284,7 +284,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => print('schedule')));
     }
 
-    if (widget.mode == EstimatorMode.Create ||
+    if (widget.mode == EstimatorMode.Create &&
         widget.mode == EstimatorMode.CreateFinal) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.assignment),
@@ -296,8 +296,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => _assignMechanic()));
     }
 
-    if (widget.mode != EstimatorMode.ReadOnly ||
-        widget.mode != EstimatorMode.CreateFinal) {
+    if (widget.mode != EstimatorMode.ReadOnly &&
+        widget.mode != EstimatorMode.CreateFinal &&
+        widget.mode != EstimatorMode.CreatePart) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.add),
           foregroundColor: red,
@@ -308,7 +309,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => _addOperation()));
     }
 
-    if (widget.mode != EstimatorMode.Create) {
+    if (widget.mode != EstimatorMode.Create &&
+        widget.mode != EstimatorMode.CreatePart) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.history),
           foregroundColor: red,

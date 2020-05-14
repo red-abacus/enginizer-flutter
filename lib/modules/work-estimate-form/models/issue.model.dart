@@ -8,14 +8,27 @@ class Issue {
   Issue({this.id, this.name, this.recommendations = const []});
 
   clearItems() {
-    for (IssueRecommendation section in recommendations) {
-      section.clearItems();
+    for (IssueRecommendation recommendation in recommendations) {
+      recommendation.clearItems();
     }
 
     recommendations = [];
   }
 
+  clearDefaultRecommendations() {
+    List<IssueRecommendation> recommendations = [];
+
+    for (IssueRecommendation recommendation in this.recommendations) {
+      if (recommendation.id != null && recommendation.id != 0) {
+        recommendations.add(recommendation);
+      }
+    }
+
+    this.recommendations = recommendations;
+  }
+
   factory Issue.fromJson(Map<String, dynamic> json) {
+    print('new issue $json');
     return Issue(
         id: json['id'],
         name: json['name'],

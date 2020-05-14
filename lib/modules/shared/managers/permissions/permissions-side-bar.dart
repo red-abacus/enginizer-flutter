@@ -1,5 +1,5 @@
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:app/modules/shared/managers/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsSideBar {
   List<ConsultantServiceType> profilePermissions = [

@@ -12,7 +12,7 @@ class Auction {
   Car car;
   String createdDate;
   bool isLost;
-  String status;
+  AuctionStatus status;
 
   Auction(
       {this.id,
@@ -31,7 +31,9 @@ class Auction {
         car: json["car"] != null ? Car.fromJson(json["car"]) : null,
         createdDate: json["createdDate"] != null ? json["createdDate"] : "",
         isLost: json["isLost"] != null ? json["isLost"] : true,
-        status: json["status"] != null ? json["status"] : "");
+        status: json["status"] != null
+            ? AuctionStatusUtils.statusFromString(json["status"])
+            : "");
   }
 
   bool filtered(String value, AuctionStatus auctionStatus, CarBrand carBrand) {
@@ -54,7 +56,7 @@ class Auction {
     bool filterStatus = false;
 
     if (auctionStatus != null) {
-      if (auctionStatus == AuctionStatus.ALL || getStatus() == auctionStatus) {
+      if (auctionStatus == AuctionStatus.ALL || status == auctionStatus) {
         filterStatus = true;
       }
     } else {
@@ -74,13 +76,5 @@ class Auction {
     }
 
     return filterTitle && filterStatus && filterBrand;
-  }
-
-  AuctionStatus getStatus() {
-    if (this.status.toLowerCase() == "open") {
-      return AuctionStatus.IN_BID;
-    }
-
-    return AuctionStatus.FINISHED;
   }
 }

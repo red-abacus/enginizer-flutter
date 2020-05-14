@@ -197,7 +197,6 @@ class AppointmentDetailsGenericConsultantWidgetState
     }
 
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: buttons,
