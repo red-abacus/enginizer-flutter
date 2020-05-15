@@ -1,6 +1,7 @@
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
+import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/screens/shop-product-details.dart';
@@ -30,13 +31,14 @@ class ShopState extends State<Shop> {
   ShopState({this.route});
 
   ShopCategoryType shopCategoryType = ShopCategoryType.SERVICES;
+  ShopListType _shopListType = ShopListType.List;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AuctionsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
-          child: _renderAuctions(_isLoading),
+          child: _renderList(_isLoading),
         ),
       ),
     );
@@ -52,7 +54,7 @@ class ShopState extends State<Shop> {
     super.didChangeDependencies();
   }
 
-  _renderAuctions(bool _isLoading) {
+  _renderList(bool _isLoading) {
     return _isLoading
         ? Center(
             child: CircularProgressIndicator(),
@@ -65,7 +67,9 @@ class ShopState extends State<Shop> {
             searchCategorySort: _provider.searchSort,
             shopCategoryType: shopCategoryType,
             selectCategoryType: _selectCategoryType,
-      selectShopItem: _selectShopItem,
+            selectShopItem: _selectShopItem,
+            shopListType: _shopListType,
+            selectListType: _selectListType,
           );
   }
 
@@ -86,9 +90,14 @@ class ShopState extends State<Shop> {
   _selectShopItem() {
     if (shopCategoryType == ShopCategoryType.SERVICES) {
       Navigator.of(context).pushNamed(ShopServiceDetails.route);
-    }
-    else {
+    } else {
       Navigator.of(context).pushNamed(ShopProductDetails.route);
     }
+  }
+
+  _selectListType(ShopListType shopListType) {
+    setState(() {
+      _shopListType = shopListType;
+    });
   }
 }

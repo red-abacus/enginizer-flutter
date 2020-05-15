@@ -1,6 +1,6 @@
 import 'package:app/modules/cars/models/car.model.dart';
-import 'package:app/modules/shop/cards/shop-appointment-car.card.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
+import 'package:app/modules/shop/widgets/cards/shop-appointment-car.card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

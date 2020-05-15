@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:app/generated/l10n.dart';
 
-class ShopItemCard extends StatelessWidget {
+class ShopItemGrid extends StatelessWidget {
   final Function selectShopItem;
   final int index;
 
-  ShopItemCard({this.index, this.selectShopItem});
+  ShopItemGrid({this.index, this.selectShopItem});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
-        margin: EdgeInsets.only(bottom: 10, left: 40, right: 40),
         padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
+          color: red,
           boxShadow: [
             BoxShadow(
               color: gray_80,
@@ -34,26 +34,37 @@ class ShopItemCard extends StatelessWidget {
             onTap: () => this.selectShopItem(),
             child: ClipRRect(
               child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    _imageContainer(context),
-                    _titleContainer(),
-                    _detailsContainer(),
-                    _priceContainer(context),
-                    _detailsButton(context),
-                    _valabilityContainer(context),
-
-//                    _statusContainer(context),
-                  ]),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _imageContainer(context),
+                  _titleContainer(),
+                  Expanded(
+                    child: _detailsContainer(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: Column(
+                        children: <Widget>[
+                          _priceContainer(context),
+                          _detailsButton(context),
+                          _valabilityContainer(context)
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
       );
     });
   }
-
+  
   _pointContainer(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
@@ -73,9 +84,9 @@ class ShopItemCard extends StatelessWidget {
               height: 40,
               child: Center(
                   child: Text(
-                    '-50%',
-                    style: TextHelper.customTextStyle(null, Colors.white, null, 14),
-                  )),
+                '-50%',
+                style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+              )),
             ),
           )
         ],
@@ -133,9 +144,11 @@ class ShopItemCard extends StatelessWidget {
 
   _titleContainer() {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Text(
-          'Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          'Pickup & Return Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
               color: Colors.black87,
               fontFamily: 'Lato',
@@ -146,7 +159,7 @@ class ShopItemCard extends StatelessWidget {
 
   _detailsContainer() {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Text(
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent gravida condimentum purus ut rhoncus. Etiam malesuada orci turpis, a varius orci sagittis at. Curabitur rutrum eget quam et ullamcorper. Nullam vel ante rhoncus, aliquet lacus vel, sodales nisi. Suspendisse potenti. Curabitur in purus varius, fermentum ante id, porttitor nunc. Donec sit amet eros aliquam, pellentesque arcu et, ultrices sem. Morbi eu turpis quis enim tincidunt mollis. Maecenas eget ante euismod, dictum leo ac, fringilla neque. Phasellus eget arcu massa. Aenean imperdiet ullamcorper nisi et hendrerit. ',
           maxLines: 3,
@@ -161,7 +174,7 @@ class ShopItemCard extends StatelessWidget {
 
   _priceContainer(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -188,7 +201,7 @@ class ShopItemCard extends StatelessWidget {
 
   _detailsButton(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       color: red_light,
       height: 40,
       child: Stack(
@@ -230,7 +243,7 @@ class ShopItemCard extends StatelessWidget {
         '${S.of(context).online_shop_card_valability_title}: 20 Mai - 15 Iunie';
 
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

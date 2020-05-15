@@ -317,7 +317,11 @@ class ProviderService {
     List<Employee> list = [];
 
     response.forEach((item) {
-      list.add(Employee.fromJson(item));
+      Employee employee = Employee.fromJson(item);
+
+      if (employee.timeSeries.length > 0) {
+        list.add(employee);
+      }
     });
 
     return list;

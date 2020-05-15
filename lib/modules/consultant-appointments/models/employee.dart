@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 
 class Employee {
@@ -29,7 +30,11 @@ class Employee {
         List<dynamic> timeSeriesObjects = item['timeSeries'];
 
         timeSeriesObjects.forEach((object) {
-          timeSeries.add(EmployeeTimeSerie.fromJson(employeeId, date, object));
+          EmployeeTimeSerie employeeTimeSerie = EmployeeTimeSerie.fromJson(employeeId, date, object);
+
+          if (employeeTimeSerie.getStatus() == DateEntryStatus.Free) {
+            timeSeries.add(employeeTimeSerie);
+          }
         });
       }
 

@@ -1,4 +1,4 @@
-import 'package:app/modules/shop/cards/shop-appointment-service.card.dart';
+import 'package:app/modules/shop/widgets/cards/shop-appointment-service.card.dart';
 import 'package:flutter/cupertino.dart';
 
 class ShopServiceAppointmentServicesWidget extends StatefulWidget {

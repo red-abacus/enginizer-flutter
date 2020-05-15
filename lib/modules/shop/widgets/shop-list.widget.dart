@@ -1,21 +1,26 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/shared/widgets/multi-select-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/single-select-dialog.widget.dart';
-import 'package:app/modules/shop/cards/shop-item.card.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
+import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
+import 'package:app/modules/shop/widgets/cards/shop-item-grid.card.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'cards/shop-item.card.dart';
+
 class ShopListWidget extends StatelessWidget {
   final Function filterShopItems;
   final Function selectCategoryType;
   final Function selectShopItem;
+  final Function selectListType;
   final ShopCategorySort searchCategorySort;
+  final ShopListType shopListType;
 
   String searchString;
   List<ShopCategory> searchShopCategories;
@@ -30,7 +35,9 @@ class ShopListWidget extends StatelessWidget {
       this.searchCategorySort,
       this.shopCategoryType,
       this.selectCategoryType,
-      this.selectShopItem});
+      this.selectShopItem,
+      this.shopListType,
+      this.selectListType});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +50,7 @@ class ShopListWidget extends StatelessWidget {
             children: <Widget>[
               _buildSearchWidget(context),
               _buildFilterWidget(context),
+              _buildListingWidget(context),
               _buildTabBar(context),
               _buildList(context)
 //            _buildList(context),
@@ -162,6 +170,35 @@ class ShopListWidget extends StatelessWidget {
     );
   }
 
+  _buildListingWidget(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 6),
+      height: 40,
+      child: Row(
+        children: <Widget>[
+          Text(
+            '${S.of(context).online_shop_list_title}:',
+            style: TextHelper.customTextStyle(null, gray3, null, 16),
+          ),
+          FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            child: Icon(
+              shopListType == ShopListType.List
+                  ? Icons.grid_off
+                  : Icons.grid_on,
+              color: red,
+            ),
+            onPressed: () {
+              selectListType(shopListType == ShopListType.List
+                  ? ShopListType.Grid
+                  : ShopListType.List);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   _categoryText(BuildContext context) {
     String title = (this.searchShopCategories.isEmpty)
         ? S.of(context).online_shop_search_category_title
@@ -275,16 +312,35 @@ class ShopListWidget extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context) {
+    int gridCount = MediaQuery.of(context).size.width.toDouble() ~/ 150.0;
     return Container(
       padding: EdgeInsets.only(top: 10),
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (ctx, index) {
-          return ShopItemCard(index: index, selectShopItem: selectShopItem);
-        },
-        itemCount: 10,
-      ),
+      child: shopListType == ShopListType.List
+          ? ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (ctx, index) {
+                return ShopItemCard(
+                    index: index, selectShopItem: selectShopItem);
+              },
+              itemCount: 10,
+            )
+          : GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              primary: false,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return ShopItemGrid(
+                    index: index, selectShopItem: selectShopItem);
+              },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gridCount,
+                crossAxisSpacing: 5.0,
+                mainAxisSpacing: 5.0,
+                childAspectRatio: 0.5,
+              ),
+            ),
     );
   }
 }
