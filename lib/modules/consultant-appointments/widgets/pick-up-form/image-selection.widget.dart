@@ -1,20 +1,19 @@
-import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
+import 'dart:io';
+
 import 'package:app/modules/consultant-appointments/widgets/pick-up-form/image-container.widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ImageSelectionWidget extends StatelessWidget {
   int _imagesPerRow = 3;
   double _imageHeight = 0;
 
   final double _minimWidth = 100;
+  final List<File> files;
 
   Function addImage;
 
-  PickUpCarFormConsultantProvider _provider;
-
-  ImageSelectionWidget({this.addImage});
+  ImageSelectionWidget({this.addImage, this.files});
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +26,11 @@ class ImageSelectionWidget extends StatelessWidget {
       _imageHeight = totalSize / 3;
     }
 
-    _provider = Provider.of<PickUpCarFormConsultantProvider>(context);
-
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
-          for (int i = 0; i < _provider.receiveFormRequest.files.length / _imagesPerRow; i++)
+          for (int i = 0; i < files.length / _imagesPerRow; i++)
             _imagesRow(i),
         ],
       ),
@@ -54,9 +51,9 @@ class ImageSelectionWidget extends StatelessWidget {
   }
 
   _getImageContainer(int index) {
-    return index < _provider.receiveFormRequest.files.length
+    return index < this.files.length
         ? ImageContainerWidget(
-            file: _provider.receiveFormRequest.files[index], index: index, addImage: addImage)
+            file: this.files[index], index: index, addImage: addImage)
         : Container();
   }
 }

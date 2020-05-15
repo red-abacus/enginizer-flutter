@@ -84,8 +84,7 @@ class AppointmentConsultantProvider with ChangeNotifier {
   Future<WorkEstimateDetails> getWorkEstimateDetails(int workEstimateId) async {
     try {
       workEstimateDetails = await this
-          ._workEstimatesService
-          .getWorkEstimateDetails(workEstimateId);
+          ._workEstimatesService.getWorkEstimateDetails(workEstimateId);
       notifyListeners();
       return workEstimateDetails;
     } catch (error) {

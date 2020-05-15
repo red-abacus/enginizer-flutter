@@ -218,7 +218,7 @@ class _PickUpCarFormConsultantWidgetState
                   style: TextHelper.customTextStyle(
                       null, red, FontWeight.bold, 16),
                 ),
-                ImageSelectionWidget(addImage: _addImage),
+                ImageSelectionWidget(addImage: _addImage, files: _provider.receiveFormRequest.files),
               ],
             ),
           ),

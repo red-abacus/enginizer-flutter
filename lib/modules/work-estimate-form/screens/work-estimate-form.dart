@@ -543,8 +543,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     _workEstimateProvider.workEstimateRequest.percent = percentage;
     _workEstimateProvider.workEstimateRequest.timeToRespond = time;
 
-    print('info added !');
-
     setState(() {
       _isLoading = true;
     });

@@ -3,6 +3,8 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/parts/providers/parts.provider.dart';
+import 'package:app/modules/parts/screens/part.dart';
+import 'package:app/modules/parts/widgets/create/part-create.modal.dart';
 import 'package:app/modules/parts/widgets/parts-list.dart';
 import 'package:app/presentation/custom_icons.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -36,6 +38,13 @@ class PartsState extends State<Parts> {
           Scaffold(
             body: Center(
               child: _renderParts(),
+            ),
+            floatingActionButton: FloatingActionButton(
+              heroTag: null,
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 1,
+              onPressed: () => {_createPart()},
+              child: Icon(Icons.add),
             ),
           ),
     );
@@ -106,31 +115,27 @@ class PartsState extends State<Parts> {
   }
 
   _selectPart(ProviderItem providerItem) {
-
+    _provider.selectedPart = providerItem;
+    Navigator.of(context).pushNamed(Part.route);
   }
 
-//  _filterAuctions(String value, AuctionStatus status) {
-//    auctionsProvider.filterAuctions(value, status);
-//    _loadData();
-//  }
-//
-//  _selectAuction(Auction auction) {
-//    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions,
-//        auctionPermission: AuctionPermission.AuctionDetails)) {
-//      AuctionProvider provider =
-//          Provider.of<AuctionProvider>(context, listen: false);
-//      provider.initialiseParameters();
-//      provider.selectedAuction = auction;
-//
-//      Navigator.of(context).pushNamed(AuctionDetails.route);
-//    } else if (PermissionsManager.getInstance().hasAccess(
-//        MainPermissions.Auctions,
-//        auctionPermission: AuctionPermission.ConsultantAuctionDetails)) {
-//      AuctionConsultantProvider provider =
-//          Provider.of<AuctionConsultantProvider>(context, listen: false);
-//      provider.selectedAuction = auction;
-//
-//      Navigator.of(context).pushNamed(AuctionConsultant.route);
-//    }
-//  }
+  _createPart() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return PartCreateModal();
+              });
+        });
+  }
+
+  _refreshState() {
+    _initDone = false;
+    _loadData();
+  }
 }

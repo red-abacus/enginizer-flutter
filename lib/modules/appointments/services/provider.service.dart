@@ -35,6 +35,7 @@ class ProviderService {
       'UPDATE_PROVIDER_DETAILS_FAILED';
   static const String ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION =
       'ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION';
+  static const CREATE_PROVIDER_ITEM_EXCEPTION = 'CREATE_PROVIDER_ITEM_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -193,7 +194,6 @@ class ProviderService {
 
   Future<List<ProviderItem>> getProviderItems(
       int providerId, Map<String, dynamic> query) async {
-    print('quert $query');
     try {
       final response = await _dio.get(_buildProviderItemsPath(providerId),
           queryParameters: query);
@@ -204,6 +204,21 @@ class ProviderService {
       }
     } catch (error) {
       throw Exception(GET_PROVIDER_ITEMS_EXCEPTION);
+    }
+  }
+
+  Future<ProviderItem> addProviderItem(
+      int providerId, Map<String, dynamic> params) async {
+    try {
+      final response = await _dio.post(_buildProviderItemsPath(providerId),
+          data: jsonEncode(params));
+      if (response.statusCode == 200) {
+        return ProviderItem.fromJson(response.data);
+      } else {
+        throw Exception(CREATE_PROVIDER_ITEM_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CREATE_PROVIDER_ITEM_EXCEPTION);
     }
   }
 

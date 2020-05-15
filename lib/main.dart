@@ -20,6 +20,7 @@ import 'package:app/modules/consultant-estimators/providers/work-estimates-consu
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/screens/parts.dart';
 import 'package:app/modules/shop/screens/shop-product-details.dart';
 import 'package:app/modules/shop/screens/shop-service-details.dart';
@@ -65,6 +66,7 @@ import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart'
 import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'modules/parts/providers/parts.provider.dart';
+import 'modules/parts/screens/part.dart';
 import 'modules/shop/providers/shop-appointment.provider.dart';
 import 'modules/shop/providers/shop.provider.dart';
 import 'modules/shop/screens/shop.dart';
@@ -127,7 +129,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: DashboardProvider()),
           ChangeNotifierProvider.value(value: ShopProvider()),
           ChangeNotifierProvider.value(value: ShopAppointmentProvider()),
-          ChangeNotifierProvider.value(value: PartsProvider())
+          ChangeNotifierProvider.value(value: PartsProvider()),
+          ChangeNotifierProvider.value(value: PartCreateProvider())
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -199,6 +202,7 @@ class AppState extends State<App> {
                     WorkEstimatesConsultant(),
                 Notifications.route: (context) => Notifications(),
                 Parts.route: (context) => Parts(),
+                Part.route: (context) => Part()
               },
             ),
           );

@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 
 class PartCard extends StatelessWidget {
   final ProviderItem providerItem;
-  final Function selectProviderItem;
+  final Function selectPart;
 
-  PartCard({this.providerItem, this.selectProviderItem});
+  PartCard({this.providerItem, this.selectPart});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,9 @@ class PartCard extends StatelessWidget {
           color: Colors.white,
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
-            onTap: () => {},
+            onTap: () => {
+              selectPart(providerItem)
+            },
             child: ClipRRect(
               child: Row(
                   mainAxisSize: MainAxisSize.max,

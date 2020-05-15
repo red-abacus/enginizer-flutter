@@ -84,7 +84,7 @@ class PartsList extends StatelessWidget {
           itemBuilder: (ctx, index) {
             return PartCard(
               providerItem: parts[index],
-              selectProviderItem: selectPart,
+              selectPart: selectPart,
             );
           },
           itemCount: parts.length,

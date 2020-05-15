@@ -10,6 +10,8 @@ class PartsProvider with ChangeNotifier {
   List<ProviderItem> parts;
   IssueItemQuery issueItemQuery;
 
+  ProviderItem selectedPart;
+
   initialise() {
     parts = [];
     issueItemQuery = new IssueItemQuery();
