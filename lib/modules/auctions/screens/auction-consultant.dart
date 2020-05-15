@@ -178,7 +178,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
   _createEstimate() {
     if (auctionProvider.auctionDetails != null) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.CreatePart);
       Provider.of<WorkEstimateProvider>(context).selectedAuction =
           auctionProvider.selectedAuction;
       Provider.of<WorkEstimateProvider>(context)

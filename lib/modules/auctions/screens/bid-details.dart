@@ -293,7 +293,7 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   void _openEstimator(BuildContext ctx) {
-    Provider.of<WorkEstimateProvider>(context).refreshValues();
+    Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.ReadOnly);
     Provider.of<WorkEstimateProvider>(context).workEstimateId =
         Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =

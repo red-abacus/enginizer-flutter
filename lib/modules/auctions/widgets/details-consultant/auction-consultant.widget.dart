@@ -197,7 +197,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
   _createEstimate() {
     if (widget.auctionDetails != null) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(widget.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
@@ -213,7 +213,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
   _seeEstimate(Bid bid) {
     if (bid != null && bid.workEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.ReadOnly);
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           bid.workEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =

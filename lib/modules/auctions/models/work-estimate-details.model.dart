@@ -1,6 +1,7 @@
 import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
@@ -45,14 +46,14 @@ class WorkEstimateDetails {
         totalCost: json['totalCost'] != null ? json['totalCost'] : 0);
   }
 
-  workEstimateRequest() {
-    WorkEstimateRequest request = new WorkEstimateRequest();
+  workEstimateRequest(EstimatorMode estimatorMode) {
+    WorkEstimateRequest request = new WorkEstimateRequest(estimatorMode);
     request.issues = this.issues;
     return request;
   }
 
-  finalWorkEstimateRequest() {
-    WorkEstimateRequest request = new WorkEstimateRequest();
+  finalWorkEstimateRequest(EstimatorMode estimatorMode) {
+    WorkEstimateRequest request = new WorkEstimateRequest(estimatorMode);
     this.issues.forEach((issue) {
       List<IssueRecommendation> recommendations = [];
       issue.recommendations.forEach((recommendation) {

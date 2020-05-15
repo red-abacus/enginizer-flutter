@@ -283,7 +283,7 @@ class AppointmentDetailsConsultantState
 
   _createEstimate() {
     if (_provider.selectedAppointmentDetail != null) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(_provider.selectedAppointmentDetail.issues);
       Provider.of<WorkEstimateProvider>(context).selectedAppointment =
@@ -306,7 +306,7 @@ class AppointmentDetailsConsultantState
         _provider.selectedAppointmentDetail.lastWorkEstimate();
 
     if (lastWorkEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.ReadOnly);
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =

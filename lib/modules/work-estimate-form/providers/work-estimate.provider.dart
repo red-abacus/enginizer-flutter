@@ -8,6 +8,7 @@ import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
@@ -60,10 +61,10 @@ class WorkEstimateProvider with ChangeNotifier {
     selectedRecommendations = [];
   }
 
-  refreshValues() {
+  refreshValues(EstimatorMode estimatorMode) {
     _initValues();
     refreshForm();
-    workEstimateRequest = WorkEstimateRequest();
+    workEstimateRequest = WorkEstimateRequest(estimatorMode);
   }
 
   refreshForm() {
@@ -230,12 +231,12 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
-    this.workEstimateRequest = workEstimateDetails.workEstimateRequest();
+  createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
+    this.workEstimateRequest = workEstimateDetails.workEstimateRequest(estimatorMode);
   }
 
-  createFinalWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
-    this.workEstimateRequest = workEstimateDetails.finalWorkEstimateRequest();
+  createFinalWorkEstimateRequest(WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
+    this.workEstimateRequest = workEstimateDetails.finalWorkEstimateRequest(estimatorMode);
   }
 
   double selectedRecommendationTotalCost() {

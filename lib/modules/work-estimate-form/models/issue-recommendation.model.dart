@@ -1,3 +1,5 @@
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+
 import 'issue-item.model.dart';
 
 class IssueRecommendation {
@@ -10,12 +12,13 @@ class IssueRecommendation {
   bool isStandard;
   bool isAccepted;
 
-  IssueRecommendation({this.id,
-    this.name,
-    this.items,
-    this.priority,
-    this.isStandard,
-    this.isAccepted});
+  IssueRecommendation(
+      {this.id,
+      this.name,
+      this.items,
+      this.priority,
+      this.isStandard,
+      this.isAccepted});
 
   factory IssueRecommendation.fromJson(Map<String, dynamic> json) {
     return IssueRecommendation(
@@ -49,11 +52,10 @@ class IssueRecommendation {
     return recommendation;
   }
 
-  Map<String, dynamic> toCreateJson() {
-    print('id $id and name $name');
+  Map<String, dynamic> toCreateJson(EstimatorMode estimatorMode) {
     Map<String, dynamic> propMap = {
-      'id': null,
-      'name': null,
+      'id': estimatorMode == EstimatorMode.CreatePart ? id : null,
+      'name': estimatorMode == EstimatorMode.Create ? name : null,
       'items': items.map((item) => item.toJson()).toList()
     };
 
@@ -62,7 +64,7 @@ class IssueRecommendation {
 
   double totalCost() {
     double total = 0.0;
-    for(IssueItem item in this.items) {
+    for (IssueItem item in this.items) {
       total += item.total;
     }
     return total;

@@ -111,10 +111,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               if (workEstimateDetails != null) {
                 if (widget.mode == EstimatorMode.CreateFinal) {
                   _workEstimateProvider
-                      .createFinalWorkEstimateRequest(workEstimateDetails);
+                      .createFinalWorkEstimateRequest(workEstimateDetails, widget.mode);
                 } else {
                   _workEstimateProvider
-                      .createWorkEstimateRequest(workEstimateDetails);
+                      .createWorkEstimateRequest(workEstimateDetails, widget.mode);
                 }
               }
               setState(() {
@@ -517,7 +517,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     String validationString =
         _workEstimateProvider.workEstimateRequest.isValid(context, widget.mode);
 
-    if (validationString != null) {
+    if (validationString != null && false) {
       AlertWarningDialog.showAlertDialog(
           context, S.of(context).general_warning, validationString);
     } else {
@@ -692,16 +692,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _acceptWorkEstimate() async {
+    print('widget mode ${widget.mode}');
     if (widget.mode == EstimatorMode.Client) {
       try {
-//        await _workEstimateProvider
-//            .acceptBid(_appointmentProvider.selectedAppointmentDetail.bidId)
-//            .then((_) {
-//          setState(() {
-//            Provider.of<AppointmentProvider>(context).initDone = false;
-//            _initDone = false;
-//          });
-//        });
+        await _workEstimateProvider
+            .acceptBid(_workEstimateProvider.selectedAppointmentDetail.bidId)
+            .then((_) {
+          setState(() {
+            Provider.of<AppointmentProvider>(context).initDone = false;
+            _initDone = false;
+          });
+        });
       } catch (error) {
         if (error
             .toString()
