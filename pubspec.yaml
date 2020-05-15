@@ -99,7 +99,7 @@ flutter:
     #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  #         weight: 700car_part.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
@@ -109,6 +109,12 @@ flutter:
         - asset: assets/fonts/Lato-Regular.ttf
         - asset: assets/fonts/Lato-Bold.ttf
           weight: 700
+
+    - family: Custom
+      fonts:
+        - asset: assets/fonts/Custom.ttf
+          weight: 700
+
 
   assets:
     - assets/

@@ -13,6 +13,7 @@ import 'package:app/modules/mechanic-appointments/screens/appointments-mechanic.
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/parts/screens/parts.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
@@ -22,6 +23,7 @@ import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../modules/auctions/screens/auctions.dart';
@@ -31,8 +33,9 @@ class DrawerItem {
   String title;
   String route;
   IconData icon;
+  SvgPicture svgPicture;
 
-  DrawerItem(this.title, this.route, this.icon);
+  DrawerItem(this.title, this.route, this.icon, {this.svgPicture});
 }
 
 class NavigationApp extends StatefulWidget {
@@ -82,10 +85,16 @@ class NavigationApp extends StatefulWidget {
           "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard));
     }
 
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Parts)) {
+      items.add(new DrawerItem(
+          'Parts', Parts.route, Parts.icon));
+    }
+
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar, sideBarPermission: ConsultantSideBarPermission.Notifications)) {
       items.add(new DrawerItem(
           'Notifications', Notifications.route, Icons.notifications));
     }
+
     return items;
   }
 
@@ -238,6 +247,8 @@ class NavigationAppState extends State<NavigationApp> {
         return WorkEstimatesConsultant();
       case Notifications.route:
         return Notifications();
+      case Parts.route:
+        return Parts();
       default:
         return new Text("Error");
     }

@@ -2,30 +2,37 @@ import 'item-type.model.dart';
 
 class ProviderItem {
   int id;
-  ItemType itemType;
+  ItemType type;
+  int typeId;
   String code;
   String name;
+  int quantity;
   double price;
   double priceVAT;
+  int issueId;
+  double total;
 
-  ProviderItem(
-      {this.id,
-      this.itemType,
-      this.code,
-      this.name,
-      this.price,
-      this.priceVAT});
+  ProviderItem({this.id,
+    this.type,
+    this.typeId,
+    this.code,
+    this.name,
+    this.quantity,
+    this.price,
+    this.priceVAT,
+    this.total});
 
   factory ProviderItem.fromJson(Map<String, dynamic> json) {
-    print('provider item $json');
+    print('provider item ${json['id']}');
     return ProviderItem(
         id: json['id'],
-        itemType: json['itemType'] != null
-            ? ItemType.fromJson(json['itemType'])
-            : null,
+        type: json['type'] != null ? ItemType.fromJson(json['type']) : null,
+        typeId: json['typeId'],
         code: json['code'],
         name: json['name'],
+        quantity: json['quantity'],
         price: json['price'],
-        priceVAT: json['priceVAT']);
+        priceVAT: json['priceVAT'],
+        total: json['total']);
   }
 }

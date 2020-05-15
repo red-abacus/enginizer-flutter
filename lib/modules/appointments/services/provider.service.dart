@@ -193,6 +193,7 @@ class ProviderService {
 
   Future<List<ProviderItem>> getProviderItems(
       int providerId, Map<String, dynamic> query) async {
+    print('quert $query');
     try {
       final response = await _dio.get(_buildProviderItemsPath(providerId),
           queryParameters: query);
