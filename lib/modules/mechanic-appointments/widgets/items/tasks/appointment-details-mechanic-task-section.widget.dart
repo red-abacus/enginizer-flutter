@@ -60,13 +60,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
           oneDecimal,
           (Timer timer) => setState(() {
                 setState(() {
-                  DateTime time = DateUtils.dateFromString(
-                      widget.task.timeValue, 'HH:mm:ss');
-                  if (time != null) {
-                    time = time.add(Duration(seconds: 1));
-                    widget.task.timeValue =
-                        DateUtils.stringFromDate(time, 'HH:mm:ss');
-                  }
+                  widget.task.addOneSecond();
                 });
               }));
     }
@@ -91,13 +85,9 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
   }
 
   _initialiseTime() {
-    DateTime time = DateUtils.dateFromString(widget.task.timeValue, 'HH:mm:ss');
-
-    if (time != null) {
-      _hours = time.hour;
-      _minutes = time.minute;
-      _seconds = time.second;
-    }
+    _hours = widget.task.hours();
+    _minutes = widget.task.minutes();
+    _seconds = widget.task.seconds();
   }
 
   _issuesContainer() {

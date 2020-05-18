@@ -37,11 +37,12 @@ class ServiceProviderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Image.network(
-                    '${serviceProvider.image}',
-                    fit: BoxFit.fitHeight,
-                    height: 100,
+                  FadeInImage.assetNetwork(
                     width: 100,
+                    height: 100,
+                    image: serviceProvider.image,
+                    placeholder: ServiceProvider.defaultImage(),
+                    fit: BoxFit.fill,
                   ),
                   Expanded(
                     child: Container(

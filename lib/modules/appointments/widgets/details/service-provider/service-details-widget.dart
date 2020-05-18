@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-fiscal-widget.dart';
 import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-items-widget.dart';
@@ -19,7 +20,6 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     ServiceProviderDetailsProvider provider = Provider.of<ServiceProviderDetailsProvider>(context);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,9 +27,9 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
       children: <Widget>[
         Container(
           alignment: Alignment.center,
-          height: 200,
-          child: Image.network(
-            provider.serviceProvider.image,
+          child: FadeInImage.assetNetwork(
+            image: provider.serviceProvider.image,
+            placeholder: ServiceProvider.defaultImage(),
             fit: BoxFit.fill,
           ),
         ),

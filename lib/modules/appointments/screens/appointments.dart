@@ -3,9 +3,11 @@ import 'package:app/modules/appointments/model/request/appointment-request.model
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
+import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/enums/appointment-type.enum.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -127,23 +129,35 @@ class AppointmentsState extends State<Appointments> {
   }
 
   void _openAppointmentCreateModal(BuildContext buildContext) {
-    Provider.of<ProviderServiceProvider>(context).initFormValues();
+    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = 7;
 
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
+    showModalBottomSheet(
         isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return AppointmentCreateModal(
-              _createAppointment,
-              true,
-            );
+        context: context,
+        builder: (_) {
+          return StatefulBuilder(builder:
+              (BuildContext context, StateSetter state) {
+            return ServiceDetailsModal();
           });
         });
+
+//    Provider.of<ProviderServiceProvider>(context).initFormValues();
+//
+//    showModalBottomSheet<void>(
+//        shape: RoundedRectangleBorder(
+//          borderRadius: BorderRadius.circular(10.0),
+//        ),
+//        context: context,
+//        isScrollControlled: true,
+//        builder: (BuildContext context) {
+//          return StatefulBuilder(
+//              builder: (BuildContext context, StateSetter state) {
+//            return AppointmentCreateModal(
+//              _createAppointment,
+//              true,
+//            );
+//          });
+//        });
   }
 
   _createAppointment(AppointmentRequest appointmentRequest) async {

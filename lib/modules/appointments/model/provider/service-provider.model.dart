@@ -82,4 +82,8 @@ class ServiceProvider {
 
     return userProviderSchedules;
   }
+
+  static String defaultImage() {
+    return 'assets/images/defaults/default_service_provider.jpg';
+  }
 }

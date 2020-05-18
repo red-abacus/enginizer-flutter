@@ -121,6 +121,7 @@ flutter:
     - assets/icons/
     - assets/images/statuses/
     - assets/images/icons/
+    - assets/images/defaults/
 
 flutter_intl:
   enabled: true

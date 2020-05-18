@@ -72,4 +72,45 @@ class MechanicTask {
         return name;
     }
   }
+
+  int hours() {
+    if (timeValue.split(':').length == 3) {
+      return int.parse(timeValue.split(':')[0]);
+    }
+
+    return 0;
+  }
+
+  int minutes() {
+    if (timeValue.split(':').length == 3) {
+      return int.parse(timeValue.split(':')[1]);
+    } else if (timeValue.split(':').length == 2) {
+      return int.parse(timeValue.split(':')[0]);
+    }
+
+    return 0;
+  }
+
+  int seconds() {
+    return int.parse(timeValue.split(':').last);
+  }
+
+  addOneSecond() {
+    int hoursValue = hours();
+    int minutesValue = minutes();
+    int secondsValue = seconds();
+    secondsValue += 1;
+
+    if (secondsValue > 59) {
+      secondsValue = 0;
+      minutesValue += 1;
+    }
+
+    if (minutesValue > 59) {
+      minutesValue = 0;
+      hoursValue += 1;
+    }
+
+    this.timeValue = '$hoursValue:$minutesValue:$secondsValue';
+  }
 }
