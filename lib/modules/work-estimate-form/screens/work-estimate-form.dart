@@ -703,7 +703,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _acceptWorkEstimate() async {
-    print('widget mode ${widget.mode}');
     if (widget.mode == EstimatorMode.Client) {
       try {
         await _workEstimateProvider

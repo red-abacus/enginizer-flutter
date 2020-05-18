@@ -24,6 +24,7 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   final Function assignMechanic;
   final Function createPickUpCarForm;
   final Function createPartProviderEstimate;
+  final Function requestPartsProvider;
 
   AppointmentDetailsGenericConsultantWidget(
       {this.appointmentDetail,
@@ -35,7 +36,8 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.assignMechanic,
       this.createPickUpCarForm,
       this.workEstimateDetails,
-      this.createPartProviderEstimate});
+      this.createPartProviderEstimate,
+      this.requestPartsProvider});
 
   @override
   AppointmentDetailsGenericConsultantWidgetState createState() {
@@ -49,7 +51,10 @@ class AppointmentDetailsGenericConsultantWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       body: _content(),
-      floatingActionButton: _buttonsWidget(),
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: _buttonsWidget(),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -187,6 +192,22 @@ class AppointmentDetailsGenericConsultantWidgetState
           ),
           backgroundColor: Colors.white,
         ));
+        break;
+      case AppointmentStatusState.SCHEDULED:
+      case AppointmentStatusState.IN_UNIT:
+      case AppointmentStatusState.IN_WORK:
+        buttons.add(FloatingActionButton.extended(
+          heroTag: null,
+          onPressed: () {
+            widget.requestPartsProvider();
+          },
+          label: Text(
+            S.of(context).appointment_request_items.toUpperCase(),
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          ),
+          backgroundColor: Colors.white,
+        ));
+        break;
         break;
       default:
         break;

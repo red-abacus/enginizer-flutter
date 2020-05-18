@@ -7,6 +7,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/consultant-appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
@@ -14,7 +15,7 @@ import 'package:app/modules/consultant-appointments/providers/appointments-consu
 import 'package:app/modules/consultant-appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-documents.widget.dart';
 import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
-import 'package:app/modules/consultant-appointments/widgets/details/appointment-details-parts-provider-estimate.widget.dart';
+import 'package:app/modules/consultant-appointments/screens/appointment-details-parts-provider-estimate.modal.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
@@ -80,10 +81,14 @@ class AppointmentDetailsConsultantState
 
           if (lastWorkEstimate != 0) {
             await _provider.getWorkEstimateDetails(lastWorkEstimate).then((_) {
-              _downloadNextServiceProviders();
+              setState(() {
+                _isLoading = false;
+              });
             });
           } else {
-            _downloadNextServiceProviders();
+            setState(() {
+              _isLoading = false;
+            });
           }
         });
       });
@@ -124,20 +129,8 @@ class AppointmentDetailsConsultantState
     }
 
     if (_tabController == null) {
-      int lenght = 2;
-      int initialIndex = 0;
-
-      switch (_provider.selectedAppointmentDetail.status.getState()) {
-        case AppointmentStatusState.IN_REVIEW:
-          lenght = 4;
-          initialIndex = 2;
-          break;
-        default:
-          break;
-      }
-
       _tabController = new TabController(
-          vsync: this, length: lenght, initialIndex: initialIndex);
+          vsync: this, length: 3, initialIndex: 0);
     }
 
     return Consumer<AppointmentConsultantProvider>(
@@ -162,15 +155,14 @@ class AppointmentDetailsConsultantState
     List<Tab> tabs = [
       Tab(text: S.of(context).appointment_details_request),
       Tab(text: S.of(context).appointment_details_car),
+      Tab(text: S.of(context).appoontment_consultant_provider_documents_title)
     ];
 
-    if (_provider.selectedAppointmentDetail.status.getState() ==
-        AppointmentStatusState.IN_REVIEW) {
-      tabs.addAll([
-        Tab(text: S.of(context).appointment_consultant_provider_estimate_title),
-        Tab(text: S.of(context).appoontment_consultant_provider_documents_title)
-      ]);
-    }
+//    if (_provider.selectedAppointmentDetail.status.getState() ==
+//        AppointmentStatusState.IN_REVIEW) {
+////      tabs.add(Tab(
+////          text: S.of(context).appointment_consultant_provider_estimate_title));
+//    }
 
     return tabs;
   }
@@ -183,27 +175,28 @@ class AppointmentDetailsConsultantState
     List<Widget> list = [
       _getAppointmentDetailsScreen(),
       CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car),
+      AppointmentDetailsDocumentsWidget()
     ];
 
-    switch (_provider.selectedAppointmentDetail.status.getState()) {
-      case AppointmentStatusState.IN_REVIEW:
-        list.addAll([
-          AppointmentDetailsPartsProviderEstimateWidget(
-            serviceProviders: _provider.serviceProviders,
-            providerType: _provider.appointmentProviderType,
-            selectedServiceProvider: _provider.selectedServiceProvider,
-            selectProviderType: _selectProviderType,
-            downloadNextServiceProviders: _downloadNextServiceProviders,
-            selectServiceProvider: _selectServiceProvider,
-            showServiceProviderDetails: _showServiceProviderDetails,
-            requestItems: _requestItems,
-          ),
-          AppointmentDetailsDocumentsWidget()
-        ]);
-        break;
-      default:
-        break;
-    }
+//    switch (_provider.selectedAppointmentDetail.status.getState()) {
+//      case AppointmentStatusState.IN_REVIEW:
+//        list.addAll([
+//          AppointmentDetailsPartsProviderEstimateWidget(
+//            serviceProviders: _provider.serviceProviders,
+//            providerType: _provider.appointmentProviderType,
+//            selectedServiceProvider: _provider.selectedServiceProvider,
+//            selectProviderType: _selectProviderType,
+//            downloadNextServiceProviders: _downloadNextServiceProviders,
+//            selectServiceProvider: _selectServiceProvider,
+//            showServiceProviderDetails: _showServiceProviderDetails,
+//            requestItems: _requestItems,
+//          ),
+//
+//        ]);
+//        break;
+//      default:
+//        break;
+//    }
 
     return TabBarView(
       controller: _tabController,
@@ -232,6 +225,7 @@ class AppointmentDetailsConsultantState
           createPickUpCarForm: _createPickUpCarForm,
           workEstimateDetails: _provider.workEstimateDetails,
           createPartProviderEstimate: _createPartProviderEstimate,
+          requestPartsProvider: _requestPartsProvider,
         );
       default:
         return Container();
@@ -283,7 +277,8 @@ class AppointmentDetailsConsultantState
 
   _createEstimate() {
     if (_provider.selectedAppointmentDetail != null) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.Create);
+      Provider.of<WorkEstimateProvider>(context)
+          .refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(_provider.selectedAppointmentDetail.issues);
       Provider.of<WorkEstimateProvider>(context).selectedAppointment =
@@ -306,7 +301,8 @@ class AppointmentDetailsConsultantState
         _provider.selectedAppointmentDetail.lastWorkEstimate();
 
     if (lastWorkEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.ReadOnly);
+      Provider.of<WorkEstimateProvider>(context)
+          .refreshValues(EstimatorMode.ReadOnly);
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
@@ -324,6 +320,24 @@ class AppointmentDetailsConsultantState
   }
 
   _createPartProviderEstimate() {}
+
+  _requestPartsProvider() {
+    Provider.of<SelectPartsProviderProvider>(context).resetParams();
+    Provider.of<SelectPartsProviderProvider>(context).selectedAppointmentDetails = _provider.selectedAppointmentDetail;
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return AppointmentDetailsPartsProviderEstimateModal();
+              });
+        });
+  }
 
   _assignMechanic() {
     showModalBottomSheet<void>(
@@ -363,121 +377,6 @@ class AppointmentDetailsConsultantState
     });
 
     _loadData();
-  }
-
-  _selectProviderType(AppointmentProviderType appointmentProviderType) {
-    setState(() {
-      _provider.appointmentProviderType = appointmentProviderType;
-    });
-  }
-
-  _downloadNextServiceProviders() async {
-    if (_provider.selectedAppointmentDetail.status.getState() ==
-        AppointmentStatusState.IN_REVIEW) {
-      try {
-        await _provider.loadProviders().then((list) async {
-          if (list != null) {
-            setState(() {
-              _isLoading = false;
-            });
-          }
-        });
-      } catch (error) {
-        if (error
-            .toString()
-            .contains(ProviderService.GET_PROVIDERS_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_get_providers, context);
-        }
-
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  _selectServiceProvider(ServiceProvider serviceProvider) {
-    setState(() {
-      _provider.selectedServiceProvider = serviceProvider;
-    });
-  }
-
-  _showServiceProviderDetails(ServiceProvider serviceProvider) {
-    Provider.of<ServiceProviderDetailsProvider>(context, listen: false)
-        .serviceProviderId = serviceProvider.id;
-
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (_) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
-          });
-        });
-  }
-
-  _requestItems() async {
-    switch (_provider.appointmentProviderType) {
-      case AppointmentProviderType.Specific:
-        if (_provider.selectedServiceProvider != null) {
-          setState(() {
-            _isLoading = true;
-          });
-
-          try {
-            await _provider
-                .requestAppointmentItems(_provider.selectedAppointment.id,
-                    _provider.selectedAppointment.serviceProvider.id)
-                .then((success) {
-              if (success) {
-                // TODO = part shop
-              }
-            });
-          } catch (error) {
-            if (error.toString().contains(
-                AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
-              FlushBarHelper.showFlushBar(S.of(context).general_error,
-                  S.of(context).exception_appointment_request_items, context);
-            }
-
-            setState(() {
-              _isLoading = false;
-            });
-          }
-        }
-        break;
-      case AppointmentProviderType.Auction:
-        setState(() {
-          _isLoading = true;
-        });
-
-        try {
-          await _provider
-              .requestAppointmentItems(_provider.selectedAppointment.id, null)
-              .then((success) {
-            if (success) {
-              // TODO = part shop
-            }
-          });
-        } catch (error) {
-          if (error.toString().contains(
-              AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
-            FlushBarHelper.showFlushBar(S.of(context).general_error,
-                S.of(context).exception_appointment_request_items, context);
-          }
-
-          setState(() {
-            _isLoading = false;
-          });
-        }
-        break;
-    }
   }
 
 //  _createFinalEstimate() {
