@@ -129,35 +129,23 @@ class AppointmentsState extends State<Appointments> {
   }
 
   void _openAppointmentCreateModal(BuildContext buildContext) {
-    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = 7;
+    Provider.of<ProviderServiceProvider>(context).initFormValues();
 
-    showModalBottomSheet(
-        isScrollControlled: true,
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         context: context,
-        builder: (_) {
-          return StatefulBuilder(builder:
-              (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AppointmentCreateModal(
+              _createAppointment,
+              true,
+            );
           });
         });
-
-//    Provider.of<ProviderServiceProvider>(context).initFormValues();
-//
-//    showModalBottomSheet<void>(
-//        shape: RoundedRectangleBorder(
-//          borderRadius: BorderRadius.circular(10.0),
-//        ),
-//        context: context,
-//        isScrollControlled: true,
-//        builder: (BuildContext context) {
-//          return StatefulBuilder(
-//              builder: (BuildContext context, StateSetter state) {
-//            return AppointmentCreateModal(
-//              _createAppointment,
-//              true,
-//            );
-//          });
-//        });
   }
 
   _createAppointment(AppointmentRequest appointmentRequest) async {
