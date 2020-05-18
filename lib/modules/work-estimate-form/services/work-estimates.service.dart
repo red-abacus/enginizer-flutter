@@ -49,8 +49,6 @@ class WorkEstimatesService {
       final response = await _dio.post('$_CREATE_WORK_ESTIMATE_PATH',
           data: jsonEncode(content));
 
-      print('response $response');
-
       if (response.statusCode == 201 || response.statusCode == 200) {
         return WorkEstimateDetails.fromJson(response.data);
       } else {

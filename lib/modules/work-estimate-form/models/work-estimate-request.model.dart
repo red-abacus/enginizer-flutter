@@ -60,6 +60,11 @@ class WorkEstimateRequest {
     map['forwardPaymentPercent'] = percent;
     map['timeToRespond'] =
         DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy');
+
+    if (estimatorMode == EstimatorMode.CreatePart) {
+      map['proposedDate'] =
+          DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy HH:mm');
+    }
     return map;
   }
 }

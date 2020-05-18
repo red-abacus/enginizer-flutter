@@ -186,6 +186,7 @@ class WorkEstimateAddIssueModalWidgetState
                                                     provider.id ==
                                                     selectedProviderItem.id,
                                                 orElse: () => null);
+                                        provider.estimatorFormState['id'] = foundProviderItem.id;
                                         provider.estimatorFormState['code'] =
                                             foundProviderItem;
                                         provider.estimatorFormState['name'] =

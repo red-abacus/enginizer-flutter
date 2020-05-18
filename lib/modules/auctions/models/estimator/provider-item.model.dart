@@ -17,7 +17,6 @@ class ProviderItem {
       this.priceVAT});
 
   factory ProviderItem.fromJson(Map<String, dynamic> json) {
-    print('provider item $json');
     return ProviderItem(
         id: json['id'],
         itemType: json['itemType'] != null

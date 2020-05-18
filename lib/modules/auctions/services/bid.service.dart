@@ -26,9 +26,31 @@ class BidsService {
 
   BidsService();
 
-  Future<BidResponse> getBids(int auctionId) async {
+  Future<BidResponse> getAllBids({int appointmentId}) async {
+    Map<String, dynamic> propMap = {};
+
+    if (appointmentId != null) {
+      propMap['appointmentId'] = appointmentId;
+    }
+
     try {
-      final response = await _dio.get(_buildBidsPath(auctionId));
+      final response =
+      await _dio.get(_BIDS_PATH, queryParameters: propMap);
+
+      if (response.statusCode == 200) {
+        return BidResponse.fromJson(response.data);
+      } else {
+        throw Exception(GET_BIDS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_BIDS_EXCEPTION);
+    }
+  }
+
+  Future<BidResponse> getBids(int auctionId, {int appointmentId}) async {
+    try {
+      final response =
+          await _dio.get(_buildBidsPath(auctionId));
 
       if (response.statusCode == 200) {
         return BidResponse.fromJson(response.data);

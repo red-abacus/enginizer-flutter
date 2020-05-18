@@ -1,29 +1,26 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
-import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
-import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AuctionConsultantPartsWidget extends StatelessWidget {
   final AuctionDetail auctionDetails;
   final AppointmentDetail appointmentDetail;
   final Function createEstimate;
+  final Function seeEstimate;
   final Function showProviderDetails;
 
   AuctionConsultantPartsWidget(
       {this.auctionDetails,
       this.appointmentDetail,
       this.createEstimate,
+      this.seeEstimate,
       this.showProviderDetails});
 
   @override
@@ -121,10 +118,15 @@ class AuctionConsultantPartsWidget extends StatelessWidget {
     buttons.add(FloatingActionButton.extended(
       heroTag: null,
       onPressed: () {
-        createEstimate();
+        if (createEstimate != null) {
+          createEstimate();
+        }
+        else if (seeEstimate != null) {
+          seeEstimate();
+        }
       },
       label: Text(
-        S.of(context).auction_create_estimate.toUpperCase(),
+        createEstimate != null ? S.of(context).auction_create_estimate.toUpperCase() : S.of(context).appointment_details_estimator.toUpperCase(),
         style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
       ),
       backgroundColor: Colors.white,

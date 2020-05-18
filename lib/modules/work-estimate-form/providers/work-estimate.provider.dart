@@ -4,7 +4,7 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
@@ -41,7 +41,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetail;
-  Auction selectedAuction;
+  AuctionDetail selectedAuctionDetails;
 
   int workEstimateId;
   int serviceProviderId;
@@ -79,9 +79,6 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   void setIssuesWithRecommendations(List<Issue> issues) {
-    for (Issue issue in issues) {
-      issue.clearDefaultRecommendations();
-    }
     workEstimateRequest.issues = issues;
   }
 
@@ -191,6 +188,7 @@ class WorkEstimateProvider with ChangeNotifier {
   addRequestToIssueSection(
       Issue issue, IssueRecommendation issueRecommendation) {
     var issueItem = IssueItem(
+      id: estimatorFormState['id'],
       type: estimatorFormState['type'],
       code: estimatorFormState['code'].code,
       name: estimatorFormState['name'].name,

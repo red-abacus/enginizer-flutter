@@ -55,7 +55,7 @@ class IssueRecommendation {
   Map<String, dynamic> toCreateJson(EstimatorMode estimatorMode) {
     Map<String, dynamic> propMap = {
       'id': estimatorMode == EstimatorMode.CreatePart ? id : null,
-      'name': estimatorMode == EstimatorMode.Create ? name : null,
+      'name': estimatorMode == EstimatorMode.CreatePart ? name : null,
       'items': items.map((item) => item.toJson()).toList()
     };
 

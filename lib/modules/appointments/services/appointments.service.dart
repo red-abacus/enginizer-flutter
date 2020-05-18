@@ -355,8 +355,6 @@ class AppointmentsService {
       final response = await _dio.patch(_buildRequestItemsPath(appointmentId),
           data: queryParameters);
 
-      print('response ${response.data}');
-      print('status code ${response.statusCode}');
       if (response.statusCode == 200) {
         return true;
       } else {

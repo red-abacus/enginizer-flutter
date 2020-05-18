@@ -6,14 +6,18 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/bid.model.dart';
+import 'package:app/modules/auctions/models/response/bid-response.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class AuctionConsultantProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
   ProviderService providerService = inject<ProviderService>();
   AuctionsService _auctionsService = inject<AuctionsService>();
+  BidsService _bidService = inject<BidsService>();
 
   Auction selectedAuction;
   AuctionDetail auctionDetails;
