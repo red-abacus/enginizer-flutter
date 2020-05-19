@@ -247,7 +247,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
         .lastWorkEstimate();
 
     if (workEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.ReadOnly);
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           workEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =

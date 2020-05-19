@@ -1,3 +1,5 @@
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+
 import 'issue-recommendation.model.dart';
 
 class Issue {
@@ -53,12 +55,12 @@ class Issue {
     return propMap;
   }
 
-  Map<String, dynamic> toCreateJson() {
+  Map<String, dynamic> toCreateJson(EstimatorMode estimatorMode) {
     Map<String, dynamic> propMap = {
       'id': id,
       'name': name,
       'recommendations':
-          recommendations.map((item) => item.toCreateJson()).toList()
+          recommendations.map((item) => item.toCreateJson(estimatorMode)).toList()
     };
 
     return propMap;

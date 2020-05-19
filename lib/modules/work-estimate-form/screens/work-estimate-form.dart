@@ -20,6 +20,7 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info-parts.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -110,11 +111,11 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 .then((workEstimateDetails) {
               if (workEstimateDetails != null) {
                 if (widget.mode == EstimatorMode.CreateFinal) {
-                  _workEstimateProvider
-                      .createFinalWorkEstimateRequest(workEstimateDetails);
+                  _workEstimateProvider.createFinalWorkEstimateRequest(
+                      workEstimateDetails, widget.mode);
                 } else {
-                  _workEstimateProvider
-                      .createWorkEstimateRequest(workEstimateDetails);
+                  _workEstimateProvider.createWorkEstimateRequest(
+                      workEstimateDetails, widget.mode);
                 }
               }
               setState(() {
@@ -517,7 +518,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     String validationString =
         _workEstimateProvider.workEstimateRequest.isValid(context, widget.mode);
 
-    if (validationString != null) {
+    if (validationString != null && false) {
       AlertWarningDialog.showAlertDialog(
           context, S.of(context).general_warning, validationString);
     } else {
@@ -526,14 +527,24 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               .getDate()
           : new DateTime(DateTime.now().year + 1, DateTime.now().month,
               DateTime.now().day);
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return WorkEstimateFinalInfoWidget(
-            infoAdded: _infoAdded,
-            maxResponseTime: maxResponseTime,
-            estimatorMode: widget.mode,
-          );
+          if (widget.mode == EstimatorMode.CreatePart) {
+            return WorkEstimateFinalInfoPartsWidget(
+                infoAdded: _partsInfoAdded,
+                maxResponseTime: DateUtils.dateFromString(
+                    _workEstimateProvider
+                        .selectedAuctionDetails.scheduledDateTime,
+                    'dd/MM/yyyy HH:mm'));
+          } else {
+            return WorkEstimateFinalInfoWidget(
+              infoAdded: _infoAdded,
+              maxResponseTime: maxResponseTime,
+              estimatorMode: widget.mode,
+            );
+          }
         },
       );
     }
@@ -547,56 +558,58 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       _isLoading = true;
     });
 
-    switch (widget.mode) {
-      case EstimatorMode.Create:
-      case EstimatorMode.CreateFinal:
-        try {
-          await _workEstimateProvider
-              .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
-                  appointmentId: _workEstimateProvider.selectedAppointment.id)
-              .then((workEstimateDetails) async {
-            if (workEstimateDetails != null) {
-              Provider.of<AppointmentConsultantProvider>(context).initDone =
-                  false;
-              Provider.of<AppointmentsConsultantProvider>(context).initDone =
-                  false;
+    try {
+      await _workEstimateProvider
+          .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
+          appointmentId: _workEstimateProvider.selectedAppointment.id)
+          .then((workEstimateDetails) async {
+        if (workEstimateDetails != null) {
+          Provider.of<AppointmentConsultantProvider>(context).initDone =
+          false;
+          Provider.of<AppointmentsConsultantProvider>(context).initDone =
+          false;
 
-              Navigator.pop(context);
-            } else {
-              setState(() {
-                _isLoading = false;
-              });
-            }
+          Navigator.pop(context);
+        } else {
+          setState(() {
+            _isLoading = false;
           });
-        } catch (error) {
-          _handleError(error);
         }
-        break;
-      case EstimatorMode.CreatePart:
-        try {
-          await _workEstimateProvider
-              .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
-                  auctionId: _workEstimateProvider.selectedAuction.id)
-              .then((workEstimateDetails) async {
-            if (workEstimateDetails != null) {
-              Provider.of<AppointmentConsultantProvider>(context).initDone =
-                  false;
-              Provider.of<AppointmentsConsultantProvider>(context).initDone =
-                  false;
+      });
+    } catch (error) {
+      _handleError(error);
+    }
+  }
 
-              Navigator.pop(context);
-            } else {
-              setState(() {
-                _isLoading = false;
-              });
-            }
+  _partsInfoAdded(DateTime deliveryDate, DateTime maxResponseDate) async {
+    _workEstimateProvider.workEstimateRequest.percent = 0;
+    _workEstimateProvider.workEstimateRequest.timeToRespond = deliveryDate;
+    _workEstimateProvider.workEstimateRequest.timeToRespond = maxResponseDate;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _workEstimateProvider
+          .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
+          auctionId: _workEstimateProvider.selectedAuctionDetails.id)
+          .then((workEstimateDetails) async {
+        if (workEstimateDetails != null) {
+          Provider.of<AppointmentConsultantProvider>(context).initDone =
+          false;
+          Provider.of<AppointmentsConsultantProvider>(context).initDone =
+          false;
+
+          Navigator.pop(context);
+        } else {
+          setState(() {
+            _isLoading = false;
           });
-        } catch (error) {
-          _handleError(error);
         }
-        break;
-      default:
-        break;
+      });
+    } catch (error) {
+      _handleError(error);
     }
   }
 
@@ -692,14 +705,14 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   _acceptWorkEstimate() async {
     if (widget.mode == EstimatorMode.Client) {
       try {
-//        await _workEstimateProvider
-//            .acceptBid(_appointmentProvider.selectedAppointmentDetail.bidId)
-//            .then((_) {
-//          setState(() {
-//            Provider.of<AppointmentProvider>(context).initDone = false;
-//            _initDone = false;
-//          });
-//        });
+        await _workEstimateProvider
+            .acceptBid(_workEstimateProvider.selectedAppointmentDetail.bidId)
+            .then((_) {
+          setState(() {
+            Provider.of<AppointmentProvider>(context).initDone = false;
+            _initDone = false;
+          });
+        });
       } catch (error) {
         if (error
             .toString()

@@ -4,10 +4,11 @@ import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
@@ -40,7 +41,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetail;
-  Auction selectedAuction;
+  AuctionDetail selectedAuctionDetails;
 
   int workEstimateId;
   int serviceProviderId;
@@ -60,10 +61,10 @@ class WorkEstimateProvider with ChangeNotifier {
     selectedRecommendations = [];
   }
 
-  refreshValues() {
+  refreshValues(EstimatorMode estimatorMode) {
     _initValues();
     refreshForm();
-    workEstimateRequest = WorkEstimateRequest();
+    workEstimateRequest = WorkEstimateRequest(estimatorMode);
   }
 
   refreshForm() {
@@ -78,9 +79,6 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   void setIssuesWithRecommendations(List<Issue> issues) {
-    for (Issue issue in issues) {
-      issue.clearDefaultRecommendations();
-    }
     workEstimateRequest.issues = issues;
   }
 
@@ -190,6 +188,7 @@ class WorkEstimateProvider with ChangeNotifier {
   addRequestToIssueSection(
       Issue issue, IssueRecommendation issueRecommendation) {
     var issueItem = IssueItem(
+      id: estimatorFormState['id'],
       type: estimatorFormState['type'],
       code: estimatorFormState['code'].code,
       name: estimatorFormState['name'].name,
@@ -230,12 +229,12 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
-    this.workEstimateRequest = workEstimateDetails.workEstimateRequest();
+  createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
+    this.workEstimateRequest = workEstimateDetails.workEstimateRequest(estimatorMode);
   }
 
-  createFinalWorkEstimateRequest(WorkEstimateDetails workEstimateDetails) {
-    this.workEstimateRequest = workEstimateDetails.finalWorkEstimateRequest();
+  createFinalWorkEstimateRequest(WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
+    this.workEstimateRequest = workEstimateDetails.finalWorkEstimateRequest(estimatorMode);
   }
 
   double selectedRecommendationTotalCost() {

@@ -1,3 +1,4 @@
+import 'package:app/modules/consultant-appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/dashboard/providers/dashboard.provider.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/providers/parts.provider.dart';
@@ -84,6 +85,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AuctionConsultantProvider());
   inject.registerFactory(() => WorkEstimateProvider());
   inject.registerFactory(() => AppointmentsConsultantProvider());
+  inject.registerFactory(() => SelectPartsProviderProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());
   inject.registerFactory(() => AppointmentsMechanicProvider());
   inject.registerFactory(() => AppointmentMechanicProvider());

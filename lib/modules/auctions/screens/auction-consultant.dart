@@ -2,8 +2,10 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/auction-consultant-parts.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
@@ -87,7 +89,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
           await auctionProvider
               .getAppointmentDetails(
                   auctionProvider.selectedAuction.appointment.id)
-              .then((_) {
+              .then((_) async {
             setState(() {
               _isLoading = false;
             });
@@ -149,10 +151,22 @@ class AuctionConsultantState extends State<AuctionConsultant> {
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions,
         auctionPermission: AuctionPermission.CarDetails)) {
+      Bid providerBid;
+
+      for(Bid bid in auctionProvider.auctionDetails.bids) {
+        if (bid.serviceProvider.id == Provider.of<Auth>(context).authUser.providerId) {
+          providerBid = bid;
+          break;
+        }
+      }
       return AuctionConsultantPartsWidget(
           auctionDetails: auctionProvider.auctionDetails,
           appointmentDetail: auctionProvider.appointmentDetails,
-          createEstimate: _createEstimate,
+          createEstimate: providerBid == null
+              ? _createEstimate
+              : null,
+          seeEstimate:
+              providerBid != null ? _seeEstimate : null,
           showProviderDetails: _showProviderDetails);
     }
 
@@ -178,9 +192,10 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
   _createEstimate() {
     if (auctionProvider.auctionDetails != null) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
-      Provider.of<WorkEstimateProvider>(context).selectedAuction =
-          auctionProvider.selectedAuction;
+      Provider.of<WorkEstimateProvider>(context)
+          .refreshValues(EstimatorMode.CreatePart);
+      Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
+          auctionProvider.auctionDetails;
       Provider.of<WorkEstimateProvider>(context)
           .setIssuesWithRecommendations(auctionProvider.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
@@ -193,6 +208,31 @@ class AuctionConsultantState extends State<AuctionConsultant> {
                 WorkEstimateForm(mode: EstimatorMode.CreatePart)),
       );
     }
+  }
+
+  _seeEstimate() {
+    Provider.of<WorkEstimateProvider>(context)
+        .refreshValues(EstimatorMode.ReadOnly);
+
+    Bid providerBid;
+    for(Bid bid in auctionProvider.auctionDetails.bids) {
+      if (bid.serviceProvider.id == Provider.of<Auth>(context).authUser.providerId) {
+        providerBid = bid;
+        break;
+      }
+    }
+    if (providerBid != null) {
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+          providerBid.workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          providerBid.serviceProvider.id;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+    );
   }
 
   _showProviderDetails() {

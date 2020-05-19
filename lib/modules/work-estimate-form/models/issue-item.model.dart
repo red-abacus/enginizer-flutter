@@ -31,8 +31,8 @@ class IssueItem {
         code: json['code'],
         name: json['name'],
         quantity: json['quantity'],
-        price: json['price'],
-        priceVAT: json['priceVAT'],
+        price: json['price'] != null ? json['price'] : 0.0,
+        priceVAT: json['priceVAT'] != null ? json['priceVAT'] : 0.0,
         total: json['total'] != null ? json['total'] : 0.0);
   }
 

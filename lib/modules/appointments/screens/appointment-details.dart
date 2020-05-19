@@ -250,7 +250,13 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
         _appointmentProvider.selectedAppointmentDetail.lastWorkEstimate();
 
     if (workEstimateId != 0) {
-      Provider.of<WorkEstimateProvider>(context).refreshValues();
+      EstimatorMode mode =
+      _appointmentProvider.selectedAppointmentDetail.status.getState() ==
+          AppointmentStatusState.PENDING
+          ? EstimatorMode.ClientAccept
+          : EstimatorMode.ReadOnly;
+
+      Provider.of<WorkEstimateProvider>(context).refreshValues(mode);
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           workEstimateId;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
@@ -260,12 +266,6 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
 
       DateEntry dateEntry = _appointmentProvider.selectedAppointmentDetail
           .getWorkEstimateDateEntry();
-
-      EstimatorMode mode =
-          _appointmentProvider.selectedAppointmentDetail.status.getState() ==
-                  AppointmentStatusState.PENDING
-              ? EstimatorMode.ClientAccept
-              : EstimatorMode.ReadOnly;
 
       Navigator.push(
         context,

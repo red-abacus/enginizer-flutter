@@ -14,6 +14,7 @@ import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/screens/car.dart';
 import 'package:app/modules/cars/screens/cars.dart';
+import 'package:app/modules/consultant-appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-consultant.dart';
 import 'package:app/modules/auctions/screens/auction-consultant.dart';
 import 'package:app/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
@@ -118,6 +119,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
           ChangeNotifierProvider.value(value: WorkEstimateProvider()),
           ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
+          ChangeNotifierProvider.value(value: SelectPartsProviderProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentsMechanicProvider()),
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),

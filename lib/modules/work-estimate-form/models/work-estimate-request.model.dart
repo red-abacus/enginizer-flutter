@@ -14,9 +14,13 @@ class WorkEstimateRequest {
   DateTime timeToRespond;
   EmployeeTimeSerie employeeTimeSerie;
 
+  final EstimatorMode estimatorMode;
+
+  WorkEstimateRequest(this.estimatorMode);
+
   String isValid(BuildContext context, EstimatorMode estimatorMode) {
     for (Issue issue in issues) {
-      if (issue.recommendations.length == 0) {
+      if (issue.recommendations.length == 0 && estimatorMode != EstimatorMode.CreatePart) {
         return S.of(context).estimator_empty_items_warning;
       }
 
@@ -25,7 +29,7 @@ class WorkEstimateRequest {
           return S.of(context).estimator_empty_section_warning;
         }
 
-        if (section.items.length == 0) {
+        if (section.items.length == 0 && estimatorMode != EstimatorMode.CreatePart) {
           return S.of(context).estimator_empty_items_warning;
         }
       }
@@ -49,13 +53,18 @@ class WorkEstimateRequest {
     List<dynamic> issuesList = [];
 
     for (Issue issue in issues) {
-      issuesList.add(issue.toCreateJson());
+      issuesList.add(issue.toCreateJson(estimatorMode));
     }
 
     map['issues'] = issuesList;
     map['forwardPaymentPercent'] = percent;
     map['timeToRespond'] =
         DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy');
+
+    if (estimatorMode == EstimatorMode.CreatePart) {
+      map['proposedDate'] =
+          DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy HH:mm');
+    }
     return map;
   }
 }
