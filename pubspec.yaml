@@ -27,7 +27,6 @@ dependencies:
   http: 0.12.0+2
   dio: ^3.0.8
   shared_preferences: ^0.5.3+1
-  flutter_svg: 0.15.0
   flutter_launcher_icons: 0.7.4
   flutter_typeahead: 1.7.0
   datetime_picker_formfield: 1.0.0
@@ -45,12 +44,13 @@ dependencies:
   intl: ^0.16.0
   flutter_speed_dial: ^1.2.5
   firebase_messaging: ^6.0.13
-  flushbar: 1.6.0
+  flushbar: 1.10.4
   pie_chart: 3.1.1
   rotated_corner_decoration: ^1.0.0
   clippy_flutter: ^1.1.1
   flutter_swiper: ^1.1.6
   url_launcher: ^5.4.5
+  flutter_svg: ^0.17.3+1
 
 dev_dependencies:
   flutter_test:
