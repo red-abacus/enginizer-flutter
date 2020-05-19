@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/utils/date_utils.dart';
@@ -18,9 +17,20 @@ class WorkEstimateRequest {
 
   WorkEstimateRequest(this.estimatorMode);
 
+  void setIssues(BuildContext context, List<Issue> issues) {
+    this.issues = issues;
+
+    if (estimatorMode == EstimatorMode.Create) {
+      this.issues.forEach((issue) {
+        issue.recommendations.add(IssueRecommendation.defaultRecommendation(context));
+      });
+    }
+  }
+
   String isValid(BuildContext context, EstimatorMode estimatorMode) {
     for (Issue issue in issues) {
-      if (issue.recommendations.length == 0 && estimatorMode != EstimatorMode.CreatePart) {
+      if (issue.recommendations.length == 0 &&
+          estimatorMode != EstimatorMode.CreatePart) {
         return S.of(context).estimator_empty_items_warning;
       }
 
@@ -29,7 +39,8 @@ class WorkEstimateRequest {
           return S.of(context).estimator_empty_section_warning;
         }
 
-        if (section.items.length == 0 && estimatorMode != EstimatorMode.CreatePart) {
+        if (section.items.length == 0 &&
+            estimatorMode != EstimatorMode.CreatePart) {
           return S.of(context).estimator_empty_items_warning;
         }
       }

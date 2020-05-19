@@ -6,6 +6,7 @@ import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
@@ -296,19 +297,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           onTap: () => _assignMechanic()));
     }
 
-    if (widget.mode != EstimatorMode.ReadOnly &&
-        widget.mode != EstimatorMode.CreateFinal &&
-        widget.mode != EstimatorMode.CreatePart) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.add),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).estimator_add_new_operation,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => _addOperation()));
-    }
-
     if (widget.mode != EstimatorMode.Create &&
         widget.mode != EstimatorMode.CreatePart) {
       buttons.add(SpeedDialChild(
@@ -419,22 +407,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     return _currentStepIndex == stepIndex;
   }
 
-  _addOperation() {
-    setState(() {
-      List<Issue> issues = _workEstimateProvider.workEstimateRequest.issues;
-
-      if (_currentStepIndex < issues.length) {
-        Issue issue = issues[_currentStepIndex];
-
-        IssueRecommendation section =
-            IssueRecommendation.defaultRecommendation();
-        issue.recommendations.add(section);
-
-        _showSectionName(issue, section);
-      }
-    });
-  }
-
   _assignMechanic() {
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -518,7 +490,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     String validationString =
         _workEstimateProvider.workEstimateRequest.isValid(context, widget.mode);
 
-    if (validationString != null && false) {
+    if (validationString != null) {
       AlertWarningDialog.showAlertDialog(
           context, S.of(context).general_warning, validationString);
     } else {
@@ -596,10 +568,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           auctionId: _workEstimateProvider.selectedAuctionDetails.id)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
-          Provider.of<AppointmentConsultantProvider>(context).initDone =
-          false;
-          Provider.of<AppointmentsConsultantProvider>(context).initDone =
-          false;
+          Provider.of<AuctionConsultantProvider>(context).initDone = false;
 
           Navigator.pop(context);
         } else {

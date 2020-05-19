@@ -71,14 +71,17 @@ class WorkEstimateProvider with ChangeNotifier {
     estimatorFormState = Map.from(initialEstimatorFormState);
   }
 
-  void setIssues(List<Issue> issues) {
+  void setIssues(BuildContext context, List<Issue> issues) {
     for (Issue issue in issues) {
       issue.clearItems();
     }
-    workEstimateRequest.issues = issues;
+    workEstimateRequest.setIssues(context, issues);
   }
 
   void setIssuesWithRecommendations(List<Issue> issues) {
+    issues.forEach((issue) {
+      issue.clearRecommendationsItems();
+    });
     workEstimateRequest.issues = issues;
   }
 
@@ -107,9 +110,11 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<List<ProviderItem>> loadProviderItems(
       int serviceProviderId, IssueItemQuery query) async {
+    print('load provider items ${serviceProviderId}');
     try {
       var response = await _providerService.getProviderItems(
           serviceProviderId, query.toJson());
+      print('za response $response');
       providerItems = response;
       notifyListeners();
       return response;

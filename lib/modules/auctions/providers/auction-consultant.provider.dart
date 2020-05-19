@@ -17,11 +17,12 @@ class AuctionConsultantProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
   ProviderService providerService = inject<ProviderService>();
   AuctionsService _auctionsService = inject<AuctionsService>();
-  BidsService _bidService = inject<BidsService>();
 
   Auction selectedAuction;
   AuctionDetail auctionDetails;
   AppointmentDetail appointmentDetails;
+
+  bool initDone = false;
 
   Future<AuctionDetail> getAuctionDetails(int auctionId) async {
     try {

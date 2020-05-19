@@ -33,6 +33,8 @@ class _AppointmentDetailsPartsProviderEstimateModalState
     _provider = Provider.of<SelectPartsProviderProvider>(context);
 
     if (!_initDone) {
+      print('did change dependencies !');
+
       if (_provider.selectedAppointmentDetails != null) {
         setState(() {
           _isLoading = true;
@@ -190,6 +192,7 @@ class _AppointmentDetailsPartsProviderEstimateModalState
   }
 
   _downloadNextServiceProviders() async {
+    print('load providers !');
     try {
       await _provider.loadProviders().then((list) async {
         if (list != null) {

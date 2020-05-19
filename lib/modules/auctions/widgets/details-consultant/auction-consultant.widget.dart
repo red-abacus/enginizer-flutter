@@ -199,7 +199,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
     if (widget.auctionDetails != null) {
       Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
-          .setIssues(widget.auctionDetails.issues);
+          .setIssues(context, widget.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           Provider.of<Auth>(context).authUserDetails.userProvider.id;
 

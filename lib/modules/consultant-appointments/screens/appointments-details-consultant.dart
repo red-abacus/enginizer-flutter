@@ -280,7 +280,7 @@ class AppointmentDetailsConsultantState
       Provider.of<WorkEstimateProvider>(context)
           .refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
-          .setIssues(_provider.selectedAppointmentDetail.issues);
+          .setIssues(context, _provider.selectedAppointmentDetail.issues);
       Provider.of<WorkEstimateProvider>(context).selectedAppointment =
           _provider.selectedAppointment;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =

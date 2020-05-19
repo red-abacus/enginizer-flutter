@@ -2,7 +2,7 @@ import 'item-type.model.dart';
 
 class ProviderItem {
   int id;
-  ItemType type;
+  ItemType itemType;
   int typeId;
   String code;
   String name;
@@ -16,7 +16,7 @@ class ProviderItem {
 
   ProviderItem(
       {this.id,
-      this.type,
+      this.itemType,
       this.typeId,
       this.code,
       this.name,
@@ -28,9 +28,10 @@ class ProviderItem {
       this.addition});
 
   factory ProviderItem.fromJson(Map<String, dynamic> json) {
+    print('provider item json $json');
     return ProviderItem(
         id: json['id'],
-        type: json['type'] != null ? ItemType.fromJson(json['type']) : null,
+        itemType: json['itemType'] != null ? ItemType.fromJson(json['itemType']) : null,
         typeId: json['typeId'],
         code: json['code'],
         name: json['name'],
