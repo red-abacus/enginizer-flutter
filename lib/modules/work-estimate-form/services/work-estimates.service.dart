@@ -1,6 +1,9 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -19,6 +22,7 @@ class WorkEstimatesService {
   static const String ACCEPT_WORK_ESTIMATE_EXCEPTION =
       'ACCEPT_WORK_ESTIMATE_EXCEPTION';
   static const String REJECT_WORK_ESTIMATE_EXCEPTION = 'REJECT_WORK_ESTIMATE_EXCEPTION';
+  static const String ADD_WORK_ESTIMATE_ITEM_EXCEPTION = 'ADD_WORK_ESTIMATE_ITEM_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -85,18 +89,18 @@ class WorkEstimatesService {
     }
   }
 
-  Future<Issue> addWorkEstimateItem(int id, Issue issue) async {
+  Future<WorkEstimateDetails> addWorkEstimateItem(int workEstimateId, IssueItemRequest issueItemRequest) async {
     try {
-      final response = await _dio.post(_buildWorkEstimateItemsPath(id),
-          data: jsonEncode(issue.toJson()));
+      final response = await _dio.post(_buildWorkEstimateItemsPath(workEstimateId),
+          data: jsonEncode(issueItemRequest.toJson()));
 
       if (response.statusCode == 200) {
-        return _mapIssue(response.data);
+        return WorkEstimateDetails.fromJson(response.data);
       } else {
-        throw Exception('TODO');
+        throw Exception(ADD_WORK_ESTIMATE_ITEM_EXCEPTION);
       }
     } catch (error) {
-      throw Exception('TODO');
+      throw Exception(ADD_WORK_ESTIMATE_ITEM_EXCEPTION);
     }
   }
 

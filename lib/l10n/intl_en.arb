@@ -453,5 +453,6 @@
   "exception_add_appointment_recommendation_image": "There was an error trying to add recommendation image.",
   "exception_stop_appointment": "There was an error trying to stop the appointment.",
   "exception_appointment_request_items": "There was an error tying to request appointment items.",
-  "exception_create_provider_item": "There was an error trying to add a new part."
+  "exception_create_provider_item": "There was an error trying to add a new part.",
+  "exception_add_work_estimate_item": "There was an error trying to add a new estimate item."
 }

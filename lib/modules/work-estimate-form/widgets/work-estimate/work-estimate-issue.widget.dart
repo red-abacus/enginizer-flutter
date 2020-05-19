@@ -136,19 +136,25 @@ class WorkEstimateIssueWidget extends StatelessWidget {
   }
 
   _getRemoveButton(BuildContext context, IssueItem issueItem) {
-    return estimatorMode == EstimatorMode.ReadOnly ||
-            estimatorMode == EstimatorMode.Client ||
-            estimatorMode == EstimatorMode.ClientAccept
-        ? Container()
-        : Container(
-            alignment: Alignment.center,
-            width: 54.0,
-            height: 54.0,
-            child: GestureDetector(
-                onTap: () => removeIssueItem(issueItem),
-                child: Icon(Icons.close,
-                    color: Theme.of(context).accentColor, size: 32)),
-          );
+    switch (estimatorMode) {
+      case EstimatorMode.ReadOnly:
+      case EstimatorMode.Client:
+      case EstimatorMode.ClientAccept:
+      case EstimatorMode.Edit:
+        return Container();
+      case EstimatorMode.Edit:
+        return Container();
+      default:
+        return Container(
+          alignment: Alignment.center,
+          width: 54.0,
+          height: 54.0,
+          child: GestureDetector(
+              onTap: () => removeIssueItem(issueItem),
+              child: Icon(Icons.close,
+                  color: Theme.of(context).accentColor, size: 32)),
+        );
+    }
   }
 
   String _translateType(BuildContext context, String type) {

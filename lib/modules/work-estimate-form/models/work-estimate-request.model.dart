@@ -35,10 +35,6 @@ class WorkEstimateRequest {
       }
 
       for (IssueRecommendation section in issue.recommendations) {
-        if (section.isNew) {
-          return S.of(context).estimator_empty_section_warning;
-        }
-
         if (section.items.length == 0 &&
             estimatorMode != EstimatorMode.CreatePart) {
           return S.of(context).estimator_empty_items_warning;

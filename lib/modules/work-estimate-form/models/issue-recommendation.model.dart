@@ -8,7 +8,6 @@ class IssueRecommendation {
   int id;
   String name;
   List<IssueItem> items;
-  bool isNew = false;
   bool expanded = false;
   String priority;
   bool isStandard;
@@ -49,7 +48,6 @@ class IssueRecommendation {
     recommendation.name = S.of(context).estimator_default_recommendation;
     recommendation.id = null;
     recommendation.items = [];
-    recommendation.isNew = false;
 
     print('recommendation ${recommendation.name}');
 

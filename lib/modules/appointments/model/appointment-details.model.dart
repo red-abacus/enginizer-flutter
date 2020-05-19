@@ -1,6 +1,7 @@
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
@@ -148,5 +149,16 @@ class AppointmentDetail {
 
   static String scheduledTimeFormat() {
     return "dd/MM/yyyy HH:mm";
+  }
+
+  bool canEditWorkEstimate() {
+    switch (status.getState()) {
+      case AppointmentStatusState.SCHEDULED:
+      case AppointmentStatusState.IN_UNIT:
+      case AppointmentStatusState.IN_WORK:
+        return true;
+      default:
+        return false;
+    }
   }
 }

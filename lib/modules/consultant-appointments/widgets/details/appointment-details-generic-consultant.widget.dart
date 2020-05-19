@@ -1,6 +1,5 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment-status.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -111,7 +110,8 @@ class AppointmentDetailsGenericConsultantWidgetState
               _titleContainer(S.of(context).appointment_details_services_title),
               _servicesContainer(),
               _buildSeparator(),
-              _titleContainer(_appointmentDateTitle(context)),
+              _titleContainer(
+                  S.of(context).appointment_details_services_issues),
               _issuesContainer(),
               _buildSeparator(),
               _titleContainer(
@@ -122,18 +122,6 @@ class AppointmentDetailsGenericConsultantWidgetState
         ],
       ),
     );
-  }
-
-  String _appointmentDateTitle(BuildContext context) {
-    switch (widget.appointmentDetail.status.getState()) {
-      case AppointmentStatusState.SUBMITTED:
-        return S.of(context).appointment_details_services_appointment_date;
-      case AppointmentStatusState.PENDING:
-      case AppointmentStatusState.SCHEDULED:
-        return S.of(context).auction_bid_date_schedule;
-      default:
-        return S.of(context).appointment_details_services_appointment_date;
-    }
   }
 
   _buttonsWidget() {

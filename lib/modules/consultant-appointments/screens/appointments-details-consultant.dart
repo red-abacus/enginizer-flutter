@@ -1,11 +1,7 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
-import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/consultant-appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
@@ -129,8 +125,8 @@ class AppointmentDetailsConsultantState
     }
 
     if (_tabController == null) {
-      _tabController = new TabController(
-          vsync: this, length: 3, initialIndex: 0);
+      _tabController =
+          new TabController(vsync: this, length: 3, initialIndex: 0);
     }
 
     return Consumer<AppointmentConsultantProvider>(
@@ -312,7 +308,7 @@ class AppointmentDetailsConsultantState
         context,
         MaterialPageRoute(
             builder: (context) => WorkEstimateForm(
-                mode: EstimatorMode.ReadOnly,
+                mode: _provider.selectedAppointmentDetail.canEditWorkEstimate() ? EstimatorMode.Edit : EstimatorMode.ReadOnly,
                 dateEntry: _provider.selectedAppointmentDetail
                     .getWorkEstimateDateEntry())),
       );
@@ -323,7 +319,8 @@ class AppointmentDetailsConsultantState
 
   _requestPartsProvider() {
     Provider.of<SelectPartsProviderProvider>(context).resetParams();
-    Provider.of<SelectPartsProviderProvider>(context).selectedAppointmentDetails = _provider.selectedAppointmentDetail;
+    Provider.of<SelectPartsProviderProvider>(context)
+        .selectedAppointmentDetails = _provider.selectedAppointmentDetail;
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -334,8 +331,8 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentDetailsPartsProviderEstimateModal();
-              });
+            return AppointmentDetailsPartsProviderEstimateModal();
+          });
         });
   }
 

@@ -4,7 +4,6 @@ import 'package:app/modules/work-estimate-form/models/issue-recommendation.model
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-section-widget.dart';
-import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +15,6 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
   final Function addIssueItem;
   final Function removeIssueItem;
   final Function selectIssueSection;
-  final Function showSectionName;
 
   WorkEstimateSectionsWidget(
       {this.issue,
@@ -24,7 +22,6 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
       this.addIssueItem,
       this.removeIssueItem,
       this.selectIssueSection,
-      this.showSectionName,
       this.estimatorMode});
 
   @override
@@ -49,7 +46,6 @@ class _WorkEstimateSectionsWidgetState
               addIssueItem: _addIssueItem,
               removeIssueItem: _removeIssueItem,
               selectIssueSection: _selectIssueSection,
-              showSectionName: widget.showSectionName,
               estimatorMode: widget.estimatorMode,
               selected: Provider.of<WorkEstimateProvider>(context)
                   .selectedRecommendations

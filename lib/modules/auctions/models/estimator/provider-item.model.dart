@@ -28,7 +28,6 @@ class ProviderItem {
       this.addition});
 
   factory ProviderItem.fromJson(Map<String, dynamic> json) {
-    print('provider item json $json');
     return ProviderItem(
         id: json['id'],
         itemType: json['itemType'] != null ? ItemType.fromJson(json['itemType']) : null,

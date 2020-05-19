@@ -9,6 +9,7 @@ import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dar
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
@@ -190,17 +191,25 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
+  Future<WorkEstimateDetails> addIssueItem(
+      int workEstimateId, IssueItemRequest issueItemRequest) async {
+    print('work estimate id $workEstimateId');
+    print('issue item request ${issueItemRequest.toJson()}');
+
+    try {
+      this.workEstimateDetails = await this
+          ._workEstimatesService
+          .addWorkEstimateItem(workEstimateId, issueItemRequest);
+      notifyListeners();
+      return workEstimateDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   addRequestToIssueSection(
       Issue issue, IssueRecommendation issueRecommendation) {
-    var issueItem = IssueItem(
-      id: estimatorFormState['id'],
-      type: estimatorFormState['type'],
-      code: estimatorFormState['code'].code,
-      name: estimatorFormState['name'].name,
-      quantity: estimatorFormState['quantity'],
-      price: estimatorFormState['price'],
-      priceVAT: estimatorFormState['priceVAT'],
-    );
+    var issueItem = issueItemFromFormState();
 
     for (Issue temp in workEstimateRequest.issues) {
       if (temp == issue) {
@@ -215,6 +224,18 @@ class WorkEstimateProvider with ChangeNotifier {
         break;
       }
     }
+  }
+
+  issueItemFromFormState() {
+    return IssueItem(
+      id: estimatorFormState['id'],
+      type: estimatorFormState['type'],
+      code: estimatorFormState['code'].code,
+      name: estimatorFormState['name'].name,
+      quantity: estimatorFormState['quantity'],
+      price: estimatorFormState['price'],
+      priceVAT: estimatorFormState['priceVAT'],
+    );
   }
 
   removeIssueItem(Issue issue, IssueRecommendation issueRecommendation,
@@ -234,12 +255,16 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  createWorkEstimateRequest(WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
-    this.workEstimateRequest = workEstimateDetails.workEstimateRequest(estimatorMode);
+  createWorkEstimateRequest(
+      WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
+    this.workEstimateRequest =
+        workEstimateDetails.workEstimateRequest(estimatorMode);
   }
 
-  createFinalWorkEstimateRequest(WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
-    this.workEstimateRequest = workEstimateDetails.finalWorkEstimateRequest(estimatorMode);
+  createFinalWorkEstimateRequest(
+      WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
+    this.workEstimateRequest =
+        workEstimateDetails.finalWorkEstimateRequest(estimatorMode);
   }
 
   double selectedRecommendationTotalCost() {

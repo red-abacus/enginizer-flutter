@@ -7,11 +7,11 @@ import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
-import 'package:app/modules/shared/widgets/alert-text-form-widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
@@ -59,7 +59,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   int _currentStepIndex = 0;
   List<FAStep> steps = [];
 
-  WorkEstimateProvider _workEstimateProvider;
+  WorkEstimateProvider _provider;
 
   _WorkEstimateFormState({this.route});
 
@@ -79,7 +79,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      _workEstimateProvider = Provider.of<WorkEstimateProvider>(context);
+      _provider = Provider.of<WorkEstimateProvider>(context);
 
       setState(() {
         _isLoading = true;
@@ -94,28 +94,29 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _loadData() async {
     try {
-      await _workEstimateProvider.loadItemTypes().then((_) async {
+      await _provider.loadItemTypes().then((_) async {
         String startDate =
             DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
         String endDate = DateUtils.stringFromDate(
             DateUtils.addDayToDate(DateTime.now(), 7), 'dd/MM/yyyy');
-        await _workEstimateProvider
+        await _provider
             .loadServiceProviderSchedule(
-                _workEstimateProvider.serviceProviderId, startDate, endDate)
+            _provider.serviceProviderId, startDate, endDate)
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
               widget.mode == EstimatorMode.CreateFinal ||
               widget.mode == EstimatorMode.Client ||
-              widget.mode == EstimatorMode.ClientAccept) {
-            await _workEstimateProvider
-                .getWorkEstimateDetails(_workEstimateProvider.workEstimateId)
+              widget.mode == EstimatorMode.ClientAccept ||
+              widget.mode == EstimatorMode.Edit) {
+            await _provider
+                .getWorkEstimateDetails(_provider.workEstimateId)
                 .then((workEstimateDetails) {
               if (workEstimateDetails != null) {
                 if (widget.mode == EstimatorMode.CreateFinal) {
-                  _workEstimateProvider.createFinalWorkEstimateRequest(
+                  _provider.createFinalWorkEstimateRequest(
                       workEstimateDetails, widget.mode);
                 } else {
-                  _workEstimateProvider.createWorkEstimateRequest(
+                  _provider.createWorkEstimateRequest(
                       workEstimateDetails, widget.mode);
                 }
               }
@@ -158,7 +159,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   Widget _buildStepper(BuildContext context) => ClipRRect(
         borderRadius: new BorderRadius.circular(5.0),
         child: Container(
-          padding: EdgeInsets.only(bottom: 60),
           child: steps.isNotEmpty
               ? Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
@@ -183,7 +183,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   List<FAStep> _buildSteps(BuildContext context) {
     List<FAStep> stepsList = [];
-    List<Issue> issues = _workEstimateProvider?.workEstimateRequest?.issues;
+    List<Issue> issues = _provider?.workEstimateRequest?.issues;
 
     if (widget.mode == EstimatorMode.Client ||
         widget.mode == EstimatorMode.ClientAccept) {
@@ -207,7 +207,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 expandSection: _expandSection,
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
-                showSectionName: _showSectionName,
                 estimatorMode: widget.mode)),
       );
     });
@@ -238,12 +237,12 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             style: TextHelper.customTextStyle(null, red, FontWeight.normal, 22),
           ),
           Text(
-            '${S.of(context).estimator_percent}: ${_workEstimateProvider.selectedAppointmentDetail?.forwardPaymentPercent}',
+            '${S.of(context).estimator_percent}: ${_provider.selectedAppointmentDetail?.forwardPaymentPercent}',
             style:
                 TextHelper.customTextStyle(null, gray, FontWeight.normal, 14),
           ),
           Text(
-            '${S.of(context).estimator_max_time}: ${_workEstimateProvider.selectedAppointmentDetail?.timeToRespond}',
+            '${S.of(context).estimator_max_time}: ${_provider.selectedAppointmentDetail?.timeToRespond}',
             style:
                 TextHelper.customTextStyle(null, gray, FontWeight.normal, 14),
           ),
@@ -264,7 +263,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
     var buttons = List<SpeedDialChild>();
 
-    if (widget.mode != EstimatorMode.ReadOnly) {
+    if (widget.mode != EstimatorMode.ReadOnly &&
+        widget.mode != EstimatorMode.Edit) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.save),
           foregroundColor: red,
@@ -342,8 +342,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _clientBottomContainer() {
     double totalCost = widget.mode == EstimatorMode.Client
-        ? _workEstimateProvider.selectedRecommendationTotalCost()
-        : _workEstimateProvider.workEstimateDetails?.totalCost;
+        ? _provider.selectedRecommendationTotalCost()
+        : _provider.workEstimateDetails?.totalCost;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -368,7 +368,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _bottomContainerButton() {
     if (widget.mode == EstimatorMode.ReadOnly ||
-        _workEstimateProvider.workEstimateDetails.status !=
+        _provider.workEstimateDetails.status !=
             WorkEstimateStatus.Pending) {
       return Container();
     }
@@ -418,9 +418,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return EstimateAssignMechanicModal(
-                appointment: _workEstimateProvider.selectedAppointment,
+                appointment: _provider.selectedAppointment,
                 appointmentDetail:
-                    _workEstimateProvider.selectedAppointmentDetail,
+                _provider.selectedAppointmentDetail,
                 refreshState: _refreshState,
                 assignEmployee: _assignEmployee);
           });
@@ -428,7 +428,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _assignEmployee(EmployeeTimeSerie timeSerie) {
-    _workEstimateProvider.workEstimateRequest.employeeTimeSerie = timeSerie;
+    _provider.workEstimateRequest.employeeTimeSerie = timeSerie;
   }
 
   _refreshState() {}
@@ -439,7 +439,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         section.expanded = false;
       }
 
-      issueSection.isNew = false;
       issueSection.expanded = true;
       issueSection.name = name;
     });
@@ -459,28 +458,56 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     });
   }
 
-  _addIssueItem(Issue issue, IssueRecommendation issueRecommendation) {
-    setState(() {
-      _workEstimateProvider.addRequestToIssueSection(
-          issue, issueRecommendation);
-    });
+  _addIssueItem(Issue issue, IssueRecommendation issueRecommendation) async {
+    if (widget.mode == EstimatorMode.Edit) {
+      IssueItemRequest issueItemRequest = new IssueItemRequest(
+          issueId: issue.id,
+          recommendationId: issueRecommendation.id,
+          issueItem: _provider.issueItemFromFormState());
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _provider.addIssueItem(_provider.workEstimateDetails.id, issueItemRequest).then((_) {
+          setState(() {
+            _provider.workEstimateRequest.setIssues(context, _provider.workEstimateDetails.issues);
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error.toString().contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
+
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _provider.addRequestToIssueSection(
+            issue, issueRecommendation);
+      });
+    }
   }
 
   _removeIssueItem(Issue issue, IssueRecommendation issueRecommendation,
       IssueItem issueItem) {
     setState(() {
-      _workEstimateProvider.removeIssueItem(
+      _provider.removeIssueItem(
           issue, issueRecommendation, issueItem);
     });
   }
 
   _selectIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
     setState(() {
-      if (!_workEstimateProvider.selectedRecommendations
+      if (!_provider.selectedRecommendations
           .contains(issueRecommendation)) {
-        _workEstimateProvider.selectedRecommendations.add(issueRecommendation);
+        _provider.selectedRecommendations.add(issueRecommendation);
       } else {
-        _workEstimateProvider.selectedRecommendations
+        _provider.selectedRecommendations
             .remove(issueRecommendation);
       }
     });
@@ -488,14 +515,14 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _save() {
     String validationString =
-        _workEstimateProvider.workEstimateRequest.isValid(context, widget.mode);
+    _provider.workEstimateRequest.isValid(context, widget.mode);
 
     if (validationString != null) {
       AlertWarningDialog.showAlertDialog(
           context, S.of(context).general_warning, validationString);
     } else {
       DateTime maxResponseTime = widget.mode == EstimatorMode.Create
-          ? _workEstimateProvider.workEstimateRequest.employeeTimeSerie
+          ? _provider.workEstimateRequest.employeeTimeSerie
               .getDate()
           : new DateTime(DateTime.now().year + 1, DateTime.now().month,
               DateTime.now().day);
@@ -507,7 +534,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             return WorkEstimateFinalInfoPartsWidget(
                 infoAdded: _partsInfoAdded,
                 maxResponseTime: DateUtils.dateFromString(
-                    _workEstimateProvider
+                    _provider
                         .selectedAuctionDetails.scheduledDateTime,
                     'dd/MM/yyyy HH:mm'));
           } else {
@@ -523,23 +550,21 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _infoAdded(int percentage, DateTime time) async {
-    _workEstimateProvider.workEstimateRequest.percent = percentage;
-    _workEstimateProvider.workEstimateRequest.timeToRespond = time;
+    _provider.workEstimateRequest.percent = percentage;
+    _provider.workEstimateRequest.timeToRespond = time;
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      await _workEstimateProvider
-          .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
-          appointmentId: _workEstimateProvider.selectedAppointment.id)
+      await _provider
+          .createWorkEstimate(_provider.workEstimateRequest,
+              appointmentId: _provider.selectedAppointment.id)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
-          Provider.of<AppointmentConsultantProvider>(context).initDone =
-          false;
-          Provider.of<AppointmentsConsultantProvider>(context).initDone =
-          false;
+          Provider.of<AppointmentConsultantProvider>(context).initDone = false;
+          Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
 
           Navigator.pop(context);
         } else {
@@ -554,18 +579,18 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _partsInfoAdded(DateTime deliveryDate, DateTime maxResponseDate) async {
-    _workEstimateProvider.workEstimateRequest.percent = 0;
-    _workEstimateProvider.workEstimateRequest.timeToRespond = deliveryDate;
-    _workEstimateProvider.workEstimateRequest.timeToRespond = maxResponseDate;
+    _provider.workEstimateRequest.percent = 0;
+    _provider.workEstimateRequest.timeToRespond = deliveryDate;
+    _provider.workEstimateRequest.timeToRespond = maxResponseDate;
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      await _workEstimateProvider
-          .createWorkEstimate(_workEstimateProvider.workEstimateRequest,
-          auctionId: _workEstimateProvider.selectedAuctionDetails.id)
+      await _provider
+          .createWorkEstimate(_provider.workEstimateRequest,
+              auctionId: _provider.selectedAuctionDetails.id)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
           Provider.of<AuctionConsultantProvider>(context).initDone = false;
@@ -579,26 +604,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       });
     } catch (error) {
       _handleError(error);
-    }
-  }
-
-  _showSectionName(Issue issue, IssueRecommendation issueRecommendation) {
-    if (widget.mode != EstimatorMode.ReadOnly) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertTextFormWidget(
-            title: S.of(context).estimator_add_section_name,
-            placeholder: issueRecommendation.isNew
-                ? S.of(context).estimator_section_name
-                : issueRecommendation.name,
-            buttonName: S.of(context).general_add,
-            addTextFunction: (name) {
-              _setSectionName(issue, issueRecommendation, name);
-            },
-          );
-        },
-      );
     }
   }
 
@@ -623,8 +628,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     });
 
     try {
-      await _workEstimateProvider
-          .rejectWorkEstimate(_workEstimateProvider.workEstimateDetails.id)
+      await _provider
+          .rejectWorkEstimate(_provider.workEstimateDetails.id)
           .then((success) {
         Provider.of<AppointmentProvider>(context).initDone = false;
         Navigator.pop(context);
@@ -636,7 +641,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _acceptEstimateAlert() {
     if (widget.mode == EstimatorMode.Client) {
-      if (_workEstimateProvider.selectedRecommendations.length == 0) {
+      if (_provider.selectedRecommendations.length == 0) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).estimator_no_recommendation_selected, context);
       } else {
@@ -674,8 +679,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   _acceptWorkEstimate() async {
     if (widget.mode == EstimatorMode.Client) {
       try {
-        await _workEstimateProvider
-            .acceptBid(_workEstimateProvider.selectedAppointmentDetail.bidId)
+        await _provider
+            .acceptBid(_provider.selectedAppointmentDetail.bidId)
             .then((_) {
           setState(() {
             Provider.of<AppointmentProvider>(context).initDone = false;
@@ -696,8 +701,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       });
 
       try {
-        await _workEstimateProvider
-            .acceptBid(_workEstimateProvider.selectedAppointmentDetail.bidId)
+        await _provider
+            .acceptBid(_provider.selectedAppointmentDetail.bidId)
             .then((_) {
           setState(() {
             Provider.of<AppointmentProvider>(context).initDone = false;
