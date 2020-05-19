@@ -5,6 +5,7 @@ import 'package:app/modules/consultant-appointments/models/receive-form-request.
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-type.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
@@ -42,6 +43,7 @@ class AppointmentsService {
   static const String STOP_APPOINTMENT_EXCEPTION = 'STOP_APPOINTMENT_EXCEPTION';
   static const String APPOINTMENT_REQUEST_ITEMS_EXCEPTION =
       'APPOINTMENT_REQUEST_ITEMS_EXCEPTION';
+  static const String APPOINTMENT_ITEMS_EXCEPTION = 'APPOINTMENT_ITEMS_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -95,6 +97,9 @@ class AppointmentsService {
   static const String _APPOINTMENT_REQUEST_ITEMS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENT_REQUEST_ITEMS_SUFFIX = '/requestItems';
+
+  static const String _APPOINTMENTS_ITEMS_PREFIX = '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _APPOINTMENTS_ITEMS_SUFFIX = '/items';
 
   Dio _dio = inject<Dio>();
 
@@ -315,8 +320,6 @@ class AppointmentsService {
 
   Future<bool> addAppointmentRecommendationImage(
       int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
-    print(
-        'path ${_buildAddAppointmentRecommendationImage(appointmentId, mechanicTaskIssue.id)}');
     List<MultipartFile> files = [];
 
     if (mechanicTaskIssue.image != null) {
@@ -365,6 +368,20 @@ class AppointmentsService {
     }
   }
 
+  Future<List<IssueItem>> getAppointmentItems(int appointmentId) async {
+    try {
+      final response = await _dio.get(_buildGetAppointmentItems(appointmentId));
+
+      if (response.statusCode == 200) {
+        return _mapIssueItems(response.data);
+      } else {
+        throw Exception(APPOINTMENT_ITEMS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(APPOINTMENT_ITEMS_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -391,6 +408,16 @@ class AppointmentsService {
     });
 
     return tasks;
+  }
+
+  _mapIssueItems(List<dynamic> response) {
+    List<IssueItem> items = [];
+
+    response.forEach((item) {
+      items.add(IssueItem.fromJson(item));
+    });
+
+    return items;
   }
 
   _buildReceiveProcedurePath(int appointmentId) {
@@ -470,5 +497,11 @@ class AppointmentsService {
     return _APPOINTMENT_REQUEST_ITEMS_PREFIX +
         appointmentId.toString() +
         _APPOINTMENT_REQUEST_ITEMS_SUFFIX;
+  }
+
+  _buildGetAppointmentItems(int appointmentId) {
+    return _APPOINTMENTS_ITEMS_PREFIX +
+        appointmentId.toString() +
+        _APPOINTMENTS_ITEMS_SUFFIX;
   }
 }

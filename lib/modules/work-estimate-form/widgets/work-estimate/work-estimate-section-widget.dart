@@ -155,6 +155,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       return Container(
         margin: EdgeInsets.only(top: 4),
         child: WorkEstimateSectionItemsWidget(
+            issue: issue,
             issueRecommendation: issueRecommendation,
             addIssueItem: addIssueItem,
             removeIssueItem: removeIssueItem,

@@ -10,9 +10,9 @@ class IssueItemRequest {
         this.recommendationId,
         this.issueItem});
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toCreateJson() => {
     'issueId': this.issueId,
     'recommendationId': this.recommendationId,
-    'items': [issueItem.toJson()]
+    'items': [issueItem.toCreateJson()]
   };
 }

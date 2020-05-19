@@ -1,9 +1,11 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
+import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -21,8 +23,11 @@ class WorkEstimatesService {
       'GET_WORK_ESTIMATE_DETIALS_EXCEPTION';
   static const String ACCEPT_WORK_ESTIMATE_EXCEPTION =
       'ACCEPT_WORK_ESTIMATE_EXCEPTION';
-  static const String REJECT_WORK_ESTIMATE_EXCEPTION = 'REJECT_WORK_ESTIMATE_EXCEPTION';
-  static const String ADD_WORK_ESTIMATE_ITEM_EXCEPTION = 'ADD_WORK_ESTIMATE_ITEM_EXCEPTION';
+  static const String REJECT_WORK_ESTIMATE_EXCEPTION =
+      'REJECT_WORK_ESTIMATE_EXCEPTION';
+  static const String ADD_WORK_ESTIMATE_ITEM_EXCEPTION =
+      'ADD_WORK_ESTIMATE_ITEM_EXCEPTION';
+  static const String WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION = 'WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -41,6 +46,10 @@ class WorkEstimatesService {
   static const String _WORK_ESTIMATE_REJECT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_REJECT_SUFFIX = '/reject';
+
+  static const String _WORK_ESTIMATE_IMPORT_PREFIX =
+      '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
+  static const String _WORK_ESTIMATE_IMPORT_SUFFIX = '/items/import';
 
   Dio _dio = inject<Dio>();
 
@@ -89,10 +98,12 @@ class WorkEstimatesService {
     }
   }
 
-  Future<WorkEstimateDetails> addWorkEstimateItem(int workEstimateId, IssueItemRequest issueItemRequest) async {
+  Future<WorkEstimateDetails> addWorkEstimateItem(
+      int workEstimateId, IssueItemRequest issueItemRequest) async {
     try {
-      final response = await _dio.post(_buildWorkEstimateItemsPath(workEstimateId),
-          data: jsonEncode(issueItemRequest.toJson()));
+      final response = await _dio.post(
+          _buildWorkEstimateItemsPath(workEstimateId),
+          data: jsonEncode(issueItemRequest.toCreateJson()));
 
       if (response.statusCode == 200) {
         return WorkEstimateDetails.fromJson(response.data);
@@ -153,6 +164,22 @@ class WorkEstimatesService {
     }
   }
 
+  Future<IssueItem> workEstimateImportItem(int workEstimateId, ImportItemRequest importItemRequest) async {
+    try {
+      final response =
+      await _dio.post(_buildImportItemPath(workEstimateId),
+      data: importItemRequest.toJson());
+
+      if (response.statusCode == 200) {
+        return IssueItem.fromJson(response.data);
+      } else {
+        throw Exception(WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION);
+    }
+  }
+
   _buildAcceptWorkEstimate(int workEstimateId) {
     return _WORK_ESTIMATE_ACCEPT_PREFIX +
         workEstimateId.toString() +
@@ -171,7 +198,9 @@ class WorkEstimatesService {
         _WORK_ESTIMATE_ITEMS_SUFFIX;
   }
 
-  Issue _mapIssue(dynamic response) {
-    return Issue.fromJson(response);
+  _buildImportItemPath(int workEstimateId) {
+    return _WORK_ESTIMATE_IMPORT_PREFIX +
+        workEstimateId.toString() +
+        _WORK_ESTIMATE_IMPORT_SUFFIX;
   }
 }

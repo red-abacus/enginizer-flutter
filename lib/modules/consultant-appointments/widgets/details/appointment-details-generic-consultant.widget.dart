@@ -22,7 +22,6 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   final Function viewEstimate;
   final Function assignMechanic;
   final Function createPickUpCarForm;
-  final Function createPartProviderEstimate;
   final Function requestPartsProvider;
 
   AppointmentDetailsGenericConsultantWidget(
@@ -35,7 +34,6 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.assignMechanic,
       this.createPickUpCarForm,
       this.workEstimateDetails,
-      this.createPartProviderEstimate,
       this.requestPartsProvider});
 
   @override

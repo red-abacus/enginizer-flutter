@@ -229,6 +229,7 @@
   "estimator_add_section_name": "Add Section Name",
   "estimator_section_name": "Section Name",
   "estimator_add_new_product": "Add New Product",
+  "estimator_import_product": "Import Product",
   "estimator_create_from_selection": "New estimate from selection",
   "estimator_operations_history": "Operations history",
   "estimator_date_warning": "Select a mechanic for this appointment.",
@@ -248,6 +249,8 @@
   "estimator_accept_recommendations_alert_body": "Are you sure you want to accept selected recommendations?",
   "estimator_accept_alert_body": "Are you sure you want to accept this work estimate?",
   "estimator_default_recommendation": "Verification / Diagnosis",
+  "estimator_no_items_to_import": "No items to import.",
+  "estimator_select_issue_item_alert": "Are you sure you want to import this product?",
   "user_profile_current_password": "Current Password",
   "user_profile_new_password": "New Password",
   "user_profile_confirm_password": "Confirm Password",
@@ -404,6 +407,7 @@
   "general_addition": "Addition",
   "general_months": "Month",
   "general_month": "Month",
+  "general_available_from": "Available from",
   "exception_get_car_fuel": "There was an error trying to load car fuel.",
   "exception_get_car_details": "There was an error trying to get car details.",
   "exception_get_appointments": "There was an error trying to load your appointments.",
@@ -454,5 +458,7 @@
   "exception_stop_appointment": "There was an error trying to stop the appointment.",
   "exception_appointment_request_items": "There was an error tying to request appointment items.",
   "exception_create_provider_item": "There was an error trying to add a new part.",
-  "exception_add_work_estimate_item": "There was an error trying to add a new estimate item."
+  "exception_add_work_estimate_item": "There was an error trying to add a new estimate item.",
+  "exception_get_appointment_items": "There was an error trying to get work estimate items.",
+  "exception_work_estimate_import_issue_item": "There was an error trying to import this issue."
 }

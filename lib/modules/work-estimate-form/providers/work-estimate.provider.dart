@@ -9,6 +9,7 @@ import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dar
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
@@ -36,6 +37,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   List<ItemType> itemTypes = [];
   List<ProviderItem> providerItems = [];
+  List<IssueItem> itemsToImport = [];
   List<ServiceProviderTimetable> serviceProviderTimetable = [];
   WorkEstimateRequest workEstimateRequest;
   WorkEstimateDetails workEstimateDetails;
@@ -52,6 +54,7 @@ class WorkEstimateProvider with ChangeNotifier {
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
   _initValues() {
+    itemsToImport = [];
     itemTypes = [];
     providerItems = [];
     serviceProviderTimetable = [];
@@ -111,14 +114,11 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<List<ProviderItem>> loadProviderItems(
       int serviceProviderId, IssueItemQuery query) async {
-    print('load provider items ${serviceProviderId}');
     try {
-      var response = await _providerService.getProviderItems(
+      providerItems = await _providerService.getProviderItems(
           serviceProviderId, query.toJson());
-      print('za response $response');
-      providerItems = response;
       notifyListeners();
-      return response;
+      return providerItems;
     } catch (error) {
       throw (error);
     }
@@ -193,15 +193,40 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<WorkEstimateDetails> addIssueItem(
       int workEstimateId, IssueItemRequest issueItemRequest) async {
-    print('work estimate id $workEstimateId');
-    print('issue item request ${issueItemRequest.toJson()}');
-
     try {
       this.workEstimateDetails = await this
           ._workEstimatesService
           .addWorkEstimateItem(workEstimateId, issueItemRequest);
       notifyListeners();
       return workEstimateDetails;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<IssueItem>> getAppointmentIssues(int appointmentId) async {
+    itemsToImport = [];
+    try {
+      List<IssueItem> issues = await this
+          ._appointmentsService.getAppointmentItems(appointmentId);
+      issues.forEach((issue) {
+        if (!issue.imported) {
+          itemsToImport.add(issue);
+        }
+      });
+      notifyListeners();
+      return this.itemsToImport;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<IssueItem> workEstimateImportIssueItem(int workEstimateId, ImportItemRequest importItemRequest) async {
+    try {
+      IssueItem issueItem = await this
+          ._workEstimatesService.workEstimateImportItem(workEstimateId, importItemRequest);
+      notifyListeners();
+      return issueItem;
     } catch (error) {
       throw (error);
     }
@@ -228,10 +253,10 @@ class WorkEstimateProvider with ChangeNotifier {
 
   issueItemFromFormState() {
     return IssueItem(
-      id: estimatorFormState['id'],
+      id: estimatorFormState['id'].id,
       type: estimatorFormState['type'],
-      code: estimatorFormState['code'].code,
-      name: estimatorFormState['name'].name,
+      code: estimatorFormState['code'],
+      name: estimatorFormState['name'],
       quantity: estimatorFormState['quantity'],
       price: estimatorFormState['price'],
       priceVAT: estimatorFormState['priceVAT'],

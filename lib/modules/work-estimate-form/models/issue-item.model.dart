@@ -1,4 +1,6 @@
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
+import 'package:app/utils/date_utils.dart';
 
 class IssueItem {
   int id;
@@ -11,6 +13,10 @@ class IssueItem {
   double priceVAT;
   int issueId;
   double total;
+  bool imported;
+  ServiceProvider provider;
+  DateTime availableFrom;
+  int warranty;
 
   IssueItem(
       {this.id,
@@ -21,7 +27,11 @@ class IssueItem {
       this.quantity,
       this.price,
       this.priceVAT,
-      this.total});
+      this.total,
+      this.imported,
+      this.provider,
+      this.availableFrom,
+      this.warranty});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
     return IssueItem(
@@ -33,7 +43,16 @@ class IssueItem {
         quantity: json['quantity'],
         price: json['price'] != null ? json['price'] : 0.0,
         priceVAT: json['priceVAT'] != null ? json['priceVAT'] : 0.0,
-        total: json['total'] != null ? json['total'] : 0.0);
+        total: json['total'] != null ? json['total'] : 0.0,
+        imported: json['imported'] != null ? json['imported'] : null,
+        provider: json['provider'] != null
+            ? ServiceProvider.fromJson(json['provider'])
+            : null,
+        availableFrom: json['availableFrom'] != null
+            ? DateUtils.dateFromString(
+                json['availableFrom'], 'dd/MM/yyyy HH:mm')
+            : null,
+        warranty: json['warranty'] != null ? json['warranty'] : 0);
   }
 
   Map<String, dynamic> toMap() => {
@@ -45,9 +64,8 @@ class IssueItem {
         'priceVAT': price.toString(),
       };
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCreateJson() {
     Map<String, dynamic> propMap = {
-      'id': id != null ? id : 0,
       'typeId': type?.id,
       'type': type?.toJson(),
       'code': code,

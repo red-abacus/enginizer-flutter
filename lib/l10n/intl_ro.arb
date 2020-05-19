@@ -224,7 +224,8 @@
   "estimator_assign_mechanic_title": "Confirmă selecția mecanicului",
   "estimator_add_section_name": "Adaugă numele secțiunii",
   "estimator_section_name": "Numele secțiunii",
-  "estimator_add_new_product": "Adaugă produs nou",
+  "estimator_add_new_product": "Adaugă Nrodus Nou",
+  "estimator_import_product": "Importă Produs",
   "estimator_create_from_selection": "Deviz nou din selecție",
   "estimator_operations_history": "Istoric operații",
   "estimator_date_warning": "Selectează un mecanic pentru această programare.",
@@ -244,6 +245,8 @@
   "estimator_accept_recommendations_alert_body": "Ești sigur că dorești să accepți recomandările selectate?",
   "estimator_accept_alert_body": "Ești sigur că dorești să accepți acest deviz?",
   "estimator_default_recommendation": "Verificare / Diagnoză",
+  "estimator_no_items_to_import": "Nu există produse pentru importare.",
+  "estimator_select_issue_item_alert": "Ești sigur că dorești să imporți acest produs?",
   "user_profile_current_password": "Parola Curentă",
   "user_profile_new_password": "Parola Nouă",
   "user_profile_confirm_password": "Confirmă parola",
@@ -399,6 +402,7 @@
   "general_addition": "Adaos",
   "general_months": "Luni",
   "general_month": "Lună",
+  "general_available_from": "Disponibil de la",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
   "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
   "exception_get_appointments": "A intervenit o problemă la încărcarea programărilor tale.",
@@ -449,5 +453,7 @@
   "exception_stop_appointment": "A intervenit o problemă la oprirea programării.",
   "exception_appointment_request_items": "A intervenit o problemă la crearea cererii pentru produsele programării.",
   "exception_create_provider_item": "A intervenit o problemă la adăugarea piesei.",
-  "exception_add_work_estimate_item": "A intervenit o problemă la adăugarea unui nou produs în deviz."
+  "exception_add_work_estimate_item": "A intervenit o problemă la adăugarea unui nou produs în deviz.",
+  "exception_get_appointment_items": "A intervenit o problemă la încărcarea produselor devizului.",
+  "exception_work_estimate_import_issue_item": "A intervenit o problemă la importarea acestui produs."
 }

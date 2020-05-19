@@ -220,7 +220,6 @@ class AppointmentDetailsConsultantState
           assignMechanic: _assignMechanic,
           createPickUpCarForm: _createPickUpCarForm,
           workEstimateDetails: _provider.workEstimateDetails,
-          createPartProviderEstimate: _createPartProviderEstimate,
           requestPartsProvider: _requestPartsProvider,
         );
       default:
@@ -303,6 +302,8 @@ class AppointmentDetailsConsultantState
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _provider.selectedAppointment.serviceProvider.id;
+      Provider.of<WorkEstimateProvider>(context).selectedAppointment =
+          _provider.selectedAppointment;
 
       Navigator.push(
         context,
@@ -314,8 +315,6 @@ class AppointmentDetailsConsultantState
       );
     }
   }
-
-  _createPartProviderEstimate() {}
 
   _requestPartsProvider() {
     Provider.of<SelectPartsProviderProvider>(context).resetParams();

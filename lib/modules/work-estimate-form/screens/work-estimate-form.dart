@@ -433,17 +433,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _refreshState() {}
 
-  _setSectionName(Issue issue, IssueRecommendation issueSection, String name) {
-    setState(() {
-      for (IssueRecommendation section in issue.recommendations) {
-        section.expanded = false;
-      }
-
-      issueSection.expanded = true;
-      issueSection.name = name;
-    });
-  }
-
   _expandSection(Issue issue, IssueRecommendation issueSection) {
     setState(() {
       if (issueSection.expanded) {

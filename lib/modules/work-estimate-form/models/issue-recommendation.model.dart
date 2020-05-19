@@ -48,9 +48,6 @@ class IssueRecommendation {
     recommendation.name = S.of(context).estimator_default_recommendation;
     recommendation.id = null;
     recommendation.items = [];
-
-    print('recommendation ${recommendation.name}');
-
     return recommendation;
   }
 
@@ -58,7 +55,7 @@ class IssueRecommendation {
     Map<String, dynamic> propMap = {
       'id': estimatorMode == EstimatorMode.CreatePart ? id : null,
       'name': estimatorMode == EstimatorMode.CreatePart ? name : null,
-      'items': items.map((item) => item.toJson()).toList()
+      'items': items.map((item) => item.toCreateJson()).toList()
     };
 
     return propMap;
