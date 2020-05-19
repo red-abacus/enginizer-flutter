@@ -5,7 +5,6 @@ import 'package:app/modules/appointments/widgets/service-details-modal.widget.da
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
-import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/auction-consultant-parts.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
@@ -63,13 +62,15 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
   @override
   void didChangeDependencies() {
-    if (!_initDone) {
-      auctionProvider = Provider.of<AuctionConsultantProvider>(context);
+    auctionProvider = Provider.of<AuctionConsultantProvider>(context);
+    _initDone = _initDone == false ? false : auctionProvider.initDone;
 
+    if (!_initDone) {
       if (auctionProvider.selectedAuction != null) {
         _loadData();
       }
 
+      auctionProvider.initDone = true;
       _initDone = true;
     }
     super.didChangeDependencies();
@@ -153,8 +154,9 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         auctionPermission: AuctionPermission.CarDetails)) {
       Bid providerBid;
 
-      for(Bid bid in auctionProvider.auctionDetails.bids) {
-        if (bid.serviceProvider.id == Provider.of<Auth>(context).authUser.providerId) {
+      for (Bid bid in auctionProvider.auctionDetails.bids) {
+        if (bid.serviceProvider.id ==
+            Provider.of<Auth>(context).authUser.providerId) {
           providerBid = bid;
           break;
         }
@@ -162,11 +164,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       return AuctionConsultantPartsWidget(
           auctionDetails: auctionProvider.auctionDetails,
           appointmentDetail: auctionProvider.appointmentDetails,
-          createEstimate: providerBid == null
-              ? _createEstimate
-              : null,
-          seeEstimate:
-              providerBid != null ? _seeEstimate : null,
+          createEstimate: providerBid == null ? _createEstimate : null,
+          seeEstimate: providerBid != null ? _seeEstimate : null,
           showProviderDetails: _showProviderDetails);
     }
 
@@ -215,8 +214,9 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         .refreshValues(EstimatorMode.ReadOnly);
 
     Bid providerBid;
-    for(Bid bid in auctionProvider.auctionDetails.bids) {
-      if (bid.serviceProvider.id == Provider.of<Auth>(context).authUser.providerId) {
+    for (Bid bid in auctionProvider.auctionDetails.bids) {
+      if (bid.serviceProvider.id ==
+          Provider.of<Auth>(context).authUser.providerId) {
         providerBid = bid;
         break;
       }

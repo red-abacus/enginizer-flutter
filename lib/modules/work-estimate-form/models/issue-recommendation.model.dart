@@ -1,4 +1,6 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'issue-item.model.dart';
 
@@ -6,7 +8,6 @@ class IssueRecommendation {
   int id;
   String name;
   List<IssueItem> items;
-  bool isNew = false;
   bool expanded = false;
   String priority;
   bool isStandard;
@@ -42,12 +43,13 @@ class IssueRecommendation {
     items = [];
   }
 
-  static IssueRecommendation defaultRecommendation() {
+  static IssueRecommendation defaultRecommendation(BuildContext context) {
     IssueRecommendation recommendation = new IssueRecommendation();
-    recommendation.name = "";
-    recommendation.id = 0;
+    recommendation.name = S.of(context).estimator_default_recommendation;
+    recommendation.id = null;
     recommendation.items = [];
-    recommendation.isNew = true;
+
+    print('recommendation ${recommendation.name}');
 
     return recommendation;
   }

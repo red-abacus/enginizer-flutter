@@ -24,6 +24,7 @@ class SelectPartsProviderProvider with ChangeNotifier {
   ServiceProvider selectedServiceProvider;
 
   resetParams() {
+    serviceProviderResponsePage = 0;
     auctionType = AppointmentProviderType.Specific;
     serviceProviders = [];
     selectedServiceProvider = null;

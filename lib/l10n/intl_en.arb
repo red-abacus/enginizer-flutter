@@ -231,7 +231,7 @@
   "estimator_add_new_product": "Add New Product",
   "estimator_create_from_selection": "New estimate from selection",
   "estimator_operations_history": "Operations history",
-  "estimator_date_warning": "Appointment date is not selected.",
+  "estimator_date_warning": "Select a mechanic for this appointment.",
   "estimator_empty_items_warning": "Estimation must not have empty fields.",
   "estimator_empty_section_warning": "Estimation must not have sections without name.",
   "estimator_bid_action": "Bid",
@@ -247,6 +247,7 @@
   "estimator_decline_alert_body": "Are you sure you want to decline this work estimate?",
   "estimator_accept_recommendations_alert_body": "Are you sure you want to accept selected recommendations?",
   "estimator_accept_alert_body": "Are you sure you want to accept this work estimate?",
+  "estimator_default_recommendation": "Verification / Diagnosis",
   "user_profile_current_password": "Current Password",
   "user_profile_new_password": "New Password",
   "user_profile_confirm_password": "Confirm Password",
@@ -452,5 +453,6 @@
   "exception_add_appointment_recommendation_image": "There was an error trying to add recommendation image.",
   "exception_stop_appointment": "There was an error trying to stop the appointment.",
   "exception_appointment_request_items": "There was an error tying to request appointment items.",
-  "exception_create_provider_item": "There was an error trying to add a new part."
+  "exception_create_provider_item": "There was an error trying to add a new part.",
+  "exception_add_work_estimate_item": "There was an error trying to add a new estimate item."
 }

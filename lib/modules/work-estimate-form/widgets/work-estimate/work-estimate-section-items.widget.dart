@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'work-estimate-add-issue-modal.widget.dart';
+import '../../screens/work-estimate-add-issue-modal.widget.dart';
 import 'work-estimate-issue.widget.dart';
 
 final createWorkEstimateAddIssueKey =

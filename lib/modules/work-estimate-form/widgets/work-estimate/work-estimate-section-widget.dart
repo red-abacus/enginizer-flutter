@@ -60,20 +60,10 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                         child: Container(
                           margin: EdgeInsets.only(
                               top: 4, bottom: 4, right: 4, left: 10),
-                          child: InkWell(
-                            onTap: () => {
-                              if (estimatorMode != EstimatorMode.CreatePart) {
-                                showSectionName(
-                                    this.issue, this.issueRecommendation)
-                              }
-                            },
-                            child: Text(
-                              issueRecommendation.isNew
-                                  ? S.of(context).estimator_add_section_name
-                                  : issueRecommendation.name,
-                              style: TextHelper.customTextStyle(
-                                  null, black_text, FontWeight.bold, 14),
-                            ),
+                          child: Text(
+                            issueRecommendation.name,
+                            style: TextHelper.customTextStyle(
+                                null, black_text, FontWeight.bold, 14),
                           ),
                         ),
                       ),
@@ -119,33 +109,32 @@ class WorkEstimateSectionWidget extends StatelessWidget {
         estimatorMode == EstimatorMode.Create ||
         estimatorMode == EstimatorMode.CreateFinal ||
         estimatorMode == EstimatorMode.ClientAccept ||
-        estimatorMode == EstimatorMode.CreatePart) {
+        estimatorMode == EstimatorMode.CreatePart ||
+        estimatorMode == EstimatorMode.Edit) {
       return Container();
     }
 
-    return issueRecommendation.isNew
-        ? Container()
-        : Expanded(
-            child: Align(
-              child: Container(
-                child: FlatButton(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  child: SvgPicture.asset(
-                    this.selected
-                        ? 'assets/images/icons/check_box.svg'
-                        : 'assets/images/icons/check_box_empty.svg',
-                    semanticsLabel: 'Up Arrow',
-                    color: Theme.of(context).primaryColor,
-                    height: 24,
-                    width: 24,
-                  ),
-                  onPressed: () {
-                    this.selectIssueSection(issueRecommendation);
-                  },
-                ),
-              ),
+    return Expanded(
+      child: Align(
+        child: Container(
+          child: FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            child: SvgPicture.asset(
+              this.selected
+                  ? 'assets/images/icons/check_box.svg'
+                  : 'assets/images/icons/check_box_empty.svg',
+              semanticsLabel: 'Up Arrow',
+              color: Theme.of(context).primaryColor,
+              height: 24,
+              width: 24,
             ),
-          );
+            onPressed: () {
+              this.selectIssueSection(issueRecommendation);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   _priceContainer(BuildContext context) {

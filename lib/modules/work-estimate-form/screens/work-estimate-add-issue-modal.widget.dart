@@ -113,6 +113,7 @@ class WorkEstimateAddIssueModalWidgetState
                           }
                         },
                         onChanged: (selectedProviderItem) async {
+                          print('selected provider item $selectedProviderItem');
                           try {
                             await provider
                                 .loadProviderItems(
@@ -123,6 +124,8 @@ class WorkEstimateAddIssueModalWidgetState
                                         code: selectedProviderItem.code))
                                 .then((providerItems) => {
                                       setState(() {
+                                        print('provider items $providerItems}');
+
                                         var foundProviderItem =
                                             providerItems.firstWhere(
                                                 (provider) =>
@@ -134,6 +137,7 @@ class WorkEstimateAddIssueModalWidgetState
                                       })
                                     });
                           } catch (error) {
+                            print('error $error');
                             if (error.toString().contains(
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
                               FlushBarHelper.showFlushBar(

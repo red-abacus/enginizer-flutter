@@ -17,6 +17,12 @@ class Issue {
     recommendations = [];
   }
 
+  clearRecommendationsItems() {
+    recommendations.forEach((recommendation) {
+      recommendation.clearItems();
+    });
+  }
+
   clearDefaultRecommendations() {
     List<IssueRecommendation> recommendations = [];
 
