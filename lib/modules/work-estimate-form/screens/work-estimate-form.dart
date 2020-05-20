@@ -78,15 +78,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   @override
   void didChangeDependencies() {
-    if (!_initDone) {
-      _provider = Provider.of<WorkEstimateProvider>(context);
+    _provider = Provider.of<WorkEstimateProvider>(context);
+    _initDone = _initDone == false ? false : _provider.initDone;
 
+    if (!_initDone) {
       setState(() {
         _isLoading = true;
       });
 
       _loadData();
       _initDone = true;
+      _provider.initDone = true;
     }
 
     super.didChangeDependencies();

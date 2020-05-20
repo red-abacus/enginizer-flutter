@@ -74,19 +74,20 @@ class IssueItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text(issueItem.name,
+                Text('${issueItem.name} (${issueItem.code})',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         height: 1.5)),
-                Text(issueItem.code,
+                Text(
+                    '${S.of(context).general_price}: ${issueItem.total.toString()}',
                     style: TextStyle(
-                        color: Colors.black87,
+                        color: Constants.red,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.normal,
-                        fontSize: 12.8,
+                        fontSize: 14,
                         height: 1.5)),
                 SizedBox(height: 10),
               ],

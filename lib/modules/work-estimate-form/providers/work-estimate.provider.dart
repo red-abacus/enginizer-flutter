@@ -49,6 +49,8 @@ class WorkEstimateProvider with ChangeNotifier {
   int workEstimateId;
   int serviceProviderId;
 
+  bool initDone = false;
+
   List<IssueRecommendation> selectedRecommendations = [];
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);

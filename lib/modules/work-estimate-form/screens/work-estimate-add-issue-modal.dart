@@ -63,21 +63,21 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                         try {
                           await provider
                               .loadProviderItems(
-                              authProvider?.authUser?.providerId,
-                              IssueItemQuery(typeId: selectedType.id))
+                                  authProvider?.authUser?.providerId,
+                                  IssueItemQuery(typeId: selectedType.id))
                               .then((_) => {
-                            setState(() {
-                              provider.estimatorFormState['type'] =
-                                  selectedType;
-                              provider.estimatorFormState['code'] =
-                              null;
-                              provider.estimatorFormState['name'] =
-                              null;
-                              provider.estimatorFormState['price'] = '';
-                              provider.estimatorFormState['priceVAT'] =
-                              '';
-                            })
-                          });
+                                    setState(() {
+                                      provider.estimatorFormState['type'] =
+                                          selectedType;
+                                      provider.estimatorFormState['code'] =
+                                          null;
+                                      provider.estimatorFormState['name'] =
+                                          null;
+                                      provider.estimatorFormState['price'] = '';
+                                      provider.estimatorFormState['priceVAT'] =
+                                          '';
+                                    })
+                                  });
                         } catch (error) {
                           if (error.toString().contains(
                               ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
@@ -115,31 +115,31 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                           try {
                             await provider
                                 .loadProviderItems(
-                                authProvider?.authUser?.providerId,
-                                IssueItemQuery(
-                                    typeId:
-                                    provider.estimatorFormState['type'].id,
-                                    code: selectedProviderItem))
+                                    authProvider?.authUser?.providerId,
+                                    IssueItemQuery(
+                                        typeId: provider
+                                            .estimatorFormState['type'].id,
+                                        code: selectedProviderItem))
                                 .then((providerItems) => {
-                              setState(() {
-                                var foundProviderItem =
-                                providerItems.firstWhere(
-                                        (provider) =>
-                                    provider.code ==
-                                        selectedProviderItem,
-                                    orElse: () => null);
-                                provider.estimatorFormState['id'] =
-                                    foundProviderItem;
-                                provider.estimatorFormState['code'] =
-                                    foundProviderItem.code;
-                                provider.estimatorFormState['name'] =
-                                    foundProviderItem.name;
-                                provider.estimatorFormState['price'] =
-                                '';
-                                provider.estimatorFormState[
-                                'priceVAT'] = '';
-                              })
-                            });
+                                      setState(() {
+                                        var foundProviderItem =
+                                            providerItems.firstWhere(
+                                                (provider) =>
+                                                    provider.code ==
+                                                    selectedProviderItem,
+                                                orElse: () => null);
+                                        provider.estimatorFormState['id'] =
+                                            foundProviderItem;
+                                        provider.estimatorFormState['code'] =
+                                            foundProviderItem.code;
+                                        provider.estimatorFormState['name'] =
+                                            foundProviderItem.name;
+                                        provider.estimatorFormState['price'] =
+                                            '';
+                                        provider.estimatorFormState[
+                                            'priceVAT'] = '';
+                                      })
+                                    });
                           } catch (error) {
                             if (error.toString().contains(
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
@@ -179,33 +179,35 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                           try {
                             await provider
                                 .loadProviderItems(
-                                authProvider?.authUser?.providerId,
-                                IssueItemQuery(
-                                    typeId:
-                                    provider.estimatorFormState['type'].id,
-                                    code: provider.estimatorFormState['code'],
-                                    name: provider.estimatorFormState['name']))
+                                    authProvider?.authUser?.providerId,
+                                    IssueItemQuery(
+                                        typeId: provider
+                                            .estimatorFormState['type'].id,
+                                        code:
+                                            provider.estimatorFormState['code'],
+                                        name: provider
+                                            .estimatorFormState['name']))
                                 .then((providerItems) => {
-                              setState(() {
-                                var foundProviderItem =
-                                providerItems.firstWhere(
-                                        (provider) =>
-                                    provider.name ==
-                                        selectedProviderItem,
-                                    orElse: () => null);
-                                provider.estimatorFormState['id'] =
-                                    foundProviderItem;
-                                provider.estimatorFormState['name'] =
-                                    foundProviderItem.name;
-                                provider
-                                    .estimatorFormState['quantity'] = 1;
-                                provider.estimatorFormState['price'] =
-                                    foundProviderItem.price;
-                                provider.estimatorFormState[
-                                'priceVAT'] =
-                                    foundProviderItem.priceVAT;
-                              })
-                            });
+                                      setState(() {
+                                        var foundProviderItem =
+                                            providerItems.firstWhere(
+                                                (provider) =>
+                                                    provider.name ==
+                                                    selectedProviderItem,
+                                                orElse: () => null);
+                                        provider.estimatorFormState['id'] =
+                                            foundProviderItem;
+                                        provider.estimatorFormState['name'] =
+                                            foundProviderItem.name;
+                                        provider
+                                            .estimatorFormState['quantity'] = 1;
+                                        provider.estimatorFormState['price'] =
+                                            foundProviderItem.price;
+                                        provider.estimatorFormState[
+                                                'priceVAT'] =
+                                            foundProviderItem.priceVAT;
+                                      })
+                                    });
                           } catch (error) {
                             if (error.toString().contains(
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
@@ -256,7 +258,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                       keyboardType: TextInputType.number,
                       controller: TextEditingController(
                           text:
-                          provider.estimatorFormState['price'].toString()),
+                              provider.estimatorFormState['price'].toString()),
                       onChanged: (newPrice) {
                         provider.estimatorFormState['price'] =
                             double.parse(newPrice);
@@ -306,12 +308,12 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                 child: FloatingActionButton(
                     heroTag: null,
                     onPressed: () => {
-                      if (valid())
-                        {
-                          Navigator.pop(context),
-                          widget.addIssueItem(widget.issueRecommendation)
-                        }
-                    },
+                          if (valid())
+                            {
+                              Navigator.pop(context),
+                              widget.addIssueItem(widget.issueRecommendation)
+                            }
+                        },
                     child: Icon(Icons.add)),
               ),
             ],

@@ -33,24 +33,27 @@ class _WorkEstimateSectionsWidgetState
     extends State<WorkEstimateSectionsWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        for (IssueRecommendation recommendation in widget.issue.recommendations)
-          WorkEstimateSectionWidget(
-              issue: widget.issue,
-              issueRecommendation: recommendation,
-              expandSection: _expandSection,
-              addIssueItem: _addIssueItem,
-              removeIssueItem: _removeIssueItem,
-              selectIssueSection: _selectIssueSection,
-              estimatorMode: widget.estimatorMode,
-              selected: Provider.of<WorkEstimateProvider>(context)
-                  .selectedRecommendations
-                  .contains(recommendation)),
-      ],
+    return Container(
+      padding: EdgeInsets.only(bottom: 60),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          for (IssueRecommendation recommendation in widget.issue.recommendations)
+            WorkEstimateSectionWidget(
+                issue: widget.issue,
+                issueRecommendation: recommendation,
+                expandSection: _expandSection,
+                addIssueItem: _addIssueItem,
+                removeIssueItem: _removeIssueItem,
+                selectIssueSection: _selectIssueSection,
+                estimatorMode: widget.estimatorMode,
+                selected: Provider.of<WorkEstimateProvider>(context)
+                    .selectedRecommendations
+                    .contains(recommendation)),
+        ],
+      ),
     );
   }
 

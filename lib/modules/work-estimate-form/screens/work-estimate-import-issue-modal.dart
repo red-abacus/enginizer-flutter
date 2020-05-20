@@ -156,9 +156,16 @@ class _WorkEstimateImportIssueModalState
     try {
       await _provider
           .workEstimateImportIssueItem(widget.workEstimateId, importItemRequest)
-          .then((value) => {
-                if (value != null) {_initDone = false, _loadData()}
-              });
+          .then((value) {
+        if (value != null) {
+          _initDone = false;
+          _loadData();
+
+          setState(() {
+            _provider.initDone = false;
+          });
+        }
+      });
     } catch (error) {
       if (error
           .toString()
