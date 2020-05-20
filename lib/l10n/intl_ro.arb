@@ -247,6 +247,7 @@
   "estimator_default_recommendation": "Verificare / Diagnoză",
   "estimator_no_items_to_import": "Nu există produse pentru importare.",
   "estimator_select_issue_item_alert": "Ești sigur că dorești să imporți acest produs?",
+  "estimator_accept_recommendations_alert_title": "Ești sigur că dorești să respingi/accepți aceste recomendări?",
   "import_item_imported_title": "Importator",
   "import_item_status_title": "Status",
   "import_item_type_title": "Tip",
@@ -469,5 +470,6 @@
   "exception_add_work_estimate_item": "A intervenit o problemă la adăugarea unui nou produs în deviz.",
   "exception_get_appointment_items": "A intervenit o problemă la încărcarea produselor devizului.",
   "exception_work_estimate_import_issue_item": "A intervenit o problemă la importarea acestui produs.",
-  "exception_edit_issue_item": "A intervenit o problemă la editarea acestui produs."
+  "exception_edit_issue_item": "A intervenit o problemă la editarea acestui produs.",
+  "exception_send_appointment_recommendations": "A intervenit o problemă la refuzarea/acceptarea recomandărilor"
 }

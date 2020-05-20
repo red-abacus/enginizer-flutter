@@ -9,15 +9,16 @@ import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dar
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/issue-recommendation-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimateProvider with ChangeNotifier {
@@ -144,6 +145,7 @@ class WorkEstimateProvider with ChangeNotifier {
           ._workEstimatesService
           .getWorkEstimateDetails(workEstimateId);
       notifyListeners();
+      populateRecommendationsStatuses();
       return workEstimateDetails;
     } catch (error) {
       throw (error);
@@ -206,9 +208,11 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  Future<IssueItem> updateIssueItem(int appointmentId, IssueItemRequest issueItemRequest) async {
+  Future<IssueItem> updateIssueItem(
+      int appointmentId, IssueItemRequest issueItemRequest) async {
     try {
-      IssueItem issueItem = await _workEstimatesService.updateAppointmentItem(appointmentId, issueItemRequest);
+      IssueItem issueItem = await _workEstimatesService.updateAppointmentItem(
+          appointmentId, issueItemRequest);
       notifyListeners();
       return issueItem;
     } catch (error) {
@@ -218,8 +222,8 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Future<List<IssueItem>> getAppointmentIssues(int appointmentId) async {
     try {
-      List<IssueItem> issues = await this
-          ._appointmentsService.getAppointmentItems(appointmentId);
+      List<IssueItem> issues =
+          await this._appointmentsService.getAppointmentItems(appointmentId);
       itemsToImport = [];
       issues.forEach((issue) {
         if (!issue.imported) {
@@ -233,12 +237,26 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  Future<IssueItem> workEstimateImportIssueItem(int workEstimateId, ImportItemRequest importItemRequest) async {
+  Future<IssueItem> workEstimateImportIssueItem(
+      int workEstimateId, ImportItemRequest importItemRequest) async {
     try {
       IssueItem issueItem = await this
-          ._workEstimatesService.workEstimateImportItem(workEstimateId, importItemRequest);
+          ._workEstimatesService
+          .workEstimateImportItem(workEstimateId, importItemRequest);
       notifyListeners();
       return issueItem;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> sendRecommendations(int appointmentId, List<Map<String, dynamic>> request) async {
+    try {
+      bool response = await this
+          ._appointmentsService
+          .sendAppointmentRecommendations(appointmentId, request);
+      notifyListeners();
+      return response;
     } catch (error) {
       throw (error);
     }
@@ -310,5 +328,51 @@ class WorkEstimateProvider with ChangeNotifier {
       total += recommendation.totalCost();
     }
     return total;
+  }
+
+  populateRecommendationsStatuses() {
+    if (selectedAppointmentDetail != null && workEstimateDetails != null) {
+      List<IssueRecommendation> appointmentRecommendation =
+          selectedAppointmentDetail.recommendations;
+
+      this.workEstimateDetails.issues.forEach((issue) {
+        for (IssueRecommendation workEstimateRecommendation
+            in issue.recommendations) {
+          for (IssueRecommendation appointmentRecommendation
+          in appointmentRecommendation) {
+            if (workEstimateRecommendation.id == appointmentRecommendation.id) {
+              workEstimateRecommendation.status =
+                  appointmentRecommendation.status;
+
+              if (workEstimateRecommendation.status ==
+                  IssueRecommendationStatus.Accepted) {
+                selectedRecommendations.add(workEstimateRecommendation);
+              }
+              break;
+            }
+          }
+        }
+      });
+    }
+  }
+
+  List<Map<String, dynamic>> getSendRecommendationRequest() {
+    List<Map<String, dynamic>> request = [];
+
+    selectedRecommendations.forEach((recommendation) {
+      request.add(recommendation.sendRequest(true).toJson());
+    });
+
+    workEstimateDetails.issues.forEach((issue) {
+      for(IssueRecommendation recommendation in issue.recommendations) {
+        if (recommendation.status == IssueRecommendationStatus.New) {
+          if (!selectedRecommendations.contains(recommendation)) {
+            request.add(recommendation.sendRequest(false).toJson());
+          }
+        }
+      }
+    });
+
+    return request;
   }
 }

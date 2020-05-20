@@ -12,7 +12,7 @@ import 'package:app/modules/auctions/widgets/details-consultant/auction-consulta
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/flush_bar.helper.dart';

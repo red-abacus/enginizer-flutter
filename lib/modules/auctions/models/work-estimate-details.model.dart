@@ -4,7 +4,7 @@ import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
-import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
 
 import '../../work-estimate-form/models/issue.model.dart';
 

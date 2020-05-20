@@ -39,7 +39,6 @@ class IssueItem {
       this.issueId});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
-    print('issue item $json');
     return IssueItem(
         id: json['id'],
         type: json['type'] != null ? ItemType.fromJson(json['type']) : null,

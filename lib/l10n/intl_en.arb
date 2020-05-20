@@ -251,6 +251,7 @@
   "estimator_default_recommendation": "Verification / Diagnosis",
   "estimator_no_items_to_import": "No items to import.",
   "estimator_select_issue_item_alert": "Are you sure you want to import this product?",
+  "estimator_accept_recommendations_alert_title": "Are you sure you want to reject/accept these recommendations?",
   "import_item_imported_title": "Importer",
   "import_item_status_title": "Status",
   "import_item_type_title": "Type",
@@ -474,5 +475,6 @@
   "exception_add_work_estimate_item": "There was an error trying to add a new estimate item.",
   "exception_get_appointment_items": "There was an error trying to get work estimate items.",
   "exception_work_estimate_import_issue_item": "There was an error trying to import this issue.",
-  "exception_edit_issue_item": "There was an error trying to edit this issue."
+  "exception_edit_issue_item": "There was an error trying to edit this issue.",
+  "exception_send_appointment_recommendations": "There was an error triyng to reject/accept recommendations."
 }

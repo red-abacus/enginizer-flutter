@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
@@ -25,6 +26,7 @@ class AppointmentDetail {
   int bidId;
   double forwardPaymentPercent;
   String timeToRespond;
+  List<IssueRecommendation> recommendations;
 
   AppointmentDetail(
       {this.id,
@@ -40,10 +42,11 @@ class AppointmentDetail {
       this.providerAcceptedDateTime,
       this.bidId,
       this.forwardPaymentPercent,
-      this.timeToRespond});
+      this.timeToRespond,
+      this.recommendations});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
-    print('json ${json['id']}');
+    print('appointment json ${json['id']}');
     return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
@@ -70,7 +73,8 @@ class AppointmentDetail {
             ? json['forwardPaymentPercent']
             : 0,
         timeToRespond:
-            json['timeToRespond'] != null ? json['timeToRespond'] : '');
+            json['timeToRespond'] != null ? json['timeToRespond'] : '',
+    recommendations: json['recommendations'] != null ? _mapRecommendations(json['recommendations']) : []);
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -97,6 +101,14 @@ class AppointmentDetail {
       }
     });
     return ids;
+  }
+
+  static _mapRecommendations(List<dynamic> response) {
+    List<IssueRecommendation> recommendations = [];
+    response.forEach((item) {
+      recommendations.add(IssueRecommendation.fromJson(item));
+    });
+    return recommendations;
   }
 
   bool hasWorkEstimate() {

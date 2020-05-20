@@ -5,16 +5,13 @@ import 'package:app/modules/appointments/model/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/consultant-appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -254,7 +251,7 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       _appointmentProvider.selectedAppointmentDetail.status.getState() ==
           AppointmentStatusState.PENDING
           ? EstimatorMode.ClientAccept
-          : EstimatorMode.ReadOnly;
+          : EstimatorMode.Client;
 
       Provider.of<WorkEstimateProvider>(context).refreshValues(mode);
       Provider.of<WorkEstimateProvider>(context).workEstimateId =

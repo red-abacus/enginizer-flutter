@@ -37,9 +37,7 @@ class WorkEstimateIssueWidget extends StatelessWidget {
                           _nameContainer(context),
                           _typeContainer(context),
                           _quantityContainer(context),
-                          if (issueItem.addition != null &&
-                              issueItem.addition != 0)
-                            _additionContainer(context),
+                          _additionContainer(context),
                           _priceContainer(context),
                         ],
                       ),
@@ -156,26 +154,35 @@ class WorkEstimateIssueWidget extends StatelessWidget {
   }
 
   _additionContainer(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '${S.of(context).general_addition}:',
-            style: TextHelper.customTextStyle(null, black_text, null, 14),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 5),
-            child: Text(
-              '${issueItem.addition.toString()}%',
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+    switch (estimatorMode) {
+      case EstimatorMode.Edit:
+        if (issueItem.addition != null && issueItem.addition != 0) {
+          return Container(
+            margin: EdgeInsets.only(top: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '${S.of(context).general_addition}:',
+                  style: TextHelper.customTextStyle(null, black_text, null, 14),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 5),
+                  child: Text(
+                    '${issueItem.addition.toString()}%',
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 14),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        }
+        break;
+      default:
+        return Container();
+    }
   }
 
   _getRemoveButton(BuildContext context, IssueItem issueItem) {

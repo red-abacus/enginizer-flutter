@@ -5,8 +5,9 @@ import 'package:app/modules/consultant-appointments/models/receive-form-request.
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-type.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/send-appointment-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
@@ -46,6 +47,8 @@ class AppointmentsService {
       'APPOINTMENT_REQUEST_ITEMS_EXCEPTION';
   static const String APPOINTMENT_ITEMS_EXCEPTION =
       'APPOINTMENT_ITEMS_EXCEPTION';
+  static const String SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION =
+      'SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -318,6 +321,23 @@ class AppointmentsService {
       }
     } catch (error) {
       throw Exception(ADD_APPOINTMENT_RECOMMENDATION_EXCEPTION);
+    }
+  }
+
+  Future<bool> sendAppointmentRecommendations(
+      int appointmentId, List<Map<String, dynamic>> request) async {
+    try {
+      final response = await _dio.patch(
+          _buildAddAppointmentRecommendationsPath(appointmentId),
+          data: jsonEncode(request));
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION);
     }
   }
 

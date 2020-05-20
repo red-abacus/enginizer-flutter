@@ -2,10 +2,10 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
-import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
-import 'package:app/modules/work-estimate-form/models/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -103,7 +103,6 @@ class WorkEstimatesService {
 
   Future<WorkEstimateDetails> addWorkEstimateItem(
       int workEstimateId, IssueItemRequest issueItemRequest) async {
-    print('test ${issueItemRequest.toCreateJson()}');
     try {
       final response = await _dio.post(
           _buildWorkEstimateItemsPath(workEstimateId),

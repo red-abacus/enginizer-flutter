@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/time-entry.dart';
@@ -7,7 +8,7 @@ import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
-import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
@@ -257,7 +258,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _floatingButtons() {
     switch (widget.mode) {
-      case EstimatorMode.Client:
       case EstimatorMode.ReadOnly:
       case EstimatorMode.ClientAccept:
         return Container();
@@ -268,7 +268,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     var buttons = List<SpeedDialChild>();
 
     if (widget.mode != EstimatorMode.ReadOnly &&
-        widget.mode != EstimatorMode.Edit) {
+        widget.mode != EstimatorMode.Edit &&
+        widget.mode != EstimatorMode.Client) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.save),
           foregroundColor: red,
@@ -302,7 +303,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
 
     if (widget.mode != EstimatorMode.Create &&
-        widget.mode != EstimatorMode.CreatePart) {
+        widget.mode != EstimatorMode.CreatePart &&
+        widget.mode != EstimatorMode.Client) {
       buttons.add(SpeedDialChild(
           child: Icon(Icons.history),
           foregroundColor: red,
@@ -321,7 +323,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           label: S.of(context).estimator_create_from_selection,
           labelStyle: TextHelper.customTextStyle(
               null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => print('create from selection')));
+          onTap: () => _acceptRecommendations()));
     }
 
     return SpeedDial(
@@ -356,7 +358,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            _bottomContainerButton(),
+            if (widget.mode == EstimatorMode.ClientAccept)
+              _bottomContainerButton(),
             Container(
               child: Text(
                 '${S.of(context).estimator_total}: $totalCost RON',
@@ -371,11 +374,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _bottomContainerButton() {
-    if (widget.mode == EstimatorMode.ReadOnly ||
-        _provider.workEstimateDetails.status != WorkEstimateStatus.Pending) {
-      return Container();
-    }
-
     return Row(
       children: <Widget>[
         FlatButton(
@@ -800,5 +798,52 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  _acceptRecommendations() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AlertConfirmationDialogWidget(
+                confirmFunction: (confirm) => {
+                      if (confirm) {_sendRecommendations()}
+                    },
+                title:
+                    S.of(context).estimator_accept_recommendations_alert_title);
+          });
+        });
+  }
+
+  _sendRecommendations() async {
+    List<Map<String, dynamic>> request = _provider.getSendRecommendationRequest();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .sendRecommendations(_provider.selectedAppointmentDetail.id, request)
+          .then((response) {
+        if (response) {
+          Provider.of<AppointmentProvider>(context).initDone = false;
+          Navigator.pop(context);
+        }
+      });
+    } catch (error) {
+      if (error.toString().contains(
+          AppointmentsService.SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_send_appointment_recommendations, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+    return request;
   }
 }

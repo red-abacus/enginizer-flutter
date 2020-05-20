@@ -4,8 +4,8 @@ import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'issue-recommendation.model.dart';
-import 'issue.model.dart';
+import '../issue-recommendation.model.dart';
+import '../issue.model.dart';
 
 class WorkEstimateRequest {
   List<Issue> issues = [];

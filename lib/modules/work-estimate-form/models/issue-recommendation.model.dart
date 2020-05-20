@@ -1,5 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/issue-recommendation-status.enum.dart';
+import 'package:app/modules/work-estimate-form/models/requests/send-appointment-request.model.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'issue-item.model.dart';
@@ -12,6 +14,7 @@ class IssueRecommendation {
   String priority;
   bool isStandard;
   bool isAccepted;
+  IssueRecommendationStatus status;
 
   IssueRecommendation(
       {this.id,
@@ -19,7 +22,8 @@ class IssueRecommendation {
       this.items,
       this.priority,
       this.isStandard,
-      this.isAccepted});
+      this.isAccepted,
+      this.status});
 
   factory IssueRecommendation.fromJson(Map<String, dynamic> json) {
     return IssueRecommendation(
@@ -28,7 +32,10 @@ class IssueRecommendation {
         items: json['items'] != null ? _mapItems(json['items']) : [],
         priority: json['priority'] != null ? json['priority'] : '',
         isStandard: json['isStandard'] != null ? json['isStandard'] : true,
-        isAccepted: json['isAccepted'] != null ? json['isAccepted'] : true);
+        isAccepted: json['isAccepted'] != null ? json['isAccepted'] : true,
+        status: json['status'] != null
+            ? IssueRecommendationStatusUtils.fromString(json['status'])
+            : null);
   }
 
   static _mapItems(List<dynamic> response) {
@@ -67,5 +74,10 @@ class IssueRecommendation {
       total += item.total;
     }
     return total;
+  }
+
+  SendAppointmentRequest sendRequest(bool accept) {
+    return SendAppointmentRequest(
+        recommendationId: this.id, isAccepted: accept, message: '');
   }
 }

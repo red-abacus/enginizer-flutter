@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/issue-recommendation-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-section-items.widget.dart';
@@ -57,42 +58,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       _checkMarkContainer(context),
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: 4, bottom: 4, right: 4, left: 10),
-                          child: Text(
-                            issueRecommendation.name,
-                            style: TextHelper.customTextStyle(
-                                null, black_text, FontWeight.bold, 14),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: FlatButton(
-                              padding: EdgeInsets.all(4),
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              child: SvgPicture.asset(
-                                this.issueRecommendation.expanded
-                                    ? 'assets/images/icons/down_arrow.svg'
-                                    : 'assets/images/icons/up_arrow.svg',
-                                semanticsLabel: 'Up Arrow',
-                                height: 14,
-                                width: 14,
-                              ),
-                              onPressed: () {
-                                this.expandSection(this.issueRecommendation);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
+                      _nameContainer(context),
+                      _arrowContainer(),
                     ],
                   ),
                   if (estimatorMode == EstimatorMode.Client ||
@@ -106,37 +73,83 @@ class WorkEstimateSectionWidget extends StatelessWidget {
         ));
   }
 
-  _checkMarkContainer(BuildContext context) {
-    if (estimatorMode == EstimatorMode.ReadOnly ||
-        estimatorMode == EstimatorMode.Create ||
-        estimatorMode == EstimatorMode.CreateFinal ||
-        estimatorMode == EstimatorMode.ClientAccept ||
-        estimatorMode == EstimatorMode.CreatePart ||
-        estimatorMode == EstimatorMode.Edit) {
-      return Container();
-    }
+  _nameContainer(BuildContext context) {
+    return Expanded(
+      flex: 5,
+      child: Container(
+        margin: EdgeInsets.only(top: 4, bottom: 4, right: 4, left: 10),
+        child: Text(
+          issueRecommendation.name,
+          style:
+              TextHelper.customTextStyle(null, black_text, FontWeight.bold, 14),
+        ),
+      ),
+    );
+  }
 
+  _arrowContainer() {
     return Expanded(
       child: Align(
+        alignment: Alignment.topRight,
         child: Container(
+          margin: EdgeInsets.only(right: 10),
           child: FlatButton(
+            padding: EdgeInsets.all(4),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             child: SvgPicture.asset(
-              this.selected
-                  ? 'assets/images/icons/check_box.svg'
-                  : 'assets/images/icons/check_box_empty.svg',
+              this.issueRecommendation.expanded
+                  ? 'assets/images/icons/down_arrow.svg'
+                  : 'assets/images/icons/up_arrow.svg',
               semanticsLabel: 'Up Arrow',
-              color: Theme.of(context).primaryColor,
-              height: 24,
-              width: 24,
+              height: 14,
+              width: 14,
             ),
             onPressed: () {
-              this.selectIssueSection(issueRecommendation);
+              this.expandSection(this.issueRecommendation);
             },
           ),
         ),
       ),
     );
+  }
+
+  _checkMarkContainer(BuildContext context) {
+    double alpha =
+        issueRecommendation.status == IssueRecommendationStatus.New ? 1.0 : 0.5;
+
+    switch (estimatorMode) {
+      case EstimatorMode.Client:
+        return Expanded(
+          child: Align(
+            child: Opacity(
+              opacity: alpha,
+              child: Container(
+                child: FlatButton(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  child: SvgPicture.asset(
+                    this.selected
+                        ? 'assets/images/icons/check_box.svg'
+                        : 'assets/images/icons/check_box_empty.svg',
+                    semanticsLabel: 'Up Arrow',
+                    color: Theme.of(context).primaryColor,
+                    height: 24,
+                    width: 24,
+                  ),
+                  onPressed: () {
+                    if (issueRecommendation.status ==
+                        IssueRecommendationStatus.New) {
+                      this.selectIssueSection(issueRecommendation);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+        break;
+      default:
+        return Container();
+    }
   }
 
   _priceContainer(BuildContext context) {
