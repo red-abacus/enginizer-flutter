@@ -17,6 +17,8 @@ class IssueItem {
   ServiceProvider provider;
   DateTime availableFrom;
   int warranty;
+  double addition;
+  int recommendationId;
 
   IssueItem(
       {this.id,
@@ -31,9 +33,13 @@ class IssueItem {
       this.imported,
       this.provider,
       this.availableFrom,
-      this.warranty});
+      this.warranty,
+      this.addition,
+      this.recommendationId,
+      this.issueId});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
+    print('issue item $json');
     return IssueItem(
         id: json['id'],
         type: json['type'] != null ? ItemType.fromJson(json['type']) : null,
@@ -52,7 +58,11 @@ class IssueItem {
             ? DateUtils.dateFromString(
                 json['availableFrom'], 'dd/MM/yyyy HH:mm')
             : null,
-        warranty: json['warranty'] != null ? json['warranty'] : 0);
+        warranty: json['warranty'] != null ? json['warranty'] : 0,
+        addition: json['addition'] != null ? json['addition'] : null,
+        recommendationId:
+            json['recommendationId'] != null ? json['recommendationId'] : null,
+        issueId: json['issueId'] != null ? json['issueId'] : null);
   }
 
   Map<String, dynamic> toMap() => {
@@ -73,7 +83,8 @@ class IssueItem {
       'quantity': quantity,
       'price': price,
       'priceVAT': priceVAT,
-      'total': (price + priceVAT).toString()
+      'total': (price + priceVAT).toString(),
+      'additionId': addition,
     };
 
     return propMap;

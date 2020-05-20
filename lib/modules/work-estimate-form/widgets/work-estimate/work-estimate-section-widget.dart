@@ -16,6 +16,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   final Function expandSection;
   final Function addIssueItem;
   final Function removeIssueItem;
+  final Function editIssueItem;
   final Function selectIssueSection;
   final Function showSectionName;
   final EstimatorMode estimatorMode;
@@ -30,7 +31,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       this.selectIssueSection,
       this.showSectionName,
       this.estimatorMode,
-      this.selected});
+      this.selected,
+      this.editIssueItem});
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +161,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
             issueRecommendation: issueRecommendation,
             addIssueItem: addIssueItem,
             removeIssueItem: removeIssueItem,
+            editIssueItem: editIssueItem,
             estimatorMode: estimatorMode),
       );
     } else {

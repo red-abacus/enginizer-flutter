@@ -4,7 +4,7 @@ import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
-import 'package:app/modules/work-estimate-form/screens/work-estimate-import-issue-modal.dart';
+import 'package:app/modules/work-estimate-form/screens/work-estimate-import-modal.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,13 +23,15 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
   final Function addIssueItem;
   final Function removeIssueItem;
   final EstimatorMode estimatorMode;
+  final Function editIssueItem;
 
   WorkEstimateSectionItemsWidget(
       {this.issue,
       this.issueRecommendation,
       this.addIssueItem,
       this.removeIssueItem,
-      this.estimatorMode});
+      this.estimatorMode,
+      this.editIssueItem});
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                   WorkEstimateIssueWidget(
                       issueItem: issueItem,
                       removeIssueItem: _removeIssueItem,
+                      editIssueItem: _editIssueItem,
                       estimatorMode: estimatorMode),
               ],
             ),
@@ -150,7 +153,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return WorkEstimateImportIssueModal(
+            return WorkEstimateImportModal(
                 workEstimateId:
                     Provider.of<WorkEstimateProvider>(context).workEstimateId,
                 issue: this.issue,
@@ -161,5 +164,9 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
 
   _removeIssueItem(IssueItem issueItem) {
     removeIssueItem(issueRecommendation, issueItem);
+  }
+
+  _editIssueItem(IssueItem issueItem) {
+    editIssueItem(issueRecommendation, issueItem);
   }
 }

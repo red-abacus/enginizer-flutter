@@ -15,6 +15,7 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
   final Function addIssueItem;
   final Function removeIssueItem;
   final Function selectIssueSection;
+  final Function editIssueItem;
 
   WorkEstimateSectionsWidget(
       {this.issue,
@@ -22,7 +23,8 @@ class WorkEstimateSectionsWidget extends StatefulWidget {
       this.addIssueItem,
       this.removeIssueItem,
       this.selectIssueSection,
-      this.estimatorMode});
+      this.estimatorMode,
+      this.editIssueItem});
 
   @override
   _WorkEstimateSectionsWidgetState createState() =>
@@ -46,6 +48,7 @@ class _WorkEstimateSectionsWidgetState
                 issueRecommendation: recommendation,
                 expandSection: _expandSection,
                 addIssueItem: _addIssueItem,
+                editIssueItem: _editIssueItem,
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
                 estimatorMode: widget.estimatorMode,
@@ -72,5 +75,9 @@ class _WorkEstimateSectionsWidgetState
 
   _selectIssueSection(IssueRecommendation issueRecommendation) {
     widget.selectIssueSection(widget.issue, issueRecommendation);
+  }
+
+  _editIssueItem(IssueRecommendation issueRecommendation, IssueItem issueItem) {
+    widget.editIssueItem(widget.issue, issueRecommendation, issueItem);
   }
 }

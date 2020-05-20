@@ -259,6 +259,7 @@
   "import_item_price_w_vta_title": "Preț (cu TVA)",
   "import_item_availability_title": "Disponibilitate",
   "import_item_import_title": "Importă",
+  "import_item_quantity_alert": "Cantitatea acestui produs trebuie sa fie validă",
   "user_profile_current_password": "Parola Curentă",
   "user_profile_new_password": "Parola Nouă",
   "user_profile_confirm_password": "Confirmă parola",
@@ -467,5 +468,6 @@
   "exception_create_provider_item": "A intervenit o problemă la adăugarea piesei.",
   "exception_add_work_estimate_item": "A intervenit o problemă la adăugarea unui nou produs în deviz.",
   "exception_get_appointment_items": "A intervenit o problemă la încărcarea produselor devizului.",
-  "exception_work_estimate_import_issue_item": "A intervenit o problemă la importarea acestui produs."
+  "exception_work_estimate_import_issue_item": "A intervenit o problemă la importarea acestui produs.",
+  "exception_edit_issue_item": "A intervenit o problemă la editarea acestui produs."
 }

@@ -5,12 +5,14 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/widgets/cards/issue-item.card.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -18,21 +20,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class WorkEstimateImportIssueModal extends StatefulWidget {
+class WorkEstimateImportModal extends StatefulWidget {
   final int workEstimateId;
   final Issue issue;
   final IssueRecommendation issueRecommendation;
 
-  WorkEstimateImportIssueModal(
+  WorkEstimateImportModal(
       {this.issue, this.issueRecommendation, this.workEstimateId});
 
   @override
-  _WorkEstimateImportIssueModalState createState() =>
-      _WorkEstimateImportIssueModalState();
+  _WorkEstimateImportModalState createState() =>
+      _WorkEstimateImportModalState();
 }
 
-class _WorkEstimateImportIssueModalState
-    extends State<WorkEstimateImportIssueModal> {
+class _WorkEstimateImportModalState extends State<WorkEstimateImportModal> {
   bool _initDone = false;
   bool _isLoading = false;
 

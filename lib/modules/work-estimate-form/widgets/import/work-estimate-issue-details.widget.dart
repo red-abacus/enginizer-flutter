@@ -82,7 +82,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(right: 4),
                 child: Text(
-                  leftString,
+                  '$leftString:',
                   textAlign: TextAlign.right,
                   style: TextHelper.customTextStyle(
                       null, gray3, FontWeight.bold, 14),

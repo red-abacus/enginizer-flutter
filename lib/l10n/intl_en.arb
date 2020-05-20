@@ -262,6 +262,7 @@
   "import_item_price_title": "Price",
   "import_item_price_w_vta_title": "Price (/w VTA)",
   "import_item_availability_title": "Availability",
+  "import_item_quantity_alert": "This product quantity must be valid.",
   "import_item_import_title": "Import",
   "user_profile_current_password": "Current Password",
   "user_profile_new_password": "New Password",
@@ -472,5 +473,6 @@
   "exception_create_provider_item": "There was an error trying to add a new part.",
   "exception_add_work_estimate_item": "There was an error trying to add a new estimate item.",
   "exception_get_appointment_items": "There was an error trying to get work estimate items.",
-  "exception_work_estimate_import_issue_item": "There was an error trying to import this issue."
+  "exception_work_estimate_import_issue_item": "There was an error trying to import this issue.",
+  "exception_edit_issue_item": "There was an error trying to edit this issue."
 }

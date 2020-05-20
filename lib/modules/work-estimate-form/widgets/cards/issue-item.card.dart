@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:app/modules/work-estimate-form/screens/work-estimate-issue-details.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/import/work-estimate-issue-details.widget.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,6 @@ class IssueItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
-        height: 80,
         margin: EdgeInsets.only(bottom: 10),
         padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
@@ -56,6 +55,8 @@ class IssueItemCard extends StatelessWidget {
 
   _imageContainer() {
     return Container(
+      width: 60,
+      height: 60,
       padding: EdgeInsets.all(1),
       child: Image.network(
         'https://images.homedepot-static.com/productImages/464241a7-ee44-4ddf-b2f9-a6054982a938/svn/wagner-brake-brake-parts-bd126055e-64_1000.jpg',
@@ -73,7 +74,7 @@ class IssueItemCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('${issueItem.name} (${issueItem.code})',
                     style: TextStyle(
@@ -90,23 +91,18 @@ class IssueItemCard extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                         height: 1.5)),
-                SizedBox(height: 10),
+                Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                      '${S.of(context).general_available_from}: ${DateUtils.stringFromDate(issueItem.availableFrom, 'dd/MM/yyyy')}',
+                      style: TextStyle(
+                          color: Constants.gray,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 10,
+                          height: 1.5)),
+                ),
               ],
-            ),
-            Positioned(
-              child: Align(
-                  alignment: FractionalOffset.bottomLeft,
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    child: Text(
-                        '${S.of(context).general_available_from}: ${DateUtils.stringFromDate(issueItem.availableFrom, 'dd/MM/yyyy')}',
-                        style: TextStyle(
-                            color: Constants.gray,
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 10,
-                            height: 1.5)),
-                  )),
             ),
           ],
         ),
@@ -123,7 +119,8 @@ class IssueItemCard extends StatelessWidget {
               context: context,
               barrierDismissible: false, // user must tap button!
               builder: (BuildContext context) {
-                return WorkEstimateIssueDetailsWidget(issueItem: issueItem, importItem: this.selectIssueItem);
+                return WorkEstimateIssueDetailsWidget(
+                    issueItem: issueItem, importItem: this.selectIssueItem);
               })
         },
         child: Icon(

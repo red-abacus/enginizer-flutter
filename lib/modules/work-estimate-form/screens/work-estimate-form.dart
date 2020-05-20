@@ -21,8 +21,9 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info-parts.widget.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-final-info.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info-parts.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
@@ -103,7 +104,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             DateUtils.addDayToDate(DateTime.now(), 7), 'dd/MM/yyyy');
         await _provider
             .loadServiceProviderSchedule(
-            _provider.serviceProviderId, startDate, endDate)
+                _provider.serviceProviderId, startDate, endDate)
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
               widget.mode == EstimatorMode.CreateFinal ||
@@ -207,6 +208,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 issue: issues[index],
                 addIssueItem: _addIssueItem,
                 expandSection: _expandSection,
+                editIssueItem: _editIssueItem,
                 removeIssueItem: _removeIssueItem,
                 selectIssueSection: _selectIssueSection,
                 estimatorMode: widget.mode)),
@@ -370,8 +372,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _bottomContainerButton() {
     if (widget.mode == EstimatorMode.ReadOnly ||
-        _provider.workEstimateDetails.status !=
-            WorkEstimateStatus.Pending) {
+        _provider.workEstimateDetails.status != WorkEstimateStatus.Pending) {
       return Container();
     }
 
@@ -421,8 +422,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               builder: (BuildContext context, StateSetter state) {
             return EstimateAssignMechanicModal(
                 appointment: _provider.selectedAppointment,
-                appointmentDetail:
-                _provider.selectedAppointmentDetail,
+                appointmentDetail: _provider.selectedAppointmentDetail,
                 refreshState: _refreshState,
                 assignEmployee: _assignEmployee);
           });
@@ -461,15 +461,21 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       });
 
       try {
-        await _provider.addIssueItem(_provider.workEstimateDetails.id, issueItemRequest).then((_) {
+        await _provider
+            .addIssueItem(_provider.workEstimateDetails.id, issueItemRequest)
+            .then((_) {
           setState(() {
-            _provider.workEstimateRequest.setIssues(context, _provider.workEstimateDetails.issues);
+            _provider.workEstimateRequest
+                .setIssues(context, _provider.workEstimateDetails.issues);
             _isLoading = false;
           });
         });
       } catch (error) {
-        if (error.toString().contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
-
+        if (error
+            .toString()
+            .contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_add_work_estimate_item, context);
         }
 
         setState(() {
@@ -478,8 +484,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       }
     } else {
       setState(() {
-        _provider.addRequestToIssueSection(
-            issue, issueRecommendation);
+        _provider.addRequestToIssueSection(issue, issueRecommendation);
       });
     }
   }
@@ -487,34 +492,77 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   _removeIssueItem(Issue issue, IssueRecommendation issueRecommendation,
       IssueItem issueItem) {
     setState(() {
-      _provider.removeIssueItem(
-          issue, issueRecommendation, issueItem);
+      _provider.removeIssueItem(issue, issueRecommendation, issueItem);
     });
+  }
+
+  _editIssueItem(Issue issue, IssueRecommendation issueRecommendation,
+      IssueItem issueItem) {
+    issueItem.issueId = issue.id;
+    issueItem.recommendationId = issueRecommendation.id;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WorkEstimateIssueEditWidget(
+          issueItem: issueItem,
+          editItem: _editItem,
+        );
+      },
+    );
+  }
+
+  _editItem(IssueItem issueItem) async {
+    IssueItemRequest issueItemRequest = new IssueItemRequest(
+        issueId: issueItem.issueId,
+        recommendationId: issueItem.recommendationId,
+        issueItem: issueItem);
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .updateIssueItem(_provider.workEstimateId, issueItemRequest)
+          .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(
+          WorkEstimatesService.WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_edit_issue_item, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _selectIssueSection(Issue issue, IssueRecommendation issueRecommendation) {
     setState(() {
-      if (!_provider.selectedRecommendations
-          .contains(issueRecommendation)) {
+      if (!_provider.selectedRecommendations.contains(issueRecommendation)) {
         _provider.selectedRecommendations.add(issueRecommendation);
       } else {
-        _provider.selectedRecommendations
-            .remove(issueRecommendation);
+        _provider.selectedRecommendations.remove(issueRecommendation);
       }
     });
   }
 
   _save() {
     String validationString =
-    _provider.workEstimateRequest.isValid(context, widget.mode);
+        _provider.workEstimateRequest.isValid(context, widget.mode);
 
     if (validationString != null) {
       AlertWarningDialog.showAlertDialog(
           context, S.of(context).general_warning, validationString);
     } else {
       DateTime maxResponseTime = widget.mode == EstimatorMode.Create
-          ? _provider.workEstimateRequest.employeeTimeSerie
-              .getDate()
+          ? _provider.workEstimateRequest.employeeTimeSerie.getDate()
           : new DateTime(DateTime.now().year + 1, DateTime.now().month,
               DateTime.now().day);
 
@@ -525,8 +573,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             return WorkEstimateFinalInfoPartsWidget(
                 infoAdded: _partsInfoAdded,
                 maxResponseTime: DateUtils.dateFromString(
-                    _provider
-                        .selectedAuctionDetails.scheduledDateTime,
+                    _provider.selectedAuctionDetails.scheduledDateTime,
                     'dd/MM/yyyy HH:mm'));
           } else {
             return WorkEstimateFinalInfoWidget(

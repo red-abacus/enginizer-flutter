@@ -21,8 +21,7 @@ class FirebaseManager {
 
   Future<void> initialise() async {
     NotificationsManager.checkNotificationsCount();
-
-    _firebaseMessaging.subscribeToTopic('general');
+    
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         AppNotification notification = AppNotification.fromNotification(message);

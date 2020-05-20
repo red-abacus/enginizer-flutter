@@ -206,11 +206,21 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
+  Future<IssueItem> updateIssueItem(int appointmentId, IssueItemRequest issueItemRequest) async {
+    try {
+      IssueItem issueItem = await _workEstimatesService.updateAppointmentItem(appointmentId, issueItemRequest);
+      notifyListeners();
+      return issueItem;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   Future<List<IssueItem>> getAppointmentIssues(int appointmentId) async {
-    itemsToImport = [];
     try {
       List<IssueItem> issues = await this
           ._appointmentsService.getAppointmentItems(appointmentId);
+      itemsToImport = [];
       issues.forEach((issue) {
         if (!issue.imported) {
           itemsToImport.add(issue);

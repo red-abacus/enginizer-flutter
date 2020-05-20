@@ -9,129 +9,172 @@ import 'package:flutter/material.dart';
 class WorkEstimateIssueWidget extends StatelessWidget {
   final IssueItem issueItem;
   final Function removeIssueItem;
+  final Function editIssueItem;
 
   final EstimatorMode estimatorMode;
 
   WorkEstimateIssueWidget(
-      {this.issueItem, this.removeIssueItem, this.estimatorMode});
+      {this.issueItem,
+      this.removeIssueItem,
+      this.estimatorMode,
+      this.editIssueItem});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: () => _editIssueItem(),
       child: Container(
-          margin: EdgeInsets.only(bottom: 20),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                '${issueItem.name} (${issueItem.code})',
-                                style: TextHelper.customTextStyle(
-                                    null, black_text, FontWeight.bold, 16),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Expanded(
-                                child: Text(
-                                  '${S.of(context).estimator_type}: ${_translateType(context, issueItem.type.name)}',
-                                  style: TextHelper.customTextStyle(
-                                      null, gray2, FontWeight.bold, 14),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                '${S.of(context).car_details_quantity}:',
-                                style: TextHelper.customTextStyle(
-                                    null, black_text, null, 14),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  issueItem.quantity.toString(),
-                                  style: TextHelper.customTextStyle(
-                                      null, red, FontWeight.bold, 14),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                '${S.of(context).general_price}:',
-                                style: TextHelper.customTextStyle(
-                                    null, black_text, null, 14),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  issueItem.price.toString(),
-                                  style: TextHelper.customTextStyle(
-                                      null, red, FontWeight.bold, 14),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  '(${(issueItem.price + issueItem.priceVAT).toString()}',
-                                  style: TextHelper.customTextStyle(
-                                      null, red, FontWeight.bold, 14),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  '${S.of(context).estimator_priceVAT})',
-                                  style: TextHelper.customTextStyle(
-                                      null, red, FontWeight.bold, 14),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
+        child: Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          _nameContainer(context),
+                          _typeContainer(context),
+                          _quantityContainer(context),
+                          if (issueItem.addition != null &&
+                              issueItem.addition != 0)
+                            _additionContainer(context),
+                          _priceContainer(context),
+                        ],
+                      ),
                     ),
-                  ),
-                  _getRemoveButton(context, issueItem),
-                ],
-              ),
-              Opacity(
-                opacity: 0.5,
-                child: Container(
-                  margin: EdgeInsets.only(top: 20),
-                  height: 1,
-                  color: red,
+                    _getRemoveButton(context, issueItem),
+                  ],
                 ),
-              )
-            ],
-          )),
+                Opacity(
+                  opacity: 0.5,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20),
+                    height: 1,
+                    color: red,
+                  ),
+                )
+              ],
+            )),
+      ),
+    );
+  }
+
+  _nameContainer(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            '${issueItem.name} (${issueItem.code})',
+            style: TextHelper.customTextStyle(
+                null, black_text, FontWeight.bold, 16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _typeContainer(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              '${S.of(context).estimator_type}: ${_translateType(context, issueItem.type.name)}',
+              style:
+                  TextHelper.customTextStyle(null, gray2, FontWeight.bold, 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _quantityContainer(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${S.of(context).car_details_quantity}:',
+            style: TextHelper.customTextStyle(null, black_text, null, 14),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Text(
+              issueItem.quantity.toString(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _priceContainer(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${S.of(context).general_price}:',
+            style: TextHelper.customTextStyle(null, black_text, null, 14),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Text(
+              issueItem.price.toString(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Text(
+              '(${(issueItem.price + issueItem.priceVAT).toString()}',
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Text(
+              '${S.of(context).estimator_priceVAT})',
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _additionContainer(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${S.of(context).general_addition}:',
+            style: TextHelper.customTextStyle(null, black_text, null, 14),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Text(
+              '${issueItem.addition.toString()}%',
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -140,8 +183,6 @@ class WorkEstimateIssueWidget extends StatelessWidget {
       case EstimatorMode.ReadOnly:
       case EstimatorMode.Client:
       case EstimatorMode.ClientAccept:
-      case EstimatorMode.Edit:
-        return Container();
       case EstimatorMode.Edit:
         return Container();
       default:
@@ -165,6 +206,16 @@ class WorkEstimateIssueWidget extends StatelessWidget {
         return S.of(context).estimator_product;
       default:
         return '';
+    }
+  }
+
+  _editIssueItem() {
+    switch (estimatorMode) {
+      case EstimatorMode.Edit:
+        this.editIssueItem(issueItem);
+        break;
+      default:
+        break;
     }
   }
 }

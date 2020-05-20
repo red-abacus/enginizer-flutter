@@ -27,7 +27,10 @@ class WorkEstimatesService {
       'REJECT_WORK_ESTIMATE_EXCEPTION';
   static const String ADD_WORK_ESTIMATE_ITEM_EXCEPTION =
       'ADD_WORK_ESTIMATE_ITEM_EXCEPTION';
-  static const String WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION = 'WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION';
+  static const String WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION =
+      'WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION';
+  static const String WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION =
+      'WORK_ESTIMATE_EDIT_ISSUE_ITEMEXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -100,6 +103,7 @@ class WorkEstimatesService {
 
   Future<WorkEstimateDetails> addWorkEstimateItem(
       int workEstimateId, IssueItemRequest issueItemRequest) async {
+    print('test ${issueItemRequest.toCreateJson()}');
     try {
       final response = await _dio.post(
           _buildWorkEstimateItemsPath(workEstimateId),
@@ -164,11 +168,11 @@ class WorkEstimatesService {
     }
   }
 
-  Future<IssueItem> workEstimateImportItem(int workEstimateId, ImportItemRequest importItemRequest) async {
+  Future<IssueItem> workEstimateImportItem(
+      int workEstimateId, ImportItemRequest importItemRequest) async {
     try {
-      final response =
-      await _dio.post(_buildImportItemPath(workEstimateId),
-      data: importItemRequest.toJson());
+      final response = await _dio.post(_buildImportItemPath(workEstimateId),
+          data: importItemRequest.toJson());
 
       if (response.statusCode == 200) {
         return IssueItem.fromJson(response.data);
@@ -177,6 +181,23 @@ class WorkEstimatesService {
       }
     } catch (error) {
       throw Exception(WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION);
+    }
+  }
+
+  Future<IssueItem> updateAppointmentItem(
+      int workEstimateId, IssueItemRequest issueItemRequest) async {
+    try {
+      final response = await _dio.post(
+          _buildWorkEstimateItemsPath(workEstimateId),
+          data: issueItemRequest.toCreateJson());
+
+      if (response.statusCode == 200) {
+        return IssueItem.fromJson(response.data);
+      } else {
+        throw Exception(WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION);
     }
   }
 
