@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/screens/work-estimate-issue-details.widget.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,12 @@ class IssueItemCard extends StatelessWidget {
       margin: EdgeInsets.only(right: 10),
       child: InkWell(
         onTap: () => {
-          // TODO - add info screen for imported issues
+          showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return WorkEstimateIssueDetailsWidget(issueItem: issueItem, importItem: this.selectIssueItem);
+              })
         },
         child: Icon(
           Icons.info,

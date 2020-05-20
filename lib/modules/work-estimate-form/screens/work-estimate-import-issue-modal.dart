@@ -2,10 +2,6 @@ import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
-import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
-import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
@@ -80,7 +76,6 @@ class _WorkEstimateImportIssueModalState
             shrinkWrap: true,
             itemCount: _provider.itemsToImport.length,
             itemBuilder: (context, index) {
-              // To be implemented
               return IssueItemCard(
                   issueItem: _provider.itemsToImport[index],
                   selectIssueItem: _selectIssueItem);
