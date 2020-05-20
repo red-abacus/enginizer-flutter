@@ -117,7 +117,9 @@ class IssueItemCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(right: 10),
       child: InkWell(
-        onTap: () => {},
+        onTap: () => {
+          // TODO - add info screen for imported issues
+        },
         child: Icon(
           Icons.info,
           color: Constants.red,
