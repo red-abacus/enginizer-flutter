@@ -48,8 +48,8 @@ class AppointmentStatusStateUtils {
   static List<AppointmentStatusState> statusesMechanic() {
     return [
       AppointmentStatusState.NONE,
+      AppointmentStatusState.IN_WORK,
       AppointmentStatusState.ON_HOLD,
-      AppointmentStatusState.SUBMITTED,
       AppointmentStatusState.IN_UNIT,
       AppointmentStatusState.IN_REVIEW
     ];

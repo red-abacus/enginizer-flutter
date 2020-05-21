@@ -46,6 +46,7 @@ class AppointmentDetail {
       this.recommendations});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
+    print('appointment details id ${json['id']}');
     return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',

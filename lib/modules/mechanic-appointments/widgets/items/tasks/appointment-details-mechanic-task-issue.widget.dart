@@ -16,7 +16,7 @@ class AppointmentDetailsTaskIssueWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 60),
+      constraints: BoxConstraints(minHeight: 80),
       child: Container(
           margin: EdgeInsets.only(top: 10),
           padding: EdgeInsets.all(1),

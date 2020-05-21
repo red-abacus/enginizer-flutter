@@ -124,23 +124,26 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
       margin: EdgeInsets.only(top: 10),
       child: Row(
         children: <Widget>[
-          FlatButton(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _imageContainer(),
-                Container(
-                  margin: EdgeInsets.only(left: 8),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Icon(Icons.camera_alt, color: red),
-                  ),
-                )
-              ],
+          Container(
+            height: 60,
+            child: FlatButton(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _imageContainer(),
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Icon(Icons.camera_alt, color: red),
+                    ),
+                  )
+                ],
+              ),
+              onPressed: () {
+                showCameraDialog();
+              },
             ),
-            onPressed: () {
-              showCameraDialog();
-            },
           ),
         ],
       ),

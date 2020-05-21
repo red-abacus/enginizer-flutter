@@ -5,7 +5,6 @@ import 'package:app/modules/mechanic-appointments/enums/mechanic-task-status.enu
 import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -69,14 +68,17 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
       margin: EdgeInsets.only(top: 20),
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              _numberContainer(),
-              _titleWidget(),
-              _timerWidget(),
-              _bestTimeWidget(),
-            ],
+          Container(
+            height: 40,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                _numberContainer(),
+                _titleWidget(),
+                _timerWidget(),
+                _bestTimeWidget(),
+              ],
+            ),
           ),
           _issuesContainer(),
         ],
@@ -145,10 +147,11 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
     String secondsString = (_seconds < 10) ? '0$_seconds' : _seconds.toString();
 
     return Align(
-      alignment: Alignment.topRight,
+      alignment: Alignment.centerRight,
       child: ClipRRect(
         borderRadius: new BorderRadius.circular(5.0),
         child: Container(
+          height: 30,
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
           color: gray,
           child: Column(
@@ -170,7 +173,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
 
   _bestTimeWidget() {
     return Align(
-      alignment: Alignment.topRight,
+      alignment: Alignment.centerRight,
       child: Container(
         margin: EdgeInsets.only(left: 4),
         width: 60,

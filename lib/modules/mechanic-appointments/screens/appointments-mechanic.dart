@@ -102,7 +102,7 @@ class AppointmentsMechanicState extends State<AppointmentsMechanic> {
 
   _renderAppointments(bool _isLoading, List<Appointment> appointments) {
     AppointmentsMechanicProvider appointmentsMechanicProvider =
-        Provider.of<AppointmentsMechanicProvider>(context, listen: false);
+        Provider.of<AppointmentsMechanicProvider>(context);
 
     return _isLoading
         ? CircularProgressIndicator()
