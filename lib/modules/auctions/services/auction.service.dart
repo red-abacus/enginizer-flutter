@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';

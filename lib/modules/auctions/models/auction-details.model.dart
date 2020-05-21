@@ -36,7 +36,6 @@ class AuctionDetail {
       this.bids});
 
   factory AuctionDetail.fromJson(Map<String, dynamic> json) {
-    print('auction details $json');
     return AuctionDetail(
         id: json['id'],
         car: json['car'] != null ? Car.fromJson(json['car']) : null,

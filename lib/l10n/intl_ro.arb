@@ -476,5 +476,6 @@
   "exception_work_estimate_import_issue_item": "A intervenit o problemă la importarea acestui produs.",
   "exception_edit_issue_item": "A intervenit o problemă la editarea acestui produs.",
   "exception_send_appointment_recommendations": "A intervenit o problemă la refuzarea/acceptarea recomandărilor",
-  "exception_order_appointment_items": "A intervenit o problemă în procesul de comandă"
+  "exception_order_appointment_items": "A intervenit o problemă în procesul de comandă",
+  "exception_get_orders": "A intervenit o problemă la încărcarea comenzilor tale."
 }

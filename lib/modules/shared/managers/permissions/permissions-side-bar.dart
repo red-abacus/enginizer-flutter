@@ -26,6 +26,10 @@ class PermissionsSideBar {
   List<ConsultantServiceType> partsPermissions = [
     ConsultantServiceType.DismantlingShop
   ];
+  List<ConsultantServiceType> orderPermissions = [
+    ConsultantServiceType.PartShop,
+    ConsultantServiceType.DismantlingShop
+  ];
 
   bool consultantHasAccess(ServiceProviderItemsResponse serviceItemResponse,
       ConsultantSideBarPermission permission) {
@@ -49,9 +53,10 @@ class PermissionsSideBar {
               .containsServiceType(notificationPermissions);
           break;
         case ConsultantSideBarPermission.Parts:
-          return serviceItemResponse
-              .containsServiceType(partsPermissions);
+          return serviceItemResponse.containsServiceType(partsPermissions);
           break;
+        case ConsultantSideBarPermission.Orders:
+          return serviceItemResponse.containsServiceType(orderPermissions);
       }
     }
 
@@ -65,5 +70,6 @@ enum ConsultantSideBarPermission {
   Auctions,
   WorkEstimates,
   Notifications,
-  Parts
+  Parts,
+  Orders
 }

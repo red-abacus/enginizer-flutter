@@ -481,5 +481,6 @@
   "exception_work_estimate_import_issue_item": "There was an error trying to import this issue.",
   "exception_edit_issue_item": "There was an error trying to edit this item.",
   "exception_send_appointment_recommendations": "There was an error trying to reject/accept recommendations.",
-  "exception_order_appointment_items": "There was an error in order process."
+  "exception_order_appointment_items": "There was an error in order process.",
+  "exception_get_orders": "There was an error trying to get orders."
 }

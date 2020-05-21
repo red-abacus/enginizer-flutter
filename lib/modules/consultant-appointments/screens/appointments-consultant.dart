@@ -6,6 +6,7 @@ import 'package:app/modules/consultant-appointments/providers/appointment-consul
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/consultant-appointments/widgets/appointments-list-consultant.widget.dart';
+import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
