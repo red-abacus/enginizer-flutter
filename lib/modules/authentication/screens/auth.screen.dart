@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/widgets/auth-form.widget.dart';
 import 'package:flutter/material.dart';
@@ -75,19 +76,31 @@ class _AuthScreenState extends State<AuthScreen> {
   _testWidget() {
     return Row(
       children: <Widget>[
-        FlatButton(child: Text('Client'), onPressed: () {
-          _login('client@autowass.com', 'password');
-        },),
-        FlatButton(child: Text('Consultant Provider'), onPressed: () {
-          _login('consultant.provider@autowass.com', 'password');
-        },),
-        FlatButton(child: Text('Mechanic'), onPressed: () {
-          _login('mechanic.provider@autowass.com', 'password');
-        },),
+        FlatButton(
+          child: Text('Client'),
+          onPressed: () {
+            _login('client@autowass.com', 'password');
+          },
+        ),
+        FlatButton(
+          child: Text('Consultant Provider'),
+          onPressed: () {
+            _login('consultant.provider@autowass.com', 'password');
+          },
+        ),
+        FlatButton(
+          child: Text('Mechanic'),
+          onPressed: () {
+            _login('mechanic.provider@autowass.com', 'password');
+          },
+        ),
         Expanded(
-          child: FlatButton(child: Text('furnizor'), onPressed: () {
-            _login('parts.provider3@autowass.com', 'password');
-          },),
+          child: FlatButton(
+            child: Text('furnizor'),
+            onPressed: () {
+              _login('parts.provider3@autowass.com', 'password');
+            },
+          ),
         )
       ],
     );
