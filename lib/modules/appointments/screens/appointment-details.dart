@@ -51,7 +51,8 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
     }
 
     return Consumer<AppointmentProvider>(
-        builder: (context, appointmentProvider, _) => Scaffold(
+        builder: (context, appointmentProvider, _) =>
+            Scaffold(
               appBar: AppBar(
                 title: Text(
                   _appointmentProvider.selectedAppointment.name,
@@ -59,7 +60,9 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
                       null, Colors.white, FontWeight.bold, 20),
                 ),
                 iconTheme:
-                    new IconThemeData(color: Theme.of(context).cardColor),
+                new IconThemeData(color: Theme
+                    .of(context)
+                    .cardColor),
               ),
               body: _content(),
             ));
@@ -99,8 +102,12 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_appointment_details, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_appointment_details, context);
       }
 
       setState(() {
@@ -112,30 +119,30 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
   Widget _content() {
     return _isLoading
         ? Center(
-            child: CircularProgressIndicator(),
-          )
+      child: CircularProgressIndicator(),
+    )
         : Column(
-            children: <Widget>[
-              Container(
-                child: Container(
-                  child: _buildTabBar(),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(top: 20),
-                  child: _getContent(),
-                ),
-              )
-            ],
-          );
+      children: <Widget>[
+        Container(
+          child: Container(
+            child: _buildTabBar(),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(top: 20),
+            child: _getContent(),
+          ),
+        )
+      ],
+    );
   }
 
   Widget _getContent() {
     switch (currentState) {
       case AppointmentDetailsTabBarState.REQUEST:
         switch (
-            _appointmentProvider.selectedAppointmentDetail.status.getState()) {
+        _appointmentProvider.selectedAppointmentDetail.status.getState()) {
           case AppointmentStatusState.SUBMITTED:
           case AppointmentStatusState.PENDING:
           case AppointmentStatusState.SCHEDULED:
@@ -143,10 +150,11 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           case AppointmentStatusState.IN_REVIEW:
           case AppointmentStatusState.IN_WORK:
           case AppointmentStatusState.CANCELED:
+          case AppointmentStatusState.ON_HOLD:
           case AppointmentStatusState.DONE:
             return AppointmentGenericDetailsWidget(
                 appointmentDetail:
-                    _appointmentProvider.selectedAppointmentDetail,
+                _appointmentProvider.selectedAppointmentDetail,
                 viewEstimate: _seeEstimate,
                 cancelAppointment: _cancelAppointment,
                 showHandoverCarForm: _showHandoverCarForm);
@@ -202,17 +210,21 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           ),
           decoration: BoxDecoration(
               border: Border(
-            bottom: BorderSide(width: 1.0, color: bottomColor),
-          ))),
+                bottom: BorderSide(width: 1.0, color: bottomColor),
+              ))),
     );
   }
 
   _stateTitle(AppointmentDetailsTabBarState state, BuildContext context) {
     switch (state) {
       case AppointmentDetailsTabBarState.REQUEST:
-        return S.of(context).appointment_details_request;
+        return S
+            .of(context)
+            .appointment_details_request;
       case AppointmentDetailsTabBarState.CAR:
-        return S.of(context).appointment_details_car;
+        return S
+            .of(context)
+            .appointment_details_car;
     }
 
     return '';
@@ -236,15 +248,19 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.CANCEL_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_cancel_appointment, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_cancel_appointment, context);
       }
     }
   }
 
   _seeEstimate() {
     int workEstimateId =
-        _appointmentProvider.selectedAppointmentDetail.lastWorkEstimate();
+    _appointmentProvider.selectedAppointmentDetail.lastWorkEstimate();
 
     if (workEstimateId != 0) {
       EstimatorMode mode =
@@ -254,11 +270,17 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
           : EstimatorMode.Client;
 
       Provider.of<WorkEstimateProvider>(context).refreshValues(mode);
-      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+      Provider
+          .of<WorkEstimateProvider>(context)
+          .workEstimateId =
           workEstimateId;
-      Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
+      Provider
+          .of<WorkEstimateProvider>(context)
+          .selectedAppointmentDetail =
           _appointmentProvider.selectedAppointmentDetail;
-      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+      Provider
+          .of<WorkEstimateProvider>(context)
+          .serviceProviderId =
           _appointmentProvider.selectedAppointment.serviceProvider.id;
 
       DateEntry dateEntry = _appointmentProvider.selectedAppointmentDetail

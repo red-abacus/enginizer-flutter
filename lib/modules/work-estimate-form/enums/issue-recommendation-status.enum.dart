@@ -3,7 +3,7 @@ class IssueRecommendationStatusUtils {
     switch (sender.toLowerCase()) {
       case 'new':
         return IssueRecommendationStatus.New;
-      case 'ACCEPTED':
+      case 'accepted':
         return IssueRecommendationStatus.Accepted;
       case 'rejected':
         return IssueRecommendationStatus.Rejected;

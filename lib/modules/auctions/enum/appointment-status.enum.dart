@@ -40,6 +40,7 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.OPEN_BID,
       AppointmentStatusState.CANCELED,
       AppointmentStatusState.IN_REVIEW,
+      AppointmentStatusState.ON_HOLD,
       AppointmentStatusState.DONE
     ];
   }

@@ -331,6 +331,7 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   populateRecommendationsStatuses() {
+
     if (selectedAppointmentDetail != null && workEstimateDetails != null) {
       List<IssueRecommendation> appointmentRecommendation =
           selectedAppointmentDetail.recommendations;
@@ -338,17 +339,23 @@ class WorkEstimateProvider with ChangeNotifier {
       this.workEstimateDetails.issues.forEach((issue) {
         for (IssueRecommendation workEstimateRecommendation
             in issue.recommendations) {
-          for (IssueRecommendation appointmentRecommendation
-          in appointmentRecommendation) {
-            if (workEstimateRecommendation.id == appointmentRecommendation.id) {
-              workEstimateRecommendation.status =
-                  appointmentRecommendation.status;
+          if (workEstimateRecommendation.isStandard) {
+            workEstimateRecommendation.status = IssueRecommendationStatus.Accepted;
+            selectedRecommendations.add(workEstimateRecommendation);
+          }
+          else {
+            for (IssueRecommendation appointmentRecommendation
+            in appointmentRecommendation) {
+              if (workEstimateRecommendation.id == appointmentRecommendation.id) {
+                workEstimateRecommendation.status =
+                    appointmentRecommendation.status;
 
-              if (workEstimateRecommendation.status ==
-                  IssueRecommendationStatus.Accepted) {
-                selectedRecommendations.add(workEstimateRecommendation);
+                if (workEstimateRecommendation.status ==
+                    IssueRecommendationStatus.Accepted) {
+                  selectedRecommendations.add(workEstimateRecommendation);
+                }
+                break;
               }
-              break;
             }
           }
         }
@@ -360,7 +367,9 @@ class WorkEstimateProvider with ChangeNotifier {
     List<Map<String, dynamic>> request = [];
 
     selectedRecommendations.forEach((recommendation) {
-      request.add(recommendation.sendRequest(true).toJson());
+      if (recommendation.status == IssueRecommendationStatus.New) {
+        request.add(recommendation.sendRequest(true).toJson());
+      }
     });
 
     workEstimateDetails.issues.forEach((issue) {
