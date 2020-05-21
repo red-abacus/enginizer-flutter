@@ -1,7 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
@@ -15,18 +15,20 @@ import 'estimate-assign-employees.widget.dart';
 
 class EstimateAssignMechanicModal extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
-  final Appointment appointment;
+  final AuctionDetail auctionDetail;
+  final int providerId;
 
   final Function refreshState;
   final Function assignEmployee;
   final EmployeeTimeSerie employeeTimeSerie;
 
   EstimateAssignMechanicModal(
-      {this.appointment,
-      this.appointmentDetail,
+      {this.appointmentDetail,
       this.refreshState,
       this.assignEmployee,
-      this.employeeTimeSerie});
+      this.employeeTimeSerie,
+      this.auctionDetail,
+      this.providerId});
 
   @override
   State<StatefulWidget> createState() {
@@ -84,7 +86,14 @@ class _EstimateAssignMechanicModalState
     String startDate = DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
     String endDate = startDate;
 
-    String scheduleDateTime = widget.appointmentDetail.scheduledDate;
+    String scheduleDateTime = '';
+
+    if (widget.appointmentDetail != null) {
+      scheduleDateTime = widget.appointmentDetail.scheduledDate;
+    }
+    else if (widget.auctionDetail != null) {
+      scheduleDateTime = widget.auctionDetail.scheduledDateTime;
+    }
 
     if (scheduleDateTime.isNotEmpty) {
       DateTime dateTime = DateUtils.dateFromString(
@@ -99,7 +108,7 @@ class _EstimateAssignMechanicModalState
     try {
       await _provider
           .getProviderEmployees(
-              widget.appointmentDetail.serviceProvider.id, startDate, endDate)
+              widget.providerId, startDate, endDate)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -124,7 +133,6 @@ class _EstimateAssignMechanicModalState
         ? Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
             child: EstimateAssignEmployeesWidget(
-                appointment: widget.appointment,
                 selectEmployee: _selectEmployee,
                 employees: _provider.employees,
                 employeeTimeSerie: _provider.selectedTimeSerie),

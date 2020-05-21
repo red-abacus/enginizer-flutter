@@ -12,7 +12,6 @@ import 'package:app/modules/auctions/widgets/details-consultant/auction-consulta
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -148,7 +147,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       return AuctionConsultantWidget(
           auction: auctionProvider.selectedAuction,
           auctionDetails: auctionProvider.auctionDetails,
-          createBid: _createBid);
+          createEstimate: _createEstimate);
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions,
         auctionPermission: AuctionPermission.CarDetails)) {
@@ -163,8 +162,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       }
       return AuctionConsultantPartsWidget(
           auctionDetails: auctionProvider.auctionDetails,
-          appointmentDetail: auctionProvider.appointmentDetails,
-          createEstimate: providerBid == null ? _createEstimate : null,
+          createEstimate: providerBid == null ? _createPartEstimate : null,
           seeEstimate: providerBid != null ? _seeEstimate : null,
           showProviderDetails: _showProviderDetails);
     }
@@ -172,24 +170,25 @@ class AuctionConsultantState extends State<AuctionConsultant> {
     return Container(child: Text('No permission !'));
   }
 
-  _createBid(WorkEstimateRequest workEstimateRequest) {
-    try {
-      auctionProvider.createBid(workEstimateRequest.toJson()).then((_) {
-        Navigator.pop(context);
+  _createEstimate() {
+    if (auctionProvider.auctionDetails != null) {
+      Provider.of<WorkEstimateProvider>(context)
+          .refreshValues(EstimatorMode.Create);
+      Provider.of<WorkEstimateProvider>(context)
+          .setIssues(context, auctionProvider.auctionDetails.issues);
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          Provider.of<Auth>(context).authUserDetails.userProvider.id;
+      Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails = auctionProvider.auctionDetails;
 
-        setState(() {
-          _initDone = false;
-        });
-      });
-    } catch (error) {
-      if (error.toString().contains(AuctionsService.CREATE_BID_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_create_bid, context);
-      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
+      );
     }
   }
 
-  _createEstimate() {
+  _createPartEstimate() {
     if (auctionProvider.auctionDetails != null) {
       Provider.of<WorkEstimateProvider>(context)
           .refreshValues(EstimatorMode.CreatePart);

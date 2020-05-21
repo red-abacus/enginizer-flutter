@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:app/modules/consultant-appointments/models/assign-employee-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
@@ -33,8 +32,6 @@ class ProviderService {
       'GET_PROVIDER_SERVICE_ITEMS_EXCEPTION';
   static const String UPDATE_PROVIDER_DETAILS_EXCEPTION =
       'UPDATE_PROVIDER_DETAILS_FAILED';
-  static const String ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION =
-      'ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION';
   static const CREATE_PROVIDER_ITEM_EXCEPTION = 'CREATE_PROVIDER_ITEM_EXCEPTION';
 
   static const String _SERVICES_PATH =
@@ -70,10 +67,6 @@ class ProviderService {
   static const String _SERVICE_PROVIDER_REVIEWS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _SERVICE_PROVIDER_REVIEWS_SUFFIX = '/reviews';
-
-  static const String _ASSIGN_MECHANIC_PREFIX =
-      '${Environment.PROVIDERS_BASE_API}/providers/';
-  static const String _ASSIGN_MECHANIC_SUFFIX = '/people-timetable/';
 
   Dio _dio = inject<Dio>();
 
@@ -271,24 +264,6 @@ class ProviderService {
     }
   }
 
-  Future<bool> assignEmployeeToAppointment(
-      AssignEmployeeRequest assignEmployeeRequest) async {
-    try {
-      final response = await _dio.put(
-          _buildAssignMechanicToAppointment(assignEmployeeRequest.providerId,
-              assignEmployeeRequest.employeeId),
-          data: jsonEncode(assignEmployeeRequest.toJson()));
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        throw Exception(ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION);
-      }
-    } catch (error) {
-      throw Exception(ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION);
-    }
-  }
-
   _mapServiceProviderTimetable(List<dynamic> response) {
     List<ServiceProviderTimetable> list = [];
 
@@ -368,13 +343,6 @@ class ProviderService {
     return _PROVIDER_SERVICE_ITEMS_PREFIX +
         providerId.toString() +
         _PROVIDER_SERVICE_ITEMS_SUFFIX;
-  }
-
-  _buildAssignMechanicToAppointment(int serviceProviderId, int mechanicId) {
-    return _ASSIGN_MECHANIC_PREFIX +
-        serviceProviderId.toString() +
-        _ASSIGN_MECHANIC_SUFFIX +
-        mechanicId.toString();
   }
 
   _buildGetServicesPath() {

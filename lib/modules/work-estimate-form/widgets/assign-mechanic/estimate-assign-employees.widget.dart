@@ -1,4 +1,3 @@
-import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/models/employee.dart';
 import 'package:app/modules/consultant-appointments/widgets/pick-up-form/pick-up-car-form-employee.widget.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EstimateAssignEmployeesWidget extends StatefulWidget {
-  final Appointment appointment;
   final Function selectEmployee;
   final List<Employee> employees;
   final EmployeeTimeSerie employeeTimeSerie;
@@ -15,7 +13,7 @@ class EstimateAssignEmployeesWidget extends StatefulWidget {
   _EstimateAssignEmployeesWidgetState createState() =>
       _EstimateAssignEmployeesWidgetState();
 
-  EstimateAssignEmployeesWidget({this.appointment, this.selectEmployee, this.employees, this.employeeTimeSerie});
+  EstimateAssignEmployeesWidget({this.selectEmployee, this.employees, this.employeeTimeSerie});
 }
 
 class _EstimateAssignEmployeesWidgetState
@@ -36,6 +34,8 @@ class _EstimateAssignEmployeesWidgetState
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               for (Employee employee in widget.employees)
                 PickUpCarFormEmployeeWidget(

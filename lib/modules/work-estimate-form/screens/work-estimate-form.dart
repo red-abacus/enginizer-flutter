@@ -8,14 +8,15 @@ import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/screens/work-estimate-order-modal.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
 import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -265,65 +266,69 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         break;
     }
 
+    var saveButton = SpeedDialChild(
+        child: Icon(Icons.save),
+        foregroundColor: red,
+        backgroundColor: Colors.white,
+        label: S.of(context).general_save,
+        labelStyle:
+            TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+        onTap: () => _save());
+
+    var operationHistoryButton = SpeedDialChild(
+        child: Icon(Icons.history),
+        foregroundColor: red,
+        backgroundColor: Colors.white,
+        label: S.of(context).estimator_operations_history,
+        labelStyle:
+            TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+        onTap: () => print('operation history'));
+
     var buttons = List<SpeedDialChild>();
 
-    if (widget.mode != EstimatorMode.ReadOnly &&
-        widget.mode != EstimatorMode.Edit &&
-        widget.mode != EstimatorMode.Client) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.save),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).general_save,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => _save()));
-    }
+    switch (widget.mode) {
+      case EstimatorMode.Client:
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.create),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).estimator_create_from_selection,
+            labelStyle: TextHelper.customTextStyle(
+                null, Colors.grey, FontWeight.bold, 16),
+            onTap: () => _acceptRecommendations()));
+        break;
+      case EstimatorMode.Edit:
+        buttons.add(operationHistoryButton);
 
-    if (widget.mode == EstimatorMode.ReadOnly) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.schedule),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).auction_proposed_date,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => print('schedule')));
-    }
-
-    if (widget.mode == EstimatorMode.Create) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.assignment),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).estimator_assign_mechanic,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => _assignMechanic()));
-    }
-
-    if (widget.mode != EstimatorMode.Create &&
-        widget.mode != EstimatorMode.CreatePart &&
-        widget.mode != EstimatorMode.Client) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.history),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).estimator_operations_history,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => print('operation history')));
-    }
-
-    if (widget.mode == EstimatorMode.Client) {
-      buttons.add(SpeedDialChild(
-          child: Icon(Icons.create),
-          foregroundColor: red,
-          backgroundColor: Colors.white,
-          label: S.of(context).estimator_create_from_selection,
-          labelStyle: TextHelper.customTextStyle(
-              null, Colors.grey, FontWeight.bold, 16),
-          onTap: () => _acceptRecommendations()));
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.shopping_cart),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).estimator_order_title,
+            labelStyle: TextHelper.customTextStyle(
+                null, Colors.grey, FontWeight.bold, 16),
+            onTap: () => _orderItems()));
+        break;
+      case EstimatorMode.Create:
+        buttons.add(saveButton);
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.assignment),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).estimator_assign_mechanic,
+            labelStyle: TextHelper.customTextStyle(
+                null, Colors.grey, FontWeight.bold, 16),
+            onTap: () => _assignMechanic()));
+        break;
+      case EstimatorMode.CreatePart:
+        buttons.add(saveButton);
+        break;
+      case EstimatorMode.CreateFinal:
+        buttons.add(saveButton);
+        buttons.add(operationHistoryButton);
+        break;
+      default:
+        break;
     }
 
     return SpeedDial(
@@ -354,6 +359,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       alignment: Alignment.bottomCenter,
       child: Container(
         height: 60,
+        color: Colors.white,
         margin: EdgeInsets.only(left: 20, right: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -419,8 +425,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return EstimateAssignMechanicModal(
-                appointment: _provider.selectedAppointment,
+                providerId: _provider.serviceProviderId,
                 appointmentDetail: _provider.selectedAppointmentDetail,
+                auctionDetail: _provider.selectedAuctionDetails,
                 refreshState: _refreshState,
                 assignEmployee: _assignEmployee);
           });
@@ -596,7 +603,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     try {
       await _provider
           .createWorkEstimate(_provider.workEstimateRequest,
-              appointmentId: _provider.selectedAppointment.id)
+              appointmentId: _provider.selectedAppointmentDetail?.id,
+              auctionId: _provider.selectedAuctionDetails?.id)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
@@ -720,7 +728,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             .then((_) {
           setState(() {
             Provider.of<AppointmentProvider>(context).initDone = false;
-            _initDone = false;
+            Navigator.pop(context);
           });
         });
       } catch (error) {
@@ -743,14 +751,11 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           setState(() {
             Provider.of<AppointmentProvider>(context).initDone = false;
             Provider.of<AppointmentsProvider>(context).initDone = false;
-
             Navigator.pop(context);
           });
         });
       } catch (error) {
-        if (error
-            .toString()
-            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
+        if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
           FlushBarHelper.showFlushBar(S.of(context).general_error,
               S.of(context).exception_accept_work_estimate, context);
         }
@@ -817,7 +822,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _sendRecommendations() async {
-    List<Map<String, dynamic>> request = _provider.getSendRecommendationRequest();
+    List<Map<String, dynamic>> request =
+        _provider.getSendRecommendationRequest();
 
     setState(() {
       _isLoading = true;
@@ -845,5 +851,22 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     }
 
     return request;
+  }
+
+  _orderItems() async {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return WorkEstimateOrderModal(
+                workEstimateId:
+                    Provider.of<WorkEstimateProvider>(context).workEstimateId);
+          });
+        });
   }
 }

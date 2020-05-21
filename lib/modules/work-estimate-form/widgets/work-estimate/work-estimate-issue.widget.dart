@@ -183,6 +183,8 @@ class WorkEstimateIssueWidget extends StatelessWidget {
       default:
         return Container();
     }
+
+    return Container();
   }
 
   _getRemoveButton(BuildContext context, IssueItem issueItem) {

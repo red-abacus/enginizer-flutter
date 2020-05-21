@@ -246,8 +246,11 @@
   "estimator_accept_alert_body": "Ești sigur că dorești să accepți acest deviz?",
   "estimator_default_recommendation": "Verificare / Diagnoză",
   "estimator_no_items_to_import": "Nu există produse pentru importare.",
+  "estimator_no_items_to_order": "Nu există produse pentru comandă",
   "estimator_select_issue_item_alert": "Ești sigur că dorești să imporți acest produs?",
   "estimator_accept_recommendations_alert_title": "Ești sigur că dorești să respingi/accepți aceste recomendări?",
+  "estimator_order_title": "Comandă Piese",
+  "estimator_order_warning_title": "Te rog selectează piesele pentru comandă",
   "import_item_imported_title": "Importator",
   "import_item_status_title": "Status",
   "import_item_type_title": "Tip",
@@ -416,6 +419,7 @@
   "general_addition": "Adaos",
   "general_months": "Luni",
   "general_month": "Lună",
+  "general_order": "Comandă",
   "general_available_from": "Disponibil de la",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
   "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
@@ -471,5 +475,6 @@
   "exception_get_appointment_items": "A intervenit o problemă la încărcarea produselor devizului.",
   "exception_work_estimate_import_issue_item": "A intervenit o problemă la importarea acestui produs.",
   "exception_edit_issue_item": "A intervenit o problemă la editarea acestui produs.",
-  "exception_send_appointment_recommendations": "A intervenit o problemă la refuzarea/acceptarea recomandărilor"
+  "exception_send_appointment_recommendations": "A intervenit o problemă la refuzarea/acceptarea recomandărilor",
+  "exception_order_appointment_items": "A intervenit o problemă în procesul de comandă"
 }

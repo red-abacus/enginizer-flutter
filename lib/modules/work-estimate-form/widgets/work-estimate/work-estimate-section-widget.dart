@@ -115,7 +115,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
 
   _checkMarkContainer(BuildContext context) {
     double alpha =
-        issueRecommendation.status == IssueRecommendationStatus.New ? 1.0 : 0.5;
+        issueRecommendation.status == IssueRecommendationStatus.New ? 1.0 : 0.4;
 
     switch (estimatorMode) {
       case EstimatorMode.Client:

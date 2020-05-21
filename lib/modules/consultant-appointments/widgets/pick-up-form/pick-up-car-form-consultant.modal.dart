@@ -25,7 +25,8 @@ class PickUpCarFormConsultantWidget extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function refreshState;
 
-  PickUpCarFormConsultantWidget({Key key, this.appointmentDetail, this.refreshState})
+  PickUpCarFormConsultantWidget(
+      {Key key, this.appointmentDetail, this.refreshState})
       : super(key: key);
 
   @override
@@ -89,7 +90,7 @@ class _PickUpCarFormConsultantWidgetState
     try {
       await _provider
           .getProviderEmployees(
-          widget.appointmentDetail.serviceProvider.id, startDate, endDate)
+              widget.appointmentDetail.serviceProvider.id, startDate, endDate)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -99,12 +100,8 @@ class _PickUpCarFormConsultantWidgetState
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_EMPLOYEES_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S
-            .of(context)
-            .general_error,
-            S
-                .of(context)
-                .exception_get_provider_employees, context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_employees, context);
       }
 
       setState(() {
@@ -119,44 +116,35 @@ class _PickUpCarFormConsultantWidgetState
         : _buildStepper();
   }
 
-  Widget _buildStepper() =>
-      Stepper(
-          currentStep: _currentStepIndex,
-          onStepContinue: _next,
-          onStepCancel: _back,
-          onStepTapped: (step) => _goTo(step),
-          type: StepperType.horizontal,
-          steps: steps,
-          controlsBuilder: (BuildContext context,
-              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-            return Row(
-              children: <Widget>[
-                SizedBox(height: 70),
-                FlatButton(
-                  child: Text(S
-                      .of(context)
-                      .general_back),
-                  onPressed: onStepCancel,
-                ),
-                RaisedButton(
-                  elevation: 0,
-                  child: Text(S
-                      .of(context)
-                      .general_continue),
-                  textColor: Theme
-                      .of(context)
-                      .cardColor,
-                  onPressed: onStepContinue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
-                )
-              ],
-            );
-          });
+  Widget _buildStepper() => Stepper(
+      currentStep: _currentStepIndex,
+      onStepContinue: _next,
+      onStepCancel: _back,
+      onStepTapped: (step) => _goTo(step),
+      type: StepperType.horizontal,
+      steps: steps,
+      controlsBuilder: (BuildContext context,
+          {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+        return Row(
+          children: <Widget>[
+            SizedBox(height: 70),
+            FlatButton(
+              child: Text(S.of(context).general_back),
+              onPressed: onStepCancel,
+            ),
+            RaisedButton(
+              elevation: 0,
+              child: Text(S.of(context).general_continue),
+              textColor: Theme.of(context).cardColor,
+              onPressed: onStepContinue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              color: Theme.of(context).primaryColor,
+            )
+          ],
+        );
+      });
 
   Future _addImage(int index) async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -177,9 +165,7 @@ class _PickUpCarFormConsultantWidgetState
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop image',
-            toolbarColor: Theme
-                .of(context)
-                .primaryColor,
+            toolbarColor: Theme.of(context).primaryColor,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
@@ -203,22 +189,20 @@ class _PickUpCarFormConsultantWidgetState
       Step(
           isActive: _currentStepIndex == 0,
           title: Text(_currentStepIndex == 0
-              ? S
-              .of(context)
-              .appointment_receive_car_step_1
+              ? S.of(context).appointment_receive_car_step_1
               : ''),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  S
-                      .of(context)
-                      .appointment_consultant_car_form_photos_title,
+                  S.of(context).appointment_consultant_car_form_photos_title,
                   style: TextHelper.customTextStyle(
                       null, red, FontWeight.bold, 16),
                 ),
-                ImageSelectionWidget(addImage: _addImage, files: _provider.receiveFormRequest.files),
+                ImageSelectionWidget(
+                    addImage: _addImage,
+                    files: _provider.receiveFormRequest.files),
               ],
             ),
           ),
@@ -226,18 +210,14 @@ class _PickUpCarFormConsultantWidgetState
       Step(
           isActive: _currentStepIndex == 1,
           title: Text(_currentStepIndex == 1
-              ? S
-              .of(context)
-              .appointment_receive_car_step_2
+              ? S.of(context).appointment_receive_car_step_2
               : ''),
           content: PickupCarFormInformationWidget(),
           state: StepState.indexed),
       Step(
           isActive: _currentStepIndex == 2,
           title: Text(_currentStepIndex == 2
-              ? S
-              .of(context)
-              .appointment_receive_car_step_3
+              ? S.of(context).appointment_receive_car_step_3
               : ''),
           content: PickUpCarFormEmployeesWidget(),
           state: StepState.indexed)
@@ -288,21 +268,26 @@ class _PickUpCarFormConsultantWidgetState
           if (_provider.selectedTimeSerie != null) {
             AssignEmployeeRequest request = new AssignEmployeeRequest();
             request.timeSerie = _provider.selectedTimeSerie;
-            request.appointmentId = widget.appointmentDetail.id;
             request.employeeId = _provider.selectedTimeSerie.employeeId;
-            request.providerId = widget.appointmentDetail.serviceProvider.id;
 
-            await _provider.assignEmployeeToAppointment(request).then((_) {
+            await _provider
+                .assignEmployeeToAppointment(
+                    widget.appointmentDetail.id, request)
+                .then((_) {
               widget.refreshState();
-              Provider.of<AppointmentConsultantProvider>(context).initDone = false;
-              Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
+              Provider.of<AppointmentConsultantProvider>(context).initDone =
+                  false;
+              Provider.of<AppointmentsConsultantProvider>(context).initDone =
+                  false;
 
               Navigator.pop(context);
             });
           } else {
             widget.refreshState();
-            Provider.of<AppointmentConsultantProvider>(context).initDone = false;
-            Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
+            Provider.of<AppointmentConsultantProvider>(context).initDone =
+                false;
+            Provider.of<AppointmentsConsultantProvider>(context).initDone =
+                false;
 
             Navigator.pop(context);
           }
@@ -312,30 +297,18 @@ class _PickUpCarFormConsultantWidgetState
       if (error
           .toString()
           .contains(AppointmentsService.CREATE_RECEIVE_PROCEDURE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S
-            .of(context)
-            .general_error,
-            S
-                .of(context)
-                .exception_create_receive_procedure, context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_create_receive_procedure, context);
       } else if (error.toString().contains(
           AppointmentsService.ADD_RECEIVE_PROCEDURE_IMAGES_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S
-            .of(context)
-            .general_error,
-            S
-                .of(context)
-                .exception_add_procedure_photos, context);
-      } else if (error.toString().contains(
-          ProviderService.ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S
-            .of(context)
-            .general_error,
-            S
-                .of(context)
-                .exception_assign_mechanic_to_appointment, context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_add_procedure_photos, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.ASSIGN_EMPLOYEE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_assign_mechanic_to_appointment, context);
       }
-
 
       setState(() {
         _isLoading = false;

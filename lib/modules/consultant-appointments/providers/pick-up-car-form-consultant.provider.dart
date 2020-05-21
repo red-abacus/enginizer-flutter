@@ -15,7 +15,7 @@ import 'package:flutter/cupertino.dart';
 class PickUpCarFormConsultantProvider with ChangeNotifier {
   final ProviderService _providerService = inject<ProviderService>();
   final AppointmentsService _appointmentsService =
-      inject<AppointmentsService>();
+  inject<AppointmentsService>();
 
   int maxFiles = 5;
 
@@ -34,8 +34,8 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
     receiveFormRequest.files.add(null);
   }
 
-  Future<List<Employee>> getProviderEmployees(
-      int providerId, String startDate, String endDate) async {
+  Future<List<Employee>> getProviderEmployees(int providerId, String startDate,
+      String endDate) async {
     try {
       this.employees = await _providerService.getProviderEmployees(
           providerId, startDate, endDate);
@@ -50,7 +50,7 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
       ReceiveFormRequest receiveFormRequest) async {
     try {
       this.receiveFormRequest.receiveFormId =
-          await _appointmentsService.createReceiveProcedure(receiveFormRequest);
+      await _appointmentsService.createReceiveProcedure(receiveFormRequest);
       notifyListeners();
       return this.receiveFormRequest.receiveFormId;
     } catch (error) {
@@ -71,10 +71,11 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> assignEmployeeToAppointment(
+  Future<bool> assignEmployeeToAppointment(int appointmentId,
       AssignEmployeeRequest assignEmployeeRequest) async {
     try {
-      await _providerService.assignEmployeeToAppointment(assignEmployeeRequest);
+      await _appointmentsService.assignEmployee(
+          appointmentId, assignEmployeeRequest);
       notifyListeners();
       return true;
     } catch (error) {

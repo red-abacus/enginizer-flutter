@@ -186,9 +186,9 @@ class WorkEstimatesService {
   Future<IssueItem> updateAppointmentItem(
       int workEstimateId, IssueItemRequest issueItemRequest) async {
     try {
-      final response = await _dio.post(
+      final response = await _dio.put(
           _buildWorkEstimateItemsPath(workEstimateId),
-          data: issueItemRequest.toCreateJson());
+          data: jsonEncode(issueItemRequest.toCreateJson()));
 
       if (response.statusCode == 200) {
         return IssueItem.fromJson(response.data);

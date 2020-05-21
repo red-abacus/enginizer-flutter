@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 
 import 'package:app/utils/constants.dart' as Constants;
 
-class IssueItemCard extends StatelessWidget {
+class IssueItemOrder extends StatelessWidget {
   final IssueItem issueItem;
+  final bool selected;
   final Function selectIssueItem;
 
-  IssueItemCard({this.issueItem, this.selectIssueItem});
+  IssueItemOrder({this.issueItem, this.selectIssueItem, this.selected});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class IssueItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
+                    if (selected) _selectedContainer(context),
                     _imageContainer(),
                     _textContainer(context),
                     _statusContainer(context),
@@ -120,7 +122,7 @@ class IssueItemCard extends StatelessWidget {
               barrierDismissible: false, // user must tap button!
               builder: (BuildContext context) {
                 return WorkEstimateIssueDetailsWidget(
-                    issueItem: issueItem, importItem: this.selectIssueItem, showImportButton: true);
+                    issueItem: issueItem, importItem: this.selectIssueItem, showImportButton: false);
               })
         },
         child: Icon(
@@ -128,6 +130,13 @@ class IssueItemCard extends StatelessWidget {
           color: Constants.red,
         ),
       ),
+    );
+  }
+
+  _selectedContainer(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Icon(Icons.check, color: Constants.red),
     );
   }
 }

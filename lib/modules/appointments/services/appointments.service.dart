@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app/modules/appointments/screens/appointment-details.dart';
+import 'package:app/modules/consultant-appointments/models/assign-employee-request.model.dart';
 import 'package:app/modules/consultant-appointments/models/receive-form-request.model.dart';
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-type.enum.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
 import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/send-appointment-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
@@ -49,6 +52,9 @@ class AppointmentsService {
       'APPOINTMENT_ITEMS_EXCEPTION';
   static const String SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION =
       'SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION';
+  static const String ASSIGN_EMPLOYEE_EXCEPTION = 'ASSIGN_EMPLOYEE_EXCEPTION';
+  static const String ORDER_APPOINTMENT_ITEMS_EXCEPTION =
+      'ORDER_APPOINTMENT_ITEMS_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -106,6 +112,14 @@ class AppointmentsService {
   static const String _APPOINTMENTS_ITEMS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENTS_ITEMS_SUFFIX = '/items';
+
+  static const String _ASSIGN_EMPLOYEE_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _ASSIGN_EMPLOYEE_SUFFIX = '/employee';
+
+  static const String _ORDER_APPOINTMENT_ITEM_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _ORDER_APPOINTMENT_ITEM_SUFFIX = '/orderItems';
 
   Dio _dio = inject<Dio>();
 
@@ -405,6 +419,37 @@ class AppointmentsService {
     }
   }
 
+  Future<AppointmentDetail> assignEmployee(
+      int appointmentId, AssignEmployeeRequest request) async {
+    try {
+      final response = await _dio.patch(_buildAssignEmployeePath(appointmentId),
+          data: jsonEncode(request.toJson()));
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(ASSIGN_EMPLOYEE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(ASSIGN_EMPLOYEE_EXCEPTION);
+    }
+  }
+
+  Future<AppointmentDetail> orderAppointmentItems(
+      int appointmentId, OrderIssueItemRequest request) async {
+    try {
+      final response = await _dio.patch(
+          _buildOrderAppointmentItem((appointmentId)),
+          data: jsonEncode(request.toCreateJson()));
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(ORDER_APPOINTMENT_ITEMS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(ORDER_APPOINTMENT_ITEMS_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -526,5 +571,17 @@ class AppointmentsService {
     return _APPOINTMENTS_ITEMS_PREFIX +
         appointmentId.toString() +
         _APPOINTMENTS_ITEMS_SUFFIX;
+  }
+
+  _buildAssignEmployeePath(int appointmentId) {
+    return _ASSIGN_EMPLOYEE_PREFIX +
+        appointmentId.toString() +
+        _ASSIGN_EMPLOYEE_SUFFIX;
+  }
+
+  _buildOrderAppointmentItem(int appointmentId) {
+    return _ORDER_APPOINTMENT_ITEM_PREFIX +
+        appointmentId.toString() +
+        _ORDER_APPOINTMENT_ITEM_SUFFIX;
   }
 }

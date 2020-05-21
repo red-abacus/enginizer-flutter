@@ -35,6 +35,8 @@ class _PickUpCarFormEmployeesWidgetState
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               for (Employee employee in _provider.employees)
                 PickUpCarFormEmployeeWidget(

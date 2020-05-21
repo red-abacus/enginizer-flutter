@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment-details.model.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
@@ -11,14 +10,12 @@ import 'package:intl/intl.dart';
 
 class AuctionConsultantPartsWidget extends StatelessWidget {
   final AuctionDetail auctionDetails;
-  final AppointmentDetail appointmentDetail;
   final Function createEstimate;
   final Function seeEstimate;
   final Function showProviderDetails;
 
   AuctionConsultantPartsWidget(
       {this.auctionDetails,
-      this.appointmentDetail,
       this.createEstimate,
       this.seeEstimate,
       this.showProviderDetails});

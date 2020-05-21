@@ -19,6 +19,8 @@ class IssueItem {
   int warranty;
   double addition;
   int recommendationId;
+  bool accepted;
+  bool ordered;
 
   IssueItem(
       {this.id,
@@ -36,7 +38,9 @@ class IssueItem {
       this.warranty,
       this.addition,
       this.recommendationId,
-      this.issueId});
+      this.issueId,
+      this.accepted,
+      this.ordered});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
     return IssueItem(
@@ -61,7 +65,9 @@ class IssueItem {
         addition: json['addition'] != null ? json['addition'] : null,
         recommendationId:
             json['recommendationId'] != null ? json['recommendationId'] : null,
-        issueId: json['issueId'] != null ? json['issueId'] : null);
+        issueId: json['issueId'] != null ? json['issueId'] : null,
+        accepted: json['accepted'] != null ? json['accepted'] : null,
+        ordered: json['ordered'] != null ? json['ordered'] : null);
   }
 
   Map<String, dynamic> toMap() => {
@@ -75,6 +81,7 @@ class IssueItem {
 
   Map<String, dynamic> toCreateJson() {
     Map<String, dynamic> propMap = {
+      'id': id,
       'typeId': type?.id,
       'type': type?.toJson(),
       'code': code,
@@ -88,4 +95,11 @@ class IssueItem {
 
     return propMap;
   }
+
+  Map<String, dynamic> toOrderJson() => {
+        'availableFrom':
+            DateUtils.stringFromDate(availableFrom, 'dd/MM/yyyy HH:mm'),
+        'itemId': id,
+        'providerId': provider.id
+      };
 }

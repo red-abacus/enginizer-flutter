@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 class WorkEstimateIssueDetailsWidget extends StatelessWidget {
   final IssueItem issueItem;
   final Function importItem;
+  bool showImportButton;
 
-  WorkEstimateIssueDetailsWidget({this.issueItem, this.importItem});
+  WorkEstimateIssueDetailsWidget(
+      {this.issueItem, this.importItem, this.showImportButton});
 
   @override
   Widget build(BuildContext context) {
@@ -31,38 +33,24 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
               issueItem.name,
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
             ),
-            _infoWidget(S
-                .of(context)
-                .import_item_imported_title, issueItem?.provider?.name),
+            _infoWidget(S.of(context).import_item_imported_title,
+                issueItem?.provider?.name),
             // TODO - no status for items to be imported
-            _infoWidget(S
-                .of(context)
-                .import_item_status_title, 'New'),
-            _infoWidget(S
-                .of(context)
-                .import_item_type_title, S
-                .of(context)
-                .estimator_product),
-            _infoWidget(S
-                .of(context)
-                .import_item_code_title, issueItem?.code),
-            _infoWidget(S
-                .of(context)
-                .import_item_name_title, issueItem?.name),
-            _infoWidget(S
-                .of(context)
-                .import_item_warranty_title, issueItem?.warranty.toString()),
-            _infoWidget(S
-                .of(context)
-                .import_item_price_title, issueItem?.price.toString()),
-            _infoWidget(S
-                .of(context)
-                .import_item_price_w_vta_title,
+            _infoWidget(S.of(context).import_item_status_title, 'New'),
+            _infoWidget(S.of(context).import_item_type_title,
+                S.of(context).estimator_product),
+            _infoWidget(S.of(context).import_item_code_title, issueItem?.code),
+            _infoWidget(S.of(context).import_item_name_title, issueItem?.name),
+            _infoWidget(S.of(context).import_item_warranty_title,
+                issueItem?.warranty.toString()),
+            _infoWidget(S.of(context).import_item_price_title,
+                issueItem?.price.toString()),
+            _infoWidget(S.of(context).import_item_price_w_vta_title,
                 '${issueItem?.price + issueItem?.priceVAT}'),
-            _infoWidget(S
-                .of(context)
-                .import_item_availability_title, DateUtils.stringFromDate(
-                issueItem?.availableFrom, 'EEEE, dd MMM. yyyy')),
+            _infoWidget(
+                S.of(context).import_item_availability_title,
+                DateUtils.stringFromDate(
+                    issueItem?.availableFrom, 'EEEE, dd MMM. yyyy')),
             _buttonsWidget(context),
           ],
         ),
@@ -119,28 +107,23 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
               Navigator.pop(context);
             },
             child: Text(
-              S
-                  .of(context)
-                  .general_back
-                  .toUpperCase(),
-              style: TextHelper.customTextStyle(
-                  null, gray3, FontWeight.bold, 16),
+              S.of(context).general_back.toUpperCase(),
+              style:
+                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-              importItem(issueItem);
-            },
-            child: Text(
-              S
-                  .of(context)
-                  .import_item_import_title
-                  .toUpperCase(),
-              style: TextHelper.customTextStyle(
-                  null, green, FontWeight.bold, 16),
-            ),
-          )
+          if (showImportButton)
+            FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+                importItem(issueItem);
+              },
+              child: Text(
+                S.of(context).import_item_import_title.toUpperCase(),
+                style: TextHelper.customTextStyle(
+                    null, green, FontWeight.bold, 16),
+              ),
+            )
         ],
       ),
     );

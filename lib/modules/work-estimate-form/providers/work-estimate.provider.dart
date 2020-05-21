@@ -12,6 +12,7 @@ import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/issue-recommendation-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
@@ -39,11 +40,12 @@ class WorkEstimateProvider with ChangeNotifier {
   List<ItemType> itemTypes = [];
   List<ProviderItem> providerItems = [];
   List<IssueItem> itemsToImport = [];
+  List<IssueItem> selectedItemsToOrder = [];
+  List<IssueItem> itemsToOrder = [];
   List<ServiceProviderTimetable> serviceProviderTimetable = [];
   WorkEstimateRequest workEstimateRequest;
   WorkEstimateDetails workEstimateDetails;
 
-  Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetail;
   AuctionDetail selectedAuctionDetails;
 
@@ -57,13 +59,14 @@ class WorkEstimateProvider with ChangeNotifier {
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
   _initValues() {
+    selectedItemsToOrder = [];
     itemsToImport = [];
+    itemsToOrder = [];
     itemTypes = [];
     providerItems = [];
     serviceProviderTimetable = [];
     workEstimateRequest = null;
     workEstimateDetails = null;
-    selectedAppointment = null;
     selectedAppointmentDetail = null;
     selectedRecommendations = [];
   }
@@ -225,9 +228,16 @@ class WorkEstimateProvider with ChangeNotifier {
       List<IssueItem> issues =
           await this._appointmentsService.getAppointmentItems(appointmentId);
       itemsToImport = [];
+      selectedItemsToOrder = [];
+      itemsToOrder = [];
+
       issues.forEach((issue) {
         if (!issue.imported) {
           itemsToImport.add(issue);
+        }
+
+        if (issue.imported && issue.accepted && !issue.ordered) {
+          itemsToOrder.add(issue);
         }
       });
       notifyListeners();
@@ -250,13 +260,27 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> sendRecommendations(int appointmentId, List<Map<String, dynamic>> request) async {
+  Future<bool> sendRecommendations(
+      int appointmentId, List<Map<String, dynamic>> request) async {
     try {
       bool response = await this
           ._appointmentsService
           .sendAppointmentRecommendations(appointmentId, request);
       notifyListeners();
       return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AppointmentDetail> orderAppointmentItems(
+      int appointmentId, OrderIssueItemRequest request) async {
+    try {
+      AppointmentDetail appointmentDetail = await this
+          ._appointmentsService
+          .orderAppointmentItems(appointmentId, request);
+      notifyListeners();
+      return appointmentDetail;
     } catch (error) {
       throw (error);
     }
@@ -331,7 +355,6 @@ class WorkEstimateProvider with ChangeNotifier {
   }
 
   populateRecommendationsStatuses() {
-
     if (selectedAppointmentDetail != null && workEstimateDetails != null) {
       List<IssueRecommendation> appointmentRecommendation =
           selectedAppointmentDetail.recommendations;
@@ -340,13 +363,14 @@ class WorkEstimateProvider with ChangeNotifier {
         for (IssueRecommendation workEstimateRecommendation
             in issue.recommendations) {
           if (workEstimateRecommendation.isStandard) {
-            workEstimateRecommendation.status = IssueRecommendationStatus.Accepted;
+            workEstimateRecommendation.status =
+                IssueRecommendationStatus.Accepted;
             selectedRecommendations.add(workEstimateRecommendation);
-          }
-          else {
+          } else {
             for (IssueRecommendation appointmentRecommendation
-            in appointmentRecommendation) {
-              if (workEstimateRecommendation.id == appointmentRecommendation.id) {
+                in appointmentRecommendation) {
+              if (workEstimateRecommendation.id ==
+                  appointmentRecommendation.id) {
                 workEstimateRecommendation.status =
                     appointmentRecommendation.status;
 
@@ -373,7 +397,7 @@ class WorkEstimateProvider with ChangeNotifier {
     });
 
     workEstimateDetails.issues.forEach((issue) {
-      for(IssueRecommendation recommendation in issue.recommendations) {
+      for (IssueRecommendation recommendation in issue.recommendations) {
         if (recommendation.status == IssueRecommendationStatus.New) {
           if (!selectedRecommendations.contains(recommendation)) {
             request.add(recommendation.sendRequest(false).toJson());

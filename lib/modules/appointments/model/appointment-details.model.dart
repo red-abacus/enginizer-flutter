@@ -167,6 +167,7 @@ class AppointmentDetail {
       case AppointmentStatusState.SCHEDULED:
       case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
         return true;
       default:
         return false;

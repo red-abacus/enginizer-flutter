@@ -182,6 +182,7 @@ class AppointmentDetailsGenericConsultantWidgetState
       case AppointmentStatusState.SCHEDULED:
       case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
         buttons.add(FloatingActionButton.extended(
           heroTag: null,
           onPressed: () {

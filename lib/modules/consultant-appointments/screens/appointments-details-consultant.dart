@@ -207,6 +207,7 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.SCHEDULED:
       case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
       case AppointmentStatusState.CANCELED:
       case AppointmentStatusState.DONE:
       case AppointmentStatusState.IN_REVIEW:
@@ -276,8 +277,6 @@ class AppointmentDetailsConsultantState
           .refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(context, _provider.selectedAppointmentDetail.issues);
-      Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-          _provider.selectedAppointment;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
           _provider.selectedAppointmentDetail;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
@@ -302,14 +301,16 @@ class AppointmentDetailsConsultantState
           lastWorkEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _provider.selectedAppointment.serviceProvider.id;
-      Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-          _provider.selectedAppointment;
+      Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
+          _provider.selectedAppointmentDetail;
 
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WorkEstimateForm(
-                mode: _provider.selectedAppointmentDetail.canEditWorkEstimate() ? EstimatorMode.Edit : EstimatorMode.ReadOnly,
+                mode: _provider.selectedAppointmentDetail.canEditWorkEstimate()
+                    ? EstimatorMode.Edit
+                    : EstimatorMode.ReadOnly,
                 dateEntry: _provider.selectedAppointmentDetail
                     .getWorkEstimateDateEntry())),
       );

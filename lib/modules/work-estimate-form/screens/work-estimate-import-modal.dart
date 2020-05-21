@@ -5,14 +5,12 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
-import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/widgets/cards/issue-item.card.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -100,7 +98,7 @@ class _WorkEstimateImportModalState extends State<WorkEstimateImportModal> {
 
     try {
       await _provider
-          .getAppointmentIssues(_provider.selectedAppointment.id)
+          .getAppointmentIssues(_provider.selectedAppointmentDetail.id)
           .then((_) async {
         setState(() {
           _isLoading = false;
