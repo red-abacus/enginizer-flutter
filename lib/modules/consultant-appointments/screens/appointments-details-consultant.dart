@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -222,6 +223,7 @@ class AppointmentDetailsConsultantState
           createPickUpCarForm: _createPickUpCarForm,
           workEstimateDetails: _provider.workEstimateDetails,
           requestPartsProvider: _requestPartsProvider,
+          seeCamera: _seeCamera,
         );
       default:
         return Container();
@@ -395,4 +397,19 @@ class AppointmentDetailsConsultantState
 //          builder: (context) => WorkEstimateForm(mode: EstimatorMode.CreateFinal)),
 //    );
 //  }
+
+  _seeCamera() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return AppointmentCameraModal();
+              });
+        });
+  }
 }

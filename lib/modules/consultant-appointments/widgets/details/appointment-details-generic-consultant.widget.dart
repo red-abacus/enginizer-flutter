@@ -23,6 +23,7 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   final Function assignMechanic;
   final Function createPickUpCarForm;
   final Function requestPartsProvider;
+  final Function seeCamera;
 
   AppointmentDetailsGenericConsultantWidget(
       {this.appointmentDetail,
@@ -34,7 +35,8 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
       this.assignMechanic,
       this.createPickUpCarForm,
       this.workEstimateDetails,
-      this.requestPartsProvider});
+      this.requestPartsProvider,
+      this.seeCamera});
 
   @override
   AppointmentDetailsGenericConsultantWidgetState createState() {
@@ -112,6 +114,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                   S.of(context).appointment_details_services_issues),
               _issuesContainer(),
               _buildSeparator(),
+              _videoFeedContainer(),
               _titleContainer(
                   S.of(context).appointment_details_services_appointment_date),
               _appointmentDateContainer(),
@@ -533,6 +536,36 @@ class AppointmentDetailsGenericConsultantWidgetState
               widget.createPickUpCarForm();
             },
           )
+        ],
+      ),
+    );
+  }
+
+  _videoFeedContainer() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _titleContainer(S.of(context).appointment_video_streaming_title),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                child: FlatButton(
+                  splashColor: Theme.of(context).primaryColor,
+                  onPressed: () => {widget.seeCamera()},
+                  child: Text(
+                    S.of(context).appointment_video_button_title.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 16),
+                  ),
+                ),
+              )
+            ],
+          ),
+          _buildSeparator()
         ],
       ),
     );
