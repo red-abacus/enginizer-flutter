@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:dio/dio.dart';
 
@@ -18,8 +19,12 @@ class CarService {
   static String CAR_GET_EXCEPTION = 'CAR_GET_EXCEPTION';
   static String CAR_ADD_FUEL_EXCEPTION = 'CAR_ADD_FUEL_EXCEPTION';
   static String CAR_ADD_IMAGE_EXCEPTION = 'CAR_ADD_IMAGE_EXCEPTION';
+  static String CAR_HISTORY_EXCEPTION = 'CAR_HISTORY_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
+
+  static const String _CAR_HISTORY_PREFIX = '${Environment.CARS_BASE_API}/cars/';
+  static const String _CAR_HISTORY_SUFFIX = '/history';
 
   Dio _dio = inject<Dio>();
 
@@ -27,10 +32,11 @@ class CarService {
 
   Future<CarsResponse> getCars({String searchString}) async {
     try {
-      var queryParams = searchString != null ? {'search': searchString} : {'search': ''};
+      var queryParams =
+          searchString != null ? {'search': searchString} : {'search': ''};
 
-      final response = await _dio
-          .get(_CAR_API_PATH, queryParameters: queryParams);
+      final response =
+          await _dio.get(_CAR_API_PATH, queryParameters: queryParams);
 
       if (response.statusCode < 300) {
         return CarsResponse.fromJson(response.data);
@@ -125,5 +131,31 @@ class CarService {
     } catch (error) {
       throw Exception(CAR_ADD_IMAGE_EXCEPTION);
     }
+  }
+
+  Future<List<CarHistory>> getCarHistory(int carId) async {
+    try {
+      final response = await _dio.get(_buildCarHistoryPath(carId));
+
+      if (response.statusCode == 200) {
+        return _mapCarHistory(response.data);
+      } else {
+        throw Exception(CAR_HISTORY_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_HISTORY_EXCEPTION);
+    }
+  }
+
+  _buildCarHistoryPath(int carId) {
+    return _CAR_HISTORY_PREFIX + carId.toString() + _CAR_HISTORY_SUFFIX;
+  }
+
+  _mapCarHistory(List<dynamic> response) {
+    List<CarHistory> histories = [];
+    response.forEach((history) {
+      histories.add(CarHistory.fromJson(history));
+    });
+    return histories;
   }
 }

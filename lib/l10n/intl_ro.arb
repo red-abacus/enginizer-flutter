@@ -73,6 +73,8 @@
   "car_details_gas_price_error": "Preț carburant necompletat",
   "car_general_quantity": "Cantitate",
   "car_general_quantity_error": "Cantitate necompletă!",
+  "cars_no_recommendations_title": "Nu a fost înregistrată nicio recomandare pentru această mașină.",
+  "car_create_appointment_from_interventions_alert": "Te rog selectează recomandările dorite pentru a crea o programare.",
   "COLOR_RED": "Roșu",
   "COLOR_BLACK": "Negru",
   "COLOR_GREEN": "Verde",
@@ -291,6 +293,8 @@
   "user_profile_active_personel": "Personal Activ",
   "user_profile_no_active_personnel": "Nu există personal activ în acest moment",
   "user_profile_number_of_active_personnel": "Nr. de personal:",
+  "car_details_title": "Detalii Mașină",
+  "car_service_recommendations_title": "Recomandări Service",
   "work_estimate_status_pending": "În Așteptare",
   "work_estimate_status_accepted": "Acceptată",
   "appointment_status_canceled": "Anulată",
@@ -483,5 +487,6 @@
   "exception_send_appointment_recommendations": "A intervenit o problemă la refuzarea/acceptarea recomandărilor",
   "exception_order_appointment_items": "A intervenit o problemă în procesul de comandă",
   "exception_get_orders": "A intervenit o problemă la încărcarea comenzilor tale.",
-  "exception_get_work_stations": "A intervenit o problemă la încărcarea stațiilor de lucru."
+  "exception_get_work_stations": "A intervenit o problemă la încărcarea stațiilor de lucru.",
+  "exception_car_history": "A intervenit o problemă la încărcarea istoricului mașinii."
 }

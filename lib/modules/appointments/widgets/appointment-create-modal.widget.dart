@@ -237,8 +237,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             title: widget._stepStateData[4]['active']
                 ? Text(S.of(context).appointment_create_step4)
                 : Text(''),
-            content: AppointmentDateTimeForm(
-                key: appointmentDateTimeStateKey),
+            content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
             state: widget._stepStateData[4]['state'])
       ];
     } else {
@@ -274,8 +273,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             title: widget._stepStateData[3]['active']
                 ? Text(S.of(context).appointment_create_step4)
                 : Text(''),
-            content: AppointmentDateTimeForm(
-                key: appointmentDateTimeStateKey),
+            content: AppointmentDateTimeForm(key: appointmentDateTimeStateKey),
             state: widget._stepStateData[3]['state'])
       ];
     }
@@ -428,6 +426,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   _submit() {
     AppointmentRequest appointmentRequest =
         providerServiceProvider.appointmentRequest();
+
     widget.createAppointment(appointmentRequest);
   }
 }

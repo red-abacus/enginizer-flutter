@@ -1,19 +1,16 @@
 import 'dart:io';
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
+import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
-import 'package:app/modules/cars/widgets/text_widget.dart';
-import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:bezier_chart/bezier_chart.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class CarDetails extends StatefulWidget {
@@ -27,13 +24,34 @@ class CarDetails extends StatefulWidget {
   }
 }
 
-class CarDetailsState extends State<CarDetails> {
+class CarDetailsState extends State<CarDetails>
+    with SingleTickerProviderStateMixin {
   Car model;
   File uploadImage;
-  CarProvider carProvider;
+  CarProvider _provider;
 
   var _initDone = false;
   var _isLoading = true;
+
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(vsync: this, length: 2, initialIndex: 0);
+
+    _tabController.addListener(() {
+      if (_tabController.index == 1) {
+        _provider.selectedInterventions = [];
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -49,13 +67,15 @@ class CarDetailsState extends State<CarDetails> {
       _isLoading = true;
     });
 
-    carProvider = Provider.of<CarProvider>(context);
+    _provider = Provider.of<CarProvider>(context);
 
     try {
-      await carProvider.getCarDetails().then((_) async {
-        await carProvider.getCarFuelConsumptionGraphic().then((_) {
-          setState(() {
-            _isLoading = false;
+      await _provider.getCarDetails().then((_) async {
+        await _provider.getCarHistory(_provider.carDetails.id).then((_) async {
+          await _provider.getCarFuelConsumptionGraphic().then((_) {
+            setState(() {
+              _isLoading = false;
+            });
           });
         });
       });
@@ -70,7 +90,14 @@ class CarDetailsState extends State<CarDetails> {
       } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_car_details, context);
+      } else if (error.toString().contains(CarService.CAR_HISTORY_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_history, context);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -78,19 +105,19 @@ class CarDetailsState extends State<CarDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${carProvider.selectedCar?.brand?.name}'),
+        title: Text('${_provider.selectedCar?.brand?.name}'),
         iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: S.of(context).car_details_title),
+            Tab(text: S.of(context).car_service_recommendations_title),
+          ],
+        ),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : showCarDetails(carProvider.carDetails),
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 1,
-        onPressed: () => openModalAddFuelConsumption(context),
-        child: Icon(Icons.add),
-      ),
+          : _buildContent(),
     );
   }
 
@@ -108,162 +135,25 @@ class CarDetailsState extends State<CarDetails> {
           );
   }
 
-  showCarDetails(Car car) {
-    return Material(
-      elevation: 1,
-      color: Colors.grey[200],
-      borderRadius: new BorderRadius.circular(5.0),
-      child: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: ClipRRect(
-                    borderRadius: new BorderRadius.circular(10.0),
-                    child: Container(
-                        color: Colors.white,
-                        child: uploadCarImageListener(car)),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    (car.brand?.name != null && car.model?.name != null)
-                        ? Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 20, right: 20),
-                            child: TextWidget(
-                              "${car.brand?.name} - ${car.model?.name} ",
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Container(),
-                    (car.year?.name != null && car.color?.name != null)
-                        ? Padding(
-                            padding: EdgeInsets.only(
-                                left: 20, right: 20, bottom: 20),
-                            child: TextWidget(
-                              '${car.year?.name}, ${car.color?.name}',
-                              color: gray2,
-                            ),
-                          )
-                        : Container(),
-                    (car.power?.name != null && car.motor?.name != null)
-                        ? _carDetailsContainer(
-                            '${car.power?.name}CP, ${car.motor?.name}')
-                        : Container(),
-                    (car.mileage != null)
-                        ? _carDetailsContainer('${car.mileage}KM')
-                        : Container(),
-                    (car.vin != null)
-                        ? _carDetailsContainer('VIN: ${car.vin}')
-                        : Container(),
-                    (car.registrationNumber != null)
-                        ? _carDetailsContainer('${car.registrationNumber}')
-                        : Container(),
-                    (car.rcaExpireDate != null)
-                        ? _carDetailsContainer(
-                            '${S.of(context).car_details_rca_availability}: ${DateUtils.stringFromDate(car.rcaExpireDate, 'dd.MM.yyyy')}')
-                        : Container(),
-                    (car.itpExpireDate != null)
-                        ? _carDetailsContainer(
-                            '${S.of(context).car_details_itp_availability}: ${DateUtils.stringFromDate(car.itpExpireDate, 'dd.MM.yyyy')}')
-                        : Container(),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                    ),
-                    showChart(),
-                  ],
-                ),
-              ],
-            ),
-            Container(
-              alignment: Alignment.topRight,
-              child: FlatButton(
-                padding: EdgeInsets.all(30),
-                splashColor: Theme.of(context).primaryColor,
-                onPressed: () async {
-                  showCameraDialog();
-                },
-                child: TextWidget(
-                  'Upload Image',
-                  color: Theme.of(context).accentColor,
-                ),
-              ),
-            )
-          ],
-        ),
+  _buildContent() {
+    List<Widget> list = [
+      CarClientDetailsWidget(
+        car: _provider.carDetails,
+        carFuelGraphicResponse: _provider.carFuelGraphicResponse,
+        openModalAddFuelConsumption: _openModalAddFuelConsumption,
+        uploadCarImageListener: _uploadCarImageListener,
+        showCameraDialog: _showCameraDialog,
       ),
+      CarRecommendationsWidget(carHistory: _provider.carHistory)
+    ];
+
+    return TabBarView(
+      controller: _tabController,
+      children: list,
     );
   }
 
-  _carDetailsContainer(String text) {
-    return Padding(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 5),
-      child: TextWidget(
-        text,
-        color: gray2,
-      ),
-    );
-  }
-
-  showChart() {
-    var now = DateTime.now();
-    var fromDate = DateTime(now.year, now.month - 1, now.day);
-
-    List<DataPoint> points = getGraphicData();
-
-    return Center(
-      child: Container(
-        color: Colors.red,
-        height: MediaQuery.of(context).size.height / 3,
-        width: MediaQuery.of(context).size.width,
-        child: BezierChart(
-          bezierChartScale: BezierChartScale.WEEKLY,
-          fromDate: fromDate,
-          toDate: now,
-          selectedDate: now,
-          series: [
-            BezierLine(label: "Consum", data: points),
-          ],
-          config: BezierChartConfig(
-            verticalIndicatorStrokeWidth: 3.0,
-            verticalIndicatorColor: Colors.black26,
-            showVerticalIndicator: true,
-            verticalIndicatorFixedPosition: false,
-            backgroundColor: Colors.red,
-            footerHeight: 35.0,
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<DataPoint> getGraphicData() {
-    List<DataPoint> dataPoints = [];
-    dataPoints.clear();
-    CarFuelGraphicResponse response = carProvider?.carFuelGraphicResponse;
-
-    if (response?.labels != null && response.labels.length > 0) {
-      for (var i = 0; i < response.labels.length; i++) {
-        if (response.datasets[i] != null && response.labels[i] != null)
-          dataPoints.add(DataPoint<DateTime>(
-              value: double.parse((response.datasets[i]).toString()),
-              xAxis: DateTime(DateTime.now().year, DateTime.now().month - 1,
-                  response.labels[i])));
-      }
-    }
-    return dataPoints;
-  }
-
-  showCameraDialog() {
+  _showCameraDialog() {
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -304,7 +194,7 @@ class CarDetailsState extends State<CarDetails> {
             ));
   }
 
-  void openModalAddFuelConsumption(BuildContext ctx) {
+  _openModalAddFuelConsumption() {
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -346,13 +236,13 @@ class CarDetailsState extends State<CarDetails> {
           minimumAspectRatio: 1.0,
         ));
     if (croppedFile != null)
-      carProvider.uploadImage(croppedFile);
+      _provider.uploadImage(croppedFile);
     else
-      carProvider.uploadImage(image);
+      _provider.uploadImage(image);
   }
 
-  uploadCarImageListener(car) {
-    switch (carProvider.uploadImageAPI.status) {
+  _uploadCarImageListener(car) {
+    switch (_provider.uploadImageAPI.status) {
       case Status.LOADING:
         return Container(
             padding: EdgeInsets.all(10),
@@ -379,7 +269,7 @@ class CarDetailsState extends State<CarDetails> {
     });
 
     try {
-      await carProvider?.getCarFuelConsumptionGraphic()?.then((_) {
+      await _provider?.getCarFuelConsumptionGraphic()?.then((_) {
         setState(() {
           _isLoading = false;
         });

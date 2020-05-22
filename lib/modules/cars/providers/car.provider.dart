@@ -5,6 +5,8 @@ import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
+import 'package:app/modules/cars/models/recommendations/car-intervention.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +23,9 @@ class CarProvider with ChangeNotifier {
 
   ApiResponse uploadImageAPI = ApiResponse.completed(null);
 
+  List<CarHistory> carHistory = [];
+  List<CarIntervention> selectedInterventions = [];
+
   selectCar(Car car) {
     this.selectedCar = car;
     notifyListeners();
@@ -32,7 +37,7 @@ class CarProvider with ChangeNotifier {
       notifyListeners();
       return carDetails;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
@@ -43,7 +48,7 @@ class CarProvider with ChangeNotifier {
       notifyListeners();
       return carFuelGraphicResponse;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
@@ -51,12 +56,12 @@ class CarProvider with ChangeNotifier {
       CarFuelConsumption fuelConsumption) async {
     if (selectedCar != null) {
       try {
-        CarFuelConsumptionResponse response =
-        await carService.addFuelConsumption(fuelConsumption, selectedCar.id);
+        CarFuelConsumptionResponse response = await carService
+            .addFuelConsumption(fuelConsumption, selectedCar.id);
         notifyListeners();
         return response;
       } catch (error) {
-        throw(error);
+        throw (error);
       }
     }
 
@@ -72,5 +77,15 @@ class CarProvider with ChangeNotifier {
       uploadImageAPI = ApiResponse.error("error");
     }
     notifyListeners();
+  }
+
+  Future<List<CarHistory>> getCarHistory(int carId) async {
+    try {
+      carHistory = await carService.getCarHistory(carId);
+      notifyListeners();
+      return carHistory;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

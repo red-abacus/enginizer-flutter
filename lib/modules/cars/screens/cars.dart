@@ -8,7 +8,7 @@ import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
-import 'package:app/modules/cars/widgets/car-create-modal.dart';
+import 'package:app/modules/cars/screens/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';

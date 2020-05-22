@@ -98,12 +98,12 @@ class ProviderServiceProvider with ChangeNotifier {
 
   AppointmentRequest appointmentRequest() {
     AppointmentRequest appointmentRequest = AppointmentRequest();
-
     appointmentRequest.userId = authUser.userId;
     appointmentRequest.carId = selectedCar.id;
     appointmentRequest.providerType = appointmentProviderType;
 
     appointmentRequest.issues = [];
+
     for (Issue item in issuesFormState) {
       appointmentRequest.issues.add(item.name);
     }

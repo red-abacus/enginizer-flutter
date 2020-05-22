@@ -73,6 +73,10 @@
   "car_details_fuel_price_error": "Gas price is empty!",
   "car_details_quantity": "Quantity",
   "car_details_quantity_empty": "Quantity is empty!",
+  "car_details_title": "Car Details",
+  "car_service_recommendations_title": "Service Recommendations",
+  "cars_no_recommendations_title": "No service recommendations recored for this car.",
+  "car_create_appointment_from_interventions_alert": "Please select recommendations in order to create an appointment.",
   "COLOR_RED": "Red",
   "COLOR_BLACK": "Black",
   "COLOR_GREEN": "Green",
@@ -488,5 +492,6 @@
   "exception_send_appointment_recommendations": "There was an error trying to reject/accept recommendations.",
   "exception_order_appointment_items": "There was an error in order process.",
   "exception_get_orders": "There was an error trying to get orders.",
-  "exception_get_work_stations": "There was an error trying to get work stations."
+  "exception_get_work_stations": "There was an error trying to get work stations.",
+  "exception_car_history": "There was an error trying to load car history."
 }
