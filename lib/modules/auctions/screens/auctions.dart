@@ -1,4 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/providers/appointment.provider.dart';
+import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';

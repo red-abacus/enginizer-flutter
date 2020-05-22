@@ -114,7 +114,9 @@ class AppointmentDetailsGenericConsultantWidgetState
                   S.of(context).appointment_details_services_issues),
               _issuesContainer(),
               _buildSeparator(),
-              _videoFeedContainer(),
+              if (widget.appointmentDetail.status.getState() ==
+                  AppointmentStatusState.IN_WORK)
+                _videoFeedContainer(),
               _titleContainer(
                   S.of(context).appointment_details_services_appointment_date),
               _appointmentDateContainer(),

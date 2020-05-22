@@ -126,7 +126,8 @@ class AppointmentsService {
 
   AppointmentsService();
 
-  Future<AppointmentsResponse> getAppointments({AppointmentStatusState state}) async {
+  Future<AppointmentsResponse> getAppointments(
+      {AppointmentStatusState state}) async {
     Map<String, dynamic> queryParameters = {};
 
     if (state != null) {
@@ -134,7 +135,8 @@ class AppointmentsService {
     }
 
     try {
-      final response = await _dio.get(_APPOINTMENTS_API_PATH, queryParameters: queryParameters);
+      final response = await _dio.get(_APPOINTMENTS_API_PATH,
+          queryParameters: queryParameters);
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {

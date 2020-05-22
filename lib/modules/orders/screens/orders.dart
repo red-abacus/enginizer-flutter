@@ -39,8 +39,8 @@ class _OrdersState extends State<Orders> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppointmentsProvider>(
-      builder: (context, appointmentsProvider, _) => Scaffold(
+    return Consumer<OrderProvider>(
+      builder: (context, ordersProvider, _) => Scaffold(
         body: Center(
           child: Container()
         ),

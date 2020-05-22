@@ -18,6 +18,7 @@ class OrderProvider with ChangeNotifier {
   String searchString;
 
   void resetParameters() {
+    _appointmentsResponse = null;
     initDone = false;
     _orderPage = 0;
 //    this.filterStatus = null;
