@@ -15,12 +15,14 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
   Function cancelAppointment;
   Function viewEstimate;
   Function showHandoverCarForm;
+  Function seeCamera;
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
       this.cancelAppointment,
       this.viewEstimate,
-      this.showHandoverCarForm});
+      this.showHandoverCarForm,
+      this.seeCamera});
 
   @override
   AppointmentGenericDetailsWidgetState createState() {
@@ -84,6 +86,9 @@ class AppointmentGenericDetailsWidgetState
                   S.of(context).appointment_details_services_issues),
               _issuesContainer(),
               _buildSeparator(),
+              if (widget.appointmentDetail.status.getState() ==
+                  AppointmentStatusState.IN_WORK)
+                _videoFeedContainer(),
               _titleContainer(_getAppointmentDateTitle(context)),
               Container(
                 margin: EdgeInsets.only(top: 15, bottom: 15),
@@ -290,6 +295,35 @@ class AppointmentGenericDetailsWidgetState
             ),
             backgroundColor: Colors.white,
           ),
+        ],
+      ),
+    );
+  }
+
+  _videoFeedContainer() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _titleContainer(S.of(context).appointment_video_streaming_title),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                child: FlatButton(
+                  splashColor: Theme.of(context).primaryColor,
+                  onPressed: () => {widget.seeCamera()},
+                  child: Text(
+                    S.of(context).appointment_video_button_title.toUpperCase(),
+                    style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+                  ),
+                ),
+              )
+            ],
+          ),
+          _buildSeparator()
         ],
       ),
     );

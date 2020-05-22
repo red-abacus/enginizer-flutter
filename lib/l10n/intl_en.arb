@@ -179,6 +179,8 @@
   "appointment_delivery_time": "Delivery date",
   "appointment_delivery_time_warning": "Add delivery date",
   "appointment_request_items": "Request items",
+  "appointment_video_streaming_title": "Video Feed",
+  "appointment_video_button_title": "See Camera",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",

@@ -175,6 +175,8 @@
   "appointment_delivery_time": "Dată livrare",
   "appointment_delivery_time_warning": "Adaugă data de livrare.",
   "appointment_request_items": "Cerere ofertă",
+  "appointment_video_streaming_title": "Feed Video",
+  "appointment_video_button_title": "Vezi Camera",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
