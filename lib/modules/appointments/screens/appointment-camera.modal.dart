@@ -15,6 +15,12 @@ class _AppointmentCameraModalState extends State<AppointmentCameraModal> {
   final double playerHeight = 360;
 
   @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (_controller == null) {
       _controller = new VlcPlayerController(
