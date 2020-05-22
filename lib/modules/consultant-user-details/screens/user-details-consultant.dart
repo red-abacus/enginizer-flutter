@@ -4,8 +4,11 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/consultant-user-details/enums/user-details-tabbar-state-consultant.enum.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'package:app/modules/consultant-user-details/widgets/user-details-active-personnel.widget.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-graph-consultant.widget.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-index-consultant.widget.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -84,17 +87,13 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_details, context);
       } else if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_service_items,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_service_items, context);
       }
 
       setState(() {
@@ -205,7 +204,11 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
       child: new Row(
         children: <Widget>[
           _buildTabBarButton(UserDetailsTabbarStateConsultant.GRAPH),
-          _buildTabBarButton(UserDetailsTabbarStateConsultant.INDEX)
+          _buildTabBarButton(UserDetailsTabbarStateConsultant.INDEX),
+          if (PermissionsManager.getInstance().hasAccess(
+              MainPermissions.UserProfile,
+              userProfilePermission: UserProfilePermission.ActivePersonel))
+            _buildTabBarButton(UserDetailsTabbarStateConsultant.WORKSTATIONS)
         ],
       ),
     );
@@ -247,15 +250,22 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
         return S.of(context).user_profile_consultant_graph;
       case UserDetailsTabbarStateConsultant.INDEX:
         return S.of(context).user_profile_index;
+      case UserDetailsTabbarStateConsultant.WORKSTATIONS:
+        return S.of(context).user_profile_active_personel;
     }
 
     return '';
   }
 
   _getContent() {
-    return _currentState == UserDetailsTabbarStateConsultant.GRAPH
-        ? UserDetailsGraphConsultantWidget()
-        : UserDetailsIndexConsultantWidget();
+    switch (_currentState) {
+      case UserDetailsTabbarStateConsultant.GRAPH:
+        return UserDetailsGraphConsultantWidget();
+      case UserDetailsTabbarStateConsultant.INDEX:
+        return UserDetailsIndexConsultantWidget();
+      case UserDetailsTabbarStateConsultant.WORKSTATIONS:
+        return UserDetailsActivePersonnelWidget();
+    }
   }
 
   _nameContainer() {
@@ -467,10 +477,8 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
       if (error
           .toString()
           .contains(ProviderService.UPDATE_PROVIDER_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_update_provider_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_update_provider_details, context);
       }
     }
   }

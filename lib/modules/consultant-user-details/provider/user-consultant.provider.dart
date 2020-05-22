@@ -1,11 +1,17 @@
 import 'dart:convert';
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
+import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/appointments/providers/appointments.provider.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
+import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserConsultantProvider with ChangeNotifier {
@@ -80,6 +86,16 @@ class UserConsultantProvider with ChangeNotifier {
           .updateServiceProviderDetails(serviceProvider.id, payload);
       notifyListeners();
       return this.serviceProvider;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<WorkStationResponse> getWorkStations() async {
+    try {
+      WorkStationResponse response = await _providerService.getWorkStations();
+      notifyListeners();
+      return response;
     } catch (error) {
       throw (error);
     }

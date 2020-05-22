@@ -344,6 +344,20 @@ class NavigationAppState extends State<NavigationApp> {
         setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
         Navigator.of(context).pop(); // close the drawer
         break;
+      case Roles.ProviderPersonnel:
+        Provider.of<UserConsultantProvider>(context, listen: false)
+            .userDetails = Provider.of<Auth>(context).authUserDetails;
+
+        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+        Navigator.of(context).pop(); // close the drawer
+        break;
+      case Roles.ProviderAdmin:
+        Provider.of<UserConsultantProvider>(context, listen: false)
+            .userDetails = Provider.of<Auth>(context).authUserDetails;
+
+        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+        Navigator.of(context).pop(); // close the drawer
+        break;
       default:
         return '/';
     }

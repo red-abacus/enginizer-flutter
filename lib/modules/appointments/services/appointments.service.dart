@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/modules/appointments/screens/appointment-details.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/consultant-appointments/models/assign-employee-request.model.dart';
 import 'package:app/modules/consultant-appointments/models/receive-form-request.model.dart';
 import 'package:app/modules/mechanic-appointments/enums/mechanic-task-type.enum.dart';
@@ -125,9 +126,15 @@ class AppointmentsService {
 
   AppointmentsService();
 
-  Future<AppointmentsResponse> getAppointments() async {
+  Future<AppointmentsResponse> getAppointments({AppointmentStatusState state}) async {
+    Map<String, dynamic> queryParameters = {};
+
+    if (state != null) {
+      queryParameters['status'] = AppointmentStatusStateUtils.status(state);
+    }
+
     try {
-      final response = await _dio.get(_APPOINTMENTS_API_PATH);
+      final response = await _dio.get(_APPOINTMENTS_API_PATH, queryParameters: queryParameters);
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {

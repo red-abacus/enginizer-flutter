@@ -288,6 +288,9 @@
   "user_profile_your_time": "Timpul tău",
   "user_profile_normalized_time": "Timpul normat",
   "user_profile_index_time": "Indicele tău de eficientă este",
+  "user_profile_active_personel": "Personal Activ",
+  "user_profile_no_active_personnel": "Nu există personal activ în acest moment",
+  "user_profile_number_of_active_personnel": "Nr. de personal:",
   "work_estimate_status_pending": "În Așteptare",
   "work_estimate_status_accepted": "Acceptată",
   "appointment_status_canceled": "Anulată",
@@ -479,5 +482,6 @@
   "exception_edit_issue_item": "A intervenit o problemă la editarea acestui produs.",
   "exception_send_appointment_recommendations": "A intervenit o problemă la refuzarea/acceptarea recomandărilor",
   "exception_order_appointment_items": "A intervenit o problemă în procesul de comandă",
-  "exception_get_orders": "A intervenit o problemă la încărcarea comenzilor tale."
+  "exception_get_orders": "A intervenit o problemă la încărcarea comenzilor tale.",
+  "exception_get_work_stations": "A intervenit o problemă la încărcarea stațiilor de lucru."
 }

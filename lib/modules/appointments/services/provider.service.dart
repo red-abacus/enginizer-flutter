@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
@@ -32,7 +33,9 @@ class ProviderService {
       'GET_PROVIDER_SERVICE_ITEMS_EXCEPTION';
   static const String UPDATE_PROVIDER_DETAILS_EXCEPTION =
       'UPDATE_PROVIDER_DETAILS_FAILED';
-  static const CREATE_PROVIDER_ITEM_EXCEPTION = 'CREATE_PROVIDER_ITEM_EXCEPTION';
+  static const CREATE_PROVIDER_ITEM_EXCEPTION =
+      'CREATE_PROVIDER_ITEM_EXCEPTION';
+  static const GET_WORK_STATIONS_EXCEPTION = 'GET_WORK_STATIONS_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -67,6 +70,9 @@ class ProviderService {
   static const String _SERVICE_PROVIDER_REVIEWS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _SERVICE_PROVIDER_REVIEWS_SUFFIX = '/reviews';
+
+  static const String _GET_WORK_STATIONS_PATH =
+      '${Environment.PROVIDERS_BASE_API}/workstations';
 
   Dio _dio = inject<Dio>();
 
@@ -261,6 +267,22 @@ class ProviderService {
       }
     } catch (error) {
       throw (error);
+    }
+  }
+
+  Future<WorkStationResponse> getWorkStations() async {
+    String path = _GET_WORK_STATIONS_PATH;
+
+    try {
+      final response = await _dio.get(path);
+
+      if (response.statusCode == 200) {
+        return WorkStationResponse.fromJson(response.data);
+      } else {
+        throw Exception(GET_WORK_STATIONS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_WORK_STATIONS_EXCEPTION);
     }
   }
 

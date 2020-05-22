@@ -37,10 +37,10 @@ class AppointmentsProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Appointment>> loadAppointments() async {
+  Future<List<Appointment>> loadAppointments({AppointmentStatusState state}) async {
     try {
       this.appointmentsResponse =
-          await this.appointmentsService.getAppointments();
+          await this.appointmentsService.getAppointments(state: state);
       appointments = this.appointmentsResponse.items;
       notifyListeners();
       return appointments;

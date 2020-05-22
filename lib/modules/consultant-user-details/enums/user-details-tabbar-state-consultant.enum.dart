@@ -1,4 +1,5 @@
 enum UserDetailsTabbarStateConsultant {
   GRAPH,
-  INDEX
+  INDEX,
+  WORKSTATIONS,
 }
