@@ -1,4 +1,4 @@
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/widgets/auth-form.widget.dart';
 import 'package:flutter/material.dart';

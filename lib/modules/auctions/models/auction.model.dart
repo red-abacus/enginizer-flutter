@@ -3,7 +3,7 @@ import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/utils/string.utils.dart';
 import 'package:flutter/gestures.dart';
 
-import '../../appointments/model/appointment.model.dart';
+import '../../appointments/model/appointment/appointment.model.dart';
 import '../../cars/models/car.model.dart';
 
 class Auction {

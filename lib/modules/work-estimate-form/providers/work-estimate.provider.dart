@@ -1,6 +1,6 @@
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';

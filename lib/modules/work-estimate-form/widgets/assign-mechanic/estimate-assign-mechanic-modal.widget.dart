@@ -1,9 +1,9 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
-import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
-import 'package:app/modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
+import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';

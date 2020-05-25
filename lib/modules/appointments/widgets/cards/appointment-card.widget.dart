@@ -1,4 +1,4 @@
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';

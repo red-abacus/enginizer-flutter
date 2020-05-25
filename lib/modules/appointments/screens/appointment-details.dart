@@ -1,7 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/appointment.details.tabbar.state.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';

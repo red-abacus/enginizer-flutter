@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';

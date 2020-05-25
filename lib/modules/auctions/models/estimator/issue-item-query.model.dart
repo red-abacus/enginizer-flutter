@@ -1,5 +1,3 @@
-import 'package:app/modules/consultant-appointments/enums/tank-quantity.enum.dart';
-
 class IssueItemQuery {
   int typeId;
   String code;

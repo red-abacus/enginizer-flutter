@@ -7,9 +7,7 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
-import 'package:app/modules/consultant-appointments/screens/appointments-consultant.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
-import 'package:app/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
@@ -73,7 +71,7 @@ class NavigationApp extends StatefulWidget {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
         sideBarPermission: ConsultantSideBarPermission.Appointments)) {
       items.add(new DrawerItem(
-          "Appointments", AppointmentsConsultant.route, Icons.dashboard));
+          "Appointments", Appointments.route, Icons.dashboard));
     }
 
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
@@ -108,7 +106,7 @@ class NavigationApp extends StatefulWidget {
 
   static final List<DrawerItem> mechanicDrawerItems = [
     new DrawerItem(
-        "Appointments", AppointmentsMechanic.route, Icons.event_available),
+        "Appointments", Appointments.route, Icons.event_available),
     new DrawerItem('Notifications', Notifications.route, Icons.notifications)
   ];
 
@@ -126,7 +124,7 @@ class NavigationApp extends StatefulWidget {
       case Roles.ProviderConsultant:
         return consultantDrawerItems.first.route;
       case Roles.ProviderPersonnel:
-        return AppointmentsMechanic.route;
+        return Appointments.route;
       default:
         return '/';
     }
@@ -245,10 +243,6 @@ class NavigationAppState extends State<NavigationApp> {
         return Auctions();
       case Shop.route:
         return Shop();
-      case AppointmentsConsultant.route:
-        return AppointmentsConsultant();
-      case AppointmentsMechanic.route:
-        return AppointmentsMechanic();
       case UserDetailsConsultant.route:
         return UserDetailsConsultant();
       case WorkEstimatesConsultant.route:

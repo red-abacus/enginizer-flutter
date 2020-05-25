@@ -1,12 +1,12 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timeserie.model.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
-import 'package:app/modules/appointments/widgets/scheduler.widget.dart';
+import 'package:app/modules/appointments/widgets/personnel/scheduler.widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 

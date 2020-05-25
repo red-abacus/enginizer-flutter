@@ -1,12 +1,12 @@
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment-provider-type.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';

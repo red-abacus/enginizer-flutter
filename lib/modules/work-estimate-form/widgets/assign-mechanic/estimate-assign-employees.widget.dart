@@ -1,6 +1,6 @@
-import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
-import 'package:app/modules/consultant-appointments/models/employee.dart';
-import 'package:app/modules/consultant-appointments/widgets/pick-up-form/pick-up-car-form-employee.widget.dart';
+import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
+import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-employee.widget.dart';
+import 'package:app/modules/appointments/model/personnel/employee.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

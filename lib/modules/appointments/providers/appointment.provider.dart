@@ -1,38 +1,26 @@
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {
-  bool initDone = false;
-
-  AppointmentsService appointmentsService = inject<AppointmentsService>();
+  AppointmentsService _appointmentsService = inject<AppointmentsService>();
   BidsService _bidsService = inject<BidsService>();
 
-  Appointment _selectedAppointment;
-  AppointmentDetail _selectedAppointmentDetail;
+  bool initDone = false;
 
-  Appointment get selectedAppointment {
-    return _selectedAppointment;
-  }
-
-  AppointmentDetail get selectedAppointmentDetail {
-    return _selectedAppointmentDetail;
-  }
-
-  selectAppointment(Appointment appointment) {
-    this._selectedAppointment = appointment;
-  }
+  Appointment selectedAppointment;
+  AppointmentDetail selectedAppointmentDetail;
 
   Future<AppointmentDetail> getAppointmentDetails(
       Appointment appointment) async {
     try {
-      _selectedAppointmentDetail =
-          await this.appointmentsService.getAppointmentDetails(appointment.id);
+      selectedAppointmentDetail =
+          await this._appointmentsService.getAppointmentDetails(appointment.id);
       notifyListeners();
-      return _selectedAppointmentDetail;
+      return selectedAppointmentDetail;
     } catch (error) {
       throw (error);
     }
@@ -40,10 +28,10 @@ class AppointmentProvider with ChangeNotifier {
 
   Future<Appointment> cancelAppointment(Appointment appointment) async {
     try {
-      _selectedAppointment =
-          await this.appointmentsService.cancelAppointment(appointment.id);
+      selectedAppointment =
+          await this._appointmentsService.cancelAppointment(appointment.id);
       notifyListeners();
-      return _selectedAppointment;
+      return selectedAppointment;
     } catch (error) {
       throw (error);
     }
@@ -54,9 +42,8 @@ class AppointmentProvider with ChangeNotifier {
       bool response = await this._bidsService.rejectBid(bidId);
       notifyListeners();
       return response;
-    }
-    catch (error) {
-      throw(error);
+    } catch (error) {
+      throw (error);
     }
   }
 
@@ -65,9 +52,8 @@ class AppointmentProvider with ChangeNotifier {
       bool response = await this._bidsService.acceptBid(bidId);
       notifyListeners();
       return response;
-    }
-    catch (error) {
-      throw(error);
+    } catch (error) {
+      throw (error);
     }
   }
 }

@@ -11,7 +11,7 @@ import 'package:app/modules/appointments/model/response/service-provider-items-r
 import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
-import 'package:app/modules/consultant-appointments/models/employee.dart';
+import 'package:app/modules/appointments/model/personnel/employee.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class ProviderService {

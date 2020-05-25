@@ -14,8 +14,7 @@ import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/screens/car.dart';
 import 'package:app/modules/cars/screens/cars.dart';
-import 'package:app/modules/consultant-appointments/providers/select-parts-provider.provider.dart';
-import 'package:app/modules/consultant-appointments/screens/appointments-consultant.dart';
+import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/auctions/screens/auction-consultant.dart';
 import 'package:app/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
@@ -50,16 +49,13 @@ import 'modules/cars/providers/cars-make.provider.dart';
 import 'modules/cars/providers/cars.provider.dart';
 import 'modules/cars/screens/car.dart';
 import 'modules/cars/screens/cars.dart';
-import 'modules/consultant-appointments/providers/appointment-consultant.provider.dart';
-import 'modules/consultant-appointments/providers/appointments-consultant.provider.dart';
-import 'modules/consultant-appointments/providers/pick-up-car-form-consultant.provider.dart';
-import 'modules/consultant-appointments/screens/appointments-details-consultant.dart';
+import 'modules/appointments/providers/appointment-consultant.provider.dart';
+import 'modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
+import 'modules/appointments/screens/appointments-details-consultant.dart';
 import 'modules/auctions/providers/auction-consultant.provider.dart';
 import 'modules/dashboard/providers/dashboard.provider.dart';
-import 'modules/mechanic-appointments/providers/appointment-mechanic.provider.dart';
-import 'modules/mechanic-appointments/providers/appointments-mechanic.provider.dart';
-import 'modules/mechanic-appointments/screens/appointment-details-mechanic.dart';
-import 'modules/mechanic-appointments/screens/appointments-mechanic.dart';
+import 'modules/appointments/providers/appointment-mechanic.provider.dart';
+import 'modules/appointments/screens/appointment-details-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'modules/orders/providers/order.provider.dart';
 import 'modules/orders/screens/orders.dart';
@@ -119,10 +115,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
           ChangeNotifierProvider.value(value: WorkEstimateProvider()),
-          ChangeNotifierProvider.value(value: AppointmentsConsultantProvider()),
           ChangeNotifierProvider.value(value: SelectPartsProviderProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
-          ChangeNotifierProvider.value(value: AppointmentsMechanicProvider()),
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
           ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider()),
           ChangeNotifierProvider.value(
@@ -192,11 +186,8 @@ class AppState extends State<App> {
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),
                 BidDetails.route: (context) => BidDetails(),
-                AppointmentsConsultant.route: (context) =>
-                    AppointmentsConsultant(),
                 AppointmentDetailsConsultant.route: (context) =>
                     AppointmentDetailsConsultant(),
-                AppointmentsMechanic.route: (context) => AppointmentsMechanic(),
                 AppointmentDetailsMechanic.route: (context) =>
                     AppointmentDetailsMechanic(),
                 UserDetails.route: (context) => UserDetails(),

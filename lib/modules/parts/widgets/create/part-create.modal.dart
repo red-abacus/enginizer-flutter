@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/appointments/widgets/pick-up-form/image-selection.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
-import 'package:app/modules/consultant-appointments/widgets/pick-up-form/image-selection.widget.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/widgets/create/part-create-car-details.widget.dart';
 import 'package:app/modules/parts/widgets/create/part-create-info.widget.dart';

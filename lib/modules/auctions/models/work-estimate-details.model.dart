@@ -1,4 +1,4 @@
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';

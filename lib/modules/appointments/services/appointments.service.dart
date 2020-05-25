@@ -1,21 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app/modules/appointments/screens/appointment-details.dart';
-import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/consultant-appointments/models/assign-employee-request.model.dart';
-import 'package:app/modules/consultant-appointments/models/receive-form-request.model.dart';
-import 'package:app/modules/mechanic-appointments/enums/mechanic-task-type.enum.dart';
-import 'package:app/modules/mechanic-appointments/models/mechanic-task-issue.model.dart';
-import 'package:app/modules/mechanic-appointments/models/mechanic-task.model.dart';
-import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
+import 'package:app/modules/appointments/model/personnel/mechanic-task-issue.model.dart';
+import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
+import 'package:app/modules/appointments/model/request/assign-employee-request.model.dart';
+import 'package:app/modules/appointments/model/request/receive-form-request.model.dart';
+import 'package:app/modules/appointments/enum/mechanic-task-type.enum.dart';
+import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
-import 'package:app/modules/work-estimate-form/models/requests/send-appointment-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/utils/environment.constants.dart';
@@ -126,15 +123,12 @@ class AppointmentsService {
 
   AppointmentsService();
 
-  Future<AppointmentsResponse> getAppointments({AppointmentStatusState state}) async {
-    Map<String, dynamic> queryParameters = {};
-
-    if (state != null) {
-      queryParameters['status'] = AppointmentStatusStateUtils.status(state);
-    }
-
+  Future<AppointmentsResponse> getAppointments(
+      AppointmentsRequest request) async {
+    print('request json ${request.toJson()}');
     try {
-      final response = await _dio.get(_APPOINTMENTS_API_PATH, queryParameters: queryParameters);
+      final response = await _dio.get(_APPOINTMENTS_API_PATH,
+          queryParameters: request.toJson());
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {

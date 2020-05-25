@@ -1,5 +1,5 @@
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:flutter/cupertino.dart';

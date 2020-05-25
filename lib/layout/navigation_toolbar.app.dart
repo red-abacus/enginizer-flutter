@@ -6,9 +6,7 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
-import 'package:app/modules/consultant-appointments/screens/appointments-consultant.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
-import 'package:app/modules/mechanic-appointments/screens/appointments-mechanic.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
@@ -47,12 +45,11 @@ class NavigationToolbarApp extends StatefulWidget {
       case Roles.Client:
         return Cars.route;
       case Roles.ProviderAdmin:
-        // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
       case Roles.ProviderConsultant:
-        return AppointmentsConsultant.route;
+        return Appointments.route;
       case Roles.ProviderPersonnel:
-        return AppointmentsMechanic.route;
+        return Appointments.route;
       default:
         return '/';
     }
@@ -173,10 +170,6 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
         return Auctions();
       case Shop.route:
         return Shop();
-      case AppointmentsConsultant.route:
-        return AppointmentsConsultant();
-      case AppointmentsMechanic.route:
-        return AppointmentsMechanic();
       case UserDetailsConsultant.route:
         return UserDetailsConsultant();
       case WorkEstimatesConsultant.route:
@@ -285,7 +278,7 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
   //region Bottom bar
   static final List<BottomBarItem> mechanicBarItems = [
     BottomBarItem(
-        'Appointments', AppointmentsMechanic.route, Icons.event_available),
+        'Appointments', Appointments.route, Icons.event_available),
     BottomBarItem('Notifications', Notifications.route, Icons.notifications),
   ];
 

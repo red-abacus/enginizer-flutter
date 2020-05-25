@@ -1,6 +1,7 @@
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -8,24 +9,21 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:flutter/widgets.dart';
 
 class AppointmentsProvider with ChangeNotifier {
+  AppointmentsService appointmentsService = inject<AppointmentsService>();
   AppointmentsResponse appointmentsResponse;
+  AppointmentsRequest appointmentsRequest;
 
   List<Appointment> appointments = [];
 
   Map<String, dynamic> serviceFormState = {'id': null, 'name': null};
 
-  AppointmentsService appointmentsService = inject<AppointmentsService>();
-
-  String filterSearchString = '';
-  AppointmentStatusState filterStatus;
-  DateTime filterDateTime;
-
   bool initDone = false;
 
-  void resetFilterParameters() {
-    filterSearchString = '';
-    filterStatus = null;
-    filterDateTime = null;
+  void resetParams() {
+    print('reset params !');
+    appointments = [];
+    appointmentsRequest = null;
+    appointmentsRequest = AppointmentsRequest();
   }
 
   void refreshAppointment(Appointment appointment) {
@@ -37,11 +35,18 @@ class AppointmentsProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Appointment>> loadAppointments({AppointmentStatusState state}) async {
+  Future<List<Appointment>> loadAppointments() async {
+    if (appointmentsResponse != null) {
+      if (appointmentsRequest.currentPage >= appointmentsResponse.totalPages) {
+        return null;
+      }
+    }
+
     try {
       this.appointmentsResponse =
-          await this.appointmentsService.getAppointments(state: state);
-      appointments = this.appointmentsResponse.items;
+          await this.appointmentsService.getAppointments(appointmentsRequest);
+      this.appointments.addAll(this.appointmentsResponse.items);
+      appointmentsRequest.currentPage += 1;
       notifyListeners();
       return appointments;
     } catch (error) {
@@ -64,17 +69,9 @@ class AppointmentsProvider with ChangeNotifier {
 
   Future<List<Appointment>> filterAppointments(String searchString,
       AppointmentStatusState filterStatus, DateTime dateTime) async {
-    this.filterSearchString = searchString;
-    this.filterStatus = filterStatus;
-    this.filterDateTime = dateTime;
-
-    appointments = this
-        .appointmentsResponse
-        .items
-        .where((appointment) => appointment.filtered(
-            this.filterSearchString, this.filterStatus, this.filterDateTime))
-        .toList();
-    notifyListeners();
-    return appointments;
+    resetParams();
+    appointmentsRequest.searchString = searchString;
+    appointmentsRequest.state = filterStatus;
+    appointmentsRequest.dateTime = dateTime;
   }
 }

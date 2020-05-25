@@ -1,19 +1,24 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
+import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/mechanic-appointments/enums/appointment-type.enum.dart';
+import 'package:app/modules/authentication/models/roles.model.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/appointment.model.dart';
+import '../model/appointment/appointment.model.dart';
+import 'appointment-details-mechanic.dart';
 import 'appointment-details.dart';
 
 class Appointments extends StatefulWidget {
@@ -32,19 +37,18 @@ class AppointmentsState extends State<Appointments> {
   var _isLoading = false;
   var _initDone = false;
 
-  AppointmentsProvider _appointmentsProvider;
+  AppointmentsProvider _provider;
 
   AppointmentsState({this.route});
 
   @override
   Widget build(BuildContext context) {
-    _appointmentsProvider = Provider.of<AppointmentsProvider>(context);
+    _provider = Provider.of<AppointmentsProvider>(context);
 
     return Consumer<AppointmentsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
-          child: _renderAppointments(
-              _isLoading, _appointmentsProvider.appointments),
+          child: _renderAppointments(_isLoading, _provider.appointments),
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: null,
@@ -59,10 +63,11 @@ class AppointmentsState extends State<Appointments> {
 
   @override
   void didChangeDependencies() {
-    _appointmentsProvider = Provider.of<AppointmentsProvider>(context);
-    _initDone = _initDone == false ? false : _appointmentsProvider.initDone;
+    _provider = Provider.of<AppointmentsProvider>(context);
+    _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
+      _provider.resetParams();
       setState(() {
         _isLoading = true;
       });
@@ -71,15 +76,14 @@ class AppointmentsState extends State<Appointments> {
     }
 
     _initDone = true;
-    _appointmentsProvider.initDone = true;
+    _provider.initDone = true;
 
     super.didChangeDependencies();
   }
 
   _loadData() async {
     try {
-      _appointmentsProvider.resetFilterParameters();
-      await _appointmentsProvider.loadAppointments().then((_) {
+      await _provider.loadAppointments().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -99,30 +103,46 @@ class AppointmentsState extends State<Appointments> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    Provider.of<AppointmentProvider>(context)
-        .selectAppointment(selectedAppointment);
-    Navigator.of(context).pushNamed(AppointmentDetails.route);
+    switch (Provider.of<Auth>(context).authUser.role) {
+      case Roles.Client:
+        Provider.of<AppointmentProvider>(context).selectedAppointment =
+            selectedAppointment;
+        Navigator.of(context).pushNamed(AppointmentDetails.route);
+        break;
+      case Roles.ProviderConsultant:
+        Provider.of<AppointmentConsultantProvider>(context).initialise();
+        Provider.of<AppointmentConsultantProvider>(context)
+            .selectedAppointment = selectedAppointment;
+        Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
+        break;
+      case Roles.ProviderPersonnel:
+        Provider.of<AppointmentMechanicProvider>(context).initialise();
+        Provider.of<AppointmentMechanicProvider>(context)
+            .selectedAppointment = selectedAppointment;
+        Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
+        break;
+      default:
+        break;
+    }
   }
 
   _filterAppointments(
       String string, AppointmentStatusState state, DateTime dateTime) {
-    Provider.of<AppointmentsProvider>(context)
-        .filterAppointments(string, state, dateTime);
+    _provider.filterAppointments(string, state, dateTime);
+    _loadData();
   }
 
   _renderAppointments(bool _isLoading, List<Appointment> appointments) {
-    AppointmentsProvider provider = Provider.of<AppointmentsProvider>(context);
-
     return _isLoading
         ? CircularProgressIndicator()
         : AppointmentsList(
             appointments: appointments,
             selectAppointment: _selectAppointment,
             filterAppointments: _filterAppointments,
-            searchString: provider.filterSearchString,
-            appointmentStatusState: provider.filterStatus,
-            filterDateTime: provider.filterDateTime,
-            appointmentType: AppointmentType.CLIENT,
+            searchString: _provider.appointmentsRequest.searchString,
+            appointmentStatusState: _provider.appointmentsRequest.state,
+            filterDateTime: _provider.appointmentsRequest.dateTime,
+            downloadNextPage: _loadData,
           );
   }
 

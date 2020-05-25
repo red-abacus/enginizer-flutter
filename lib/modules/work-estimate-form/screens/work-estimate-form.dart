@@ -2,7 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/time-entry.dart';
+import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -12,16 +13,14 @@ import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-order-modal.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
-import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
-import 'package:app/modules/consultant-appointments/providers/appointments-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
-import 'package:app/modules/consultant-appointments/providers/appointment-consultant.provider.dart';
-import 'package:app/modules/consultant-appointments/screens/appointments-details-consultant.dart';
+import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
+import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info-parts.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
@@ -608,7 +607,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
-          Provider.of<AppointmentsConsultantProvider>(context).initDone = false;
+          Provider.of<AppointmentsProvider>(context).initDone = false;
 
           Navigator.pop(context);
         } else {

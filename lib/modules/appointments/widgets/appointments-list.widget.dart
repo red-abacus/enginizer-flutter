@@ -1,11 +1,13 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/mechanic-appointments/enums/appointment-type.enum.dart';
+import 'package:app/modules/authentication/models/roles.model.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'cards/appointment-card.widget.dart';
 
@@ -18,7 +20,7 @@ class AppointmentsList extends StatelessWidget {
 
   Function selectAppointment;
   Function filterAppointments;
-  final AppointmentType appointmentType;
+  final Function downloadNextPage;
 
   AppointmentsList(
       {this.appointments,
@@ -27,7 +29,7 @@ class AppointmentsList extends StatelessWidget {
       this.searchString,
       this.appointmentStatusState,
       this.filterDateTime,
-      this.appointmentType});
+      this.downloadNextPage});
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +109,9 @@ class AppointmentsList extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemBuilder: (ctx, index) {
+            if (index == this.appointments.length - 1) {
+              downloadNextPage();
+            }
             return AppointmentCard(
                 appointment: this.appointments.elementAt(index),
                 selectAppointment: this.selectAppointment);
@@ -134,12 +139,12 @@ class AppointmentsList extends StatelessWidget {
 
     var statuses = List<AppointmentStatusState>();
 
-    switch (appointmentType) {
-      case AppointmentType.CLIENT:
-        statuses = AppointmentStatusStateUtils.statuses();
-        break;
-      case AppointmentType.MECHANIC:
+    switch (Provider.of<Auth>(context).authUser.role) {
+      case Roles.ProviderPersonnel:
         statuses = AppointmentStatusStateUtils.statusesMechanic();
+        break;
+      default:
+        statuses = AppointmentStatusStateUtils.statuses();
         break;
     }
 

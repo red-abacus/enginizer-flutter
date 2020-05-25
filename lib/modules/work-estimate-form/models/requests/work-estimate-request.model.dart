@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/consultant-appointments/models/employee-timeserie.dart';
+import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';

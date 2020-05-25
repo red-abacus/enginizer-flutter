@@ -1,4 +1,4 @@
-import 'package:app/modules/appointments/model/appointment.model.dart';
+import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 
 class AppointmentsResponse {
   int total;

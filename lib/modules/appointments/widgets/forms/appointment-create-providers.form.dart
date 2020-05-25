@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment-provider-type.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
