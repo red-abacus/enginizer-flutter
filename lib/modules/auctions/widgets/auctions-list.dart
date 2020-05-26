@@ -15,6 +15,7 @@ class AuctionsList extends StatelessWidget {
 
   String searchString;
   AuctionStatus auctionStatus;
+  bool shouldDownload = true;
 
   AuctionsList(
       {this.auctions,
@@ -22,7 +23,8 @@ class AuctionsList extends StatelessWidget {
       this.selectAuction,
       this.searchString,
       this.auctionStatus,
-      this.downloadNextPage});
+      this.downloadNextPage,
+      this.shouldDownload});
 
   @override
   Widget build(BuildContext context) {

@@ -38,6 +38,7 @@ class AppointmentStatus {
       case AppointmentStatusState.CANCELED:
         return red;
       case AppointmentStatusState.DONE:
+      case AppointmentStatusState.NEW:
         return green;
       case AppointmentStatusState.NONE:
         return gray2;
@@ -58,6 +59,7 @@ class AppointmentStatus {
       case AppointmentStatusState.PENDING:
         return 'waiting';
       case AppointmentStatusState.DONE:
+      case AppointmentStatusState.NEW:
         return 'completed';
       default:
         return name.toLowerCase();
@@ -86,6 +88,8 @@ class AppointmentStatus {
         return AppointmentStatusState.ON_HOLD;
       case 'inunit':
         return AppointmentStatusState.IN_UNIT;
+      case 'new':
+        return AppointmentStatusState.NEW;
       default:
         return AppointmentStatusState.NONE;
     }

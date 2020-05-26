@@ -112,6 +112,7 @@
   "appointment_status_on_hold": "On Pause",
   "appointment_status_in_unit": "In Unit",
   "appointment_status_in_review": "In Review",
+  "appointment_status_new": "Accepted",
   "appointment_details_applicant": "Applicant",
   "appointment_details_request_reprogramming": "Request reprogramming",
   "appointment_details_assiged_mechanic": "Assigned Mechanics",

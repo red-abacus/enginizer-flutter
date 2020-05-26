@@ -125,7 +125,6 @@ class AppointmentsService {
 
   Future<AppointmentsResponse> getAppointments(
       AppointmentsRequest request) async {
-    print('request json ${request.toJson()}');
     try {
       final response = await _dio.get(_APPOINTMENTS_API_PATH,
           queryParameters: request.toJson());

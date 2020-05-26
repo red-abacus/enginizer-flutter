@@ -3,7 +3,6 @@ import 'package:app/modules/appointments/model/appointment/appointment.model.dar
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:flutter/widgets.dart';
@@ -19,8 +18,20 @@ class AppointmentsProvider with ChangeNotifier {
 
   bool initDone = false;
 
+  bool shouldDownload() {
+    if (appointmentsResponse != null) {
+      if (appointmentsRequest.currentPage >= appointmentsResponse.totalPages) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   void resetParams() {
-    print('reset params !');
+    initDone = false;
+    appointmentsResponse = null;
+
     appointments = [];
     appointmentsRequest = null;
     appointmentsRequest = AppointmentsRequest();
@@ -36,10 +47,8 @@ class AppointmentsProvider with ChangeNotifier {
   }
 
   Future<List<Appointment>> loadAppointments() async {
-    if (appointmentsResponse != null) {
-      if (appointmentsRequest.currentPage >= appointmentsResponse.totalPages) {
-        return null;
-      }
+    if (!shouldDownload()) {
+      return null;
     }
 
     try {
@@ -67,9 +76,12 @@ class AppointmentsProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Appointment>> filterAppointments(String searchString,
+  filterAppointments(String searchString,
       AppointmentStatusState filterStatus, DateTime dateTime) async {
-    resetParams();
+    appointmentsResponse = null;
+    appointments = [];
+    appointmentsRequest = AppointmentsRequest();
+
     appointmentsRequest.searchString = searchString;
     appointmentsRequest.state = filterStatus;
     appointmentsRequest.dateTime = dateTime;

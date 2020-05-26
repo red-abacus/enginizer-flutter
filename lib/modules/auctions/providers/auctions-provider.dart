@@ -20,6 +20,7 @@ class AuctionsProvider with ChangeNotifier {
   int _pageSize = 20;
 
   void resetParameters() {
+    auctionResponse = null;
     _auctionPage = 0;
     this.filterStatus = null;
     this.searchString = null;
@@ -27,11 +28,19 @@ class AuctionsProvider with ChangeNotifier {
     auctions = [];
   }
 
-  Future<AuctionResponse> loadAuctions() async {
+  bool shouldDownload() {
     if (auctionResponse != null) {
       if (_auctionPage >= auctionResponse.totalPages) {
-        return null;
+        return false;
       }
+    }
+
+    return true;
+  }
+
+  Future<AuctionResponse> loadAuctions() async {
+    if (!shouldDownload()) {
+      return null;
     }
 
     try {

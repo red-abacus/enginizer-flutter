@@ -24,6 +24,8 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_in_unit;
       case AppointmentStatusState.IN_REVIEW:
         return S.of(context).appointment_status_in_review;
+      case AppointmentStatusState.NEW:
+        return S.of(context).appointment_status_new;
       case AppointmentStatusState.NONE:
         return '';
         break;
@@ -33,9 +35,9 @@ class AppointmentStatusStateUtils {
   static String status(AppointmentStatusState state) {
     switch (state) {
       case AppointmentStatusState.IN_REVIEW:
-      return 'InReview';
+        return 'InReview';
       case AppointmentStatusState.IN_WORK:
-      return 'InWork';
+        return 'InWork';
       case AppointmentStatusState.PENDING:
         return 'Pending';
       case AppointmentStatusState.SUBMITTED:
@@ -52,6 +54,8 @@ class AppointmentStatusStateUtils {
         return 'OnHold';
       case AppointmentStatusState.IN_UNIT:
         return 'InUnit';
+      case AppointmentStatusState.NEW:
+        return 'NEW';
       default:
         return '';
     }
@@ -81,6 +85,10 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.IN_REVIEW
     ];
   }
+
+  static List<AppointmentStatusState> statusesParts() {
+    return [AppointmentStatusState.NEW];
+  }
 }
 
 enum AppointmentStatusState {
@@ -94,5 +102,6 @@ enum AppointmentStatusState {
   DONE,
   ON_HOLD,
   IN_UNIT,
-  IN_REVIEW
+  IN_REVIEW,
+  NEW
 }

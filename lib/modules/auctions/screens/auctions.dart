@@ -1,6 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/providers/appointment.provider.dart';
-import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
@@ -95,7 +93,8 @@ class AuctionsState extends State<Auctions> {
             selectAuction: _selectAuction,
             searchString: auctionsProvider.searchString,
             auctionStatus: auctionsProvider.filterStatus,
-            downloadNextPage: _loadData);
+            downloadNextPage: _loadData,
+            shouldDownload: true);
   }
 
   _filterAuctions(String value, AuctionStatus status) {
@@ -104,17 +103,19 @@ class AuctionsState extends State<Auctions> {
   }
 
   _selectAuction(Auction auction) {
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions, auctionPermission: AuctionPermission.AuctionDetails)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions,
+        auctionPermission: AuctionPermission.AuctionDetails)) {
       AuctionProvider provider =
-      Provider.of<AuctionProvider>(context, listen: false);
+          Provider.of<AuctionProvider>(context, listen: false);
       provider.initialiseParameters();
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionDetails.route);
-    }
-    else if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions, auctionPermission: AuctionPermission.ConsultantAuctionDetails)) {
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions,
+        auctionPermission: AuctionPermission.ConsultantAuctionDetails)) {
       AuctionConsultantProvider provider =
-      Provider.of<AuctionConsultantProvider>(context, listen: false);
+          Provider.of<AuctionConsultantProvider>(context, listen: false);
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionConsultant.route);

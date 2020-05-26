@@ -1,11 +1,11 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
-import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-details.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/services/order.service.dart';
+import 'package:app/modules/orders/widgets/orders-list.widget.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +46,7 @@ class _OrdersState extends State<Orders> {
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
+      _provider.resetParameters();
       setState(() {
         _isLoading = true;
       });
@@ -61,7 +62,6 @@ class _OrdersState extends State<Orders> {
 
   _loadData() async {
     try {
-      _provider.resetParameters();
       await _provider.getOrders().then((_) {
         setState(() {
           _isLoading = false;
@@ -80,29 +80,29 @@ class _OrdersState extends State<Orders> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    Provider.of<AppointmentProvider>(context).selectedAppointment = selectedAppointment;
+    Provider.of<AppointmentProvider>(context).selectedAppointment =
+        selectedAppointment;
     Navigator.of(context).pushNamed(AppointmentDetails.route);
   }
 
   _filterAppointments(
       String string, AppointmentStatusState state, DateTime dateTime) {
-    Provider.of<AppointmentsProvider>(context)
-        .filterAppointments(string, state, dateTime);
+    _provider.filterAppointments(string, state, dateTime);
+    _loadData();
   }
 
   _renderAppointments(bool _isLoading, List<Appointment> appointments) {
-//    AppointmentsProvider provider = Provider.of<AppointmentsProvider>(context);
-//
-//    return _isLoading
-//        ? CircularProgressIndicator()
-//        : AppointmentsList(
-//            appointments: appointments,
-//            selectAppointment: _selectAppointment,
-//            filterAppointments: _filterAppointments,
-//            searchString: provider.filterSearchString,
-//            appointmentStatusState: provider.filterStatus,
-//            filterDateTime: provider.filterDateTime,
-//            appointmentType: AppointmentType.CLIENT,
-//          );
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : OrdersList(
+            appointments: appointments,
+            selectAppointment: _selectAppointment,
+            filterAppointments: _filterAppointments,
+            searchString: _provider.appointmentsRequest.searchString,
+            appointmentStatusState: _provider.appointmentsRequest.state,
+            filterDateTime: _provider.appointmentsRequest.dateTime,
+            downloadNextPage: _loadData,
+            shouldDownload: _provider.shouldDownload(),
+          );
   }
 }

@@ -117,8 +117,8 @@ class AppointmentsState extends State<Appointments> {
         break;
       case Roles.ProviderPersonnel:
         Provider.of<AppointmentMechanicProvider>(context).initialise();
-        Provider.of<AppointmentMechanicProvider>(context)
-            .selectedAppointment = selectedAppointment;
+        Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
+            selectedAppointment;
         Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
         break;
       default:
@@ -143,6 +143,7 @@ class AppointmentsState extends State<Appointments> {
             appointmentStatusState: _provider.appointmentsRequest.state,
             filterDateTime: _provider.appointmentsRequest.dateTime,
             downloadNextPage: _loadData,
+            shouldDownload: _provider.shouldDownload(),
           );
   }
 

@@ -1,5 +1,6 @@
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
@@ -10,6 +11,8 @@ class PermissionsManager {
   PermissionsAuction _permissionsAuction = PermissionsAuction();
   PermissionsSideBar _permissionsSideBar = PermissionsSideBar();
   PermissionsUserProfile _permissionsUserProfile = PermissionsUserProfile();
+  PermissionAppointmentsStatuses _permissionAppointmentsStatuses =
+      PermissionAppointmentsStatuses();
 
   ServiceProviderItemsResponse serviceItemsResponse;
   String userRole;
@@ -21,7 +24,8 @@ class PermissionsManager {
   bool hasAccess(MainPermissions permission,
       {ConsultantSideBarPermission sideBarPermission,
       AuctionPermission auctionPermission,
-      UserProfilePermission userProfilePermission}) {
+      UserProfilePermission userProfilePermission,
+      AppointmentStatusesPermission appointmentStatusesPermission}) {
     switch (userRole) {
       case Roles.Super:
         if (userProfilePermission != null) {
@@ -56,6 +60,9 @@ class PermissionsManager {
           case MainPermissions.UserProfile:
             return _permissionsUserProfile.hasAccess(
                 userRole, userProfilePermission);
+          case MainPermissions.AppointmentsStatuses:
+            return _permissionAppointmentsStatuses.consultantHasAccess(
+                serviceItemsResponse, appointmentStatusesPermission);
           default:
             break;
         }
@@ -74,7 +81,7 @@ class PermissionsManager {
   }
 }
 
-enum MainPermissions { Sidebar, Auctions, UserProfile }
+enum MainPermissions { Sidebar, Auctions, UserProfile, AppointmentsStatuses }
 
 enum ConsultantServiceType { Service, PartShop, DismantlingShop }
 

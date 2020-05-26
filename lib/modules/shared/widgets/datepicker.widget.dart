@@ -26,7 +26,7 @@ class BasicDateField extends StatelessWidget {
               context: context,
               firstDate: minDate != null ? minDate : DateTime(1900),
               initialDate: currentValue ?? DateTime.now(),
-              lastDate: maxDate != null ? maxDate : DateTime.now());
+              lastDate: maxDate != null ? maxDate : new DateTime(DateTime.now().year + 100));
         },
         validator: (value) {
           return validator(value);
