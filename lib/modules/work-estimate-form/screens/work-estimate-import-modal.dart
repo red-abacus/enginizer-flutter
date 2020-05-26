@@ -140,7 +140,7 @@ class _WorkEstimateImportModalState extends State<WorkEstimateImportModal> {
     ImportItemRequest importItemRequest = new ImportItemRequest(
         issueId: widget.issue.id,
         recommendationId: widget.issueRecommendation.id,
-        providerId: Provider.of<Auth>(context).authUser.providerId,
+        providerId: issueItem.provider.id,
         itemId: issueItem.id);
 
     setState(() {

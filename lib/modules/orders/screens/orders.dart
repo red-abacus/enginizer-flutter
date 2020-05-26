@@ -1,14 +1,10 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
-import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
-import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-details.dart';
-import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/orders/providers/order.provider.dart';
+import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,24 +27,22 @@ class _OrdersState extends State<Orders> {
   var _isLoading = false;
   var _initDone = false;
 
-  OrderProvider _provider;
+  OrdersProvider _provider;
 
   _OrdersState({this.route});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppointmentsProvider>(
-      builder: (context, appointmentsProvider, _) => Scaffold(
-        body: Center(
-          child: Container()
-        ),
+    return Consumer<OrdersProvider>(
+      builder: (context, ordersProvider, _) => Scaffold(
+        body: _renderAppointments(_isLoading, ordersProvider.appointments),
       ),
     );
   }
 
   @override
   void didChangeDependencies() {
-    _provider = Provider.of<OrderProvider>(context);
+    _provider = Provider.of<OrdersProvider>(context);
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
@@ -110,42 +104,5 @@ class _OrdersState extends State<Orders> {
 //            filterDateTime: provider.filterDateTime,
 //            appointmentType: AppointmentType.CLIENT,
 //          );
-  }
-
-  void _openAppointmentCreateModal(BuildContext buildContext) {
-    Provider.of<ProviderServiceProvider>(context).initFormValues();
-
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return AppointmentCreateModal(
-              _createAppointment,
-              true,
-            );
-          });
-        });
-  }
-
-  _createAppointment(AppointmentRequest appointmentRequest) async {
-    try {
-      await Provider.of<AppointmentsProvider>(context)
-          .createAppointment(appointmentRequest)
-          .then((_) {
-        Navigator.pop(context);
-      });
-    } catch (error) {
-      if (error
-          .toString()
-          .contains(AppointmentsService.CREATE_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_create_appointment, context);
-      }
-    }
   }
 }

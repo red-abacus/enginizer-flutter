@@ -1,6 +1,6 @@
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/dashboard/providers/dashboard.provider.dart';
-import 'package:app/modules/orders/providers/order.provider.dart';
+import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/providers/parts.provider.dart';
@@ -95,6 +95,6 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => ShopAppointmentProvider());
   inject.registerFactory(() => PartsProvider());
   inject.registerFactory(() => PartCreateProvider());
-  inject.registerFactory(() => OrderProvider());
+  inject.registerFactory(() => OrdersProvider());
 
 }

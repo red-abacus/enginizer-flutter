@@ -4,7 +4,7 @@ import 'package:app/modules/appointments/model/response/appointments-response.mo
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:flutter/cupertino.dart';
 
-class OrderProvider with ChangeNotifier {
+class OrdersProvider with ChangeNotifier {
   OrderService _orderService = inject<OrderService>();
 
   List<Appointment> appointments = [];
@@ -18,6 +18,7 @@ class OrderProvider with ChangeNotifier {
   String searchString;
 
   void resetParameters() {
+    _appointmentsResponse = null;
     initDone = false;
     _orderPage = 0;
 //    this.filterStatus = null;
