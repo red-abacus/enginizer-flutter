@@ -78,7 +78,7 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text('${appointment.car?.registrationNumber}',
+                Text('${appointment.car?.model?.name} ${appointment.car?.year?.name}',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
@@ -86,7 +86,7 @@ class OrderCard extends StatelessWidget {
                         fontSize: 16,
                         height: 1.5)),
                 Text(
-                    '${appointment.car?.brand?.name} ${appointment.car?.model?.name} ${appointment.car?.year?.name}',
+                    '${appointment.serviceProvider.name}',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',

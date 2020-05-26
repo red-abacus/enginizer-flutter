@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
@@ -27,6 +28,8 @@ class AppointmentDetail {
   double forwardPaymentPercent;
   String timeToRespond;
   List<IssueRecommendation> recommendations;
+  DateTime deliveryDateTime;
+  List<IssueItem> items;
 
   AppointmentDetail(
       {this.id,
@@ -43,9 +46,15 @@ class AppointmentDetail {
       this.bidId,
       this.forwardPaymentPercent,
       this.timeToRespond,
-      this.recommendations});
+      this.recommendations,
+      this.deliveryDateTime,
+      this.items});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
+    for (String key in json.keys) {
+      print('key $key');
+      print('value ${json[key]}\n\n');
+    }
     return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
@@ -73,7 +82,22 @@ class AppointmentDetail {
             : 0,
         timeToRespond:
             json['timeToRespond'] != null ? json['timeToRespond'] : '',
-    recommendations: json['recommendations'] != null ? _mapRecommendations(json['recommendations']) : []);
+        recommendations: json['recommendations'] != null
+            ? _mapRecommendations(json['recommendations'])
+            : [],
+        deliveryDateTime: json['deliveryDateTime'] != null
+            ? DateUtils.dateFromString(
+                json['deliveryDateTime'], 'dd/MM/yyyy HH:mm')
+            : null,
+        items: json['items'] != null ? _mapIssueItems(json['items']) : []);
+  }
+
+  static _mapIssueItems(List<dynamic> response) {
+    List<IssueItem> list = [];
+    response.forEach((item) {
+      list.add(IssueItem.fromJson(item));
+    });
+    return list;
   }
 
   static _mapIssuesList(List<dynamic> response) {

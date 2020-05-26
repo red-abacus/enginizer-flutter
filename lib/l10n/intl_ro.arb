@@ -383,6 +383,10 @@
   "part_create_vta_title": "Preț TVA",
   "part_create_addition_title": "Adaos",
   "part_create_guarantee_title": "Garanție (pe luni)",
+  "parts_delivery_title": "Livrare Piese",
+  "parts_delivery_button_title": "Livrează",
+  "parts_suggested_delivery_date": "Dată propusă pentru livrare",
+  "parts_delivery_date_warning": "Adaugă data de livrare",
   "dashboard_start_date": "Dată start",
   "dashboard_end_date": "Dată final",
   "dashboard_select_car": "Alege masină",
@@ -489,5 +493,7 @@
   "exception_order_appointment_items": "A intervenit o problemă în procesul de comandă",
   "exception_get_orders": "A intervenit o problemă la încărcarea comenzilor tale.",
   "exception_get_work_stations": "A intervenit o problemă la încărcarea stațiilor de lucru.",
-  "exception_car_history": "A intervenit o problemă la încărcarea istoricului mașinii."
+  "exception_car_history": "A intervenit o problemă la încărcarea istoricului mașinii.",
+  "exception_get_order_details": "A intervenit o problemă la încărcarea detaliilor comenzii.",
+  "exception_accept_order": "A intervenit o problemă la acceptarea comenzii."
 }

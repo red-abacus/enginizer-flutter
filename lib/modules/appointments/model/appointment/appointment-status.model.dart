@@ -34,11 +34,11 @@ class AppointmentStatus {
     switch (getState()) {
       case AppointmentStatusState.SUBMITTED:
       case AppointmentStatusState.IN_REVIEW:
+      case AppointmentStatusState.NEW:
         return gray;
       case AppointmentStatusState.CANCELED:
         return red;
       case AppointmentStatusState.DONE:
-      case AppointmentStatusState.NEW:
         return green;
       case AppointmentStatusState.NONE:
         return gray2;

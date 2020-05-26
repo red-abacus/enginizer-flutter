@@ -57,7 +57,9 @@ import 'modules/dashboard/providers/dashboard.provider.dart';
 import 'modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'modules/appointments/screens/appointment-details-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/orders/providers/order.provider.dart';
 import 'modules/orders/providers/orders.provider.dart';
+import 'modules/orders/screens/order.dart';
 import 'modules/orders/screens/orders.dart';
 import 'modules/parts/providers/part-create.provider.dart';
 import 'modules/parts/providers/parts.provider.dart';
@@ -129,6 +131,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: PartsProvider()),
           ChangeNotifierProvider.value(value: PartCreateProvider()),
           ChangeNotifierProvider.value(value: OrdersProvider()),
+          ChangeNotifierProvider.value(value: OrderProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -198,7 +201,8 @@ class AppState extends State<App> {
                 Notifications.route: (context) => Notifications(),
                 Parts.route: (context) => Parts(),
                 Part.route: (context) => Part(),
-                Orders.route: (context) => Orders()
+                Orders.route: (context) => Orders(),
+                OrderDetails.route: (context) => OrderDetails()
               },
             ),
           );

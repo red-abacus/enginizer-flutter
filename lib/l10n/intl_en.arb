@@ -244,7 +244,7 @@
   "estimator_empty_section_warning": "Estimation must not have sections without name.",
   "estimator_bid_action": "Bid",
   "estimator_percent": "Advance percent (%)",
-  "estimator_percent_warning": "Add advance percent" ,
+  "estimator_percent_warning": "Add advance percent",
   "estimator_percent_max_100": "Your advance percent must not exceed 100%",
   "estimator_max_time": "Maximum response date",
   "estimator_max_time_warning": "Add maximum response date",
@@ -375,6 +375,10 @@
   "part_create_vta_title": "VTA Price",
   "part_create_addition_title": "Addition",
   "part_create_guarantee_title": "Guarantee (in months)",
+  "parts_delivery_title": "Parts Delivery",
+  "parts_delivery_button_title": "Deliver",
+  "parts_suggested_delivery_date": "Sugested delivery date",
+  "parts_delivery_date_warning": "Add delivery date",
   "dashboard_start_date": "Start date",
   "dashboard_end_date": "End date",
   "dashboard_select_car": "Select car",
@@ -494,5 +498,7 @@
   "exception_order_appointment_items": "There was an error in order process.",
   "exception_get_orders": "There was an error trying to get orders.",
   "exception_get_work_stations": "There was an error trying to get work stations.",
-  "exception_car_history": "There was an error trying to load car history."
+  "exception_car_history": "There was an error trying to load car history.",
+  "exception_get_order_details": "There was an error trying to get order details.",
+  "exception_accept_order": "There was an error trying to accept this order."
 }

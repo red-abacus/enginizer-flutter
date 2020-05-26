@@ -1,9 +1,9 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
-import 'package:app/modules/appointments/providers/appointment.provider.dart';
-import 'package:app/modules/appointments/screens/appointment-details.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/providers/orders.provider.dart';
+import 'package:app/modules/orders/screens/order.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/modules/orders/widgets/orders-list.widget.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -80,9 +80,9 @@ class _OrdersState extends State<Orders> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    Provider.of<AppointmentProvider>(context).selectedAppointment =
-        selectedAppointment;
-    Navigator.of(context).pushNamed(AppointmentDetails.route);
+    Provider.of<OrderProvider>(context).resetParameters();
+    Provider.of<OrderProvider>(context).appointment = selectedAppointment;
+    Navigator.of(context).pushNamed(OrderDetails.route);
   }
 
   _filterAppointments(
