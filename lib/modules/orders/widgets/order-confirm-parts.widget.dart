@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment/appointment-status.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/widgets/cards/order-part.card.dart';
@@ -11,19 +10,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OrderDeliveryParts extends StatefulWidget {
+class OrderConfirmParts extends StatefulWidget {
   Function showProviderDetails;
   Function acceptOrder;
 
-  OrderDeliveryParts({this.showProviderDetails, this.acceptOrder});
+  OrderConfirmParts({this.showProviderDetails, this.acceptOrder});
 
   @override
   State<StatefulWidget> createState() {
-    return _OrderDeliveryPartsState();
+    return _OrderConfirmPartsState();
   }
 }
 
-class _OrderDeliveryPartsState extends State<OrderDeliveryParts> {
+class _OrderConfirmPartsState extends State<OrderConfirmParts> {
   OrderProvider _provider;
 
   @override
@@ -50,7 +49,7 @@ class _OrderDeliveryPartsState extends State<OrderDeliveryParts> {
               children: <Widget>[
                 Text(
                   _provider.orderDetails.status.getState() ==
-                          AppointmentStatusState.ACCEPTED
+                      AppointmentStatusState.ACCEPTED
                       ? '${S.of(context).appointment_delivery_time}:'
                       : '${S.of(context).parts_suggested_delivery_date}:',
                   style: TextHelper.customTextStyle(null, gray3, null, 14),

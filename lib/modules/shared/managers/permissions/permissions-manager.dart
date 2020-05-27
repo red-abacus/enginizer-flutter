@@ -2,6 +2,7 @@ import 'package:app/modules/appointments/model/response/service-provider-items-r
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
 
@@ -13,6 +14,7 @@ class PermissionsManager {
   PermissionsUserProfile _permissionsUserProfile = PermissionsUserProfile();
   PermissionAppointmentsStatuses _permissionAppointmentsStatuses =
       PermissionAppointmentsStatuses();
+  PermissionsOrder _permissionsOrder = PermissionsOrder();
 
   ServiceProviderItemsResponse serviceItemsResponse;
   String userRole;
@@ -25,7 +27,8 @@ class PermissionsManager {
       {ConsultantSideBarPermission sideBarPermission,
       AuctionPermission auctionPermission,
       UserProfilePermission userProfilePermission,
-      AppointmentStatusesPermission appointmentStatusesPermission}) {
+      AppointmentStatusesPermission appointmentStatusesPermission,
+      OrderPermission orderPermission}) {
     switch (userRole) {
       case Roles.Super:
         if (userProfilePermission != null) {
@@ -63,6 +66,9 @@ class PermissionsManager {
           case MainPermissions.AppointmentsStatuses:
             return _permissionAppointmentsStatuses.consultantHasAccess(
                 serviceItemsResponse, appointmentStatusesPermission);
+          case MainPermissions.Orders:
+            return _permissionsOrder.consultantHasAccess(
+                serviceItemsResponse, orderPermission);
           default:
             break;
         }
@@ -81,7 +87,13 @@ class PermissionsManager {
   }
 }
 
-enum MainPermissions { Sidebar, Auctions, UserProfile, AppointmentsStatuses }
+enum MainPermissions {
+  Sidebar,
+  Auctions,
+  UserProfile,
+  AppointmentsStatuses,
+  Orders
+}
 
 enum ConsultantServiceType { Service, PartShop, DismantlingShop }
 

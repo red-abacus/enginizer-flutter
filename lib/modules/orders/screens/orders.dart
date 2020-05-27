@@ -81,7 +81,7 @@ class _OrdersState extends State<Orders> {
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
     Provider.of<OrderProvider>(context).resetParameters();
-    Provider.of<OrderProvider>(context).appointment = selectedAppointment;
+    Provider.of<OrderProvider>(context).order = selectedAppointment;
     Navigator.of(context).pushNamed(OrderDetails.route);
   }
 

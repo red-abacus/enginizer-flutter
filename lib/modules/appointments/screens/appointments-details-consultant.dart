@@ -215,7 +215,6 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.IN_REVIEW:
         return AppointmentDetailsGenericConsultantWidget(
           appointmentDetail: _provider.selectedAppointmentDetail,
-          serviceItems: _provider.selectedAppointmentDetail.serviceItems,
           serviceProviderItems: _provider.serviceProviderItems,
           declineAppointment: _declineAppointment,
           createEstimate: _createEstimate,

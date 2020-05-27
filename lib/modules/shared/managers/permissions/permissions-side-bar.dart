@@ -28,7 +28,8 @@ class PermissionsSideBar {
   ];
   List<ConsultantServiceType> orderPermissions = [
     ConsultantServiceType.PartShop,
-    ConsultantServiceType.DismantlingShop
+    ConsultantServiceType.DismantlingShop,
+    ConsultantServiceType.Service
   ];
 
   bool consultantHasAccess(ServiceProviderItemsResponse serviceItemResponse,

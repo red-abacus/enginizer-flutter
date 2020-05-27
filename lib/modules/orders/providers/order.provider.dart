@@ -1,29 +1,41 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
-import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
-import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
-import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class OrderProvider with ChangeNotifier {
   OrderService _orderService = inject<OrderService>();
+  AppointmentsService _appointmentsService = inject<AppointmentsService>();
 
-  AppointmentDetail appointmentDetail;
-  Appointment appointment;
+  AppointmentDetail orderDetails;
+  Appointment order;
+
+  AppointmentDetail appointmentDetails;
 
   void resetParameters() {
-    appointment = null;
-    appointmentDetail = null;
+    order = null;
+    orderDetails = null;
+    appointmentDetails = null;
+  }
+
+  Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
+    try {
+      appointmentDetails = await _appointmentsService.getAppointmentDetails(appointmentId);
+      notifyListeners();
+      return orderDetails;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<AppointmentDetail> getOrderDetails(
       Appointment appointment) async {
     try {
-      appointmentDetail = await _orderService.getOrderDetails(appointment.id);
+      orderDetails = await _orderService.getOrderDetails(appointment.id);
       notifyListeners();
-      return appointmentDetail;
+      return orderDetails;
     } catch (error) {
       throw (error);
     }
@@ -32,9 +44,9 @@ class OrderProvider with ChangeNotifier {
   Future<AppointmentDetail> acceptOrder(
       int orderId, String deliveryDate) async {
     try {
-      appointmentDetail = await _orderService.acceptOrder(appointment.id, deliveryDate);
+      orderDetails = await _orderService.acceptOrder(order.id, deliveryDate);
       notifyListeners();
-      return appointmentDetail;
+      return orderDetails;
     } catch (error) {
       throw (error);
     }

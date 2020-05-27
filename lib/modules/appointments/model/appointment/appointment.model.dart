@@ -23,7 +23,6 @@ class Appointment {
   String appointmentType;
   OperatingUnit operatingUnit;
   AppointmentStatus status;
-  AppointmentDetail appointmentDetail;
   ServiceProvider serviceProvider;
 
   Appointment(

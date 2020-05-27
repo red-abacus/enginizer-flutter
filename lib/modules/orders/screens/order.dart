@@ -1,11 +1,15 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/car-details-parts.widget.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/orders/services/order.service.dart';
+import 'package:app/modules/orders/widgets/order-confirm-parts.widget.dart';
 import 'package:app/modules/orders/widgets/order-delivery-parts.widget.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -37,7 +41,14 @@ class OrderDetailsState extends State<OrderDetails>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 2, initialIndex: 1);
+
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Orders,
+        orderPermission: OrderPermission.Order)) {
+      _tabController =
+          new TabController(vsync: this, length: 2, initialIndex: 1);
+    } else {
+      new TabController(vsync: this, length: 3, initialIndex: 2);
+    }
   }
 
   @override
@@ -48,7 +59,7 @@ class OrderDetailsState extends State<OrderDetails>
 
   @override
   Widget build(BuildContext context) {
-    if (_provider != null && _provider.appointment == null) {
+    if (_provider != null && _provider.order == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -75,10 +86,22 @@ class OrderDetailsState extends State<OrderDetails>
   }
 
   _getTabs() {
-    List<Tab> tabs = [
-      Tab(text: S.of(context).appointment_details_car_details),
-      Tab(text: S.of(context).parts_delivery_title),
-    ];
+    List<Tab> tabs = [];
+
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Orders,
+        orderPermission: OrderPermission.Order)) {
+      tabs = [
+        Tab(text: S.of(context).appointment_details_car_details),
+        Tab(text: S.of(context).parts_delivery_title),
+      ];
+    } else {
+      tabs = [
+        Tab(text: S.of(context).appointment_details_request),
+        Tab(text: S.of(context).appointment_details_car),
+        Tab(text: S.of(context).appointment_consultant_final_estimate_title)
+      ];
+    }
+
     return tabs;
   }
 
@@ -100,7 +123,7 @@ class OrderDetailsState extends State<OrderDetails>
 
   _loadData() async {
     try {
-      await _provider.getOrderDetails(_provider.appointment).then((_) async {
+      await _provider.getOrderDetails(_provider.order).then((_) async {
         setState(() {
           _isLoading = false;
         });
@@ -119,18 +142,42 @@ class OrderDetailsState extends State<OrderDetails>
 
   _titleText() {
     return Text(
-      _provider.appointment?.name ?? 'N/A',
+      _provider.order?.name ?? 'N/A',
       style:
           TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
   }
 
   _buildContent() {
-    List<Widget> list = [
-      CarDetailsPartsWidget(car: _provider.appointment.car),
-      OrderDeliveryParts(
-          showProviderDetails: _showProviderDetails, acceptOrder: _acceptOrder)
-    ];
+    List<Widget> list = [];
+
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Orders,
+        orderPermission: OrderPermission.Order)) {
+      list = [
+        CarDetailsPartsWidget(car: _provider.order.car),
+        OrderDeliveryParts(
+            showProviderDetails: _showProviderDetails,
+            acceptOrder: _acceptOrder)
+      ];
+    } else {
+      list = [
+        AppointmentDetailsGenericConsultantWidget(
+          appointmentDetail: _provider.orderDetails,
+//        serviceProviderItems: _provider.serviceprovi,
+//        declineAppointment: _declineAppointment,
+//        createEstimate: _createEstimate,
+//        viewEstimate: _viewEstimate,
+//        assignMechanic: _assignMechanic,
+//        createPickUpCarForm: _createPickUpCarForm,
+//        workEstimateDetails: _provider.workEstimateDetails,
+//        requestPartsProvider: _requestPartsProvider,
+//        seeCamera: _seeCamera,
+        )
+      ];
+      list.add(OrderConfirmParts(
+          showProviderDetails: _showProviderDetails,
+          acceptOrder: _acceptOrder));
+    }
 
     return TabBarView(
       controller: _tabController,
@@ -140,7 +187,7 @@ class OrderDetailsState extends State<OrderDetails>
 
   _showProviderDetails() {
     Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
-        _provider.appointmentDetail.serviceProvider.id;
+        _provider.orderDetails.serviceProvider.id;
 
     showModalBottomSheet(
         isScrollControlled: true,
@@ -160,7 +207,7 @@ class OrderDetailsState extends State<OrderDetails>
 
     try {
       await _provider
-          .acceptOrder(_provider.appointment.id,
+          .acceptOrder(_provider.order.id,
               DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy HH:mm'))
           .then((_) async {
         setState(() {

@@ -124,16 +124,14 @@ class OrderCard extends StatelessWidget {
   }
 
   _statusContainer(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: Text(
-          AppointmentStatusStateUtils.title(context, appointment.status.getState())
-              .toUpperCase(),
-          textAlign: TextAlign.right,
-          style: TextHelper.customTextStyle(
-              null, appointment.status.resolveStatusColor(), FontWeight.bold, 12),
-        ),
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Text(
+        AppointmentStatusStateUtils.title(context, appointment.status.getState())
+            .toUpperCase(),
+        textAlign: TextAlign.right,
+        style: TextHelper.customTextStyle(
+            null, appointment.status.resolveStatusColor(), FontWeight.bold, 12),
       ),
     );
   }
