@@ -51,8 +51,6 @@ class AppointmentDetailsConsultantState
   void didChangeDependencies() {
     _provider = Provider.of<AppointmentConsultantProvider>(context);
 
-    print('init done ? ${_provider.initDone}');
-
     if (!_provider.initDone) {
       if (_provider.selectedAppointment != null) {
         setState(() {
@@ -68,7 +66,6 @@ class AppointmentDetailsConsultantState
   }
 
   _loadData() async {
-    print('load data ?');
     try {
       await _provider
           .getAppointmentDetails(_provider.selectedAppointment)
@@ -79,8 +76,6 @@ class AppointmentDetailsConsultantState
             .then((_) async {
           int lastWorkEstimate =
               _provider.selectedAppointmentDetail.lastWorkEstimate();
-
-          print('last work estimate $lastWorkEstimate');
 
           if (lastWorkEstimate != 0) {
             await _provider.getWorkEstimateDetails(lastWorkEstimate).then((_) {

@@ -40,6 +40,7 @@ import 'generated/l10n.dart';
 import 'layout/navigation.app.dart';
 import 'modules/appointments/providers/appointment.provider.dart';
 import 'modules/appointments/providers/appointments.provider.dart';
+import 'modules/appointments/providers/camera.provider.dart';
 import 'modules/appointments/providers/provider-service.provider.dart';
 import 'modules/appointments/screens/appointment-details.dart';
 import 'modules/appointments/screens/appointments.dart';
@@ -130,6 +131,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: PartsProvider()),
           ChangeNotifierProvider.value(value: PartCreateProvider()),
           ChangeNotifierProvider.value(value: OrdersProvider()),
+          ChangeNotifierProvider.value(value: CameraProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(

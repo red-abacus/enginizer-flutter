@@ -20,7 +20,6 @@ class AppointmentsProvider with ChangeNotifier {
   bool initDone = false;
 
   void resetParams() {
-    print('reset params !');
     appointments = [];
     appointmentsRequest = null;
     appointmentsRequest = AppointmentsRequest();
