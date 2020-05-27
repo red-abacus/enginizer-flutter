@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/image-selection.widget.dart';
@@ -9,14 +7,13 @@ import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/widgets/create/part-create-car-details.widget.dart';
 import 'package:app/modules/parts/widgets/create/part-create-info.widget.dart';
+import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/locale.manager.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class PartCreateModal extends StatefulWidget {
@@ -141,41 +138,24 @@ class _PartCreateModalState extends State<PartCreateModal> {
       });
 
   Future _addImage(int index) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      cropImage(index, image, context);
-    }
-  }
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+              setState(() {
+                if (file != null) {
+                  if (index < _provider.request.files.length) {
+                    _provider.request.files[index] = file;
 
-  cropImage(int index, image, BuildContext context) async {
-    File croppedFile = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop image',
-            toolbarColor: Theme.of(context).primaryColor,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        ));
-
-    setState(() {
-      if (index < _provider.request.files.length) {
-        _provider.request.files[index] = croppedFile;
-
-        if (_provider.request.files.length < _provider.maxFiles) {
-          _provider.request.files.add(null);
-        }
-      }
-    });
+                    if (_provider.request.files.length < _provider.maxFiles) {
+                      _provider.request.files.add(null);
+                    }
+                  }
+                }
+              });
+            }));
   }
 
   List<Step> _buildSteps(BuildContext context) {

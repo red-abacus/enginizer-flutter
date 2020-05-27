@@ -9,6 +9,7 @@ import 'package:app/modules/consultant-user-details/widgets/user-details-graph-c
 import 'package:app/modules/consultant-user-details/widgets/user-details-index-consultant.widget.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
+import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -489,75 +490,12 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         context: context,
-        builder: (context) => Container(
-              padding: EdgeInsets.only(top: 50, bottom: 50),
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("Open Camera"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      getImage(ImageSource.camera);
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
-                  ),
-                  RaisedButton(
-                    child: Text("Open Gallery"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      getImage(ImageSource.gallery);
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
-                  ),
-                ],
-              ),
-            ));
-  }
-
-  Future getImage(ImageSource imageSource) async {
-    var image = await ImagePicker.pickImage(source: imageSource);
-    if (image != null) {
-      setState(() {
-        // TODO - handle this image
-//        uploadImage = image;
-      });
-      cropImage(image);
-    }
-  }
-
-  cropImage(image) async {
-    File croppedFile = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop image',
-            toolbarColor: Theme.of(context).primaryColor,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        ));
-    // TODO - upload image
-//    if(croppedFile!=null)
-//      carProvider.uploadImage(croppedFile);
-//    else
-//      carProvider.uploadImage(image);
+        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+              if (file != null) {
+//                carProvider.uploadImage(croppedFile);
+              } else {
+//                carProvider.uploadImage(image);
+              }
+            }));
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
@@ -10,14 +9,13 @@ import 'package:app/modules/appointments/providers/appointment-consultant.provid
 import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-employees.widget.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-information.widget.dart';
+import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'image-selection.widget.dart';
@@ -148,41 +146,25 @@ class _PickUpCarFormConsultantWidgetState
       });
 
   Future _addImage(int index) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      cropImage(index, image, context);
-    }
-  }
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+          if (file != null) {
+            setState(() {
+              if (index < _provider.receiveFormRequest.files.length) {
+                _provider.receiveFormRequest.files[index] = file;
 
-  cropImage(int index, image, BuildContext context) async {
-    File croppedFile = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop image',
-            toolbarColor: Theme.of(context).primaryColor,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        ));
-
-    setState(() {
-      if (index < _provider.receiveFormRequest.files.length) {
-        _provider.receiveFormRequest.files[index] = croppedFile;
-
-        if (_provider.receiveFormRequest.files.length < _provider.maxFiles) {
-          _provider.receiveFormRequest.files.add(null);
-        }
-      }
-    });
+                if (_provider.receiveFormRequest.files.length <
+                    _provider.maxFiles) {
+                  _provider.receiveFormRequest.files.add(null);
+                }
+              }
+            });
+          }
+        }));
   }
 
   List<Step> _buildSteps(BuildContext context) {
@@ -278,8 +260,7 @@ class _PickUpCarFormConsultantWidgetState
               widget.refreshState();
               Provider.of<AppointmentConsultantProvider>(context).initDone =
                   false;
-              Provider.of<AppointmentsProvider>(context).initDone =
-                  false;
+              Provider.of<AppointmentsProvider>(context).initDone = false;
 
               Navigator.pop(context);
             });
@@ -287,8 +268,7 @@ class _PickUpCarFormConsultantWidgetState
             widget.refreshState();
             Provider.of<AppointmentConsultantProvider>(context).initDone =
                 false;
-            Provider.of<AppointmentsProvider>(context).initDone =
-                false;
+            Provider.of<AppointmentsProvider>(context).initDone = false;
 
             Navigator.pop(context);
           }

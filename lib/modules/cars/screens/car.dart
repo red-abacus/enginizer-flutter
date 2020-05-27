@@ -4,14 +4,13 @@ import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
 import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
+import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:image_cropper/image_cropper.dart';
 
 class CarDetails extends StatefulWidget {
   final String route = '/car';
@@ -124,15 +123,15 @@ class CarDetailsState extends State<CarDetails>
   showPicture(car) {
     return (uploadImage == null)
         ? Image.network(
-            '${car.image}',
-            fit: BoxFit.contain,
-            height: MediaQuery.of(context).size.height * 0.3,
-          )
+      '${car.image}',
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height * 0.3,
+    )
         : Image.file(
-            uploadImage,
-            fit: BoxFit.contain,
-            height: MediaQuery.of(context).size.height * 0.3,
-          );
+      uploadImage,
+      fit: BoxFit.contain,
+      height: MediaQuery.of(context).size.height * 0.3,
+    );
   }
 
   _buildContent() {
@@ -159,39 +158,11 @@ class CarDetailsState extends State<CarDetails>
           borderRadius: BorderRadius.circular(10.0),
         ),
         context: context,
-        builder: (context) => Container(
-              padding: EdgeInsets.only(top: 50, bottom: 50),
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("Open Camera"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      getImage(ImageSource.camera);
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
-                  ),
-                  RaisedButton(
-                    child: Text("Open Gallery"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      getImage(ImageSource.gallery);
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
-                  ),
-                ],
-              ),
-            ));
+        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+          if (file != null) {
+            _provider.uploadImage(file);
+          }
+        }));
   }
 
   _openModalAddFuelConsumption() {
@@ -200,45 +171,10 @@ class CarDetailsState extends State<CarDetails>
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CarFuelConsumptionForm(
-                createFuelConsumption: _createCarConsumption);
-          });
+                return CarFuelConsumptionForm(
+                    createFuelConsumption: _createCarConsumption);
+              });
         });
-  }
-
-  Future getImage(ImageSource imageSource) async {
-    var image = await ImagePicker.pickImage(source: imageSource);
-    if (image != null) {
-      setState(() {
-        uploadImage = image;
-      });
-      cropImage(image);
-    }
-  }
-
-  cropImage(image) async {
-    File croppedFile = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop image',
-            toolbarColor: Theme.of(context).primaryColor,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        ));
-    if (croppedFile != null)
-      _provider.uploadImage(croppedFile);
-    else
-      _provider.uploadImage(image);
   }
 
   _uploadCarImageListener(car) {
@@ -248,10 +184,10 @@ class CarDetailsState extends State<CarDetails>
             padding: EdgeInsets.all(10),
             child: Center(
                 child: Container(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(),
-            )));
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(),
+                )));
         break;
       case Status.ERROR:
 //        return Text(carProvider.getCarFuelConsumptionAPI.toString());

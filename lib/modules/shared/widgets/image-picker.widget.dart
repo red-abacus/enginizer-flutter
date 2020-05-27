@@ -45,7 +45,7 @@ class ImagePickerWidget extends StatelessWidget {
   }
 
   _getImage(BuildContext context, ImageSource imageSource) async {
-    var image = await ImagePicker.pickImage(source: imageSource);
+    var image = await ImagePicker.pickImage(source: imageSource, maxWidth: 1024, maxHeight: 1024);
 
     if (image != null) {
       cropImage(context, image);
