@@ -1,4 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-status.model.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/widgets/cards/order-part.card.dart';
 import 'package:app/modules/orders/widgets/order-parts-final-info.widget.dart';
@@ -47,14 +49,20 @@ class _OrderDeliveryPartsState extends State<OrderDeliveryParts> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  '${S.of(context).parts_suggested_delivery_date}:',
+                  _provider.appointmentDetail.status.getState() ==
+                          AppointmentStatusState.ACCEPTED
+                      ? '${S.of(context).appointment_delivery_time}:'
+                      : '${S.of(context).parts_suggested_delivery_date}:',
                   style: TextHelper.customTextStyle(null, gray3, null, 14),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 6),
                   child: Text(
-                    DateUtils.stringFromDate(_provider.appointmentDetail.deliveryDateTime, 'dd-MM-yyyy HH:mm'),
-                    style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+                    DateUtils.stringFromDate(
+                        _provider.appointmentDetail.deliveryDateTime,
+                        'dd-MM-yyyy HH:mm'),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 14),
                   ),
                 ),
               ],
@@ -90,17 +98,20 @@ class _OrderDeliveryPartsState extends State<OrderDeliveryParts> {
       backgroundColor: Colors.white,
     ));
 
-    buttons.add(FloatingActionButton.extended(
-      heroTag: null,
-      onPressed: () {
-        _showFinalInfo();
-      },
-      label: Text(
+    if (_provider.appointmentDetail.status.getState() ==
+        AppointmentStatusState.NEW) {
+      buttons.add(FloatingActionButton.extended(
+        heroTag: null,
+        onPressed: () {
+          _showFinalInfo();
+        },
+        label: Text(
           S.of(context).parts_delivery_button_title.toUpperCase(),
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
-      ),
-      backgroundColor: Colors.white,
-    ));
+          style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        ),
+        backgroundColor: Colors.white,
+      ));
+    }
 
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20),
@@ -115,8 +126,7 @@ class _OrderDeliveryPartsState extends State<OrderDeliveryParts> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return OrderPartsFinalInfo(
-          infoAdded: widget.acceptOrder);
+        return OrderPartsFinalInfo(infoAdded: widget.acceptOrder);
       },
     );
   }

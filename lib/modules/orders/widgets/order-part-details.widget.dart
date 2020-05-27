@@ -40,6 +40,8 @@ class OrderPartDetails extends StatelessWidget {
                 issueItem?.price.toString()),
             _infoWidget(S.of(context).import_item_price_w_vta_title,
                 '${issueItem?.price + issueItem?.priceVAT}'),
+            _infoWidget(S.of(context).import_item_quantity_title,
+                '${issueItem?.quantity}'),
             _buttonsWidget(context),
           ],
         ),
