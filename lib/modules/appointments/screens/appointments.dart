@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
@@ -7,7 +6,7 @@ import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
@@ -117,8 +116,8 @@ class AppointmentsState extends State<Appointments> {
         break;
       case Roles.ProviderPersonnel:
         Provider.of<AppointmentMechanicProvider>(context).initialise();
-        Provider.of<AppointmentMechanicProvider>(context)
-            .selectedAppointment = selectedAppointment;
+        Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
+            selectedAppointment;
         Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
         break;
       default:
@@ -158,28 +157,8 @@ class AppointmentsState extends State<Appointments> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return AppointmentCreateModal(
-              _createAppointment,
-              true,
-            );
+            return AppointmentCreateModal();
           });
         });
-  }
-
-  _createAppointment(AppointmentRequest appointmentRequest) async {
-    try {
-      await Provider.of<AppointmentsProvider>(context)
-          .createAppointment(appointmentRequest)
-          .then((_) {
-        Navigator.pop(context);
-      });
-    } catch (error) {
-      if (error
-          .toString()
-          .contains(AppointmentsService.CREATE_APPOINTMENT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_create_appointment, context);
-      }
-    }
   }
 }

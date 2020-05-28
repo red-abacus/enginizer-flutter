@@ -13,8 +13,7 @@ import 'package:provider/provider.dart';
 class AppointmentDateTimeForm extends StatefulWidget {
   List<ServiceProviderSchedule> providerSchedules;
 
-  AppointmentDateTimeForm({Key key, this.providerSchedules})
-      : super(key: key);
+  AppointmentDateTimeForm({this.providerSchedules});
 
   @override
   AppointmentDateTimeFormState createState() => AppointmentDateTimeFormState();
@@ -28,22 +27,30 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: MediaQuery.of(context).size.height * .5,
-        child: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : _getContent());
+    return _isLoading
+        ? Container(
+            margin: EdgeInsets.only(top: 40),
+            child: Center(child: CircularProgressIndicator()),
+          )
+        : _getContent();
   }
 
   _getContent() {
-    return SchedulerWidget(
-        // TODO - for now, this feature will be on next versions of app.
-        //        calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), widget.appointments),
-        calendarEntries: CalendarEntry.getDateEntries(
-            DateTime.now(), [], _providerServiceProvider.selectedProvider),
-        dateEntrySelected: _dateEntrySelected,
-        dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry,
-        disableSelect: false);
+    return Container(
+      margin: EdgeInsets.only(bottom: 60),
+      child: Column(
+        children: [
+          SchedulerWidget(
+            calendarEntries: CalendarEntry.getDateEntries(
+                DateTime.now(), [], _providerServiceProvider.selectedProvider),
+            dateEntrySelected: _dateEntrySelected,
+            dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry,
+            disableSelect: false,
+            shouldScroll: false,
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -53,10 +60,6 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
 
       if (_providerServiceProvider.selectedProvider != null) {
         _loadData();
-      } else {
-        setState(() {
-          _isLoading = true;
-        });
       }
 
       _initDone = true;
@@ -86,10 +89,8 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
       if (error
           .toString()
           .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_provider_timetable,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_timetable, context);
       }
 
       setState(() {
@@ -100,11 +101,7 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
 
   _dateEntrySelected(DateEntry dateEntry) {
     setState(() {
-      Provider.of<ProviderServiceProvider>(context).dateEntry = dateEntry;
+      _providerServiceProvider.dateEntry = dateEntry;
     });
-  }
-
-  bool valid() {
-    return true;
   }
 }

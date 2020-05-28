@@ -92,7 +92,7 @@ class ProviderService {
   }
 
   Future<ServiceProviderResponse> getProviders(
-      {int page, List<String> serviceNames}) async {
+      {int page, List<String> serviceNames, int pageSize}) async {
     Map<String, dynamic> queryParameters = {};
 
     if (serviceNames != null) {
@@ -101,6 +101,10 @@ class ProviderService {
 
     if (page != null) {
       queryParameters['page'] = '$page';
+    }
+
+    if (pageSize != null) {
+      queryParameters['pageSize'] = '$pageSize';
     }
 
     try {

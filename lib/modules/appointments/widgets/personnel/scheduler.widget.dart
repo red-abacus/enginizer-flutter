@@ -10,9 +10,15 @@ class SchedulerWidget extends StatefulWidget {
   DateEntry dateEntry;
 
   Function dateEntrySelected;
-  bool disableSelect = false;
+  bool disableSelect = true;
+  final bool shouldScroll;
 
-  SchedulerWidget({this.calendarEntries = const [], this.dateEntrySelected, this.dateEntry, this.disableSelect});
+  SchedulerWidget(
+      {this.calendarEntries = const [],
+      this.dateEntrySelected,
+      this.dateEntry,
+      this.disableSelect,
+      this.shouldScroll});
 
   @override
   SchedulerWidgetState createState() {
@@ -21,6 +27,25 @@ class SchedulerWidget extends StatefulWidget {
 }
 
 class SchedulerWidgetState extends State<SchedulerWidget> {
+  @override
+  Widget build(BuildContext context) {
+    bool shrinkWrap = !widget.shouldScroll;
+    ScrollPhysics physics = widget.shouldScroll ? ClampingScrollPhysics() : NeverScrollableScrollPhysics();
+
+    return Container(
+      color: Colors.white,
+      child: ListView.builder(
+        physics: physics,
+        shrinkWrap: shrinkWrap,
+        itemBuilder: (context, index) {
+          return _buildSchedule(context);
+        },
+        scrollDirection: Axis.vertical,
+        itemCount: 1,
+      ),
+    );
+  }
+
   Widget _buildDay(BuildContext context, CalendarEntry calendarEntry) {
     List<Widget> hours = new List();
 
@@ -85,9 +110,12 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
           child: new FlatButton(
             color: boxBackground,
             onPressed: () => onClicked(dateEntry),
-            child: new Text(DateUtils.stringFromDate(dateEntry.dateTime, "HH:mm"),
+            child: new Text(
+                DateUtils.stringFromDate(dateEntry.dateTime, "HH:mm"),
                 style: TextStyle(
-                    fontWeight: FontWeight.w800, fontSize: 10, color: textColor),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 10,
+                    color: textColor),
                 textAlign: TextAlign.center),
           ),
           margin: EdgeInsets.all(4),
@@ -138,20 +166,6 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
           ),
         ],
         mainAxisAlignment: MainAxisAlignment.start,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return _buildSchedule(context);
-        },
-        scrollDirection: Axis.vertical,
-        itemCount: 1,
       ),
     );
   }

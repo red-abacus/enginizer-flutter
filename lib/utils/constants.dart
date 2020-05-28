@@ -2,8 +2,10 @@ library Constants;
 
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:io' show Platform;
 
 const String SUCCESS_MESSAGE = " You will be contacted by us very soon.";
 const Color light_green = Color.fromARGB(255, 232, 240, 238);
@@ -43,4 +45,18 @@ const Color switch_dark_gray = Color.fromRGBO(70, 70, 72, 1);
 class Constants {
   static DateFormat time = new DateFormat("hh:mm");
   static DateFormat date = new DateFormat("dd/MM/yyyy");
+}
+
+const String _kGoogleKeyiOS = 'AIzaSyD9M1eI1kL7GP62FoM8XAA4cKAS9kstTwE';
+const String _kGoogleKeyAndroid = 'AIzaSyCsA-lBjHv66qgd2TFvcV805w1Sq9LJNWg';
+
+String kGoogleApiKey() {
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS:
+      return _kGoogleKeyiOS;
+    case TargetPlatform.android:
+      return _kGoogleKeyAndroid;
+    default:
+      return _kGoogleKeyAndroid;
+  }
 }

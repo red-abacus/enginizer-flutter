@@ -8,11 +8,10 @@ import '../custom-text-form-field.dart';
 class IssuesListWidget extends StatefulWidget {
   List<Issue> issues;
   Function removeIssue;
-  Function addIssue;
   Function issueChanged;
 
   IssuesListWidget(
-      {this.issues, this.removeIssue, this.addIssue, this.issueChanged});
+      {this.issues, this.removeIssue, this.issueChanged});
 
   @override
   _IssuesListWidgetState createState() => _IssuesListWidgetState();
@@ -21,33 +20,26 @@ class IssuesListWidget extends StatefulWidget {
 class _IssuesListWidgetState extends State<IssuesListWidget> {
   @override
   Widget build(BuildContext context) {
-    var listbox = buildIssuesListBox(context, widget.issues);
-    return Expanded(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child:
-                widget.issues != null ? listbox : CircularProgressIndicator(),
-          ),
-          FloatingActionButton(
-              heroTag: null,
-              onPressed: widget.addIssue, child: Icon(Icons.add))
-        ],
-      ),
-    );
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: widget.issues.length,
+        itemBuilder: (context, index) {
+          return _buildListTile(context, index, widget.issues);
+        });
   }
 
-  Widget buildIssuesListBox(
-      BuildContext context, List<Issue> issues) {
+  Widget buildIssuesListBox(BuildContext context, List<Issue> issues) {
     return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         itemCount: issues.length,
         itemBuilder: (context, index) {
           return _buildListTile(context, index, issues);
         });
   }
 
-  ListTile _buildListTile(
-      BuildContext context, int index, List<Issue> issues) {
+  ListTile _buildListTile(BuildContext context, int index, List<Issue> issues) {
     if (issues.length > 1) {
       return ListTile(
         title: _tileTextFormField(issues[index]),

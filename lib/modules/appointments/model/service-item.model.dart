@@ -40,8 +40,18 @@ class ServiceItem {
         return S.of(context).ITP_SERVICE;
       case 'TENANCY_SERVICE':
         return S.of(context).TENANCY_SERVICE;
+      case 'RENT_SERVICE':
+        return S.of(context).RENT_SERVICE;
       default:
         return name;
     }
+  }
+
+  bool isPickUpAndReturnService() {
+    return name == 'PICKUP_RETURN';
+  }
+
+  bool isTowService() {
+    return name == 'TOW_SERVICE';
   }
 }

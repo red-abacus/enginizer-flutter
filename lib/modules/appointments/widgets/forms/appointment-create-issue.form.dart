@@ -27,24 +27,26 @@ class AppointmentCreateIssueFormState
 
     return Form(
       key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                AlertInfoWidget(S.of(context).appointment_create_step2_alert),
-                IssuesListWidget(
-                  issues: issues,
-                  addIssue: _addIssue,
-                  removeIssue: _removeAt,
-                )
-              ],
+      child: Container(
+        padding: EdgeInsets.only(bottom: 60),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            AlertInfoWidget(S.of(context).appointment_create_step2_alert),
+            IssuesListWidget(
+              issues: issues,
+              removeIssue: _removeAt,
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: FloatingActionButton(
+                heroTag: null,
+                onPressed: _addIssue,
+                child: Icon(Icons.add),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

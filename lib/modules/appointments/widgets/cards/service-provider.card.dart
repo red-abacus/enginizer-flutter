@@ -42,7 +42,7 @@ class ServiceProviderCard extends StatelessWidget {
                     height: 100,
                     image: serviceProvider.image,
                     placeholder: ServiceProvider.defaultImage(),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   ),
                   Expanded(
                     child: Container(

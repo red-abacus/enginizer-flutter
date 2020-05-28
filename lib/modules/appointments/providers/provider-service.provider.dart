@@ -1,10 +1,12 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-position.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timeserie.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -14,11 +16,13 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ProviderServiceProvider with ChangeNotifier {
   JwtUser authUser;
 
+  AppointmentPosition appointmentPosition;
   List<ServiceItem> serviceItems = [];
   List<ServiceProvider> serviceProviders = [];
   List<ServiceProviderItem> serviceProviderItems = [];
@@ -36,16 +40,27 @@ class ProviderServiceProvider with ChangeNotifier {
   ServiceProvider selectedProvider;
   DateEntry dateEntry;
 
-  String pickupAddress = "";
+  Map<int, dynamic> stepStateData;
+
+  int _currentPage = 0;
+  final int _pageSize = 20;
+  ServiceProviderResponse _serviceProviderResponse;
 
   void initFormValues() {
+    appointmentPosition = AppointmentPosition();
     selectedCar = null;
     selectedServiceItems = [];
     issuesFormState = [Issue(id: null, name: '')];
     appointmentProviderType = AppointmentProviderType.Specific;
     selectedProvider = null;
     dateEntry = null;
-    pickupAddress = "";
+    stepStateData = null;
+  }
+
+  resetServiceProviderParams() {
+    serviceProviders = [];
+    _currentPage = 0;
+    _serviceProviderResponse = null;
   }
 
   Future<List<ServiceItem>> loadServices() async {
@@ -60,9 +75,25 @@ class ProviderServiceProvider with ChangeNotifier {
   }
 
   Future<List<ServiceProvider>> loadProviders() async {
+    if (_serviceProviderResponse != null) {
+      if (_currentPage >= _serviceProviderResponse.totalPages) {
+        return null;
+      }
+    }
+
+    List<String> serviceNames = [];
+
+    selectedServiceItems.forEach((element) {
+      if (!element.isPickUpAndReturnService() && !element.isTowService()) {
+        serviceNames.add(element.name);
+      }
+    });
+
     try {
-      var response = await providerService.getProviders();
-      serviceProviders = response.items;
+      _serviceProviderResponse = await providerService.getProviders(
+          pageSize: _pageSize, page: _currentPage, serviceNames: serviceNames);
+      serviceProviders.addAll(_serviceProviderResponse.items);
+      _currentPage += 1;
       notifyListeners();
       return serviceProviders;
     } catch (error) {
@@ -92,7 +123,7 @@ class ProviderServiceProvider with ChangeNotifier {
       notifyListeners();
       return response;
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 
@@ -114,47 +145,51 @@ class ProviderServiceProvider with ChangeNotifier {
       appointmentRequest.serviceIds.add(item.id);
     }
 
-    appointmentRequest.address = "";
-    bool pickupSet = false;
-
-    if (pickUpServiceValidation()) {
-      appointmentRequest.address = pickupAddress;
-      pickupSet = true;
-    }
-
     if (selectedProvider != null) {
       appointmentRequest.providerId = selectedProvider.id;
-
-      if (!pickupSet) {
-        appointmentRequest.address = selectedProvider.address;
-      }
+      appointmentRequest.address = selectedProvider.address;
     }
 
     appointmentRequest.scheduledTime = dateEntry.dateForAppointment();
     return appointmentRequest;
   }
 
-  bool containsPickUpService() {
-    for (ServiceItem serviceItem in this.selectedServiceItems) {
-      if (serviceItem.name == "PICKUP_RETURN") {
-        return true;
-      }
-    }
-
-    return false;
+  bool pickUpServiceValidation() {
+    ServiceItem serviceItem = this.selectedServiceItems.firstWhere(
+        (element) => element.isPickUpAndReturnService(),
+        orElse: () => null);
+    return !(serviceItem != null && this.selectedServiceItems.length == 1);
   }
 
-  bool pickUpServiceValidation() {
-    for (ServiceItem serviceItem in this.selectedServiceItems) {
-      if (serviceItem.name == "PICKUP_RETURN") {
-        if (this.pickupAddress.isNotEmpty) {
-          return true;
-        } else {
-          return false;
-        }
-      }
+  generateStateData(bool showCarSelection) {
+    if (!showCarSelection) {
+      stepStateData = {
+        0: {"state": StepState.indexed, "active": true, "title": Text("")},
+        1: {"state": StepState.disabled, "active": false, "title": Text("")},
+        2: {"state": StepState.disabled, "active": false, "title": Text("")},
+        3: {"state": StepState.disabled, "active": false, "title": Text("")},
+        4: {"state": StepState.disabled, "active": false, "title": Text("")},
+      };
+    } else {
+      stepStateData = {
+        0: {"state": StepState.indexed, "active": true, "title": Text("")},
+        1: {"state": StepState.disabled, "active": false, "title": Text("")},
+        2: {"state": StepState.disabled, "active": false, "title": Text("")},
+        3: {"state": StepState.disabled, "active": false, "title": Text("")},
+        4: {"state": StepState.disabled, "active": false, "title": Text("")},
+        5: {"state": StepState.disabled, "active": false, "title": Text("")},
+      };
     }
+  }
 
-    return true;
+  bool needSetupLocation() {
+    if (selectedServiceItems.length == 0) {
+      return false;
+    }
+    return this.selectedServiceItems.firstWhere(
+            (element) =>
+                element.isTowService() || element.isPickUpAndReturnService(),
+            orElse: () => null) !=
+        null;
   }
 }

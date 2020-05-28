@@ -1,8 +1,6 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
-import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
-import 'package:app/modules/appointments/widgets/appointment-create-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/recommendations/car-intervention.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
@@ -10,7 +8,6 @@ import 'package:app/modules/cars/widgets/cards/car-history.card.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +90,6 @@ class _CarRecommendationsWidgetState extends State<CarRecommendationsWidget> {
     } else {
       Provider.of<ProviderServiceProvider>(context).initFormValues();
       Provider.of<ProviderServiceProvider>(context).selectedCar = carProvider.selectedCar;
-      Provider.of<ProviderServiceProvider>(context).issuesFormState = [];
 
       carProvider.selectedInterventions.forEach((intervention) {
         Provider.of<ProviderServiceProvider>(context)
@@ -110,23 +106,9 @@ class _CarRecommendationsWidgetState extends State<CarRecommendationsWidget> {
           builder: (BuildContext context) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter state) {
-              return AppointmentCreateModal(
-                  _createAppointment, false, carProvider.selectedCar);
+              return AppointmentCreateModal();
             });
           });
-    }
-  }
-
-  _createAppointment(AppointmentRequest appointmentRequest) async {
-    try {
-      await Provider.of<AppointmentsProvider>(context)
-          .createAppointment(appointmentRequest)
-          .then((_) {
-        Navigator.pop(context);
-      });
-    } catch (error) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_create_appointment, context);
     }
   }
 }
