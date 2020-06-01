@@ -5,6 +5,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-manager.dart
 
 class PermissionsAuction {
   static final String AUCTION_DETAILS = 'AUCTION.AUCTION_DETAILS';
+  static final String AUCTION_MAP_DETAILS = 'AUCTION.AUCTION_MAP_DETAILS';
   static final String CONSULTANT_AUCTION_DETAILS = 'AUCTION.CONSULTANT_AUCTION_DETAILS';
   static final String APPOINTMENT_DETAILS = 'AUCTION.APPOINTMENT_DETAILS';
   static final String CAR_DETAILS = 'AUCTION.CAR_DETAILS';
@@ -37,6 +38,7 @@ class PermissionsAuction {
             if (serviceType != null) {
               switch (serviceType) {
                 case ConsultantServiceType.PickUpAndReturn:
+                  permissions.add(AUCTION_MAP_DETAILS);
                   break;
                 case ConsultantServiceType.Service:
                   permissions.add(APPOINTMENT_DETAILS);

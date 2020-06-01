@@ -1,11 +1,10 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/providers/appointment.provider.dart';
-import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
+import 'package:app/modules/auctions/screens/auction-consultant-map.dart';
 import 'package:app/modules/auctions/screens/auction-consultant.dart';
 import 'package:app/modules/auctions/screens/auction.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
@@ -40,6 +39,13 @@ class AuctionsState extends State<Auctions> {
 
   @override
   Widget build(BuildContext context) {
+    AuctionProvider provider =
+    Provider.of<AuctionProvider>(context, listen: false);
+    provider.initialiseParameters();
+    provider.selectedAuction = null;
+
+    Navigator.of(context).pushNamed(AuctionConsultantMap.route);
+
     return Consumer<AuctionsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
@@ -105,6 +111,14 @@ class AuctionsState extends State<Auctions> {
 
   _selectAuction(Auction auction) {
     if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
+      AuctionProvider provider =
+      Provider.of<AuctionProvider>(context, listen: false);
+      provider.initialiseParameters();
+      provider.selectedAuction = auction;
+
+      Navigator.of(context).pushNamed(AuctionConsultantMap.route);
+    } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
       AuctionProvider provider =
           Provider.of<AuctionProvider>(context, listen: false);
