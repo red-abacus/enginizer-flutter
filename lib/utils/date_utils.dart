@@ -25,6 +25,10 @@ class DateUtils {
     return date.add(new Duration(minutes: minutes));
   }
 
+  static DateTime addSecondsToDate(DateTime date, int seconds) {
+    return date.add(new Duration(seconds: seconds));
+  }
+
   static String getWeekDayName(DateTime date) {
     String formattedDate = DateFormat('EEE').format(date);
     return formattedDate;

@@ -38,17 +38,19 @@ class _ServiceDetailsModalState extends State<ServiceDetailsModal> {
   }
 
   _buildContent(BuildContext context, bool isLoading) {
-    return isLoading == true
-        ? SizedBox(
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: Container(
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          )
-        : ServiceDetailsWidget();
+    if (isLoading) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Container(
+          padding: EdgeInsets.only(top: 10, bottom: 10),
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
+
+    return ServiceDetailsWidget();
   }
 
   @override

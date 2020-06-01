@@ -17,9 +17,13 @@ class ServiceDetailsWidget extends StatefulWidget {
 class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
   TabBarState currentState = TabBarState.SERVICES;
 
+  ServiceProviderDetailsProvider _provider;
+
   @override
   Widget build(BuildContext context) {
-    ServiceProviderDetailsProvider provider = Provider.of<ServiceProviderDetailsProvider>(context);
+    _provider =
+        Provider.of<ServiceProviderDetailsProvider>(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -28,7 +32,7 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
         Container(
           alignment: Alignment.center,
           child: FadeInImage.assetNetwork(
-            image: provider.serviceProvider.image,
+            image: _provider.serviceProvider?.image ?? '',
             placeholder: ServiceProvider.defaultImage(),
             fit: BoxFit.fill,
           ),
@@ -36,12 +40,12 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
         Container(
           margin: EdgeInsets.only(left: 20, right: 20, top: 10),
           child: Text(
-            provider.serviceProvider.name,
+            _provider.serviceProvider?.name ?? '',
             style: TextStyle(
                 fontFamily: "Lato", fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
-        _buildTabBar(),
+        if (_provider.serviceProvider != null) _buildTabBar(),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.4,
           child: Container(
@@ -54,6 +58,10 @@ class ServiceDetailsWidgetState extends State<ServiceDetailsWidget> {
   }
 
   Widget _getContainer() {
+    if (_provider.serviceProvider == null) {
+      return Container();
+    }
+
     switch (currentState) {
       case TabBarState.SERVICES:
         return ServiceProviderItemWidget();

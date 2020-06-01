@@ -5,13 +5,17 @@ import 'package:app/modules/appointments/screens/appointment-details.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
+import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/models/response/bid-response.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AuctionConsultantProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
@@ -21,6 +25,8 @@ class AuctionConsultantProvider with ChangeNotifier {
   Auction selectedAuction;
   AuctionDetail auctionDetails;
   AppointmentDetail appointmentDetails;
+
+  AuctionMapDirections auctionMapDirections = AuctionMapDirections();
 
   bool initDone = false;
 
@@ -36,7 +42,8 @@ class AuctionConsultantProvider with ChangeNotifier {
 
   Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
     try {
-      appointmentDetails = await this.appointmentsService.getAppointmentDetails(appointmentId);
+      appointmentDetails =
+          await this.appointmentsService.getAppointmentDetails(appointmentId);
       notifyListeners();
       return appointmentDetails;
     } catch (error) {
@@ -60,6 +67,21 @@ class AuctionConsultantProvider with ChangeNotifier {
       return workEstimateDetails;
     } catch (error) {
       throw (error);
+    }
+  }
+
+  Future<void> loadAuctionMapData(BuildContext context) async {
+    auctionMapDirections = AuctionMapDirections();
+    // TODO
+//    auctionMapDirections.appointmentDate = DateUtils.dateFromString(auctionDetails.scheduledDateTime, 'dd/MM/yyyy HH:mm:ss');
+    auctionMapDirections.appointmentDate = DateTime.now();
+
+    try {
+      await auctionMapDirections.setPolyLines(context);
+      await auctionMapDirections.fetchDistanceAndDurations(_auctionsService);
+    }
+    catch (error) {
+      throw(error);
     }
   }
 }

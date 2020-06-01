@@ -39,17 +39,20 @@ class AuctionsState extends State<Auctions> {
 
   @override
   Widget build(BuildContext context) {
-    AuctionProvider provider =
-    Provider.of<AuctionProvider>(context, listen: false);
-    provider.initialiseParameters();
-    provider.selectedAuction = null;
-
-    Navigator.of(context).pushNamed(AuctionConsultantMap.route);
-
     return Consumer<AuctionsProvider>(
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
           child: _renderAuctions(_isLoading),
+        ),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+          AuctionProvider provider =
+          Provider.of<AuctionProvider>(context, listen: false);
+          provider.initialiseParameters();
+          provider.selectedAuction = null;
+
+          Navigator.of(context).pushNamed(AuctionConsultantMap.route);
+        },
+
         ),
       ),
     );

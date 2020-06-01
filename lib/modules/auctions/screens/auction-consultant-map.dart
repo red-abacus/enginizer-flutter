@@ -1,6 +1,9 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
+import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
@@ -8,6 +11,8 @@ import 'package:app/modules/auctions/providers/auction-consultant.provider.dart'
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +43,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: 2, initialIndex: 0);
+    _tabController.addListener(_setActiveTabIndex);
   }
 
   @override
@@ -61,29 +67,70 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
                 ],
               ),
             ),
+            floatingActionButton: _floatActionButtonContainer(),
             body: _isLoading
                 ? Center(child: CircularProgressIndicator())
                 : _contentWidget()));
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     _provider = Provider.of<AuctionConsultantProvider>(context);
     _initDone = _initDone == false ? false : _provider.initDone;
 
-    if (!_initDone) {}
+    if (!_initDone) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _provider.loadAuctionMapData(context).then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(AuctionsService.GET_POINTS_DISTANCE_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_points_distance, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+
+    _initDone = true;
+    _provider.initDone = true;
 
     super.didChangeDependencies();
   }
 
-  _loadData() async {
+  _setActiveTabIndex() {
     setState(() {
-      _isLoading = true;
     });
+  }
 
-    setState(() {
-      _isLoading = false;
-    });
+  _floatActionButtonContainer() {
+    return _tabController.index == 0
+        ? Container(
+            child: FloatingActionButton.extended(
+              heroTag: null,
+              onPressed: () {
+//          widget.createEstimate();
+              },
+              label: Text(
+                S.of(context).auction_create_estimate.toUpperCase(),
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              ),
+              backgroundColor: Colors.white,
+            ),
+          )
+        : Container();
   }
 
   _titleText() {
@@ -95,16 +142,14 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   }
 
   _contentWidget() {
-    List<Widget> list = [
-      AuctionConsultantMapDetailsWidget(
-        auctionDetails: _provider.auctionDetails,
-      ),
-      AuctionConsultantMapWidget()
-    ];
-
     return TabBarView(
+      physics: NeverScrollableScrollPhysics(),
       controller: _tabController,
-      children: list,
+      children: [
+        AuctionConsultantMapDetailsWidget(
+            showProviderDetails: _showProviderDetails),
+        AuctionConsultantMapWidget()
+      ],
     );
   }
 
@@ -127,30 +172,17 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
     }
   }
 
+  _showProviderDetails() {
+    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = 7;
 
-  _seeEstimate() {
-    Provider.of<WorkEstimateProvider>(context)
-        .refreshValues(EstimatorMode.ReadOnly);
-
-    Bid providerBid;
-    for (Bid bid in _provider.auctionDetails.bids) {
-      if (bid.serviceProvider.id ==
-          Provider.of<Auth>(context).authUser.providerId) {
-        providerBid = bid;
-        break;
-      }
-    }
-    if (providerBid != null) {
-      Provider.of<WorkEstimateProvider>(context).workEstimateId =
-          providerBid.workEstimateId;
-      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          providerBid.serviceProvider.id;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
-    );
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (_) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return ServiceDetailsModal();
+          });
+        });
   }
 }

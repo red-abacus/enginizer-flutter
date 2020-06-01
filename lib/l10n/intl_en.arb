@@ -206,6 +206,9 @@
   "auction_create_bid": "Create Bid",
   "auction_create_bid_validation_error": "Please make sure you add an estimation for every issue. Also, make sure the proposed date is selected.",
   "auction_route_title": "Route",
+  "auction_route_destination": "Delivery",
+  "auction_route_start_point": "Taking Over",
+  "auction_route_total_distance": "Total number of km",
   "estimator_type": "Type",
   "estimator_typePlaceholder": "Entry type",
   "estimator_code": "Code",
@@ -499,5 +502,6 @@
   "exception_get_orders": "There was an error trying to get orders.",
   "exception_get_work_stations": "There was an error trying to get work stations.",
   "exception_car_history": "There was an error trying to load car history.",
-  "exception_convert_camera": "There was an error trying to display camera streaming."
+  "exception_convert_camera": "There was an error trying to display camera streaming.",
+  "exception_get_points_distance": "There was an error trying to get points distance."
 }

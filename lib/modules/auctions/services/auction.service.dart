@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:app/modules/auctions/models/google-distance.response.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/injection.dart';
 import '../../../utils/environment.constants.dart';
@@ -13,12 +15,16 @@ class AuctionsService {
   static const String GET_AUCTION_DETAILS_EXCEPTION =
       'GET_AUCTION_DETAILS_EXCEPTION';
   static const String CREATE_BID_EXCEPTION = 'CREATE_BID_EXCEPTION';
+  static const String GET_POINTS_DISTANCE_EXCEPTION =
+      'GET_POINTS_DISTANCE_EXCEPTION';
 
   static const String _AUCTIONS_PATH = '${Environment.BIDS_BASE_API}/auctions';
 
   static const String _CREATE_BID_PATH_PREFIX =
       '${Environment.BIDS_BASE_API}/auctions/';
   static const String _CREATE_BID_PATH_SUFFIX = '/bids';
+  static const String _GET_POINTS_DISTANCE =
+      'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric';
 
   Dio _dio = inject<Dio>();
 
@@ -85,9 +91,33 @@ class AuctionsService {
     }
   }
 
+  Future<GoogleDistanceResponse> getPointsDistance(
+      LatLng startPoint, LatLng endPoint, String apiKey) async {
+    try {
+      final response = await _dio.get(Uri.encodeFull(
+          _buildGetPointsDistancePath(startPoint, endPoint, apiKey)));
+
+      if (response.statusCode == 200) {
+        return GoogleDistanceResponse.fromJson(response.data);
+      } else {
+        throw Exception(GET_POINTS_DISTANCE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_POINTS_DISTANCE_EXCEPTION);
+    }
+  }
+
   _buildCreateBidPath(int auctionId) {
     return _CREATE_BID_PATH_PREFIX +
         auctionId.toString() +
         _CREATE_BID_PATH_SUFFIX;
+  }
+
+  _buildGetPointsDistancePath(
+      LatLng startPoint, LatLng endPoint, String apiKey) {
+    return _GET_POINTS_DISTANCE +
+        '&origins=${startPoint.latitude}, ${startPoint.longitude}' +
+        '&destinations=${endPoint.latitude}, ${endPoint.longitude}' +
+        '&key=$apiKey';
   }
 }
