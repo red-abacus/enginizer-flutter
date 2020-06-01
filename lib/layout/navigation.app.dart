@@ -68,35 +68,35 @@ class NavigationApp extends StatefulWidget {
   List<DrawerItem> get consultantDrawerItems {
     List<DrawerItem> items = [];
 
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
-        sideBarPermission: ConsultantSideBarPermission.Appointments)) {
-      items.add(new DrawerItem(
-          "Appointments", Appointments.route, Icons.dashboard));
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.APPOINTMENT)) {
+      items.add(
+          new DrawerItem("Appointments", Appointments.route, Icons.dashboard));
     }
 
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
-        sideBarPermission: ConsultantSideBarPermission.Auctions)) {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.AUCTION)) {
       items.add(new DrawerItem("Auctions", Auctions.route, Icons.dashboard));
     }
 
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
-        sideBarPermission: ConsultantSideBarPermission.WorkEstimates)) {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.WORK_ESTIMATE)) {
       items.add(new DrawerItem(
           "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard));
     }
 
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
-        sideBarPermission: ConsultantSideBarPermission.Parts)) {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PARTS)) {
       items.add(new DrawerItem('Parts', Parts.route, Parts.icon));
     }
 
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
-        sideBarPermission: ConsultantSideBarPermission.Orders)) {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.ORDERS)) {
       items.add(new DrawerItem('Orders', Orders.route, Orders.icon));
     }
 
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Sidebar,
-        sideBarPermission: ConsultantSideBarPermission.Notifications)) {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.NOTIFICATIONS)) {
       items.add(new DrawerItem(
           'Notifications', Notifications.route, Icons.notifications));
     }
@@ -105,8 +105,7 @@ class NavigationApp extends StatefulWidget {
   }
 
   static final List<DrawerItem> mechanicDrawerItems = [
-    new DrawerItem(
-        "Appointments", Appointments.route, Icons.event_available),
+    new DrawerItem("Appointments", Appointments.route, Icons.event_available),
     new DrawerItem('Notifications', Notifications.route, Icons.notifications)
   ];
 

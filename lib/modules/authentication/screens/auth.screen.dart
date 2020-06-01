@@ -1,4 +1,3 @@
-import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/widgets/auth-form.widget.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   // TODO - remove this
                   _testWidget(),
+                  _testWidget2(),
                 ],
               ),
             ),
@@ -103,6 +103,20 @@ class _AuthScreenState extends State<AuthScreen> {
             },
           ),
         )
+      ],
+    );
+  }
+
+  _testWidget2() {
+    // admin.provider@autowas.com
+    return Row(
+      children: <Widget>[
+        FlatButton(
+          child: Text('PR Consultant'),
+          onPressed: () {
+            _login('pr.consultant2@autowass.ro', 'password');
+          },
+        ),
       ],
     );
   }

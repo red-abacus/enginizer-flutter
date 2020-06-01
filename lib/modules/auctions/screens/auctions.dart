@@ -104,17 +104,19 @@ class AuctionsState extends State<Auctions> {
   }
 
   _selectAuction(Auction auction) {
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions, auctionPermission: AuctionPermission.AuctionDetails)) {
+    if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
       AuctionProvider provider =
-      Provider.of<AuctionProvider>(context, listen: false);
+          Provider.of<AuctionProvider>(context, listen: false);
       provider.initialiseParameters();
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionDetails.route);
-    }
-    else if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions, auctionPermission: AuctionPermission.ConsultantAuctionDetails)) {
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions,
+        PermissionsAuction.CONSULTANT_AUCTION_DETAILS)) {
       AuctionConsultantProvider provider =
-      Provider.of<AuctionConsultantProvider>(context, listen: false);
+          Provider.of<AuctionConsultantProvider>(context, listen: false);
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionConsultant.route);

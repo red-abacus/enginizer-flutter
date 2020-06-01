@@ -1,5 +1,4 @@
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
@@ -7,67 +6,35 @@ import 'package:app/modules/shared/managers/permissions/permissions-user-profile
 class PermissionsManager {
   static var manager = PermissionsManager();
 
-  PermissionsAuction _permissionsAuction = PermissionsAuction();
-  PermissionsSideBar _permissionsSideBar = PermissionsSideBar();
-  PermissionsUserProfile _permissionsUserProfile = PermissionsUserProfile();
+  PermissionsSideBar _permissionsSideBar;
+  PermissionsAuction _permissionsAuction;
+  PermissionsUserProfile _permissionsUserProfile;
 
-  ServiceProviderItemsResponse serviceItemsResponse;
+  ServiceProviderItemsResponse _serviceItemsResponse;
   String userRole;
 
   static PermissionsManager getInstance() {
     return manager;
   }
 
-  bool hasAccess(MainPermissions permission,
-      {ConsultantSideBarPermission sideBarPermission,
-      AuctionPermission auctionPermission,
-      UserProfilePermission userProfilePermission}) {
-    switch (userRole) {
-      case Roles.Super:
-        if (userProfilePermission != null) {
-          return _permissionsUserProfile.hasAccess(
-              userRole, userProfilePermission);
-        }
-        return true;
-      case Roles.Client:
-        if (userProfilePermission != null) {
-          return _permissionsUserProfile.hasAccess(
-              userRole, userProfilePermission);
-        }
-        return true;
-      case Roles.ProviderAdmin:
-        if (userProfilePermission != null) {
-          return _permissionsUserProfile.hasAccess(
-              userRole, userProfilePermission);
-        }
-        return true;
-      case Roles.ProviderConsultant:
-        switch (permission) {
-          case MainPermissions.Sidebar:
-            if (sideBarPermission != null) {
-              return _permissionsSideBar.consultantHasAccess(
-                  serviceItemsResponse, sideBarPermission);
-            }
-            break;
-          case MainPermissions.Auctions:
-            return _permissionsAuction.consultantHasAccess(
-                serviceItemsResponse, auctionPermission);
-            break;
-          case MainPermissions.UserProfile:
-            return _permissionsUserProfile.hasAccess(
-                userRole, userProfilePermission);
-          default:
-            break;
-        }
+  setServiceItemsResponse(
+      ServiceProviderItemsResponse serviceProviderItemsResponse) {
+    _permissionsSideBar = PermissionsSideBar(serviceProviderItemsResponse);
+    _permissionsAuction = PermissionsAuction(serviceProviderItemsResponse);
+    _permissionsUserProfile = PermissionsUserProfile();
+  }
+
+  bool hasAccess(MainPermissions mainPermission, String permission) {
+    switch (mainPermission) {
+      case MainPermissions.Sidebar:
+        return _permissionsSideBar.hasAccess(userRole, permission);
         break;
-      case Roles.ProviderPersonnel:
-        if (userProfilePermission != null) {
-          return _permissionsUserProfile.hasAccess(
-              userRole, userProfilePermission);
-        }
-        return true;
-      default:
-        return false;
+      case MainPermissions.Auctions:
+        return _permissionsAuction.hasAccess(userRole, permission);
+        break;
+      case MainPermissions.UserProfile:
+        return _permissionsUserProfile.hasAccess(userRole, permission);
+        break;
     }
 
     return false;
@@ -76,7 +43,12 @@ class PermissionsManager {
 
 enum MainPermissions { Sidebar, Auctions, UserProfile }
 
-enum ConsultantServiceType { Service, PartShop, DismantlingShop }
+enum ConsultantServiceType {
+  Service,
+  PartShop,
+  DismantlingShop,
+  PickUpAndReturn
+}
 
 class ConsultantServiceTypeUtils {
   static serviceTypeFromString(String sender) {
@@ -87,6 +59,8 @@ class ConsultantServiceTypeUtils {
         return ConsultantServiceType.PartShop;
       case 'DISMANTLING_SHOP':
         return ConsultantServiceType.DismantlingShop;
+      case 'PICKUP_RETURN':
+        return ConsultantServiceType.PickUpAndReturn;
     }
 
     return null;
