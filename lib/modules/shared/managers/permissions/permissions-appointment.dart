@@ -1,11 +1,11 @@
 import 'package:app/modules/authentication/models/roles.model.dart';
 
-class PermissionsUserProfile {
-  static final String ACTIVE_PERSONNEL = 'ACTIVE_PERSONNEL';
+class PermissionsAppointment {
+  static final String CREATE_APPOINTMENT = 'APPOINTMENT.CREATE_APPOINTMENT';
 
   Map<String, List<String>> permissionsMap = Map();
 
-  PermissionsUserProfile() {
+  PermissionsAppointment() {
     for (String role in Roles.roles) {
       List<String> permissions = [];
 
@@ -13,6 +13,7 @@ class PermissionsUserProfile {
         case Roles.Super:
           break;
         case Roles.Client:
+          permissions = [CREATE_APPOINTMENT];
           break;
         case Roles.ProviderAccountant:
           break;
@@ -21,7 +22,6 @@ class PermissionsUserProfile {
         case Roles.ProviderConsultant:
           break;
         case Roles.ProviderAdmin:
-          permissions = [ACTIVE_PERSONNEL];
           break;
       }
 

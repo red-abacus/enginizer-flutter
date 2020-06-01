@@ -208,7 +208,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
           _buildTabBarButton(UserDetailsTabbarStateConsultant.INDEX),
           if (PermissionsManager.getInstance().hasAccess(
               MainPermissions.UserProfile,
-              userProfilePermission: UserProfilePermission.ActivePersonel))
+              PermissionsUserProfile.ACTIVE_PERSONNEL))
             _buildTabBarButton(UserDetailsTabbarStateConsultant.WORKSTATIONS)
         ],
       ),

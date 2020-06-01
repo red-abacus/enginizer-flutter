@@ -84,8 +84,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
       await auctionProvider
           .getAuctionDetails(auctionProvider.selectedAuction.id)
           .then((_) async {
-        if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions,
-            auctionPermission: AuctionPermission.CarDetails)) {
+        if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Auctions, PermissionsAuction.CAR_DETAILS)) {
           await auctionProvider
               .getAppointmentDetails(
                   auctionProvider.selectedAuction.appointment.id)
@@ -142,15 +142,14 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _buildContent() {
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Auctions,
-        auctionPermission: AuctionPermission.AppointmentDetails)) {
+    if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Auctions, PermissionsAuction.APPOINTMENT_DETAILS)) {
       return AuctionConsultantWidget(
           auction: auctionProvider.selectedAuction,
           auctionDetails: auctionProvider.auctionDetails,
           createEstimate: _createEstimate);
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Auctions,
-        auctionPermission: AuctionPermission.CarDetails)) {
+    } else if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Auctions, PermissionsAuction.CAR_DETAILS)) {
       Bid providerBid;
 
       for (Bid bid in auctionProvider.auctionDetails.bids) {
@@ -178,7 +177,8 @@ class AuctionConsultantState extends State<AuctionConsultant> {
           .setIssues(context, auctionProvider.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           Provider.of<Auth>(context).authUserDetails.userProvider.id;
-      Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails = auctionProvider.auctionDetails;
+      Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
+          auctionProvider.auctionDetails;
 
       Navigator.push(
         context,

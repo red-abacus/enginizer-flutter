@@ -199,6 +199,7 @@
   "auction_proposed_date_error": "Selectează data propusă",
   "auction_create_bid": "Crează Licitație",
   "auction_create_bid_validation_error": "Te rog sa fii sigur că ai estimat fiecare problemă raportată. La fel, verifică dacă ai ales data propusă",
+  "auction_route_title": "Rută",
   "estimator_type": "Tip",
   "estimator_typePlaceholder": "Tip intrare",
   "estimator_code": "Cod",

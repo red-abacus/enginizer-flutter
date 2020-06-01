@@ -40,6 +40,7 @@ import 'modules/appointments/screens/appointment-details.dart';
 import 'modules/appointments/screens/appointments.dart';
 import 'modules/auctions/providers/auction-provider.dart';
 import 'modules/auctions/providers/auctions-provider.dart';
+import 'modules/auctions/screens/auction-consultant-map.dart';
 import 'modules/auctions/screens/auctions.dart';
 import 'modules/authentication/providers/auth.provider.dart';
 import 'modules/authentication/providers/user.provider.dart';
@@ -188,6 +189,7 @@ class AppState extends State<App> {
                 ShopProductDetails.route: (context) => ShopProductDetails(),
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),
+                AuctionConsultantMap.route: (context) => AuctionConsultantMap(),
                 BidDetails.route: (context) => BidDetails(),
                 AppointmentDetailsConsultant.route: (context) =>
                     AppointmentDetailsConsultant(),

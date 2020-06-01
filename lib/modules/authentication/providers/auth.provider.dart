@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/authentication/models/auth.model.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
@@ -77,14 +76,13 @@ class Auth with ChangeNotifier {
       PermissionsManager.getInstance().userRole = authUser.role;
 
       this.authUserDetails = await _userService.getUserDetails(authUser.userId);
-
       if (this.authUserDetails != null) {
         if (this.authUserDetails.userProvider != null) {
           if (authUser.role == Roles.ProviderAdmin ||
               authUser.role == Roles.ProviderConsultant) {
-            PermissionsManager.getInstance().serviceItemsResponse =
+            PermissionsManager.getInstance().setServiceItemsResponse(
                 await _providerService.getProviderServiceItems(
-                    this.authUserDetails.userProvider.id);
+                    this.authUserDetails.userProvider.id));
           }
         }
       }
@@ -112,9 +110,9 @@ class Auth with ChangeNotifier {
           if (this.authUserDetails.userProvider != null) {
             if (authUser.role == Roles.ProviderAdmin ||
                 authUser.role == Roles.ProviderConsultant) {
-              PermissionsManager.getInstance().serviceItemsResponse =
+              PermissionsManager.getInstance().setServiceItemsResponse(
                   await _providerService.getProviderServiceItems(
-                      this.authUserDetails.userProvider.id);
+                      this.authUserDetails.userProvider.id));
             }
           }
         }

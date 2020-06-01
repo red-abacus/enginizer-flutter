@@ -25,13 +25,15 @@ class UserProvider with ChangeNotifier {
   Future<JwtUserDetails> getUserDetails() async {
     this.userDetails = await _userService.getUserDetails(userDetails.id);
     notifyListeners();
+
     return this.userDetails;
   }
 
   Future<JwtUserDetails> updateUserDetails(String email, String name) async {
     var payload = json.encode({'email': email, 'name': name});
 
-    this.userDetails = await _userService.updateUserDetails(userDetails.id, payload);
+    this.userDetails =
+        await _userService.updateUserDetails(userDetails.id, payload);
     notifyListeners();
     return this.userDetails;
   }

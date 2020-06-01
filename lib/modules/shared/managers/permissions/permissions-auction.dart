@@ -1,59 +1,71 @@
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsAuction {
-  List<ConsultantServiceType> appointmentDetailsPermissions = [
-    ConsultantServiceType.Service,
-  ];
-  List<ConsultantServiceType> carDetailsPermissions = [
-    ConsultantServiceType.PartShop,
-    ConsultantServiceType.DismantlingShop
-  ];
-  List<ConsultantServiceType> createWorkEstimatePermissions = [
-    ConsultantServiceType.Service,
-    ConsultantServiceType.PartShop,
-    ConsultantServiceType.DismantlingShop
-  ];
-  List<ConsultantServiceType> createPartWorkEstimatePermission = [
-    ConsultantServiceType.Service
-  ];
+  static final String AUCTION_DETAILS = 'AUCTION.AUCTION_DETAILS';
+  static final String AUCTION_MAP_DETAILS = 'AUCTION.AUCTION_MAP_DETAILS';
+  static final String CONSULTANT_AUCTION_DETAILS = 'AUCTION.CONSULTANT_AUCTION_DETAILS';
+  static final String APPOINTMENT_DETAILS = 'AUCTION.APPOINTMENT_DETAILS';
+  static final String CAR_DETAILS = 'AUCTION.CAR_DETAILS';
+  static final String CREATE_PART_WORK_ESTIMATE = 'AUCTION.CREATE_PART_WORK_ESTIMATE';
+  static final String CREATE_WORK_ESTIMATE = 'AUCTION.CREATE_WORK_ESTIMATE';
 
-  bool consultantHasAccess(
-      ServiceProviderItemsResponse serviceProviderItemsResponse,
-      AuctionPermission permission) {
-    if (serviceProviderItemsResponse != null) {
-      switch (permission) {
-        case AuctionPermission.ConsultantAuctionDetails:
-          return true;
-        case AuctionPermission.AppointmentDetails:
-          return serviceProviderItemsResponse
-              .containsServiceType(appointmentDetailsPermissions);
-        case AuctionPermission.CreateWorkEstimate:
-          return serviceProviderItemsResponse
-              .containsServiceType(carDetailsPermissions);
+  Map<String, List<String>> permissionsMap = Map();
+  Map<String, List<String>> serviceItemsPermissionsMap = Map();
+
+  PermissionsAuction(ServiceProviderItemsResponse serviceProviderItemsResponse) {
+    for (String role in Roles.roles) {
+      List<String> permissions = [];
+
+      switch (role) {
+        case Roles.Super:
           break;
-        case AuctionPermission.CarDetails:
-          return serviceProviderItemsResponse
-              .containsServiceType(createWorkEstimatePermissions);
+        case Roles.Client:
+          permissions = [AUCTION_DETAILS];
           break;
-        case AuctionPermission.CreatePartWorkEstimate:
-          return serviceProviderItemsResponse
-              .containsServiceType(createPartWorkEstimatePermission);
+        case Roles.ProviderAccountant:
           break;
-        default:
+        case Roles.ProviderPersonnel:
+          break;
+        case Roles.ProviderConsultant:
+          permissions = [AUCTION_DETAILS];
+
+          for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
+            ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
+
+            if (serviceType != null) {
+              switch (serviceType) {
+                case ConsultantServiceType.PickUpAndReturn:
+                  permissions.add(AUCTION_MAP_DETAILS);
+                  break;
+                case ConsultantServiceType.Service:
+                  permissions.add(APPOINTMENT_DETAILS);
+                  permissions.add(CREATE_WORK_ESTIMATE);
+                  permissions.add(CREATE_PART_WORK_ESTIMATE);
+                  break;
+                case ConsultantServiceType.PartShop:
+                  permissions.add(CAR_DETAILS);
+                  permissions.add(CREATE_WORK_ESTIMATE);
+                  break;
+                case ConsultantServiceType.DismantlingShop:
+                  permissions.add(CAR_DETAILS);
+                  permissions.add(CREATE_WORK_ESTIMATE);
+                  break;
+              }
+            }
+          }
+          break;
+        case Roles.ProviderAdmin:
           break;
       }
+
+      permissionsMap[role] = permissions;
     }
-
-    return false;
   }
-}
 
-enum AuctionPermission {
-  AuctionDetails,
-  ConsultantAuctionDetails,
-  AppointmentDetails,
-  CarDetails,
-  CreateWorkEstimate,
-  CreatePartWorkEstimate
+  bool hasAccess(String userRole, String permission) {
+    return permissionsMap[userRole].contains(permission);
+  }
 }
