@@ -1,9 +1,11 @@
-import 'package:app/database/database.dart';
-import 'package:app/database/models/notification.model.dart';
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/notifications/cards/notification.card.dart';
-import 'package:app/modules/shared/widgets/notifications-manager.dart';
+import 'package:app/modules/notifications/providers/notification.provider.dart';
+import 'package:app/modules/notifications/services/notification.service.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Notifications extends StatefulWidget {
   static const String route = '/notifications';
@@ -25,7 +27,7 @@ class NotificationsState extends State<Notifications> {
 
   NotificationsState({this.route});
 
-  List<AppNotification> notifications = [];
+  NotificationProvider _provider;
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +37,38 @@ class NotificationsState extends State<Notifications> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      Database.getInstance().markNotificationsAsRead();
-
       setState(() {
         _isLoading = true;
       });
 
-      Database.getInstance().getNotifications().then((notifications) {
-        setState(() {
-          _isLoading = false;
-          this.notifications = notifications;
-        });
-
-        NotificationsManager.refreshNotifications(0);
-      });
+      _provider = Provider.of<NotificationProvider>(context);
+      _provider.initialiseParams();
+      _loadData();
     }
 
     _initDone = true;
     super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await _provider.loadNotifications().then((_) async {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(NotificationService.GET_NOTIFICATIONS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_notifications, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _contentWidget() {
@@ -63,9 +79,14 @@ class NotificationsState extends State<Notifications> {
             margin: EdgeInsets.only(left: 10, right: 10),
             child: ListView.builder(
               itemBuilder: (ctx, index) {
-                return NotificationCard(appNotification: notifications[index]);
+                if (index == _provider.notifications.length-1) {
+                  _loadData();
+                }
+
+                return NotificationCard(
+                    appNotification: _provider.notifications[index]);
               },
-              itemCount: notifications.length,
+              itemCount: _provider.notifications.length,
             ),
           );
   }

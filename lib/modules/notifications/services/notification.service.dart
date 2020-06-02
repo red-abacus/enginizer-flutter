@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/modules/notifications/models/app-notification-response.model.dart';
 import 'package:app/utils/environment.constants.dart';
 import 'package:dio/dio.dart';
 
@@ -14,11 +15,14 @@ class NotificationService {
       'REGISTER_NOTIFICATION_EXCEPTION';
   static const String UNREGISTER_NOTIFICATION_EXCEPTION =
       'UNREGISTER_NOTIFICATION_EXCEPTION';
+  static const String GET_NOTIFICATIONS_EXCEPTION =
+      'GET_NOTIFICATIONS_EXCEPTION';
 
   static const String _REGISTER_PATH =
       '${Environment.NOTIFICATIONS_BASE_API}/fcm/group/add';
   static const String _UNREGISTER_PATH =
       '${Environment.NOTIFICATIONS_BASE_API}/fcm/group/remove';
+  static const String _GET_NOTIFICATIONS_PATH = '${Environment.NOTIFICATIONS_BASE_API}/notification';
 
   Future<bool> register(String fcmToken) async {
     try {
@@ -41,6 +45,26 @@ class NotificationService {
           data: jsonEncode(fcmToken));
       if (response.statusCode == 200) {
         return true;
+      } else {
+        throw Exception(UNREGISTER_NOTIFICATION_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(UNREGISTER_NOTIFICATION_EXCEPTION);
+    }
+  }
+
+  Future<AppNotificationResponse> getNotifications(int page,
+      {int pageSize}) async {
+    Map<String, dynamic> queryParameters = {'page': '$page'};
+    
+    if (pageSize != null) {
+      queryParameters['pageSize'] = '$pageSize';
+    }
+
+    try {
+      final response = await _dio.get(_GET_NOTIFICATIONS_PATH, queryParameters: queryParameters);
+      if (response.statusCode == 200) {
+        return AppNotificationResponse.fromJson(response.data);
       } else {
         throw Exception(UNREGISTER_NOTIFICATION_EXCEPTION);
       }
