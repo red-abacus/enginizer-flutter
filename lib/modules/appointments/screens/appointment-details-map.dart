@@ -1,16 +1,15 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/widgets/map/appointment-map-details.widget.dart';
+import 'package:app/modules/appointments/widgets/map/appointment-map.widget.dart';
+import 'package:app/modules/appointments/widgets/map/car-reception-form.modal.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map.widget.dart';
-import 'package:app/modules/auctions/widgets/details-map/auction-map-decline.widget.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
-import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
-import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -18,25 +17,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AuctionConsultantMap extends StatefulWidget {
-  static const String route = '/${Auctions.route}/auction-consultant-map';
+class AppointmentDetailsMap extends StatefulWidget {
+  static const String route = '/${Auctions.route}/appointment-details-map';
 
   @override
   State<StatefulWidget> createState() {
-    return AuctionConsultantMapState(route: route);
+    return AppointmentDetailsMapState(route: route);
   }
 }
 
-class AuctionConsultantMapState extends State<AuctionConsultantMap>
+class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     with SingleTickerProviderStateMixin {
   String route;
 
   var _initDone = false;
   var _isLoading = false;
 
-  AuctionConsultantMapState({this.route});
+  AppointmentDetailsMapState({this.route});
 
-  AuctionConsultantProvider _provider;
+  AppointmentProvider _provider;
   TabController _tabController;
 
   @override
@@ -75,7 +74,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
 
   @override
   Future<void> didChangeDependencies() async {
-    _provider = Provider.of<AuctionConsultantProvider>(context);
+    _provider = Provider.of<AppointmentProvider>(context);
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
@@ -116,35 +115,17 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   _floatActionButtonContainer() {
     return _tabController.index == 0
         ? Container(
-            margin: EdgeInsets.only(left: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FloatingActionButton.extended(
-                  heroTag: null,
-                  onPressed: () {
-                    _declineAppointment();
-                  },
-                  label: Text(
-                    S.of(context).general_decline.toUpperCase(),
-                    style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-                FloatingActionButton.extended(
-                  heroTag: null,
-                  onPressed: () {
-//          widget.createEstimate();
-                  },
-                  label: Text(
-                    S.of(context).auction_create_estimate.toUpperCase(),
-                    style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
-                  ),
-                  backgroundColor: Colors.white,
-                )
-              ],
+            child: FloatingActionButton.extended(
+              heroTag: null,
+              onPressed: () {
+                _createVehicleReception();
+              },
+              label: Text(
+                S.of(context).auction_vehicle_reception.toUpperCase(),
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              ),
+              backgroundColor: Colors.white,
             ),
           )
         : Container();
@@ -152,7 +133,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
 
   _titleText() {
     return Text(
-      _provider.selectedAuction?.appointment?.name ?? 'N/A',
+      _provider.selectedAppointmentDetail?.name ?? 'N/A',
       style:
           TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
@@ -163,30 +144,10 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
       physics: NeverScrollableScrollPhysics(),
       controller: _tabController,
       children: [
-        AuctionConsultantMapDetailsWidget(
-            showProviderDetails: _showProviderDetails),
-        AuctionConsultantMapWidget()
+        AppointmentMapDetailsWidget(showProviderDetails: _showProviderDetails),
+        AppointmentMapWidget()
       ],
     );
-  }
-
-  _createEstimate() {
-    if (_provider.auctionDetails != null) {
-      Provider.of<WorkEstimateProvider>(context)
-          .refreshValues(EstimatorMode.Create);
-      Provider.of<WorkEstimateProvider>(context)
-          .setIssues(context, _provider.auctionDetails.issues);
-      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          Provider.of<Auth>(context).authUserDetails.userProvider.id;
-      Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
-          _provider.auctionDetails;
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
-      );
-    }
   }
 
   _showProviderDetails() {
@@ -203,12 +164,19 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
         });
   }
 
-  _declineAppointment() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AuctionMapDeclineWidget();
-      },
-    );
+  _createVehicleReception() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return CarReceptionFormModal(
+                appointmentDetail: _provider.selectedAppointmentDetail);
+          });
+        });
   }
 }

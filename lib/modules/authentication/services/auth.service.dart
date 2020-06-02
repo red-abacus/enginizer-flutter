@@ -9,7 +9,8 @@ import 'package:app/utils/environment.constants.dart';
 
 class AuthService {
   static const FORGOT_PASSWORD_EXCEPTION = 'FORGOT_PASSWORD_EXCEPTION';
-  static const FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND = 'FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND';
+  static const FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND =
+      'FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND';
 
   static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
   static const headers = {'Content-Type': 'application/json'};
@@ -76,7 +77,7 @@ class AuthService {
       }
     } catch (e) {
       if (e.response.statusCode == 404) {
-        throw(FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND);
+        throw (FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND);
       } else {
         throw (FORGOT_PASSWORD_EXCEPTION);
       }

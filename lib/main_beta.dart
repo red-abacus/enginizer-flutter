@@ -3,6 +3,7 @@ import 'package:app/layout/navigation.app.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/providers/car-reception-form.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/auctions/screens/auction.dart';
 import 'package:app/modules/auctions/screens/bid-details.dart';
@@ -36,6 +37,7 @@ import 'modules/appointments/providers/appointment.provider.dart';
 import 'modules/appointments/providers/appointments.provider.dart';
 import 'modules/appointments/providers/camera.provider.dart';
 import 'modules/appointments/providers/provider-service.provider.dart';
+import 'modules/appointments/screens/appointment-details-map.dart';
 import 'modules/appointments/screens/appointment-details.dart';
 import 'modules/appointments/screens/appointments.dart';
 import 'modules/auctions/providers/auction-provider.dart';
@@ -126,6 +128,8 @@ class AppState extends State<App> {
               value: WorkEstimatesConsultantProvider()),
           ChangeNotifierProvider.value(
               value: PickUpCarFormConsultantProvider()),
+          ChangeNotifierProvider.value(
+              value: CarReceptionFormProvider()),
           ChangeNotifierProvider.value(value: DashboardProvider()),
           ChangeNotifierProvider.value(value: ShopProvider()),
           ChangeNotifierProvider.value(value: ShopAppointmentProvider()),
@@ -190,6 +194,7 @@ class AppState extends State<App> {
                 AuctionDetails.route: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),
                 AuctionConsultantMap.route: (context) => AuctionConsultantMap(),
+                AppointmentDetailsMap.route: (context) => AppointmentDetailsMap(),
                 BidDetails.route: (context) => BidDetails(),
                 AppointmentDetailsConsultant.route: (context) =>
                     AppointmentDetailsConsultant(),

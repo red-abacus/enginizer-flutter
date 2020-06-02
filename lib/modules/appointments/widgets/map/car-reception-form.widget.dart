@@ -1,0 +1,298 @@
+import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/providers/appointments.provider.dart';
+import 'package:app/modules/appointments/providers/car-reception-form.provider.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/appointments/model/request/assign-employee-request.model.dart';
+import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
+import 'package:app/modules/appointments/widgets/map/car-reception-form-employees.widget.dart';
+import 'package:app/modules/appointments/widgets/map/car-reception-form-information.widget.dart';
+import 'package:app/modules/appointments/widgets/pick-up-form/image-selection.widget.dart';
+import 'package:app/modules/shared/widgets/image-picker.widget.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/text.helper.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class CarReceptionFormWidget extends StatefulWidget {
+  final AppointmentDetail appointmentDetail;
+  final Function refreshState;
+
+  CarReceptionFormWidget({Key key, this.appointmentDetail, this.refreshState})
+      : super(key: key);
+
+  @override
+  _CarReceptionFormWidgetState createState() => _CarReceptionFormWidgetState();
+}
+
+class _CarReceptionFormWidgetState extends State<CarReceptionFormWidget> {
+  bool _initDone = false;
+  bool _isLoading = false;
+  int _currentStepIndex = 0;
+
+  CarReceptionFormProvider _provider;
+
+  List<Step> steps = [];
+
+  @override
+  Widget build(BuildContext context) {
+    steps = _buildSteps(context);
+    return _getContent();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      _provider = Provider.of<CarReceptionFormProvider>(context);
+      _provider.resetParams();
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      _loadData();
+    }
+
+    if (_provider.receiveFormRequest.files == null) {
+      _provider.resetParams();
+    }
+
+    _initDone = true;
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    String startDate = DateUtils.stringFromDate(DateTime.now(), 'dd/MM/yyyy');
+    String endDate = startDate;
+
+    String scheduleDateTime = widget.appointmentDetail?.scheduledDate;
+
+    if (scheduleDateTime == null) {
+      scheduleDateTime = DateUtils.stringFromDate(DateTime.now(), AppointmentDetail.scheduledTimeFormat());
+    }
+
+    if (scheduleDateTime.isNotEmpty) {
+      DateTime dateTime = DateUtils.dateFromString(
+          scheduleDateTime, AppointmentDetail.scheduledTimeFormat());
+
+      if (dateTime != null) {
+        startDate = DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy');
+        endDate = startDate;
+      }
+    }
+
+    try {
+      await _provider
+          .getProviderEmployees(
+              widget.appointmentDetail.serviceProvider.id, startDate, endDate)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(ProviderService.GET_PROVIDER_EMPLOYEES_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_provider_employees, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _getContent() {
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _buildStepper();
+  }
+
+  Widget _buildStepper() => Stepper(
+      currentStep: _currentStepIndex,
+      onStepContinue: _next,
+      onStepCancel: _back,
+      onStepTapped: (step) => _goTo(step),
+      type: StepperType.horizontal,
+      steps: steps,
+      controlsBuilder: (BuildContext context,
+          {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+        return Row(
+          children: <Widget>[
+            SizedBox(height: 70),
+            FlatButton(
+              child: Text(S.of(context).general_back),
+              onPressed: onStepCancel,
+            ),
+            RaisedButton(
+              elevation: 0,
+              child: Text(S.of(context).general_continue),
+              textColor: Theme.of(context).cardColor,
+              onPressed: onStepContinue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              color: Theme.of(context).primaryColor,
+            )
+          ],
+        );
+      });
+
+  Future _addImage(int index) async {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+              if (file != null) {
+                setState(() {
+                  if (index < _provider.receiveFormRequest.files.length) {
+                    _provider.receiveFormRequest.files[index] = file;
+
+                    if (_provider.receiveFormRequest.files.length <
+                        _provider.maxFiles) {
+                      _provider.receiveFormRequest.files.add(null);
+                    }
+                  }
+                });
+              }
+            }));
+  }
+
+  List<Step> _buildSteps(BuildContext context) {
+    return [
+      Step(
+          isActive: _currentStepIndex == 0,
+          title: Text(_currentStepIndex == 0
+              ? S.of(context).appointment_receive_car_step_1
+              : ''),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  S.of(context).appointment_consultant_car_form_photos_title,
+                  style: TextHelper.customTextStyle(
+                      null, red, FontWeight.bold, 16),
+                ),
+                ImageSelectionWidget(
+                    addImage: _addImage,
+                    files: _provider.receiveFormRequest.files),
+              ],
+            ),
+          ),
+          state: StepState.indexed),
+      Step(
+          isActive: _currentStepIndex == 1,
+          title: Text(_currentStepIndex == 1
+              ? S.of(context).appointment_receive_car_step_2
+              : ''),
+          content: CarReceptionFormInformationWidget(),
+          state: StepState.indexed),
+      Step(
+          isActive: _currentStepIndex == 2,
+          title: Text(_currentStepIndex == 2
+              ? S.of(context).appointment_receive_car_form_step_3_title
+              : ''),
+          content: CarReceptionFormEmployeesWidget(),
+          state: StepState.indexed)
+    ];
+  }
+
+  _next() {
+    switch (_currentStepIndex) {
+      case 0:
+        _goTo(1);
+        break;
+      case 1:
+        if (_provider.informationFormState.currentState.validate()) {
+          _goTo(2);
+        }
+        break;
+      case 2:
+        _createReceiveForm();
+        break;
+    }
+  }
+
+  _back() {
+    if (_currentStepIndex > 0) {
+      _goTo(_currentStepIndex - 1);
+    }
+  }
+
+  _goTo(stepIndex) {
+    setState(() {
+      _currentStepIndex = stepIndex;
+    });
+  }
+
+  _createReceiveForm() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _provider.receiveFormRequest.appointmentId = widget.appointmentDetail.id;
+      await _provider
+          .createReceiveProcedure(_provider.receiveFormRequest)
+          .then((_) async {
+        await _provider
+            .addReceiveProcedurePhotos(_provider.receiveFormRequest)
+            .then((_) async {
+          if (_provider.selectedTimeSerie != null) {
+            AssignEmployeeRequest request = new AssignEmployeeRequest();
+            request.timeSerie = _provider.selectedTimeSerie;
+            request.employeeId = _provider.selectedTimeSerie.employeeId;
+
+            await _provider
+                .assignEmployeeToAppointment(
+                    widget.appointmentDetail.id, request)
+                .then((_) {
+              widget.refreshState();
+              Provider.of<AppointmentConsultantProvider>(context).initDone =
+                  false;
+              Provider.of<AppointmentsProvider>(context).initDone = false;
+
+              Navigator.pop(context);
+            });
+          } else {
+            widget.refreshState();
+            Provider.of<AppointmentConsultantProvider>(context).initDone =
+                false;
+            Provider.of<AppointmentsProvider>(context).initDone = false;
+
+            Navigator.pop(context);
+          }
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.CREATE_RECEIVE_PROCEDURE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_create_receive_procedure, context);
+      } else if (error.toString().contains(
+          AppointmentsService.ADD_RECEIVE_PROCEDURE_IMAGES_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_add_procedure_photos, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.ASSIGN_EMPLOYEE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_assign_mechanic_to_appointment, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+}

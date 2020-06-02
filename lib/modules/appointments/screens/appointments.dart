@@ -4,6 +4,7 @@ import 'package:app/modules/appointments/providers/appointment-mechanic.provider
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/screens/appointment-details-map.dart';
 import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
@@ -12,6 +13,7 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -49,12 +51,28 @@ class AppointmentsState extends State<Appointments> {
         body: Center(
           child: _renderAppointments(_isLoading, _provider.appointments),
         ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: null,
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 1,
-          onPressed: () => _openAppointmentCreateModal(context),
-          child: Icon(Icons.add),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton.extended(
+              heroTag: null,
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 1,
+              onPressed: () => _showAppointmentMapDetails(),
+              label: Text(
+                'PickUp Receive Form',
+                style:
+                TextHelper.customTextStyle(null, Colors.white, null, 14),
+              ),
+            ),
+            FloatingActionButton(
+              heroTag: null,
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 1,
+              onPressed: () => _openAppointmentCreateModal(context),
+              child: Icon(Icons.add),
+            )
+          ],
         ),
       ),
     );
@@ -160,5 +178,13 @@ class AppointmentsState extends State<Appointments> {
             return AppointmentCreateModal();
           });
         });
+  }
+
+  void _showAppointmentMapDetails() {
+    AppointmentProvider provider =
+        Provider.of<AppointmentProvider>(context, listen: false);
+    provider.initialiseParams();
+
+    Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
   }
 }
