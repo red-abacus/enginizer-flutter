@@ -502,5 +502,6 @@
   "exception_get_work_stations": "A intervenit o problemă la încărcarea stațiilor de lucru.",
   "exception_car_history": "A intervenit o problemă la încărcarea istoricului mașinii.",
   "exception_convert_camera": "A intervenit o problemă la încărcarea stream-ului.",
-  "exception_get_points_distance": "A intervenit o problema la calcularea distanțelor."
+  "exception_get_points_distance": "A intervenit o problemă la calcularea distanțelor.",
+  "exception_register_notification": "A intervenit o problemă la înregistrarea la sistemul de notificări."
 }

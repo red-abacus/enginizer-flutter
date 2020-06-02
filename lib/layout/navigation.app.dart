@@ -20,6 +20,7 @@ import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/firebase/firebase_manager.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -142,6 +143,7 @@ class NavigationAppState extends State<NavigationApp> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseManager.getInstance().setContext(context);
     NotificationsManager.navigationAppState = this;
     if (widget.activeDrawerItems == null) {
       widget.activeDrawerItems = _initActiveDrawerItems();

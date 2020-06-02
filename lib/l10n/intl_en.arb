@@ -507,5 +507,6 @@
   "exception_get_work_stations": "There was an error trying to get work stations.",
   "exception_car_history": "There was an error trying to load car history.",
   "exception_convert_camera": "There was an error trying to display camera streaming.",
-  "exception_get_points_distance": "There was an error trying to get points distance."
+  "exception_get_points_distance": "There was an error trying to get points distance.",
+  "exception_register_notification": "There was an error trying to register to notification system."
 }

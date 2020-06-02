@@ -9,7 +9,10 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
+import 'package:app/modules/notifications/services/notification.service.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/widgets/notifications-manager.dart';
+import 'package:app/utils/firebase/firebase_manager.dart';
 import 'package:app/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +21,8 @@ class Auth with ChangeNotifier {
   final AuthService _authService = inject<AuthService>();
   final UserService _userService = inject<UserService>();
   final ProviderService _providerService = inject<ProviderService>();
+  final NotificationService _notificationService =
+      inject<NotificationService>();
 
   JwtUserDetails authUserDetails;
 
@@ -55,11 +60,16 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> logout() async {
+    if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
+      await unregister(FirebaseManager.getInstance().fcmToken);
+    }
+
     _token = null;
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
     prefs.remove("email");
     prefs.clear();
+
     notifyListeners();
   }
 
@@ -77,6 +87,9 @@ class Auth with ChangeNotifier {
 
       this.authUserDetails = await _userService.getUserDetails(authUser.userId);
       if (this.authUserDetails != null) {
+        if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
+          await register(FirebaseManager.getInstance().fcmToken);
+        }
         if (this.authUserDetails.userProvider != null) {
           if (authUser.role == Roles.ProviderAdmin ||
               authUser.role == Roles.ProviderConsultant) {
@@ -107,6 +120,9 @@ class Auth with ChangeNotifier {
         this.authUserDetails =
             await _userService.getUserDetails(authUser.userId);
         if (this.authUserDetails != null) {
+          if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
+            await register(FirebaseManager.getInstance().fcmToken);
+          }
           if (this.authUserDetails.userProvider != null) {
             if (authUser.role == Roles.ProviderAdmin ||
                 authUser.role == Roles.ProviderConsultant) {
@@ -158,6 +174,26 @@ class Auth with ChangeNotifier {
       return response;
     } catch (error) {
       throw error;
+    }
+  }
+
+  Future<bool> register(String fcmToken) async {
+    try {
+      bool response = await this._notificationService.register(fcmToken);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> unregister(String fcmToken) async {
+    try {
+      bool response = await this._notificationService.unregister(fcmToken);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
     }
   }
 }

@@ -1,21 +1,14 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/screens/appointment-details.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
-import 'package:app/modules/auctions/models/bid.model.dart';
-import 'package:app/modules/auctions/models/response/bid-response.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
-import 'package:app/modules/auctions/services/bid.service.dart';
-import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AuctionConsultantProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();

@@ -62,6 +62,7 @@ import 'modules/dashboard/providers/dashboard.provider.dart';
 import 'modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'modules/appointments/screens/appointment-details-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/notifications/providers/notification.provider.dart';
 import 'modules/notifications/screens/notifications.dart';
 import 'modules/orders/providers/orders.provider.dart';
 import 'modules/orders/screens/orders.dart';
@@ -139,6 +140,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: PartCreateProvider()),
           ChangeNotifierProvider.value(value: OrdersProvider()),
           ChangeNotifierProvider.value(value: CameraProvider()),
+          ChangeNotifierProvider.value(value: NotificationProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(

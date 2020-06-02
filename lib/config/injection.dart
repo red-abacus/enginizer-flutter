@@ -3,6 +3,8 @@ import 'package:app/modules/appointments/providers/car-reception-form.provider.d
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/appointments/services/camera.service.dart';
 import 'package:app/modules/dashboard/providers/dashboard.provider.dart';
+import 'package:app/modules/notifications/providers/notification.provider.dart';
+import 'package:app/modules/notifications/services/notification.service.dart';
 import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
@@ -47,19 +49,17 @@ void setupDependencyInjection(SharedPreferences s) async {
       Headers.contentTypeHeader: 'application/json', // set content-length
     }));
 
-    dio.interceptors.add(InterceptorsWrapper(
-        onRequest: (RequestOptions options) async {
-          options.headers['Authorization'] = 'Bearer ${s.getString('token')}';
-          return options;
-        },
-        onError: (DioError e) async {
-          if (e?.response?.statusCode == 401 && s.getString('token') != null) {
-            s.remove('token');
-            s.clear();
-          }
-          return e;
-        }
-    ));
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+      options.headers['Authorization'] = 'Bearer ${s.getString('token')}';
+      return options;
+    }, onError: (DioError e) async {
+      if (e?.response?.statusCode == 401 && s.getString('token') != null) {
+        s.remove('token');
+        s.clear();
+      }
+      return e;
+    }));
 
     return dio;
   });
@@ -76,6 +76,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerLazySingleton(() => ShopService());
   inject.registerLazySingleton(() => OrderService());
   inject.registerLazySingleton(() => CameraService());
+  inject.registerLazySingleton(() => NotificationService());
 
   inject.registerFactory(() => Auth());
   inject.registerFactory(() => CarsMakeProvider());
@@ -102,4 +103,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => PartCreateProvider());
   inject.registerFactory(() => OrdersProvider());
   inject.registerFactory(() => CameraProvider());
+  inject.registerFactory(() => NotificationProvider());
 }

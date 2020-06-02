@@ -10,6 +10,7 @@ class Environment {
   static const String USERS_BASE_API = "https://dev-user.autowass.ro/api";
   static const String CAMERA_CONVERT_API = "http://34.78.165.120:8091/api";
   static const String ROLES_BASE_API = '"https://dev-role.autowass.ro/api';
+  static const String NOTIFICATIONS_BASE_API = 'https://dev-notification.autowass.ro/api';
 
 //  static const String AUTH_BASE_URL = "http://35.187.164.102:8084/api";
 //  static const String CARS_BASE_API = "http://35.187.164.102:8087/api";

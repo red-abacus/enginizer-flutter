@@ -16,6 +16,7 @@ import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/firebase/firebase_manager.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +69,7 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseManager.getInstance().setContext(context);
     NotificationsManager.navigationToolbarAppState = this;
 
     if (widget.activeDrawerItems == null) {
