@@ -30,7 +30,7 @@ class _AppointmentCreateLocationFormState
     extends State<AppointmentCreateLocationForm> {
   ProviderServiceProvider _provider;
 
-  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey());
+  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
   Completer<GoogleMapController> _controller = Completer();
 
   CameraPosition _kGooglePlex;
@@ -68,7 +68,7 @@ class _AppointmentCreateLocationFormState
             onError: _onError,
             onSelected: _onSelected,
             hint: S.of(context).appointment_address_location_hint,
-            apiKey: kGoogleApiKey(),
+            apiKey: kGoogleApiKey,
             controller: _textEditingController,
           ),
           if (_kGooglePlex != null)

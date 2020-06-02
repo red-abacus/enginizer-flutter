@@ -57,7 +57,7 @@ class AuctionMapDirections {
       markers.add(marker);
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-          kGoogleApiKey(),
+          kGoogleApiKey,
           PointLatLng(destinationPoints[i].location.latitude,
               destinationPoints[i].location.longitude),
           PointLatLng(destinationPoints[i + 1].location.latitude,
@@ -95,7 +95,7 @@ class AuctionMapDirections {
             await auctionsService.getPointsDistance(
                 destinationPoints[i - 1].location,
                 destinationPoints[i].location,
-                kGoogleApiKey());
+                kGoogleApiKey);
       } catch (error) {
         throw (error);
       }

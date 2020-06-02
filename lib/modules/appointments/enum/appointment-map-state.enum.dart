@@ -1,0 +1,4 @@
+enum AppointmentMapState {
+  ReceiveForm,
+  InProgress
+}

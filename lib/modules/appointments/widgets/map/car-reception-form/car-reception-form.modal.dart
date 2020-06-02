@@ -1,7 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/enum/receive-car-form-state.enum.dart';
-import 'package:app/modules/appointments/widgets/map/car-reception-form.widget.dart';
+import 'package:app/modules/appointments/widgets/map/car-reception-form/car-reception-form.widget.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-consultant.modal.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';

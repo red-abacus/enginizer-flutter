@@ -1,20 +1,23 @@
+import 'dart:async';
+
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/appointment-map-state.enum.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map-details.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map.widget.dart';
-import 'package:app/modules/appointments/widgets/map/car-reception-form.modal.dart';
+import 'package:app/modules/appointments/widgets/map/car-reception-form/car-reception-form.modal.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
-import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map-details.widget.dart';
-import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map.widget.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/firebase/firestore_manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentDetailsMap extends StatefulWidget {
@@ -78,6 +81,8 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
+      _initialiseLocator();
+
       setState(() {
         _isLoading = true;
       });
@@ -113,7 +118,8 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
   }
 
   _floatActionButtonContainer() {
-    return _tabController.index == 0
+    return _tabController.index == 0 &&
+            _provider.appointmentMapState == AppointmentMapState.ReceiveForm
         ? Container(
             child: FloatingActionButton.extended(
               heroTag: null,
@@ -178,5 +184,18 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
                 appointmentDetail: _provider.selectedAppointmentDetail);
           });
         });
+  }
+
+  _initialiseLocator() async {
+    if (_provider.appointmentMapState == AppointmentMapState.InProgress) {
+      var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
+      Geolocator().getPositionStream(locationOptions).listen(
+              (Position position) {
+                if (position != null) {
+                  Map<String, dynamic> map = {'latitude': position.latitude, 'longitude': position.longitude, 'provider_id': '6'};
+                  FirestoreManager.getInstance().writeLocation(map);
+                }
+          });
+    }
   }
 }

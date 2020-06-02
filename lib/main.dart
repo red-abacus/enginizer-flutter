@@ -29,6 +29,7 @@ import 'package:app/modules/shop/screens/shop-service-details.dart';
 import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
+import 'package:app/utils/firebase/firestore_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,6 +90,7 @@ void main() async {
   runApp(configuredApp);
 
   FirebaseManager.getInstance().initialise();
+  FirestoreManager.getInstance().initialise();
 }
 
 class App extends StatefulWidget {

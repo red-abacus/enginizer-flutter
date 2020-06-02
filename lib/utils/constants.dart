@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:io' show Platform;
 
 const String SUCCESS_MESSAGE = " You will be contacted by us very soon.";
 const Color light_green = Color.fromARGB(255, 232, 240, 238);
@@ -49,16 +48,33 @@ class Constants {
   static DateFormat date = new DateFormat("dd/MM/yyyy");
 }
 
-const String _kGoogleKeyiOS = 'AIzaSyD9M1eI1kL7GP62FoM8XAA4cKAS9kstTwE';
-const String _kGoogleKeyAndroid = 'AIzaSyCsA-lBjHv66qgd2TFvcV805w1Sq9LJNWg';
+const String kGoogleKeyiOS = 'AIzaSyD9M1eI1kL7GP62FoM8XAA4cKAS9kstTwE';
+const String kGoogleKeyAndroid = 'AIzaSyCsA-lBjHv66qgd2TFvcV805w1Sq9LJNWg';
 
-String kGoogleApiKey() {
+const String kFirebaseAppIdAndroid = '1:617758597624:android:1ce45d11b056053b87b60d';
+const String kFirebaseAppIdiOS = '1:617758597624:ios:bf0e06b3eca8bdff87b60d';
+const String kFirebaseGcmSenderId = '617758597624';
+const String kFirebaseProjectId = 'autowass-dev';
+const String kFirebaseProjectName = 'autowass-dev';
+
+String get kGoogleApiKey {
   switch (defaultTargetPlatform) {
     case TargetPlatform.iOS:
-      return _kGoogleKeyiOS;
+      return kGoogleKeyiOS;
     case TargetPlatform.android:
-      return _kGoogleKeyAndroid;
+      return kGoogleKeyAndroid;
     default:
-      return _kGoogleKeyAndroid;
+      return kGoogleKeyAndroid;
+  }
+}
+
+String get kFirebaseAppId {
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS:
+      return kFirebaseAppIdiOS;
+    case TargetPlatform.android:
+      return kFirebaseAppIdAndroid;
+    default:
+      return kGoogleKeyAndroid;
   }
 }

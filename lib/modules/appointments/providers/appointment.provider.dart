@@ -1,4 +1,5 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/enum/appointment-map-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -19,11 +20,14 @@ class AppointmentProvider with ChangeNotifier {
 
   AuctionMapDirections auctionMapDirections;
 
+  AppointmentMapState appointmentMapState;
+
   initialiseParams() {
     initDone = false;
     selectedAppointment = null;
     selectedAppointmentDetail = null;
     auctionMapDirections = null;
+    appointmentMapState = null;
   }
 
   Future<AppointmentDetail> getAppointmentDetails(
