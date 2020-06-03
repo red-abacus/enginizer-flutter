@@ -2,6 +2,8 @@ import 'package:app/modules/appointments/model/provider/service-provider.model.d
 import 'package:app/modules/auctions/enum/bid-status.enum.dart';
 import 'package:app/utils/date_utils.dart';
 
+import 'bid-details.model.dart';
+
 class Bid {
   int id;
   double cost;
@@ -12,6 +14,7 @@ class Bid {
   int requestedServicesCount;
   String status;
   int workEstimateId;
+  int appointmentId;
 
   Bid(
       {this.id,
@@ -22,7 +25,8 @@ class Bid {
       this.providerAcceptedDateTime,
       this.requestedServicesCount,
       this.status,
-      this.workEstimateId});
+      this.workEstimateId,
+      this.appointmentId});
 
   factory Bid.fromJson(Map<String, dynamic> json) {
     return Bid(
@@ -37,7 +41,24 @@ class Bid {
         requestedServicesCount: json["requestedServicesCount"],
         status: json["status"],
         workEstimateId:
-            json['workEstimateId'] != null ? json['workEstimateId'] : 0);
+            json['workEstimateId'] != null ? json['workEstimateId'] : 0,
+        appointmentId:
+            json['appointmentId'] != null ? json['appointmentId'] : 0);
+  }
+
+  factory Bid.fromBidDetails(BidDetails bidDetails) {
+    return Bid(
+        id: bidDetails.id,
+        cost: bidDetails.cost,
+        coveredServicesCount: bidDetails.coveredServicesCount,
+        createdDate: bidDetails.createdDate,
+        serviceProvider: bidDetails.serviceProvider,
+        providerAcceptedDateTime: bidDetails.providerAcceptedDateTime,
+        requestedServicesCount: bidDetails.requestedServicesCount,
+        status: bidDetails.status,
+        workEstimateId: bidDetails.workEstimateId,
+        appointmentId:
+            bidDetails.appointment != null ? bidDetails.appointment.id : 0);
   }
 
   DateTime getAcceptedDate() {

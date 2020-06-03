@@ -30,6 +30,7 @@ class Auth with ChangeNotifier {
   List<User> users = [];
 
   bool get isAuth {
+    print('za token $_token');
     return _token != null && authUserDetails != null;
   }
 
@@ -64,6 +65,7 @@ class Auth with ChangeNotifier {
       await unregister(FirebaseManager.getInstance().fcmToken);
     }
 
+    PermissionsManager.removeInstance();
     _token = null;
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
@@ -90,6 +92,9 @@ class Auth with ChangeNotifier {
         if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
           await register(FirebaseManager.getInstance().fcmToken);
         }
+
+        PermissionsManager.getInstance().setServiceItemsResponse(null);
+
         if (this.authUserDetails.userProvider != null) {
           if (authUser.role == Roles.ProviderAdmin ||
               authUser.role == Roles.ProviderConsultant) {
@@ -123,6 +128,8 @@ class Auth with ChangeNotifier {
           if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
             await register(FirebaseManager.getInstance().fcmToken);
           }
+          PermissionsManager.getInstance().setServiceItemsResponse(null);
+
           if (this.authUserDetails.userProvider != null) {
             if (authUser.role == Roles.ProviderAdmin ||
                 authUser.role == Roles.ProviderConsultant) {

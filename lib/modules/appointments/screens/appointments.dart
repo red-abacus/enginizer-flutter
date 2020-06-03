@@ -134,6 +134,7 @@ class AppointmentsState extends State<Appointments> {
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
     switch (Provider.of<Auth>(context).authUser.role) {
       case Roles.Client:
+        Provider.of<AppointmentProvider>(context).initialiseParams();
         Provider.of<AppointmentProvider>(context).selectedAppointment =
             selectedAppointment;
         Navigator.of(context).pushNamed(AppointmentDetails.route);

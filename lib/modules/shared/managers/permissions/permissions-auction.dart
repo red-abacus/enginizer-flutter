@@ -30,29 +30,32 @@ class PermissionsAuction {
         case Roles.ProviderPersonnel:
           break;
         case Roles.ProviderConsultant:
-          permissions = [AUCTION_DETAILS];
+          if (serviceProviderItemsResponse != null) {
+            for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
+              ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
-          for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
-            ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
-
-            if (serviceType != null) {
-              switch (serviceType) {
-                case ConsultantServiceType.PickUpAndReturn:
-                  permissions.add(AUCTION_MAP_DETAILS);
-                  break;
-                case ConsultantServiceType.Service:
-                  permissions.add(APPOINTMENT_DETAILS);
-                  permissions.add(CREATE_WORK_ESTIMATE);
-                  permissions.add(CREATE_PART_WORK_ESTIMATE);
-                  break;
-                case ConsultantServiceType.PartShop:
-                  permissions.add(CAR_DETAILS);
-                  permissions.add(CREATE_WORK_ESTIMATE);
-                  break;
-                case ConsultantServiceType.DismantlingShop:
-                  permissions.add(CAR_DETAILS);
-                  permissions.add(CREATE_WORK_ESTIMATE);
-                  break;
+              if (serviceType != null) {
+                switch (serviceType) {
+                  case ConsultantServiceType.PickUpAndReturn:
+                    permissions.add(AUCTION_MAP_DETAILS);
+                    break;
+                  case ConsultantServiceType.Service:
+                    permissions.add(APPOINTMENT_DETAILS);
+                    permissions.add(CREATE_WORK_ESTIMATE);
+                    permissions.add(CREATE_PART_WORK_ESTIMATE);
+                    permissions.add(CONSULTANT_AUCTION_DETAILS);
+                    break;
+                  case ConsultantServiceType.PartShop:
+                    permissions.add(CAR_DETAILS);
+                    permissions.add(CREATE_WORK_ESTIMATE);
+                    permissions.add(CONSULTANT_AUCTION_DETAILS);
+                    break;
+                  case ConsultantServiceType.DismantlingShop:
+                    permissions.add(CAR_DETAILS);
+                    permissions.add(CREATE_WORK_ESTIMATE);
+                    permissions.add(CONSULTANT_AUCTION_DETAILS);
+                    break;
+                }
               }
             }
           }

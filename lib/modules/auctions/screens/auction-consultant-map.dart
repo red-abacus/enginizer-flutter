@@ -8,6 +8,7 @@ import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map.
 import 'package:app/modules/auctions/widgets/details-map/auction-map-decline.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -19,7 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuctionConsultantMap extends StatefulWidget {
-  static const String route = '/${Auctions.route}/auction-consultant-map';
+  static const String route = '${Auctions.route}/auction-consultant-map';
+  static const String notificationsRoute = '${Notifications.route}/auction-consultant-map';
 
   @override
   State<StatefulWidget> createState() {

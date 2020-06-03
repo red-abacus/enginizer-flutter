@@ -9,6 +9,7 @@ import 'package:app/modules/auctions/widgets/details-consultant/auction-consulta
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/auction-consultant.widget.dart';
+import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
@@ -22,6 +23,7 @@ import 'package:provider/provider.dart';
 
 class AuctionConsultant extends StatefulWidget {
   static const String route = '/${Auctions.route}/auction-consultant';
+  static const String notificationRoute = '/${Notifications.route}/auction-consultant';
 
   @override
   State<StatefulWidget> createState() {

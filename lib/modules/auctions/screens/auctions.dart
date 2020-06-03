@@ -102,8 +102,8 @@ class AuctionsState extends State<Auctions> {
             auctions: auctionsProvider.auctions,
             filterAuctions: _filterAuctions,
             selectAuction: _selectAuction,
-            searchString: auctionsProvider.searchString,
-            auctionStatus: auctionsProvider.filterStatus,
+            searchString: auctionsProvider.auctionRequest.searchString,
+            auctionStatus: auctionsProvider.auctionRequest.filterStatus,
             downloadNextPage: _loadData);
   }
 

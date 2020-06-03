@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/modules/auctions/models/google-distance.response.dart';
+import 'package:app/modules/auctions/models/request/auction-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
@@ -20,6 +21,8 @@ class AuctionsService {
 
   static const String _AUCTIONS_PATH = '${Environment.BIDS_BASE_API}/auctions';
 
+  static const String _GET_AUCTIONS_PATH = 'api/auctions';
+
   static const String _CREATE_BID_PATH_PREFIX =
       '${Environment.BIDS_BASE_API}/auctions/';
   static const String _CREATE_BID_PATH_SUFFIX = '/bids';
@@ -30,25 +33,15 @@ class AuctionsService {
 
   AuctionsService();
 
-  Future<AuctionResponse> getAuctions(int page,
-      {String status, String searchString, int pageSize}) async {
-    Map<String, dynamic> queryParameters = {'page': '$page'};
-
-    if (status != null) {
-      queryParameters['status'] = status;
-    }
-
-    if (searchString != null) {
-      queryParameters['search'] = searchString;
-    }
-
-    if (pageSize != null) {
-      queryParameters['pageSize'] = '$pageSize';
-    }
-
+  Future<AuctionResponse> getAuctions(AuctionRequest auctionRequest) async {
     try {
-      final response =
-          await _dio.get(_AUCTIONS_PATH, queryParameters: queryParameters);
+      var uri = Uri(
+          scheme: Environment.BIDS_SCHEME,
+          host: Environment.BIDS_HOST,
+          path: _GET_AUCTIONS_PATH,
+          queryParameters: auctionRequest.toJson());
+
+      final response = await _dio.getUri(uri);
 
       if (response.statusCode == 200) {
         return AuctionResponse.fromJson(response.data);

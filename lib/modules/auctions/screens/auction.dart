@@ -7,6 +7,7 @@ import 'package:app/modules/auctions/screens/bid-details.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/auctions/widgets/details/auction-appointment-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details/auction-bids.widget.dart';
+import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -14,8 +15,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'auctions.dart';
+
 class AuctionDetails extends StatefulWidget {
-  static const String route = '/auctions/auctionDetails';
+  static const String route = '${Auctions.route}/auctionDetails';
+  static const String notificationRoute =
+      '${Notifications.route}/auctionDetails';
 
   @override
   State<StatefulWidget> createState() {
@@ -31,11 +36,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   AuctionDetailsState({this.route});
 
-  AuctionProvider auctionProvider;
+  AuctionProvider _provider;
 
   @override
   Widget build(BuildContext context) {
-    if (auctionProvider != null && auctionProvider.selectedAuction == null) {
+    if (_provider != null && _provider.selectedAuction == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -52,32 +57,32 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   @override
   void didChangeDependencies() {
-    auctionProvider = Provider.of<AuctionProvider>(context);
+    _provider = Provider.of<AuctionProvider>(context);
 
-    if (!auctionProvider.initDone) {
-      if (auctionProvider.selectedAuction != null) {
+    if (!_provider.initDone) {
+      if (_provider.selectedAuction != null) {
         setState(() {
-          auctionProvider.isLoading = true;
+          _provider.isLoading = true;
         });
 
         _loadData();
       }
 
-      auctionProvider.initDone = true;
+      _provider.initDone = true;
     }
     super.didChangeDependencies();
   }
 
   _loadData() async {
     try {
-      await auctionProvider
-          .getAppointmentDetails(auctionProvider.selectedAuction.appointment.id)
+      await _provider
+          .getAppointmentDetails(_provider.selectedAuction.appointment.id)
           .then((_) async {
-        await auctionProvider
-            .loadBids(auctionProvider.selectedAuction.id)
+        await _provider
+            .loadBids(_provider.selectedAuction.id)
             .then((_) {
           setState(() {
-            auctionProvider.isLoading = false;
+            _provider.isLoading = false;
           });
         });
       });
@@ -85,24 +90,22 @@ class AuctionDetailsState extends State<AuctionDetails> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_appointment_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointment_details, context);
       } else if (error.toString().contains(BidsService.GET_BIDS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_bids, context);
       }
 
       setState(() {
-        auctionProvider.isLoading = false;
+        _provider.isLoading = false;
       });
     }
   }
 
   _titleText() {
     return Text(
-      auctionProvider.selectedAuction?.appointment?.name ?? 'N/A',
+      _provider.selectedAuction?.appointment?.name ?? 'N/A',
       style:
           TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
     );
@@ -127,7 +130,13 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _buildContent() {
-    return Provider.of<AuctionProvider>(context).isLoading
+    if (!_provider.isLoading && _provider.redirectBid != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _selectBid(_provider.redirectBid);
+        _provider.redirectBid = null;
+      });
+    }
+    return _provider.isLoading
         ? Center(child: CircularProgressIndicator())
         : _getContent();
   }
@@ -136,14 +145,14 @@ class AuctionDetailsState extends State<AuctionDetails> {
     switch (this.currentState) {
       case AuctionDetailsScreenState.APPOINTMENT:
         return AuctionAppointmentDetailsWidget(
-            auction: auctionProvider.selectedAuction,
-            appointmentDetail: auctionProvider.appointmentDetails);
+            auction: _provider.selectedAuction,
+            appointmentDetail: _provider.appointmentDetails);
       case AuctionDetailsScreenState.AUCTIONS:
-        auctionProvider.resetFilterParameters();
+        _provider.resetFilterParameters();
 
         return AuctionBidsWidget(
-            bids: auctionProvider.bids,
-            filterSearchString: auctionProvider.filterSearchString,
+            bids: _provider.bids,
+            filterSearchString: _provider.filterSearchString,
             selectBid: _selectBid,
             filterBids: _filterBids);
         break;
@@ -204,11 +213,11 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _selectBid(Bid bid) {
-    auctionProvider.selectedBid = bid;
+    _provider.selectedBid = bid;
     Navigator.of(context).pushNamed(BidDetails.route);
   }
 
   _filterBids(String filterSearchString) {
-    Provider.of<AuctionProvider>(context).filterBids(filterSearchString);
+    _provider.filterBids(filterSearchString);
   }
 }

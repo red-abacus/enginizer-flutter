@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/widgets/personnel/appointment-details-mechanic-car-details.widget.dart';
@@ -23,6 +24,7 @@ import 'appointments.dart';
 class AppointmentDetailsMechanic extends StatefulWidget {
   static const String route =
       '${Appointments.route}/appointment-details-mechanic';
+  static const String notificationsRoute = '${Notifications.route}/appointment-details-mechanic';
 
   @override
   State<StatefulWidget> createState() {

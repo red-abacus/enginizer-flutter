@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 
 class NotificationCard extends StatelessWidget {
   final AppNotification appNotification;
+  final Function selectNotification;
 
-  NotificationCard({this.appNotification});
+  NotificationCard({this.appNotification, this.selectNotification});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,9 @@ class NotificationCard extends StatelessWidget {
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
-            onTap: () => {},
+            onTap: () => {
+              selectNotification(this.appNotification)
+            },
             child: ClipRRect(
               borderRadius: new BorderRadius.circular(10.0),
               child: Container(

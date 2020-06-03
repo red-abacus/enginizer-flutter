@@ -398,6 +398,7 @@
   "notification_type_bid_created": "Bid created",
   "notification_type_bid_accepted": "Bid accepted",
   "notification_type_bid_rejected": "Bid rejected",
+  "notification_mark_as_read": "Mark All As Read",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -524,5 +525,10 @@
   "exception_convert_camera": "There was an error trying to display camera streaming.",
   "exception_get_points_distance": "There was an error trying to get points distance.",
   "exception_register_notification": "There was an error trying to register to notification system.",
-  "exception_get_notifications": "There was an error trying to get notifications."
+  "exception_get_notifications": "There was an error trying to get notifications.",
+  "exception_get_notification_appointment": "There was an error trying to get notification.",
+  "exception_get_notification_auction": "There was an error trying to get auction.",
+  "exception_get_notification_appointment_not_found": "No appointment found for this notification.",
+  "exception_get_notification_auction_not_found": "No auction found for this notification.",
+  "exception_notification_mark_as_seen": "There was an error trying to mark this notification as seen."
 }

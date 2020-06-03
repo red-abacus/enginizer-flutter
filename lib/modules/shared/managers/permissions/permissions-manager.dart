@@ -10,11 +10,14 @@ class PermissionsManager {
   PermissionsAuction _permissionsAuction;
   PermissionsUserProfile _permissionsUserProfile;
 
-  ServiceProviderItemsResponse _serviceItemsResponse;
   String userRole;
 
   static PermissionsManager getInstance() {
     return manager;
+  }
+
+  static PermissionsManager removeInstance() {
+    manager = PermissionsManager();
   }
 
   setServiceItemsResponse(
@@ -28,13 +31,10 @@ class PermissionsManager {
     switch (mainPermission) {
       case MainPermissions.Sidebar:
         return _permissionsSideBar.hasAccess(userRole, permission);
-        break;
       case MainPermissions.Auctions:
         return _permissionsAuction.hasAccess(userRole, permission);
-        break;
       case MainPermissions.UserProfile:
         return _permissionsUserProfile.hasAccess(userRole, permission);
-        break;
     }
 
     return false;

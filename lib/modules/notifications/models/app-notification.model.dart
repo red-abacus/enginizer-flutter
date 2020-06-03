@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/notifications/enums/notification-type.enum.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -67,5 +68,15 @@ class AppNotification {
       default:
         return '';
     }
+  }
+
+  getNotificationType() {
+    if (notificationType.contains('APPOINTMENT')) {
+      return NotificationType.Appointment;
+    } else if (notificationType.contains('BID')) {
+      return NotificationType.Auction;
+    }
+
+    return null;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
+import 'package:app/modules/auctions/models/request/auction-request.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
@@ -10,37 +11,27 @@ class AuctionsProvider with ChangeNotifier {
   CarMakeService carMakeService = inject<CarMakeService>();
   AuctionsService auctionsService = inject<AuctionsService>();
 
-  AuctionStatus filterStatus;
-  String searchString;
   List<Auction> auctions = [];
 
   AuctionResponse auctionResponse;
-
-  int _auctionPage = 0;
-  int _pageSize = 20;
+  AuctionRequest auctionRequest;
 
   void resetParameters() {
-    _auctionPage = 0;
-    this.filterStatus = null;
-    this.searchString = null;
-
+    auctionRequest = AuctionRequest();
     auctions = [];
   }
 
   Future<AuctionResponse> loadAuctions() async {
     if (auctionResponse != null) {
-      if (_auctionPage >= auctionResponse.totalPages) {
+      if (auctionRequest.auctionPage >= auctionResponse.totalPages) {
         return null;
       }
     }
 
     try {
-      auctionResponse = await auctionsService.getAuctions(_auctionPage,
-          pageSize: _pageSize,
-          searchString: this.searchString,
-          status: AuctionStatusUtils.rawStringFromStatus(this.filterStatus));
+      auctionResponse = await auctionsService.getAuctions(auctionRequest);
       this.auctions.addAll(auctionResponse.auctions);
-      _auctionPage += 1;
+      auctionRequest.auctionPage += 1;
       return auctionResponse;
     } catch (error) {
       throw (error);
@@ -48,11 +39,11 @@ class AuctionsProvider with ChangeNotifier {
   }
 
   filterAuctions(String searchString, AuctionStatus filterStatus) {
-    this._auctionPage = 0;
+    auctionRequest.auctionPage = 0;
     this.auctionResponse = null;
     this.auctions = [];
 
-    this.searchString = searchString;
-    this.filterStatus = filterStatus;
+    auctionRequest.searchString = searchString;
+    auctionRequest.filterStatus = filterStatus;
   }
 }

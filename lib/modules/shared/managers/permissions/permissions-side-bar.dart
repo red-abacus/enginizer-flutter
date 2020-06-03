@@ -34,37 +34,39 @@ class PermissionsSideBar {
         case Roles.ProviderConsultant:
           permissions = [PROFILE];
 
-          for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
-            ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
+          if (serviceProviderItemsResponse != null) {
+            for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
+              ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
-            if (serviceType != null) {
-              switch (serviceType) {
-                case ConsultantServiceType.PickUpAndReturn:
-                  permissions.add(APPOINTMENT);
-                  permissions.add(AUCTION);
-                  permissions.add(WORK_ESTIMATE);
-                  permissions.add(NOTIFICATIONS);
-                  break;
-                case ConsultantServiceType.Service:
-                  permissions.add(PROFILE);
-                  permissions.add(APPOINTMENT);
-                  permissions.add(AUCTION);
-                  permissions.add(WORK_ESTIMATE);
-                  permissions.add(NOTIFICATIONS);
-                  break;
-                case ConsultantServiceType.PartShop:
-                  permissions.add(PROFILE);
-                  permissions.add(AUCTION);
-                  permissions.add(NOTIFICATIONS);
-                  permissions.add(ORDERS);
-                  break;
-                case ConsultantServiceType.DismantlingShop:
-                  permissions.add(PROFILE);
-                  permissions.add(AUCTION);
-                  permissions.add(NOTIFICATIONS);
-                  permissions.add(PARTS);
-                  permissions.add(ORDERS);
-                  break;
+              if (serviceType != null) {
+                switch (serviceType) {
+                  case ConsultantServiceType.PickUpAndReturn:
+                    permissions.add(APPOINTMENT);
+                    permissions.add(AUCTION);
+                    permissions.add(WORK_ESTIMATE);
+                    permissions.add(NOTIFICATIONS);
+                    break;
+                  case ConsultantServiceType.Service:
+                    permissions.add(PROFILE);
+                    permissions.add(APPOINTMENT);
+                    permissions.add(AUCTION);
+                    permissions.add(WORK_ESTIMATE);
+                    permissions.add(NOTIFICATIONS);
+                    break;
+                  case ConsultantServiceType.PartShop:
+                    permissions.add(PROFILE);
+                    permissions.add(AUCTION);
+                    permissions.add(NOTIFICATIONS);
+                    permissions.add(ORDERS);
+                    break;
+                  case ConsultantServiceType.DismantlingShop:
+                    permissions.add(PROFILE);
+                    permissions.add(AUCTION);
+                    permissions.add(NOTIFICATIONS);
+                    permissions.add(PARTS);
+                    permissions.add(ORDERS);
+                    break;
+                }
               }
             }
           }

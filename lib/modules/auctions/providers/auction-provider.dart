@@ -24,6 +24,7 @@ class AuctionProvider with ChangeNotifier {
   Auction selectedAuction;
   AppointmentDetail appointmentDetails;
   Bid selectedBid;
+  Bid redirectBid;
   BidDetails bidDetails;
 
   String filterSearchString = "";
@@ -37,6 +38,7 @@ class AuctionProvider with ChangeNotifier {
     filterSearchString = "";
     isLoading = false;
     initDone = false;
+    redirectBid = null;
   }
 
   void resetFilterParameters() {

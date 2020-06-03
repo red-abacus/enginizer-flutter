@@ -407,6 +407,7 @@
   "notification_type_bid_created": "Ofertă creată",
   "notification_type_bid_accepted": "Ofertă acceptată",
   "notification_type_bid_rejected": "Ofertă refuzată",
+  "notification_mark_as_read": "Marchează toate ca citite",
   "general_at": "la",
   "appointment_create_step0": "Alege mașină",
   "general_find": "Caută",
@@ -519,5 +520,10 @@
   "exception_convert_camera": "A intervenit o problemă la încărcarea stream-ului.",
   "exception_get_points_distance": "A intervenit o problemă la calcularea distanțelor.",
   "exception_register_notification": "A intervenit o problemă la înregistrarea la sistemul de notificări.",
-  "exception_get_notifications": "A intervenit o problemă la încărcarea notificărilor."
+  "exception_get_notifications": "A intervenit o problemă la încărcarea notificărilor.",
+  "exception_get_notification_appointment": "A intervenit o problemă la încărcarea programării.",
+  "exception_get_notification_auction": "A intervenit o problemă la încărcarea licitației.",
+  "exception_get_notification_appointment_not_found": "Nicio programare nu a fost găsită.",
+  "exception_get_notification_auction_not_found": "Nicio licitație nu a fost găsită.",
+  "exception_notification_mark_as_seen": "A intervenit o problemă la marcarea notificării ca fiind citită."
 }

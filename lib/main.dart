@@ -191,18 +191,27 @@ class AppState extends State<App> {
                 '/cars/details': (context) => CarDetails(),
                 Appointments.route: (context) => Appointments(),
                 AppointmentDetails.route: (context) => AppointmentDetails(),
+                AppointmentDetails.notificationsRoute: (context) => AppointmentDetails(),
                 Auctions.route: (context) => Auctions(),
                 Shop.route: (context) => Shop(),
                 ShopServiceDetails.route: (context) => ShopServiceDetails(),
                 ShopProductDetails.route: (context) => ShopProductDetails(),
                 AuctionDetails.route: (context) => AuctionDetails(),
+                AuctionDetails.notificationRoute: (context) => AuctionDetails(),
                 AuctionConsultant.route: (context) => AuctionConsultant(),
+                AuctionConsultant.notificationRoute: (context) => AuctionConsultant(),
                 AuctionConsultantMap.route: (context) => AuctionConsultantMap(),
+                AuctionConsultantMap.notificationsRoute: (context) => AuctionConsultantMap(),
                 AppointmentDetailsMap.route: (context) => AppointmentDetailsMap(),
+                AppointmentDetailsMap.notificationsRoute: (context) => AppointmentDetailsMap(),
                 BidDetails.route: (context) => BidDetails(),
                 AppointmentDetailsConsultant.route: (context) =>
                     AppointmentDetailsConsultant(),
+                AppointmentDetailsConsultant.notificationsRoute: (context) =>
+                    AppointmentDetailsConsultant(),
                 AppointmentDetailsMechanic.route: (context) =>
+                    AppointmentDetailsMechanic(),
+                AppointmentDetailsMechanic.notificationsRoute: (context) =>
                     AppointmentDetailsMechanic(),
                 UserDetails.route: (context) => UserDetails(),
                 UserDetailsConsultant.route: (context) =>

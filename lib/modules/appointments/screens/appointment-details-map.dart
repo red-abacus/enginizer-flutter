@@ -11,6 +11,7 @@ import 'package:app/modules/appointments/widgets/service-details-modal.widget.da
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/firebase/firestore_manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -21,7 +22,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentDetailsMap extends StatefulWidget {
-  static const String route = '/${Auctions.route}/appointment-details-map';
+  static const String route = '${Auctions.route}/appointment-details-map';
+  static const String notificationsRoute = '${Notifications.route}/appointment-details-map';
 
   @override
   State<StatefulWidget> createState() {

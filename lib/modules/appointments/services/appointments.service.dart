@@ -56,6 +56,8 @@ class AppointmentsService {
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
+  static const String _APPOINTMENTS_PATH = 'api/appointments';
+
   static const String _APPOINTMENTS_DETAILS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _CANCEL_APPOINTMENT_PREFIX =
@@ -126,8 +128,13 @@ class AppointmentsService {
   Future<AppointmentsResponse> getAppointments(
       AppointmentsRequest request) async {
     try {
-      final response = await _dio.get(_APPOINTMENTS_API_PATH,
+      var uri = Uri(
+          scheme: Environment.APPOINTMENTS_SCHEME,
+          host: Environment.APPOINTMENTS_HOST,
+          path: _APPOINTMENTS_PATH,
           queryParameters: request.toJson());
+
+      final response = await _dio.getUri(uri);
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {

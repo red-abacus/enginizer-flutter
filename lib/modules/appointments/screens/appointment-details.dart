@@ -9,6 +9,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
+import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -19,8 +20,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'appointments.dart';
+
 class AppointmentDetails extends StatefulWidget {
-  static const String route = '/appointments/appointmentDetails';
+  static const String route = '${Appointments.route}/appointmentDetails';
+  static const String notificationsRoute = '${Notifications.route}/appointmentDetails';
 
   @override
   State<StatefulWidget> createState() {

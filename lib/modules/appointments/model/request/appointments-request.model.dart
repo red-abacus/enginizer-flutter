@@ -7,6 +7,7 @@ class AppointmentsRequest {
   AppointmentStatusState state;
   int pageSize = 20;
   int currentPage = 0;
+  List<String> ids = [];
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
@@ -25,6 +26,10 @@ class AppointmentsRequest {
     if (dateTime != null) {
       propMap['startDate'] = DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy');
       propMap['endDate'] = DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy');
+    }
+
+    if (ids.length > 0) {
+      propMap['ids'] = ids;
     }
 
     return propMap;
