@@ -173,6 +173,7 @@ class AppointmentsState extends State<Appointments> {
             appointmentStatusState: _provider.appointmentsRequest.state,
             filterDateTime: _provider.appointmentsRequest.dateTime,
             downloadNextPage: _loadData,
+            shouldDownload: _provider.shouldDownload(),
           );
   }
 

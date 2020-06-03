@@ -21,11 +21,19 @@ class AuctionsProvider with ChangeNotifier {
     auctions = [];
   }
 
-  Future<AuctionResponse> loadAuctions() async {
+  bool shouldDownload() {
     if (auctionResponse != null) {
       if (auctionRequest.auctionPage >= auctionResponse.totalPages) {
         return null;
       }
+    }
+
+    return true;
+  }
+
+  Future<AuctionResponse> loadAuctions() async {
+    if (!shouldDownload()) {
+      return null;
     }
 
     try {

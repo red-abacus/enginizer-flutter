@@ -1,30 +1,29 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
 import 'package:app/modules/shared/widgets/custom-show-dialog.widget.dart';
-import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
-import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/shared/widgets/datetimepicker.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
+class OrderPartsFinalInfo extends StatelessWidget {
   final Function infoAdded;
-  final DateTime maxResponseTime;
-  DateTime deliveryDate;
+
+  DateTime time;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  WorkEstimateFinalInfoPartsWidget({this.infoAdded, this.maxResponseTime});
+  OrderPartsFinalInfo({this.infoAdded});
 
   @override
   Widget build(BuildContext context) {
     return new CustomAlertDialog(
       content: new Container(
         width: 260.0,
-        height: 260.0,
+        height: 160.0,
         decoration: new BoxDecoration(
           shape: BoxShape.rectangle,
           color: const Color(0xFFFFFF),
@@ -36,42 +35,21 @@ class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                S.of(context).estimator_bid_action,
+                S.of(context).parts_delivery_button_title,
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      S.of(context).estimator_max_time,
-                      style: TextHelper.customTextStyle(null, gray3, null, 14),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 6),
-                      child: Text(
-                        DateUtils.stringFromDate(maxResponseTime, 'dd/MM/yyyy'),
-                        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               BasicDateField(
-                minDate: DateUtils.addDayToDate(DateTime.now(), -1),
-                maxDate: maxResponseTime,
-                labelText: S.of(context).appointment_delivery_time,
+                labelText: S.of(context).orders_date_delivery_estimator,
                 validator: (value) {
                   if (value == null) {
-                    return S.of(context).appointment_delivery_time_warning;
+                    return S.of(context).orders_date_delivery_estimator;
                   } else {
                     return null;
                   }
                 },
                 onChange: (value) {
-                  deliveryDate = value;
+                  time = value;
                 },
               ),
               new Container(
@@ -101,8 +79,8 @@ class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
 
   _save(BuildContext context) {
     if (_formKey.currentState.validate()) {
+      infoAdded(time);
       Navigator.pop(context);
-      infoAdded(deliveryDate, maxResponseTime);
     }
   }
 }

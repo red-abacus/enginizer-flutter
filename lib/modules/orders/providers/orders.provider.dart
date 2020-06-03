@@ -1,6 +1,8 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
+import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -10,39 +12,55 @@ class OrdersProvider with ChangeNotifier {
   List<Appointment> appointments = [];
 
   bool initDone = false;
+
   AppointmentsResponse _appointmentsResponse;
-
-  int _orderPage = 0;
-  final int _pageSize = 20;
-
-  String searchString;
+  AppointmentsRequest appointmentsRequest;
 
   void resetParameters() {
-    _appointmentsResponse = null;
     initDone = false;
-    _orderPage = 0;
-//    this.filterStatus = null;
-    this.searchString = null;
+
+    _appointmentsResponse = null;
 
     appointments = [];
+    appointmentsRequest = null;
+    appointmentsRequest = AppointmentsRequest();
   }
 
-  Future<AppointmentsResponse> getOrders() async {
-    if (_appointmentsResponse != null) {
-      if (_orderPage >= _appointmentsResponse.totalPages) {
-        return null;
-      }
+  Future<List<Appointment>> getOrders() async {
+    if (!shouldDownload()) {
+      return null;
     }
 
     try {
-      _appointmentsResponse = await _orderService.getOrders(_orderPage,
-          pageSize: _pageSize,
-          searchString: this.searchString);
-      this.appointments.addAll(_appointmentsResponse.items);
-      _orderPage += 1;
-      return _appointmentsResponse;
+      this._appointmentsResponse =
+          await this._orderService.getOrders(appointmentsRequest);
+      this.appointments.addAll(this._appointmentsResponse.items);
+      appointmentsRequest.currentPage += 1;
+      notifyListeners();
+      return appointments;
     } catch (error) {
       throw (error);
     }
+  }
+
+  bool shouldDownload() {
+    if (_appointmentsResponse != null) {
+      if (appointmentsRequest.currentPage >= _appointmentsResponse.totalPages) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  filterAppointments(String searchString,
+      AppointmentStatusState filterStatus, DateTime dateTime) async {
+    _appointmentsResponse = null;
+    appointments = [];
+    appointmentsRequest = AppointmentsRequest();
+
+    appointmentsRequest.searchString = searchString;
+    appointmentsRequest.state = filterStatus;
+    appointmentsRequest.dateTime = dateTime;
   }
 }

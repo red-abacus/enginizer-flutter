@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/environment.constants.dart';
 import 'package:dio/dio.dart';
 
@@ -9,26 +14,22 @@ class OrderService {
   OrderService();
 
   static const String GET_ORDERS_EXCEPTION = 'GET_ORDERS_EXCEPTION';
+  static const String GET_ORDER_DETAILS_EXCEPTION =
+      'GET_ORDER_DETAILS_EXCEPTION';
+  static const String ACCEPT_ORDER_EXCEPTION = 'ACCEPT_ORDER_EXCEPTION';
 
   static const String _GET_ORDERS_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/orders';
+  static const String _GET_ORDER_DETAILS_PATH =
+      '${Environment.APPOINTMENTS_BASE_API}/orders';
+  static const String _ACCEPT_ORDER_PATH_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/orders/';
+  static const String _ACCEPT_ORDER_PATH_SUFFX = '/accept';
 
-  Future<AppointmentsResponse> getOrders(int page,
-      {String status, String searchString, int pageSize}) async {
-    Map<String, dynamic> queryParameters = {'page': '$page'};
-    if (status != null) {
-      queryParameters['status'] = status;
-    }
-    if (searchString != null) {
-      queryParameters['search'] = searchString;
-    }
-    if (pageSize != null) {
-      queryParameters['pageSize'] = '$pageSize';
-    }
-
+  Future<AppointmentsResponse> getOrders(AppointmentsRequest request) async {
     try {
-      final response = await _dio
-          .get(_GET_ORDERS_PATH, queryParameters: queryParameters);
+      final response =
+          await _dio.get(_GET_ORDERS_PATH, queryParameters: request.toJson());
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {
@@ -37,5 +38,39 @@ class OrderService {
     } catch (error) {
       throw Exception(GET_ORDERS_EXCEPTION);
     }
+  }
+
+  Future<AppointmentDetail> getOrderDetails(int orderId) async {
+    try {
+      final response = await _dio.get(_GET_ORDER_DETAILS_PATH + '/${orderId}');
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(GET_ORDER_DETAILS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_ORDERS_EXCEPTION);
+    }
+  }
+
+  Future<AppointmentDetail> acceptOrder(
+      int orderId, String deliveryDateTime) async {
+    try {
+      final response = await _dio.patch(_buildAcceptOrderPath(orderId),
+          data: jsonEncode({'deliveryDateTime': deliveryDateTime}));
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(ACCEPT_ORDER_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(ACCEPT_ORDER_EXCEPTION);
+    }
+  }
+
+  _buildAcceptOrderPath(int orderId) {
+    return _ACCEPT_ORDER_PATH_PREFIX +
+        orderId.toString() +
+        _ACCEPT_ORDER_PATH_SUFFX;
   }
 }

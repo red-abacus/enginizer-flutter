@@ -34,10 +34,12 @@ class AppointmentStatus {
     switch (getState()) {
       case AppointmentStatusState.SUBMITTED:
       case AppointmentStatusState.IN_REVIEW:
+      case AppointmentStatusState.NEW:
         return gray;
       case AppointmentStatusState.CANCELED:
         return red;
       case AppointmentStatusState.DONE:
+      case AppointmentStatusState.ACCEPTED:
         return green;
       case AppointmentStatusState.NONE:
         return gray2;
@@ -58,6 +60,8 @@ class AppointmentStatus {
       case AppointmentStatusState.PENDING:
         return 'waiting';
       case AppointmentStatusState.DONE:
+      case AppointmentStatusState.NEW:
+      case AppointmentStatusState.ACCEPTED:
         return 'completed';
       default:
         return name.toLowerCase();
@@ -86,6 +90,10 @@ class AppointmentStatus {
         return AppointmentStatusState.ON_HOLD;
       case 'inunit':
         return AppointmentStatusState.IN_UNIT;
+      case 'new':
+        return AppointmentStatusState.NEW;
+      case 'accepted':
+        return AppointmentStatusState.ACCEPTED;
       default:
         return AppointmentStatusState.NONE;
     }

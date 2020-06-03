@@ -15,7 +15,6 @@ import 'package:flutter_svg/svg.dart';
 class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   AppointmentDetail appointmentDetail;
   WorkEstimateDetails workEstimateDetails;
-  List<ServiceItem> serviceItems;
   List<ServiceProviderItem> serviceProviderItems;
   final Function declineAppointment;
   final Function createEstimate;
@@ -27,7 +26,6 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
 
   AppointmentDetailsGenericConsultantWidget(
       {this.appointmentDetail,
-      this.serviceItems = const [],
       this.serviceProviderItems = const [],
       this.declineAppointment,
       this.createEstimate,
@@ -366,8 +364,8 @@ class AppointmentDetailsGenericConsultantWidgetState
   _servicesContainer() {
     return Column(
       children: <Widget>[
-        if (widget.serviceItems != null)
-          for (ServiceItem item in widget.serviceItems) _getServiceRow(item),
+        if (widget.appointmentDetail.serviceItems != null)
+          for (ServiceItem item in widget.appointmentDetail.serviceItems) _getServiceRow(item),
       ],
     );
   }

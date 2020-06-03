@@ -11,7 +11,6 @@ import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
-import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
 import 'package:app/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
@@ -30,7 +29,6 @@ class Auth with ChangeNotifier {
   List<User> users = [];
 
   bool get isAuth {
-    print('za token $_token');
     return _token != null && authUserDetails != null;
   }
 

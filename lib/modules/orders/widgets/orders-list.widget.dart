@@ -1,16 +1,18 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/authentication/models/roles.model.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/orders/widgets/cards/order.card.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'cards/appointment-card.widget.dart';
-
-class AppointmentsList extends StatelessWidget {
+class OrdersList extends StatelessWidget {
   List<Appointment> appointments = [];
 
   String searchString;
@@ -22,22 +24,27 @@ class AppointmentsList extends StatelessWidget {
   final Function downloadNextPage;
   bool shouldDownload = true;
 
-  AppointmentsList(
-      {this.appointments,
-      this.selectAppointment,
-      this.filterAppointments,
-      this.searchString,
-      this.appointmentStatusState,
-      this.filterDateTime,
-      this.downloadNextPage,
-      this.shouldDownload});
+  OrdersList({this.appointments,
+    this.selectAppointment,
+    this.filterAppointments,
+    this.searchString,
+    this.appointmentStatusState,
+    this.filterDateTime,
+    this.downloadNextPage,
+    this.shouldDownload});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
       child: Container(
         child: Center(
           child: Column(
@@ -61,7 +68,9 @@ class AppointmentsList extends StatelessWidget {
         style: TextHelper.customTextStyle(null, null, null, null),
         autofocus: false,
         decoration: InputDecoration(
-            labelText: S.of(context).appointments_list_search_hint),
+            labelText: S
+                .of(context)
+                .appointments_list_search_hint),
         onChanged: (val) {
           filterAppointments(
               val, this.appointmentStatusState, this.filterDateTime);
@@ -93,7 +102,9 @@ class AppointmentsList extends StatelessWidget {
             child: Container(
               height: 70,
               child: BasicDateField(
-                labelText: S.of(context).general_date,
+                labelText: S
+                    .of(context)
+                    .general_date,
                 onChange: (value) {
                   filterAppointments(
                       this.searchString, this.appointmentStatusState, value);
@@ -115,7 +126,7 @@ class AppointmentsList extends StatelessWidget {
                 downloadNextPage();
               }
             }
-            return AppointmentCard(
+            return OrderCard(
                 appointment: this.appointments.elementAt(index),
                 selectAppointment: this.selectAppointment);
           },
@@ -127,9 +138,11 @@ class AppointmentsList extends StatelessWidget {
 
   Widget _statusText(BuildContext context) {
     String title = (this.appointmentStatusState == null)
-        ? S.of(context).general_status
+        ? S
+        .of(context)
+        .general_status
         : AppointmentStatusStateUtils.title(
-            context, this.appointmentStatusState);
+        context, this.appointmentStatusState);
 
     return Text(
       title,
@@ -144,16 +157,18 @@ class AppointmentsList extends StatelessWidget {
 
     if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.PERSONNEL_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statusesMechanic();
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
         PermissionAppointmentsStatuses.ALL_STATUSES)) {
       statuses = AppointmentStatusStateUtils.statuses();
-    } else if (PermissionsManager.getInstance().hasAccess(
+    }
+    else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.AppointmentsStatuses,
         PermissionAppointmentsStatuses.PARTS_STATUSES)) {
       statuses = AppointmentStatusStateUtils.statusesParts();
+    }
+    else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.AppointmentsStatuses,
+        PermissionAppointmentsStatuses.PERSONNEL_STATUSES)) {
+      statuses = AppointmentStatusStateUtils.statusesMechanic();
     }
 
     statuses.forEach((status) {

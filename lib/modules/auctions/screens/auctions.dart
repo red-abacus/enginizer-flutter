@@ -116,7 +116,7 @@ class AuctionsState extends State<Auctions> {
     if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
       AuctionProvider provider =
-      Provider.of<AuctionProvider>(context, listen: false);
+          Provider.of<AuctionProvider>(context, listen: false);
       provider.initialiseParameters();
       provider.selectedAuction = auction;
 
