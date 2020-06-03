@@ -99,7 +99,7 @@ class _AuthScreenState extends State<AuthScreen> {
           child: FlatButton(
             child: Text('furnizor'),
             onPressed: () {
-              _login('parts.provider3@autowass.com', 'password');
+              _login('furnizor.piese.consultant@autowass.com', 'password');
             },
           ),
         )

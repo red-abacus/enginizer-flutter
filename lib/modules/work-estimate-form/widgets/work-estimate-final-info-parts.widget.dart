@@ -61,7 +61,7 @@ class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
               ),
               BasicDateField(
                 minDate: DateUtils.addDayToDate(DateTime.now(), -1),
-                maxDate: DateUtils.addDayToDate(DateTime.now(), 100),
+                maxDate: maxResponseTime,
                 labelText: S.of(context).appointment_delivery_time,
                 validator: (value) {
                   if (value == null) {

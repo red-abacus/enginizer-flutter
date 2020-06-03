@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
@@ -30,6 +31,8 @@ class AppointmentDetail {
   List<IssueRecommendation> recommendations;
   DateTime deliveryDateTime;
   List<IssueItem> items;
+  GenericModel buyer;
+  GenericModel seller;
 
   AppointmentDetail(
       {this.id,
@@ -48,7 +51,9 @@ class AppointmentDetail {
       this.timeToRespond,
       this.recommendations,
       this.deliveryDateTime,
-      this.items});
+      this.items,
+      this.buyer,
+      this.seller});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -85,7 +90,12 @@ class AppointmentDetail {
             ? DateUtils.dateFromString(
                 json['deliveryDateTime'], 'dd/MM/yyyy HH:mm')
             : null,
-        items: json['items'] != null ? _mapIssueItems(json['items']) : []);
+        items: json['items'] != null ? _mapIssueItems(json['items']) : [],
+        buyer:
+            json['buyer'] != null ? GenericModel.fromJson(json['buyer']) : null,
+        seller: json['seller'] != null
+            ? GenericModel.fromJson(json['seller'])
+            : null);
   }
 
   static _mapIssueItems(List<dynamic> response) {

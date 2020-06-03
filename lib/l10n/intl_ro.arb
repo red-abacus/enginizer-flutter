@@ -388,6 +388,8 @@
   "parts_delivery_button_title": "Livrează",
   "parts_suggested_delivery_date": "Dată propusă pentru livrare",
   "parts_delivery_date_warning": "Adaugă data de livrare",
+  "orders_date_delivery_estimator": "Estimare dată de livrare",
+  "orders_date_delivery_estimator_warning": "Adaugă estimare dată de livrare",
   "dashboard_start_date": "Dată start",
   "dashboard_end_date": "Dată final",
   "dashboard_select_car": "Alege masină",

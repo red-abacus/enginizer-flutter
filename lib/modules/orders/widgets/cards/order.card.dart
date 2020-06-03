@@ -60,7 +60,8 @@ class OrderCard extends StatelessWidget {
       padding: EdgeInsets.all(30),
       color: appointment.status.resolveStatusColor(),
       child: SvgPicture.asset(
-        'assets/images/statuses/${appointment.status.assetName()}.svg'.toLowerCase(),
+        'assets/images/statuses/${appointment.status.assetName()}.svg'
+            .toLowerCase(),
         semanticsLabel: 'Appointment Status Image',
       ),
     );
@@ -78,15 +79,15 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text('${appointment.car?.model?.name} ${appointment.car?.year?.name}',
+                Text(
+                    '${appointment.car?.model?.name} ${appointment.car?.year?.name}',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         height: 1.5)),
-                Text(
-                    '${appointment.serviceProvider.name}',
+                Text('${appointment.buyer?.name ?? ''}',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
@@ -108,7 +109,7 @@ class OrderCard extends StatelessWidget {
                   alignment: FractionalOffset.bottomLeft,
                   child: Container(
                     margin: EdgeInsets.only(bottom: 10),
-                    child: Text(appointment.name,
+                    child: Text('${appointment.name}',
                         style: TextStyle(
                             color: Colors.black87,
                             fontFamily: 'Lato',
@@ -127,7 +128,8 @@ class OrderCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(right: 10),
       child: Text(
-        AppointmentStatusStateUtils.title(context, appointment.status.getState())
+        AppointmentStatusStateUtils.title(
+                context, appointment.status.getState())
             .toUpperCase(),
         textAlign: TextAlign.right,
         style: TextHelper.customTextStyle(

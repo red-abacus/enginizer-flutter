@@ -380,6 +380,8 @@
   "parts_delivery_button_title": "Deliver",
   "parts_suggested_delivery_date": "Sugested delivery date",
   "parts_delivery_date_warning": "Add delivery date",
+  "orders_date_delivery_estimator": "Estimated delivery date",
+  "orders_date_delivery_estimator_warning": "Add estimated delivery date",
   "dashboard_start_date": "Start date",
   "dashboard_end_date": "End date",
   "dashboard_select_car": "Select car",

@@ -39,11 +39,11 @@ class OrderPartsFinalInfo extends StatelessWidget {
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
               ),
-              BasicDateTimePicker(
-                labelText: S.of(context).estimator_max_time,
+              BasicDateField(
+                labelText: S.of(context).orders_date_delivery_estimator,
                 validator: (value) {
                   if (value == null) {
-                    return S.of(context).parts_delivery_date_warning;
+                    return S.of(context).orders_date_delivery_estimator;
                   } else {
                     return null;
                   }

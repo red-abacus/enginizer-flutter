@@ -4,6 +4,7 @@ import 'package:app/modules/appointments/widgets/details/appointment-details-gen
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/car-details-parts.widget.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
+import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/modules/orders/widgets/order-confirm-parts.widget.dart';
@@ -163,15 +164,6 @@ class OrderDetailsState extends State<OrderDetails>
       list = [
         AppointmentDetailsGenericConsultantWidget(
           appointmentDetail: _provider.orderDetails,
-//        serviceProviderItems: _provider.serviceprovi,
-//        declineAppointment: _declineAppointment,
-//        createEstimate: _createEstimate,
-//        viewEstimate: _viewEstimate,
-//        assignMechanic: _assignMechanic,
-//        createPickUpCarForm: _createPickUpCarForm,
-//        workEstimateDetails: _provider.workEstimateDetails,
-//        requestPartsProvider: _requestPartsProvider,
-//        seeCamera: _seeCamera,
         )
       ];
       list.add(OrderConfirmParts(
@@ -186,18 +178,20 @@ class OrderDetailsState extends State<OrderDetails>
   }
 
   _showProviderDetails() {
-    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
-        _provider.orderDetails.serviceProvider.id;
+    if (_provider.orderDetails.buyer != null) {
+      Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
+          _provider.orderDetails.buyer.id;
 
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (_) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (_) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+                  return ServiceDetailsModal();
+                });
           });
-        });
+    }
   }
 
   _acceptOrder(DateTime dateTime) async {
@@ -210,6 +204,7 @@ class OrderDetailsState extends State<OrderDetails>
           .acceptOrder(_provider.order.id,
               DateUtils.stringFromDate(dateTime, 'dd/MM/yyyy HH:mm'))
           .then((_) async {
+            Provider.of<OrdersProvider>(context).initDone = false;
         setState(() {
           _isLoading = false;
         });

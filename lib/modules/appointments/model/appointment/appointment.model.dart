@@ -1,5 +1,6 @@
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-status.model.dart';
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/operating-unit.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -24,6 +25,8 @@ class Appointment {
   OperatingUnit operatingUnit;
   AppointmentStatus status;
   ServiceProvider serviceProvider;
+  GenericModel buyer;
+  GenericModel seller;
 
   Appointment(
       {this.id,
@@ -35,7 +38,9 @@ class Appointment {
       this.operatingUnit,
       this.status,
       this.name,
-      this.serviceProvider});
+      this.serviceProvider,
+      this.buyer,
+      this.seller});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -54,9 +59,14 @@ class Appointment {
         status: json['status'] != null
             ? AppointmentStatus.fromJson(json['status'])
             : null,
-        name: json["name"] != null ? json["name"] : "",
+        name: json['name'] != null ? json['name'] : '',
         serviceProvider: json['provider'] != null
             ? ServiceProvider.fromJson(json["provider"])
+            : null,
+        buyer:
+            json['buyer'] != null ? GenericModel.fromJson(json['buyer']) : null,
+        seller: json['seller'] != null
+            ? GenericModel.fromJson(json['seller'])
             : null);
   }
 
