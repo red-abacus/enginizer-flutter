@@ -1,3 +1,3 @@
 enum NotificationType {
-  Appointment, Auction
+  Appointment, Bid, Auction
 }

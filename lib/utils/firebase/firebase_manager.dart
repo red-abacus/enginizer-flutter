@@ -28,8 +28,6 @@ class FirebaseManager {
   }
 
   Future<void> initialise() async {
-    NotificationsManager.checkNotificationsCount();
-
     _firebaseMessaging.getToken().then((token) {
       fcmToken = token;
 
@@ -40,30 +38,14 @@ class FirebaseManager {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-//        AppNotification notification = AppNotification.fromNotification(message);
-//
-//        if (notification != null) {
-//          Database.getInstance()
-//              .addNotification(notification);
-//          NotificationsManager.showNotificationBanner(notification);
-//        }
+        parseNotification(message);
       },
       onBackgroundMessage: FirebaseManager.firebaseBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
-//        AppNotification notification = AppNotification.fromNotification(message);
-//
-//        if (notification != null) {
-//          Database.getInstance()
-//              .addNotification(notification);
-//        }
+        parseNotification(message);
       },
       onResume: (Map<String, dynamic> message) async {
-//        AppNotification notification = AppNotification.fromNotification(message);
-//
-//        if (notification != null) {
-//          Database.getInstance()
-//              .addNotification(notification);
-//        }
+        parseNotification(message);
       },
     );
   }
@@ -77,5 +59,16 @@ class FirebaseManager {
 //          .addNotification(notification);
 //    }
     return Future<void>.value();
+  }
+
+  parseNotification(Map<String, dynamic> message) {
+    if (message['notification'] != null) {
+      var notificationData = message['notification'];
+
+      String title = notificationData['title'] != null ? notificationData['title'] : '';
+      String body = notificationData['body'] != null ? notificationData['body'] : '';
+
+      NotificationsManager.showNotificationBanner(title, body);
+    }
   }
 }

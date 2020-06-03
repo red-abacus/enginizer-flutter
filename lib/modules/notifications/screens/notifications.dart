@@ -25,6 +25,7 @@ import 'package:app/modules/notifications/providers/notification.provider.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,6 +56,10 @@ class NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NotificationsManager.refreshNotifications(0);
+    });
+
     return Scaffold(
       key: _scaffoldKey,
       body: _contentWidget(),
@@ -169,7 +174,7 @@ class NotificationsState extends State<Notifications> {
               S.of(context).exception_get_notification_appointment, context);
         }
       }
-    } else if (notificationType == NotificationType.Auction) {
+    } else if (notificationType == NotificationType.Bid) {
       try {
         await _provider
             .getBidDetails(appNotification.payloadId)
@@ -191,6 +196,21 @@ class NotificationsState extends State<Notifications> {
         } else if (error
             .toString()
             .contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(
+              S.of(context).general_error,
+              S.of(context).exception_get_notification_auction_not_found,
+              context);
+        }
+      }
+    } else if (notificationType == NotificationType.Auction) {
+      try {
+        Auction auction = await _provider.getAuction(appNotification.payloadId);
+
+        if (auction != null) {
+          _showAuctionDetails(auction, null);
+        }
+      } catch (error) {
+        if (error.toString().contains(AuctionsService.GET_AUCTION_EXCEPTION)) {
           FlushBarHelper.showFlushBar(
               S.of(context).general_error,
               S.of(context).exception_get_notification_auction_not_found,
@@ -247,7 +267,7 @@ class NotificationsState extends State<Notifications> {
         MainPermissions.Auctions,
         PermissionsAuction.CONSULTANT_AUCTION_DETAILS)) {
       AuctionConsultantProvider provider =
-      Provider.of<AuctionConsultantProvider>(context);
+          Provider.of<AuctionConsultantProvider>(context);
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionConsultant.route);

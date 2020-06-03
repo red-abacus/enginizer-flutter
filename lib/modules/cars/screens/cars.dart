@@ -8,6 +8,7 @@ import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/screens/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
+import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,6 +78,8 @@ class CarsState extends State<Cars> {
   }
 
   void _openCarCreateModal(BuildContext ctx) {
+    NotificationsManager.showNotificationBanner('test', 'body');
+    return;
     Provider.of<CarsMakeProvider>(context).initParams();
 
     showModalBottomSheet<void>(

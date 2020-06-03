@@ -30,8 +30,9 @@ class NotificationService {
   Future<bool> register(String fcmToken) async {
     try {
       final response =
-          await _dio.post(_REGISTER_PATH, data: jsonEncode(fcmToken));
+          await _dio.post(_REGISTER_PATH, data: fcmToken);
       if (response.statusCode == 200) {
+        print('[FIREBASE] Registered');
         return true;
       } else {
         throw Exception(REGISTER_NOTIFICATION_EXCEPTION);
@@ -46,6 +47,7 @@ class NotificationService {
       final response =
           await _dio.post(_UNREGISTER_PATH, data: jsonEncode(fcmToken));
       if (response.statusCode == 200) {
+        print('[FIREBASE] Unregister');
         return true;
       } else {
         throw Exception(UNREGISTER_NOTIFICATION_EXCEPTION);

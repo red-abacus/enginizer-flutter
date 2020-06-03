@@ -407,6 +407,7 @@
   "notification_type_bid_created": "Ofertă creată",
   "notification_type_bid_accepted": "Ofertă acceptată",
   "notification_type_bid_rejected": "Ofertă refuzată",
+  "notification_type_auction_created": "Licitație creată",
   "notification_mark_as_read": "Marchează toate ca citite",
   "general_at": "la",
   "appointment_create_step0": "Alege mașină",

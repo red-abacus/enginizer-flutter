@@ -65,6 +65,8 @@ class AppNotification {
       case 'BID_REJECTED':
         return S.of(context).notification_type_bid_rejected;
         break;
+      case 'AUCTION_CREATED':
+        return S.of(context).notification_type_auction_created;
       default:
         return '';
     }
@@ -74,6 +76,8 @@ class AppNotification {
     if (notificationType.contains('APPOINTMENT')) {
       return NotificationType.Appointment;
     } else if (notificationType.contains('BID')) {
+      return NotificationType.Bid;
+    } else if (notificationType.contains('AUCTION')) {
       return NotificationType.Auction;
     }
 

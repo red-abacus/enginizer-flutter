@@ -398,6 +398,7 @@
   "notification_type_bid_created": "Bid created",
   "notification_type_bid_accepted": "Bid accepted",
   "notification_type_bid_rejected": "Bid rejected",
+  "notification_type_auction_created": "Auction created",
   "notification_mark_as_read": "Mark All As Read",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
