@@ -398,8 +398,10 @@
   "part_create_guarantee_title": "Garanție (pe luni)",
   "parts_delivery_title": "Livrare Piese",
   "parts_delivery_button_title": "Livrează",
+  "parts_delivery_confirm_button_title": "Confirmă",
   "parts_suggested_delivery_date": "Dată propusă pentru livrare",
   "parts_delivery_date_warning": "Adaugă data de livrare",
+  "parts_confirm_parts_warning": "Confirmă comanda",
   "orders_date_delivery_estimator": "Estimare dată de livrare",
   "orders_date_delivery_estimator_warning": "Adaugă estimare dată de livrare",
   "dashboard_start_date": "Dată start",
@@ -536,5 +538,6 @@
   "exception_get_notification_auction_not_found": "Nicio licitație nu a fost găsită.",
   "exception_notification_mark_as_seen": "A intervenit o problemă la marcarea notificării ca fiind citită.",
   "exception_get_order_details": "A intervenit o problemă la încărcarea detaliilor comenzii.",
-  "exception_accept_order": "A intervenit o problemă la acceptarea comenzii."
+  "exception_accept_order": "A intervenit o problemă la acceptarea comenzii.",
+  "exception_finish_order": "A intervenit o problemă la confirmarea comenzii."
 }

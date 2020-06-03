@@ -153,23 +153,7 @@ class OrdersList extends StatelessWidget {
   _statusDropdownItems(BuildContext context) {
     List<DropdownMenuItem<AppointmentStatusState>> list = [];
 
-    var statuses = List<AppointmentStatusState>();
-
-    if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.ALL_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statuses();
-    }
-    else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.PARTS_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statusesParts();
-    }
-    else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.PERSONNEL_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statusesMechanic();
-    }
+    var statuses = AppointmentStatusStateUtils.statusesParts();
 
     statuses.forEach((status) {
       list.add(DropdownMenuItem(

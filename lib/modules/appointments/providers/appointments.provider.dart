@@ -29,12 +29,9 @@ class AppointmentsProvider with ChangeNotifier {
   }
 
   void resetParams() {
-<<<<<<< HEAD
-=======
     initDone = false;
     appointmentsResponse = null;
 
->>>>>>> feature/AUT-514/partsOrderWorkflow2
     appointments = [];
     appointmentsRequest = null;
     appointmentsRequest = AppointmentsRequest();

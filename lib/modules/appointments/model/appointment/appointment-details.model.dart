@@ -55,7 +55,8 @@ class AppointmentDetail {
       this.buyer,
       this.seller});
 
-  factory AppointmentDetail.fromJson(Map<String, dynamic> json) {return AppointmentDetail(
+  factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
+    return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
         car: Car.fromJson(json["car"]),

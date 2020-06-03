@@ -3,6 +3,7 @@ import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/widgets/cards/order-part.card.dart';
 import 'package:app/modules/orders/widgets/order-parts-final-info.widget.dart';
+import 'package:app/modules/orders/widgets/order-parts-receive-form.modal.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
@@ -12,9 +13,9 @@ import 'package:provider/provider.dart';
 
 class OrderConfirmParts extends StatefulWidget {
   Function showProviderDetails;
-  Function acceptOrder;
+  Function finishOrder;
 
-  OrderConfirmParts({this.showProviderDetails, this.acceptOrder});
+  OrderConfirmParts({this.showProviderDetails, this.finishOrder});
 
   @override
   State<StatefulWidget> createState() {
@@ -98,14 +99,14 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
     ));
 
     if (_provider.orderDetails.status.getState() ==
-        AppointmentStatusState.NEW) {
+        AppointmentStatusState.ACCEPTED) {
       buttons.add(FloatingActionButton.extended(
         heroTag: null,
         onPressed: () {
           _showFinalInfo();
         },
         label: Text(
-          S.of(context).parts_delivery_button_title.toUpperCase(),
+          S.of(context).parts_delivery_confirm_button_title.toUpperCase(),
           style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
         ),
         backgroundColor: Colors.white,
@@ -122,11 +123,18 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
   }
 
   _showFinalInfo() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return OrderPartsFinalInfo(infoAdded: widget.acceptOrder);
-      },
-    );
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return OrderPartsReceiveFormModal(
+                    orderDetails: _provider.orderDetails, finishOrder: widget.finishOrder);
+              });
+        });
   }
 }

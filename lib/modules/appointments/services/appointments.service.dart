@@ -391,7 +391,7 @@ class AppointmentsService {
   }
 
   Future<bool> requestAppointmentItems(
-      int appointmentId, int providerId) async {
+      int appointmentId, {int providerId}) async {
     Map<String, dynamic> queryParameters = {};
 
     if (providerId != null) {

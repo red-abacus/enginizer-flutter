@@ -232,62 +232,32 @@ class _AppointmentDetailsPartsProviderEstimateModalState
   }
 
   _requestItems() async {
-    switch (_provider.auctionType) {
-      case AppointmentProviderType.Specific:
-        if (_provider.selectedServiceProvider != null) {
-          setState(() {
-            _isLoading = true;
-          });
+    setState(() {
+      _isLoading = true;
+    });
 
-          try {
-            await _provider
-                .requestAppointmentItems(
-                    _provider.selectedAppointmentDetails.id,
-                    _provider.selectedAppointmentDetails.serviceProvider.id)
-                .then((success) {
-              if (success) {
-                Navigator.pop(context);
-              }
-            });
-          } catch (error) {
-            if (error.toString().contains(
-                AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
-              FlushBarHelper.showFlushBar(S.of(context).general_error,
-                  S.of(context).exception_appointment_request_items, context);
-            }
-
-            setState(() {
-              _isLoading = false;
-            });
-          }
+    try {
+      await _provider
+          .requestAppointmentItems(_provider.selectedAppointmentDetails.id,
+              providerId:
+                  _provider.selectedAppointmentDetails?.serviceProvider?.id ??
+                      null)
+          .then((success) {
+        if (success) {
+          Navigator.pop(context);
         }
-        break;
-      case AppointmentProviderType.Auction:
-        setState(() {
-          _isLoading = true;
-        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_appointment_request_items, context);
+      }
 
-        try {
-          await _provider
-              .requestAppointmentItems(
-                  _provider.selectedAppointmentDetails.id, null)
-              .then((success) {
-            if (success) {
-              Navigator.pop(context);
-            }
-          });
-        } catch (error) {
-          if (error.toString().contains(
-              AppointmentsService.APPOINTMENT_REQUEST_ITEMS_EXCEPTION)) {
-            FlushBarHelper.showFlushBar(S.of(context).general_error,
-                S.of(context).exception_appointment_request_items, context);
-          }
-
-          setState(() {
-            _isLoading = false;
-          });
-        }
-        break;
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

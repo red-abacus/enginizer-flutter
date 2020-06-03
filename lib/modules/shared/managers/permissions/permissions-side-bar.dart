@@ -52,6 +52,7 @@ class PermissionsSideBar {
                     permissions.add(AUCTION);
                     permissions.add(WORK_ESTIMATE);
                     permissions.add(NOTIFICATIONS);
+                    permissions.add(ORDERS);
                     break;
                   case ConsultantServiceType.PartShop:
                     permissions.add(PROFILE);

@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:app/modules/appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/car-details-parts.widget.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
@@ -50,7 +50,7 @@ class OrderDetailsState extends State<OrderDetails>
     } else if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Orders, PermissionsOrder.VIEW_ORDER)) {
       _tabController =
-          new TabController(vsync: this, length: 3, initialIndex: 2);
+          new TabController(vsync: this, length: 2, initialIndex: 1);
     } else {
       new TabController(vsync: this, length: 0, initialIndex: 0);
     }
@@ -102,9 +102,8 @@ class OrderDetailsState extends State<OrderDetails>
     } else if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Orders, PermissionsOrder.VIEW_ORDER)) {
       tabs = [
-        Tab(text: S.of(context).appointment_details_request),
-        Tab(text: S.of(context).appointment_details_car),
-        Tab(text: S.of(context).appointment_consultant_final_estimate_title)
+        Tab(text: S.of(context).appointment_details_car_details),
+        Tab(text: S.of(context).parts_delivery_title),
       ];
     }
 
@@ -168,12 +167,10 @@ class OrderDetailsState extends State<OrderDetails>
     } else if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Orders, PermissionsOrder.VIEW_ORDER)) {
       list = [
-        AppointmentDetailsGenericConsultantWidget(
-          appointmentDetail: _provider.orderDetails,
-        ),
+        CarDetailsPartsWidget(car: _provider.order.car),
         OrderConfirmParts(
             showProviderDetails: _showProviderDetails,
-            acceptOrder: _acceptOrder)
+            finishOrder: _finishOrder)
       ];
     }
 
@@ -185,8 +182,16 @@ class OrderDetailsState extends State<OrderDetails>
 
   _showProviderDetails() {
     if (_provider.orderDetails.buyer != null) {
-      Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
-          _provider.orderDetails.buyer.id;
+      if (PermissionsManager.getInstance()
+          .hasAccess(MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+        Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
+            _provider.orderDetails.buyer.id;
+      }
+      if (PermissionsManager.getInstance()
+          .hasAccess(MainPermissions.Orders, PermissionsOrder.VIEW_ORDER)) {
+        Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
+            _provider.orderDetails.seller.id;
+      }
 
       showModalBottomSheet(
           isScrollControlled: true,
@@ -219,6 +224,30 @@ class OrderDetailsState extends State<OrderDetails>
       if (error.toString().contains(OrderService.ACCEPT_ORDER_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_accept_order, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _finishOrder(AppointmentDetail orderDetails) async {
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      await _provider.finishOrder(_provider.order.id).then((value) {
+        Provider.of<OrdersProvider>(context).initDone = false;
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(OrderService.FINISH_ORDER_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_finish_order, context);
       }
 
       setState(() {

@@ -39,7 +39,7 @@ class OrderPartsFinalInfo extends StatelessWidget {
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
               ),
-              BasicDateField(
+              BasicDateTimeField(
                 labelText: S.of(context).orders_date_delivery_estimator,
                 validator: (value) {
                   if (value == null) {

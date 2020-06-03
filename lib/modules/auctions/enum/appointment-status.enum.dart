@@ -51,7 +51,7 @@ class AppointmentStatusStateUtils {
       case AppointmentStatusState.OPEN_BID:
         return 'OpenBid';
       case AppointmentStatusState.DONE:
-        return 'Done';
+        return 'DONE';
       case AppointmentStatusState.ON_HOLD:
         return 'OnHold';
       case AppointmentStatusState.IN_UNIT:
@@ -91,7 +91,7 @@ class AppointmentStatusStateUtils {
   }
 
   static List<AppointmentStatusState> statusesParts() {
-    return [AppointmentStatusState.NEW, AppointmentStatusState.ACCEPTED];
+    return [AppointmentStatusState.NEW, AppointmentStatusState.ACCEPTED, AppointmentStatusState.DONE];
   }
 }
 

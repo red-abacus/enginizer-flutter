@@ -50,10 +50,10 @@ class SelectPartsProviderProvider with ChangeNotifier {
   }
 
   Future<bool> requestAppointmentItems(
-      int appointmentId, int providerId) async {
+      int appointmentId, {int providerId}) async {
     try {
       bool response = await _appointmentsService.requestAppointmentItems(
-          appointmentId, providerId);
+          appointmentId, providerId: providerId);
       notifyListeners();
       return response;
     } catch (error) {

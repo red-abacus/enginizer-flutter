@@ -389,8 +389,10 @@
   "part_create_guarantee_title": "Guarantee (in months)",
   "parts_delivery_title": "Parts Delivery",
   "parts_delivery_button_title": "Deliver",
+  "parts_delivery_confirm_button_title": "Confirm",
   "parts_suggested_delivery_date": "Sugested delivery date",
   "parts_delivery_date_warning": "Add delivery date",
+  "parts_confirm_parts_warning": "Confirm order",
   "orders_date_delivery_estimator": "Estimated delivery date",
   "orders_date_delivery_estimator_warning": "Add estimated delivery date",
   "dashboard_start_date": "Start date",
@@ -541,5 +543,6 @@
   "exception_get_notification_auction_not_found": "No auction found for this notification.",
   "exception_notification_mark_as_seen": "There was an error trying to mark this notification as seen.",
   "exception_get_order_details": "There was an error trying to get order details.",
-  "exception_accept_order": "There was an error trying to accept this order."
+  "exception_accept_order": "There was an error trying to accept this order.",
+  "exception_finish_order": "There was an error trying to confirm order."
 }
