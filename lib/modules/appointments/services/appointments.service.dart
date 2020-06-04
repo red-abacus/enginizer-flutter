@@ -7,6 +7,7 @@ import 'package:app/modules/appointments/model/request/assign-employee-request.m
 import 'package:app/modules/appointments/model/request/receive-form-request.model.dart';
 import 'package:app/modules/appointments/enum/mechanic-task-type.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
 import 'package:dio/dio.dart';
@@ -53,6 +54,8 @@ class AppointmentsService {
   static const String ASSIGN_EMPLOYEE_EXCEPTION = 'ASSIGN_EMPLOYEE_EXCEPTION';
   static const String ORDER_APPOINTMENT_ITEMS_EXCEPTION =
       'ORDER_APPOINTMENT_ITEMS_EXCEPTION';
+  static const String APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION =
+      'APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -120,6 +123,11 @@ class AppointmentsService {
   static const String _ORDER_APPOINTMENT_ITEM_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ORDER_APPOINTMENT_ITEM_SUFFIX = '/orderItems';
+
+  static const String _APPOINTMENT_REQUEST_TRANSPORT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX =
+      '/requestTransport';
 
   Dio _dio = inject<Dio>();
 
@@ -390,8 +398,8 @@ class AppointmentsService {
     }
   }
 
-  Future<bool> requestAppointmentItems(
-      int appointmentId, {int providerId}) async {
+  Future<bool> requestAppointmentItems(int appointmentId,
+      {int providerId}) async {
     Map<String, dynamic> queryParameters = {};
 
     if (providerId != null) {
@@ -454,6 +462,26 @@ class AppointmentsService {
       }
     } catch (error) {
       throw Exception(ORDER_APPOINTMENT_ITEMS_EXCEPTION);
+    }
+  }
+
+  Future<AppointmentDetail> requestTransport(
+      int appointmentId, TransportRequest transportRequest) async {
+    print('test ${transportRequest.toJson()}');
+    print('request ${_buildRequestTransport(appointmentId)}');
+    try {
+      final response = await _dio.patch(_buildRequestTransport(appointmentId),
+          data: jsonEncode(transportRequest.toJson()));
+      print('response ${response.data}');
+      print('response ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION);
+      }
+    } catch (error) {
+      print('error $error');
+      throw Exception(APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION);
     }
   }
 
@@ -590,5 +618,11 @@ class AppointmentsService {
     return _ORDER_APPOINTMENT_ITEM_PREFIX +
         appointmentId.toString() +
         _ORDER_APPOINTMENT_ITEM_SUFFIX;
+  }
+
+  _buildRequestTransport(int appointmentId) {
+    return _APPOINTMENT_REQUEST_TRANSPORT_PREFIX +
+        appointmentId.toString() +
+        _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX;
   }
 }

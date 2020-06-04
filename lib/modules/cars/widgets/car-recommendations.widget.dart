@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
@@ -89,7 +90,10 @@ class _CarRecommendationsWidgetState extends State<CarRecommendationsWidget> {
           S.of(context).car_create_appointment_from_interventions_alert);
     } else {
       Provider.of<ProviderServiceProvider>(context).initFormValues();
-      Provider.of<ProviderServiceProvider>(context).selectedCar = carProvider.selectedCar;
+      Provider.of<ProviderServiceProvider>(context).createAppointmentState =
+          CreateAppointmentState.Default;
+      Provider.of<ProviderServiceProvider>(context).selectedCar =
+          carProvider.selectedCar;
 
       carProvider.selectedInterventions.forEach((intervention) {
         Provider.of<ProviderServiceProvider>(context)

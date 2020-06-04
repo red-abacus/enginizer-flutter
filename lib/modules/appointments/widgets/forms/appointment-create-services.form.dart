@@ -1,5 +1,8 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,36 +18,49 @@ class AppointmentCreateServicesForm extends StatefulWidget {
 
 class AppointmentCreateServicesFormState
     extends State<AppointmentCreateServicesForm> {
-  ProviderServiceProvider providerServiceProvider;
+  ProviderServiceProvider _provider;
 
   @override
   Widget build(BuildContext context) {
-    providerServiceProvider =
-        Provider.of<ProviderServiceProvider>(context, listen: false);
+    _provider = Provider.of<ProviderServiceProvider>(context, listen: false);
     List<ServiceItem> services = widget.serviceItems;
 
     return Container(
+      padding: EdgeInsets.only(bottom: 60),
       child: Column(
         children: [
           ListView.builder(
             physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.only(bottom: 60),
             shrinkWrap: true,
             itemBuilder: (ctx, index) {
               var serviceName =
                   services[index].getTranslatedServiceName(context);
 
-              return CheckboxListTile(
-                title: Text(serviceName),
-                value: providerServiceProvider.selectedServiceItems
-                    .contains(services[index]),
-                onChanged: (bool value) {
-                  onChanged(services[index], value);
-                },
+              return Column(
+                children: [
+                  CheckboxListTile(
+                    title: Text(serviceName),
+                    value: _provider.selectedServiceItems
+                        .contains(services[index]),
+                    onChanged: (bool value) {
+                      onChanged(services[index], value);
+                    },
+                  ),
+                  if (services[index].isPickUpAndReturnService() &&
+                      _provider.needSetupLocation())
+                    Container(
+                      margin: EdgeInsets.only(left: 20, right: 20),
+                      child: Text(
+                        S.of(context).appointment_create_step1_location_alert,
+                        style:
+                            TextHelper.customTextStyle(null, gray3, null, 14),
+                      ),
+                    ),
+                ],
               );
             },
             itemCount: services.length,
-          )
+          ),
         ],
       ),
     );
@@ -54,41 +70,37 @@ class AppointmentCreateServicesFormState
     setState(() {
       if (value) {
         if (serviceItem.isPickUpAndReturnService()) {
-          ServiceItem towService = providerServiceProvider.selectedServiceItems
-              .firstWhere((element) => element.isTowService(),
-                  orElse: () => null);
+          ServiceItem towService = _provider.selectedServiceItems.firstWhere(
+              (element) => element.isTowService(),
+              orElse: () => null);
 
           if (towService != null) {
-            providerServiceProvider.selectedServiceItems.remove(towService);
+            _provider.selectedServiceItems.remove(towService);
           }
         } else if (serviceItem.isTowService()) {
-          ServiceItem prService = providerServiceProvider.selectedServiceItems
-              .firstWhere((element) => element.isPickUpAndReturnService(),
-                  orElse: () => null);
+          ServiceItem prService = _provider.selectedServiceItems.firstWhere(
+              (element) => element.isPickUpAndReturnService(),
+              orElse: () => null);
 
           if (prService != null) {
-            providerServiceProvider.selectedServiceItems.remove(prService);
+            _provider.selectedServiceItems.remove(prService);
           }
         }
 
-        if (!providerServiceProvider.selectedServiceItems
-            .contains(serviceItem)) {
-          providerServiceProvider.selectedServiceItems.add(serviceItem);
+        if (!_provider.selectedServiceItems.contains(serviceItem)) {
+          _provider.selectedServiceItems.add(serviceItem);
         }
       } else {
-        if (providerServiceProvider.selectedServiceItems
-            .contains(serviceItem)) {
-          providerServiceProvider.selectedServiceItems.remove(serviceItem);
+        if (_provider.selectedServiceItems.contains(serviceItem)) {
+          _provider.selectedServiceItems.remove(serviceItem);
         }
       }
     });
   }
 
   bool valid() {
-    bool servicesSelected =
-        providerServiceProvider.selectedServiceItems.length > 0;
-    bool pickupAddressCompleted =
-        providerServiceProvider.pickUpServiceValidation();
+    bool servicesSelected = _provider.selectedServiceItems.length > 0;
+    bool pickupAddressCompleted = _provider.pickUpServiceValidation();
 
     return servicesSelected && pickupAddressCompleted;
   }

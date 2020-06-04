@@ -27,6 +27,7 @@
   "auctions_details_appointment_details": "Detalii Programare",
   "auctions_details_appointment_auctions": "Licitatii",
   "cars_create_step1": "Identificare",
+  "appointment_create_step1_location_alert": "Vei putea selecta un operator Pickup & Return după ce ai acceptat un deviz estimativ",
   "cars_create_step2": "Technice",
   "cars_create_step3": "Extra",
   "cars_create_selectBrand": "Alege marcă",
@@ -268,6 +269,12 @@
   "estimator_accept_recommendations_alert_title": "Ești sigur că dorești să respingi/accepți aceste recomendări?",
   "estimator_order_title": "Comandă Piese",
   "estimator_order_warning_title": "Te rog selectează piesele pentru comandă",
+  "estimator_accept_modal_step1_title": "Alege modalitatea de transport",
+  "estimator_accept_modal_step1_personal_transport": "Transport personal până la service",
+  "estimator_accept_modal_step1_pickup_transport": "Serviciu de Pickup & Return",
+  "estimator_accept_modal_step2_title": "Selectează locația",
+  "estimator_accept_modal_step3_title": "Alege furnizor",
+  "estimator_accept_modal_step3_alert": "În modul Licitație, service-urile vor licita pentru a efectua transportul.",
   "import_item_imported_title": "Importator",
   "import_item_status_title": "Status",
   "import_item_type_title": "Tip",
@@ -539,5 +546,6 @@
   "exception_notification_mark_as_seen": "A intervenit o problemă la marcarea notificării ca fiind citită.",
   "exception_get_order_details": "A intervenit o problemă la încărcarea detaliilor comenzii.",
   "exception_accept_order": "A intervenit o problemă la acceptarea comenzii.",
-  "exception_finish_order": "A intervenit o problemă la confirmarea comenzii."
+  "exception_finish_order": "A intervenit o problemă la confirmarea comenzii.",
+  "exception_transport_request": "A intervenit o problemă la cererea pentru transport."
 }

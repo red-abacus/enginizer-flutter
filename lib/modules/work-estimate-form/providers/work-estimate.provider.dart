@@ -10,6 +10,7 @@ import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/issue-recommendation-status.enum.dart';
+import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
@@ -279,6 +280,19 @@ class WorkEstimateProvider with ChangeNotifier {
       AppointmentDetail appointmentDetail = await this
           ._appointmentsService
           .orderAppointmentItems(appointmentId, request);
+      notifyListeners();
+      return appointmentDetail;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AppointmentDetail> requestTransport(
+      int appointmentId, TransportRequest request) async {
+    try {
+      AppointmentDetail appointmentDetail = await this
+          ._appointmentsService
+          .requestTransport(appointmentId, request);
       notifyListeners();
       return appointmentDetail;
     } catch (error) {

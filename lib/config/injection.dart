@@ -13,6 +13,7 @@ import 'package:app/modules/parts/providers/parts.provider.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
@@ -91,6 +92,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AuctionProvider());
   inject.registerFactory(() => AuctionConsultantProvider());
   inject.registerFactory(() => WorkEstimateProvider());
+  inject.registerFactory(() => WorkEstimateAcceptProvider());
   inject.registerFactory(() => SelectPartsProviderProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());
   inject.registerFactory(() => AppointmentMechanicProvider());

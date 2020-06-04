@@ -4,13 +4,16 @@ import 'dart:ui';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
+import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-order-modal.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
@@ -22,6 +25,7 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/assign-pr/work-estimate-accept.modal.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info-parts.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
@@ -704,65 +708,80 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             });
       }
     } else {
-      showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return AlertConfirmationDialogWidget(
-                  confirmFunction: (confirm) => {
-                        if (confirm) {_acceptWorkEstimate()}
-                      },
-                  title: S.of(context).estimator_accept_alert_body);
+      ServiceItem pickupServiceItem =
+          _provider.selectedAppointmentDetail.pickupServiceItem();
+      if (pickupServiceItem == null) {
+        showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                return AlertConfirmationDialogWidget(
+                    confirmFunction: (confirm) => {
+                          if (confirm) {_acceptWorkEstimate()}
+                        },
+                    title: S.of(context).estimator_accept_alert_body);
+              });
             });
-          });
+      } else {
+        Provider.of<WorkEstimateAcceptProvider>(context).initialise();
+        Provider.of<WorkEstimateAcceptProvider>(context).pickupServiceItem =
+            pickupServiceItem;
+
+        showModalBottomSheet<void>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                return WorkEstimateAcceptModal(
+                    acceptWorkEstimate: _acceptWorkEstimate);
+              });
+            });
+      }
     }
   }
 
-  _acceptWorkEstimate() async {
-    if (widget.mode == EstimatorMode.Client) {
-      try {
-        await _provider
-            .acceptBid(_provider.selectedAppointmentDetail.bidId)
-            .then((_) {
-          setState(() {
-            Provider.of<AppointmentProvider>(context).initDone = false;
-            Navigator.pop(context);
-          });
-        });
-      } catch (error) {
-        if (error
-            .toString()
-            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_accept_work_estimate, context);
-        }
-      }
-    } else if (widget.mode == EstimatorMode.ClientAccept) {
-      setState(() {
-        _isLoading = true;
-      });
+  _acceptWorkEstimate({TransportRequest transportRequest}) async {
+    setState(() {
+      _isLoading = true;
+    });
 
-      try {
-        await _provider
-            .acceptBid(_provider.selectedAppointmentDetail.bidId)
-            .then((_) {
-          setState(() {
+    try {
+      await _provider
+          .acceptBid(_provider.selectedAppointmentDetail.bidId)
+          .then((_) {
+        setState(() async {
+          if (transportRequest != null) {
+            await _provider.requestTransport(_provider.selectedAppointmentDetail.id, transportRequest).then((value) {
+              Provider.of<AppointmentProvider>(context).initDone = false;
+              Provider.of<AppointmentsProvider>(context).initDone = false;
+              Navigator.pop(context);
+            });
+          }
+          else {
             Provider.of<AppointmentProvider>(context).initDone = false;
             Provider.of<AppointmentsProvider>(context).initDone = false;
             Navigator.pop(context);
-          });
+          }
         });
-      } catch (error) {
-        if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_accept_work_estimate, context);
-        }
-
-        setState(() {
-          _isLoading = false;
-        });
+      });
+    } catch (error) {
+      if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_accept_work_estimate, context);
       }
+      else if (error.toString().contains(AppointmentsService.APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_transport_request, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

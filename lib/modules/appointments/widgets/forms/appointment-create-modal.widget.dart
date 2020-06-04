@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/appointment-position.model.dart';
+import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
@@ -9,7 +9,6 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
-import 'package:app/modules/appointments/widgets/forms/appointment-create-location.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-services.form.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
@@ -184,7 +183,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   List<Step> _buildSteps(BuildContext context) {
     List<Step> steps = [];
 
-    if (_provider.selectedCar == null) {
+    if (_provider.createAppointmentState == CreateAppointmentState.SelectCar) {
       steps = [
         Step(
           isActive: _provider.stepStateData[0]["active"],
@@ -229,7 +228,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             content: AppointmentDateTimeForm(),
             state: _provider.stepStateData[4]['state'])
       ];
-    } else {
+    } else if (_provider.createAppointmentState ==
+        CreateAppointmentState.Default) {
       steps = [
         Step(
             isActive: _provider.stepStateData[0]['active'],
@@ -267,33 +267,13 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
       ];
     }
 
-    if (_provider.needSetupLocation()) {
-      if (_provider.selectedCar == null) {
-        steps.add(Step(
-            isActive: _currentStepIndex == 5,
-            title: _provider.stepStateData[5]['active']
-                ? Text(S.of(context).appointment_create_step5)
-                : Text(''),
-            content: AppointmentCreateLocationForm(),
-            state: _provider.stepStateData[5]['state']));
-      } else {
-        steps.add(Step(
-            isActive: _currentStepIndex == 4,
-            title: _provider.stepStateData[4]['active']
-                ? Text(S.of(context).appointment_create_step5)
-                : Text(''),
-            content: AppointmentCreateLocationForm(),
-            state: _provider.stepStateData[4]['state']));
-      }
-    }
-
     return steps;
   }
 
   _next() {
     _resetStepTitles();
 
-    if (_provider.selectedCar == null) {
+    if (_provider.createAppointmentState == CreateAppointmentState.SelectCar) {
       switch (_currentStepIndex) {
         case 0:
           _carChecker();
@@ -310,11 +290,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         case 4:
           _calendarChecker();
           break;
-        case 5:
-          _locationChecker();
-          break;
       }
-    } else {
+    } else if (_provider.createAppointmentState == CreateAppointmentState.Default) {
       switch (_currentStepIndex) {
         case 0:
           _servicesChecker();
@@ -327,9 +304,6 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           break;
         case 3:
           _calendarChecker();
-          break;
-        case 4:
-          _locationChecker();
           break;
       }
     }
@@ -391,38 +365,15 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
         _goTo(_currentStepIndex + 1);
 
-        if (_provider.needSetupLocation()) {
-          isLastStep = false;
-        } else {
-          isLastStep = true;
-        }
+        isLastStep = true;
       });
     }
   }
 
   _calendarChecker() {
     if (_provider.dateEntry != null) {
-      setState(() {
-        _provider.stepStateData[_currentStepIndex]['state'] =
-            StepState.complete;
-
-        if (_provider.needSetupLocation()) {
-          _provider.appointmentPosition = AppointmentPosition();
-          _provider.stepStateData[_currentStepIndex + 1]['state'] =
-              StepState.indexed;
-          _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
-          _goTo(_currentStepIndex + 1);
-
-          isLastStep = true;
-        } else {
-          _submit();
-        }
-      });
+      _submit();
     }
-  }
-
-  _locationChecker() {
-    _submit();
   }
 
   _resetStepTitles() {

@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/appointment-map-state.enum.dart';
+import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
@@ -55,28 +56,17 @@ class AppointmentsState extends State<Appointments> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FloatingActionButton.extended(
-              heroTag: null,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 1,
-              onPressed: () => _showAppointmentMapDetails(AppointmentMapState.ReceiveForm),
-              label: Text(
-                'PR Form',
-                style:
-                TextHelper.customTextStyle(null, Colors.white, null, 14),
-              ),
-            ),
-            FloatingActionButton.extended(
-              heroTag: null,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 1,
-              onPressed: () => _showAppointmentMapDetails(AppointmentMapState.InProgress),
-              label: Text(
-                'PR Accepted',
-                style:
-                TextHelper.customTextStyle(null, Colors.white, null, 14),
-              ),
-            ),
+//            FloatingActionButton.extended(
+//              heroTag: null,
+//              backgroundColor: Theme.of(context).primaryColor,
+//              elevation: 1,
+//              onPressed: () => _showAppointmentMapDetails(AppointmentMapState.InProgress),
+//              label: Text(
+//                'PR Accepted',
+//                style:
+//                TextHelper.customTextStyle(null, Colors.white, null, 14),
+//              ),
+//            ),
             FloatingActionButton(
               heroTag: null,
               backgroundColor: Theme.of(context).primaryColor,
@@ -179,6 +169,7 @@ class AppointmentsState extends State<Appointments> {
 
   void _openAppointmentCreateModal(BuildContext buildContext) {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
+    Provider.of<ProviderServiceProvider>(context).createAppointmentState = CreateAppointmentState.SelectCar;
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -192,14 +183,5 @@ class AppointmentsState extends State<Appointments> {
             return AppointmentCreateModal();
           });
         });
-  }
-
-  void _showAppointmentMapDetails(AppointmentMapState state) {
-    AppointmentProvider provider =
-        Provider.of<AppointmentProvider>(context, listen: false);
-    provider.initialiseParams();
-    provider.appointmentMapState = state;
-
-    Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
   }
 }

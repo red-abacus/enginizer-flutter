@@ -87,6 +87,7 @@
   "COLOR_DARK_GRAY": "Dark gray",
   "COLOR_GOLD": "Gold",
   "appointment_create_step1": "Choose services",
+  "appointment_create_step1_location_alert": "You can select a Pickup & Return operator after you accept the cost estimate.",
   "appointment_create_step2": "Describe issues",
   "appointment_create_step2_alert": "Add the problems encountered with your car, one on the line",
   "appointment_create_step3": "Select providers",
@@ -274,6 +275,12 @@
   "estimator_accept_recommendations_alert_title": "Are you sure you want to reject/accept these recommendations?",
   "estimator_order_title": "Order Products",
   "estimator_order_warning_title": "Please select items to be ordered.",
+  "estimator_accept_modal_step1_title": "Select transport method",
+  "estimator_accept_modal_step1_personal_transport": "Personal transport to the service",
+  "estimator_accept_modal_step1_pickup_transport": "Pickup & Return service",
+  "estimator_accept_modal_step2_title": "Select location",
+  "estimator_accept_modal_step3_title": "Select provider",
+  "estimator_accept_modal_step3_alert": "In Auction mode, the services will bid to carry out your transport",
   "import_item_imported_title": "Importer",
   "import_item_status_title": "Status",
   "import_item_type_title": "Type",
@@ -544,5 +551,6 @@
   "exception_notification_mark_as_seen": "There was an error trying to mark this notification as seen.",
   "exception_get_order_details": "There was an error trying to get order details.",
   "exception_accept_order": "There was an error trying to accept this order.",
-  "exception_finish_order": "There was an error trying to confirm order."
+  "exception_finish_order": "There was an error trying to confirm order.",
+  "exception_transport_request": "There was an error trying to request transport."
 }

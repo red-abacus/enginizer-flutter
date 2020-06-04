@@ -56,6 +56,7 @@ class AppointmentDetail {
       this.seller});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
+    print('json ${json['id']}');
     return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
@@ -202,5 +203,14 @@ class AppointmentDetail {
       default:
         return false;
     }
+  }
+
+  ServiceItem pickupServiceItem() {
+    for(ServiceItem serviceItem in this.serviceItems) {
+      if (serviceItem.isPickUpAndReturnService()) {
+        return serviceItem;
+      }
+    }
+    return null;
   }
 }
