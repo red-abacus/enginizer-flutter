@@ -41,7 +41,7 @@ class IssueItemOrder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    if (selected) _selectedContainer(context),
+                    _selectedContainer(context),
                     _imageContainer(),
                     _textContainer(context),
                     _statusContainer(context),
@@ -86,7 +86,15 @@ class IssueItemOrder extends StatelessWidget {
                         fontSize: 16,
                         height: 1.5)),
                 Text(
-                    '${S.of(context).general_price}: ${issueItem.total.toString()}',
+                    '${S.of(context).general_price}: ${issueItem.price.toString()}',
+                    style: TextStyle(
+                        color: Constants.red,
+                        fontFamily: 'Lato',
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        height: 1.5)),
+                Text(
+                    '${S.of(context).estimator_form_priceVAT}: ${issueItem.price + issueItem.priceVAT}',
                     style: TextStyle(
                         color: Constants.red,
                         fontFamily: 'Lato',
@@ -96,7 +104,7 @@ class IssueItemOrder extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(top: 10, bottom: 10),
                   child: Text(
-                      '${S.of(context).general_available_from}: ${DateUtils.stringFromDate(issueItem.availableFrom, 'dd/MM/yyyy')}',
+                      '${S.of(context).general_available_from}: ${DateUtils.stringFromDate(issueItem.availableFrom, 'dd/MM/yyyy HH:mm')}',
                       style: TextStyle(
                           color: Constants.gray,
                           fontFamily: 'Lato',
@@ -122,7 +130,9 @@ class IssueItemOrder extends StatelessWidget {
               barrierDismissible: false, // user must tap button!
               builder: (BuildContext context) {
                 return WorkEstimateIssueDetailsWidget(
-                    issueItem: issueItem, importItem: this.selectIssueItem, showImportButton: false);
+                    issueItem: issueItem,
+                    importItem: this.selectIssueItem,
+                    showImportButton: false);
               })
         },
         child: Icon(
@@ -136,7 +146,8 @@ class IssueItemOrder extends StatelessWidget {
   _selectedContainer(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(right: 10),
-      child: Icon(Icons.check, color: Constants.red),
+      child: Icon(selected ? Icons.check_box : Icons.check_box_outline_blank,
+          color: Constants.red),
     );
   }
 }

@@ -49,7 +49,6 @@ class AppointmentStatus {
   }
 
   String assetName() {
-    // TODO - need to check again these assets
     switch (getState()) {
       case AppointmentStatusState.IN_WORK:
         return 'in_work';

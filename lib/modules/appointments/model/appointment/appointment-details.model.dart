@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/model/appointment/appointment-transport.model.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
@@ -33,6 +34,8 @@ class AppointmentDetail {
   List<IssueItem> items;
   GenericModel buyer;
   GenericModel seller;
+  AppointmentTransportInfo appointmentTransportInfo;
+  GenericModel personnel;
 
   AppointmentDetail(
       {this.id,
@@ -53,10 +56,14 @@ class AppointmentDetail {
       this.deliveryDateTime,
       this.items,
       this.buyer,
-      this.seller});
+      this.seller,
+      this.appointmentTransportInfo,
+      this.personnel});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
-    print('json ${json['id']}');
+    for(String key in json.keys) {
+      print('$key : ${json[key]}');
+    }
     return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
@@ -96,6 +103,12 @@ class AppointmentDetail {
             json['buyer'] != null ? GenericModel.fromJson(json['buyer']) : null,
         seller: json['seller'] != null
             ? GenericModel.fromJson(json['seller'])
+            : null,
+        appointmentTransportInfo: json['transportInfo'] != null
+            ? AppointmentTransportInfo.fromJson(json['transportInfo'])
+            : null,
+        personnel: json['personalProductive'] != null
+            ? GenericModel.fromJson(json['personalProductive'])
             : null);
   }
 
@@ -205,8 +218,16 @@ class AppointmentDetail {
     }
   }
 
+  bool canShareLocation() {
+    if (status.getState() == AppointmentStatusState.SUBMITTED) {
+      return false;
+    }
+
+    return true;
+  }
+
   ServiceItem pickupServiceItem() {
-    for(ServiceItem serviceItem in this.serviceItems) {
+    for (ServiceItem serviceItem in this.serviceItems) {
       if (serviceItem.isPickUpAndReturnService()) {
         return serviceItem;
       }

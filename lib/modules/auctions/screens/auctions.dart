@@ -44,16 +44,6 @@ class AuctionsState extends State<Auctions> {
         body: Center(
           child: _renderAuctions(_isLoading),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          AuctionProvider provider =
-          Provider.of<AuctionProvider>(context, listen: false);
-          provider.initialiseParameters();
-          provider.selectedAuction = null;
-
-          Navigator.of(context).pushNamed(AuctionConsultantMap.route);
-        },
-
-        ),
       ),
     );
   }

@@ -1,11 +1,11 @@
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/enum/appointment-map-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {
@@ -20,14 +20,11 @@ class AppointmentProvider with ChangeNotifier {
 
   AuctionMapDirections auctionMapDirections;
 
-  AppointmentMapState appointmentMapState;
-
   initialiseParams() {
     initDone = false;
     selectedAppointment = null;
     selectedAppointmentDetail = null;
     auctionMapDirections = null;
-    appointmentMapState = null;
   }
 
   Future<AppointmentDetail> getAppointmentDetails(
@@ -73,18 +70,17 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
-  Future<void> loadAuctionMapData(BuildContext context) async {
-    auctionMapDirections = AuctionMapDirections();
-    // TODO
-//    auctionMapDirections.appointmentDate = DateUtils.dateFromString(auctionDetails.scheduledDateTime, 'dd/MM/yyyy HH:mm:ss');
-    auctionMapDirections.appointmentDate = DateTime.now();
+  Future<void> loadMapData(BuildContext context) async {
+    auctionMapDirections = AuctionMapDirections(
+        destinationPoints:
+            selectedAppointmentDetail.appointmentTransportInfo.getLocations());
+    auctionMapDirections.appointmentDate = DateUtils.dateFromString(selectedAppointmentDetail.scheduledDate, 'dd/MM/yyyy HH:mm');
 
     try {
       await auctionMapDirections.setPolyLines(context);
       await auctionMapDirections.fetchDistanceAndDurations(_auctionsService);
-    }
-    catch (error) {
-      throw(error);
+    } catch (error) {
+      throw (error);
     }
   }
 }

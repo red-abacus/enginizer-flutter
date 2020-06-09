@@ -14,14 +14,12 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
 
   Function cancelAppointment;
   Function viewEstimate;
-  Function showHandoverCarForm;
   Function seeCamera;
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
       this.cancelAppointment,
       this.viewEstimate,
-      this.showHandoverCarForm,
       this.seeCamera});
 
   @override

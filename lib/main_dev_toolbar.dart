@@ -234,10 +234,6 @@ class CustomPageTransitionBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    // TODO
-//    if (route.settings.isInitialRoute) {
-//      return child;
-//    }
     return FadeTransition(
       opacity: animation,
       child: child,

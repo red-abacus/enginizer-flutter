@@ -46,18 +46,12 @@ class WorkStationCard extends StatelessWidget {
   }
 
   _imageContainer(int index) {
-    return Container(
-      width: 15,
-      height: 15,
-      decoration: new BoxDecoration(
-        color: index % 2 == 0 ? green : gray,
-        borderRadius: BorderRadius.all(
-          Radius.circular(15.0),
-        ),
-      ),
-      child: Container(
-          // TODO - need to add icon for mechanic
-          ),
+    return FadeInImage.assetNetwork(
+      image: workStation?.workStationPersonnel[0]?.image ?? '',
+      placeholder: 'assets/images/defaults/default_profile_icon.png',
+      fit: BoxFit.fitHeight,
+      height: 24,
+      width: 24,
     );
   }
 
@@ -99,7 +93,9 @@ class WorkStationCard extends StatelessWidget {
   _statusContainer(BuildContext context) {
     return Container(
       child: FlatButton(
-        onPressed: () { showCamera(); },
+        onPressed: () {
+          showCamera();
+        },
         child: Text(
           S.of(context).appointment_video_button_title.toUpperCase(),
           style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),

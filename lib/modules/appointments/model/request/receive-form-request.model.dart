@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/modules/appointments/enum/payment-method.enum.dart';
 import 'package:app/modules/appointments/enum/tank-quantity.enum.dart';
+import 'package:dio/dio.dart';
 
 class ReceiveFormRequest {
   int appointmentId = 0;
@@ -30,6 +31,7 @@ class ReceiveFormRequest {
       'paymentMethod': PaymentMethodUtilities.paymentMethod(paymentMethod),
       'realKms': km
     };
+
     return propMap;
   }
 }

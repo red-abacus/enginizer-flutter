@@ -31,9 +31,9 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
 
   _imageContainer() {
     return Container(
-      child: Image.network(
-        // TODO - need to add image of mechanic
-        'https://www.kindpng.com/picc/m/495-4952535_create-digital-profile-icon-blue-user-profile-icon.png',
+      child: FadeInImage.assetNetwork(
+        image: employee?.image ?? '',
+        placeholder: 'assets/images/defaults/default_profile_icon.png',
         fit: BoxFit.fitHeight,
         height: 40,
         width: 40,
@@ -43,9 +43,11 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
 
   _nameContainer() {
     return Container(
+      height: 50,
       margin: EdgeInsets.only(top: 4),
       child: Text(
         employee?.name,
+        maxLines: 2,
         textAlign: TextAlign.center,
         style: TextHelper.customTextStyle(null, Colors.black, null, 14),
       ),

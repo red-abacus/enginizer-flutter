@@ -29,7 +29,7 @@ class Auth with ChangeNotifier {
   List<User> users = [];
 
   bool get isAuth {
-    print('token $_token');
+    print('is auth ${_token}');
     return _token != null && authUserDetails != null;
   }
 

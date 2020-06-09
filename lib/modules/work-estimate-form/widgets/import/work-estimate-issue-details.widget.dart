@@ -35,6 +35,8 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
             ),
             _infoWidget(S.of(context).import_item_imported_title,
                 issueItem?.provider?.name),
+            _infoWidget(S.of(context).import_item_imported_manufacturer,
+                issueItem?.manufacturer),
             // TODO - no status for items to be imported
             _infoWidget(S.of(context).import_item_status_title, 'New'),
             _infoWidget(S.of(context).import_item_type_title,
@@ -50,7 +52,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
             _infoWidget(
                 S.of(context).import_item_availability_title,
                 DateUtils.stringFromDate(
-                    issueItem?.availableFrom, 'EEEE, dd MMM. yyyy')),
+                    issueItem?.availableFrom, 'EEEE, dd MMM. yyyy HH:mm')),
             _buttonsWidget(context),
           ],
         ),

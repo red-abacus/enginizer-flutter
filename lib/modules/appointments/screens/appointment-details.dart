@@ -155,7 +155,6 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
                     _appointmentProvider.selectedAppointmentDetail,
                 viewEstimate: _seeEstimate,
                 cancelAppointment: _cancelAppointment,
-                showHandoverCarForm: _showHandoverCarForm,
                 seeCamera: _seeCamera);
             break;
           default:
@@ -278,14 +277,6 @@ class AppointmentDetailsState extends State<AppointmentDetails> {
                 WorkEstimateForm(mode: mode, dateEntry: dateEntry)),
       );
     }
-  }
-
-  _showHandoverCarForm() {
-    // TODO - need to complete handover car form?
-  }
-
-  _createHandoverCarForm() {
-    // TODO
   }
 
   _seeCamera() {

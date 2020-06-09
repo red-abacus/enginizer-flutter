@@ -1,4 +1,0 @@
-enum AppointmentMapState {
-  ReceiveForm,
-  InProgress
-}

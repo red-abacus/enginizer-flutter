@@ -157,7 +157,9 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
             style: TextHelper.customTextStyle(null, red, FontWeight.normal, 14),
           )
         : Container(
-            width: 60, height: 60, child: Image.file(widget.mechanicTaskIssue.image));
+            width: 60,
+            height: 60,
+            child: Image.file(widget.mechanicTaskIssue.image));
   }
 
   _priorityDropdownItems(BuildContext context) {

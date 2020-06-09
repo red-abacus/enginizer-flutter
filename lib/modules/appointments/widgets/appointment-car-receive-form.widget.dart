@@ -104,7 +104,7 @@ class _AppointmentCarReceiveFormModalState
                             TextHelper.customTextStyle(null, gray3, null, 16),
                       ),
                       TextSpan(
-                        // tODO - need to add representative name for client
+                        // TODO - need to add representative name for service provider
                         text: 'Mircea Pop',
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),
@@ -132,8 +132,8 @@ class _AppointmentCarReceiveFormModalState
                         '${S.of(context).mechanic_appointment_receive_form_part_5} ',
                     style: TextHelper.customTextStyle(null, gray3, null, 16),
                     children: <TextSpan>[
-                      // TODO - need to add mechanic name
                       TextSpan(
+                        // TODO - need to add representative name for representative service provider
                         text: 'Mircea Pop ',
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),

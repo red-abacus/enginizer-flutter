@@ -84,7 +84,15 @@ class IssueItemCard extends StatelessWidget {
                         fontSize: 16,
                         height: 1.5)),
                 Text(
-                    '${S.of(context).general_price}: ${issueItem.total.toString()}',
+                    '${S.of(context).general_price}: ${issueItem.price.toString()}',
+                    style: TextStyle(
+                        color: Constants.red,
+                        fontFamily: 'Lato',
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        height: 1.5)),
+                Text(
+                    '${S.of(context).import_item_price_w_vta_title}: ${(issueItem.price + issueItem.priceVAT).toString()}',
                     style: TextStyle(
                         color: Constants.red,
                         fontFamily: 'Lato',
@@ -94,7 +102,7 @@ class IssueItemCard extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(top: 10, bottom: 10),
                   child: Text(
-                      '${S.of(context).general_available_from}: ${DateUtils.stringFromDate(issueItem.availableFrom, 'dd/MM/yyyy')}',
+                      '${S.of(context).general_available_from}: ${DateUtils.stringFromDate(issueItem.availableFrom, 'dd/MM/yyyy HH:mm')}',
                       style: TextStyle(
                           color: Constants.gray,
                           fontFamily: 'Lato',
@@ -120,7 +128,9 @@ class IssueItemCard extends StatelessWidget {
               barrierDismissible: false, // user must tap button!
               builder: (BuildContext context) {
                 return WorkEstimateIssueDetailsWidget(
-                    issueItem: issueItem, importItem: this.selectIssueItem, showImportButton: true);
+                    issueItem: issueItem,
+                    importItem: this.selectIssueItem,
+                    showImportButton: true);
               })
         },
         child: Icon(

@@ -234,7 +234,6 @@ class AppointmentsService {
       final response = await _dio.post(
           _buildReceiveProcedurePath(receiveFormRequest.appointmentId),
           data: jsonEncode(receiveFormRequest.toJson()));
-
       if (response.statusCode == 200) {
         return response.data;
       } else {
@@ -247,7 +246,6 @@ class AppointmentsService {
 
   Future<bool> addReceiveProcedurePhotos(
       ReceiveFormRequest receiveFormRequest) async {
-    // TODO - i tested on swagger and photos are not saved to procedure.
     List<MultipartFile> files = [];
 
     for (File file in receiveFormRequest.files) {
@@ -336,7 +334,7 @@ class AppointmentsService {
     }
   }
 
-  Future<bool> addAppointmentRecommendation(
+  Future<int> addAppointmentRecommendation(
       int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
     try {
       final response = await _dio.post(
@@ -344,7 +342,7 @@ class AppointmentsService {
           data: jsonEncode(mechanicTaskIssue.toJson()));
 
       if (response.statusCode == 200) {
-        return true;
+        return response.data;
       } else {
         throw Exception(ADD_APPOINTMENT_RECOMMENDATION_EXCEPTION);
       }
@@ -370,8 +368,8 @@ class AppointmentsService {
     }
   }
 
-  Future<bool> addAppointmentRecommendationImage(
-      int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
+  Future<bool> addAppointmentRecommendationImage(int appointmentId,
+      MechanicTaskIssue mechanicTaskIssue, int recommendationId) async {
     List<MultipartFile> files = [];
 
     if (mechanicTaskIssue.image != null) {
@@ -382,11 +380,16 @@ class AppointmentsService {
 
     FormData formData = new FormData.fromMap({"files": files});
 
+    print('form data $formData');
+
     try {
       final response = await _dio.patch(
           _buildAddAppointmentRecommendationImage(
-              appointmentId, mechanicTaskIssue.id),
+              appointmentId, recommendationId),
           data: formData);
+
+      print('response ${response.statusCode}');
+      print('response data ${response.data}');
 
       if (response.statusCode == 200) {
         return true;
@@ -394,6 +397,8 @@ class AppointmentsService {
         throw Exception(ADD_APPOINTMENT_RECOMMENDATION_IMAGE_EXCEPTION);
       }
     } catch (error) {
+      print('error ${error}');
+      print('error ${error.response}');
       throw Exception(ADD_APPOINTMENT_RECOMMENDATION_IMAGE_EXCEPTION);
     }
   }
@@ -408,7 +413,7 @@ class AppointmentsService {
 
     try {
       final response = await _dio.patch(_buildRequestItemsPath(appointmentId),
-          data: queryParameters);
+          data: jsonEncode(queryParameters));
 
       if (response.statusCode == 200) {
         return true;
@@ -467,20 +472,15 @@ class AppointmentsService {
 
   Future<AppointmentDetail> requestTransport(
       int appointmentId, TransportRequest transportRequest) async {
-    print('test ${transportRequest.toJson()}');
-    print('request ${_buildRequestTransport(appointmentId)}');
     try {
       final response = await _dio.patch(_buildRequestTransport(appointmentId),
           data: jsonEncode(transportRequest.toJson()));
-      print('response ${response.data}');
-      print('response ${response.statusCode}');
       if (response.statusCode == 200) {
         return AppointmentDetail.fromJson(response.data);
       } else {
         throw Exception(APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION);
       }
     } catch (error) {
-      print('error $error');
       throw Exception(APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION);
     }
   }

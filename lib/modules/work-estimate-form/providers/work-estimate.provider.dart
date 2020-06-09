@@ -59,7 +59,10 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
+  int defaultQuantity;
+
   _initValues() {
+    defaultQuantity = null;
     selectedItemsToOrder = [];
     itemsToImport = [];
     itemsToOrder = [];

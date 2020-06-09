@@ -119,7 +119,6 @@ class NavigationApp extends StatefulWidget {
       case Roles.Client:
         return Cars.route;
       case Roles.ProviderAdmin:
-        // TODO: Replace Dashboard with Profile when the profile screen is implemented
         return Dashboard.route;
       case Roles.ProviderConsultant:
         return consultantDrawerItems.first.route;
@@ -145,6 +144,7 @@ class NavigationAppState extends State<NavigationApp> {
   Widget build(BuildContext context) {
     FirebaseManager.getInstance().setContext(context);
     NotificationsManager.navigationAppState = this;
+
     if (widget.activeDrawerItems == null) {
       widget.activeDrawerItems = _initActiveDrawerItems();
     }

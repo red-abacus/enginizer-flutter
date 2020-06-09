@@ -270,20 +270,18 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
       margin: EdgeInsets.only(top: 10),
       child: Row(
         children: <Widget>[
-          Container(
-            decoration: new BoxDecoration(
-                color: red,
-                borderRadius: new BorderRadius.all(Radius.circular(12))),
-            width: 24,
+          FadeInImage.assetNetwork(
+            image: appointmentDetail?.personnel?.profilePhoto ?? '',
+            placeholder: 'assets/images/defaults/default_profile_icon.png',
+            fit: BoxFit.fitHeight,
             height: 24,
-            child: Container(),
+            width: 24,
           ),
           Flexible(
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                // TODO - need to add name of assigned mechanic
-                'Nume mecanic',
+                appointmentDetail?.personnel?.name ?? '',
                 maxLines: 3,
                 style: TextHelper.customTextStyle(
                     null, gray3, FontWeight.bold, 16),

@@ -1,4 +1,3 @@
-
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
@@ -152,19 +151,19 @@ class _PickUpCarFormConsultantWidgetState
         ),
         context: context,
         builder: (context) => ImagePickerWidget(imageSelected: (file) {
-          if (file != null) {
-            setState(() {
-              if (index < _provider.receiveFormRequest.files.length) {
-                _provider.receiveFormRequest.files[index] = file;
+              if (file != null) {
+                setState(() {
+                  if (index < _provider.receiveFormRequest.files.length) {
+                    _provider.receiveFormRequest.files[index] = file;
 
-                if (_provider.receiveFormRequest.files.length <
-                    _provider.maxFiles) {
-                  _provider.receiveFormRequest.files.add(null);
-                }
+                    if (_provider.receiveFormRequest.files.length <
+                        _provider.maxFiles) {
+                      _provider.receiveFormRequest.files.add(null);
+                    }
+                  }
+                });
               }
-            });
-          }
-        }));
+            }));
   }
 
   List<Step> _buildSteps(BuildContext context) {
@@ -202,7 +201,8 @@ class _PickUpCarFormConsultantWidgetState
           title: Text(_currentStepIndex == 2
               ? S.of(context).appointment_receive_car_step_3
               : ''),
-          content: PickUpCarFormEmployeesWidget(),
+          content: PickUpCarFormEmployeesWidget(
+              appointmentDetail: widget.appointmentDetail),
           state: StepState.indexed)
     ];
   }

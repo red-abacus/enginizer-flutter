@@ -1,6 +1,5 @@
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/utils/app_config.dart';
-import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

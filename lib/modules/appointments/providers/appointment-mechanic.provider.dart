@@ -61,9 +61,9 @@ class AppointmentMechanicProvider with ChangeNotifier {
       issueTasks =
           await _appointmentsService.getAppointmentClientTasks(appointmentId);
 
-      for(MechanicTask mechanicTask in issueTasks) {
+      for (MechanicTask mechanicTask in issueTasks) {
         bool remove = true;
-        for(Issue issue in selectedAppointmentDetails.issues) {
+        for (Issue issue in selectedAppointmentDetails.issues) {
           if (issue.id == mechanicTask.id) {
             remove = false;
             break;
@@ -138,10 +138,10 @@ class AppointmentMechanicProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> addAppointmentRecommendation(
+  Future<int> addAppointmentRecommendation(
       int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
     try {
-      bool response = await _appointmentsService.addAppointmentRecommendation(
+      int response = await _appointmentsService.addAppointmentRecommendation(
           appointmentId, mechanicTaskIssue);
       notifyListeners();
       return response;
@@ -150,11 +150,12 @@ class AppointmentMechanicProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> addAppointmentRecommendationImage(
-      int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
+  Future<bool> addAppointmentRecommendationImage(int appointmentId,
+      MechanicTaskIssue mechanicTaskIssue, int recommendationId) async {
     try {
-      bool response = await _appointmentsService
-          .addAppointmentRecommendationImage(appointmentId, mechanicTaskIssue);
+      bool response =
+          await _appointmentsService.addAppointmentRecommendationImage(
+              appointmentId, mechanicTaskIssue, recommendationId);
       notifyListeners();
       return response;
     } catch (error) {
