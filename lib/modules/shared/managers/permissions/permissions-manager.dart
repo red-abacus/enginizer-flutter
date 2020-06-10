@@ -58,7 +58,7 @@ enum MainPermissions {
   Auctions,
   UserProfile,
   AppointmentsStatuses,
-  Orders
+  Orders,
 }
 
 enum ConsultantServiceType {

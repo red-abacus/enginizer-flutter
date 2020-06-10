@@ -10,6 +10,8 @@ import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/providers/parts.provider.dart';
+import 'package:app/modules/promotions/providers/promotions.provider.dart';
+import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
@@ -78,6 +80,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerLazySingleton(() => OrderService());
   inject.registerLazySingleton(() => CameraService());
   inject.registerLazySingleton(() => NotificationService());
+  inject.registerLazySingleton(() => PromotionService());
 
   inject.registerFactory(() => Auth());
   inject.registerFactory(() => CarsMakeProvider());
@@ -106,4 +109,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => CameraProvider());
   inject.registerFactory(() => NotificationProvider());
   inject.registerFactory(() => OrderProvider());
+  inject.registerFactory(() => PromotionsProvider());
 }

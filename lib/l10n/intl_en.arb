@@ -410,6 +410,11 @@
   "notification_type_bid_rejected": "Bid rejected",
   "notification_type_auction_created": "Auction created",
   "notification_mark_as_read": "Mark All As Read",
+  "promotions_status_pending": "Pending",
+  "promotions_status_active": "Active",
+  "promotions_status_paused": "Paused",
+  "promotions_status_finished": "Finished",
+  "promotions_list_search_hint": "Search by name",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -544,5 +549,6 @@
   "exception_notification_mark_as_seen": "There was an error trying to mark this notification as seen.",
   "exception_get_order_details": "There was an error trying to get order details.",
   "exception_accept_order": "There was an error trying to accept this order.",
-  "exception_finish_order": "There was an error trying to confirm order."
+  "exception_finish_order": "There was an error trying to confirm order.",
+  "exception_get_promotions": "There was an error trying to get your promotions."
 }

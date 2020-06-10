@@ -20,6 +20,8 @@ import 'package:app/modules/consultant-estimators/providers/work-estimates-consu
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/promotions/providers/promotions.provider.dart';
+import 'package:app/modules/promotions/screens/promotions.screen.dart';
 import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
@@ -143,6 +145,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: CameraProvider()),
           ChangeNotifierProvider.value(value: NotificationProvider()),
           ChangeNotifierProvider.value(value: OrderProvider()),
+          ChangeNotifierProvider.value(value: PromotionsProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -215,7 +218,8 @@ class AppState extends State<App> {
                 Parts.route: (context) => Parts(),
                 Part.route: (context) => Part(),
                 Orders.route: (context) => Orders(),
-                OrderDetails.route: (context) => OrderDetails()
+                OrderDetails.route: (context) => OrderDetails(),
+                Promotions.route: (context) => Promotions(),
               },
             ),
           );

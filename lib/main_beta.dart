@@ -72,6 +72,8 @@ import 'modules/parts/providers/part-create.provider.dart';
 import 'modules/parts/providers/parts.provider.dart';
 import 'modules/parts/screens/part.dart';
 import 'modules/parts/screens/parts.dart';
+import 'modules/promotions/providers/promotions.provider.dart';
+import 'modules/promotions/screens/promotions.screen.dart';
 import 'modules/shop/providers/shop-appointment.provider.dart';
 import 'modules/shop/providers/shop.provider.dart';
 import 'modules/shop/screens/shop-product-details.dart';
@@ -144,6 +146,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: CameraProvider()),
           ChangeNotifierProvider.value(value: NotificationProvider()),
           ChangeNotifierProvider.value(value: OrderProvider()),
+          ChangeNotifierProvider.value(value: PromotionsProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -216,7 +219,8 @@ class AppState extends State<App> {
                 Parts.route: (context) => Parts(),
                 Part.route: (context) => Part(),
                 Orders.route: (context) => Orders(),
-                OrderDetails.route: (context) => OrderDetails()
+                OrderDetails.route: (context) => OrderDetails(),
+                Promotions.route: (context) => Promotions(),
               },
             ),
           );

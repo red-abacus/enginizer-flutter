@@ -13,6 +13,7 @@ import 'package:app/modules/consultant-user-details/screens/user-details-consult
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/parts/screens/parts.dart';
+import 'package:app/modules/promotions/screens/promotions.screen.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
@@ -64,7 +65,9 @@ class NavigationApp extends StatefulWidget {
         : [new DrawerItem("Cars", Cars.route, Icons.directions_car)];
   }
 
-  static final List<DrawerItem> providerAdminDrawerItems = [];
+  static final List<DrawerItem> providerAdminDrawerItems = [
+    new DrawerItem("Promotions", Promotions.route, Promotions.icon)
+  ];
 
   List<DrawerItem> get consultantDrawerItems {
     List<DrawerItem> items = [];
@@ -119,8 +122,7 @@ class NavigationApp extends StatefulWidget {
       case Roles.Client:
         return Cars.route;
       case Roles.ProviderAdmin:
-        // TODO: Replace Dashboard with Profile when the profile screen is implemented
-        return Dashboard.route;
+        return Promotions.route;
       case Roles.ProviderConsultant:
         return consultantDrawerItems.first.route;
       case Roles.ProviderPersonnel:
@@ -254,6 +256,8 @@ class NavigationAppState extends State<NavigationApp> {
         return Parts();
       case Orders.route:
         return Orders();
+      case Promotions.route:
+        return Promotions();
       default:
         return new Text("Error");
     }

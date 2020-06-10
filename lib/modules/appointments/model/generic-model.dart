@@ -7,4 +7,8 @@ class GenericModel {
   factory GenericModel.fromJson(Map<String, dynamic> json) {
     return GenericModel(id: json['id'], name: json['name']);
   }
+
+  factory GenericModel.imageFromJson(Map<String, dynamic> json) {
+    return GenericModel(id: json['id'], name: json['imageUrl']);
+  }
 }

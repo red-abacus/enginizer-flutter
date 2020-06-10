@@ -11,6 +11,7 @@ import 'package:app/modules/consultant-user-details/provider/user-consultant.pro
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
+import 'package:app/modules/promotions/screens/promotions.screen.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
@@ -46,7 +47,7 @@ class NavigationToolbarApp extends StatefulWidget {
       case Roles.Client:
         return Cars.route;
       case Roles.ProviderAdmin:
-        return Dashboard.route;
+        return Promotions.route;
       case Roles.ProviderConsultant:
         return Appointments.route;
       case Roles.ProviderPersonnel:
@@ -180,6 +181,8 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
         return Orders();
       case Notifications.route:
         return Notifications();
+      case Promotions.route:
+        return Promotions();
       default:
         return new Text("Error");
     }

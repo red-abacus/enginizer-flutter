@@ -22,4 +22,5 @@ class Custom {
   static const _kFontPkg = null;
 
   static const IconData car = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData discount = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

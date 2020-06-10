@@ -419,6 +419,11 @@
   "notification_type_bid_rejected": "Ofertă refuzată",
   "notification_type_auction_created": "Licitație creată",
   "notification_mark_as_read": "Marchează toate ca citite",
+  "promotions_status_pending": "În așteptare",
+  "promotions_status_active": "Activ",
+  "promotions_status_paused": "În pauză",
+  "promotions_status_finished": "Terminaă",
+  "promotions_list_search_hint": "Caută după nume",
   "general_at": "la",
   "appointment_create_step0": "Alege mașină",
   "general_find": "Caută",
@@ -539,5 +544,6 @@
   "exception_notification_mark_as_seen": "A intervenit o problemă la marcarea notificării ca fiind citită.",
   "exception_get_order_details": "A intervenit o problemă la încărcarea detaliilor comenzii.",
   "exception_accept_order": "A intervenit o problemă la acceptarea comenzii.",
-  "exception_finish_order": "A intervenit o problemă la confirmarea comenzii."
+  "exception_finish_order": "A intervenit o problemă la confirmarea comenzii.",
+  "exception_get_promotions": "A intervenit o problemă la încărcarea promoțiilor tale."
 }

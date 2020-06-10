@@ -60,6 +60,7 @@ dependencies:
   flutter_polyline_points: ^0.2.1
   cloud_firestore: ^0.13.6
   firebase_auth: ^0.16.1
+  stream_transform: ^1.2.0
 
 dev_dependencies:
   flutter_test:

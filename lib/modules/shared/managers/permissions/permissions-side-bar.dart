@@ -11,6 +11,7 @@ class PermissionsSideBar {
   static final String NOTIFICATIONS = 'SIDEBAR.NOTIFICATIONS';
   static final String PARTS = 'SIDEBAR.PARTS';
   static final String ORDERS = 'SIDEBAR.ORDERS';
+  static final String PROMOTIONS = 'SIDEBAR.PROMOTIONS';
 
   Map<String, List<String>> _permissionsMap = Map();
 
@@ -73,7 +74,7 @@ class PermissionsSideBar {
           }
           break;
         case Roles.ProviderAdmin:
-          permissions = [PROFILE];
+          permissions = [PROFILE, PROMOTIONS];
           break;
       }
 
