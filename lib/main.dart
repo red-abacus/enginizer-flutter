@@ -75,6 +75,7 @@ import 'modules/orders/providers/orders.provider.dart';
 import 'modules/orders/screens/orders.dart';
 import 'modules/parts/providers/parts.provider.dart';
 import 'modules/parts/screens/part.dart';
+import 'modules/promotions/providers/create-promotion.provider.dart';
 import 'modules/promotions/screens/promotions.screen.dart';
 import 'modules/shop/providers/shop-appointment.provider.dart';
 import 'modules/shop/providers/shop.provider.dart';
@@ -147,6 +148,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: NotificationProvider()),
           ChangeNotifierProvider.value(value: OrderProvider()),
           ChangeNotifierProvider.value(value: PromotionsProvider()),
+          ChangeNotifierProvider.value(value: CreatePromotionProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(

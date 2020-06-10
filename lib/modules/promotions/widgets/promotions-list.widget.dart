@@ -15,8 +15,8 @@ class PromotionsList extends StatelessWidget {
   String searchString;
   PromotionStatus promotionStatus;
 
-  Function selectPromotion;
-  Function filterPromotions;
+  final Function selectPromotion;
+  final Function filterPromotions;
   final Function downloadNextPage;
   bool shouldDownload = true;
 

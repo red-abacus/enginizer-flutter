@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,11 @@ class ImageSelectionWidget extends StatelessWidget {
 
   final double _minimWidth = 100;
   final List<File> files;
+  final List<GenericModel> images;
 
   Function addImage;
 
-  ImageSelectionWidget({this.addImage, this.files});
+  ImageSelectionWidget({this.addImage, this.files, this.images});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +29,14 @@ class ImageSelectionWidget extends StatelessWidget {
       _imageHeight = totalSize / 3;
     }
 
+    int total = images != null ? images.length : 0;
+    total += files.length;
+
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
-          for (int i = 0; i < files.length / _imagesPerRow; i++)
-            _imagesRow(i),
+          for (int i = 0; i < total / _imagesPerRow; i++) _imagesRow(i),
         ],
       ),
     );
@@ -52,9 +56,18 @@ class ImageSelectionWidget extends StatelessWidget {
   }
 
   _getImageContainer(int index) {
-    return index < this.files.length
-        ? ImageContainerWidget(
-            file: this.files[index], index: index, addImage: addImage)
-        : Container();
+    int imagesCount = this.images != null ? this.images.length : 0;
+
+    if (index < imagesCount) {
+      return ImageContainerWidget(
+          image: this.images[index], index: index, addImage: null);
+    } else if (index < this.files.length) {
+      return ImageContainerWidget(
+          file: this.files[index - imagesCount],
+          index: index,
+          addImage: addImage);
+    }
+
+    return Container();
   }
 }

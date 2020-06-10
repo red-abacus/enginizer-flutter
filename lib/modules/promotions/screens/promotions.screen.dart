@@ -2,7 +2,9 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/promotions/enum/promotion-status.enum.dart';
 import 'package:app/modules/promotions/models/promotion.model.dart';
+import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/modules/promotions/providers/promotions.provider.dart';
+import 'package:app/modules/promotions/screens/create-promotion.modal.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/promotions/widgets/promotions-list.widget.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
@@ -119,8 +121,57 @@ class PromotionsState extends State<Promotions> {
     _loadData();
   }
 
-  _selectPromotion(Promotion promotion) {}
+  _selectPromotion(Promotion promotion) {
+    Provider.of<CreatePromotionProvider>(context).initialise(
+        Provider.of<Auth>(context).authUser.providerId,
+        promotion: promotion);
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return CreatePromotionModal(
+              refreshState: _refreshState,
+            );
+          });
+        });
+  }
 
   _openPromotionCreateModal() {
+    Provider.of<CreatePromotionProvider>(context)
+        .initialise(Provider.of<Auth>(context).authUser.providerId);
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return CreatePromotionModal(
+              refreshState: _refreshState,
+            );
+          });
+        });
+  }
+
+  _refreshState() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    _provider.initialise();
+    _provider.initDone = true;
+    _provider.promotionsRequest.providerId =
+        Provider.of<Auth>(context).authUser.providerId;
+
+    _loadData();
   }
 }

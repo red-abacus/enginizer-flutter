@@ -19,6 +19,7 @@ import 'package:app/modules/auctions/screens/auction-consultant.dart';
 import 'package:app/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
+import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
@@ -147,6 +148,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: NotificationProvider()),
           ChangeNotifierProvider.value(value: OrderProvider()),
           ChangeNotifierProvider.value(value: PromotionsProvider()),
+          ChangeNotifierProvider.value(value: CreatePromotionProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(

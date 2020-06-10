@@ -42,7 +42,7 @@ class Promotion {
             ? DateUtils.dateFromString(json['endDate'], 'dd/MM/yyyy')
             : null,
         serviceId: json['serviceId'] != null ? json['serviceId'] : null,
-        isActive: json['isActive'] != null ? json['isActive'] : false,
+        isActive: json['isActive'] != null ? json['isActive'] : true,
         status: json['status'] != null ? json["status"] : '',
         images: json['images'] != null ? _mapImages(json['images']) : []);
   }

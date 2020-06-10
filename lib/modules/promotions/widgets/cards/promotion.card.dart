@@ -35,7 +35,7 @@ class PromotionCard extends StatelessWidget {
           color: Colors.white,
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
-            onTap: () => this.selectPromotion(),
+            onTap: () => this.selectPromotion(this.promotion),
             child: ClipRRect(
               child: Container(
                 height: 120,
@@ -148,14 +148,14 @@ class PromotionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
+                    margin: EdgeInsets.only(top: 10),
                     child: (promotion.images.length > 0)
                         ? FadeInImage.assetNetwork(
                             width: 100,
                             height: 100,
                             image: promotion.images[0].name,
                             placeholder: 'assets/images/icons/camera.svg',
-                            fit: BoxFit.contain,
-                          )
+                            fit: BoxFit.contain)
                         : Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,

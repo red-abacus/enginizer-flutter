@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/authentication/models/auth.model.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
@@ -28,8 +29,9 @@ class Auth with ChangeNotifier {
   String _token;
   List<User> users = [];
 
+  ServiceProviderResponse serviceProviderResponse;
+
   bool get isAuth {
-    print('is auth $_token');
     return _token != null && authUserDetails != null;
   }
 

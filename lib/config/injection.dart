@@ -10,6 +10,7 @@ import 'package:app/modules/orders/providers/orders.provider.dart';
 import 'package:app/modules/orders/services/order.service.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
 import 'package:app/modules/parts/providers/parts.provider.dart';
+import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/modules/promotions/providers/promotions.provider.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
@@ -110,4 +111,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => NotificationProvider());
   inject.registerFactory(() => OrderProvider());
   inject.registerFactory(() => PromotionsProvider());
+  inject.registerFactory(() => CreatePromotionProvider());
 }
