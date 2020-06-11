@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 class ImageContainerWidget extends StatelessWidget {
   File file;
   int index;
-  Function addImage;
+  final Function addImage;
+  final Function removeImage;
   GenericModel image;
+  final double height;
 
-  ImageContainerWidget({this.file, this.index, this.addImage, this.image});
+  ImageContainerWidget(this.height, {this.file, this.index, this.addImage, this.removeImage, this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,8 @@ class ImageContainerWidget extends StatelessWidget {
       padding: EdgeInsets.all(0),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       child: Container(
+        height: this.height,
+        width: this.height,
         margin: const EdgeInsets.all(10.0),
         padding: const EdgeInsets.all(3.0),
         decoration: BoxDecoration(
@@ -65,6 +69,8 @@ class ImageContainerWidget extends StatelessWidget {
       padding: EdgeInsets.all(0),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       child: Container(
+        height: height,
+        width: this.height,
         margin: const EdgeInsets.all(10.0),
         padding: const EdgeInsets.all(3.0),
         decoration: BoxDecoration(
@@ -72,13 +78,6 @@ class ImageContainerWidget extends StatelessWidget {
           border: Border.all(color: red),
           borderRadius: BorderRadius.all(const Radius.circular(10)),
         ),
-        /*
-        child: FadeInImage.assetNetwork(
-            image: _provider.serviceProvider?.image ?? '',
-            placeholder: ServiceProvider.defaultImage(),
-            fit: BoxFit.fill,
-          ),
-         */
       ),
       onPressed: () {
         if (addImage != null) {
@@ -89,27 +88,43 @@ class ImageContainerWidget extends StatelessWidget {
   }
 
   _imageContainer() {
-    return FlatButton(
-      hoverColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      padding: EdgeInsets.all(0),
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      child: Container(
-        margin: const EdgeInsets.all(10.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: FileImage(file), fit: BoxFit.cover),
-          border: Border.all(color: red),
-          borderRadius: BorderRadius.all(const Radius.circular(10)),
+    return Stack(
+      children: [
+        Container(
+          height: height,
+          width: this.height,
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: red),
+            borderRadius: BorderRadius.all(const Radius.circular(10)),
+          ),
+          child: FadeInImage.assetNetwork(
+              placeholder: 'assets/images/icons/camera.svg',
+              image: image.name,
+              fit: BoxFit.cover),
         ),
-      ),
-      onPressed: () {
-        if (addImage != null) {
-          addImage(this.index);
-        }
-      },
+        Align(
+          alignment: Alignment.topRight,
+          child: GestureDetector(
+            onTap: () {
+              if (this.removeImage != null) {
+                this.removeImage(this.image);
+              }
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              margin: EdgeInsets.only(right: 10, top: 10),
+              child: Container(
+                width: 20,
+                height: 20,
+                child: Icon(Icons.close, color: red),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

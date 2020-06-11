@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/image-selection.widget.dart';
@@ -6,6 +7,7 @@ import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/promotions/widgets/forms/create-promotion-info-form.widget.dart';
+import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -176,11 +178,7 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
                   setState(() {
                     if (index < _provider.createPromotionRequest.files.length) {
                       _provider.createPromotionRequest.files[index] = file;
-
-                      if (_provider.createPromotionRequest.files.length <
-                          _provider.maxFiles) {
-                        _provider.createPromotionRequest.files.add(null);
-                      }
+                      _provider.createPromotionRequest.checkAddImage();
                     }
                   });
                 } else {
@@ -190,6 +188,10 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
                         _provider.createPromotionRequest.promotionId,
                         [file]).then((value) {
                       setState(() {
+                        _provider.createPromotionRequest.images.addAll(value);
+                        _provider.createPromotionRequest.checkAddImage();
+                        _provider.createPromotionRequest.promotion?.images =
+                            _provider.createPromotionRequest.images;
                         _isLoading = false;
                       });
                     });
@@ -211,6 +213,54 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
             }));
   }
 
+  _removeImage(GenericModel image) {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AlertConfirmationDialogWidget(
+                confirmFunction: (confirm) {
+                  if (confirm) {
+                    setState(() {
+                      _isLoading = true;
+                    });
+
+                    try {
+                      _provider
+                          .deletePromotionImage(
+                              _provider.createPromotionRequest.providerId,
+                              _provider.createPromotionRequest.promotionId,
+                              image.id)
+                          .then((success) {
+                        setState(() {
+                          _provider.createPromotionRequest.images.remove(image);
+                          _provider.createPromotionRequest.promotion?.images =
+                              _provider.createPromotionRequest.images;
+                          _provider.createPromotionRequest.checkAddImage();
+                          _isLoading = false;
+                        });
+                      });
+                    } catch (error) {
+                      if (error.toString().contains(
+                          PromotionService.DELETE_PROMOTION_IMAGE_EXCEPTION)) {
+                        FlushBarHelper.showFlushBar(
+                            S.of(context).general_error,
+                            S.of(context).exception_remove_promotion_image,
+                            context);
+                      }
+
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  }
+                },
+                title: S.of(context).promotions_remove_image_alert);
+          });
+        });
+  }
+
   List<Step> _buildSteps(BuildContext context) {
     return [
       Step(
@@ -229,6 +279,7 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
                 ),
                 ImageSelectionWidget(
                     addImage: _addImage,
+                    removeImage: _removeImage,
                     images: _provider.createPromotionRequest.images,
                     files: _provider.createPromotionRequest.files),
               ],

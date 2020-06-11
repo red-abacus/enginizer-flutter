@@ -9,6 +9,7 @@ import 'package:app/modules/promotions/models/request/promotions-request.model.d
 import 'package:app/modules/promotions/models/response/promotions.response.dart';
 import 'package:app/utils/environment.constants.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 
 class PromotionService {
   Dio _dio = inject<Dio>();
@@ -20,6 +21,8 @@ class PromotionService {
   static const String ADD_PROMOTION_IMAGES_EXCEPTION =
       'ADD_PROMOTION_IMAGES_EXCEPTION';
   static const String EDIT_PROMOTION_EXCEPTION = 'EDIT_PROMOTION_EXCEPTION';
+  static const String DELETE_PROMOTION_IMAGE_EXCEPTION =
+      'DELETE_PROMOTION_IMAGE_EXCEPTION';
 
   static const String _GET_PROMOTIONS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
@@ -82,21 +85,22 @@ class PromotionService {
 
   Future<List<GenericModel>> addPromotionImages(
       int providerId, int promotionId, List<File> images) async {
-    List<MultipartFile> files = [];
+    var formData = FormData();
 
-    for (File file in images) {
-      if (file != null) {
-        files.add(await MultipartFile.fromFile(file.path));
-      }
+    for (File image in images) {
+      formData.files.add(MapEntry(
+        "files",
+        await MultipartFile.fromFile(image.path,
+            filename: image.path.split('/').last,
+            contentType: MediaType('image', image.path.split('.').last)),
+      ));
     }
-
-    FormData formData = new FormData.fromMap({"files": await MultipartFile.fromFile(images[0].path)});
 
     try {
       final response = await _dio.patch(
           _buildAddPromotionImagesPath(providerId, promotionId),
-          data: formData, onSendProgress: (int send, int total) {
-      });
+          data: formData);
+
       if (response.statusCode == 200) {
         return _mapPromotionsImages(response.data);
       } else {
@@ -104,6 +108,20 @@ class PromotionService {
       }
     } catch (error) {
       throw Exception(ADD_PROMOTION_IMAGES_EXCEPTION);
+    }
+  }
+
+  Future<bool> deletePromotionImage(
+      int providerId, int promotionId, int imageId) async {
+    try {
+      final response = await _dio.delete(_buildDeletePromotionImagesPath(providerId, promotionId, imageId));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(DELETE_PROMOTION_IMAGE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(DELETE_PROMOTION_IMAGE_EXCEPTION);
     }
   }
 
@@ -126,6 +144,16 @@ class PromotionService {
         _ADD_PROMOTION_IMAGES_MIDDLE +
         promotionId.toString() +
         _ADD_PROMOTION_IMAGES_SUFFIX;
+  }
+
+  _buildDeletePromotionImagesPath(
+      int providerId, int promotionId, int imageId) {
+    return _ADD_PROMOTION_IMAGES_PREFIX +
+        providerId.toString() +
+        _ADD_PROMOTION_IMAGES_MIDDLE +
+        promotionId.toString() +
+        _ADD_PROMOTION_IMAGES_SUFFIX +
+        '/${imageId.toString()}';
   }
 
   _mapPromotionsImages(List<dynamic> response) {

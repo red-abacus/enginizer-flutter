@@ -13,8 +13,6 @@ class CreatePromotionProvider with ChangeNotifier {
   PromotionService _promotionService = inject<PromotionService>();
   ProviderService _providerService = inject<ProviderService>();
 
-  int maxFiles = 5;
-
   GlobalKey<FormState> informationFormState;
 
   CreatePromotionRequest createPromotionRequest;
@@ -27,7 +25,6 @@ class CreatePromotionProvider with ChangeNotifier {
 
     createPromotionRequest =
         CreatePromotionRequest(providerId, promotion: promotion);
-    createPromotionRequest.files.add(null);
   }
 
   Future<ServiceProviderItemsResponse> getServiceProviderItems(
@@ -74,6 +71,19 @@ class CreatePromotionProvider with ChangeNotifier {
           .addPromotionImages(providerId, promotionId, images);
       notifyListeners();
       return items;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> deletePromotionImage(
+      int providerId, int promotionId, int imageId) async {
+    try {
+      bool response = await this
+          ._promotionService
+          .deletePromotionImage(providerId, promotionId, imageId);
+      notifyListeners();
+      return response;
     } catch (error) {
       throw (error);
     }

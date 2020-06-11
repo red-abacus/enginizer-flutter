@@ -155,10 +155,10 @@ class PromotionsState extends State<Promotions> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CreatePromotionModal(
-              refreshState: _refreshState,
-            );
-          });
+                return CreatePromotionModal(
+                  refreshState: _refreshState,
+                );
+              });
         });
   }
 

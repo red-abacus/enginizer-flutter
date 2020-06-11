@@ -436,6 +436,7 @@
   "promotions_create_step_2_price_warning": "Adaugă prețul promoției!",
   "promotions_create_step_2_active": "Activă",
   "promotions_create_step_2_stopped": "Oprită",
+  "promotions_remove_image_alert": "Ești sigur că dorești să ștergi această imagine?",
   "general_at": "la",
   "appointment_create_step0": "Alege mașină",
   "general_find": "Caută",
@@ -565,5 +566,6 @@
   "exception_get_promotions": "A intervenit o problemă la încărcarea promoțiilor tale.",
   "exception_add_promotion": "A intervenit o problemă la adăugarea unei promoții noi.",
   "exception_add_promotion_images": "A intervenit o problemă la adăugarea imaginilor promoției.",
-  "exception_edit_promotion": "A intervenit o problemă la editarea acestei promoții."
+  "exception_edit_promotion": "A intervenit o problemă la editarea acestei promoții.",
+  "exception_remove_promotion_image": "A intervenit o problemă la ștergerea acestei imagini."
 }

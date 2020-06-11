@@ -10,6 +10,8 @@ import 'package:app/utils/date_utils.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class CreatePromotionRequest {
+  final int maxFiles = 5;
+
   final int providerId;
   int promotionId;
   int serviceId;
@@ -24,7 +26,9 @@ class CreatePromotionRequest {
   bool isActive = true;
   List<GenericModel> images;
 
-  CreatePromotionRequest(this.providerId, {Promotion promotion}) {
+  final Promotion promotion;
+
+  CreatePromotionRequest(this.providerId, {this.promotion}) {
     if (promotion != null) {
       promotionId = promotion.id;
       title = promotion.title;
@@ -37,6 +41,8 @@ class CreatePromotionRequest {
       isActive = promotion.isActive;
       images = promotion.images;
     }
+
+    checkAddImage();
   }
 
   List<File> files = [];
@@ -67,5 +73,30 @@ class CreatePromotionRequest {
       }
     });
     return list;
+  }
+
+  checkAddImage() {
+    int total = 0;
+
+    if (images != null) {
+      total += images.length;
+    }
+
+    if (files != null) {
+      total += files.length;
+    }
+
+    if (total >= maxFiles) {
+      if (files.length > 0 && files.last == null) {
+        files.removeLast();
+      }
+    } else {
+      if (files.length == 0) {
+        files.add(null);
+      }
+      else if (files.length > 0 && files.last != null) {
+        files.add(null);
+      }
+    }
   }
 }

@@ -14,9 +14,10 @@ class ImageSelectionWidget extends StatelessWidget {
   final List<File> files;
   final List<GenericModel> images;
 
-  Function addImage;
+  final Function addImage;
+  final Function removeImage;
 
-  ImageSelectionWidget({this.addImage, this.files, this.images});
+  ImageSelectionWidget({this.addImage, this.removeImage, this.files, this.images});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class ImageSelectionWidget extends StatelessWidget {
   _imagesRow(int index) {
     return Row(
       children: <Widget>[
-        for (int i = index; i < index + _imagesPerRow; i++)
+        for (int i = index * _imagesPerRow; i < index * _imagesPerRow + 3; i++)
           Expanded(
             flex: 1,
             child:
@@ -59,10 +60,10 @@ class ImageSelectionWidget extends StatelessWidget {
     int imagesCount = this.images != null ? this.images.length : 0;
 
     if (index < imagesCount) {
-      return ImageContainerWidget(
-          image: this.images[index], index: index, addImage: null);
-    } else if (index < this.files.length) {
-      return ImageContainerWidget(
+      return ImageContainerWidget(_imageHeight,
+          image: this.images[index], index: index, removeImage: removeImage);
+    } else if (index < imagesCount + this.files.length) {
+      return ImageContainerWidget(_imageHeight,
           file: this.files[index - imagesCount],
           index: index,
           addImage: addImage);

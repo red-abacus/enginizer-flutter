@@ -9,8 +9,6 @@ class UserService {
   static const String GET_USER_DETAILS_PATH = '${Environment.USERS_BASE_API}/users/';
   static const String UPDATE_USER_DETAILS_PATH = '${Environment.USERS_BASE_API}/users/credentials';
 
-  static const headers = {'Content-Type': 'application/json'};
-
   Dio _dio = inject<Dio>();
 
   UserService();

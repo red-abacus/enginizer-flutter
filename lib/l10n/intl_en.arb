@@ -427,6 +427,7 @@
   "promotions_create_step_2_price_warning": "Add promotion price!",
   "promotions_create_step_2_active": "Active",
   "promotions_create_step_2_stopped": "Stopped",
+  "promotions_remove_image_alert": "Are you sure you want to delete this image?",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
@@ -570,5 +571,6 @@
   "exception_get_promotions": "There was an error trying to get your promotions.",
   "exception_add_promotion": "There was an error trying to add a new promotion.",
   "exception_add_promotion_images": "There was an error trying to add a promotion images.",
-  "exception_edit_promotion": "There was an error trying to edit this promotion."
+  "exception_edit_promotion": "There was an error trying to edit this promotion.",
+  "exception_remove_promotion_image": "There was an error trying to delete this image."
 }

@@ -45,7 +45,8 @@ class ImagePickerWidget extends StatelessWidget {
   }
 
   _getImage(BuildContext context, ImageSource imageSource) async {
-    var image = await ImagePicker.pickImage(source: imageSource, maxWidth: 1024, maxHeight: 1024);
+    var image = await ImagePicker.pickImage(
+        source: imageSource, maxWidth: 1024, maxHeight: 1024);
 
     if (image != null) {
       cropImage(context, image);
@@ -72,15 +73,12 @@ class ImagePickerWidget extends StatelessWidget {
           minimumAspectRatio: 1.0,
         ));
 
-    Navigator.pop(context);
+    if (croppedFile != null) if (imageSelected != null) {
+      imageSelected(croppedFile);
+    } else if (imageSelected != null) {
+      imageSelected(image);
+    }
 
-    if (croppedFile != null)
-      if (imageSelected != null) {
-        imageSelected(croppedFile);
-      }
-    else
-      if (imageSelected != null) {
-        imageSelected(image);
-      }
+    Navigator.pop(context);
   }
 }

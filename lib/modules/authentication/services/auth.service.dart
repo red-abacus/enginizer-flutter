@@ -13,7 +13,6 @@ class AuthService {
       'FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND';
 
   static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
-  static const headers = {'Content-Type': 'application/json'};
 
   Dio _dio = inject<Dio>();
 
