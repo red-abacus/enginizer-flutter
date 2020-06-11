@@ -51,11 +51,14 @@ class _AppointmentMapDetailsWidgetState
                 _applicantContainer(),
                 _buildSeparator(),
                 for (int i = 0;
-                i < _provider.auctionMapDirections.destinationPoints.length;
-                i++)
-                // TODO
+                    i <
+                        _provider.selectedAppointmentDetail.auctionMapDirections
+                            .destinationPoints.length;
+                    i++)
                   _markerContainer(
-                      _provider.auctionMapDirections.destinationPoints[i], i),
+                      _provider.selectedAppointmentDetail.auctionMapDirections
+                          .destinationPoints[i],
+                      i),
                 _totalDistanceContainer()
               ],
             ),
@@ -81,10 +84,11 @@ class _AppointmentMapDetailsWidgetState
           child: Container(
             margin: EdgeInsets.only(left: 10),
             child: Text(
-              _provider.selectedAppointmentDetail?.car?.registrationNumber ?? 'N/A',
+              _provider.selectedAppointmentDetail?.car?.registrationNumber ??
+                  'N/A',
               maxLines: 3,
               style:
-              TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
             ),
           ),
         ),
@@ -115,7 +119,8 @@ class _AppointmentMapDetailsWidgetState
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                _provider.selectedAppointmentDetail?.user?.name ?? 'Client Name',
+                _provider.selectedAppointmentDetail?.user?.name ??
+                    'Client Name',
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),
@@ -141,22 +146,31 @@ class _AppointmentMapDetailsWidgetState
   }
 
   _markerContainer(AuctionMapLocation point, int i) {
-    String logo =
-    i > 0 && i < _provider.auctionMapDirections.destinationPoints.length - 1
+    String logo = i > 0 &&
+            i <
+                _provider.selectedAppointmentDetail.auctionMapDirections
+                        .destinationPoints.length -
+                    1
         ? 'marker_gray.svg'
         : 'marker_red.svg';
     String title = i == 0
         ? S.of(context).auction_route_start_point
-        : i == _provider.auctionMapDirections.destinationPoints.length - 1
-        ? S.of(context).auction_route_destination
-        : 'Service Provider';
+        : i ==
+                _provider.selectedAppointmentDetail.auctionMapDirections
+                        .destinationPoints.length -
+                    1
+            ? S.of(context).auction_route_destination
+            : 'Service Provider';
 
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: GestureDetector(
         onTap: () {
           if (i > 0 &&
-              i < _provider.auctionMapDirections.destinationPoints.length - 1) {
+              i <
+                  _provider.selectedAppointmentDetail.auctionMapDirections
+                          .destinationPoints.length -
+                      1) {
             widget.showProviderDetails();
           }
         },
@@ -194,7 +208,7 @@ class _AppointmentMapDetailsWidgetState
                       child: Text(
                         point.dateTime != null
                             ? DateUtils.stringFromDate(
-                            point.dateTime, 'dd.MM.yyyy')
+                                point.dateTime, 'dd.MM.yyyy')
                             : '',
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 14),
@@ -221,7 +235,9 @@ class _AppointmentMapDetailsWidgetState
   }
 
   _totalDistanceContainer() {
-    double distanceInKm = _provider.auctionMapDirections.totalDistance / 1000;
+    double distanceInKm =
+        _provider.selectedAppointmentDetail.auctionMapDirections.totalDistance /
+            1000;
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Row(

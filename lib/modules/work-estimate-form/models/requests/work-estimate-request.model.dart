@@ -13,6 +13,7 @@ class WorkEstimateRequest {
   DateTime timeToRespond;
   EmployeeTimeSerie employeeTimeSerie;
 
+  DateTime proposedDate;
   final EstimatorMode estimatorMode;
 
   WorkEstimateRequest(this.estimatorMode);
@@ -77,6 +78,10 @@ class WorkEstimateRequest {
     if (estimatorMode == EstimatorMode.CreatePart) {
       map['proposedDate'] =
           DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy HH:mm');
+    } else if (estimatorMode == EstimatorMode.CreatePr &&
+        proposedDate != null) {
+      map['proposedDate'] =
+          DateUtils.stringFromDate(proposedDate, 'dd/MM/yyyy HH:mm');
     }
     return map;
   }

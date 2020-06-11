@@ -18,9 +18,9 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
-      this.cancelAppointment,
-      this.viewEstimate,
-      this.seeCamera});
+        this.cancelAppointment,
+        this.viewEstimate,
+        this.seeCamera});
 
   @override
   AppointmentGenericDetailsWidgetState createState() {
@@ -41,6 +41,7 @@ class AppointmentGenericDetailsWidgetState
   _content() {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20),
+      padding: EdgeInsets.only(top: 20, bottom: 20),
       child: new ListView(
         shrinkWrap: true,
         children: <Widget>[
@@ -127,8 +128,8 @@ class AppointmentGenericDetailsWidgetState
                 children: <Widget>[
                   if (widget.appointmentDetail != null)
                     for (int i = 0;
-                        i < widget.appointmentDetail?.issues?.length;
-                        i++)
+                    i < widget.appointmentDetail?.issues?.length;
+                    i++)
                       _appointmentIssueType(
                           widget.appointmentDetail.issues[i], i)
                 ],
@@ -163,12 +164,12 @@ class AppointmentGenericDetailsWidgetState
       children: <Widget>[
         Expanded(
             child: Container(
-          margin: EdgeInsets.only(top: 4),
-          child: Text(
-            serviceItem.name,
-            style: TextHelper.customTextStyle(null, Colors.black, null, 13),
-          ),
-        )),
+              margin: EdgeInsets.only(top: 4),
+              child: Text(
+                serviceItem.name,
+                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+              ),
+            )),
       ],
     );
   }
@@ -315,7 +316,8 @@ class AppointmentGenericDetailsWidgetState
                   onPressed: () => {widget.seeCamera()},
                   child: Text(
                     S.of(context).appointment_video_button_title.toUpperCase(),
-                    style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 16),
                   ),
                 ),
               )

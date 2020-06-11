@@ -120,7 +120,8 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       await _appointmentMechanicProvider
           .getAppointmentDetails(
               _appointmentMechanicProvider.selectedAppointment)
-          .then((_) async {
+          .then((value) async {
+            _appointmentMechanicProvider.selectedAppointmentDetails = value;
         await _appointmentMechanicProvider
             .getStandardTasks(
                 _appointmentMechanicProvider.selectedAppointment.id)

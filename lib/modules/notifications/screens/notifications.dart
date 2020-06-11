@@ -223,7 +223,7 @@ class NotificationsState extends State<Notifications> {
   _showAppointmentDetails(Appointment appointment) {
     switch (Provider.of<Auth>(context).authUser.role) {
       case Roles.Client:
-        Provider.of<AppointmentProvider>(context).initialiseParams();
+        Provider.of<AppointmentProvider>(context).initialise();
         Provider.of<AppointmentProvider>(context).selectedAppointment =
             appointment;
         Navigator.of(context).pushNamed(AppointmentDetails.notificationsRoute);

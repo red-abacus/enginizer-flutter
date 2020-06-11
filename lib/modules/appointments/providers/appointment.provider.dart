@@ -11,29 +11,27 @@ import 'package:flutter/cupertino.dart';
 class AppointmentProvider with ChangeNotifier {
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
   BidsService _bidsService = inject<BidsService>();
-  AuctionsService _auctionsService = inject<AuctionsService>();
 
   bool initDone = false;
 
   Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetail;
 
-  AuctionMapDirections auctionMapDirections;
+  List<AppointmentDetail> children = [];
 
-  initialiseParams() {
+  initialise() {
+    children = [];
     initDone = false;
     selectedAppointment = null;
     selectedAppointmentDetail = null;
-    auctionMapDirections = null;
   }
 
-  Future<AppointmentDetail> getAppointmentDetails(
-      Appointment appointment) async {
+  Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
     try {
-      selectedAppointmentDetail =
-          await this._appointmentsService.getAppointmentDetails(appointment.id);
+      var item =
+          await this._appointmentsService.getAppointmentDetails(appointmentId);
       notifyListeners();
-      return selectedAppointmentDetail;
+      return item;
     } catch (error) {
       throw (error);
     }
@@ -65,20 +63,6 @@ class AppointmentProvider with ChangeNotifier {
       bool response = await this._bidsService.acceptBid(bidId);
       notifyListeners();
       return response;
-    } catch (error) {
-      throw (error);
-    }
-  }
-
-  Future<void> loadMapData(BuildContext context) async {
-    auctionMapDirections = AuctionMapDirections(
-        destinationPoints:
-            selectedAppointmentDetail.appointmentTransportInfo.getLocations());
-    auctionMapDirections.appointmentDate = DateUtils.dateFromString(selectedAppointmentDetail.scheduledDate, 'dd/MM/yyyy HH:mm');
-
-    try {
-      await auctionMapDirections.setPolyLines(context);
-      await auctionMapDirections.fetchDistanceAndDurations(_auctionsService);
     } catch (error) {
       throw (error);
     }

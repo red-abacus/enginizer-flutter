@@ -485,6 +485,8 @@
   "general_hours_ago": "hours ago",
   "general_day_ago": "day ago",
   "general_days_ago": "days ago",
+  "general_pickup_and_return": "Pickup & Return",
+  "general_map": "Map",
   "exception_get_car_fuel": "There was an error trying to load car fuel.",
   "exception_get_car_details": "There was an error trying to get car details.",
   "exception_get_appointments": "There was an error trying to load your appointments.",

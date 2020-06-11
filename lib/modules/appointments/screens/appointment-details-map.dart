@@ -11,6 +11,7 @@ import 'package:app/modules/appointments/widgets/service-details-modal.widget.da
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
+import 'package:app/modules/auctions/widgets/details-map/auction-map-decline.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
@@ -95,9 +96,10 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
 
       try {
         await _provider
-            .getAppointmentDetails(_provider.selectedAppointment)
-            .then((_) async {
-          await _provider.loadMapData(context);
+            .getAppointmentDetails(_provider.selectedAppointment.id)
+            .then((value) async {
+          _provider.selectedAppointmentDetail = value;
+          await _provider.selectedAppointmentDetail.loadMapData(context);
 
           setState(() {
             _isLoading = false;
@@ -138,16 +140,37 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     if (_tabController.index == 0) {
       switch (_provider.selectedAppointmentDetail?.status?.getState()) {
         case AppointmentStatusState.SUBMITTED:
-          return FloatingActionButton.extended(
-            heroTag: null,
-            onPressed: () {
-              _createEstimate();
-            },
-            label: Text(
-              S.of(context).auction_create_estimate.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          return Container(
+            margin: EdgeInsets.only(left: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    _declineAppointment();
+                  },
+                  label: Text(
+                    S.of(context).general_decline.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 16),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+                FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    _createEstimate();
+                  },
+                  label: Text(
+                    S.of(context).auction_create_estimate.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 16),
+                  ),
+                  backgroundColor: Colors.white,
+                )
+              ],
             ),
-            backgroundColor: Colors.white,
           );
           break;
         default:
@@ -243,6 +266,15 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     }
   }
 
+  _declineAppointment() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AuctionMapDeclineWidget();
+      },
+    );
+  }
+
   _createEstimate() {
     Provider.of<WorkEstimateProvider>(context)
         .refreshValues(EstimatorMode.CreatePr);
@@ -252,8 +284,15 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
         Provider.of<Auth>(context).authUserDetails.userProvider.id;
     Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
         _provider.selectedAppointmentDetail;
-    Provider.of<WorkEstimateProvider>(context).defaultQuantity =
-    (_provider.auctionMapDirections.totalDistance / 1000).round();
+    Provider.of<WorkEstimateProvider>(context).defaultQuantity = (_provider
+                .selectedAppointmentDetail.auctionMapDirections.totalDistance /
+            1000)
+        .round();
+    Provider.of<WorkEstimateProvider>(context)
+            .workEstimateRequest
+            .proposedDate =
+        _provider.selectedAppointmentDetail.auctionMapDirections
+            .destinationPoints[0].dateTime;
 
     Navigator.push(
       context,

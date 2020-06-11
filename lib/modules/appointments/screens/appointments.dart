@@ -120,7 +120,7 @@ class AppointmentsState extends State<Appointments> {
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_CLIENT)) {
-      Provider.of<AppointmentProvider>(context).initialiseParams();
+      Provider.of<AppointmentProvider>(context).initialise();
       Provider
           .of<AppointmentProvider>(context)
           .selectedAppointment =
@@ -147,7 +147,7 @@ class AppointmentsState extends State<Appointments> {
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
-      Provider.of<AppointmentProvider>(context).initialiseParams();
+      Provider.of<AppointmentProvider>(context).initialise();
       Provider
           .of<AppointmentProvider>(context)
           .selectedAppointment =

@@ -628,6 +628,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
+          Provider.of<AppointmentProvider>(context).initDone = false;
           Provider.of<AppointmentsProvider>(context).initDone = false;
 
           Navigator.pop(context);

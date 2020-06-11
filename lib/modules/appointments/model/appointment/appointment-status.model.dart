@@ -37,6 +37,7 @@ class AppointmentStatus {
       case AppointmentStatusState.NEW:
         return gray;
       case AppointmentStatusState.CANCELED:
+      case AppointmentStatusState.OPEN_BID:
         return red;
       case AppointmentStatusState.DONE:
       case AppointmentStatusState.ACCEPTED:

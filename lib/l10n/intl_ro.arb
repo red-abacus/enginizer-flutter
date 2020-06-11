@@ -480,6 +480,8 @@
   "general_hours_ago": "ore în urmă",
   "general_day_ago": "zi în urmă",
   "general_days_ago": "zile în urmă",
+  "general_pickup_and_return": "Pickup & Return",
+  "general_map": "Hartă",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
   "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
   "exception_get_appointments": "A intervenit o problemă la încărcarea programărilor tale.",

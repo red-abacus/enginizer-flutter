@@ -380,16 +380,11 @@ class AppointmentsService {
 
     FormData formData = new FormData.fromMap({"files": files});
 
-    print('form data $formData');
-
     try {
       final response = await _dio.patch(
           _buildAddAppointmentRecommendationImage(
               appointmentId, recommendationId),
           data: formData);
-
-      print('response ${response.statusCode}');
-      print('response data ${response.data}');
 
       if (response.statusCode == 200) {
         return true;
@@ -397,8 +392,6 @@ class AppointmentsService {
         throw Exception(ADD_APPOINTMENT_RECOMMENDATION_IMAGE_EXCEPTION);
       }
     } catch (error) {
-      print('error ${error}');
-      print('error ${error.response}');
       throw Exception(ADD_APPOINTMENT_RECOMMENDATION_IMAGE_EXCEPTION);
     }
   }

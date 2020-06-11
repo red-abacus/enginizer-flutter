@@ -1,4 +1,0 @@
-enum AppointmentDetailsTabBarState {
-  REQUEST,
-  CAR
-}

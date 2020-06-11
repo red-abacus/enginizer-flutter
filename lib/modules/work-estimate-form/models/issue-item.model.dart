@@ -95,7 +95,7 @@ class IssueItem {
       'price': price,
       'priceVAT': priceVAT,
       'total': (price + priceVAT).toString(),
-      'additionId': addition,
+      'addition': addition,
     };
 
     return propMap;

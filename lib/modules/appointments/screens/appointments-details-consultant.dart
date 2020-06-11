@@ -71,7 +71,8 @@ class AppointmentDetailsConsultantState
     try {
       await _provider
           .getAppointmentDetails(_provider.selectedAppointment)
-          .then((_) async {
+          .then((value) async {
+            _provider.selectedAppointmentDetail = value;
         await _provider
             .getProviderServices(
                 _provider.selectedAppointment.serviceProvider.id)

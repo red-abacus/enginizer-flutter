@@ -27,9 +27,9 @@ class _AppointmentMapWidgetState extends State<AppointmentMapWidget> {
     } else {
       _kGooglePlex = CameraPosition(
         target: LatLng(
-            _provider
+            _provider.selectedAppointmentDetail
                 .auctionMapDirections.destinationPoints[0].location.latitude,
-            _provider
+            _provider.selectedAppointmentDetail
                 .auctionMapDirections.destinationPoints[0].location.longitude),
         zoom: 14.0,
       );
@@ -41,8 +41,8 @@ class _AppointmentMapWidgetState extends State<AppointmentMapWidget> {
             child: GoogleMap(
               myLocationEnabled: _provider.selectedAppointmentDetail.canShareLocation(),
               mapType: MapType.normal,
-              markers: _provider.auctionMapDirections.markers,
-              polylines: _provider.auctionMapDirections.polylines,
+              markers: _provider.selectedAppointmentDetail.auctionMapDirections.markers,
+              polylines: _provider.selectedAppointmentDetail.auctionMapDirections.polylines,
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {},
             ),

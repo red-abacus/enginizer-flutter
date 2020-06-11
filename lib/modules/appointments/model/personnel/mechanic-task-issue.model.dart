@@ -13,7 +13,6 @@ class MechanicTaskIssue {
       {this.id, this.name, this.priority, this.image, this.taskId});
 
   factory MechanicTaskIssue.fromJson(Map<String, dynamic> json) {
-    print('json $json');
     return MechanicTaskIssue(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '-',
