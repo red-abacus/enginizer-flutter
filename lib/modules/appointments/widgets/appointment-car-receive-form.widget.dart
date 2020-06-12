@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/enum/receive-car-form-state.enum.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-consultant.modal.dart';
@@ -12,9 +13,10 @@ import 'package:flutter/material.dart';
 class AppointmentCarReceiveFormModal extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function refreshState;
+  final CarReceiveFormState carReceiveFormState;
 
   AppointmentCarReceiveFormModal(
-      {this.appointmentDetail, this.refreshState});
+      {this.appointmentDetail, this.refreshState, this.carReceiveFormState});
 
   @override
   State<StatefulWidget> createState() {
@@ -55,7 +57,10 @@ class _AppointmentCarReceiveFormModalState
       return _formContainer();
     }
 
-    return PickUpCarFormConsultantWidget(appointmentDetail: widget.appointmentDetail, refreshState: widget.refreshState);
+    return PickUpCarFormConsultantWidget(
+        carReceiveFormState: widget.carReceiveFormState,
+        appointmentDetail: widget.appointmentDetail,
+        refreshState: widget.refreshState);
   }
 
   _formContainer() {

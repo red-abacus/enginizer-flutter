@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -22,9 +23,13 @@ import 'image-selection.widget.dart';
 class PickUpCarFormConsultantWidget extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function refreshState;
+  final CarReceiveFormState carReceiveFormState;
 
   PickUpCarFormConsultantWidget(
-      {Key key, this.appointmentDetail, this.refreshState})
+      {Key key,
+      this.appointmentDetail,
+      this.refreshState,
+      this.carReceiveFormState})
       : super(key: key);
 
   @override
@@ -167,7 +172,7 @@ class _PickUpCarFormConsultantWidgetState
   }
 
   List<Step> _buildSteps(BuildContext context) {
-    return [
+    List<Step> list = [
       Step(
           isActive: _currentStepIndex == 0,
           title: Text(_currentStepIndex == 0
@@ -194,17 +199,23 @@ class _PickUpCarFormConsultantWidgetState
           title: Text(_currentStepIndex == 1
               ? S.of(context).appointment_receive_car_step_2
               : ''),
-          content: PickupCarFormInformationWidget(),
-          state: StepState.indexed),
-      Step(
+          content: PickupCarFormInformationWidget(
+              carReceiveFormState: widget.carReceiveFormState),
+          state: StepState.indexed)
+    ];
+
+    if (widget.carReceiveFormState == CarReceiveFormState.Service) {
+      list.add(Step(
           isActive: _currentStepIndex == 2,
           title: Text(_currentStepIndex == 2
               ? S.of(context).appointment_receive_car_step_3
               : ''),
           content: PickUpCarFormEmployeesWidget(
               appointmentDetail: widget.appointmentDetail),
-          state: StepState.indexed)
-    ];
+          state: StepState.indexed));
+    }
+
+    return list;
   }
 
   _next() {
@@ -214,7 +225,14 @@ class _PickUpCarFormConsultantWidgetState
         break;
       case 1:
         if (_provider.informationFormState.currentState.validate()) {
-          _goTo(2);
+          switch (widget.carReceiveFormState) {
+            case CarReceiveFormState.Service:
+              _goTo(2);
+              break;
+            case CarReceiveFormState.Pr:
+              _createReceiveForm();
+              break;
+          }
         }
         break;
       case 2:

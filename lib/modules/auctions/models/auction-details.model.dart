@@ -1,9 +1,12 @@
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../work-estimate-form/models/issue.model.dart';
 
@@ -20,6 +23,8 @@ class AuctionDetail {
   int workEstimateId;
   String appointmentType;
   List<Bid> bids = [];
+  AuctionMapDirections auctionMapDirections;
+  GenericModel appointment;
 
   AuctionDetail(
       {this.id,
@@ -33,7 +38,8 @@ class AuctionDetail {
       this.user,
       this.workEstimateId,
       this.appointmentType,
-      this.bids});
+      this.bids,
+      this.appointment});
 
   factory AuctionDetail.fromJson(Map<String, dynamic> json) {
     return AuctionDetail(
@@ -51,7 +57,10 @@ class AuctionDetail {
         user: json['user'] != null ? User.fromJson(json['user']) : null,
         workEstimateId: json['workEstimateId'],
         appointmentType: json['appointmentType'],
-        bids: json['bids'] != null ? _mapBids(json['bids']) : []);
+        bids: json['bids'] != null ? _mapBids(json['bids']) : [],
+        appointment: json['appointment'] != null
+            ? GenericModel.fromJson(json['appointment'])
+            : null);
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -85,5 +94,19 @@ class AuctionDetail {
       }
     }
     return null;
+  }
+
+  Future<void> loadMapData(BuildContext context) async {
+//    auctionMapDirections = AuctionMapDirections(
+//        destinationPoints:
+//        appointmentTransportInfo.getLocations());
+//    auctionMapDirections.appointmentDate = DateUtils.dateFromString(scheduledDate, 'dd/MM/yyyy HH:mm');
+//
+//    try {
+//      await auctionMapDirections.setPolyLines(context);
+//      await auctionMapDirections.fetchDistanceAndDurations(inject<AuctionsService>());
+//    } catch (error) {
+//      throw (error);
+//    }
   }
 }

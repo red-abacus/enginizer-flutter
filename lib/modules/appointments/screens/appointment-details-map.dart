@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
+import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map-details.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map.widget.dart';
 import 'package:app/modules/appointments/widgets/map/car-reception-form/car-reception-form.modal.dart';
@@ -20,6 +23,7 @@ import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/firebase/firestore_manager.dart';
+import 'package:app/utils/firebase/models/firestore-location.model.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +43,7 @@ class AppointmentDetailsMap extends StatefulWidget {
 }
 
 class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   String route;
 
   var _initDone = false;
@@ -90,6 +94,9 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
+      _initDone = true;
+      _provider.initDone = true;
+
       setState(() {
         _isLoading = true;
       });
@@ -99,10 +106,12 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
             .getAppointmentDetails(_provider.selectedAppointment.id)
             .then((value) async {
           _provider.selectedAppointmentDetail = value;
-          await _provider.selectedAppointmentDetail.loadMapData(context);
-
-          setState(() {
-            _isLoading = false;
+          await _provider.selectedAppointmentDetail
+              .loadMapData(context)
+              .then((value) {
+            setState(() {
+              _isLoading = false;
+            });
           });
         });
       } catch (error) {
@@ -126,7 +135,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
       _initDone = true;
       _provider.initDone = true;
     } else {
-      _initialiseLocator();
+//      _initialiseLocator();
     }
 
     super.didChangeDependencies();
@@ -211,7 +220,9 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
       physics: NeverScrollableScrollPhysics(),
       controller: _tabController,
       children: [
-        AppointmentMapDetailsWidget(showProviderDetails: _showProviderDetails),
+        AppointmentMapDetailsWidget(
+            showProviderDetails: _showProviderDetails,
+            createPickUpCarForm: _createPickUpCarForm),
         AppointmentMapWidget()
       ],
     );
@@ -255,12 +266,13 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
           .getPositionStream(locationOptions)
           .listen((Position position) {
         if (position != null) {
-          Map<String, dynamic> map = {
-            'latitude': position.latitude,
-            'longitude': position.longitude,
-            'provider_id': '6'
-          };
-          FirestoreManager.getInstance().writeLocation(map);
+          FirestoreLocation location = FirestoreLocation();
+          location.latitude = position.latitude;
+          location.longitude = position.longitude;
+          location.providerId = Provider.of<Auth>(context).authUser.providerId;
+          location.appointmentId = _provider.selectedAppointmentDetail.id;
+
+          FirestoreManager.getInstance().writeLocation(location.toJson());
         }
       });
     }
@@ -299,5 +311,31 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
       MaterialPageRoute(
           builder: (context) => WorkEstimateForm(mode: EstimatorMode.CreatePr)),
     );
+  }
+
+  _createPickUpCarForm() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AppointmentCarReceiveFormModal(
+                carReceiveFormState: CarReceiveFormState.Pr,
+                appointmentDetail: _provider.selectedAppointmentDetail,
+                refreshState: _refreshState);
+          });
+        });
+  }
+
+  _refreshState() {
+    Provider.of<AppointmentsProvider>(context).initDone = false;
+
+    setState(() {
+      _initDone = false;
+    });
   }
 }

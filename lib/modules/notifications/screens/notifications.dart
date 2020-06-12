@@ -251,14 +251,14 @@ class NotificationsState extends State<Notifications> {
     if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
       AuctionProvider provider = Provider.of<AuctionProvider>(context);
-      provider.initialiseParameters();
+      provider.initialise();
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionConsultantMap.route);
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
       AuctionProvider provider = Provider.of<AuctionProvider>(context);
-      provider.initialiseParameters();
+      provider.initialise();
       provider.selectedAuction = auction;
       provider.redirectBid = bid;
 

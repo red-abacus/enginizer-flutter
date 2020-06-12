@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
@@ -8,8 +9,10 @@ import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-children.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
+import 'package:app/modules/appointments/widgets/map/client-map-directions.modal.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -35,7 +38,7 @@ class AppointmentDetails extends StatefulWidget {
 }
 
 class AppointmentDetailsState extends State<AppointmentDetails>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   String route;
 
   var _initDone = false;
@@ -103,6 +106,8 @@ class AppointmentDetailsState extends State<AppointmentDetails>
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
+      _tabController = null;
+      _tabBar = null;
       _provider = Provider.of<AppointmentProvider>(context);
 
       if (_provider.selectedAppointment != null) {
@@ -131,9 +136,10 @@ class AppointmentDetailsState extends State<AppointmentDetails>
                   _provider.selectedAppointmentDetail.children[0].id)
               .then((value) async {
             _provider.children = [value];
-            await _provider.children[0].loadMapData(context);
-            setState(() {
-              _isLoading = false;
+            await _provider.children[0].loadMapData(context).then((value) {
+              setState(() {
+                _isLoading = false;
+              });
             });
           });
         } else {
@@ -168,7 +174,11 @@ class AppointmentDetailsState extends State<AppointmentDetails>
 
     if (_provider.children.length == 1) {
       widgets.add(AppointmentDetailsChildrenWidget(
-          appointmentDetail: _provider.children[0], showProviderDetails: _showProviderDetails));
+        appointmentDetail: _provider.children[0],
+        showProviderDetails: _showProviderDetails,
+        showMap: _showMapDirections,
+        seeEstimate: _seeEstimate,
+      ));
     }
 
     return TabBarView(
@@ -200,13 +210,12 @@ class AppointmentDetailsState extends State<AppointmentDetails>
     }
   }
 
-  _seeEstimate() {
-    int workEstimateId = _provider.selectedAppointmentDetail.lastWorkEstimate();
+  _seeEstimate(AppointmentDetail appointmentDetail) {
+    int workEstimateId = appointmentDetail.lastWorkEstimate();
 
     if (workEstimateId != 0) {
       EstimatorMode mode =
-          _provider.selectedAppointmentDetail.status.getState() ==
-                  AppointmentStatusState.PENDING
+          appointmentDetail.status.getState() == AppointmentStatusState.PENDING
               ? EstimatorMode.ClientAccept
               : EstimatorMode.Client;
 
@@ -214,12 +223,13 @@ class AppointmentDetailsState extends State<AppointmentDetails>
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           workEstimateId;
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
-          _provider.selectedAppointmentDetail;
+          appointmentDetail;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          _provider.selectedAppointment.serviceProvider.id;
+          appointmentDetail.serviceProvider.id;
+      Provider.of<WorkEstimateProvider>(context).shouldAskForPr =
+          _provider.selectedAppointmentDetail.id == appointmentDetail.id;
 
-      DateEntry dateEntry =
-          _provider.selectedAppointmentDetail.getWorkEstimateDateEntry();
+      DateEntry dateEntry = appointmentDetail.getWorkEstimateDateEntry();
 
       Navigator.push(
         context,
@@ -259,8 +269,26 @@ class AppointmentDetailsState extends State<AppointmentDetails>
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return ServiceDetailsModal();
-              });
+            return ServiceDetailsModal();
+          });
+        });
+  }
+
+  _showMapDirections(AppointmentDetail appointmentDetail) {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return ClientMapDirectionsModal(
+              appointmentDetail: appointmentDetail,
+            );
+          });
         });
   }
 }

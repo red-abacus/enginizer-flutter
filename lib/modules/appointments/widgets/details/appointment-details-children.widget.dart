@@ -14,9 +14,14 @@ import 'package:flutter_svg/svg.dart';
 class AppointmentDetailsChildrenWidget extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function showProviderDetails;
+  final Function showMap;
+  final Function seeEstimate;
 
   AppointmentDetailsChildrenWidget(
-      {this.appointmentDetail, this.showProviderDetails});
+      {this.appointmentDetail,
+      this.showProviderDetails,
+      this.showMap,
+      this.seeEstimate});
 
   @override
   _AppointmentDetailsChildrenWidgetState createState() {
@@ -90,8 +95,7 @@ class _AppointmentDetailsChildrenWidgetState
               _providerContainer(),
               _buildSeparator(),
               _titleContainer(S.of(context).appointment_details_services_title),
-              for (ServiceItem item in widget.appointmentDetail.serviceItems)
-                _generalTitleContent(item.getTranslatedServiceName(context)),
+              _issuesContainer(),
               _buildSeparator(),
               _titleContainer(S.of(context).auction_route_title),
               _directionsContainer(),
@@ -188,7 +192,8 @@ class _AppointmentDetailsChildrenWidgetState
           ),
           FlatButton(
             splashColor: Theme.of(context).primaryColor,
-            onPressed: () => {},
+            onPressed: () =>
+                {widget.showMap(widget.appointmentDetail)},
             child: Text(
               S.of(context).general_map.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
@@ -396,6 +401,19 @@ class _AppointmentDetailsChildrenWidgetState
             ),
             backgroundColor: Colors.white,
           ),
+          if (widget.appointmentDetail.hasWorkEstimate())
+            FloatingActionButton.extended(
+              heroTag: null,
+              onPressed: () {
+                widget.seeEstimate(widget.appointmentDetail);
+              },
+              label: Text(
+                S.of(context).appointment_details_estimator.toUpperCase(),
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              ),
+              backgroundColor: Colors.white,
+            ),
         ],
       ),
     );
@@ -440,5 +458,34 @@ class _AppointmentDetailsChildrenWidgetState
       default:
         return Container();
     }
+  }
+
+  _issuesContainer() {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  for (ServiceItem item
+                      in widget.appointmentDetail.serviceItems)
+                    _generalTitleContent(
+                        item.getTranslatedServiceName(context)),
+                ],
+              ),
+            ),
+          ),
+          FlatButton(
+            splashColor: Theme.of(context).primaryColor,
+            onPressed: () => {widget.seeEstimate(widget.appointmentDetail)},
+            child: Text(
+              S.of(context).appointment_details_estimator.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

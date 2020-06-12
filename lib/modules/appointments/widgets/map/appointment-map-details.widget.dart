@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 
 class AppointmentMapDetailsWidget extends StatefulWidget {
   final Function showProviderDetails;
+  final Function createPickUpCarForm;
 
-  AppointmentMapDetailsWidget({this.showProviderDetails});
+  AppointmentMapDetailsWidget({this.showProviderDetails, this.createPickUpCarForm});
 
   @override
   _AppointmentMapDetailsWidgetState createState() {
@@ -50,6 +51,12 @@ class _AppointmentMapDetailsWidgetState
                 ),
                 _applicantContainer(),
                 _buildSeparator(),
+                if (_provider.selectedAppointmentDetail
+                    .canCreateCarReceiveForm())
+                  _pickUpCarForm(),
+                if (_provider.selectedAppointmentDetail
+                    .canCreateCarReceiveForm())
+                  _buildSeparator(),
                 for (int i = 0;
                     i <
                         _provider.selectedAppointmentDetail.auctionMapDirections
@@ -63,6 +70,47 @@ class _AppointmentMapDetailsWidgetState
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  _pickUpCarForm() {
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 20,
+            height: 20,
+            decoration: new BoxDecoration(
+              color: gray,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Text(
+                S.of(context).appointment_consultant_no_pick_up_car_form,
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+              ),
+            ),
+          ),
+          FlatButton(
+            child: Text(
+              S.of(context).general_create.toUpperCase(),
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+            ),
+            onPressed: () {
+              widget.createPickUpCarForm();
+            },
+          )
         ],
       ),
     );

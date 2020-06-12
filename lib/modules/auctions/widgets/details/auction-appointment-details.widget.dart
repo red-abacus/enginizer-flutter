@@ -25,6 +25,13 @@ class AuctionAppointmentDetailsWidgetState
     extends State<AuctionAppointmentDetailsWidget> {
   @override
   Widget build(BuildContext context) {
+    bool showIssues = false;
+
+    if (widget.appointmentDetail != null &&
+        widget.appointmentDetail.issues.length > 0) {
+      showIssues = true;
+    }
+
     return new ListView(
       shrinkWrap: true,
       children: <Widget>[
@@ -70,26 +77,29 @@ class AuctionAppointmentDetailsWidgetState
                   in widget.appointmentDetail.serviceItems)
                 _appointmentServiceItem(serviceItem),
             _buildSeparator(),
-            Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Text(
-                S.of(context).appointment_details_services_issues,
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.bold, 13),
+            if (showIssues)
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                child: Text(
+                  S.of(context).appointment_details_services_issues,
+                  style: TextHelper.customTextStyle(
+                      null, gray2, FontWeight.bold, 13),
+                ),
               ),
-            ),
-            if (widget.appointmentDetail != null)
-              for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
-                _appointmentIssueType(widget.appointmentDetail.issues[i], i),
+            if (showIssues)
+              if (widget.appointmentDetail != null)
+                for (int i = 0; i < widget.appointmentDetail.issues.length; i++)
+                  _appointmentIssueType(widget.appointmentDetail.issues[i], i),
             _buildSeparator(),
-            Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Text(
-                S.of(context).appointment_details_services_appointment_date,
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.bold, 13),
+            if (showIssues)
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                child: Text(
+                  S.of(context).appointment_details_services_appointment_date,
+                  style: TextHelper.customTextStyle(
+                      null, gray2, FontWeight.bold, 13),
+                ),
               ),
-            ),
             Container(
               margin: EdgeInsets.only(top: 15, bottom: 15),
               child: Row(
@@ -119,7 +129,7 @@ class AuctionAppointmentDetailsWidgetState
           child: Container(
             margin: EdgeInsets.only(top: 4),
             child: Text(
-              serviceItem.name,
+              serviceItem.getTranslatedServiceName(context),
               style: TextHelper.customTextStyle(null, Colors.black, null, 13),
             ),
           ),

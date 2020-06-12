@@ -100,10 +100,8 @@ class BidDetailsState extends State<BidDetails> {
       } else if (error
           .toString()
           .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(
-            S.of(context).general_error,
-            S.of(context).exception_get_work_estimate_details,
-            context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_details, context);
       }
 
       setState(() {
@@ -245,15 +243,10 @@ class BidDetailsState extends State<BidDetails> {
         children: <Widget>[
           Expanded(
             child: Text(
-              serviceItem.name,
+              serviceItem.getTranslatedServiceName(context),
               style: TextHelper.customTextStyle(null, gray, null, 14),
             ),
           ),
-          Container(
-            width: 30,
-            height: 30,
-            color: red,
-          )
         ],
       ),
     ));
@@ -293,7 +286,8 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   void _openEstimator(BuildContext ctx) {
-    Provider.of<WorkEstimateProvider>(context).refreshValues(EstimatorMode.ReadOnly);
+    Provider.of<WorkEstimateProvider>(context)
+        .refreshValues(EstimatorMode.ReadOnly);
     Provider.of<WorkEstimateProvider>(context).workEstimateId =
         Provider.of<AuctionProvider>(context).bidDetails.workEstimateId;
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =
@@ -445,18 +439,24 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   _cancelBid(Bid bid) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       await auctionProvider.rejectBid(bid.id).then((success) {
-        if (success != null && success) {
-          Provider.of<AuctionProvider>(context, listen: false).initDone = false;
-          Navigator.pop(context);
-        }
+        Provider.of<AuctionProvider>(context).initDone = false;
+        Navigator.pop(context);
       });
     } catch (error) {
       if (error.toString().contains(BidsService.REJECT_BID_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_reject_bid, context);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -500,18 +500,24 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   _acceptBid(Bid bid) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       await auctionProvider.acceptBid(bid.id).then((success) {
-        if (success != null && success) {
-          Provider.of<AuctionProvider>(context, listen: false).initDone = false;
-          Navigator.pop(context);
-        }
+        Provider.of<AuctionProvider>(context).initDone = false;
+        Navigator.pop(context);
       });
     } catch (error) {
       if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_accept_bid, context);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -533,39 +539,39 @@ class BidDetailsState extends State<BidDetails> {
   }
 
   _floatingButtonsContainer() {
-    if (auctionProvider.selectedBid.bidStatus() == BidStatus.REJECTED) {
-      return Container();
-    }
-
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FloatingActionButton.extended(
-            heroTag: '1',
-            onPressed: () {
-              _showCancelBidAlert();
-            },
-            label: Text(
-              S.of(context).general_decline.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+    return auctionProvider.selectedBid.bidStatus() == BidStatus.PENDING
+        ? Container(
+            margin: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                  heroTag: '1',
+                  onPressed: () {
+                    _showCancelBidAlert();
+                  },
+                  label: Text(
+                    S.of(context).general_decline.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 20),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+                FloatingActionButton.extended(
+                  heroTag: '2',
+                  onPressed: () {
+                    _showAcceptBidAlert();
+                  },
+                  label: Text(
+                    S.of(context).general_accept.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        null, red, FontWeight.bold, 20),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+              ],
             ),
-            backgroundColor: Colors.white,
-          ),
-          FloatingActionButton.extended(
-            heroTag: '2',
-            onPressed: () {
-              _showAcceptBidAlert();
-            },
-            label: Text(
-              S.of(context).general_accept.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
-            ),
-            backgroundColor: Colors.white,
-          ),
-        ],
-      ),
-    );
+          )
+        : Container();
   }
 }

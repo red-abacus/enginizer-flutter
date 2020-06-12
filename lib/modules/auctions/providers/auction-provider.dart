@@ -29,7 +29,7 @@ class AuctionProvider with ChangeNotifier {
 
   String filterSearchString = "";
 
-  void initialiseParameters() {
+  void initialise() {
     bidResponse = null;
     bids = [];
     selectedAuction = null;

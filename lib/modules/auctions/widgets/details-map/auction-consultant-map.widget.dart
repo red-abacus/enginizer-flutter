@@ -22,12 +22,12 @@ class _AuctionConsultantMapWidgetState
     return new Container(
       child: GoogleMap(
         mapType: MapType.normal,
-        markers: _provider.auctionMapDirections.markers,
-        polylines: _provider.auctionMapDirections.polylines,
+        markers: _provider.appointmentDetails.auctionMapDirections.markers,
+        polylines: _provider.appointmentDetails.auctionMapDirections.polylines,
         initialCameraPosition: CameraPosition(
           target: LatLng(
-              _provider.auctionMapDirections.destinationPoints[0].location.latitude,
-              _provider.auctionMapDirections.destinationPoints[0].location.longitude),
+              _provider.appointmentDetails.auctionMapDirections.destinationPoints[0].location.latitude,
+              _provider.appointmentDetails.auctionMapDirections.destinationPoints[0].location.longitude),
           zoom: 14.0,
         ),
         onMapCreated: (GoogleMapController controller) {},

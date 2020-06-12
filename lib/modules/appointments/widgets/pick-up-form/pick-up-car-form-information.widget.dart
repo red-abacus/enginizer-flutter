@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/enum/payment-method.enum.dart';
 import 'package:app/modules/appointments/enum/tank-quantity.enum.dart';
 import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
@@ -10,6 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PickupCarFormInformationWidget extends StatefulWidget {
+  final CarReceiveFormState carReceiveFormState;
+
+  PickupCarFormInformationWidget({this.carReceiveFormState});
+
   @override
   _PickupCarFormInformationWidgetState createState() {
     return _PickupCarFormInformationWidgetState();
@@ -35,11 +40,15 @@ class _PickupCarFormInformationWidgetState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _clientBoughtPartsWidget(),
-            _clientKeepPartsWidget(),
-            _fuelWidget(),
+            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+              _clientKeepPartsWidget(),
+            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+              _fuelWidget(),
             _paymentMethodWidget(),
-            _kmWidget(),
-            _oilChangeWidget(),
+            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+              _kmWidget(),
+            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+              _oilChangeWidget(),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: _addTitle(

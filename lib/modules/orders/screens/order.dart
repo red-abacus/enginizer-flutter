@@ -28,7 +28,7 @@ class OrderDetails extends StatefulWidget {
 }
 
 class OrderDetailsState extends State<OrderDetails>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   String route;
 
   bool _initDone = false;

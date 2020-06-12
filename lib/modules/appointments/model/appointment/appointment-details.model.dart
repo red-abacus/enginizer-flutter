@@ -69,9 +69,6 @@ class AppointmentDetail {
       this.children});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
-    for(String key in json.keys) {
-      print('$key : ${json[key]}');
-    }
     return AppointmentDetail(
         id: json['id'] != null ? json['id'] : 0,
         name: json['name'] != null ? json['name'] : '',
@@ -237,11 +234,11 @@ class AppointmentDetail {
   }
 
   bool canShareLocation() {
-    if (status.getState() == AppointmentStatusState.SUBMITTED) {
-      return false;
-    }
+    return status.getState() == AppointmentStatusState.IN_TRANSPORT;
+  }
 
-    return true;
+  bool canCreateCarReceiveForm() {
+    return status.getState() == AppointmentStatusState.SCHEDULED;
   }
 
   ServiceItem pickupServiceItem() {
@@ -255,13 +252,14 @@ class AppointmentDetail {
 
   Future<void> loadMapData(BuildContext context) async {
     auctionMapDirections = AuctionMapDirections(
-        destinationPoints:
-        appointmentTransportInfo.getLocations());
-    auctionMapDirections.appointmentDate = DateUtils.dateFromString(scheduledDate, 'dd/MM/yyyy HH:mm');
+        destinationPoints: appointmentTransportInfo.getLocations());
+    auctionMapDirections.appointmentDate =
+        DateUtils.dateFromString(scheduledDate, 'dd/MM/yyyy HH:mm');
 
     try {
       await auctionMapDirections.setPolyLines(context);
-      await auctionMapDirections.fetchDistanceAndDurations(inject<AuctionsService>());
+      await auctionMapDirections
+          .fetchDistanceAndDurations(inject<AuctionsService>());
     } catch (error) {
       throw (error);
     }

@@ -1,4 +1,5 @@
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/firebase/models/firestore-location.model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,5 +55,20 @@ class FirestoreManager {
     final batchWrite = firestore.batch();
     batchWrite.setData(locations.document(), location);
     await batchWrite.commit();
+  }
+
+  getLocation(int appointmentId, int providerId,
+      Function providerLocationChanged) async {
+    Query query = locations
+//        .where('provider_id', isEqualTo: providerId)
+//        .where('appointment_id', isEqualTo: appointmentId)
+        .limit(1);
+
+    query.snapshots().listen((data) {
+      if (data.documents.length > 0) {
+        providerLocationChanged(
+            FirestoreLocation.fromJson(data.documents.last.data));
+      }
+    });
   }
 }

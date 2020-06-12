@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/auctions/enum/bid-status.enum.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/utils/constants.dart';
@@ -32,36 +33,31 @@ class BidCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: () => {selectBid(bid)},
           child: ClipRRect(
-            borderRadius: new BorderRadius.circular(10.0),
-            child: Opacity(
-              opacity: opacity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  _imageContainer(),
-                  _textContainer(context),
-                  _detailsContainer(context),
-                ],
-              ),
-            )
-          ),
+              borderRadius: new BorderRadius.circular(10.0),
+              child: Opacity(
+                opacity: opacity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _imageContainer(),
+                    _textContainer(context),
+                    _detailsContainer(context),
+                  ],
+                ),
+              )),
         ),
       ),
     );
   }
 
   _imageContainer() {
-    return Container(
-      color: red,
+    return FadeInImage.assetNetwork(
       width: 100,
-      height: 120,
-      child: Image.network(
-        '${bid.serviceProvider?.image?.replaceAll(" ", "")}',
-        fit: BoxFit.fitHeight,
-        height: 100,
-        width: 100,
-      ),
+      height: 100,
+      image: bid.serviceProvider?.image,
+      placeholder: ServiceProvider.defaultImage(),
+      fit: BoxFit.contain,
     );
   }
 
@@ -95,7 +91,7 @@ class BidCard extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(left: 5),
                       child: Text(
-                        "${bid.serviceProvider?.rating?.value} (${bid.serviceProvider?.rating?.reviews})",
+                        "${bid.serviceProvider?.rating?.value ?? '0'} (${bid.serviceProvider?.rating?.reviews ?? '0'})",
                         style: TextHelper.customTextStyle(null, gray, null, 11),
                       ),
                     ),
@@ -159,7 +155,8 @@ class BidCard extends StatelessWidget {
   }
 
   _priceText(BuildContext context) {
-    String text = "${S.of(context).general_price}: ${bid.cost} ${S.of(context).general_currency}";
+    String text =
+        "${S.of(context).general_price}: ${bid.cost} ${S.of(context).general_currency}";
     return Text(text,
         style: TextStyle(
             color: gray,
@@ -190,13 +187,14 @@ class BidCard extends StatelessWidget {
     DateTime acceptedDate = bid.getAcceptedDate();
 
     String dateString = (acceptedDate != null)
-    ? DateUtils.stringFromDate(acceptedDate, "dd.MM.yyyy")
-    : "";
+        ? DateUtils.stringFromDate(acceptedDate, "dd.MM.yyyy")
+        : "";
     String timeString = (acceptedDate != null)
-    ? DateUtils.stringFromDate(acceptedDate, "HH:mm")
-    : "";
+        ? DateUtils.stringFromDate(acceptedDate, "HH:mm")
+        : "";
 
-    String title = "${S.of(context).auction_bid_date_schedule}: $dateString ${S.of(context).general_at} $timeString";
+    String title =
+        "${S.of(context).auction_bid_date_schedule}: $dateString ${S.of(context).general_at} $timeString";
 
     return Positioned(
       child: Align(

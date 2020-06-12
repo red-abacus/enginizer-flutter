@@ -41,6 +41,7 @@ class AppointmentStatus {
         return red;
       case AppointmentStatusState.DONE:
       case AppointmentStatusState.ACCEPTED:
+      case AppointmentStatusState.IN_TRANSPORT:
         return green;
       case AppointmentStatusState.NONE:
         return gray2;
@@ -94,6 +95,8 @@ class AppointmentStatus {
         return AppointmentStatusState.NEW;
       case 'accepted':
         return AppointmentStatusState.ACCEPTED;
+      case 'intransport':
+        return AppointmentStatusState.IN_TRANSPORT;
       default:
         return AppointmentStatusState.NONE;
     }

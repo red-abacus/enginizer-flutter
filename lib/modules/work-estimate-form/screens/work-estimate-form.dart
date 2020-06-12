@@ -9,6 +9,9 @@ import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/auctions/providers/auction-provider.dart';
+import 'package:app/modules/auctions/providers/auctions-provider.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
@@ -699,7 +702,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     } else {
       ServiceItem pickupServiceItem =
           _provider.selectedAppointmentDetail.pickupServiceItem();
-      if (pickupServiceItem == null) {
+      if (pickupServiceItem == null || !_provider.shouldAskForPr) {
         showDialog<void>(
             context: context,
             builder: (BuildContext context) {
@@ -742,23 +745,25 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     try {
       await _provider
           .acceptBid(_provider.selectedAppointmentDetail.bidId)
-          .then((_) {
-        setState(() async {
-          if (transportRequest != null) {
-            await _provider
-                .requestTransport(
-                    _provider.selectedAppointmentDetail.id, transportRequest)
-                .then((value) {
-              Provider.of<AppointmentProvider>(context).initDone = false;
-              Provider.of<AppointmentsProvider>(context).initDone = false;
-              Navigator.pop(context);
-            });
-          } else {
+          .then((_) async {
+        if (transportRequest != null) {
+          await _provider
+              .requestTransport(
+                  _provider.selectedAppointmentDetail.id, transportRequest)
+              .then((value) {
             Provider.of<AppointmentProvider>(context).initDone = false;
             Provider.of<AppointmentsProvider>(context).initDone = false;
+            Provider.of<AuctionConsultantProvider>(context).initDone = false;
+            Provider.of<AuctionProvider>(context).initDone = false;
             Navigator.pop(context);
-          }
-        });
+          });
+        } else {
+          Provider.of<AppointmentProvider>(context).initDone = false;
+          Provider.of<AppointmentsProvider>(context).initDone = false;
+          Provider.of<AuctionConsultantProvider>(context).initDone = false;
+          Provider.of<AuctionProvider>(context).initDone = false;
+          Navigator.pop(context);
+        }
       });
     } catch (error) {
       if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {

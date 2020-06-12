@@ -18,9 +18,9 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
-        this.cancelAppointment,
-        this.viewEstimate,
-        this.seeCamera});
+      this.cancelAppointment,
+      this.viewEstimate,
+      this.seeCamera});
 
   @override
   AppointmentGenericDetailsWidgetState createState() {
@@ -128,8 +128,8 @@ class AppointmentGenericDetailsWidgetState
                 children: <Widget>[
                   if (widget.appointmentDetail != null)
                     for (int i = 0;
-                    i < widget.appointmentDetail?.issues?.length;
-                    i++)
+                        i < widget.appointmentDetail?.issues?.length;
+                        i++)
                       _appointmentIssueType(
                           widget.appointmentDetail.issues[i], i)
                 ],
@@ -138,7 +138,7 @@ class AppointmentGenericDetailsWidgetState
           ),
           FlatButton(
             splashColor: Theme.of(context).primaryColor,
-            onPressed: () => {widget.viewEstimate()},
+            onPressed: () => {widget.viewEstimate(widget.appointmentDetail)},
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
@@ -164,12 +164,12 @@ class AppointmentGenericDetailsWidgetState
       children: <Widget>[
         Expanded(
             child: Container(
-              margin: EdgeInsets.only(top: 4),
-              child: Text(
-                serviceItem.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
-              ),
-            )),
+          margin: EdgeInsets.only(top: 4),
+          child: Text(
+            serviceItem.getTranslatedServiceName(context),
+            style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+          ),
+        )),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
@@ -38,7 +39,7 @@ class AppointmentDetailsConsultant extends StatefulWidget {
 
 class AppointmentDetailsConsultantState
     extends State<AppointmentDetailsConsultant>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   AppointmentConsultantProvider _provider;
 
   String route;
@@ -367,6 +368,7 @@ class AppointmentDetailsConsultantState
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return AppointmentCarReceiveFormModal(
+              carReceiveFormState: CarReceiveFormState.Service,
                 appointmentDetail: _provider.selectedAppointmentDetail,
                 refreshState: _refreshState);
           });

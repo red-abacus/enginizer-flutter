@@ -33,7 +33,7 @@ class AppointmentDetailsMechanic extends StatefulWidget {
 }
 
 class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   String route;
 
   var _initDone = false;

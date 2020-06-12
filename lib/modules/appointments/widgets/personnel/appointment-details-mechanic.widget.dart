@@ -66,7 +66,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
               _buildTitleContainer(
                   S.of(context).appointment_details_services_title),
               for (ServiceItem item in appointmentDetail.serviceItems)
-                _serviceItemText(item),
+                _serviceItemText(item, context),
               _buildSeparator(),
               _buildTitleContainer(
                   S.of(context).appointment_details_services_issues),
@@ -134,7 +134,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
     }
   }
 
-  _serviceItemText(ServiceItem serviceItem) {
+  _serviceItemText(ServiceItem serviceItem, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 4),
       child: Row(
@@ -148,7 +148,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(left: 4),
               child: Text(
-                serviceItem.name,
+                serviceItem.getTranslatedServiceName(context),
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),

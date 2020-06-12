@@ -54,6 +54,7 @@ class WorkEstimateProvider with ChangeNotifier {
   int serviceProviderId;
 
   bool initDone = false;
+  bool shouldAskForPr = true;
 
   List<IssueRecommendation> selectedRecommendations = [];
 
@@ -62,6 +63,7 @@ class WorkEstimateProvider with ChangeNotifier {
   int defaultQuantity;
 
   _initValues() {
+    shouldAskForPr = false;
     defaultQuantity = null;
     selectedItemsToOrder = [];
     itemsToImport = [];
