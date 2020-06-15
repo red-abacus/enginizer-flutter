@@ -4,15 +4,22 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsAppointment {
-  static final String VIEW_APPOINTMENT_DETAILS_CLIENT = 'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_CLIENT';
-  static final String VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER = 'APPOINTMENT.SERVICE_PROVIDER';
-  static final String VIEW_APPOINTMENT_DETAILS_PERSONNEL = 'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PERSONNEL';
-  static final String VIEW_APPOINTMENT_DETAILS_PR = 'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PR';
+  static final String VIEW_APPOINTMENT_DETAILS_CLIENT =
+      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_CLIENT';
+  static final String VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER =
+      'APPOINTMENT.SERVICE_PROVIDER';
+  static final String VIEW_APPOINTMENT_DETAILS_PERSONNEL =
+      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PERSONNEL';
+  static final String VIEW_APPOINTMENT_DETAILS_PR =
+      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PR';
   static final String CREATE_APPOINTMENT = 'APPOINTMENT.CREATE_APPOINTMENT';
+  static final String SHARE_APPOINTMENT_LOCATION =
+      'APPOINTMENT.SHARE_APPOINTMENT_LOCATION';
 
   Map<String, List<String>> permissionsMap = Map();
 
-  PermissionsAppointment(ServiceProviderItemsResponse serviceProviderItemsResponse) {
+  PermissionsAppointment(
+      ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
       List<String> permissions = [];
 
@@ -29,13 +36,16 @@ class PermissionsAppointment {
           break;
         case Roles.ProviderConsultant:
           if (serviceProviderItemsResponse != null) {
-            for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
-              ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
+            for (ServiceProviderItem item
+                in serviceProviderItemsResponse.items) {
+              ConsultantServiceType serviceType =
+                  ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
               if (serviceType != null) {
                 switch (serviceType) {
                   case ConsultantServiceType.PickUpAndReturn:
                     permissions.add(VIEW_APPOINTMENT_DETAILS_PR);
+                    permissions.add(SHARE_APPOINTMENT_LOCATION);
                     break;
                   case ConsultantServiceType.Service:
                     permissions.add(VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER);

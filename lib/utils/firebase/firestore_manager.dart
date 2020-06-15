@@ -60,8 +60,8 @@ class FirestoreManager {
   getLocation(int appointmentId, int providerId,
       Function providerLocationChanged) async {
     Query query = locations
-//        .where('provider_id', isEqualTo: providerId)
-//        .where('appointment_id', isEqualTo: appointmentId)
+        .where('provider_id', isEqualTo: providerId)
+        .where('appointment_id', isEqualTo: appointmentId)
         .limit(1);
 
     query.snapshots().listen((data) {

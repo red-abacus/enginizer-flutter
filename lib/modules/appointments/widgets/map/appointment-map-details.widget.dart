@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/utils/constants.dart';
@@ -13,7 +14,8 @@ class AppointmentMapDetailsWidget extends StatefulWidget {
   final Function showProviderDetails;
   final Function createPickUpCarForm;
 
-  AppointmentMapDetailsWidget({this.showProviderDetails, this.createPickUpCarForm});
+  AppointmentMapDetailsWidget(
+      {this.showProviderDetails, this.createPickUpCarForm});
 
   @override
   _AppointmentMapDetailsWidgetState createState() {
@@ -108,7 +110,7 @@ class _AppointmentMapDetailsWidgetState
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
             ),
             onPressed: () {
-              widget.createPickUpCarForm();
+              widget.createPickUpCarForm(PickupFormState.Receive);
             },
           )
         ],

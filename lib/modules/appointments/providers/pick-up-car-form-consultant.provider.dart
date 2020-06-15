@@ -1,5 +1,6 @@
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
@@ -22,7 +23,9 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
   EmployeeTimeSerie selectedTimeSerie;
   ReceiveFormRequest receiveFormRequest;
 
-  resetParams() {
+  PickupFormState pickupFormState;
+
+  initialise() {
     selectedTimeSerie = null;
     informationFormState = null;
 
@@ -42,11 +45,18 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
     }
   }
 
-  Future<int> createReceiveProcedure(
-      ReceiveFormRequest receiveFormRequest) async {
+  Future<int> createProcedure(
+      ReceiveFormRequest receiveFormRequest, PickupFormState pickupFormState) async {
     try {
-      this.receiveFormRequest.receiveFormId =
-      await _appointmentsService.createReceiveProcedure(receiveFormRequest);
+      if (pickupFormState == PickupFormState.Receive) {
+        this.receiveFormRequest.receiveFormId =
+        await _appointmentsService.createReceiveProcedure(receiveFormRequest);
+      }
+      else {
+        this.receiveFormRequest.receiveFormId =
+        await _appointmentsService.createReturnProcedure(receiveFormRequest);
+      }
+
       notifyListeners();
       return this.receiveFormRequest.receiveFormId;
     } catch (error) {

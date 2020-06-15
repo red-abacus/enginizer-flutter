@@ -29,6 +29,8 @@ class AppointmentsService {
       'CANCEL_APPOINTMENT_EXCEPTION';
   static const String CREATE_RECEIVE_PROCEDURE_EXCEPTION =
       'CREATE_RECEIVE_PROCEDURE_EXCEPTION';
+  static const String CREATE_RETURN_PROCEDURE_EXCEPTION =
+      'CREATE_RETURN_PROCEDURE_EXCEPTION';
   static const String ADD_RECEIVE_PROCEDURE_IMAGES_EXCEPTION =
       'ADD_RECEIVE_PROCEDURE_IMAGES_EXCEPTION';
   static const String GET_STANDARD_TASKS_EXCEPTION =
@@ -78,6 +80,10 @@ class AppointmentsService {
   static const String _RECEIVE_PROCEDURE_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _RECEIVE_PROCEDURE_SUFFIX = '/procedure/receive';
+
+  static const String _RETURN_PROCEDURE_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _RETURN_PROCEDURE_SUFFIX = '/procedure/return';
 
   static const String _ADD_RECEIVE_PROCEDURE_PHOTOS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
@@ -241,6 +247,22 @@ class AppointmentsService {
       }
     } catch (error) {
       throw Exception(CREATE_RECEIVE_PROCEDURE_EXCEPTION);
+    }
+  }
+
+  Future<int> createReturnProcedure(
+      ReceiveFormRequest receiveFormRequest) async {
+    try {
+      final response = await _dio.post(
+          _buildReturnProcedurePath(receiveFormRequest.appointmentId),
+          data: jsonEncode(receiveFormRequest.toReturnJson()));
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception(CREATE_RETURN_PROCEDURE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CREATE_RETURN_PROCEDURE_EXCEPTION);
     }
   }
 
@@ -520,6 +542,12 @@ class AppointmentsService {
     return _RECEIVE_PROCEDURE_PREFIX +
         appointmentId.toString() +
         _RECEIVE_PROCEDURE_SUFFIX;
+  }
+
+  _buildReturnProcedurePath(int appointmentId) {
+    return _RETURN_PROCEDURE_PREFIX +
+        appointmentId.toString() +
+        _RETURN_PROCEDURE_SUFFIX;
   }
 
   _buildCancelAppointmentPath(int appointmentId) {

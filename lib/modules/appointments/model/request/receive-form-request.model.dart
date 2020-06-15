@@ -33,4 +33,21 @@ class ReceiveFormRequest {
 
     return propMap;
   }
+
+  Map<String, dynamic> toReturnJson() {
+    Map<String, dynamic> propMap = {
+      'id': 0,
+      'appointmentProcedureType': 'RETURN_CAR',
+      'fuel': TankQuantityUtils.quantity(tankQuantity),
+      'hasClientComponents': clientParts,
+      'hasClientKeepComponents': clientKeepParts,
+      'missingOrDamagedComponents': damagedItems,
+      'observations': observations,
+      'oilReplacementConvention': oilChange,
+      'paymentMethod': PaymentMethodUtilities.paymentMethod(paymentMethod),
+      'realKms': km
+    };
+
+    return propMap;
+  }
 }

@@ -192,8 +192,7 @@ class _AppointmentDetailsChildrenWidgetState
           ),
           FlatButton(
             splashColor: Theme.of(context).primaryColor,
-            onPressed: () =>
-                {widget.showMap(widget.appointmentDetail)},
+            onPressed: () => {widget.showMap(widget.appointmentDetail)},
             child: Text(
               S.of(context).general_map.toUpperCase(),
               style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
@@ -401,19 +400,6 @@ class _AppointmentDetailsChildrenWidgetState
             ),
             backgroundColor: Colors.white,
           ),
-          if (widget.appointmentDetail.hasWorkEstimate())
-            FloatingActionButton.extended(
-              heroTag: null,
-              onPressed: () {
-                widget.seeEstimate(widget.appointmentDetail);
-              },
-              label: Text(
-                S.of(context).appointment_details_estimator.toUpperCase(),
-                style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
-              ),
-              backgroundColor: Colors.white,
-            ),
         ],
       ),
     );
@@ -476,14 +462,16 @@ class _AppointmentDetailsChildrenWidgetState
               ),
             ),
           ),
-          FlatButton(
-            splashColor: Theme.of(context).primaryColor,
-            onPressed: () => {widget.seeEstimate(widget.appointmentDetail)},
-            child: Text(
-              S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          if (widget.appointmentDetail.hasWorkEstimate())
+            FlatButton(
+              splashColor: Theme.of(context).primaryColor,
+              onPressed: () => {widget.seeEstimate(widget.appointmentDetail)},
+              child: Text(
+                S.of(context).appointment_details_estimator.toUpperCase(),
+                style:
+                    TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              ),
             ),
-          ),
         ],
       ),
     );

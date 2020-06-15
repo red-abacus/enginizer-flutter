@@ -215,7 +215,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
       Provider.of<WorkEstimateProvider>(context)
           .refreshValues(EstimatorMode.CreatePr);
       Provider.of<WorkEstimateProvider>(context)
-          .setIssues(context, [Issue.defaultIssue(context)]);
+          .setIssues(context, _provider.appointmentDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           Provider.of<Auth>(context).authUserDetails.userProvider.id;
       Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =

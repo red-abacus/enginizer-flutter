@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -24,12 +25,14 @@ class PickUpCarFormConsultantWidget extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function refreshState;
   final CarReceiveFormState carReceiveFormState;
+  final PickupFormState pickupFormState;
 
   PickUpCarFormConsultantWidget(
       {Key key,
       this.appointmentDetail,
       this.refreshState,
-      this.carReceiveFormState})
+      this.carReceiveFormState,
+      this.pickupFormState})
       : super(key: key);
 
   @override
@@ -57,7 +60,7 @@ class _PickUpCarFormConsultantWidgetState
   void didChangeDependencies() {
     if (!_initDone) {
       _provider = Provider.of<PickUpCarFormConsultantProvider>(context);
-      _provider.resetParams();
+      _provider.initialise();
 
       setState(() {
         _isLoading = true;
@@ -67,7 +70,7 @@ class _PickUpCarFormConsultantWidgetState
     }
 
     if (_provider.receiveFormRequest.files == null) {
-      _provider.resetParams();
+      _provider.initialise();
     }
 
     _initDone = true;
@@ -197,7 +200,9 @@ class _PickUpCarFormConsultantWidgetState
       Step(
           isActive: _currentStepIndex == 1,
           title: Text(_currentStepIndex == 1
-              ? S.of(context).appointment_receive_car_step_2
+              ? widget.pickupFormState == PickupFormState.Receive
+                  ? S.of(context).appointment_receive_car_step_receive_2
+                  : S.of(context).appointment_receive_car_step_return_2
               : ''),
           content: PickupCarFormInformationWidget(
               carReceiveFormState: widget.carReceiveFormState),
@@ -261,7 +266,7 @@ class _PickUpCarFormConsultantWidgetState
     try {
       _provider.receiveFormRequest.appointmentId = widget.appointmentDetail.id;
       await _provider
-          .createReceiveProcedure(_provider.receiveFormRequest)
+          .createProcedure(_provider.receiveFormRequest, widget.pickupFormState)
           .then((_) async {
         await _provider
             .addReceiveProcedurePhotos(_provider.receiveFormRequest)

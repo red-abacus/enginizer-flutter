@@ -38,6 +38,10 @@ class AuctionDetailsState extends State<AuctionDetails> {
 
   AuctionProvider _provider;
 
+  bool _initDone = false;
+  bool _isLoading = false;
+
+
   @override
   Widget build(BuildContext context) {
     if (_provider != null && _provider.selectedAuction == null) {
@@ -58,18 +62,21 @@ class AuctionDetailsState extends State<AuctionDetails> {
   @override
   void didChangeDependencies() {
     _provider = Provider.of<AuctionProvider>(context);
+    _initDone = _initDone == false ? false : _provider.initDone;
 
-    if (!_provider.initDone) {
+    if (!_initDone) {
       if (_provider.selectedAuction != null) {
         setState(() {
-          _provider.isLoading = true;
+          _isLoading = true;
         });
 
         _loadData();
       }
-
-      _provider.initDone = true;
     }
+
+    _provider.initDone = true;
+    _initDone = true;
+
     super.didChangeDependencies();
   }
 
@@ -82,7 +89,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
             .loadBids(_provider.selectedAuction.id)
             .then((_) {
           setState(() {
-            _provider.isLoading = false;
+            _isLoading = false;
           });
         });
       });
@@ -98,7 +105,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
       }
 
       setState(() {
-        _provider.isLoading = false;
+        _isLoading = false;
       });
     }
   }
@@ -130,13 +137,13 @@ class AuctionDetailsState extends State<AuctionDetails> {
   }
 
   _buildContent() {
-    if (!_provider.isLoading && _provider.redirectBid != null) {
+    if (!_isLoading && _provider.redirectBid != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _selectBid(_provider.redirectBid);
         _provider.redirectBid = null;
       });
     }
-    return _provider.isLoading
+    return _isLoading
         ? Center(child: CircularProgressIndicator())
         : _getContent();
   }

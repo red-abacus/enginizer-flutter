@@ -11,8 +11,8 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
-import 'package:app/modules/auctions/providers/auctions-provider.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
@@ -499,16 +499,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           });
         });
       } catch (error) {
-        if (error
-            .toString()
-            .contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_add_work_estimate_item, context);
-        }
-
-        setState(() {
-          _isLoading = false;
-        });
+        _handleError(error);
       }
     } else {
       setState(() {
@@ -559,15 +550,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         });
       });
     } catch (error) {
-      if (error.toString().contains(
-          WorkEstimatesService.WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_edit_issue_item, context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      _handleError(error);
     }
   }
 
@@ -630,9 +613,13 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               auctionId: _provider.selectedAuctionDetails?.id)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
+          LocatorManager.getInstance().removeActiveAppointment();
+          LocatorManager.getInstance().getActiveAppointment(context);
+
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
           Provider.of<AppointmentProvider>(context).initDone = false;
           Provider.of<AppointmentsProvider>(context).initDone = false;
+          Provider.of<AuctionConsultantProvider>(context).initDone = false;
 
           Navigator.pop(context);
         } else {
@@ -766,57 +753,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         }
       });
     } catch (error) {
-      if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_accept_work_estimate, context);
-      } else if (error.toString().contains(
-          AppointmentsService.APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_transport_request, context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      _handleError(error);
     }
-  }
-
-  _handleError(dynamic error) {
-    if (error
-        .toString()
-        .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_add_new_work_estimate, context);
-    } else if (error
-        .toString()
-        .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_provider_timetable, context);
-    } else if (error
-        .toString()
-        .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_item_types, context);
-    } else if (error
-        .toString()
-        .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_work_estimate_details, context);
-    } else if (error
-        .toString()
-        .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_appointment_details, context);
-    } else if (error
-        .toString()
-        .contains(WorkEstimatesService.REJECT_WORK_ESTIMATE_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_reject_work_estimate, context);
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   _acceptRecommendations() {
@@ -853,15 +791,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         }
       });
     } catch (error) {
-      if (error.toString().contains(
-          AppointmentsService.SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_send_appointment_recommendations, context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      _handleError(error);
     }
 
     return request;
@@ -882,5 +812,63 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                     Provider.of<WorkEstimateProvider>(context).workEstimateId);
           });
         });
+  }
+
+  _handleError(dynamic error) {
+    if (error
+        .toString()
+        .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_add_new_work_estimate, context);
+    } else if (error
+        .toString()
+        .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_provider_timetable, context);
+    } else if (error
+        .toString()
+        .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_item_types, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_work_estimate_details, context);
+    } else if (error
+        .toString()
+        .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_appointment_details, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.REJECT_WORK_ESTIMATE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_reject_work_estimate, context);
+    } else if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_accept_work_estimate, context);
+    } else if (error.toString().contains(
+        AppointmentsService.APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_transport_request, context);
+    } else if (error.toString().contains(
+        WorkEstimatesService.WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_edit_issue_item, context);
+    } else if (error.toString().contains(
+        AppointmentsService.SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_send_appointment_recommendations, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_add_work_estimate_item, context);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

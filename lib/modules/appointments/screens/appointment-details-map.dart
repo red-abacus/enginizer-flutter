@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
@@ -9,7 +10,6 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map-details.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map.widget.dart';
-import 'package:app/modules/appointments/widgets/map/car-reception-form/car-reception-form.modal.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
@@ -17,18 +17,16 @@ import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-map-decline.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/firebase/firestore_manager.dart';
-import 'package:app/utils/firebase/models/firestore-location.model.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentDetailsMap extends StatefulWidget {
@@ -101,44 +99,46 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
         _isLoading = true;
       });
 
-      try {
-        await _provider
-            .getAppointmentDetails(_provider.selectedAppointment.id)
-            .then((value) async {
-          _provider.selectedAppointmentDetail = value;
-          await _provider.selectedAppointmentDetail
-              .loadMapData(context)
-              .then((value) {
-            setState(() {
-              _isLoading = false;
-            });
-          });
-        });
-      } catch (error) {
-        if (error
-            .toString()
-            .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_get_appointment_details, context);
-        } else if (error
-            .toString()
-            .contains(AuctionsService.GET_POINTS_DISTANCE_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_get_points_distance, context);
-        }
-
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      _loadData();
 
       _initDone = true;
       _provider.initDone = true;
-    } else {
-//      _initialiseLocator();
     }
 
     super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await _provider
+          .getAppointmentDetails(_provider.selectedAppointment.id)
+          .then((value) async {
+        _provider.selectedAppointmentDetail = value;
+        await _provider.selectedAppointmentDetail
+            .loadMapData(context)
+            .then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointment_details, context);
+      } else if (error
+          .toString()
+          .contains(AuctionsService.GET_POINTS_DISTANCE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_points_distance, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _setActiveTabIndex() {
@@ -182,29 +182,26 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
             ),
           );
           break;
-        default:
-          break;
-      }
-    }
-
-    return Container();
-    return _tabController.index == 0 &&
-            !_provider.selectedAppointmentDetail.canShareLocation()
-        ? Container(
+        case AppointmentStatusState.IN_TRANSPORT:
+          return Container(
             child: FloatingActionButton.extended(
               heroTag: null,
               onPressed: () {
-                _createVehicleReception();
+                _createPickUpCarForm(PickupFormState.Return);
               },
               label: Text(
-                S.of(context).auction_vehicle_reception.toUpperCase(),
+                S.of(context).appointment_hand_over_car.toUpperCase(),
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
               ),
               backgroundColor: Colors.white,
             ),
-          )
-        : Container();
+          );
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   _titleText() {
@@ -242,42 +239,6 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
         });
   }
 
-  _createVehicleReception() {
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return CarReceptionFormModal(
-                appointmentDetail: _provider.selectedAppointmentDetail);
-          });
-        });
-  }
-
-  _initialiseLocator() async {
-    if (_provider.selectedAppointmentDetail.canShareLocation()) {
-      var locationOptions =
-          LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
-      Geolocator()
-          .getPositionStream(locationOptions)
-          .listen((Position position) {
-        if (position != null) {
-          FirestoreLocation location = FirestoreLocation();
-          location.latitude = position.latitude;
-          location.longitude = position.longitude;
-          location.providerId = Provider.of<Auth>(context).authUser.providerId;
-          location.appointmentId = _provider.selectedAppointmentDetail.id;
-
-          FirestoreManager.getInstance().writeLocation(location.toJson());
-        }
-      });
-    }
-  }
-
   _declineAppointment() {
     showDialog(
       context: context,
@@ -291,7 +252,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     Provider.of<WorkEstimateProvider>(context)
         .refreshValues(EstimatorMode.CreatePr);
     Provider.of<WorkEstimateProvider>(context)
-        .setIssues(context, [Issue.defaultIssue(context)]);
+        .setIssues(context, _provider.selectedAppointmentDetail.issues);
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =
         Provider.of<Auth>(context).authUserDetails.userProvider.id;
     Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
@@ -313,7 +274,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     );
   }
 
-  _createPickUpCarForm() {
+  _createPickUpCarForm(PickupFormState formState) {
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -326,16 +287,22 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
             return AppointmentCarReceiveFormModal(
                 carReceiveFormState: CarReceiveFormState.Pr,
                 appointmentDetail: _provider.selectedAppointmentDetail,
-                refreshState: _refreshState);
+                refreshState: _refreshState,
+                pickupFormState: formState);
           });
         });
   }
 
   _refreshState() {
+    LocatorManager.getInstance().removeActiveAppointment();
+    LocatorManager.getInstance().getActiveAppointment(context);
+
     Provider.of<AppointmentsProvider>(context).initDone = false;
 
     setState(() {
-      _initDone = false;
+      _isLoading = true;
     });
+
+    _loadData();
   }
 }

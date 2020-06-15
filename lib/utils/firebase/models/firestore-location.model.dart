@@ -12,9 +12,9 @@ class FirestoreLocation {
         latitude: json['latitude'] != null ? json['latitude'] : null,
         longitude: json['longitude'] != null ? json['longitude'] : null,
         providerId:
-            json['provider_id'] != null ? int.parse(json['provider_id']) : null,
+            json['provider_id'] != null ? json['provider_id'] : null,
         appointmentId: json['appointment_id'] != null
-            ? int.parse(json['appointment_id'])
+            ? json['appointment_id']
             : null);
   }
 

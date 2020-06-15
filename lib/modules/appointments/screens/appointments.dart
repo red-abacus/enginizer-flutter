@@ -94,7 +94,7 @@ class AppointmentsState extends State<Appointments> {
 
   _loadData() async {
     try {
-      await _provider.loadAppointments().then((_) {
+      await _provider.loadAppointments(_provider.appointmentsRequest).then((_) {
         setState(() {
           _isLoading = false;
         });

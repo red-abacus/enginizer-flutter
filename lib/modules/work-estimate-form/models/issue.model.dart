@@ -19,14 +19,6 @@ class Issue {
     recommendations = [];
   }
 
-  static Issue defaultIssue(BuildContext context) {
-    Issue issue = new Issue();
-    issue.name = S.of(context).estimator_default_issue;
-    issue.id = null;
-    issue.recommendations = [];
-    return issue;
-  }
-
   clearRecommendationsItems() {
     recommendations.forEach((recommendation) {
       recommendation.clearItems();

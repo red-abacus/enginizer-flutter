@@ -12,11 +12,10 @@ import 'package:app/modules/appointments/widgets/details/appointment-generic-det
 import 'package:app/modules/appointments/widgets/map/client-map-directions.modal.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
-import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -50,6 +49,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
 
   TabController _tabController;
   TabBar _tabBar;
+  int _tabBarCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
     }
 
     if (_tabController == null && _provider.selectedAppointmentDetail != null) {
-      int count = 2;
+      _tabBarCount = 2;
 
       List<Tab> tabs = [
         Tab(text: S.of(context).general_details),
@@ -69,12 +69,12 @@ class AppointmentDetailsState extends State<AppointmentDetails>
       ];
 
       if (_provider.selectedAppointmentDetail.children.length == 1) {
-        count += 1;
+        _tabBarCount += 1;
         tabs.add(Tab(text: S.of(context).general_pickup_and_return));
       }
 
       _tabController =
-          new TabController(vsync: this, length: count, initialIndex: 0);
+          new TabController(vsync: this, length: _tabBarCount, initialIndex: 0);
       _tabController.addListener(_setActiveTabIndex);
 
       _tabBar = TabBar(
@@ -91,7 +91,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
             style: TextHelper.customTextStyle(
                 null, Colors.white, FontWeight.bold, 20),
           ),
-          bottom: _tabBar,
+          bottom: _isLoading ? null : _tabBar,
           iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
         ),
         body: _isLoading
@@ -172,7 +172,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
       CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car)
     ];
 
-    if (_provider.children.length == 1) {
+    if (_tabBarCount == 3) {
       widgets.add(AppointmentDetailsChildrenWidget(
         appointmentDetail: _provider.children[0],
         showProviderDetails: _showProviderDetails,
