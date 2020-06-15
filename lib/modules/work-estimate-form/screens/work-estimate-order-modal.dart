@@ -65,19 +65,29 @@ class _WorkEstimateOrderModalState extends State<WorkEstimateOrderModal> {
           ))
         : Stack(
             children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 50),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _provider.itemsToOrder.length,
-                  itemBuilder: (context, index) {
-                    return IssueItemOrder(
-                        issueItem: _provider.itemsToOrder[index],
-                        selectIssueItem: _selectIssueItem,
-                        selected: _provider.selectedItemsToOrder
-                            .contains(_provider.itemsToOrder[index]));
-                  },
-                ),
+              Column(
+                children: [
+                  Text(
+                    S.of(context).estimator_items_order_title,
+                    style: TextHelper.customTextStyle(
+                        null, gray3, FontWeight.bold, 14),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(bottom: 50),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _provider.itemsToOrder.length,
+                      itemBuilder: (context, index) {
+                        return IssueItemOrder(
+                            issueItem: _provider.itemsToOrder[index],
+                            selectIssueItem: _selectIssueItem,
+                            selected: _provider.selectedItemsToOrder
+                                .contains(_provider.itemsToOrder[index]));
+                      },
+                    ),
+                  ),
+                ],
               ),
               Align(
                 alignment: Alignment.bottomRight,
@@ -165,10 +175,10 @@ class _WorkEstimateOrderModalState extends State<WorkEstimateOrderModal> {
             .orderAppointmentItems(
                 _provider.selectedAppointmentDetail.id, request)
             .then((value) {
-              if (value != null) {
-                _provider.initDone = false;
-                Navigator.pop(context);
-              }
+          if (value != null) {
+            _provider.initDone = false;
+            Navigator.pop(context);
+          }
         });
       } catch (error) {
         if (error

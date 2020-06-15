@@ -21,7 +21,8 @@ class AuctionConsultantWidget extends StatefulWidget {
   final AuctionDetail auctionDetails;
   final Function createEstimate;
 
-  AuctionConsultantWidget({this.auction, this.auctionDetails, this.createEstimate});
+  AuctionConsultantWidget(
+      {this.auction, this.auctionDetails, this.createEstimate});
 
   @override
   AuctionConsultantWidgetState createState() {
@@ -32,6 +33,13 @@ class AuctionConsultantWidget extends StatefulWidget {
 class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
   @override
   Widget build(BuildContext context) {
+    bool showIssues = false;
+
+    if (widget.auctionDetails != null &&
+        widget.auctionDetails.issues.length > 0) {
+      showIssues = true;
+    }
+
     return new Container(
       padding: EdgeInsets.only(left: 20, top: 20, right: 20),
       child: ListView(
@@ -76,21 +84,22 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
               ),
               if (widget.auctionDetails != null)
                 for (ServiceItem serviceItem
-                in widget.auctionDetails.serviceItems)
+                    in widget.auctionDetails.serviceItems)
                   _appointmentServiceItem(serviceItem),
               _buildSeparator(),
-              Container(
-                margin: EdgeInsets.only(top: 15),
-                child: Text(
-                  S.of(context).appointment_details_services_issues,
-                  style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.bold, 13),
+              if (showIssues)
+                Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: Text(
+                    S.of(context).appointment_details_services_issues,
+                    style: TextHelper.customTextStyle(
+                        null, gray2, FontWeight.bold, 13),
+                  ),
                 ),
-              ),
-              if (widget.auctionDetails != null)
+              if (showIssues)
                 for (int i = 0; i < widget.auctionDetails.issues.length; i++)
                   _appointmentIssueType(widget.auctionDetails.issues[i], i),
-              _buildSeparator(),
+              if (showIssues) _buildSeparator(),
               Container(
                 margin: EdgeInsets.only(top: 15),
                 child: Text(
@@ -105,9 +114,9 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                   children: <Widget>[
                     Text(
                       (widget.auctionDetails != null &&
-                          widget.auctionDetails.scheduledDateTime != null)
+                              widget.auctionDetails.scheduledDateTime != null)
                           ? widget.auctionDetails.scheduledDateTime
-                          .replaceAll(" ", " ${S.of(context).general_at} ")
+                              .replaceAll(" ", " ${S.of(context).general_at} ")
                           : 'N/A',
                       style: TextHelper.customTextStyle(
                           null, Colors.black, null, 18),
@@ -133,7 +142,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
           child: Container(
             margin: EdgeInsets.only(top: 4),
             child: Text(
-              serviceItem.name,
+              serviceItem.getTranslatedServiceName(context),
               style: TextHelper.customTextStyle(null, Colors.black, null, 13),
             ),
           ),
@@ -219,7 +228,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
       if (userDetails != null) {
         Bid userBid =
-        widget.auctionDetails.getConsultantBid(userDetails.userProvider.id);
+            widget.auctionDetails.getConsultantBid(userDetails.userProvider.id);
         if (userBid != null) {
           return FlatButton(
             child: Text(

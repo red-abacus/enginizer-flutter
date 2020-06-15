@@ -19,9 +19,13 @@ class AuctionConsultantProvider with ChangeNotifier {
   AuctionDetail auctionDetails;
   AppointmentDetail appointmentDetails;
 
-  AuctionMapDirections auctionMapDirections = AuctionMapDirections();
-
   bool initDone = false;
+
+  initialise() {
+    selectedAuction = null;
+    auctionDetails = null;
+    appointmentDetails = null;
+  }
 
   Future<AuctionDetail> getAuctionDetails(int auctionId) async {
     try {
@@ -60,21 +64,6 @@ class AuctionConsultantProvider with ChangeNotifier {
       return workEstimateDetails;
     } catch (error) {
       throw (error);
-    }
-  }
-
-  Future<void> loadAuctionMapData(BuildContext context) async {
-    auctionMapDirections = AuctionMapDirections();
-    // TODO
-//    auctionMapDirections.appointmentDate = DateUtils.dateFromString(auctionDetails.scheduledDateTime, 'dd/MM/yyyy HH:mm:ss');
-    auctionMapDirections.appointmentDate = DateTime.now();
-
-    try {
-      await auctionMapDirections.setPolyLines(context);
-      await auctionMapDirections.fetchDistanceAndDurations(_auctionsService);
-    }
-    catch (error) {
-      throw(error);
     }
   }
 }

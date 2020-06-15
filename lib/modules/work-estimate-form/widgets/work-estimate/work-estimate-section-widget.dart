@@ -53,22 +53,16 @@ class WorkEstimateSectionWidget extends StatelessWidget {
           children: <Widget>[
             Container(
               color: gray_10,
-              child: Column(
+              child: Row(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      _checkMarkContainer(context),
-                      _nameContainer(context),
-                      _arrowContainer(),
-                    ],
-                  ),
-                  if (estimatorMode == EstimatorMode.Client ||
-                      estimatorMode == EstimatorMode.ClientAccept)
-                    _priceContainer(context)
+                  _checkMarkContainer(context),
+                  _nameContainer(context),
+                  _arrowContainer(),
                 ],
               ),
             ),
             _issuesContainer(),
+            _priceContainer(context),
           ],
         ));
   }
@@ -153,14 +147,16 @@ class WorkEstimateSectionWidget extends StatelessWidget {
   }
 
   _priceContainer(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: Container(
-        margin: EdgeInsets.only(left: 10, top: 6, bottom: 6, right: 10),
-        child: Text(
-          '${S.of(context).estimator_total}: ${issueRecommendation.totalCost()} RON',
-          style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
-        ),
+    return Container(
+      padding: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
+      color: gray_10,
+      child: Row(
+        children: [
+          Text(
+            '${S.of(context).estimator_total}: ${issueRecommendation.totalCost()} RON',
+            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+          )
+        ],
       ),
     );
   }

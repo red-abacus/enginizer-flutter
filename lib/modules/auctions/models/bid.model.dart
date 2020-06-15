@@ -85,6 +85,8 @@ class Bid {
     switch (this.status.toLowerCase()) {
       case 'rejected':
         return BidStatus.REJECTED;
+      case 'accepted':
+        return BidStatus.ACCEPTED;
       default:
         return BidStatus.PENDING;
     }

@@ -7,6 +7,7 @@ import 'package:app/modules/appointments/model/request/assign-employee-request.m
 import 'package:app/modules/appointments/model/request/receive-form-request.model.dart';
 import 'package:app/modules/appointments/enum/mechanic-task-type.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
+import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
 import 'package:dio/dio.dart';
@@ -28,6 +29,8 @@ class AppointmentsService {
       'CANCEL_APPOINTMENT_EXCEPTION';
   static const String CREATE_RECEIVE_PROCEDURE_EXCEPTION =
       'CREATE_RECEIVE_PROCEDURE_EXCEPTION';
+  static const String CREATE_RETURN_PROCEDURE_EXCEPTION =
+      'CREATE_RETURN_PROCEDURE_EXCEPTION';
   static const String ADD_RECEIVE_PROCEDURE_IMAGES_EXCEPTION =
       'ADD_RECEIVE_PROCEDURE_IMAGES_EXCEPTION';
   static const String GET_STANDARD_TASKS_EXCEPTION =
@@ -53,6 +56,8 @@ class AppointmentsService {
   static const String ASSIGN_EMPLOYEE_EXCEPTION = 'ASSIGN_EMPLOYEE_EXCEPTION';
   static const String ORDER_APPOINTMENT_ITEMS_EXCEPTION =
       'ORDER_APPOINTMENT_ITEMS_EXCEPTION';
+  static const String APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION =
+      'APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -75,6 +80,10 @@ class AppointmentsService {
   static const String _RECEIVE_PROCEDURE_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _RECEIVE_PROCEDURE_SUFFIX = '/procedure/receive';
+
+  static const String _RETURN_PROCEDURE_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _RETURN_PROCEDURE_SUFFIX = '/procedure/return';
 
   static const String _ADD_RECEIVE_PROCEDURE_PHOTOS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
@@ -120,6 +129,11 @@ class AppointmentsService {
   static const String _ORDER_APPOINTMENT_ITEM_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ORDER_APPOINTMENT_ITEM_SUFFIX = '/orderItems';
+
+  static const String _APPOINTMENT_REQUEST_TRANSPORT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX =
+      '/requestTransport';
 
   Dio _dio = inject<Dio>();
 
@@ -226,7 +240,6 @@ class AppointmentsService {
       final response = await _dio.post(
           _buildReceiveProcedurePath(receiveFormRequest.appointmentId),
           data: jsonEncode(receiveFormRequest.toJson()));
-
       if (response.statusCode == 200) {
         return response.data;
       } else {
@@ -237,9 +250,24 @@ class AppointmentsService {
     }
   }
 
+  Future<int> createReturnProcedure(
+      ReceiveFormRequest receiveFormRequest) async {
+    try {
+      final response = await _dio.post(
+          _buildReturnProcedurePath(receiveFormRequest.appointmentId),
+          data: jsonEncode(receiveFormRequest.toReturnJson()));
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception(CREATE_RETURN_PROCEDURE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CREATE_RETURN_PROCEDURE_EXCEPTION);
+    }
+  }
+
   Future<bool> addReceiveProcedurePhotos(
       ReceiveFormRequest receiveFormRequest) async {
-    // TODO - i tested on swagger and photos are not saved to procedure.
     List<MultipartFile> files = [];
 
     for (File file in receiveFormRequest.files) {
@@ -328,7 +356,7 @@ class AppointmentsService {
     }
   }
 
-  Future<bool> addAppointmentRecommendation(
+  Future<int> addAppointmentRecommendation(
       int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
     try {
       final response = await _dio.post(
@@ -336,7 +364,7 @@ class AppointmentsService {
           data: jsonEncode(mechanicTaskIssue.toJson()));
 
       if (response.statusCode == 200) {
-        return true;
+        return response.data;
       } else {
         throw Exception(ADD_APPOINTMENT_RECOMMENDATION_EXCEPTION);
       }
@@ -362,8 +390,8 @@ class AppointmentsService {
     }
   }
 
-  Future<bool> addAppointmentRecommendationImage(
-      int appointmentId, MechanicTaskIssue mechanicTaskIssue) async {
+  Future<bool> addAppointmentRecommendationImage(int appointmentId,
+      MechanicTaskIssue mechanicTaskIssue, int recommendationId) async {
     List<MultipartFile> files = [];
 
     if (mechanicTaskIssue.image != null) {
@@ -377,7 +405,7 @@ class AppointmentsService {
     try {
       final response = await _dio.patch(
           _buildAddAppointmentRecommendationImage(
-              appointmentId, mechanicTaskIssue.id),
+              appointmentId, recommendationId),
           data: formData);
 
       if (response.statusCode == 200) {
@@ -390,8 +418,8 @@ class AppointmentsService {
     }
   }
 
-  Future<bool> requestAppointmentItems(
-      int appointmentId, {int providerId}) async {
+  Future<bool> requestAppointmentItems(int appointmentId,
+      {int providerId}) async {
     Map<String, dynamic> queryParameters = {};
 
     if (providerId != null) {
@@ -400,7 +428,7 @@ class AppointmentsService {
 
     try {
       final response = await _dio.patch(_buildRequestItemsPath(appointmentId),
-          data: queryParameters);
+          data: jsonEncode(queryParameters));
 
       if (response.statusCode == 200) {
         return true;
@@ -457,6 +485,21 @@ class AppointmentsService {
     }
   }
 
+  Future<AppointmentDetail> requestTransport(
+      int appointmentId, TransportRequest transportRequest) async {
+    try {
+      final response = await _dio.patch(_buildRequestTransport(appointmentId),
+          data: jsonEncode(transportRequest.toJson()));
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -499,6 +542,12 @@ class AppointmentsService {
     return _RECEIVE_PROCEDURE_PREFIX +
         appointmentId.toString() +
         _RECEIVE_PROCEDURE_SUFFIX;
+  }
+
+  _buildReturnProcedurePath(int appointmentId) {
+    return _RETURN_PROCEDURE_PREFIX +
+        appointmentId.toString() +
+        _RETURN_PROCEDURE_SUFFIX;
   }
 
   _buildCancelAppointmentPath(int appointmentId) {
@@ -590,5 +639,11 @@ class AppointmentsService {
     return _ORDER_APPOINTMENT_ITEM_PREFIX +
         appointmentId.toString() +
         _ORDER_APPOINTMENT_ITEM_SUFFIX;
+  }
+
+  _buildRequestTransport(int appointmentId) {
+    return _APPOINTMENT_REQUEST_TRANSPORT_PREFIX +
+        appointmentId.toString() +
+        _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX;
   }
 }

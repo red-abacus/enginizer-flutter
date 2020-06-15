@@ -273,7 +273,6 @@ class AppointmentDetailsNewConsultantWidgetState
             flex: 1,
             child: FlatButton(
               child: Text(
-                // TODO - need proper translation for english version
                 S.of(context).general_estimator.toUpperCase(),
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 24),

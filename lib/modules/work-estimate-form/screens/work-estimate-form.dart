@@ -4,13 +4,18 @@ import 'dart:ui';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
+import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
+import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
+import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-order-modal.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
@@ -22,7 +27,7 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
-import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info-parts.widget.dart';
+import 'package:app/modules/work-estimate-form/widgets/assign-pr/work-estimate-accept.modal.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
@@ -46,7 +51,6 @@ class WorkEstimateForm extends StatefulWidget {
 
   WorkEstimateForm({this.mode, this.dateEntry});
 
-  // TODO - check route
   @override
   State<StatefulWidget> createState() {
     return _WorkEstimateFormState(route: route);
@@ -151,10 +155,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       child: Stack(
         children: <Widget>[
           _buildStepper(context),
-          if (widget.mode == EstimatorMode.Client ||
-              widget.mode == EstimatorMode.ReadOnly ||
-              widget.mode == EstimatorMode.ClientAccept)
-            _clientBottomContainer()
+          _totalBottomContainer(),
         ],
       ),
     );
@@ -326,6 +327,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         buttons.add(saveButton);
         buttons.add(operationHistoryButton);
         break;
+      case EstimatorMode.CreatePr:
+        buttons.add(saveButton);
+        break;
       default:
         break;
     }
@@ -350,28 +354,48 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     );
   }
 
-  _clientBottomContainer() {
-    double totalCost = widget.mode == EstimatorMode.Client
-        ? _provider.selectedRecommendationTotalCost()
-        : _provider.workEstimateDetails?.totalCost;
+  _totalBottomContainer() {
+    double totalCost = 0.0;
+
+    switch (widget.mode) {
+      case EstimatorMode.Create:
+      case EstimatorMode.CreatePart:
+      case EstimatorMode.CreatePr:
+        totalCost = _provider.workEstimateRequest.totalCost();
+        break;
+      case EstimatorMode.Edit:
+        totalCost = _provider.workEstimateDetails?.totalCost;
+        break;
+      case EstimatorMode.CreateFinal:
+        break;
+      case EstimatorMode.ReadOnly:
+        totalCost = _provider.workEstimateDetails?.totalCost;
+        break;
+      case EstimatorMode.Client:
+        totalCost = _provider.selectedRecommendationTotalCost();
+        break;
+      case EstimatorMode.ClientAccept:
+        totalCost = _provider.workEstimateDetails?.totalCost;
+        break;
+    }
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
         height: 60,
-        color: Colors.white,
-        margin: EdgeInsets.only(left: 20, right: 20),
+        margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            if (widget.mode == EstimatorMode.ClientAccept)
-              _bottomContainerButton(),
             Container(
               child: Text(
-                '${S.of(context).estimator_total}: $totalCost RON',
+                '${S.of(context).estimator_total}: ${totalCost.toStringAsFixed(2)} RON',
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
               ),
-            )
+            ),
+            if (widget.mode == EstimatorMode.ClientAccept)
+              _bottomContainerButton(),
           ],
         ),
       ),
@@ -475,16 +499,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           });
         });
       } catch (error) {
-        if (error
-            .toString()
-            .contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_add_work_estimate_item, context);
-        }
-
-        setState(() {
-          _isLoading = false;
-        });
+        _handleError(error);
       }
     } else {
       setState(() {
@@ -535,15 +550,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         });
       });
     } catch (error) {
-      if (error.toString().contains(
-          WorkEstimatesService.WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_edit_issue_item, context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      _handleError(error);
     }
   }
 
@@ -574,8 +581,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         context: context,
         builder: (BuildContext context) {
           if (widget.mode == EstimatorMode.CreatePart) {
-            return WorkEstimateFinalInfoPartsWidget(
-                infoAdded: _partsInfoAdded,
+            return WorkEstimateFinalInfoWidget(
+                infoAdded: _infoAdded,
                 maxResponseTime: DateUtils.dateFromString(
                     _provider.selectedAuctionDetails.scheduledDateTime,
                     'dd/MM/yyyy HH:mm'));
@@ -606,36 +613,12 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
               auctionId: _provider.selectedAuctionDetails?.id)
           .then((workEstimateDetails) async {
         if (workEstimateDetails != null) {
+          LocatorManager.getInstance().removeActiveAppointment();
+          LocatorManager.getInstance().getActiveAppointment(context);
+
           Provider.of<AppointmentConsultantProvider>(context).initDone = false;
+          Provider.of<AppointmentProvider>(context).initDone = false;
           Provider.of<AppointmentsProvider>(context).initDone = false;
-
-          Navigator.pop(context);
-        } else {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      });
-    } catch (error) {
-      _handleError(error);
-    }
-  }
-
-  _partsInfoAdded(DateTime deliveryDate, DateTime maxResponseDate) async {
-    _provider.workEstimateRequest.percent = 0;
-    _provider.workEstimateRequest.timeToRespond = deliveryDate;
-    _provider.workEstimateRequest.timeToRespond = maxResponseDate;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      await _provider
-          .createWorkEstimate(_provider.workEstimateRequest,
-              auctionId: _provider.selectedAuctionDetails.id)
-          .then((workEstimateDetails) async {
-        if (workEstimateDetails != null) {
           Provider.of<AuctionConsultantProvider>(context).initDone = false;
 
           Navigator.pop(context);
@@ -704,104 +687,74 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             });
       }
     } else {
-      showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return AlertConfirmationDialogWidget(
-                  confirmFunction: (confirm) => {
-                        if (confirm) {_acceptWorkEstimate()}
-                      },
-                  title: S.of(context).estimator_accept_alert_body);
+      ServiceItem pickupServiceItem =
+          _provider.selectedAppointmentDetail.pickupServiceItem();
+      if (pickupServiceItem == null || !_provider.shouldAskForPr) {
+        showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                return AlertConfirmationDialogWidget(
+                    confirmFunction: (confirm) => {
+                          if (confirm) {_acceptWorkEstimate()}
+                        },
+                    title: S.of(context).estimator_accept_alert_body);
+              });
             });
-          });
+      } else {
+        Provider.of<WorkEstimateAcceptProvider>(context).initialise();
+        Provider.of<WorkEstimateAcceptProvider>(context).pickupServiceItem =
+            pickupServiceItem;
+
+        showModalBottomSheet<void>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                return WorkEstimateAcceptModal(
+                    acceptWorkEstimate: _acceptWorkEstimate);
+              });
+            });
+      }
     }
   }
 
-  _acceptWorkEstimate() async {
-    if (widget.mode == EstimatorMode.Client) {
-      try {
-        await _provider
-            .acceptBid(_provider.selectedAppointmentDetail.bidId)
-            .then((_) {
-          setState(() {
-            Provider.of<AppointmentProvider>(context).initDone = false;
-            Navigator.pop(context);
-          });
-        });
-      } catch (error) {
-        if (error
-            .toString()
-            .contains(WorkEstimatesService.ACCEPT_WORK_ESTIMATE_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_accept_work_estimate, context);
-        }
-      }
-    } else if (widget.mode == EstimatorMode.ClientAccept) {
-      setState(() {
-        _isLoading = true;
-      });
+  _acceptWorkEstimate({TransportRequest transportRequest}) async {
+    setState(() {
+      _isLoading = true;
+    });
 
-      try {
-        await _provider
-            .acceptBid(_provider.selectedAppointmentDetail.bidId)
-            .then((_) {
-          setState(() {
+    try {
+      await _provider
+          .acceptBid(_provider.selectedAppointmentDetail.bidId)
+          .then((_) async {
+        if (transportRequest != null) {
+          await _provider
+              .requestTransport(
+                  _provider.selectedAppointmentDetail.id, transportRequest)
+              .then((value) {
             Provider.of<AppointmentProvider>(context).initDone = false;
             Provider.of<AppointmentsProvider>(context).initDone = false;
+            Provider.of<AuctionConsultantProvider>(context).initDone = false;
+            Provider.of<AuctionProvider>(context).initDone = false;
             Navigator.pop(context);
           });
-        });
-      } catch (error) {
-        if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_accept_work_estimate, context);
+        } else {
+          Provider.of<AppointmentProvider>(context).initDone = false;
+          Provider.of<AppointmentsProvider>(context).initDone = false;
+          Provider.of<AuctionConsultantProvider>(context).initDone = false;
+          Provider.of<AuctionProvider>(context).initDone = false;
+          Navigator.pop(context);
         }
-
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      });
+    } catch (error) {
+      _handleError(error);
     }
-  }
-
-  _handleError(dynamic error) {
-    if (error
-        .toString()
-        .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_add_new_work_estimate, context);
-    } else if (error
-        .toString()
-        .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_provider_timetable, context);
-    } else if (error
-        .toString()
-        .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_item_types, context);
-    } else if (error
-        .toString()
-        .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_work_estimate_details, context);
-    } else if (error
-        .toString()
-        .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_get_appointment_details, context);
-    } else if (error
-        .toString()
-        .contains(WorkEstimatesService.REJECT_WORK_ESTIMATE_EXCEPTION)) {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).exception_reject_work_estimate, context);
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   _acceptRecommendations() {
@@ -838,15 +791,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         }
       });
     } catch (error) {
-      if (error.toString().contains(
-          AppointmentsService.SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_send_appointment_recommendations, context);
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
+      _handleError(error);
     }
 
     return request;
@@ -867,5 +812,63 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                     Provider.of<WorkEstimateProvider>(context).workEstimateId);
           });
         });
+  }
+
+  _handleError(dynamic error) {
+    if (error
+        .toString()
+        .contains(WorkEstimatesService.ADD_NEW_WORK_ESTIMATE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_add_new_work_estimate, context);
+    } else if (error
+        .toString()
+        .contains(ProviderService.GET_PROVIDER_TIMETABLE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_provider_timetable, context);
+    } else if (error
+        .toString()
+        .contains(ProviderService.GET_ITEM_TYPES_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_item_types, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.GET_WORK_ESTIMATE_DETAILS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_work_estimate_details, context);
+    } else if (error
+        .toString()
+        .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_get_appointment_details, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.REJECT_WORK_ESTIMATE_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_reject_work_estimate, context);
+    } else if (error.toString().contains(BidsService.ACCEPT_BID_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_accept_work_estimate, context);
+    } else if (error.toString().contains(
+        AppointmentsService.APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_transport_request, context);
+    } else if (error.toString().contains(
+        WorkEstimatesService.WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_edit_issue_item, context);
+    } else if (error.toString().contains(
+        AppointmentsService.SEND_APPOINTMENT_RECOMMENDATIONS_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_send_appointment_recommendations, context);
+    } else if (error
+        .toString()
+        .contains(WorkEstimatesService.ADD_WORK_ESTIMATE_ITEM_EXCEPTION)) {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).exception_add_work_estimate_item, context);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

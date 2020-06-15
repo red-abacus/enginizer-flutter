@@ -20,17 +20,19 @@ class ServiceProvider {
   List<ServiceProviderItem> items = [];
   List<ServiceProviderTimetable> timetables = [];
 
-  ServiceProvider({this.id,
-    this.name,
-    this.address,
-    this.contactPerson,
-    this.cui,
-    this.fiscalName,
-    this.profilePhotoUrl,
-    this.registrationNumber,
-    this.image,
-    this.rating, this.isVATPayer,
-    this.userProviderSchedules});
+  ServiceProvider(
+      {this.id,
+      this.name,
+      this.address,
+      this.contactPerson,
+      this.cui,
+      this.fiscalName,
+      this.profilePhotoUrl,
+      this.registrationNumber,
+      this.image,
+      this.rating,
+      this.isVATPayer,
+      this.userProviderSchedules});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
     return ServiceProvider(
@@ -44,7 +46,9 @@ class ServiceProvider {
         registrationNumber: json['registrationNumber'] != null
             ? json['registrationNumber']
             : "",
-        image: json['image'] != null ? json['image'] : "",
+        image: json['image'] != null
+            ? json['image']
+            : json['imageUrl'] != null ? json['imageUrl'] : '',
         rating: json["ratingDto"] != null
             ? ServiceProviderRating.fromJson(json["ratingDto"])
             : null,

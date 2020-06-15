@@ -1,4 +1,6 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'issue-recommendation.model.dart';
 
@@ -70,5 +72,13 @@ class Issue {
     };
 
     return propMap;
+  }
+
+  totalCost() {
+    double total = 0.0;
+    this.recommendations.forEach((recommendation) {
+      total += recommendation.totalCost();
+    });
+    return total;
   }
 }

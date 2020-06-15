@@ -15,7 +15,6 @@ class AuctionProvider with ChangeNotifier {
   BidsService bidsService = inject<BidsService>();
   ProviderService providerService = inject<ProviderService>();
 
-  bool isLoading = false;
   bool initDone = false;
 
   BidResponse bidResponse;
@@ -29,14 +28,13 @@ class AuctionProvider with ChangeNotifier {
 
   String filterSearchString = "";
 
-  void initialiseParameters() {
+  void initialise() {
     bidResponse = null;
     bids = [];
     selectedAuction = null;
     appointmentDetails = null;
     selectedBid = null;
     filterSearchString = "";
-    isLoading = false;
     initDone = false;
     redirectBid = null;
   }

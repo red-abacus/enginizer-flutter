@@ -81,6 +81,7 @@ import 'modules/shop/screens/shop-product-details.dart';
 import 'modules/shop/screens/shop-service-details.dart';
 import 'modules/shop/screens/shop.dart';
 import 'modules/user-details/screens/user-details.dart';
+import 'modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
 
 void main() async {
@@ -128,6 +129,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
           ChangeNotifierProvider.value(value: WorkEstimateProvider()),
+          ChangeNotifierProvider.value(value: WorkEstimateAcceptProvider()),
           ChangeNotifierProvider.value(value: SelectPartsProviderProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
@@ -239,10 +241,7 @@ class CustomPageTransitionBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    // TODO
-//    if (route.settings.isInitialRoute) {
-//      return child;
-//    }
+
     return FadeTransition(
       opacity: animation,
       child: child,

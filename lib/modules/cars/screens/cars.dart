@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
 import 'package:app/modules/cars/models/car.model.dart';
@@ -78,8 +79,6 @@ class CarsState extends State<Cars> {
   }
 
   void _openCarCreateModal(BuildContext ctx) {
-    NotificationsManager.showNotificationBanner('test', 'body');
-    return;
     Provider.of<CarsMakeProvider>(context).initParams();
 
     showModalBottomSheet<void>(
@@ -99,6 +98,8 @@ class CarsState extends State<Cars> {
   Future<void> _openAppointmentCreateModal(
       BuildContext ctx, Car selectedCar) async {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
+    Provider.of<ProviderServiceProvider>(context).createAppointmentState =
+        CreateAppointmentState.Default;
     Provider.of<ProviderServiceProvider>(context).selectedCar = selectedCar;
 
     showModalBottomSheet<void>(
@@ -118,8 +119,7 @@ class CarsState extends State<Cars> {
   Future<void> _filterCars(BuildContext ctx, String filterValue) async {
     try {
       await Provider.of<CarsProvider>(ctx).loadCars(filterValue: filterValue);
-    }
-    catch (error) {
+    } catch (error) {
       if (error.toString() == CarService.CAR_GET_EXCEPTION) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_car_get, context);

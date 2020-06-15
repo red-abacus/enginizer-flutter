@@ -24,7 +24,7 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final double loginCardHeight = 350;
 
   double registerCardHeight(BuildContext context) {

@@ -67,7 +67,7 @@ class _WorkEstimateIssueEditWidgetState
                 _infoWidget(S.of(context).import_item_price_w_vta_title,
                     '${widget.issueItem?.price + widget.issueItem?.priceVAT}'),
                 _quantityWidget(S.of(context).import_item_quantity_title),
-                _additionWidget(S.of(context).import_item_addition_title),
+                _additionWidget('${S.of(context).import_item_addition_title} %'),
                 _buttonsWidget(context),
               ],
             ),

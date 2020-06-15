@@ -14,8 +14,10 @@ import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/parts/screens/parts.dart';
 import 'package:app/modules/promotions/screens/promotions.screen.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
@@ -145,8 +147,13 @@ class NavigationAppState extends State<NavigationApp> {
 
   @override
   Widget build(BuildContext context) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments, PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+      LocatorManager.getInstance().getActiveAppointment(context);
+    }
+
     FirebaseManager.getInstance().setContext(context);
     NotificationsManager.navigationAppState = this;
+
     if (widget.activeDrawerItems == null) {
       widget.activeDrawerItems = _initActiveDrawerItems();
     }

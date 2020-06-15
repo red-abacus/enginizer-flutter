@@ -13,6 +13,7 @@ class WorkEstimateRequest {
   DateTime timeToRespond;
   EmployeeTimeSerie employeeTimeSerie;
 
+  DateTime proposedDate;
   final EstimatorMode estimatorMode;
 
   WorkEstimateRequest(this.estimatorMode);
@@ -22,7 +23,13 @@ class WorkEstimateRequest {
 
     if (estimatorMode == EstimatorMode.Create) {
       this.issues.forEach((issue) {
-        issue.recommendations.add(IssueRecommendation.defaultRecommendation(context));
+        issue.recommendations
+            .add(IssueRecommendation.defaultRecommendation(context));
+      });
+    } else if (estimatorMode == EstimatorMode.CreatePr) {
+      this.issues.forEach((issue) {
+        issue.recommendations
+            .add(IssueRecommendation.defaultPrRecommendation(context));
       });
     }
   }
@@ -71,7 +78,21 @@ class WorkEstimateRequest {
     if (estimatorMode == EstimatorMode.CreatePart) {
       map['proposedDate'] =
           DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy HH:mm');
+    } else if (estimatorMode == EstimatorMode.CreatePr &&
+        proposedDate != null) {
+      map['proposedDate'] =
+          DateUtils.stringFromDate(proposedDate, 'dd/MM/yyyy HH:mm');
     }
     return map;
+  }
+
+  totalCost() {
+    double total = 0.0;
+
+    this.issues.forEach((issue) {
+      total += issue.totalCost();
+    });
+
+    return total;
   }
 }

@@ -239,9 +239,7 @@ class _AppointmentDetailsPartsProviderEstimateModalState
     try {
       await _provider
           .requestAppointmentItems(_provider.selectedAppointmentDetails.id,
-              providerId:
-                  _provider.selectedAppointmentDetails?.serviceProvider?.id ??
-                      null)
+              providerId: _provider.selectedServiceProvider?.id ?? null)
           .then((success) {
         if (success) {
           Navigator.pop(context);

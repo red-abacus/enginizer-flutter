@@ -1,4 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/enum/receive-car-form-state.enum.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-consultant.modal.dart';
@@ -12,9 +14,14 @@ import 'package:flutter/material.dart';
 class AppointmentCarReceiveFormModal extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function refreshState;
+  final CarReceiveFormState carReceiveFormState;
+  final PickupFormState pickupFormState;
 
   AppointmentCarReceiveFormModal(
-      {this.appointmentDetail, this.refreshState});
+      {this.appointmentDetail,
+      this.refreshState,
+      this.carReceiveFormState,
+      this.pickupFormState});
 
   @override
   State<StatefulWidget> createState() {
@@ -52,13 +59,19 @@ class _AppointmentCarReceiveFormModalState
 
   Widget _buildContent() {
     if (_receiveCarFormState == ReceiveCarFormState.FORM) {
-      return _formContainer();
+      return widget.pickupFormState == PickupFormState.Receive
+          ? _receiveFormContainer()
+          : _returnFormContainer();
     }
 
-    return PickUpCarFormConsultantWidget(appointmentDetail: widget.appointmentDetail, refreshState: widget.refreshState);
+    return PickUpCarFormConsultantWidget(
+        carReceiveFormState: widget.carReceiveFormState,
+        appointmentDetail: widget.appointmentDetail,
+        refreshState: widget.refreshState,
+        pickupFormState: widget.pickupFormState);
   }
 
-  _formContainer() {
+  _receiveFormContainer() {
     return Container(
       padding: EdgeInsets.all(20),
       child: SingleChildScrollView(
@@ -104,7 +117,7 @@ class _AppointmentCarReceiveFormModalState
                             TextHelper.customTextStyle(null, gray3, null, 16),
                       ),
                       TextSpan(
-                        // tODO - need to add representative name for client
+                        // TODO - need to add representative name for service provider
                         text: 'Mircea Pop',
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),
@@ -132,8 +145,8 @@ class _AppointmentCarReceiveFormModalState
                         '${S.of(context).mechanic_appointment_receive_form_part_5} ',
                     style: TextHelper.customTextStyle(null, gray3, null, 16),
                     children: <TextSpan>[
-                      // TODO - need to add mechanic name
                       TextSpan(
+                        // TODO - need to add representative name for representative service provider
                         text: 'Mircea Pop ',
                         style: TextHelper.customTextStyle(
                             null, gray3, FontWeight.bold, 16),
@@ -212,12 +225,135 @@ class _AppointmentCarReceiveFormModalState
     );
   }
 
+  _returnFormContainer() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              widget.pickupFormState == PickupFormState.Receive
+                  ? S.of(context).mechanic_appointment_receive_form_title
+                  : S.of(context).mechanic_appointment_hand_form_title,
+              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 18),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: RichText(
+                text: TextSpan(
+                    text:
+                        '${S.of(context).mechanic_appointment_receive_form_part_1}, ',
+                    style: TextHelper.customTextStyle(null, gray3, null, 16),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text:
+                            '${DateUtils.stringFromDate(DateTime.now(), 'dd.MM.yyyy')}, ',
+                        style: TextHelper.customTextStyle(
+                            null, gray3, FontWeight.bold, 16),
+                      ),
+                      TextSpan(
+                        text: S.of(context).general_by,
+                        style:
+                            TextHelper.customTextStyle(null, gray3, null, 16),
+                      ),
+                      TextSpan(
+                        text:
+                            ' ${widget.appointmentDetail?.serviceProvider?.name}.',
+                        style: TextHelper.customTextStyle(
+                            null, gray3, FontWeight.bold, 16),
+                      ),
+                    ]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: RichText(
+                text: TextSpan(
+                    text:
+                        '${S.of(context).mechanic_appointment_receive_form_part_5} ',
+                    style: TextHelper.customTextStyle(null, gray3, null, 16),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text:
+                            '${widget.appointmentDetail?.serviceProvider?.name} ',
+                        style: TextHelper.customTextStyle(
+                            null, gray3, FontWeight.bold, 16),
+                      ),
+                      TextSpan(
+                        text:
+                            '${S.of(context).mechanic_appointment_return_form_part_1}:',
+                        style:
+                            TextHelper.customTextStyle(null, gray3, null, 16),
+                      ),
+                    ]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: RichText(
+                text: TextSpan(
+                    text:
+                        '${S.of(context).mechanic_appointment_receive_form_part_8}: ',
+                    style: TextHelper.customTextStyle(null, gray3, null, 16),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text:
+                            '${widget.appointmentDetail?.car?.registrationNumber}, ${widget.appointmentDetail?.car?.brand?.name}, ${widget.appointmentDetail?.car?.year?.name}, ${widget.appointmentDetail?.car?.color?.translateColorName(context)}',
+                        style: TextHelper.customTextStyle(
+                            null, gray3, FontWeight.bold, 16),
+                      ),
+                    ]),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: FlatButton(
+                    color: gray2,
+                    child: Text(
+                        widget.pickupFormState == PickupFormState.Receive
+                            ? S.of(context).mechanic_appointment_i_received
+                            : S.of(context).mechanic_appointment_i_handed_over,
+                        style: TextHelper.customTextStyle(
+                            null, Colors.white, FontWeight.normal, 16)),
+                    onPressed: () {
+                      _showConfirmationAlert();
+                    },
+                  ),
+                ),
+                if (_showPickUpButton)
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: FlatButton(
+                      color: gray2,
+                      child: Text(S.of(context).appointment_extended_form,
+                          style: TextHelper.customTextStyle(
+                              null, Colors.white, FontWeight.normal, 16)),
+                      onPressed: () {
+                        _showExtendedForm();
+                      },
+                    ),
+                  )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   _showConfirmationAlert() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertConfirmationDialogWidget(
-          title: S.of(context).mechanic_appointment_receive_form_alert_title,
+          title: widget.pickupFormState == PickupFormState.Receive
+              ? S.of(context).mechanic_appointment_receive_form_alert_title
+              : S.of(context).mechanic_appointment_handover_form_alert_title,
           confirmFunction: (confirmation) {
             if (confirmation) {
               setState(() {

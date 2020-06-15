@@ -1,15 +1,17 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map-details.widget.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map.widget.dart';
-import 'package:app/modules/auctions/widgets/details-map/auction-map-decline.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
@@ -21,7 +23,8 @@ import 'package:provider/provider.dart';
 
 class AuctionConsultantMap extends StatefulWidget {
   static const String route = '${Auctions.route}/auction-consultant-map';
-  static const String notificationsRoute = '${Notifications.route}/auction-consultant-map';
+  static const String notificationsRoute =
+      '${Notifications.route}/auction-consultant-map';
 
   @override
   State<StatefulWidget> createState() {
@@ -30,7 +33,7 @@ class AuctionConsultantMap extends StatefulWidget {
 }
 
 class AuctionConsultantMapState extends State<AuctionConsultantMap>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   String route;
 
   var _initDone = false;
@@ -69,7 +72,8 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
                 ],
               ),
             ),
-            floatingActionButton: _floatActionButtonContainer(),
+            floatingActionButton:
+                _isLoading ? Container() : _floatActionButtonContainer(),
             body: _isLoading
                 ? Center(child: CircularProgressIndicator())
                 : _contentWidget()));
@@ -81,22 +85,45 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
     _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
+      _initDone = true;
+      _provider.initDone = true;
+
       setState(() {
         _isLoading = true;
       });
 
       try {
-        await _provider.loadAuctionMapData(context).then((value) {
-          setState(() {
-            _isLoading = false;
+        await _provider
+            .getAuctionDetails(_provider.selectedAuction.id)
+            .then((_) async {
+          await _provider
+              .getAppointmentDetails(_provider.selectedAuction.appointment.id)
+              .then((value) async {
+            await _provider.appointmentDetails
+                .loadMapData(context)
+                .then((value) {
+              setState(() {
+                _isLoading = false;
+              });
+            });
           });
         });
       } catch (error) {
         if (error
             .toString()
+            .contains(AuctionsService.GET_AUCTION_DETAILS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_auction_details, context);
+        } else if (error
+            .toString()
             .contains(AuctionsService.GET_POINTS_DISTANCE_EXCEPTION)) {
           FlushBarHelper.showFlushBar(S.of(context).general_error,
               S.of(context).exception_get_points_distance, context);
+        } else if (error
+            .toString()
+            .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_appointment_details, context);
         }
 
         setState(() {
@@ -116,31 +143,39 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   }
 
   _floatActionButtonContainer() {
+    Bid providerBid;
+
+    for (Bid bid in _provider.auctionDetails.bids) {
+      if (bid.serviceProvider.id ==
+          Provider.of<Auth>(context).authUser.providerId) {
+        providerBid = bid;
+        break;
+      }
+    }
+
     return _tabController.index == 0
         ? Container(
             margin: EdgeInsets.only(left: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Spacer(),
                 FloatingActionButton.extended(
                   heroTag: null,
                   onPressed: () {
-                    _declineAppointment();
+                    if (providerBid == null) {
+                      _createEstimate();
+                    } else {
+                      _seeEstimate();
+                    }
                   },
                   label: Text(
-                    S.of(context).general_decline.toUpperCase(),
-                    style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-                FloatingActionButton.extended(
-                  heroTag: null,
-                  onPressed: () {
-//          widget.createEstimate();
-                  },
-                  label: Text(
-                    S.of(context).auction_create_estimate.toUpperCase(),
+                    providerBid == null
+                        ? S.of(context).auction_create_estimate.toUpperCase()
+                        : S
+                            .of(context)
+                            .appointment_details_estimator
+                            .toUpperCase(),
                     style: TextHelper.customTextStyle(
                         null, red, FontWeight.bold, 16),
                   ),
@@ -173,22 +208,62 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   }
 
   _createEstimate() {
-    if (_provider.auctionDetails != null) {
+    if (_provider.auctionDetails != null &&
+        _provider.appointmentDetails != null) {
+      print(
+          'total distance ${_provider.appointmentDetails.auctionMapDirections.totalDistance}');
       Provider.of<WorkEstimateProvider>(context)
-          .refreshValues(EstimatorMode.Create);
+          .refreshValues(EstimatorMode.CreatePr);
       Provider.of<WorkEstimateProvider>(context)
-          .setIssues(context, _provider.auctionDetails.issues);
+          .setIssues(context, _provider.appointmentDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           Provider.of<Auth>(context).authUserDetails.userProvider.id;
       Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
           _provider.auctionDetails;
+      Provider.of<WorkEstimateProvider>(context).defaultQuantity =
+          (_provider.appointmentDetails.auctionMapDirections.totalDistance /
+                  1000)
+              .round();
+      Provider.of<WorkEstimateProvider>(context)
+              .workEstimateRequest
+              .proposedDate =
+          _provider.appointmentDetails.auctionMapDirections.destinationPoints[0]
+              .dateTime;
 
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
+            builder: (context) =>
+                WorkEstimateForm(mode: EstimatorMode.CreatePr)),
       );
     }
+  }
+
+  _seeEstimate() {
+    // TODO - need to populate
+    Provider.of<WorkEstimateProvider>(context)
+        .refreshValues(EstimatorMode.ReadOnly);
+
+    Bid providerBid;
+    for (Bid bid in _provider.auctionDetails.bids) {
+      if (bid.serviceProvider.id ==
+          Provider.of<Auth>(context).authUser.providerId) {
+        providerBid = bid;
+        break;
+      }
+    }
+    if (providerBid != null) {
+      Provider.of<WorkEstimateProvider>(context).workEstimateId =
+          providerBid.workEstimateId;
+      Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+          providerBid.serviceProvider.id;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WorkEstimateForm(mode: EstimatorMode.ReadOnly)),
+    );
   }
 
   _showProviderDetails() {
@@ -203,14 +278,5 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
             return ServiceDetailsModal();
           });
         });
-  }
-
-  _declineAppointment() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AuctionMapDeclineWidget();
-      },
-    );
   }
 }

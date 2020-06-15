@@ -154,6 +154,10 @@ class AppointmentsList extends StatelessWidget {
         MainPermissions.AppointmentsStatuses,
         PermissionAppointmentsStatuses.PARTS_STATUSES)) {
       statuses = AppointmentStatusStateUtils.statusesParts();
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.AppointmentsStatuses,
+        PermissionAppointmentsStatuses.PR_STATUSES)) {
+      statuses = AppointmentStatusStateUtils.statusesParts();
     }
 
     statuses.forEach((status) {

@@ -66,36 +66,14 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
             estimatorMode == EstimatorMode.Client ||
             estimatorMode == EstimatorMode.ClientAccept
         ? Container()
-        : Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              InkWell(
-                onTap: () => this._openAddIssueModal(context),
-                child: Container(
-                  height: 36,
-                  child: ClipRRect(
-                    borderRadius: new BorderRadius.circular(5.0),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                      color: gray2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            S.of(context).estimator_add_new_product,
-                            style: TextHelper.customTextStyle(
-                                null, Colors.white, FontWeight.normal, 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (estimatorMode == EstimatorMode.Edit)
+        : Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
                 InkWell(
-                  onTap: () => this._openImportIssueModal(context),
+                  onTap: () => this._openAddIssueModal(context),
                   child: Container(
                     height: 36,
                     child: ClipRRect(
@@ -108,7 +86,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              S.of(context).estimator_import_product,
+                              S.of(context).estimator_add_new_product,
                               style: TextHelper.customTextStyle(
                                   null, Colors.white, FontWeight.normal, 14),
                             ),
@@ -117,8 +95,34 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
-            ],
+                ),
+                if (estimatorMode == EstimatorMode.Edit)
+                  InkWell(
+                    onTap: () => this._openImportIssueModal(context),
+                    child: Container(
+                      height: 36,
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(5.0),
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                          color: gray2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                S.of(context).estimator_import_product,
+                                style: TextHelper.customTextStyle(
+                                    null, Colors.white, FontWeight.normal, 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+              ],
+            ),
           );
   }
 

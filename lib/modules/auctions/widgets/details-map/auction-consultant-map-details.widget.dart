@@ -51,11 +51,11 @@ class _AuctionConsultantMapDetailsWidgetState
                 _applicantContainer(),
                 _buildSeparator(),
                 for (int i = 0;
-                    i < _provider.auctionMapDirections.destinationPoints.length;
+                    i < _provider.appointmentDetails.auctionMapDirections.destinationPoints.length;
                     i++)
                   // TODO
                   _markerContainer(
-                      _provider.auctionMapDirections.destinationPoints[i], i),
+                      _provider.appointmentDetails.auctionMapDirections.destinationPoints[i], i),
                 _totalDistanceContainer()
               ],
             ),
@@ -142,12 +142,12 @@ class _AuctionConsultantMapDetailsWidgetState
 
   _markerContainer(AuctionMapLocation point, int i) {
     String logo =
-        i > 0 && i < _provider.auctionMapDirections.destinationPoints.length - 1
+        i > 0 && i < _provider.appointmentDetails.auctionMapDirections.destinationPoints.length - 1
             ? 'marker_gray.svg'
             : 'marker_red.svg';
     String title = i == 0
         ? S.of(context).auction_route_start_point
-        : i == _provider.auctionMapDirections.destinationPoints.length - 1
+        : i == _provider.appointmentDetails.auctionMapDirections.destinationPoints.length - 1
             ? S.of(context).auction_route_destination
             : 'Service Provider';
 
@@ -156,7 +156,7 @@ class _AuctionConsultantMapDetailsWidgetState
       child: GestureDetector(
         onTap: () {
           if (i > 0 &&
-              i < _provider.auctionMapDirections.destinationPoints.length - 1) {
+              i < _provider.appointmentDetails.auctionMapDirections.destinationPoints.length - 1) {
             widget.showProviderDetails();
           }
         },
@@ -221,7 +221,7 @@ class _AuctionConsultantMapDetailsWidgetState
   }
 
   _totalDistanceContainer() {
-    double distanceInKm = _provider.auctionMapDirections.totalDistance / 1000;
+    double distanceInKm = _provider.appointmentDetails.auctionMapDirections.totalDistance / 1000;
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Row(

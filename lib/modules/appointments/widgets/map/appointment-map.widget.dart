@@ -1,4 +1,4 @@
-import 'package:app/modules/appointments/enum/appointment-map-state.enum.dart';
+
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +22,14 @@ class _AppointmentMapWidgetState extends State<AppointmentMapWidget> {
   Widget build(BuildContext context) {
     _provider = Provider.of<AppointmentProvider>(context);
 
-    if (_provider.appointmentMapState == AppointmentMapState.InProgress) {
+    if (_provider.selectedAppointmentDetail.canShareLocation()) {
       getUserLocation();
     } else {
       _kGooglePlex = CameraPosition(
         target: LatLng(
-            _provider
+            _provider.selectedAppointmentDetail
                 .auctionMapDirections.destinationPoints[0].location.latitude,
-            _provider
+            _provider.selectedAppointmentDetail
                 .auctionMapDirections.destinationPoints[0].location.longitude),
         zoom: 14.0,
       );
@@ -39,11 +39,10 @@ class _AppointmentMapWidgetState extends State<AppointmentMapWidget> {
         ? Container()
         : Container(
             child: GoogleMap(
-              myLocationEnabled: _provider.appointmentMapState ==
-                  AppointmentMapState.InProgress,
+              myLocationEnabled: _provider.selectedAppointmentDetail.canShareLocation(),
               mapType: MapType.normal,
-              markers: _provider.auctionMapDirections.markers,
-              polylines: _provider.auctionMapDirections.polylines,
+              markers: _provider.selectedAppointmentDetail.auctionMapDirections.markers,
+              polylines: _provider.selectedAppointmentDetail.auctionMapDirections.polylines,
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {},
             ),

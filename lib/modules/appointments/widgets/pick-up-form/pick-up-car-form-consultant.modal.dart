@@ -1,5 +1,6 @@
-
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -23,9 +24,15 @@ import 'image-selection.widget.dart';
 class PickUpCarFormConsultantWidget extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
   final Function refreshState;
+  final CarReceiveFormState carReceiveFormState;
+  final PickupFormState pickupFormState;
 
   PickUpCarFormConsultantWidget(
-      {Key key, this.appointmentDetail, this.refreshState})
+      {Key key,
+      this.appointmentDetail,
+      this.refreshState,
+      this.carReceiveFormState,
+      this.pickupFormState})
       : super(key: key);
 
   @override
@@ -53,7 +60,7 @@ class _PickUpCarFormConsultantWidgetState
   void didChangeDependencies() {
     if (!_initDone) {
       _provider = Provider.of<PickUpCarFormConsultantProvider>(context);
-      _provider.resetParams();
+      _provider.initialise();
 
       setState(() {
         _isLoading = true;
@@ -63,7 +70,7 @@ class _PickUpCarFormConsultantWidgetState
     }
 
     if (_provider.receiveFormRequest.files == null) {
-      _provider.resetParams();
+      _provider.initialise();
     }
 
     _initDone = true;
@@ -152,23 +159,23 @@ class _PickUpCarFormConsultantWidgetState
         ),
         context: context,
         builder: (context) => ImagePickerWidget(imageSelected: (file) {
-          if (file != null) {
-            setState(() {
-              if (index < _provider.receiveFormRequest.files.length) {
-                _provider.receiveFormRequest.files[index] = file;
+              if (file != null) {
+                setState(() {
+                  if (index < _provider.receiveFormRequest.files.length) {
+                    _provider.receiveFormRequest.files[index] = file;
 
-                if (_provider.receiveFormRequest.files.length <
-                    _provider.maxFiles) {
-                  _provider.receiveFormRequest.files.add(null);
-                }
+                    if (_provider.receiveFormRequest.files.length <
+                        _provider.maxFiles) {
+                      _provider.receiveFormRequest.files.add(null);
+                    }
+                  }
+                });
               }
-            });
-          }
-        }));
+            }));
   }
 
   List<Step> _buildSteps(BuildContext context) {
-    return [
+    List<Step> list = [
       Step(
           isActive: _currentStepIndex == 0,
           title: Text(_currentStepIndex == 0
@@ -193,18 +200,27 @@ class _PickUpCarFormConsultantWidgetState
       Step(
           isActive: _currentStepIndex == 1,
           title: Text(_currentStepIndex == 1
-              ? S.of(context).appointment_receive_car_step_2
+              ? widget.pickupFormState == PickupFormState.Receive
+                  ? S.of(context).appointment_receive_car_step_receive_2
+                  : S.of(context).appointment_receive_car_step_return_2
               : ''),
-          content: PickupCarFormInformationWidget(),
-          state: StepState.indexed),
-      Step(
+          content: PickupCarFormInformationWidget(
+              carReceiveFormState: widget.carReceiveFormState),
+          state: StepState.indexed)
+    ];
+
+    if (widget.carReceiveFormState == CarReceiveFormState.Service) {
+      list.add(Step(
           isActive: _currentStepIndex == 2,
           title: Text(_currentStepIndex == 2
               ? S.of(context).appointment_receive_car_step_3
               : ''),
-          content: PickUpCarFormEmployeesWidget(),
-          state: StepState.indexed)
-    ];
+          content: PickUpCarFormEmployeesWidget(
+              appointmentDetail: widget.appointmentDetail),
+          state: StepState.indexed));
+    }
+
+    return list;
   }
 
   _next() {
@@ -214,7 +230,14 @@ class _PickUpCarFormConsultantWidgetState
         break;
       case 1:
         if (_provider.informationFormState.currentState.validate()) {
-          _goTo(2);
+          switch (widget.carReceiveFormState) {
+            case CarReceiveFormState.Service:
+              _goTo(2);
+              break;
+            case CarReceiveFormState.Pr:
+              _createReceiveForm();
+              break;
+          }
         }
         break;
       case 2:
@@ -243,7 +266,7 @@ class _PickUpCarFormConsultantWidgetState
     try {
       _provider.receiveFormRequest.appointmentId = widget.appointmentDetail.id;
       await _provider
-          .createReceiveProcedure(_provider.receiveFormRequest)
+          .createProcedure(_provider.receiveFormRequest, widget.pickupFormState)
           .then((_) async {
         await _provider
             .addReceiveProcedurePhotos(_provider.receiveFormRequest)

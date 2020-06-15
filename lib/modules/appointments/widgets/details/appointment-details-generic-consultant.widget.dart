@@ -365,7 +365,8 @@ class AppointmentDetailsGenericConsultantWidgetState
     return Column(
       children: <Widget>[
         if (widget.appointmentDetail.serviceItems != null)
-          for (ServiceItem item in widget.appointmentDetail.serviceItems) _getServiceRow(item),
+          for (ServiceItem item in widget.appointmentDetail.serviceItems)
+            _getServiceRow(item),
       ],
     );
   }
@@ -472,25 +473,18 @@ class AppointmentDetailsGenericConsultantWidgetState
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            width: 30,
+          FadeInImage.assetNetwork(
+            image: widget.appointmentDetail?.personnel?.profilePhoto ?? '',
+            placeholder: 'assets/images/defaults/default_profile_icon.png',
+            fit: BoxFit.fitHeight,
             height: 30,
-            decoration: new BoxDecoration(
-              color: red,
-              borderRadius: BorderRadius.all(
-                Radius.circular(15.0),
-              ),
-            ),
-            child: Container(
-                // TODO - need to add icon for mechanic
-                ),
+            width: 30,
           ),
           Expanded(
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                // TODO - need to add mechanic name
-                'Mechanic name',
+                widget.appointmentDetail?.personnel?.name ?? '',
                 style: TextHelper.customTextStyle(null, Colors.black, null, 13),
               ),
             ),
@@ -520,7 +514,6 @@ class AppointmentDetailsGenericConsultantWidgetState
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                // TODO - need proper translation
                 S.of(context).appointment_consultant_no_pick_up_car_form,
                 style:
                     TextHelper.customTextStyle(null, red, FontWeight.bold, 15),

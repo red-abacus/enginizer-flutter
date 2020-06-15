@@ -28,6 +28,8 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_new;
       case AppointmentStatusState.ACCEPTED:
         return S.of(context).appointment_status_accepted;
+      case AppointmentStatusState.IN_TRANSPORT:
+        return S.of(context).appointment_status_in_transport;
       case AppointmentStatusState.NONE:
         return '';
         break;
@@ -60,6 +62,8 @@ class AppointmentStatusStateUtils {
         return 'NEW';
       case AppointmentStatusState.ACCEPTED:
         return 'ACCEPTED';
+      case AppointmentStatusState.IN_TRANSPORT:
+        return 'InTransport';
       default:
         return '';
     }
@@ -76,6 +80,7 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.CANCELED,
       AppointmentStatusState.IN_REVIEW,
       AppointmentStatusState.ON_HOLD,
+      AppointmentStatusState.IN_TRANSPORT,
       AppointmentStatusState.DONE
     ];
   }
@@ -93,6 +98,10 @@ class AppointmentStatusStateUtils {
   static List<AppointmentStatusState> statusesParts() {
     return [AppointmentStatusState.NEW, AppointmentStatusState.ACCEPTED, AppointmentStatusState.DONE];
   }
+
+  static List<AppointmentStatusState> statusesPr() {
+    return [AppointmentStatusState.SUBMITTED, AppointmentStatusState.SCHEDULED, AppointmentStatusState.IN_TRANSPORT];
+  }
 }
 
 enum AppointmentStatusState {
@@ -108,5 +117,6 @@ enum AppointmentStatusState {
   IN_UNIT,
   IN_REVIEW,
   NEW,
-  ACCEPTED
+  ACCEPTED,
+  IN_TRANSPORT
 }

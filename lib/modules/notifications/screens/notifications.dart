@@ -223,7 +223,7 @@ class NotificationsState extends State<Notifications> {
   _showAppointmentDetails(Appointment appointment) {
     switch (Provider.of<Auth>(context).authUser.role) {
       case Roles.Client:
-        Provider.of<AppointmentProvider>(context).initialiseParams();
+        Provider.of<AppointmentProvider>(context).initialise();
         Provider.of<AppointmentProvider>(context).selectedAppointment =
             appointment;
         Navigator.of(context).pushNamed(AppointmentDetails.notificationsRoute);
@@ -251,14 +251,14 @@ class NotificationsState extends State<Notifications> {
     if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
       AuctionProvider provider = Provider.of<AuctionProvider>(context);
-      provider.initialiseParameters();
+      provider.initialise();
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionConsultantMap.route);
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
       AuctionProvider provider = Provider.of<AuctionProvider>(context);
-      provider.initialiseParameters();
+      provider.initialise();
       provider.selectedAuction = auction;
       provider.redirectBid = bid;
 

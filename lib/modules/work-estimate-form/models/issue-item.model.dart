@@ -21,6 +21,8 @@ class IssueItem {
   int recommendationId;
   bool accepted;
   bool ordered;
+  // TODO - manufacturer not provider by API
+  String manufacturer;
 
   IssueItem(
       {this.id,
@@ -40,7 +42,8 @@ class IssueItem {
       this.recommendationId,
       this.issueId,
       this.accepted,
-      this.ordered});
+      this.ordered,
+      this.manufacturer});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
     return IssueItem(
@@ -67,7 +70,9 @@ class IssueItem {
             json['recommendationId'] != null ? json['recommendationId'] : null,
         issueId: json['issueId'] != null ? json['issueId'] : null,
         accepted: json['accepted'] != null ? json['accepted'] : null,
-        ordered: json['ordered'] != null ? json['ordered'] : null);
+        ordered: json['ordered'] != null ? json['ordered'] : null,
+        manufacturer:
+            json['manufacturer'] != null ? json['manufacturer'] : '-');
   }
 
   Map<String, dynamic> toMap() => {
@@ -90,7 +95,7 @@ class IssueItem {
       'price': price,
       'priceVAT': priceVAT,
       'total': (price + priceVAT).toString(),
-      'additionId': addition,
+      'addition': addition,
     };
 
     return propMap;
@@ -102,4 +107,8 @@ class IssueItem {
         'itemId': id,
         'providerId': provider.id
       };
+
+  getPrice() {
+    return quantity * (price + priceVAT);
+  }
 }

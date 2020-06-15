@@ -16,35 +16,31 @@ class AppointmentCreateSelectCarForm extends StatefulWidget {
 class AppointmentCreateSelectCarFormState
     extends State<AppointmentCreateSelectCarForm> {
   CarsProvider carsProvider;
-  ProviderServiceProvider providerServiceProvider;
+  ProviderServiceProvider _provider;
 
   @override
   Widget build(BuildContext context) {
     carsProvider = Provider.of<CarsProvider>(context);
-    providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * .55,
-      child: Center(
-        child: AppointmentCreateSelectCarList(
-          cars: carsProvider.cars,
-          selectCar: _selectCar,
-          selectedCar: providerServiceProvider.selectedCar,
-        ),
-      ),
+    _provider = Provider.of<ProviderServiceProvider>(context);
+
+    return AppointmentCreateSelectCarList(
+      cars: carsProvider.cars,
+      selectCar: _selectCar,
+      selectedCar: _provider.selectedCar,
     );
   }
 
   void _selectCar(Car currentCar) {
     setState(() {
-      if (providerServiceProvider.selectedCar == currentCar) {
-        providerServiceProvider.selectedCar = null;
+      if (_provider.selectedCar == currentCar) {
+        _provider.selectedCar = null;
       } else {
-        providerServiceProvider.selectedCar = currentCar;
+        _provider.selectedCar = currentCar;
       }
     });
   }
 
   bool valid() {
-    return providerServiceProvider.selectedCar != null;
+    return _provider.selectedCar != null;
   }
 }

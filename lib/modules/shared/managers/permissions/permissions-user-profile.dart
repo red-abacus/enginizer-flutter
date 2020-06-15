@@ -19,6 +19,7 @@ class PermissionsUserProfile {
         case Roles.ProviderPersonnel:
           break;
         case Roles.ProviderConsultant:
+          permissions = [ACTIVE_PERSONNEL];
           break;
         case Roles.ProviderAdmin:
           permissions = [ACTIVE_PERSONNEL];

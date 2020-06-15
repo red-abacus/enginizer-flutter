@@ -44,16 +44,6 @@ class AuctionsState extends State<Auctions> {
         body: Center(
           child: _renderAuctions(_isLoading),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          AuctionProvider provider =
-          Provider.of<AuctionProvider>(context, listen: false);
-          provider.initialiseParameters();
-          provider.selectedAuction = null;
-
-          Navigator.of(context).pushNamed(AuctionConsultantMap.route);
-        },
-
-        ),
       ),
     );
   }
@@ -115,9 +105,9 @@ class AuctionsState extends State<Auctions> {
   _selectAuction(Auction auction) {
     if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
-      AuctionProvider provider =
-          Provider.of<AuctionProvider>(context, listen: false);
-      provider.initialiseParameters();
+      AuctionConsultantProvider provider =
+          Provider.of<AuctionConsultantProvider>(context);
+      provider.initialise();
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionConsultantMap.route);
@@ -125,7 +115,7 @@ class AuctionsState extends State<Auctions> {
         MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
       AuctionProvider provider =
           Provider.of<AuctionProvider>(context, listen: false);
-      provider.initialiseParameters();
+      provider.initialise();
       provider.selectedAuction = auction;
 
       Navigator.of(context).pushNamed(AuctionDetails.route);

@@ -46,7 +46,7 @@ class AppointmentsProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Appointment>> loadAppointments() async {
+  Future<List<Appointment>> loadAppointments(AppointmentsRequest appointmentsRequest) async {
     if (!shouldDownload()) {
       return null;
     }
@@ -58,6 +58,17 @@ class AppointmentsProvider with ChangeNotifier {
       appointmentsRequest.currentPage += 1;
       notifyListeners();
       return appointments;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<Appointment>> getActiveAppointments(AppointmentsRequest appointmentsRequest) async {
+    try {
+      var response =
+      await this.appointmentsService.getAppointments(appointmentsRequest);
+      notifyListeners();
+      return response.items;
     } catch (error) {
       throw (error);
     }

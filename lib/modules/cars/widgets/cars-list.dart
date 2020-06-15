@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car.model.dart';
-import 'package:app/modules/cars/widgets/car-card.dart';
+import 'package:app/modules/cars/widgets/cards/car-card.dart';
 import 'package:app/utils/constants.dart';
 import 'package:flutter/material.dart';
 

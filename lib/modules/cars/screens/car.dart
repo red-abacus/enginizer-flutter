@@ -24,7 +24,7 @@ class CarDetails extends StatefulWidget {
 }
 
 class CarDetailsState extends State<CarDetails>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   Car model;
   File uploadImage;
   CarProvider _provider;

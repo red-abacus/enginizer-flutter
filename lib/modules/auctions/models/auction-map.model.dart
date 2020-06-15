@@ -6,25 +6,20 @@ import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/svg.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AuctionMapDirections {
+  AuctionMapDirections({this.destinationPoints});
+
   PolylinePoints polylinePoints = PolylinePoints();
 
-  List<AuctionMapLocation> destinationPoints = [AuctionMapLocation(location: LatLng(46.777019, 23.615115)),
-    AuctionMapLocation(location: LatLng(46.781949, 23.613342)),
-    AuctionMapLocation(location: LatLng(46.786477, 23.605170)),
-    AuctionMapLocation(location: LatLng(46.784087, 23.587493)),
-    AuctionMapLocation(location: LatLng(46.765421, 23.587589)),
-    AuctionMapLocation(location: LatLng(46.772055, 23.601009))];
+  List<AuctionMapLocation> destinationPoints;
 
   Set<Marker> markers = Set();
   Set<Polyline> polylines = Set();
   List<LatLng> polylineCoordinates = [];
 
   DateTime appointmentDate;
-  int totalKm = 0;
 
   int get totalDistance {
     int total = 0;
@@ -84,7 +79,7 @@ class AuctionMapDirections {
   _addPolyLine() {
     PolylineId id = PolylineId("poly");
     Polyline polyline =
-        Polyline(polylineId: id, color: blue, points: polylineCoordinates);
+        Polyline(polylineId: id, color: red, points: polylineCoordinates);
     polylines.add(polyline);
   }
 
@@ -156,18 +151,5 @@ class AuctionMapLocation {
     return meters;
   }
 
-  AuctionMapLocation({this.location}) {
-    _loadAddress();
-  }
-
-  _loadAddress() async {
-    final coordinates =
-        new Coordinates(this.location.latitude, this.location.longitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-
-    address =
-        first.addressLine != null ? '$address ${first.addressLine}' : address;
-  }
+  AuctionMapLocation({this.location, this.address});
 }

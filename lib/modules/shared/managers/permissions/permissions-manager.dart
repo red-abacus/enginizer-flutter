@@ -1,4 +1,5 @@
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
@@ -13,6 +14,7 @@ class PermissionsManager {
   PermissionsUserProfile _permissionsUserProfile;
   PermissionAppointmentsStatuses _permissionAppointmentsStatuses;
   PermissionsOrder _permissionsOrder;
+  PermissionsAppointment _permissionsAppointment;
 
   String userRole;
 
@@ -32,6 +34,8 @@ class PermissionsManager {
     _permissionAppointmentsStatuses =
         PermissionAppointmentsStatuses(serviceProviderItemsResponse);
     _permissionsOrder = PermissionsOrder(serviceProviderItemsResponse);
+    _permissionsAppointment =
+        PermissionsAppointment(serviceProviderItemsResponse);
   }
 
   bool hasAccess(MainPermissions mainPermission, String permission) {
@@ -47,6 +51,9 @@ class PermissionsManager {
       case MainPermissions.Orders:
         return _permissionsOrder.hasAccess(userRole, permission);
         break;
+      case MainPermissions.Appointments:
+        return _permissionsAppointment.hasAccess(userRole, permission);
+        break;
     }
 
     return false;
@@ -59,6 +66,7 @@ enum MainPermissions {
   UserProfile,
   AppointmentsStatuses,
   Orders,
+  Appointments
 }
 
 enum ConsultantServiceType {

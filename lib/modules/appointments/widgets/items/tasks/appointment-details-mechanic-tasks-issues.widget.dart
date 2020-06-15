@@ -153,18 +153,19 @@ class _AppointmentDetailsMechanicTasksIssuesWidgetState
 
     if (standardTask != null || issueTask != null) {
       const oneDecimal = const Duration(seconds: 1);
-      _timer = new Timer.periodic(oneDecimal, (Timer timer) => setState(() {
-        if (_currentState == MechanicTaskScreenState.TASK && issueTask != null) {
-          issueTask.addOneSecond();
-        }
-        else if (_currentState == MechanicTaskScreenState.CLIENT && standardTask != null) {
-          standardTask.addOneSecond();
-        }
-        else {
-          setState(() {
-          });
-        }
-      }));
+      _timer = new Timer.periodic(
+          oneDecimal,
+          (Timer timer) => setState(() {
+                if (_currentState == MechanicTaskScreenState.TASK &&
+                    issueTask != null) {
+                  issueTask.addOneSecond();
+                } else if (_currentState == MechanicTaskScreenState.CLIENT &&
+                    standardTask != null) {
+                  standardTask.addOneSecond();
+                } else {
+                  setState(() {});
+                }
+              }));
     }
   }
 
@@ -480,11 +481,13 @@ class _AppointmentDetailsMechanicTasksIssuesWidgetState
       await _provider
           .addAppointmentRecommendation(
               _provider.selectedAppointmentDetails.id, issue)
-          .then((response) async {
+          .then((recommendationId) async {
         if (issue.image != null) {
           await _provider
               .addAppointmentRecommendationImage(
-                  _provider.selectedAppointmentDetails.id, issue)
+                  _provider.selectedAppointmentDetails.id,
+                  issue,
+                  recommendationId)
               .then((response) {
             _loadTasks(task);
           });

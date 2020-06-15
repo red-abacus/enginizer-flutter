@@ -1,4 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
+import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
@@ -8,6 +10,7 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
@@ -28,7 +31,8 @@ import 'package:provider/provider.dart';
 class AppointmentDetailsConsultant extends StatefulWidget {
   static const String route =
       '${Appointments.route}/appointment-details-consultant';
-  static const String notificationsRoute = '${Notifications.route}/appointment-details-consultant';
+  static const String notificationsRoute =
+      '${Notifications.route}/appointment-details-consultant';
 
   @override
   State<StatefulWidget> createState() {
@@ -37,8 +41,7 @@ class AppointmentDetailsConsultant extends StatefulWidget {
 }
 
 class AppointmentDetailsConsultantState
-    extends State<AppointmentDetailsConsultant>
-    with SingleTickerProviderStateMixin {
+    extends State<AppointmentDetailsConsultant> with TickerProviderStateMixin {
   AppointmentConsultantProvider _provider;
 
   String route;
@@ -71,7 +74,8 @@ class AppointmentDetailsConsultantState
     try {
       await _provider
           .getAppointmentDetails(_provider.selectedAppointment)
-          .then((_) async {
+          .then((value) async {
+        _provider.selectedAppointmentDetail = value;
         await _provider
             .getProviderServices(
                 _provider.selectedAppointment.serviceProvider.id)
@@ -177,26 +181,6 @@ class AppointmentDetailsConsultantState
       CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car),
       AppointmentDetailsDocumentsWidget()
     ];
-
-//    switch (_provider.selectedAppointmentDetail.status.getState()) {
-//      case AppointmentStatusState.IN_REVIEW:
-//        list.addAll([
-//          AppointmentDetailsPartsProviderEstimateWidget(
-//            serviceProviders: _provider.serviceProviders,
-//            providerType: _provider.appointmentProviderType,
-//            selectedServiceProvider: _provider.selectedServiceProvider,
-//            selectProviderType: _selectProviderType,
-//            downloadNextServiceProviders: _downloadNextServiceProviders,
-//            selectServiceProvider: _selectServiceProvider,
-//            showServiceProviderDetails: _showServiceProviderDetails,
-//            requestItems: _requestItems,
-//          ),
-//
-//        ]);
-//        break;
-//      default:
-//        break;
-//    }
 
     return TabBarView(
       controller: _tabController,
@@ -366,8 +350,11 @@ class AppointmentDetailsConsultantState
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
             return AppointmentCarReceiveFormModal(
-                appointmentDetail: _provider.selectedAppointmentDetail,
-                refreshState: _refreshState);
+              carReceiveFormState: CarReceiveFormState.Service,
+              appointmentDetail: _provider.selectedAppointmentDetail,
+              refreshState: _refreshState,
+              pickupFormState: PickupFormState.Receive,
+            );
           });
         });
   }
@@ -410,8 +397,8 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentCameraModal();
-              });
+            return AppointmentCameraModal();
+          });
         });
   }
 }

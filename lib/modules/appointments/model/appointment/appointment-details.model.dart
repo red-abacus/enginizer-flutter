@@ -1,15 +1,20 @@
+import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-transport.model.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
+import 'package:app/modules/auctions/models/auction-map.model.dart';
+import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/utils/date_utils.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'appointment-status.model.dart';
 
@@ -33,6 +38,11 @@ class AppointmentDetail {
   List<IssueItem> items;
   GenericModel buyer;
   GenericModel seller;
+  AppointmentTransportInfo appointmentTransportInfo;
+  GenericModel personnel;
+  List<GenericModel> children;
+
+  AuctionMapDirections auctionMapDirections;
 
   AppointmentDetail(
       {this.id,
@@ -53,7 +63,10 @@ class AppointmentDetail {
       this.deliveryDateTime,
       this.items,
       this.buyer,
-      this.seller});
+      this.seller,
+      this.appointmentTransportInfo,
+      this.personnel,
+      this.children});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -95,7 +108,23 @@ class AppointmentDetail {
             json['buyer'] != null ? GenericModel.fromJson(json['buyer']) : null,
         seller: json['seller'] != null
             ? GenericModel.fromJson(json['seller'])
-            : null);
+            : null,
+        appointmentTransportInfo: json['transportInfo'] != null
+            ? AppointmentTransportInfo.fromJson(json['transportInfo'])
+            : null,
+        personnel: json['personalProductive'] != null
+            ? GenericModel.fromJson(json['personalProductive'])
+            : null,
+        children:
+            json['children'] != null ? _mapChildren(json['children']) : []);
+  }
+
+  static _mapChildren(List<dynamic> response) {
+    List<GenericModel> list = [];
+    response.forEach((item) {
+      list.add(GenericModel.fromJson(item));
+    });
+    return list;
   }
 
   static _mapIssueItems(List<dynamic> response) {
@@ -201,6 +230,38 @@ class AppointmentDetail {
         return true;
       default:
         return false;
+    }
+  }
+
+  bool canShareLocation() {
+    return status.getState() == AppointmentStatusState.IN_TRANSPORT;
+  }
+
+  bool canCreateCarReceiveForm() {
+    return status.getState() == AppointmentStatusState.SCHEDULED;
+  }
+
+  ServiceItem pickupServiceItem() {
+    for (ServiceItem serviceItem in this.serviceItems) {
+      if (serviceItem.isPickUpAndReturnService()) {
+        return serviceItem;
+      }
+    }
+    return null;
+  }
+
+  Future<void> loadMapData(BuildContext context) async {
+    auctionMapDirections = AuctionMapDirections(
+        destinationPoints: appointmentTransportInfo.getLocations());
+    auctionMapDirections.appointmentDate =
+        DateUtils.dateFromString(scheduledDate, 'dd/MM/yyyy HH:mm');
+
+    try {
+      await auctionMapDirections.setPolyLines(context);
+      await auctionMapDirections
+          .fetchDistanceAndDurations(inject<AuctionsService>());
+    } catch (error) {
+      throw (error);
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/modules/appointments/providers/camera.provider.dart';
 import 'package:app/modules/appointments/providers/car-reception-form.provider.dart';
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
@@ -16,6 +18,8 @@ import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
@@ -52,6 +56,13 @@ void setupDependencyInjection(SharedPreferences s) async {
     Dio dio = new Dio(BaseOptions(headers: {
       Headers.contentTypeHeader: 'application/json', // set content-length
     }));
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
 
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
@@ -95,6 +106,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AuctionProvider());
   inject.registerFactory(() => AuctionConsultantProvider());
   inject.registerFactory(() => WorkEstimateProvider());
+  inject.registerFactory(() => WorkEstimateAcceptProvider());
   inject.registerFactory(() => SelectPartsProviderProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());
   inject.registerFactory(() => AppointmentMechanicProvider());

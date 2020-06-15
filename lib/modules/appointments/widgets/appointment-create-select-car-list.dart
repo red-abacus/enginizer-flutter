@@ -13,40 +13,34 @@ class AppointmentCreateSelectCarList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: TextField(
-                key: Key('searchBar'),
-                autofocus: false,
-                decoration: InputDecoration(labelText: 'Find car'),
-                onChanged: (val) {
-                  print(val);
-                },
-              ),
+      padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            child: TextField(
+              key: Key('searchBar'),
+              autofocus: false,
+              decoration: InputDecoration(labelText: 'Find car'),
+              onChanged: (val) {
+                print(val);
+              },
             ),
-            Expanded(
-              child: Container(
-                child: ListView.builder(
-                  itemBuilder: (ctx, index) {
-                    return AppointmentCarCard(
-                      car: this.cars[index],
-                      selectCar: this.selectCar,
-                      selectedCar: this.selectedCar,
-                    );
-                  },
-                  itemCount: this.cars.length,
-                ),
-              ),
-            )
-          ],
-        ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (ctx, index) {
+              return AppointmentCarCard(
+                car: this.cars[index],
+                selectCar: this.selectCar,
+                selectedCar: this.selectedCar,
+              );
+            },
+            itemCount: this.cars.length,
+          )
+        ],
       ),
     );
   }

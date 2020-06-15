@@ -37,9 +37,11 @@ class AppointmentStatus {
       case AppointmentStatusState.NEW:
         return gray;
       case AppointmentStatusState.CANCELED:
+      case AppointmentStatusState.OPEN_BID:
         return red;
       case AppointmentStatusState.DONE:
       case AppointmentStatusState.ACCEPTED:
+      case AppointmentStatusState.IN_TRANSPORT:
         return green;
       case AppointmentStatusState.NONE:
         return gray2;
@@ -49,7 +51,6 @@ class AppointmentStatus {
   }
 
   String assetName() {
-    // TODO - need to check again these assets
     switch (getState()) {
       case AppointmentStatusState.IN_WORK:
         return 'in_work';
@@ -94,6 +95,8 @@ class AppointmentStatus {
         return AppointmentStatusState.NEW;
       case 'accepted':
         return AppointmentStatusState.ACCEPTED;
+      case 'intransport':
+        return AppointmentStatusState.IN_TRANSPORT;
       default:
         return AppointmentStatusState.NONE;
     }

@@ -1,4 +1,5 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment-position.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
@@ -39,6 +40,7 @@ class ProviderServiceProvider with ChangeNotifier {
   AppointmentProviderType appointmentProviderType;
   ServiceProvider selectedProvider;
   DateEntry dateEntry;
+  CreateAppointmentState createAppointmentState;
 
   Map<int, dynamic> stepStateData;
 
@@ -55,6 +57,7 @@ class ProviderServiceProvider with ChangeNotifier {
     selectedProvider = null;
     dateEntry = null;
     stepStateData = null;
+    createAppointmentState = null;
   }
 
   resetServiceProviderParams() {
@@ -187,9 +190,7 @@ class ProviderServiceProvider with ChangeNotifier {
       return false;
     }
     return this.selectedServiceItems.firstWhere(
-            (element) =>
-                element.isTowService() || element.isPickUpAndReturnService(),
-            orElse: () => null) !=
-        null;
+            (element) => element.isPickUpAndReturnService(),
+            orElse: () => null) != null;
   }
 }

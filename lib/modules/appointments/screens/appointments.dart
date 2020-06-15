@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/enum/appointment-map-state.enum.dart';
+import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
@@ -11,10 +11,9 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/authentication/models/roles.model.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
-import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,46 +47,29 @@ class AppointmentsState extends State<Appointments> {
     _provider = Provider.of<AppointmentsProvider>(context);
 
     return Consumer<AppointmentsProvider>(
-      builder: (context, appointmentsProvider, _) => Scaffold(
-        body: Center(
-          child: _renderAppointments(_isLoading, _provider.appointments),
-        ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FloatingActionButton.extended(
-              heroTag: null,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 1,
-              onPressed: () => _showAppointmentMapDetails(AppointmentMapState.ReceiveForm),
-              label: Text(
-                'PR Form',
-                style:
-                TextHelper.customTextStyle(null, Colors.white, null, 14),
-              ),
+      builder: (context, appointmentsProvider, _) =>
+          Scaffold(
+            body: Center(
+              child: _renderAppointments(_isLoading, _provider.appointments),
             ),
-            FloatingActionButton.extended(
-              heroTag: null,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 1,
-              onPressed: () => _showAppointmentMapDetails(AppointmentMapState.InProgress),
-              label: Text(
-                'PR Accepted',
-                style:
-                TextHelper.customTextStyle(null, Colors.white, null, 14),
-              ),
-            ),
-            FloatingActionButton(
-              heroTag: null,
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 1,
-              onPressed: () => _openAppointmentCreateModal(context),
-              child: Icon(Icons.add),
-            )
-          ],
-        ),
-      ),
+            floatingActionButton: _floatingActionButton()
+          ),
     );
+  }
+
+  _floatingActionButton() {
+    return (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Appointments,
+        PermissionsAppointment.CREATE_APPOINTMENT)) ? FloatingActionButton(
+      heroTag: null,
+      backgroundColor: Theme
+          .of(context)
+          .primaryColor,
+      elevation: 1,
+      onPressed: () => _openAppointmentCreateModal(context),
+      child: Icon(Icons.add),
+    ) :
+    Container();
   }
 
   @override
@@ -112,7 +94,7 @@ class AppointmentsState extends State<Appointments> {
 
   _loadData() async {
     try {
-      await _provider.loadAppointments().then((_) {
+      await _provider.loadAppointments(_provider.appointmentsRequest).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -121,8 +103,12 @@ class AppointmentsState extends State<Appointments> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_appointments, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_appointments, context);
       }
 
       setState(() {
@@ -132,32 +118,46 @@ class AppointmentsState extends State<Appointments> {
   }
 
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-    switch (Provider.of<Auth>(context).authUser.role) {
-      case Roles.Client:
-        Provider.of<AppointmentProvider>(context).initialiseParams();
-        Provider.of<AppointmentProvider>(context).selectedAppointment =
-            selectedAppointment;
-        Navigator.of(context).pushNamed(AppointmentDetails.route);
-        break;
-      case Roles.ProviderConsultant:
-        Provider.of<AppointmentConsultantProvider>(context).initialise();
-        Provider.of<AppointmentConsultantProvider>(context)
-            .selectedAppointment = selectedAppointment;
-        Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
-        break;
-      case Roles.ProviderPersonnel:
-        Provider.of<AppointmentMechanicProvider>(context).initialise();
-        Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
-            selectedAppointment;
-        Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
-        break;
-      default:
-        break;
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
+        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_CLIENT)) {
+      Provider.of<AppointmentProvider>(context).initialise();
+      Provider
+          .of<AppointmentProvider>(context)
+          .selectedAppointment =
+          selectedAppointment;
+      Navigator.of(context).pushNamed(AppointmentDetails.route);
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Appointments,
+        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER)) {
+      Provider.of<AppointmentConsultantProvider>(context).initialise();
+      Provider
+          .of<AppointmentConsultantProvider>(context)
+          .selectedAppointment =
+          selectedAppointment;
+      Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Appointments,
+        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PERSONNEL)) {
+      Provider.of<AppointmentMechanicProvider>(context).initialise();
+      Provider
+          .of<AppointmentMechanicProvider>(context)
+          .selectedAppointment =
+          selectedAppointment;
+      Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Appointments,
+        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
+      Provider.of<AppointmentProvider>(context).initialise();
+      Provider
+          .of<AppointmentProvider>(context)
+          .selectedAppointment =
+          selectedAppointment;
+      Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
     }
   }
 
-  _filterAppointments(
-      String string, AppointmentStatusState state, DateTime dateTime) {
+  _filterAppointments(String string, AppointmentStatusState state,
+      DateTime dateTime) {
     _provider.filterAppointments(string, state, dateTime);
     _loadData();
   }
@@ -166,19 +166,23 @@ class AppointmentsState extends State<Appointments> {
     return _isLoading
         ? CircularProgressIndicator()
         : AppointmentsList(
-            appointments: appointments,
-            selectAppointment: _selectAppointment,
-            filterAppointments: _filterAppointments,
-            searchString: _provider.appointmentsRequest.searchString,
-            appointmentStatusState: _provider.appointmentsRequest.state,
-            filterDateTime: _provider.appointmentsRequest.dateTime,
-            downloadNextPage: _loadData,
-            shouldDownload: _provider.shouldDownload(),
-          );
+      appointments: appointments,
+      selectAppointment: _selectAppointment,
+      filterAppointments: _filterAppointments,
+      searchString: _provider.appointmentsRequest.searchString,
+      appointmentStatusState: _provider.appointmentsRequest.state,
+      filterDateTime: _provider.appointmentsRequest.dateTime,
+      downloadNextPage: _loadData,
+      shouldDownload: _provider.shouldDownload(),
+    );
   }
 
   void _openAppointmentCreateModal(BuildContext buildContext) {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
+    Provider
+        .of<ProviderServiceProvider>(context)
+        .createAppointmentState =
+        CreateAppointmentState.SelectCar;
 
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -189,17 +193,8 @@ class AppointmentsState extends State<Appointments> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return AppointmentCreateModal();
-          });
+                return AppointmentCreateModal();
+              });
         });
-  }
-
-  void _showAppointmentMapDetails(AppointmentMapState state) {
-    AppointmentProvider provider =
-        Provider.of<AppointmentProvider>(context, listen: false);
-    provider.initialiseParams();
-    provider.appointmentMapState = state;
-
-    Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
   }
 }

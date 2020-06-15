@@ -84,7 +84,7 @@ class OrderPartCard extends StatelessWidget {
                           fontSize: 16,
                           height: 1.5)),
                   Text(
-                      '${S.of(context).general_price}: ${issueItem.total.toString()}',
+                      '${S.of(context).general_price}: ${(issueItem.price + issueItem.priceVAT).toString()}',
                       style: TextStyle(
                           color: Constants.red,
                           fontFamily: 'Lato',
