@@ -1,4 +1,3 @@
-import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
@@ -45,39 +44,23 @@ class NavigationApp extends StatefulWidget {
   final JwtUser authUser;
   final JwtUserDetails authUserDetails;
 
-  static final List<DrawerItem> adminDrawerItems = [];
-
-  static List<DrawerItem> userDrawerItems(BuildContext context) {
-    return AppConfig.of(context).enviroment == Enviroment.Dev
-        ? [
-            new DrawerItem("Dashboard", Dashboard.route, Icons.dashboard),
-            new DrawerItem("Cars", Cars.route, Icons.directions_car),
-            new DrawerItem(
-                "Appointments", Appointments.route, Icons.event_available),
-            new DrawerItem("Auctions", Auctions.route, Icons.dashboard),
-            new DrawerItem(S.of(context).online_shop_title, Shop.route,
-                Icons.shopping_cart),
-            new DrawerItem(
-                'Notifications',
-                Notifications.route,
-                NotificationsManager.notificationsCount == 0
-                    ? Icons.notifications
-                    : Icons.notifications_active)
-          ]
-        : [new DrawerItem("Cars", Cars.route, Icons.directions_car)];
-  }
-
-  static final List<DrawerItem> providerAdminDrawerItems = [
-    new DrawerItem("Promotions", Promotions.route, Promotions.icon)
-  ];
-
-  List<DrawerItem> get consultantDrawerItems {
+  List<DrawerItem> get drawerItems {
     List<DrawerItem> items = [];
 
     if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.DASHBOARD)) {
+      items.add(new DrawerItem('Dashboard', Dashboard.route, Icons.dashboard));
+    }
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.CARS)) {
+      items.add(new DrawerItem("Cars", Cars.route, Icons.directions_car));
+    }
+
+    if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.APPOINTMENT)) {
-      items.add(
-          new DrawerItem("Appointments", Appointments.route, Icons.dashboard));
+      items.add(new DrawerItem(
+          "Appointments", Appointments.route, Icons.event_available));
     }
 
     if (PermissionsManager.getInstance()
@@ -86,9 +69,8 @@ class NavigationApp extends StatefulWidget {
     }
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.WORK_ESTIMATE)) {
-      items.add(new DrawerItem(
-          "Work Estimates", WorkEstimatesConsultant.route, Icons.dashboard));
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.SHOP)) {
+      items.add(new DrawerItem("Shop", Shop.route, Icons.shopping_cart));
     }
 
     if (PermissionsManager.getInstance()
@@ -102,18 +84,22 @@ class NavigationApp extends StatefulWidget {
     }
 
     if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PROMOTIONS)) {
+      items.add(new DrawerItem('Promotions', Promotions.route, Promotions.icon));
+    }
+
+    if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.NOTIFICATIONS)) {
       items.add(new DrawerItem(
-          'Notifications', Notifications.route, Icons.notifications));
+          'Notifications',
+          Notifications.route,
+          NotificationsManager.notificationsCount == 0
+              ? Icons.notifications
+              : Icons.notifications_active));
     }
 
     return items;
   }
-
-  static final List<DrawerItem> mechanicDrawerItems = [
-    new DrawerItem("Appointments", Appointments.route, Icons.event_available),
-    new DrawerItem('Notifications', Notifications.route, Icons.notifications)
-  ];
 
   NavigationApp({this.authUser, this.authUserDetails});
 
@@ -126,7 +112,7 @@ class NavigationApp extends StatefulWidget {
       case Roles.ProviderAdmin:
         return Promotions.route;
       case Roles.ProviderConsultant:
-        return consultantDrawerItems.first.route;
+        return drawerItems.first.route;
       case Roles.ProviderPersonnel:
         return Appointments.route;
       default:
@@ -147,7 +133,8 @@ class NavigationAppState extends State<NavigationApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments, PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
+        PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
       LocatorManager.getInstance().getActiveAppointment(context);
     }
 
@@ -155,7 +142,7 @@ class NavigationAppState extends State<NavigationApp> {
     NotificationsManager.navigationAppState = this;
 
     if (widget.activeDrawerItems == null) {
-      widget.activeDrawerItems = _initActiveDrawerItems();
+      widget.activeDrawerItems = widget.drawerItems;
     }
 
     var auth = Provider.of<Auth>(context);
@@ -215,23 +202,6 @@ class NavigationAppState extends State<NavigationApp> {
       ),
       body: _getDrawerItemWidget(_selectedDrawerRoute),
     );
-  }
-
-  _initActiveDrawerItems() {
-    switch (widget.authUser.role) {
-      case Roles.Super:
-        return NavigationApp.adminDrawerItems;
-      case Roles.Client:
-        return NavigationApp.userDrawerItems(context);
-      case Roles.ProviderAdmin:
-        return NavigationApp.providerAdminDrawerItems;
-      case Roles.ProviderConsultant:
-        return widget.consultantDrawerItems;
-      case Roles.ProviderPersonnel:
-        return NavigationApp.mechanicDrawerItems;
-      default:
-        return [];
-    }
   }
 
   _onSelectItem(String route) {

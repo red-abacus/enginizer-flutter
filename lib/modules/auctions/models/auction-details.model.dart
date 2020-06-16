@@ -1,6 +1,6 @@
 import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -18,7 +18,7 @@ class AuctionDetail {
   ServiceProvider serviceProvider;
   List<Issue> issues = [];
   String name;
-  List<ServiceItem> serviceItems = [];
+  List<ServiceProviderItem> serviceItems = [];
   User user;
   int workEstimateId;
   String appointmentType;
@@ -72,9 +72,9 @@ class AuctionDetail {
   }
 
   static _mapServiceItems(List<dynamic> response) {
-    List<ServiceItem> services = [];
+    List<ServiceProviderItem> services = [];
     response.forEach((item) {
-      services.add(ServiceItem.fromJson(item));
+      services.add(ServiceProviderItem.fromJson(item));
     });
     return services;
   }

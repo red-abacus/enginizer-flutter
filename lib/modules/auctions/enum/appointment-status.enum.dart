@@ -39,31 +39,31 @@ class AppointmentStatusStateUtils {
   static String status(AppointmentStatusState state) {
     switch (state) {
       case AppointmentStatusState.IN_REVIEW:
-        return 'InReview';
+        return 'IN_REVIEW';
       case AppointmentStatusState.IN_WORK:
-        return 'InWork';
+        return 'IN_WORK';
       case AppointmentStatusState.PENDING:
-        return 'Pending';
+        return 'PENDING';
       case AppointmentStatusState.SUBMITTED:
-        return 'Submitted';
+        return 'SUBMITTED';
       case AppointmentStatusState.SCHEDULED:
-        return 'Scheduled';
+        return 'SCHEDULED';
       case AppointmentStatusState.CANCELED:
-        return 'Canceled';
+        return 'CANCELED';
       case AppointmentStatusState.OPEN_BID:
-        return 'OpenBid';
+        return 'OPEN_BID';
       case AppointmentStatusState.DONE:
         return 'DONE';
       case AppointmentStatusState.ON_HOLD:
-        return 'OnHold';
+        return 'ON_HOLD';
       case AppointmentStatusState.IN_UNIT:
-        return 'InUnit';
+        return 'IN_UNIT';
       case AppointmentStatusState.NEW:
         return 'NEW';
       case AppointmentStatusState.ACCEPTED:
         return 'ACCEPTED';
       case AppointmentStatusState.IN_TRANSPORT:
-        return 'InTransport';
+        return 'IN_TRANSPORT';
       default:
         return '';
     }

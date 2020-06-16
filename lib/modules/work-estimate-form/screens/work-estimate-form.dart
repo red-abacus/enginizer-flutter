@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -687,7 +687,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             });
       }
     } else {
-      ServiceItem pickupServiceItem =
+      ServiceProviderItem pickupServiceItem =
           _provider.selectedAppointmentDetail.pickupServiceItem();
       if (pickupServiceItem == null || !_provider.shouldAskForPr) {
         showDialog<void>(

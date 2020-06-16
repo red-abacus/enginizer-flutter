@@ -27,6 +27,7 @@ class Car {
   DateTime rcaExpireDate;
   String fuelConsumption;
   int ownerId;
+  int providerId;
 
   Car(
       {this.id,
@@ -45,7 +46,8 @@ class Car {
       this.registrationNumber,
       this.mileage,
       this.fuelConsumption,
-      this.ownerId});
+      this.ownerId,
+      this.providerId});
 
   factory Car.fromJson(Map<String, dynamic> json) {
     return Car(
@@ -75,7 +77,8 @@ class Car {
         registrationNumber: json['registrationNumber'],
         mileage: json['mileage'],
         fuelConsumption: json['fuelConsumption'],
-        ownerId: json['ownerId']);
+        ownerId: json['ownerId'] != null ? json['ownerId'] : null,
+        providerId: json['providerId'] != null ? json['providerId'] : null);
   }
 
   Map<String, dynamic> toJson() {
@@ -94,7 +97,7 @@ class Car {
       'mileage': mileage,
       'itpExpireDate': itpExpireDate.toIso8601String(),
       'rcaExpireDate': rcaExpireDate.toIso8601String(),
-      'fuelConsumption': fuelConsumption
+      'fuelConsumption': fuelConsumption,
     };
 
     if (id != null) {
@@ -103,6 +106,10 @@ class Car {
 
     if (ownerId != null) {
       propMap.putIfAbsent('ownerid', () => ownerId);
+    }
+
+    if (providerId != null) {
+      propMap.putIfAbsent('providerId', () => providerId);
     }
 
     return propMap;

@@ -2,7 +2,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
@@ -38,7 +38,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${appointment?.status.assetName()}.svg'
+                        'assets/images/statuses/${appointment?.status?.assetName()}.svg'
                             .toLowerCase(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
@@ -65,7 +65,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
               _buildSeparator(),
               _buildTitleContainer(
                   S.of(context).appointment_details_services_title),
-              for (ServiceItem item in appointmentDetail.serviceItems)
+              for (ServiceProviderItem item in appointmentDetail.serviceItems)
                 _serviceItemText(item, context),
               _buildSeparator(),
               _buildTitleContainer(
@@ -134,7 +134,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
     }
   }
 
-  _serviceItemText(ServiceItem serviceItem, BuildContext context) {
+  _serviceItemText(ServiceProviderItem serviceItem, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 4),
       child: Row(

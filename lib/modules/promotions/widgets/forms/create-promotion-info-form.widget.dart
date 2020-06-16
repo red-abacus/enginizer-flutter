@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreatePromotionInfoForm extends StatefulWidget {
+  final Function refreshState;
+
+  CreatePromotionInfoForm({this.refreshState});
+
   @override
   _CreatePromotionInfoFormState createState() {
     return _CreatePromotionInfoFormState();
@@ -41,7 +45,10 @@ class _CreatePromotionInfoFormState extends State<CreatePromotionInfoForm> {
             _endDateWidget(),
             _priceWidget(),
             _discountWidget(),
-            _servicesWidget(),
+            if (_provider.createPromotionRequest.presetServiceProviderItem ==
+                    null &&
+                _provider.createPromotionRequest.promotionId == null)
+              _servicesWidget(),
           ],
         ),
       ),
@@ -193,9 +200,8 @@ class _CreatePromotionInfoFormState extends State<CreatePromotionInfoForm> {
           }
         },
         onChanged: (newValue) {
-          setState(() {
-            _provider.createPromotionRequest.serviceProviderItem = newValue;
-          });
+          _provider.createPromotionRequest.serviceProviderItem = newValue;
+          widget.refreshState();
         },
       ),
     );

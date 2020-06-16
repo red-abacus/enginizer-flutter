@@ -13,11 +13,15 @@ class ServiceProviderItem {
   factory ServiceProviderItem.fromJson(Map<String, dynamic> json) {
     Map<String, dynamic> serviceMap = json['service'];
 
+    if (serviceMap == null) {
+      serviceMap = json;
+    }
+
     return ServiceProviderItem(
         id: serviceMap['id'],
         name: serviceMap['name'],
         rate: json['rate'],
-        items: _mapItems(json['subServices']));
+        items: json['subServices'] != null ? _mapItems(json['subServices']) : []);
   }
 
   Map<String, dynamic> toJson() {
@@ -35,7 +39,7 @@ class ServiceProviderItem {
 
     if (list != null) {
       list.forEach((item) {
-        items.add(ServiceProviderSubItem.fromJson(item));
+//        items.add(ServiceProviderSubItem.fromJson(item));
       });
     }
 
@@ -62,8 +66,23 @@ class ServiceProviderItem {
         return S.of(context).ITP_SERVICE;
       case 'TENANCY_SERVICE':
         return S.of(context).TENANCY_SERVICE;
+      case 'SELLER_SERVICE':
+        return S.of(context).SELLER_SERVICE;
+      case 'RENT_SERVICE':
+        return S.of(context).RENT_SERVICE;
       default:
         return name;
     }
+  }
+
+  bool isSellerService() {
+    return name == 'SELLER_SERVICE';
+  }
+  bool isPickUpAndReturnService() {
+    return name == 'PICKUP_RETURN';
+  }
+
+  bool isTowService() {
+    return name == 'TOW_SERVICE';
   }
 }

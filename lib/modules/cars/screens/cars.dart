@@ -1,7 +1,10 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
@@ -9,7 +12,8 @@ import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/screens/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
-import 'package:app/modules/shared/widgets/notifications-manager.dart';
+import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
+import 'package:app/modules/promotions/screens/create-promotion.modal.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,23 +82,6 @@ class CarsState extends State<Cars> {
     }
   }
 
-  void _openCarCreateModal(BuildContext ctx) {
-    Provider.of<CarsMakeProvider>(context).initParams();
-
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return CarCreateModal();
-          });
-        });
-  }
-
   Future<void> _openAppointmentCreateModal(
       BuildContext ctx, Car selectedCar) async {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
@@ -141,6 +128,142 @@ class CarsState extends State<Cars> {
             cars: cars,
             filterCars: _filterCars,
             selectCar: _selectCar,
-            openAppointmentCreateModal: _openAppointmentCreateModal);
+            openAppointmentCreateModal: _openAppointmentCreateModal,
+            sellCar: _sellCar,
+            rentCar: _rentCar,
+          );
   }
+
+  _openCarCreateModal(BuildContext ctx) {
+    Provider.of<CarsMakeProvider>(context).initParams();
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return CarCreateModal();
+          });
+        });
+  }
+
+  _sellCar(Car car) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    CreatePromotionProvider provider =
+        Provider.of<CreatePromotionProvider>(context);
+
+    int providerId = Provider.of<Auth>(context).authUser.providerId;
+
+    if (providerId != null) {
+      try {
+        await provider
+            .getServiceProviderItems(
+                Provider.of<Auth>(context).authUser.providerId)
+            .then((response) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          ServiceProviderItem sellProviderItem;
+
+          for (ServiceProviderItem item in response.items) {
+            if (item.isSellerService()) {
+              sellProviderItem = item;
+            }
+          }
+
+          if (sellProviderItem != null) {
+            Provider.of<CreatePromotionProvider>(context).initialise(
+                Provider.of<Auth>(context).authUser.providerId,
+                car: car,
+                serviceProviderItem: sellProviderItem);
+            Provider.of<CreatePromotionProvider>(context)
+                .serviceProviderItemsResponse = response;
+
+            showModalBottomSheet<void>(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                      builder: (BuildContext context, StateSetter state) {
+                    return CreatePromotionModal(
+                      refreshState: null,
+                    );
+                  });
+                });
+          }
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_provider_service_items, context);
+
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else {
+      try {
+        await provider.loadServices(null).then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          ServiceProviderItem sellProviderItem;
+
+          for (ServiceProviderItem providerItem in value.items) {
+            if (providerItem.isSellerService()) {
+              sellProviderItem = providerItem;
+              break;
+            }
+          }
+
+          if (sellProviderItem != null) {
+            Provider.of<CreatePromotionProvider>(context).initialise(null,
+                car: car, serviceProviderItem: sellProviderItem);
+            Provider.of<CreatePromotionProvider>(context).serviceProviderItemsResponse = value;
+
+            showModalBottomSheet<void>(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                      builder: (BuildContext context, StateSetter state) {
+                    return CreatePromotionModal(
+                      refreshState: null,
+                    );
+                  });
+                });
+          }
+        });
+      } catch (error) {
+        if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_services, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  _rentCar(Car car) {}
 }

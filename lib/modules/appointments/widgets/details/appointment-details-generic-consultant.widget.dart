@@ -1,7 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
@@ -365,13 +364,13 @@ class AppointmentDetailsGenericConsultantWidgetState
     return Column(
       children: <Widget>[
         if (widget.appointmentDetail.serviceItems != null)
-          for (ServiceItem item in widget.appointmentDetail.serviceItems)
+          for (ServiceProviderItem item in widget.appointmentDetail.serviceItems)
             _getServiceRow(item),
       ],
     );
   }
 
-  _getServiceRow(ServiceItem item) {
+  _getServiceRow(ServiceProviderItem item) {
     return Container(
         margin: EdgeInsets.only(top: 4),
         child: Row(

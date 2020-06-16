@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
@@ -78,7 +78,7 @@ class AppointmentGenericDetailsWidgetState
                 ],
               ),
               _titleContainer(S.of(context).appointment_details_services_title),
-              for (ServiceItem item in widget.appointmentDetail.serviceItems)
+              for (ServiceProviderItem item in widget.appointmentDetail.serviceItems)
                 _serviceItemText(item),
               _buildSeparator(),
               _titleContainer(
@@ -159,7 +159,7 @@ class AppointmentGenericDetailsWidgetState
     }
   }
 
-  Widget _serviceItemText(ServiceItem serviceItem) {
+  Widget _serviceItemText(ServiceProviderItem serviceItem) {
     return Row(
       children: <Widget>[
         Expanded(

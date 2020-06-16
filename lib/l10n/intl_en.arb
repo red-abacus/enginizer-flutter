@@ -77,6 +77,9 @@
   "car_service_recommendations_title": "Service Recommendations",
   "cars_no_recommendations_title": "No service recommendations recorded for this car.",
   "car_create_appointment_from_interventions_alert": "Please select recommendations in order to create an appointment.",
+  "car_create_exhaust_test": "Exhaust gas tests",
+  "car_create_diagnosis_protocol": "Diagnosis protocol",
+  "car_create_general_car_verification": "Car general verification form",
   "COLOR_RED": "Red",
   "COLOR_BLACK": "Black",
   "COLOR_GREEN": "Green",
@@ -435,6 +438,7 @@
   "promotions_create_step_1": "Upload images",
   "promotions_create_step_1_upload_image_title": "Add Promotion Images (max 5)",
   "promotions_create_step_2": "Promotion info",
+  "promotions_create_step_3": "Select car",
   "promotions_create_step_2_title_warning": "Add promotion title!",
   "promotions_create_step_2_description_warning": "Add promotion description!",
   "promotions_create_step_2_start_date_warning": "Add promotion start date!",
@@ -455,6 +459,7 @@
   "ITP_SERVICE": "ITP Service",
   "TENANCY_SERVICE": "Tenancy Service",
   "RENT_SERVICE": "Rent Service",
+  "SELLER_SERVICE": "Sell Service",
   "service_services": "Services",
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",
@@ -517,6 +522,9 @@
   "general_pickup_and_return": "Pickup & Return",
   "general_map": "Map",
   "general_by": "by",
+  "general_schedule": "Schedule",
+  "general_sell": "Sell",
+  "general_rent": "Rent",
   "exception_get_car_fuel": "There was an error trying to load car fuel.",
   "exception_get_car_details": "There was an error trying to get car details.",
   "exception_get_appointments": "There was an error trying to load your appointments.",
@@ -594,5 +602,6 @@
   "exception_add_promotion_images": "There was an error trying to add a promotion images.",
   "exception_edit_promotion": "There was an error trying to edit this promotion.",
   "exception_remove_promotion_image": "There was an error trying to delete this image.",
-  "exception_transport_request": "There was an error trying to request transport."
+  "exception_transport_request": "There was an error trying to request transport.",
+  "exception_car_sell": "There was a problem creating a sale offer."
 }

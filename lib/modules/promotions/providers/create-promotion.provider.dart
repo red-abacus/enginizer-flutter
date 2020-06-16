@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/promotions/models/promotion.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
@@ -12,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 class CreatePromotionProvider with ChangeNotifier {
   PromotionService _promotionService = inject<PromotionService>();
   ProviderService _providerService = inject<ProviderService>();
+  CarService _carService = inject<CarService>();
 
   GlobalKey<FormState> informationFormState;
 
@@ -19,12 +23,28 @@ class CreatePromotionProvider with ChangeNotifier {
 
   ServiceProviderItemsResponse serviceProviderItemsResponse;
 
-  initialise(int providerId, {Promotion promotion}) {
+  List<Car> cars = [];
+
+  initialise(int providerId,
+      {Promotion promotion, Car car, ServiceProviderItem serviceProviderItem}) {
     informationFormState = null;
     serviceProviderItemsResponse = null;
+    cars = [];
 
-    createPromotionRequest =
-        CreatePromotionRequest(providerId, promotion: promotion);
+    createPromotionRequest = CreatePromotionRequest(providerId,
+        promotion: promotion,
+        car: car,
+        presetServiceProviderItem: serviceProviderItem);
+  }
+
+  Future<ServiceProviderItemsResponse> loadServices(String type) async {
+    try {
+      var response = await _providerService.getServices(type);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<ServiceProviderItemsResponse> getServiceProviderItems(
@@ -46,6 +66,17 @@ class CreatePromotionProvider with ChangeNotifier {
           await this._promotionService.addPromotion(createPromotionRequest);
       notifyListeners();
       return promotion;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<Car> createCarPromotion(
+      CreatePromotionRequest createPromotionRequest) async {
+    try {
+      Car car = await this._carService.sellCar(createPromotionRequest);
+      notifyListeners();
+      return car;
     } catch (error) {
       throw (error);
     }
@@ -84,6 +115,22 @@ class CreatePromotionProvider with ChangeNotifier {
           .deletePromotionImage(providerId, promotionId, imageId);
       notifyListeners();
       return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<Car>> getCars({String filterValue = ''}) async {
+    try {
+      var response = await this._carService.getCars();
+      cars = response.items;
+
+      if (filterValue.isNotEmpty) {
+        cars = cars.where((car) => car.filtered(filterValue)).toList();
+      }
+
+      notifyListeners();
+      return cars;
     } catch (error) {
       throw (error);
     }

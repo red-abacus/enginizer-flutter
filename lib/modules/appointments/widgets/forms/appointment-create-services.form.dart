@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentCreateServicesForm extends StatefulWidget {
-  List<ServiceItem> serviceItems;
+  List<ServiceProviderItem> serviceItems;
 
   AppointmentCreateServicesForm({Key key, this.serviceItems}) : super(key: key);
 
@@ -23,7 +23,7 @@ class AppointmentCreateServicesFormState
   @override
   Widget build(BuildContext context) {
     _provider = Provider.of<ProviderServiceProvider>(context, listen: false);
-    List<ServiceItem> services = widget.serviceItems;
+    List<ServiceProviderItem> services = widget.serviceItems;
 
     return Container(
       padding: EdgeInsets.only(bottom: 60),
@@ -66,11 +66,11 @@ class AppointmentCreateServicesFormState
     );
   }
 
-  ValueChanged<bool> onChanged(ServiceItem serviceItem, bool value) {
+  ValueChanged<bool> onChanged(ServiceProviderItem serviceItem, bool value) {
     setState(() {
       if (value) {
         if (serviceItem.isPickUpAndReturnService()) {
-          ServiceItem towService = _provider.selectedServiceItems.firstWhere(
+          ServiceProviderItem towService = _provider.selectedServiceItems.firstWhere(
               (element) => element.isTowService(),
               orElse: () => null);
 
@@ -78,7 +78,7 @@ class AppointmentCreateServicesFormState
             _provider.selectedServiceItems.remove(towService);
           }
         } else if (serviceItem.isTowService()) {
-          ServiceItem prService = _provider.selectedServiceItems.firstWhere(
+          ServiceProviderItem prService = _provider.selectedServiceItems.firstWhere(
               (element) => element.isPickUpAndReturnService(),
               orElse: () => null);
 

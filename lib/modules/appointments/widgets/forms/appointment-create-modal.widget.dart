@@ -101,7 +101,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
 
   _loadData() async {
     try {
-      await _provider.loadServices().then((_) async {
+      await _provider.loadServices('APPOINTMENT').then((_) async {
         if (_provider.selectedCar == null) {
           await Provider.of<CarsProvider>(context).loadCars().then((_) {
             setState(() {

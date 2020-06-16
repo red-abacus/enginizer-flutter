@@ -6,7 +6,6 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/model/response/provider-service-response.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
@@ -78,9 +77,9 @@ class ProviderService {
 
   ProviderService();
 
-  Future<ProviderServiceResponse> getServices() async {
+  Future<ServiceProviderItemsResponse> getServices(String type) async {
     try {
-      final response = await _dio.get(_buildGetServicesPath());
+      final response = await _dio.get(_buildGetServicesPath(type));
       if (response.statusCode == 200) {
         return _mapServices(response.data);
       } else {
@@ -329,7 +328,7 @@ class ProviderService {
   }
 
   _mapServices(Map<String, dynamic> commingServices) {
-    var response = ProviderServiceResponse.fromJson(commingServices);
+    var response = ServiceProviderItemsResponse.fromJson(commingServices);
     return response;
   }
 
@@ -371,7 +370,11 @@ class ProviderService {
         _PROVIDER_SERVICE_ITEMS_SUFFIX;
   }
 
-  _buildGetServicesPath() {
-    return _SERVICES_PATH + '?type=APPOINTMENT';
+  _buildGetServicesPath(String type) {
+    if (type != null) {
+      return _SERVICES_PATH + '?type=$type';
+    }
+
+    return _SERVICES_PATH;
   }
 }

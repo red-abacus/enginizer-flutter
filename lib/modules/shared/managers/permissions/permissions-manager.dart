@@ -2,7 +2,9 @@ import 'package:app/modules/appointments/model/response/service-provider-items-r
 import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-promotions.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
 
@@ -15,6 +17,8 @@ class PermissionsManager {
   PermissionAppointmentsStatuses _permissionAppointmentsStatuses;
   PermissionsOrder _permissionsOrder;
   PermissionsAppointment _permissionsAppointment;
+  PermissionsCar _permissionsCar;
+  PermissionsPromotion _permissionsPromotion;
 
   String userRole;
 
@@ -36,6 +40,8 @@ class PermissionsManager {
     _permissionsOrder = PermissionsOrder(serviceProviderItemsResponse);
     _permissionsAppointment =
         PermissionsAppointment(serviceProviderItemsResponse);
+    _permissionsCar = PermissionsCar(serviceProviderItemsResponse);
+    _permissionsPromotion = PermissionsPromotion(serviceProviderItemsResponse);
   }
 
   bool hasAccess(MainPermissions mainPermission, String permission) {
@@ -54,6 +60,12 @@ class PermissionsManager {
       case MainPermissions.Appointments:
         return _permissionsAppointment.hasAccess(userRole, permission);
         break;
+      case MainPermissions.Cars:
+        return _permissionsCar.hasAccess(userRole, permission);
+        break;
+      case MainPermissions.Promotions:
+        return _permissionsPromotion.hasAccess(userRole, permission);
+        break;
     }
 
     return false;
@@ -66,14 +78,18 @@ enum MainPermissions {
   UserProfile,
   AppointmentsStatuses,
   Orders,
-  Appointments
+  Appointments,
+  Cars,
+  Promotions
 }
 
 enum ConsultantServiceType {
   Service,
   PartShop,
   DismantlingShop,
-  PickUpAndReturn
+  PickUpAndReturn,
+  Sell,
+  Rent
 }
 
 class ConsultantServiceTypeUtils {
@@ -87,6 +103,10 @@ class ConsultantServiceTypeUtils {
         return ConsultantServiceType.DismantlingShop;
       case 'PICKUP_RETURN':
         return ConsultantServiceType.PickUpAndReturn;
+      case 'SELLER_SERVICE':
+        return ConsultantServiceType.Sell;
+      case 'RENT_SERVICE':
+        return ConsultantServiceType.Rent;
     }
 
     return null;

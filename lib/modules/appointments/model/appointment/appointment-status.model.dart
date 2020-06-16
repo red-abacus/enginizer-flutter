@@ -52,6 +52,8 @@ class AppointmentStatus {
 
   String assetName() {
     switch (getState()) {
+      case AppointmentStatusState.ON_HOLD:
+        return 'pending';
       case AppointmentStatusState.IN_WORK:
         return 'in_work';
       case AppointmentStatusState.IN_REVIEW:
@@ -70,32 +72,32 @@ class AppointmentStatus {
   }
 
   AppointmentStatusState getState() {
-    switch (name.toLowerCase()) {
-      case 'inreview':
+    switch (name) {
+      case 'IN_REVIEW':
         return AppointmentStatusState.IN_REVIEW;
-      case 'inwork':
+      case 'IN_WORK':
         return AppointmentStatusState.IN_WORK;
-      case 'pending':
+      case 'PENDING':
         return AppointmentStatusState.PENDING;
-      case 'submitted':
+      case 'SUBMITTED':
         return AppointmentStatusState.SUBMITTED;
-      case 'scheduled':
+      case 'SCHEDULED':
         return AppointmentStatusState.SCHEDULED;
-      case 'canceled':
+      case 'CANCELED':
         return AppointmentStatusState.CANCELED;
-      case 'openbid':
+      case 'OPEN_BID':
         return AppointmentStatusState.OPEN_BID;
-      case 'done':
+      case 'DONE':
         return AppointmentStatusState.DONE;
-      case 'onhold':
+      case 'ON_HOLD':
         return AppointmentStatusState.ON_HOLD;
-      case 'inunit':
+      case 'IN_UNIT':
         return AppointmentStatusState.IN_UNIT;
-      case 'new':
+      case 'NEW':
         return AppointmentStatusState.NEW;
-      case 'accepted':
+      case 'ACCEPTED':
         return AppointmentStatusState.ACCEPTED;
-      case 'intransport':
+      case 'IN_TRANSPORT':
         return AppointmentStatusState.IN_TRANSPORT;
       default:
         return AppointmentStatusState.NONE;

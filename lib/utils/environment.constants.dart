@@ -17,6 +17,8 @@ class Environment {
   static const String NOTIFICATIONS_BASE_API = 'https://dev-notification.autowass.ro/api';
   static const String NOTIFICATIONS_SCHEME = 'https';
   static const String NOTIFICATIONS_HOST = 'dev-notification.autowass.ro';
+//  static const String PROMOTIONS_BASE_API = 'https://dev-store.autowass.ro/api';
+  static const String PROMOTIONS_BASE_API = 'https://store.dev.autowass.ro/api';
 
 //  static const String AUTH_BASE_URL = "http://35.187.164.102:8084/api";
 //  static const String CARS_BASE_API = "http://35.187.164.102:8087/api";

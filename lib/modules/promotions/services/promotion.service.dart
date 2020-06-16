@@ -24,19 +24,16 @@ class PromotionService {
   static const String DELETE_PROMOTION_IMAGE_EXCEPTION =
       'DELETE_PROMOTION_IMAGE_EXCEPTION';
 
-  static const String _GET_PROMOTIONS_PREFIX =
-      '${Environment.PROVIDERS_BASE_API}/providers/';
-  static const String _GET_PROMOTIONS_SUFFIX = '/promotions';
+  static const String _GET_PROMOTIONS_PATH =
+      '${Environment.PROMOTIONS_BASE_API}/promotions';
 
   static const String _ADD_PROMOTION_IMAGES_PREFIX =
-      '${Environment.PROVIDERS_BASE_API}/providers/';
-  static const String _ADD_PROMOTION_IMAGES_MIDDLE = '/promotions/';
+      '${Environment.PROMOTIONS_BASE_API}/promotions/';
   static const String _ADD_PROMOTION_IMAGES_SUFFIX = '/images';
 
   Future<PromotionsResponse> getPromotions(PromotionsRequest request) async {
     try {
-      final response = await _dio.get(
-          _buildGetPromotionsPath(request.providerId),
+      final response = await _dio.get(_GET_PROMOTIONS_PATH,
           queryParameters: request.toJson());
       if (response.statusCode == 200) {
         return PromotionsResponse.fromJson(response.data);
@@ -51,8 +48,7 @@ class PromotionService {
   Future<Promotion> addPromotion(
       CreatePromotionRequest createPromotionRequest) async {
     try {
-      final response = await _dio.post(
-          _buildGetPromotionsPath(createPromotionRequest.providerId),
+      final response = await _dio.post(_GET_PROMOTIONS_PATH,
           data: jsonEncode(createPromotionRequest.toJson()));
       if (response.statusCode == 200) {
         return Promotion.fromJson(response.data);
@@ -66,12 +62,9 @@ class PromotionService {
 
   Future<Promotion> editPromotion(
       CreatePromotionRequest createPromotionRequest) async {
-    print(
-        'path ${_buildEditPromotionPath(createPromotionRequest.providerId, createPromotionRequest.promotionId)}');
     try {
       final response = await _dio.put(
-          _buildEditPromotionPath(createPromotionRequest.providerId,
-              createPromotionRequest.promotionId),
+          _buildEditPromotionPath(createPromotionRequest.promotionId),
           data: jsonEncode(createPromotionRequest.toJson()));
       if (response.statusCode == 200) {
         return Promotion.fromJson(response.data);
@@ -98,7 +91,7 @@ class PromotionService {
 
     try {
       final response = await _dio.patch(
-          _buildAddPromotionImagesPath(providerId, promotionId),
+          _buildAddPromotionImagesPath(promotionId),
           data: formData);
 
       if (response.statusCode == 200) {
@@ -114,7 +107,8 @@ class PromotionService {
   Future<bool> deletePromotionImage(
       int providerId, int promotionId, int imageId) async {
     try {
-      final response = await _dio.delete(_buildDeletePromotionImagesPath(providerId, promotionId, imageId));
+      final response = await _dio.delete(
+          _buildDeletePromotionImagesPath(promotionId, imageId));
       if (response.statusCode == 200) {
         return true;
       } else {
@@ -125,32 +119,18 @@ class PromotionService {
     }
   }
 
-  _buildGetPromotionsPath(int providerId) {
-    return _GET_PROMOTIONS_PREFIX +
-        providerId.toString() +
-        _GET_PROMOTIONS_SUFFIX;
+  _buildEditPromotionPath(int promotionId) {
+    return _GET_PROMOTIONS_PATH + '/${promotionId.toString()}';
   }
 
-  _buildEditPromotionPath(int providerId, int promotionId) {
-    return _GET_PROMOTIONS_PREFIX +
-        providerId.toString() +
-        _GET_PROMOTIONS_SUFFIX +
-        '/${promotionId.toString()}';
-  }
-
-  _buildAddPromotionImagesPath(int providerId, int promotionId) {
+  _buildAddPromotionImagesPath(int promotionId) {
     return _ADD_PROMOTION_IMAGES_PREFIX +
-        providerId.toString() +
-        _ADD_PROMOTION_IMAGES_MIDDLE +
         promotionId.toString() +
         _ADD_PROMOTION_IMAGES_SUFFIX;
   }
 
-  _buildDeletePromotionImagesPath(
-      int providerId, int promotionId, int imageId) {
+  _buildDeletePromotionImagesPath(int promotionId, int imageId) {
     return _ADD_PROMOTION_IMAGES_PREFIX +
-        providerId.toString() +
-        _ADD_PROMOTION_IMAGES_MIDDLE +
         promotionId.toString() +
         _ADD_PROMOTION_IMAGES_SUFFIX +
         '/${imageId.toString()}';

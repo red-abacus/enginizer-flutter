@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
+import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:dio/dio.dart';
 
 import 'package:app/config/injection.dart';
@@ -20,11 +22,16 @@ class CarService {
   static String CAR_ADD_FUEL_EXCEPTION = 'CAR_ADD_FUEL_EXCEPTION';
   static String CAR_ADD_IMAGE_EXCEPTION = 'CAR_ADD_IMAGE_EXCEPTION';
   static String CAR_HISTORY_EXCEPTION = 'CAR_HISTORY_EXCEPTION';
+  static String CAR_SELL_EXCEPTION = 'CAR_SELL_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
-  static const String _CAR_HISTORY_PREFIX = '${Environment.CARS_BASE_API}/cars/';
+  static const String _CAR_HISTORY_PREFIX =
+      '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_HISTORY_SUFFIX = '/history';
+
+  static const String _CAR_SELL_PREFIX = '${Environment.CARS_BASE_API}/cars/';
+  static const String _CAR_SELL_SUFFIX = '/sell';
 
   Dio _dio = inject<Dio>();
 
@@ -147,8 +154,28 @@ class CarService {
     }
   }
 
+  Future<Car> sellCar(CreatePromotionRequest createPromotionRequest) async {
+    try {
+      final response = await _dio.patch(
+          _buildCarSellPath(createPromotionRequest.car.id),
+          data: jsonEncode(createPromotionRequest.toJson()));
+
+      if (response.statusCode == 200) {
+        return Car.fromJson(response.data);
+      } else {
+        throw Exception(CAR_SELL_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_SELL_EXCEPTION);
+    }
+  }
+
   _buildCarHistoryPath(int carId) {
     return _CAR_HISTORY_PREFIX + carId.toString() + _CAR_HISTORY_SUFFIX;
+  }
+
+  _buildCarSellPath(int carId) {
+    return _CAR_SELL_PREFIX + carId.toString() + _CAR_SELL_SUFFIX;
   }
 
   _mapCarHistory(List<dynamic> response) {

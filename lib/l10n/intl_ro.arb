@@ -76,6 +76,9 @@
   "car_general_quantity_error": "Cantitate necompletă!",
   "cars_no_recommendations_title": "Nu a fost înregistrată nicio recomandare pentru această mașină.",
   "car_create_appointment_from_interventions_alert": "Te rog selectează recomandările dorite pentru a crea o programare.",
+  "car_create_exhaust_test": "Teste gaze esapament",
+  "car_create_diagnosis_protocol": "Protocol de diagnoză",
+  "car_create_general_car_verification": "Fișă verificare generală autoturism",
   "COLOR_RED": "Roșu",
   "COLOR_BLACK": "Negru",
   "COLOR_GREEN": "Verde",
@@ -339,6 +342,7 @@
   "ITP_SERVICE": "Serviciu de ITP",
   "TENANCY_SERVICE": "Serviciu de închiriere",
   "RENT_SERVICE": "Serviciu de închiriere",
+  "SELLER_SERVICE": "Serviciu de vânzare",
   "service_services": "Services",
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",
@@ -444,6 +448,7 @@
   "promotions_create_step_1": "Încarcă imagini",
   "promotions_create_step_1_upload_image_title": "Adaugă Imagini Promoție (maxim 5)",
   "promotions_create_step_2": "Informații Promoție",
+  "promotions_create_step_3": "Alege mașina",
   "promotions_create_step_2_title_warning": "Adaugă titlul promoției!",
   "promotions_create_step_2_description_warning": "Adaugă descrierea promoției!",
   "promotions_create_step_2_start_date_warning": "Adaugă data de început a promoției!",
@@ -512,6 +517,9 @@
   "general_pickup_and_return": "Pickup & Return",
   "general_map": "Hartă",
   "general_by": "de către",
+  "general_schedule": "Programează",
+  "general_sell": "Vinde",
+  "general_rent": "Închiriază",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
   "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
   "exception_get_appointments": "A intervenit o problemă la încărcarea programărilor tale.",
@@ -589,5 +597,6 @@
   "exception_add_promotion_images": "A intervenit o problemă la adăugarea imaginilor promoției.",
   "exception_edit_promotion": "A intervenit o problemă la editarea acestei promoții.",
   "exception_remove_promotion_image": "A intervenit o problemă la ștergerea acestei imagini.",
-  "exception_transport_request": "A intervenit o problemă la cererea pentru transport."
+  "exception_transport_request": "A intervenit o problemă la cererea pentru transport.",
+  "exception_car_sell": "A intervenit o problema la crearea unei oferte de vânzare."
 }

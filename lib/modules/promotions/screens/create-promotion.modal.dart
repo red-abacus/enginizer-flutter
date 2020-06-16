@@ -1,12 +1,16 @@
+import 'dart:math';
+
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/image-selection.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/promotions/widgets/forms/create-promotion-info-form.widget.dart';
+import 'package:app/modules/promotions/widgets/forms/create-promotion-select-car.widget.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/constants.dart';
@@ -15,6 +19,9 @@ import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+final createPromotionSelectCarKey =
+    new GlobalKey<CreatePromotionSelectCarWidgetState>();
 
 class CreatePromotionModal extends StatefulWidget {
   final Function refreshState;
@@ -33,6 +40,8 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
   CreatePromotionProvider _provider;
 
   List<Step> steps = [];
+
+  Key _stepperKey = Key(Random.secure().nextDouble().toString());
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +63,11 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
                   data: ThemeData(
                       accentColor: Theme.of(context).primaryColor,
                       primaryColor: Theme.of(context).primaryColor),
-                  child: _getContent(),
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Stack(
+                          children: [_buildStepper(), _bottomButtonsWidget()],
+                        ),
                 ),
               ),
             ),
@@ -74,57 +87,40 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
   }
 
   _loadData() async {
-    setState(() {
-      _isLoading = true;
-    });
+    if (_provider.serviceProviderItemsResponse == null) {
+      setState(() {
+        _isLoading = true;
+      });
 
-    try {
-      await _provider
-          .getServiceProviderItems(
-              Provider.of<Auth>(context).authUser.providerId)
-          .then((itemsResponse) async {
-        int serviceId = _provider.createPromotionRequest.serviceId;
-
-        if (serviceId != null) {
-          for (ServiceProviderItem item in itemsResponse.items) {
-            if (item.id == serviceId) {
-              _provider.createPromotionRequest.serviceProviderItem = item;
-              break;
-            }
-          }
+      try {
+        await _provider
+            .getServiceProviderItems(
+                Provider.of<Auth>(context).authUser.providerId)
+            .then((itemsResponse) async {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_provider_service_items, context);
         }
 
         setState(() {
           _isLoading = false;
         });
-      });
-    } catch (error) {
-      if (error
-          .toString()
-          .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_provider_service_items, context);
       }
-
-      setState(() {
-        _isLoading = false;
-      });
     }
-  }
-
-  _getContent() {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : Stack(
-            children: [_buildStepper(), _bottomButtonsWidget()],
-          );
   }
 
   Widget _buildStepper() => Stepper(
       currentStep: _currentStepIndex,
       onStepContinue: _next,
       onStepCancel: _back,
-      onStepTapped: (step) => _goTo(step),
+      key: _stepperKey,
       type: StepperType.horizontal,
       steps: steps,
       controlsBuilder: (BuildContext context,
@@ -135,6 +131,14 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
       });
 
   _bottomButtonsWidget() {
+    bool isLastStep = false;
+    if (_currentStepIndex == 1 &&
+        !_provider.createPromotionRequest.hasSellerService()) {
+      isLastStep = true;
+    } else if (_currentStepIndex == 2) {
+      isLastStep = true;
+    }
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -150,7 +154,7 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
             ),
             RaisedButton(
               elevation: 0,
-              child: Text(_currentStepIndex == 1
+              child: Text(isLastStep
                   ? S.of(context).general_add
                   : S.of(context).general_continue),
               textColor: Theme.of(context).cardColor,
@@ -262,7 +266,7 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
   }
 
   List<Step> _buildSteps(BuildContext context) {
-    return [
+    List<Step> steps = [
       Step(
           isActive: _currentStepIndex == 0,
           title: Text(_currentStepIndex == 0
@@ -291,9 +295,23 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
           title: Text(_currentStepIndex == 1
               ? S.of(context).promotions_create_step_2
               : ''),
-          content: CreatePromotionInfoForm(),
+          content: CreatePromotionInfoForm(refreshState: _refreshState),
           state: StepState.indexed)
     ];
+
+    if (_provider.createPromotionRequest.hasSellerService()) {
+      steps.add(Step(
+          isActive: _currentStepIndex == 2,
+          title: Text(_currentStepIndex == 2
+              ? S.of(context).promotions_create_step_3
+              : ''),
+          content: CreatePromotionSelectCarWidget(
+            key: createPromotionSelectCarKey,
+          ),
+          state: StepState.indexed));
+    }
+
+    return steps;
   }
 
   _next() {
@@ -303,11 +321,24 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
         break;
       case 1:
         if (_provider.informationFormState.currentState.validate()) {
-          if (_provider.createPromotionRequest.promotionId == null) {
-            _createPromotion();
+          if (_provider.createPromotionRequest.hasSellerService()) {
+            _goTo(2);
+          } else if (_provider.createPromotionRequest.car != null &&
+              _provider.createPromotionRequest.presetServiceProviderItem !=
+                  null) {
+            _sellCar();
           } else {
-            _editPromotion();
+            if (_provider.createPromotionRequest.promotionId == null) {
+              _createPromotion();
+            } else {
+              _editPromotion();
+            }
           }
+        }
+        break;
+      case 2:
+        if (createPromotionSelectCarKey.currentState.valid()) {
+          _sellCar();
         }
         break;
     }
@@ -339,14 +370,18 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
               .addPromotionImages(_provider.createPromotionRequest.providerId,
                   promotion.id, _provider.createPromotionRequest.getImages())
               .then((value) {
-            widget.refreshState();
+            if (widget.refreshState != null) {
+              widget.refreshState();
+            }
             Navigator.pop(context);
             setState(() {
               _isLoading = false;
             });
           });
         } else {
-          widget.refreshState();
+          if (widget.refreshState != null) {
+            widget.refreshState();
+          }
           Navigator.pop(context);
           setState(() {
             _isLoading = false;
@@ -363,7 +398,9 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_add_promotion_images, context);
 
-        widget.refreshState();
+        if (widget.refreshState != null) {
+          widget.refreshState();
+        }
         Navigator.pop(context);
       }
 
@@ -387,14 +424,18 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
               .addPromotionImages(_provider.createPromotionRequest.providerId,
                   promotion.id, _provider.createPromotionRequest.getImages())
               .then((value) {
-            widget.refreshState();
+            if (widget.refreshState != null) {
+              widget.refreshState();
+            }
             Navigator.pop(context);
             setState(() {
               _isLoading = false;
             });
           });
         } else {
-          widget.refreshState();
+          if (widget.refreshState != null) {
+            widget.refreshState();
+          }
           Navigator.pop(context);
           setState(() {
             _isLoading = false;
@@ -413,7 +454,9 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_add_promotion_images, context);
 
-        widget.refreshState();
+        if (widget.refreshState != null) {
+          widget.refreshState();
+        }
         Navigator.pop(context);
       }
 
@@ -421,5 +464,37 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
         _isLoading = false;
       });
     }
+  }
+
+  _sellCar() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .createCarPromotion(_provider.createPromotionRequest)
+          .then((car) {
+        if (widget.refreshState != null) {
+          widget.refreshState();
+        }
+        Navigator.pop(context);
+      });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_SELL_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_sell, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _refreshState() {
+    setState(() {
+      _stepperKey = Key(Random.secure().nextDouble().toString());
+    });
   }
 }

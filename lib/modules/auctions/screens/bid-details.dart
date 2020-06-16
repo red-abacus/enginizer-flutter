@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/bid-status.enum.dart';
@@ -218,14 +218,14 @@ class BidDetailsState extends State<BidDetails> {
     return Column(
       children: <Widget>[
         if (auctionProvider.appointmentDetails != null)
-          for (ServiceItem serviceItem
+          for (ServiceProviderItem serviceItem
               in auctionProvider.appointmentDetails?.serviceItems)
             _getServiceRow(serviceItem),
       ],
     );
   }
 
-  _getServiceRow(ServiceItem serviceItem) {
+  _getServiceRow(ServiceProviderItem serviceItem) {
     return Container(
         margin: EdgeInsets.only(top: 4),
         child: Row(
@@ -235,7 +235,7 @@ class BidDetailsState extends State<BidDetails> {
         ));
   }
 
-  _getServiceText(ServiceItem serviceItem) {
+  _getServiceText(ServiceProviderItem serviceItem) {
     return Expanded(
         child: Container(
       margin: EdgeInsets.only(right: 10),

@@ -4,6 +4,7 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsSideBar {
+  static final String DASHBOARD = 'SIDEBAR.DASHBOARD';
   static final String PROFILE = 'SIDEBAR.PROFILE';
   static final String APPOINTMENT = 'SIDEBAR.APPOINTMENT';
   static final String AUCTION = 'SIDEBAR.AUCTION';
@@ -12,10 +13,13 @@ class PermissionsSideBar {
   static final String PARTS = 'SIDEBAR.PARTS';
   static final String ORDERS = 'SIDEBAR.ORDERS';
   static final String PROMOTIONS = 'SIDEBAR.PROMOTIONS';
+  static final String CARS = 'SIDEBAR.CARS';
+  static final String SHOP = 'SIDEBAR.SHOP';
 
   Map<String, List<String>> _permissionsMap = Map();
 
-  PermissionsSideBar(ServiceProviderItemsResponse serviceProviderItemsResponse) {
+  PermissionsSideBar(
+      ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
       List<String> permissions = [];
 
@@ -24,7 +28,16 @@ class PermissionsSideBar {
           permissions = [PROFILE];
           break;
         case Roles.Client:
-          permissions = [PROFILE, APPOINTMENT, AUCTION, NOTIFICATIONS];
+          permissions = [
+            DASHBOARD,
+            CARS,
+            PROFILE,
+            APPOINTMENT,
+            AUCTION,
+            NOTIFICATIONS,
+            PROMOTIONS,
+            SHOP,
+          ];
           break;
         case Roles.ProviderAccountant:
           permissions = [PROFILE];
@@ -36,8 +49,10 @@ class PermissionsSideBar {
           permissions = [PROFILE];
 
           if (serviceProviderItemsResponse != null) {
-            for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
-              ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
+            for (ServiceProviderItem item
+                in serviceProviderItemsResponse.items) {
+              ConsultantServiceType serviceType =
+                  ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
               if (serviceType != null) {
                 switch (serviceType) {
@@ -67,6 +82,11 @@ class PermissionsSideBar {
                     permissions.add(NOTIFICATIONS);
                     permissions.add(PARTS);
                     permissions.add(ORDERS);
+                    break;
+                  case ConsultantServiceType.Sell:
+                  case ConsultantServiceType.Rent:
+                    permissions.add(CARS);
+                    permissions.add(PROMOTIONS);
                     break;
                 }
               }

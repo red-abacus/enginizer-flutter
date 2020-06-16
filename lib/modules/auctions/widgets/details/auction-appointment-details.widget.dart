@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
@@ -73,7 +73,7 @@ class AuctionAppointmentDetailsWidgetState
               ),
             ),
             if (widget.appointmentDetail != null)
-              for (ServiceItem serviceItem
+              for (ServiceProviderItem serviceItem
                   in widget.appointmentDetail.serviceItems)
                 _appointmentServiceItem(serviceItem),
             _buildSeparator(),
@@ -122,7 +122,7 @@ class AuctionAppointmentDetailsWidgetState
     );
   }
 
-  Widget _appointmentServiceItem(ServiceItem serviceItem) {
+  Widget _appointmentServiceItem(ServiceProviderItem serviceItem) {
     return Row(
       children: <Widget>[
         Expanded(

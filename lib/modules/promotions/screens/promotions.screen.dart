@@ -7,6 +7,8 @@ import 'package:app/modules/promotions/providers/promotions.provider.dart';
 import 'package:app/modules/promotions/screens/create-promotion.modal.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/promotions/widgets/promotions-list.widget.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-promotions.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/presentation/custom_icons.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -42,13 +44,17 @@ class PromotionsState extends State<Promotions> {
         body: Center(
           child: _renderList(_isLoading),
         ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: null,
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 1,
-          onPressed: () => _openPromotionCreateModal(),
-          child: Icon(Icons.add),
-        ),
+        floatingActionButton: PermissionsManager.getInstance().hasAccess(
+                MainPermissions.Promotions,
+                PermissionsPromotion.CREATE_PROMOTION)
+            ? FloatingActionButton(
+                heroTag: null,
+                backgroundColor: Theme.of(context).primaryColor,
+                elevation: 1,
+                onPressed: () => _openPromotionCreateModal(),
+                child: Icon(Icons.add),
+              )
+            : Container(),
       ),
     );
   }
@@ -155,10 +161,10 @@ class PromotionsState extends State<Promotions> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return CreatePromotionModal(
-                  refreshState: _refreshState,
-                );
-              });
+            return CreatePromotionModal(
+              refreshState: _refreshState,
+            );
+          });
         });
   }
 

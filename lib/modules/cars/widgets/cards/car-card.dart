@@ -1,5 +1,7 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car.model.dart';
-import 'package:app/utils/app_config.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +9,15 @@ class CarCard extends StatelessWidget {
   final Car car;
   final Function selectCar;
   final Function openAppointmentCreateModal;
+  final Function sellCar;
+  final Function rentCar;
 
-  CarCard({this.car, this.selectCar, this.openAppointmentCreateModal});
+  CarCard(
+      {this.car,
+      this.selectCar,
+      this.openAppointmentCreateModal,
+      this.sellCar,
+      this.rentCar});
 
   @override
   Widget build(BuildContext context) {
@@ -89,28 +98,61 @@ class CarCard extends StatelessWidget {
   }
 
   _scheduleButton(BuildContext context) {
-    return AppConfig.of(context).enviroment == Enviroment.Dev
-        ? Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                FlatButton(
-                  padding: EdgeInsets.all(0),
-                  splashColor: Theme.of(context).primaryColor,
-                  onPressed: () =>
-                      {this.openAppointmentCreateModal(context, this.car)},
-                  child: Text('SCHEDULE',
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14)),
-                ),
-              ],
-            ),
-          )
-        : Container();
+    List<Widget> list = [];
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR)) {
+      list.add(FlatButton(
+        padding: EdgeInsets.all(0),
+        splashColor: Theme.of(context).primaryColor,
+        onPressed: () => {this.sellCar(this.car)},
+        child: Text(S.of(context).general_sell.toUpperCase(),
+            style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold,
+                fontSize: 14)),
+      ));
+    }
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.RENT_CAR)) {
+      list.add(FlatButton(
+        padding: EdgeInsets.all(0),
+        splashColor: Theme.of(context).primaryColor,
+        onPressed: () => {this.rentCar(this.car)},
+        child: Text(S.of(context).general_rent.toUpperCase(),
+            style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold,
+                fontSize: 14)),
+      ));
+    }
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
+      list.add(FlatButton(
+        padding: EdgeInsets.all(0),
+        splashColor: Theme.of(context).primaryColor,
+        onPressed: () => {this.openAppointmentCreateModal(context, this.car)},
+        child: Text(S.of(context).general_schedule.toUpperCase(),
+            style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold,
+                fontSize: 14)),
+      ));
+    }
+
+    if (list.length == 1) {
+      list.insert(0, Spacer());
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, children: list),
+    );
   }
 }

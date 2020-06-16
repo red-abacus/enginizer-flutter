@@ -1,8 +1,8 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-transport.model.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
@@ -23,7 +23,7 @@ class AppointmentDetail {
   String name;
   Car car;
   List<Issue> issues = [];
-  List<ServiceItem> serviceItems = [];
+  List<ServiceProviderItem> serviceItems = [];
   String scheduledDate;
   User user;
   List<int> workEstimateIds;
@@ -144,9 +144,9 @@ class AppointmentDetail {
   }
 
   static _mapServiceItems(List<dynamic> response) {
-    List<ServiceItem> services = [];
+    List<ServiceProviderItem> services = [];
     response.forEach((item) {
-      services.add(ServiceItem.fromJson(item));
+      services.add(ServiceProviderItem.fromJson(item));
     });
     return services;
   }
@@ -241,8 +241,8 @@ class AppointmentDetail {
     return status.getState() == AppointmentStatusState.SCHEDULED;
   }
 
-  ServiceItem pickupServiceItem() {
-    for (ServiceItem serviceItem in this.serviceItems) {
+  ServiceProviderItem pickupServiceItem() {
+    for (ServiceProviderItem serviceItem in this.serviceItems) {
       if (serviceItem.isPickUpAndReturnService()) {
         return serviceItem;
       }

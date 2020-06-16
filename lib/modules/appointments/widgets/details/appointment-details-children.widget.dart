@@ -1,7 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/models/auction-map.model.dart';
 import 'package:app/utils/constants.dart';
@@ -454,7 +454,7 @@ class _AppointmentDetailsChildrenWidgetState
             child: Container(
               child: Column(
                 children: <Widget>[
-                  for (ServiceItem item
+                  for (ServiceProviderItem item
                       in widget.appointmentDetail.serviceItems)
                     _generalTitleContent(
                         item.getTranslatedServiceName(context)),

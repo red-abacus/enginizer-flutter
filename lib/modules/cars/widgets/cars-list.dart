@@ -9,11 +9,16 @@ class CarList extends StatelessWidget {
   Function filterCars;
   Function selectCar;
   Function openAppointmentCreateModal;
+  final Function sellCar;
+  final Function rentCar;
 
-  CarList({this.cars,
-    this.filterCars,
-    this.selectCar,
-    this.openAppointmentCreateModal});
+  CarList(
+      {this.cars,
+      this.filterCars,
+      this.selectCar,
+      this.openAppointmentCreateModal,
+      this.sellCar,
+      this.rentCar});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +36,7 @@ class CarList extends StatelessWidget {
                 key: Key('searchBar'),
                 autofocus: false,
                 decoration: InputDecoration(
-                    labelText: S
-                        .of(context)
-                        .cars_list_search_hint),
+                    labelText: S.of(context).cars_list_search_hint),
                 onChanged: (val) {
                   this.filterCars(context, val);
                 },
@@ -46,6 +49,8 @@ class CarList extends StatelessWidget {
                     car: this.cars.elementAt(index),
                     selectCar: this.selectCar,
                     openAppointmentCreateModal: this.openAppointmentCreateModal,
+                    sellCar: this.sellCar,
+                      rentCar: this.rentCar,
                   );
                 },
                 itemCount: this.cars.length,

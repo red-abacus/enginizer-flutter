@@ -74,7 +74,7 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
     NotificationsManager.navigationToolbarAppState = this;
 
     if (widget.activeDrawerItems == null) {
-      widget.activeDrawerItems = _initActiveDrawerItems();
+      widget.activeDrawerItems = [];
     }
 
     var auth = Provider.of<Auth>(context);
@@ -135,23 +135,6 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
       bottomNavigationBar: bottomBarApp,
       body: _getDrawerItemWidget(_selectedDrawerRoute),
     );
-  }
-
-  _initActiveDrawerItems() {
-    switch (widget.authUser.role) {
-      case Roles.Super:
-        return NavigationApp.adminDrawerItems;
-      case Roles.Client:
-        return NavigationApp.userDrawerItems(context);
-      case Roles.ProviderAdmin:
-        return NavigationApp.providerAdminDrawerItems;
-//      case Roles.ProviderConsultant:
-//        return NavigationApp.consultantDrawerItems;
-      case Roles.ProviderPersonnel:
-        return NavigationApp.mechanicDrawerItems;
-      default:
-        return [];
-    }
   }
 
   _onSelectItem(String route) {

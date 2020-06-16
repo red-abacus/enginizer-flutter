@@ -5,6 +5,7 @@ import 'package:app/modules/appointments/enum/tank-quantity.enum.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/promotions/models/promotion.model.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -23,12 +24,15 @@ class CreatePromotionRequest {
   int discount = 0;
   double price;
   ServiceProviderItem serviceProviderItem;
+  ServiceProviderItem presetServiceProviderItem;
   bool isActive = true;
   List<GenericModel> images;
+  Car car;
 
   final Promotion promotion;
 
-  CreatePromotionRequest(this.providerId, {this.promotion}) {
+  CreatePromotionRequest(this.providerId,
+      {this.promotion, this.car, this.presetServiceProviderItem}) {
     if (promotion != null) {
       promotionId = promotion.id;
       title = promotion.title;
@@ -52,16 +56,30 @@ class CreatePromotionRequest {
       'description': description,
       'discount': discount,
       'endDate': DateUtils.stringFromDate(endDate, 'dd/MM/yyyy'),
-      'serviceId': serviceProviderItem.id,
       'startDate': DateUtils.stringFromDate(startDate, 'dd/MM/yyyy'),
       'title': title,
       'price': price,
       'isActive': isActive
     };
 
+    if (serviceProviderItem != null) {
+      propMap['serviceId'] = serviceProviderItem.id;
+    } else if (presetServiceProviderItem != null) {
+      propMap['serviceId'] = presetServiceProviderItem.id;
+    }
+
     if (promotionId != null) {
       propMap['id'] = promotionId;
     }
+
+    if (this.car != null) {
+      propMap['carId'] = this.car.id;
+    }
+
+    if (this.providerId != null) {
+      propMap['providerId'] = this.providerId;
+    }
+
     return propMap;
   }
 
@@ -93,10 +111,13 @@ class CreatePromotionRequest {
     } else {
       if (files.length == 0) {
         files.add(null);
-      }
-      else if (files.length > 0 && files.last != null) {
+      } else if (files.length > 0 && files.last != null) {
         files.add(null);
       }
     }
+  }
+
+  hasSellerService() {
+    return this.serviceProviderItem != null && this.serviceProviderItem.isSellerService();
   }
 }

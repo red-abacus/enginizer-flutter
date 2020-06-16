@@ -2,7 +2,6 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -13,7 +12,7 @@ import 'package:flutter_svg/svg.dart';
 class AppointmentDetailsNewConsultantWidget extends StatefulWidget {
   Appointment appointment;
   AppointmentDetail appointmentDetail;
-  List<ServiceItem> serviceItems;
+  List<ServiceProviderItem> serviceItems;
   List<ServiceProviderItem> serviceProviderItems;
 
   AppointmentDetailsNewConsultantWidget(
@@ -189,12 +188,12 @@ class AppointmentDetailsNewConsultantWidgetState
     return Column(
       children: <Widget>[
         if (widget.serviceItems != null)
-          for (ServiceItem item in widget.serviceItems) _getServiceRow(item),
+          for (ServiceProviderItem item in widget.serviceItems) _getServiceRow(item),
       ],
     );
   }
 
-  _getServiceRow(ServiceItem item) {
+  _getServiceRow(ServiceProviderItem item) {
     return Container(
         margin: EdgeInsets.only(top: 4),
         child: Row(

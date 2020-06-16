@@ -4,6 +4,8 @@ import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
 import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
@@ -23,8 +25,7 @@ class CarDetails extends StatefulWidget {
   }
 }
 
-class CarDetailsState extends State<CarDetails>
-    with TickerProviderStateMixin {
+class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
   Car model;
   File uploadImage;
   CarProvider _provider;
@@ -37,7 +38,13 @@ class CarDetailsState extends State<CarDetails>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 2, initialIndex: 0);
+    _tabController = new TabController(
+        vsync: this,
+        length: PermissionsManager.getInstance()
+                .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)
+            ? 2
+            : 1,
+        initialIndex: 0);
 
     _tabController.addListener(() {
       if (_tabController.index == 1) {
@@ -70,12 +77,21 @@ class CarDetailsState extends State<CarDetails>
 
     try {
       await _provider.getCarDetails().then((_) async {
-        await _provider.getCarHistory(_provider.carDetails.id).then((_) async {
-          await _provider.getCarFuelConsumptionGraphic().then((_) {
+        await _provider.getCarFuelConsumptionGraphic().then((_) async {
+          if (PermissionsManager.getInstance().hasAccess(
+              MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
+            await _provider
+                .getCarHistory(_provider.carDetails.id)
+                .then((_) async {
+              setState(() {
+                _isLoading = false;
+              });
+            });
+          } else {
             setState(() {
               _isLoading = false;
             });
-          });
+          }
         });
       });
     } catch (error) {
@@ -110,7 +126,9 @@ class CarDetailsState extends State<CarDetails>
           controller: _tabController,
           tabs: [
             Tab(text: S.of(context).car_details_title),
-            Tab(text: S.of(context).car_service_recommendations_title),
+            if (PermissionsManager.getInstance().hasAccess(
+                MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR))
+              Tab(text: S.of(context).car_service_recommendations_title),
           ],
         ),
       ),
@@ -123,15 +141,15 @@ class CarDetailsState extends State<CarDetails>
   showPicture(car) {
     return (uploadImage == null)
         ? Image.network(
-      '${car.image}',
-      fit: BoxFit.contain,
-      height: MediaQuery.of(context).size.height * 0.3,
-    )
+            '${car.image}',
+            fit: BoxFit.contain,
+            height: MediaQuery.of(context).size.height * 0.3,
+          )
         : Image.file(
-      uploadImage,
-      fit: BoxFit.contain,
-      height: MediaQuery.of(context).size.height * 0.3,
-    );
+            uploadImage,
+            fit: BoxFit.contain,
+            height: MediaQuery.of(context).size.height * 0.3,
+          );
   }
 
   _buildContent() {
@@ -143,8 +161,12 @@ class CarDetailsState extends State<CarDetails>
         uploadCarImageListener: _uploadCarImageListener,
         showCameraDialog: _showCameraDialog,
       ),
-      CarRecommendationsWidget(carHistory: _provider.carHistory)
     ];
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
+      list.add(CarRecommendationsWidget(carHistory: _provider.carHistory));
+    }
 
     return TabBarView(
       controller: _tabController,
@@ -159,10 +181,10 @@ class CarDetailsState extends State<CarDetails>
         ),
         context: context,
         builder: (context) => ImagePickerWidget(imageSelected: (file) {
-          if (file != null) {
-            _provider.uploadImage(file);
-          }
-        }));
+              if (file != null) {
+                _provider.uploadImage(file);
+              }
+            }));
   }
 
   _openModalAddFuelConsumption() {
@@ -171,9 +193,9 @@ class CarDetailsState extends State<CarDetails>
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return CarFuelConsumptionForm(
-                    createFuelConsumption: _createCarConsumption);
-              });
+            return CarFuelConsumptionForm(
+                createFuelConsumption: _createCarConsumption);
+          });
         });
   }
 
@@ -184,10 +206,10 @@ class CarDetailsState extends State<CarDetails>
             padding: EdgeInsets.all(10),
             child: Center(
                 child: Container(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(),
-                )));
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(),
+            )));
         break;
       case Status.ERROR:
 //        return Text(carProvider.getCarFuelConsumptionAPI.toString());

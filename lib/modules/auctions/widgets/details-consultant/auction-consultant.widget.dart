@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
@@ -83,7 +83,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                 ),
               ),
               if (widget.auctionDetails != null)
-                for (ServiceItem serviceItem
+                for (ServiceProviderItem serviceItem
                     in widget.auctionDetails.serviceItems)
                   _appointmentServiceItem(serviceItem),
               _buildSeparator(),
@@ -135,7 +135,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
     );
   }
 
-  Widget _appointmentServiceItem(ServiceItem serviceItem) {
+  Widget _appointmentServiceItem(ServiceProviderItem serviceItem) {
     return Row(
       children: <Widget>[
         Expanded(

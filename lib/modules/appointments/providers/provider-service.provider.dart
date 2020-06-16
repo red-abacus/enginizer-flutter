@@ -8,7 +8,6 @@ import 'package:app/modules/appointments/model/provider/service-provider-timetab
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
-import 'package:app/modules/appointments/model/service-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
@@ -24,7 +23,7 @@ class ProviderServiceProvider with ChangeNotifier {
   JwtUser authUser;
 
   AppointmentPosition appointmentPosition;
-  List<ServiceItem> serviceItems = [];
+  List<ServiceProviderItem> serviceItems = [];
   List<ServiceProvider> serviceProviders = [];
   List<ServiceProviderItem> serviceProviderItems = [];
   List<ServiceProviderSchedule> serviceProviderSchedules = [];
@@ -35,7 +34,7 @@ class ProviderServiceProvider with ChangeNotifier {
 
   // Form entries
   Car selectedCar;
-  List<ServiceItem> selectedServiceItems;
+  List<ServiceProviderItem> selectedServiceItems;
   List<Issue> issuesFormState;
   AppointmentProviderType appointmentProviderType;
   ServiceProvider selectedProvider;
@@ -66,9 +65,9 @@ class ProviderServiceProvider with ChangeNotifier {
     _serviceProviderResponse = null;
   }
 
-  Future<List<ServiceItem>> loadServices() async {
+  Future<List<ServiceProviderItem>> loadServices(String type) async {
     try {
-      var response = await providerService.getServices();
+      var response = await providerService.getServices(type);
       serviceItems = response.items;
       notifyListeners();
       return serviceItems;
@@ -144,7 +143,7 @@ class ProviderServiceProvider with ChangeNotifier {
 
     appointmentRequest.serviceIds = [];
 
-    for (ServiceItem item in selectedServiceItems) {
+    for (ServiceProviderItem item in selectedServiceItems) {
       appointmentRequest.serviceIds.add(item.id);
     }
 
@@ -158,7 +157,7 @@ class ProviderServiceProvider with ChangeNotifier {
   }
 
   bool pickUpServiceValidation() {
-    ServiceItem serviceItem = this.selectedServiceItems.firstWhere(
+    ServiceProviderItem serviceItem = this.selectedServiceItems.firstWhere(
         (element) => element.isPickUpAndReturnService(),
         orElse: () => null);
     return !(serviceItem != null && this.selectedServiceItems.length == 1);
