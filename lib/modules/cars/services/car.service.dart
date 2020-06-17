@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:dio/dio.dart';
 
 import 'package:app/config/injection.dart';
@@ -13,6 +12,8 @@ import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/cars-reponse.model.dart';
 import 'package:app/utils/environment.constants.dart';
+
+import 'package:http_parser/http_parser.dart';
 
 class CarService {
   static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
@@ -122,11 +123,14 @@ class CarService {
   }
 
   Future<CarFuelConsumptionResponse> uploadImage(File file, int id) async {
-    FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        file.path,
-      ),
-    });
+    var formData = FormData();
+
+    formData.files.add(MapEntry(
+      "file",
+      await MultipartFile.fromFile(file.path,
+          filename: file.path.split('/').last,
+          contentType: MediaType('image', file.path.split('.').last)),
+    ));
 
     try {
       final response =

@@ -17,6 +17,7 @@ import 'package:app/modules/appointments/model/appointment/appointment.model.dar
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/utils/environment.constants.dart';
+import 'package:http_parser/http_parser.dart';
 
 class AppointmentsService {
   static const String GET_APPOINTMENTS_EXCEPTION = 'GET_APPOINTMENTS_FAILED';
@@ -268,17 +269,18 @@ class AppointmentsService {
 
   Future<bool> addReceiveProcedurePhotos(
       ReceiveFormRequest receiveFormRequest) async {
-    List<MultipartFile> files = [];
+    var formData = FormData();
 
     for (File file in receiveFormRequest.files) {
       if (file != null) {
-        files.add(await MultipartFile.fromFile(
-          file.path,
+        formData.files.add(MapEntry(
+          "files",
+          await MultipartFile.fromFile(file.path,
+              filename: file.path.split('/').last,
+              contentType: MediaType('image', file.path.split('.').last)),
         ));
       }
     }
-
-    FormData formData = new FormData.fromMap({"files": files});
 
     try {
       final response = await _dio.patch(
@@ -392,15 +394,17 @@ class AppointmentsService {
 
   Future<bool> addAppointmentRecommendationImage(int appointmentId,
       MechanicTaskIssue mechanicTaskIssue, int recommendationId) async {
-    List<MultipartFile> files = [];
+    var formData = FormData();
 
     if (mechanicTaskIssue.image != null) {
-      files.add(await MultipartFile.fromFile(
-        mechanicTaskIssue.image.path,
+      formData.files.add(MapEntry(
+        "files",
+        await MultipartFile.fromFile(mechanicTaskIssue.image.path,
+            filename: mechanicTaskIssue.image.path.split('/').last,
+            contentType: MediaType(
+                'image', mechanicTaskIssue.image.path.split('.').last)),
       ));
     }
-
-    FormData formData = new FormData.fromMap({"files": files});
 
     try {
       final response = await _dio.patch(
