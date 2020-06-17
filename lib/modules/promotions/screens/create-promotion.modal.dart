@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
-import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/image-selection.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';

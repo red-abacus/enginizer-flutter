@@ -45,8 +45,11 @@ class PromotionsState extends State<Promotions> {
           child: _renderList(_isLoading),
         ),
         floatingActionButton: PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Promotions,
-                PermissionsPromotion.CREATE_PROMOTION)
+                    MainPermissions.Promotions,
+                    PermissionsPromotion.CREATE_PROMOTION) ||
+                PermissionsManager.getInstance().hasAccess(
+                    MainPermissions.Promotions,
+                    PermissionsPromotion.SELLER_PROMOTION)
             ? FloatingActionButton(
                 heroTag: null,
                 backgroundColor: Theme.of(context).primaryColor,

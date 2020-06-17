@@ -38,6 +38,8 @@ class CarService {
   CarService();
 
   Future<CarsResponse> getCars({String searchString}) async {
+    // TODO - when create a new promotion with car, i need a filtering for status
+    // TODO - get cars need to retrieve status as well
     try {
       var queryParams =
           searchString != null ? {'search': searchString} : {'search': ''};

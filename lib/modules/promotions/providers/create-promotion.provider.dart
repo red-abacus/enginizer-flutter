@@ -10,6 +10,8 @@ import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/promotions/models/promotion.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-promotions.dart';
 import 'package:flutter/cupertino.dart';
 
 class CreatePromotionProvider with ChangeNotifier {
@@ -53,6 +55,24 @@ class CreatePromotionProvider with ChangeNotifier {
       this.serviceProviderItemsResponse =
           await this._providerService.getProviderServiceItems(providerId);
       notifyListeners();
+
+      List<ServiceProviderItem> list = [];
+
+      this.serviceProviderItemsResponse.items.forEach((item) {
+        if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Promotions,
+            PermissionsPromotion.SELLER_PROMOTION)) {
+          if (item.isSellerService()) {
+            list.add(item);
+          }
+        }
+        else {
+          list.add(item);
+        }
+      });
+
+      this.serviceProviderItemsResponse.items = list;
+
       return this.serviceProviderItemsResponse;
     } catch (error) {
       throw (error);

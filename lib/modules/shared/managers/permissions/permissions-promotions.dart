@@ -5,6 +5,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-manager.dart
 
 class PermissionsPromotion {
   static final String CREATE_PROMOTION = 'PROMOTION.CREATE_PROMOTION';
+  static final String SELLER_PROMOTION = 'PROMOTION.SELLER_PROMOTION';
 
   Map<String, List<String>> permissionsMap = Map();
   Map<String, List<String>> serviceItemsPermissionsMap = Map();
@@ -38,7 +39,7 @@ class PermissionsPromotion {
                   case ConsultantServiceType.DismantlingShop:
                     break;
                   case ConsultantServiceType.Sell:
-                    permissions = [CREATE_PROMOTION];
+                    permissions = [CREATE_PROMOTION, SELLER_PROMOTION];
                     break;
                   case ConsultantServiceType.Rent:
                     break;
