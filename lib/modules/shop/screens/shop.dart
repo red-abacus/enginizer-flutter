@@ -1,12 +1,16 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
+import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
+import 'package:app/modules/shop/screens/shop-alert-create.modal.dart';
 import 'package:app/modules/shop/screens/shop-product-details.dart';
 import 'package:app/modules/shop/screens/shop-service-details.dart';
 import 'package:app/modules/shop/widgets/shop-list.widget.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +43,17 @@ class ShopState extends State<Shop> {
       builder: (context, appointmentsProvider, _) => Scaffold(
         body: Center(
           child: _renderList(_isLoading),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          heroTag: null,
+          backgroundColor: Theme.of(context).primaryColor,
+          elevation: 1,
+          onPressed: () => _openShopAlertModal(),
+          label: Text(
+            S.of(context).general_alert,
+            style: TextHelper.customTextStyle(null, Colors.white, null, 12),
+          ),
+          icon: Icon(Icons.add),
         ),
       ),
     );
@@ -99,5 +114,22 @@ class ShopState extends State<Shop> {
     setState(() {
       _shopListType = shopListType;
     });
+  }
+
+  _openShopAlertModal() {
+    Provider.of<CarsMakeProvider>(context).initParams();
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return ShopAlertCreateModal();
+          });
+        });
   }
 }

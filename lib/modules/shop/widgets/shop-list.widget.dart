@@ -46,6 +46,7 @@ class ShopListWidget extends StatelessWidget {
       child: Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 60),
           child: Column(
             children: <Widget>[
               _buildSearchWidget(context),
