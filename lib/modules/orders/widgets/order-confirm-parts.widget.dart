@@ -2,7 +2,6 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/widgets/cards/order-part.card.dart';
-import 'package:app/modules/orders/widgets/order-parts-final-info.widget.dart';
 import 'package:app/modules/orders/widgets/order-parts-receive-form.modal.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
@@ -53,7 +52,7 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
                       AppointmentStatusState.ACCEPTED
                       ? '${S.of(context).appointment_delivery_time}:'
                       : '${S.of(context).parts_suggested_delivery_date}:',
-                  style: TextHelper.customTextStyle(null, gray3, null, 14),
+                  style: TextHelper.customTextStyle(color: gray3),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 6),
@@ -62,7 +61,7 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
                         _provider.orderDetails.deliveryDateTime,
                         'dd-MM-yyyy HH:mm'),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 14),
+                        color: red, weight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -93,7 +92,7 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
       },
       label: Text(
         S.of(context).online_shop_appointment_provider_details.toUpperCase(),
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
       ),
       backgroundColor: Colors.white,
     ));
@@ -107,7 +106,7 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
         },
         label: Text(
           S.of(context).parts_delivery_confirm_button_title.toUpperCase(),
-          style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+          style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
         ),
         backgroundColor: Colors.white,
       ));

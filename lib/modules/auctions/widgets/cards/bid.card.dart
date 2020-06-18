@@ -92,7 +92,7 @@ class BidCard extends StatelessWidget {
                       margin: EdgeInsets.only(left: 5),
                       child: Text(
                         "${bid.serviceProvider?.rating?.value ?? '0'} (${bid.serviceProvider?.rating?.reviews ?? '0'})",
-                        style: TextHelper.customTextStyle(null, gray, null, 11),
+                        style: TextHelper.customTextStyle(color: gray, size: 11),
                       ),
                     ),
                   ],

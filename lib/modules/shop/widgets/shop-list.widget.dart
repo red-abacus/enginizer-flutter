@@ -179,7 +179,7 @@ class ShopListWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             '${S.of(context).online_shop_list_title}:',
-            style: TextHelper.customTextStyle(null, gray3, null, 16),
+            style: TextHelper.customTextStyle(color: gray3, size: 16),
           ),
           FlatButton(
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -222,7 +222,7 @@ class ShopListWidget extends StatelessWidget {
             child: Text(
               title,
               overflow: TextOverflow.ellipsis,
-              style: TextHelper.customTextStyle(null, gray3, null, 16),
+              style: TextHelper.customTextStyle(color: gray3, size: 16),
             ),
           ),
         )
@@ -252,7 +252,7 @@ class ShopListWidget extends StatelessWidget {
             child: Text(
               title,
               overflow: TextOverflow.ellipsis,
-              style: TextHelper.customTextStyle(null, gray3, null, 16),
+              style: TextHelper.customTextStyle(color: gray3, size: 16),
             ),
           ),
         )

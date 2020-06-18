@@ -45,7 +45,7 @@ class _AuctionConsultantMapDetailsWidgetState
                   child: Text(
                     S.of(context).appointment_details_applicant,
                     style: TextHelper.customTextStyle(
-                        null, gray2, FontWeight.bold, 13),
+                        color: gray2, weight: FontWeight.bold, size: 13),
                   ),
                 ),
                 _applicantContainer(),
@@ -84,7 +84,7 @@ class _AuctionConsultantMapDetailsWidgetState
               _provider.auctionDetails?.car?.registrationNumber ?? 'N/A',
               maxLines: 3,
               style:
-                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: gray3, weight: FontWeight.bold, size: 16),
             ),
           ),
         ),
@@ -116,7 +116,7 @@ class _AuctionConsultantMapDetailsWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 _provider.appointmentDetails?.user?.name ?? 'Client Name',
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -179,14 +179,14 @@ class _AuctionConsultantMapDetailsWidgetState
                     Text(
                       '$title:',
                       style: TextHelper.customTextStyle(
-                          null, gray3, FontWeight.bold, 14),
+                          color: gray3, weight: FontWeight.bold),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Text(
                         point.address,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     ),
                     Container(
@@ -197,7 +197,7 @@ class _AuctionConsultantMapDetailsWidgetState
                                 point.dateTime, 'dd.MM.yyyy')
                             : '',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     ),
                     Container(
@@ -207,7 +207,7 @@ class _AuctionConsultantMapDetailsWidgetState
                             ? DateUtils.stringFromDate(point.dateTime, 'HH:mm')
                             : '',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -228,11 +228,11 @@ class _AuctionConsultantMapDetailsWidgetState
         children: [
           Text(
             '${S.of(context).auction_route_total_distance}:',
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(color: gray3, weight: FontWeight.bold, size: 16),
           ),
           Text(
             '${distanceInKm.toStringAsFixed(1)} km',
-            style: TextHelper.customTextStyle(null, gray3, null, 16),
+            style: TextHelper.customTextStyle(color: gray3, size: 16),
           ),
         ],
       ),

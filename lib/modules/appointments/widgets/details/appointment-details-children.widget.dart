@@ -78,13 +78,17 @@ class _AppointmentDetailsChildrenWidgetState
                           Text(
                             widget.appointmentDetail.name ?? '',
                             style: TextHelper.customTextStyle(
-                                null, gray3, FontWeight.bold, 16),
+                                color: gray3,
+                                weight: FontWeight.bold,
+                                size: 16),
                           ),
                           Text(
                             '${AppointmentStatusStateUtils.title(context, widget.appointmentDetail?.status?.getState())}',
                             maxLines: 3,
                             style: TextHelper.customTextStyle(
-                                null, gray3, FontWeight.bold, 16),
+                                color: gray3,
+                                weight: FontWeight.bold,
+                                size: 16),
                           )
                         ],
                       ),
@@ -111,8 +115,7 @@ class _AppointmentDetailsChildrenWidgetState
                     Text(
                       widget.appointmentDetail.scheduledDate
                           .replaceAll(" ", " ${S.of(context).general_at} "),
-                      style: TextHelper.customTextStyle(
-                          null, Colors.black, null, 18),
+                      style: TextHelper.customTextStyle(size: 18),
                     )
                   ],
                 ),
@@ -145,7 +148,7 @@ class _AppointmentDetailsChildrenWidgetState
                     child: Text(
                       '${widget.appointmentDetail?.serviceProvider?.name}',
                       style: TextHelper.customTextStyle(
-                          null, gray3, FontWeight.bold, 16),
+                          color: gray3, weight: FontWeight.bold, size: 16),
                     ),
                   ),
                 ),
@@ -158,7 +161,7 @@ class _AppointmentDetailsChildrenWidgetState
                   child: Text(
                     S.of(context).general_details.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                 ),
               ],
@@ -195,7 +198,8 @@ class _AppointmentDetailsChildrenWidgetState
             onPressed: () => {widget.showMap(widget.appointmentDetail)},
             child: Text(
               S.of(context).general_map.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -244,14 +248,14 @@ class _AppointmentDetailsChildrenWidgetState
                     Text(
                       '$title:',
                       style: TextHelper.customTextStyle(
-                          null, gray3, FontWeight.bold, 14),
+                          color: gray3, weight: FontWeight.bold),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Text(
                         point.address,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     ),
                     Container(
@@ -262,7 +266,7 @@ class _AppointmentDetailsChildrenWidgetState
                                 point.dateTime, 'dd.MM.yyyy')
                             : '',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     ),
                     Container(
@@ -272,7 +276,7 @@ class _AppointmentDetailsChildrenWidgetState
                             ? DateUtils.stringFromDate(point.dateTime, 'HH:mm')
                             : '',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -294,11 +298,12 @@ class _AppointmentDetailsChildrenWidgetState
         children: [
           Text(
             '${S.of(context).auction_route_total_distance}:',
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(
+                color: gray3, weight: FontWeight.bold, size: 16),
           ),
           Text(
             '${distanceInKm.toStringAsFixed(1)} km',
-            style: TextHelper.customTextStyle(null, gray3, null, 16),
+            style: TextHelper.customTextStyle(color: gray3, size: 16),
           ),
         ],
       ),
@@ -323,7 +328,7 @@ class _AppointmentDetailsChildrenWidgetState
           margin: EdgeInsets.only(top: 4),
           child: Text(
             title,
-            style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+            style: TextHelper.customTextStyle(size: 13),
           ),
         )),
       ],
@@ -350,7 +355,7 @@ class _AppointmentDetailsChildrenWidgetState
       margin: EdgeInsets.only(top: 15),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
+        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -371,7 +376,7 @@ class _AppointmentDetailsChildrenWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           )
@@ -396,7 +401,7 @@ class _AppointmentDetailsChildrenWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           ),
@@ -423,7 +428,7 @@ class _AppointmentDetailsChildrenWidgetState
                   child: Text(
                     S.of(context).appointment_video_button_title.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                 ),
               )
@@ -469,7 +474,7 @@ class _AppointmentDetailsChildrenWidgetState
               child: Text(
                 S.of(context).appointment_details_estimator.toUpperCase(),
                 style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
               ),
             ),
         ],

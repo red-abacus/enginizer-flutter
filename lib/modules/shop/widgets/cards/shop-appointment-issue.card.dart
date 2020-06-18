@@ -31,7 +31,7 @@ class ShopAppointmentIssueCard extends StatelessWidget {
               child: Text(
                 '${index + 1}',
                 textAlign: TextAlign.center,
-                style: TextHelper.customTextStyle(null, Colors.white, null, 12),
+                style: TextHelper.customTextStyle(color: Colors.white, size: 12),
               ),
             ),
           ),
@@ -39,7 +39,7 @@ class ShopAppointmentIssueCard extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(issue.name,
-                style: TextHelper.customTextStyle(null, gray3, null, 14),),
+                style: TextHelper.customTextStyle(color: gray3),),
             ),
           )
         ],

@@ -111,7 +111,7 @@ class LocatorManager {
     _entry = showSimpleNotification(
       Text(
         '${_appointment.name}\n${S.of(context).appointment_locator_title}',
-        style: TextHelper.customTextStyle(null, gray, FontWeight.normal, 16),
+        style: TextHelper.customTextStyle(color: gray, size: 16),
       ),
       leading: Container(
         width: 24,

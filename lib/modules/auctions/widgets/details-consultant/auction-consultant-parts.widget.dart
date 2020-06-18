@@ -37,7 +37,7 @@ class AuctionConsultantPartsWidget extends StatelessWidget {
       },
       label: Text(
         S.of(context).online_shop_appointment_provider_details.toUpperCase(),
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
       ),
       backgroundColor: Colors.white,
     ));
@@ -55,7 +55,7 @@ class AuctionConsultantPartsWidget extends StatelessWidget {
         createEstimate != null
             ? S.of(context).auction_create_estimate.toUpperCase()
             : S.of(context).appointment_details_estimator.toUpperCase(),
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
       ),
       backgroundColor: Colors.white,
     ));

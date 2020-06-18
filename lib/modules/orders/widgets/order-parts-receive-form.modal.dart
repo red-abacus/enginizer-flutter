@@ -57,7 +57,7 @@ class _OrderPartsReceiveFormModalState
           children: <Widget>[
             Text(
               S.of(context).appointment_receive_car_form_title,
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 18),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 18),
             ),
             // TODO - need to check info for car reception form
             Container(
@@ -66,19 +66,19 @@ class _OrderPartsReceiveFormModalState
                 text: TextSpan(
                     text:
                         '${S.of(context).mechanic_appointment_receive_form_part_1}, ',
-                    style: TextHelper.customTextStyle(null, gray3, null, 16),
+                    style: TextHelper.customTextStyle(color: gray3, size: 16),
                     children: <TextSpan>[
                       TextSpan(
                         text:
                             '${DateUtils.stringFromDate(DateTime.now(), 'dd.MM.yyyy')}, ',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text:
                             ' ${S.of(context).mechanic_appointment_receive_form_part_2}',
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 16),
+                            TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
                         text: Provider.of<Auth>(context)
@@ -87,31 +87,31 @@ class _OrderPartsReceiveFormModalState
                                 ?.name ??
                             'AUTOWASS MANAGER SRL',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text:
                             ' ${S.of(context).mechanic_appointment_receive_form_part_3} ',
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 16),
+                            TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
                         // tODO - need to add representative name for client
                         text: 'Mircea Pop',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text:
                             ' ${S.of(context).mechanic_appointment_receive_form_part_4} ',
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 16),
+                            TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       // TODO - need to add represantive name for service provider
                       TextSpan(
                         text: 'Mircea Pop.',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                     ]),
               ),
@@ -122,32 +122,32 @@ class _OrderPartsReceiveFormModalState
                 text: TextSpan(
                     text:
                         '${S.of(context).mechanic_appointment_receive_form_part_5} ',
-                    style: TextHelper.customTextStyle(null, gray3, null, 16),
+                    style: TextHelper.customTextStyle(color: gray3, size: 16),
                     children: <TextSpan>[
                       // TODO - need to add mechanic name
                       TextSpan(
                         text: 'Mircea Pop ',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text: S
                             .of(context)
                             .mechanic_appointment_receive_form_part_6,
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 16),
+                            TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
                         text:
                             ' ${widget.orderDetails?.seller?.name ?? 'Mircea Pop'} ',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text:
                             '${S.of(context).mechanic_appointment_receive_form_part_7}:',
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 16),
+                            TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                     ]),
               ),
@@ -161,13 +161,13 @@ class _OrderPartsReceiveFormModalState
                       text: TextSpan(
                           text: '${S.of(context).estimator_product}: ',
                           style:
-                              TextHelper.customTextStyle(null, gray3, null, 16),
+                              TextHelper.customTextStyle(color: gray3, size: 16),
                           children: <TextSpan>[
                             TextSpan(
                               text:
                                   '${item.code ?? ''}, ${item.name ?? ''}',
                               style: TextHelper.customTextStyle(
-                                  null, gray3, FontWeight.bold, 16),
+                                  color: gray3, weight: FontWeight.bold, size: 16),
                             ),
                           ]),
                     ),
@@ -183,7 +183,7 @@ class _OrderPartsReceiveFormModalState
                     color: gray2,
                     child: Text(S.of(context).mechanic_appointment_i_received,
                         style: TextHelper.customTextStyle(
-                            null, Colors.white, FontWeight.normal, 16)),
+                            color: Colors.white, size: 16)),
                     onPressed: () {
                       _showConfirmationAlert();
                     },

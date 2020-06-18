@@ -71,7 +71,7 @@ class AppointmentGenericDetailsWidgetState
                         '${widget.appointmentDetail?.car?.brand?.name} ${widget.appointmentDetail?.car?.model?.name} - ${widget.appointmentDetail?.status?.name}',
                         maxLines: 3,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                     ),
                   ),
@@ -97,7 +97,7 @@ class AppointmentGenericDetailsWidgetState
                       widget.appointmentDetail.scheduledDate
                           .replaceAll(" ", " ${S.of(context).general_at} "),
                       style: TextHelper.customTextStyle(
-                          null, Colors.black, null, 18),
+                          size: 18),
                     )
                   ],
                 ),
@@ -141,7 +141,7 @@ class AppointmentGenericDetailsWidgetState
             onPressed: () => {widget.viewEstimate(widget.appointmentDetail)},
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -167,7 +167,7 @@ class AppointmentGenericDetailsWidgetState
           margin: EdgeInsets.only(top: 4),
           child: Text(
             serviceItem.getTranslatedServiceName(context),
-            style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+            style: TextHelper.customTextStyle(size: 13),
           ),
         )),
       ],
@@ -194,7 +194,7 @@ class AppointmentGenericDetailsWidgetState
               child: Text(
                 (index + 1).toString(),
                 style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 11),
+                    color: Colors.white, weight: FontWeight.bold, size: 11),
               ),
             ),
           ),
@@ -203,7 +203,7 @@ class AppointmentGenericDetailsWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 item.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -232,7 +232,7 @@ class AppointmentGenericDetailsWidgetState
       margin: EdgeInsets.only(top: 15),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
+        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -265,7 +265,7 @@ class AppointmentGenericDetailsWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           )
@@ -290,7 +290,7 @@ class AppointmentGenericDetailsWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           ),
@@ -317,7 +317,7 @@ class AppointmentGenericDetailsWidgetState
                   child: Text(
                     S.of(context).appointment_video_button_title.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                 ),
               )

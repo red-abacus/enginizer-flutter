@@ -15,7 +15,8 @@ class ImageContainerWidget extends StatelessWidget {
   GenericModel image;
   final double height;
 
-  ImageContainerWidget(this.height, {this.file, this.index, this.addImage, this.removeImage, this.image});
+  ImageContainerWidget(this.height,
+      {this.file, this.index, this.addImage, this.removeImage, this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,8 @@ class ImageContainerWidget extends StatelessWidget {
         child: Center(
           child: Text(
             S.of(context).general_add_image,
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            style:
+                TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
           ),
         ),
       ),

@@ -1,13 +1,10 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/shared/widgets/custom-show-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
-import 'package:app/modules/shared/widgets/datetimepicker.widget.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class OrderPartsFinalInfo extends StatelessWidget {
   final Function infoAdded;
@@ -37,7 +34,7 @@ class OrderPartsFinalInfo extends StatelessWidget {
               Text(
                 S.of(context).parts_delivery_button_title,
                 style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
               ),
               BasicDateTimeField(
                 labelText: S.of(context).orders_date_delivery_estimator,
@@ -62,7 +59,7 @@ class OrderPartsFinalInfo extends StatelessWidget {
                   child: new Text(
                     S.of(context).general_send,
                     style: TextHelper.customTextStyle(
-                        null, Colors.white, FontWeight.bold, 18.0),
+                        color: Colors.white, weight: FontWeight.bold, size: 18.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {

@@ -1,6 +1,5 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
-import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
@@ -94,7 +93,7 @@ class _UserDetailsActivePersonnelWidgetState
                     S.of(context).user_profile_no_active_personnel,
                     textAlign: TextAlign.center,
                     style: TextHelper.customTextStyle(
-                        null, gray3, FontWeight.bold, 16),
+                        color: gray3, weight: FontWeight.bold, size: 16),
                   ),
                 )
               ],

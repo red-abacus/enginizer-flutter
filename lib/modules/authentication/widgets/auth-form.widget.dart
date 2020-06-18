@@ -23,8 +23,7 @@ class AuthForm extends StatefulWidget {
       _AuthFormState(authFailedHandler: authFailedHandler);
 }
 
-class _AuthFormState extends State<AuthForm>
-    with TickerProviderStateMixin {
+class _AuthFormState extends State<AuthForm> with TickerProviderStateMixin {
   final double loginCardHeight = 350;
 
   double registerCardHeight(BuildContext context) {
@@ -321,8 +320,7 @@ class _AuthFormState extends State<AuthForm>
           child: FlatButton(
             child: Text(
               S.of(context).auth_forgot_password,
-              style: TextHelper.customTextStyle(
-                  null, gray2, FontWeight.normal, 14),
+              style: TextHelper.customTextStyle(color: gray2),
             ),
             onPressed: () {
               _toggleForgotPasswordMode();

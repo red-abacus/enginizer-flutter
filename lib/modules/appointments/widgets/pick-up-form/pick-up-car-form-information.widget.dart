@@ -116,8 +116,7 @@ class _PickupCarFormInformationWidgetState
         children: <Widget>[
           Text(
             S.of(context).appointment_consultant_car_form_client_parts,
-            style:
-                TextHelper.customTextStyle(null, gray2, FontWeight.normal, 16),
+            style: TextHelper.customTextStyle(color: gray2, size: 16),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
@@ -142,8 +141,7 @@ class _PickupCarFormInformationWidgetState
         children: <Widget>[
           Text(
             S.of(context).appointment_consultant_car_form_client_keep_parts,
-            style:
-                TextHelper.customTextStyle(null, gray2, FontWeight.normal, 16),
+            style: TextHelper.customTextStyle(color: gray2, size: 16),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
@@ -268,7 +266,7 @@ class _PickupCarFormInformationWidgetState
     return Container(
       child: Text(
         title,
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
       ),
     );
   }

@@ -54,7 +54,7 @@ class _UserDetailsGraphConsultantWidgetState
                       child: Text(
                         S.of(context).user_profile_your_time,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -71,7 +71,7 @@ class _UserDetailsGraphConsultantWidgetState
                       child: Text(
                         S.of(context).user_profile_normalized_time,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -96,7 +96,7 @@ class _UserDetailsGraphConsultantWidgetState
                     'dd MMMM yyyy',
                   ),
                   style: TextHelper.customTextStyle(
-                      null, gray3, FontWeight.bold, 16),
+                      color: gray3, weight: FontWeight.bold, size: 16),
                 )
               : _startDatePickerContainer(),
         ),
@@ -119,7 +119,7 @@ class _UserDetailsGraphConsultantWidgetState
             child: Text(
               S.of(context).user_profile_start_date,
               style: TextHelper.customTextStyle(
-                  null, Colors.grey, FontWeight.normal, 12),
+                  color: Colors.grey, size: 12),
             ),
           ),
           Container(
@@ -161,7 +161,7 @@ class _UserDetailsGraphConsultantWidgetState
                       'dd MMMM yyyy',
                     ),
                     style: TextHelper.customTextStyle(
-                        null, gray3, FontWeight.bold, 16),
+                        color: gray3, weight: FontWeight.bold, size: 16),
                   )
                 : _endDatePickerContainer()),
       ),
@@ -183,7 +183,7 @@ class _UserDetailsGraphConsultantWidgetState
             child: Text(
               S.of(context).user_profile_end_date,
               style: TextHelper.customTextStyle(
-                  null, Colors.grey, FontWeight.normal, 12),
+                  color: Colors.grey, size: 12),
             ),
           ),
           Container(

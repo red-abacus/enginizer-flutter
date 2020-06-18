@@ -19,7 +19,6 @@ import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
@@ -162,7 +161,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
                   label: Text(
                     S.of(context).general_decline.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                   backgroundColor: Colors.white,
                 ),
@@ -174,7 +173,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
                   label: Text(
                     S.of(context).auction_create_estimate.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                   backgroundColor: Colors.white,
                 )
@@ -192,7 +191,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
               label: Text(
                 S.of(context).appointment_hand_over_car.toUpperCase(),
                 style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
               ),
               backgroundColor: Colors.white,
             ),
@@ -208,7 +207,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     return Text(
       _provider.selectedAppointmentDetail?.name ?? 'N/A',
       style:
-          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 

@@ -31,7 +31,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               issueItem.name,
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
             ),
             _infoWidget(S.of(context).import_item_imported_title,
                 issueItem?.provider?.name),
@@ -75,7 +75,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
                   '$leftString:',
                   textAlign: TextAlign.right,
                   style: TextHelper.customTextStyle(
-                      null, gray3, FontWeight.bold, 14),
+                      color: gray3, weight: FontWeight.bold),
                 ),
               ),
             ),
@@ -88,7 +88,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
                 child: Text(
                   rightString,
                   textAlign: TextAlign.left,
-                  style: TextHelper.customTextStyle(null, gray3, null, 14),
+                  style: TextHelper.customTextStyle(color: gray3),
                 ),
               ),
             ),
@@ -111,7 +111,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
             child: Text(
               S.of(context).general_back.toUpperCase(),
               style:
-                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: gray3, weight: FontWeight.bold, size: 16),
             ),
           ),
           if (showImportButton)
@@ -123,7 +123,7 @@ class WorkEstimateIssueDetailsWidget extends StatelessWidget {
               child: Text(
                 S.of(context).import_item_import_title.toUpperCase(),
                 style: TextHelper.customTextStyle(
-                    null, green, FontWeight.bold, 16),
+                    color: green, weight: FontWeight.bold, size: 16),
               ),
             )
         ],

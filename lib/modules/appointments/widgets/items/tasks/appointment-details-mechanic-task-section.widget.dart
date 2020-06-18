@@ -199,7 +199,7 @@ class _AppointmentDetailsMechanicTaskSectionWidgetState
       child: Text('${widget.index + 1}',
           textAlign: TextAlign.center,
           style: TextHelper.customTextStyle(
-              null, Colors.white, FontWeight.normal, 14)),
+              color: Colors.white)),
       width: 24,
       height: 24,
       decoration: BoxDecoration(

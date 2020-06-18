@@ -110,7 +110,7 @@ class ShopItemCard extends StatelessWidget {
               child: Center(
                   child: Text(
                 '-50%',
-                style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+                style: TextHelper.customTextStyle(color: Colors.white),
               )),
             ),
           )
@@ -155,7 +155,7 @@ class ShopItemCard extends StatelessWidget {
                                       .of(context)
                                       .online_shop_card_no_photos_title,
                                   style: TextHelper.customTextStyle(
-                                      null, gray2, null, 12),
+                                      color: gray2, size: 12),
                                 ),
                               ),
                             ],
@@ -239,7 +239,7 @@ class ShopItemCard extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               S.of(context).general_details.toUpperCase(),
-              style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+              style: TextHelper.customTextStyle(color: Colors.white),
             ),
           )
         ],
@@ -255,7 +255,7 @@ class ShopItemCard extends StatelessWidget {
       child: Text(
         title,
         style:
-            TextHelper.customTextStyle(null, black_text, FontWeight.bold, 12),
+            TextHelper.customTextStyle(color: black_text, weight: FontWeight.bold, size: 12),
       ),
     );
   }

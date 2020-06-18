@@ -118,7 +118,7 @@ class _PartCreateInfoWidgetState extends State<PartCreateInfoWidget> {
           Text(
             S.of(context).part_create_guarantee_title,
             style:
-                TextHelper.customTextStyle(null, gray2, FontWeight.normal, 16),
+                TextHelper.customTextStyle(color: gray2, weight: FontWeight.normal, size: 16),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),

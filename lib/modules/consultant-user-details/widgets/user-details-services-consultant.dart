@@ -37,7 +37,7 @@ class UserDetailsServicesConsultant extends StatelessWidget {
               item.getTranslatedServiceName(buildContext),
               textAlign: TextAlign.left,
               style: TextHelper.customTextStyle(
-                  null, black_text, FontWeight.bold, 14),
+                  color: black_text, weight: FontWeight.bold),
             ),
           ),
           for (ServiceProviderSubItem subItem in item.items)
@@ -66,7 +66,7 @@ class UserDetailsServicesConsultant extends StatelessWidget {
             margin: EdgeInsets.only(left: 5),
             child: Text(
               subItem.name,
-              style: TextHelper.customTextStyle(null, gray2, null, 14),
+              style: TextHelper.customTextStyle(color: gray2),
             ),
           ),
           Expanded(
@@ -74,7 +74,7 @@ class UserDetailsServicesConsultant extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                 '${subItem.rate} ${S.of(context).general_currency}',
-                style: TextHelper.customTextStyle(null, red, null, 14),
+                style: TextHelper.customTextStyle(color: red),
               ),
             ),
           )

@@ -169,7 +169,7 @@ class BidDetailsState extends State<BidDetails> {
               '${auctionProvider.selectedAuction?.appointment?.name ?? 'N/A'}',
               maxLines: 3,
               style:
-                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: gray3, weight: FontWeight.bold, size: 16),
             ),
           ),
         ),
@@ -196,14 +196,14 @@ class BidDetailsState extends State<BidDetails> {
               child: Text(
                 '${auctionProvider.selectedBid?.serviceProvider?.name ?? 'N/A'}',
                 style: TextHelper.customTextStyle(
-                    null, Colors.black, FontWeight.bold, 14),
+                    weight: FontWeight.bold),
               ),
             ),
           ),
           FlatButton(
             child: Text(
               S.of(context).auction_bid_see_provider_profile.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
             ),
             onPressed: () {
               _showServiceProviderDetails();
@@ -244,7 +244,7 @@ class BidDetailsState extends State<BidDetails> {
           Expanded(
             child: Text(
               serviceItem.getTranslatedServiceName(context),
-              style: TextHelper.customTextStyle(null, gray, null, 14),
+              style: TextHelper.customTextStyle(color: gray),
             ),
           ),
         ],
@@ -277,7 +277,7 @@ class BidDetailsState extends State<BidDetails> {
             onPressed: () => _openEstimator(context),
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -319,7 +319,7 @@ class BidDetailsState extends State<BidDetails> {
       child: Text(
         title,
         style:
-            TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
+            TextHelper.customTextStyle(weight: FontWeight.bold, size: 16),
       ),
     );
   }
@@ -332,7 +332,7 @@ class BidDetailsState extends State<BidDetails> {
             ? '${auctionProvider.selectedBid?.cost} ${S.of(context).general_currency.toUpperCase()}'
             : 'N/A',
         style:
-            TextHelper.customTextStyle(null, Colors.black, FontWeight.bold, 16),
+            TextHelper.customTextStyle(weight: FontWeight.bold, size: 16),
       ),
     );
   }
@@ -342,7 +342,7 @@ class BidDetailsState extends State<BidDetails> {
       margin: EdgeInsets.only(top: 10),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
+        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -366,7 +366,7 @@ class BidDetailsState extends State<BidDetails> {
               child: Text(
                 (index + 1).toString(),
                 style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 11),
+                    color: Colors.white, weight: FontWeight.bold, size: 11),
               ),
             ),
           ),
@@ -375,7 +375,7 @@ class BidDetailsState extends State<BidDetails> {
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 item.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           )
@@ -407,13 +407,13 @@ class BidDetailsState extends State<BidDetails> {
         return AlertDialog(
           title: Text(S.of(context).general_warning,
               style:
-                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+                  TextHelper.customTextStyle(weight: FontWeight.bold, size: 16)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
                   S.of(context).auction_bid_cancel_description,
-                  style: TextHelper.customTextStyle(null, null, null, 16),
+                  style: TextHelper.customTextStyle(size: 16),
                 ),
               ],
             ),
@@ -468,13 +468,13 @@ class BidDetailsState extends State<BidDetails> {
         return AlertDialog(
           title: Text(S.of(context).general_warning,
               style:
-                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+                  TextHelper.customTextStyle(weight: FontWeight.bold, size: 16)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
                   S.of(context).auction_bid_accept_description,
-                  style: TextHelper.customTextStyle(null, null, null, 16),
+                  style: TextHelper.customTextStyle(size: 16),
                 ),
               ],
             ),
@@ -553,7 +553,7 @@ class BidDetailsState extends State<BidDetails> {
                   label: Text(
                     S.of(context).general_decline.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 20),
+                        color: red, weight: FontWeight.bold, size: 20),
                   ),
                   backgroundColor: Colors.white,
                 ),
@@ -565,7 +565,7 @@ class BidDetailsState extends State<BidDetails> {
                   label: Text(
                     S.of(context).general_accept.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 20),
+                        color: red, weight: FontWeight.bold, size: 20),
                   ),
                   backgroundColor: Colors.white,
                 ),

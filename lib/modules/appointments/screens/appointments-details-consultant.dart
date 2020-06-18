@@ -10,7 +10,6 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
-import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
@@ -148,7 +147,7 @@ class AppointmentDetailsConsultantState
               title: Text(
                 _provider.selectedAppointment?.name,
                 style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 20),
+                    color: Colors.white, weight: FontWeight.bold, size: 20),
               ),
               iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
             ),

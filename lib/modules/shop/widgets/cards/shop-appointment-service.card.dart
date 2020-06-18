@@ -66,7 +66,7 @@ class ShopAppointmentServiceCard extends StatelessWidget {
         ),
         Text(
           '100 lei',
-          style: TextHelper.customTextStyle(null, red, FontWeight.normal, 14),
+          style: TextHelper.customTextStyle(color: red),
         ),
       ],
     );

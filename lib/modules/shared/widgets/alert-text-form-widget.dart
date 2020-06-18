@@ -39,7 +39,7 @@ class AlertTextFormWidget extends StatelessWidget {
                     child: new Text(
                       this.title,
                       style: TextHelper.customTextStyle(
-                          null, Colors.black, FontWeight.bold, 18),
+                          color: Colors.black, weight: FontWeight.bold, size: 18),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -60,7 +60,7 @@ class AlertTextFormWidget extends StatelessWidget {
                     contentPadding: new EdgeInsets.all(10),
                     hintText: this.placeholder,
                     hintStyle: TextHelper.customTextStyle(
-                        null, gray, FontWeight.normal, 12)),
+                        color: gray, size: 12)),
               )),
               flex: 2,
             ),
@@ -75,7 +75,7 @@ class AlertTextFormWidget extends StatelessWidget {
                   child: new Text(
                     this.buttonName,
                     style: TextHelper.customTextStyle(
-                        null, Colors.white, FontWeight.bold, 18.0),
+                        color: Colors.white, weight: FontWeight.bold, size: 18.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {

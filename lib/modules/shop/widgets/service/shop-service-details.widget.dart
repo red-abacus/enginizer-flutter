@@ -31,14 +31,14 @@ class ShopServiceDetailsWidget extends StatelessWidget {
               child: Text(
                 '${S.of(context).general_details}:',
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 14),
+                    color: gray3, weight: FontWeight.bold),
               ),
             ),
             Container(
               margin: EdgeInsets.only(left: 20, right: 20, top: 10),
               child: Text(
                 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                style: TextHelper.customTextStyle(null, gray3, null, 14),
+                style: TextHelper.customTextStyle(color: gray3),
               ),
             ),
             Row(
@@ -51,7 +51,7 @@ class ShopServiceDetailsWidget extends StatelessWidget {
                     child: Text(
                       S.of(context).online_shop_appointment_title,
                       style: TextHelper.customTextStyle(
-                          null, Colors.white, null, 14),
+                          color: Colors.white),
                     ),
                     onPressed: () {
                       showAppointment();
@@ -65,7 +65,7 @@ class ShopServiceDetailsWidget extends StatelessWidget {
                     child: Text(
                       S.of(context).online_shop_appointment_provider_details,
                       style: TextHelper.customTextStyle(
-                          null, Colors.white, null, 14),
+                          color: Colors.white),
                     ),
                     onPressed: () {
                       showProviderDetails();
@@ -129,14 +129,14 @@ class ShopServiceDetailsWidget extends StatelessWidget {
           Expanded(
             child: Text(
               'Lorep ispum dolorem Lorep ispum dolorem Lorep ispum dolorem Lorep ispum dolorem Lorep ispum dolorem',
-              style: TextHelper.customTextStyle(null, gray3, null, 16),
+              style: TextHelper.customTextStyle(color: gray3, size: 16),
             ),
           ),
           Container(
             margin: EdgeInsets.only(left: 20),
             child: Text(
               '-50%',
-              style: TextHelper.customTextStyle(null, red, null, 16),
+              style: TextHelper.customTextStyle(color: red, size: 16),
             ),
           ),
         ],
@@ -156,7 +156,7 @@ class ShopServiceDetailsWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: TextHelper.customTextStyle(null, gray, FontWeight.bold, 10),
+            style: TextHelper.customTextStyle(color: gray, weight: FontWeight.bold, size: 10),
           )
         ],
       ),

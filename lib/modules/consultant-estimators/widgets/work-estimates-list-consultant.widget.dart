@@ -49,7 +49,7 @@ class WorkEstimatesListConsultantWidget extends StatelessWidget {
     return Container(
       child: TextField(
         key: Key('searchBar'),
-        style: TextHelper.customTextStyle(null, null, null, null),
+        style: TextHelper.customTextStyle(),
         autofocus: false,
         decoration: InputDecoration(
             labelText: S
@@ -104,7 +104,7 @@ class WorkEstimatesListConsultantWidget extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 12),
     );
   }
 
@@ -115,7 +115,7 @@ class WorkEstimatesListConsultantWidget extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 12),
     );
   }
 

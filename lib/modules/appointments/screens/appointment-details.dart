@@ -89,7 +89,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
           title: Text(
             _provider.selectedAppointment.name,
             style: TextHelper.customTextStyle(
-                null, Colors.white, FontWeight.bold, 20),
+                color: Colors.white, weight: FontWeight.bold, size: 20),
           ),
           bottom: _isLoading ? null : _tabBar,
           iconTheme: new IconThemeData(color: Theme.of(context).cardColor),

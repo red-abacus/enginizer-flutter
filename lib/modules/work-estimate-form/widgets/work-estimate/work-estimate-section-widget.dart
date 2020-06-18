@@ -74,8 +74,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
         margin: EdgeInsets.only(top: 4, bottom: 4, right: 4, left: 10),
         child: Text(
           issueRecommendation.name,
-          style:
-              TextHelper.customTextStyle(null, black_text, FontWeight.bold, 14),
+          style: TextHelper.customTextStyle(
+              color: black_text, weight: FontWeight.bold),
         ),
       ),
     );
@@ -154,7 +154,8 @@ class WorkEstimateSectionWidget extends StatelessWidget {
         children: [
           Text(
             '${S.of(context).estimator_total}: ${issueRecommendation.totalCost()} RON',
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(
+                color: red, weight: FontWeight.bold, size: 16),
           )
         ],
       ),

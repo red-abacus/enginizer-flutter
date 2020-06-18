@@ -42,7 +42,7 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
               Text(
                 S.of(context).estimator_bid_action,
                 style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
               ),
               if (estimatorMode != EstimatorMode.CreateFinal)
                 CustomTextFormField(
@@ -80,7 +80,7 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
                   child: new Text(
                     S.of(context).general_send,
                     style: TextHelper.customTextStyle(
-                        null, Colors.white, FontWeight.bold, 18.0),
+                        color: Colors.white, weight: FontWeight.bold, size: 18.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {

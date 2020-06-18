@@ -70,7 +70,7 @@ class NotificationsState extends State<Notifications> {
         onPressed: () => _markAllAsRead(),
         label: Text(
           S.of(context).notification_mark_as_read,
-          style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+          style: TextHelper.customTextStyle(color: Colors.white),
         ),
       ),
     );

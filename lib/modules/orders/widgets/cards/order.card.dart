@@ -133,7 +133,7 @@ class OrderCard extends StatelessWidget {
             .toUpperCase(),
         textAlign: TextAlign.right,
         style: TextHelper.customTextStyle(
-            null, appointment.status.resolveStatusColor(), FontWeight.bold, 12),
+            color: appointment.status.resolveStatusColor(), weight: FontWeight.bold, size: 12),
       ),
     );
   }

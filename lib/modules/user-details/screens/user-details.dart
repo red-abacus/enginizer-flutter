@@ -108,7 +108,7 @@ class UserDetailsState extends State<UserDetails> {
                 child: Text(
                   userProvider.name,
                   style: TextHelper.customTextStyle(
-                      null, gray3, FontWeight.bold, 20),
+                      color: gray3, weight: FontWeight.bold, size: 20),
                 ),
               ),
             ],
@@ -141,7 +141,8 @@ class UserDetailsState extends State<UserDetails> {
         children: <Widget>[
           Text(
             '${S.of(context).user_profile_payment_method}:',
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 15),
+            style: TextHelper.customTextStyle(
+                color: gray3, weight: FontWeight.bold, size: 15),
           ),
           _cardDetailsContainer(),
         ],
@@ -177,13 +178,13 @@ class UserDetailsState extends State<UserDetails> {
                         Text(
                           'Visa •••• 0033',
                           style: TextHelper.customTextStyle(
-                              null, gray3, FontWeight.bold, 13),
+                              color: gray3, weight: FontWeight.bold, size: 13),
                         ),
                         Text(
                           '${S.of(context).user_profile_expires_in} Ianuarie / 2022',
                           maxLines: 3,
                           style: TextHelper.customTextStyle(
-                              null, gray3, FontWeight.bold, 13),
+                              color: gray3, weight: FontWeight.bold, size: 13),
                         )
                       ],
                     ),
@@ -207,7 +208,7 @@ class UserDetailsState extends State<UserDetails> {
                       child: Text(
                         S.of(context).user_profile_add_new_card,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 13),
+                            color: gray3, weight: FontWeight.bold, size: 13),
                       ),
                       onPressed: () {},
                     ),
@@ -216,7 +217,7 @@ class UserDetailsState extends State<UserDetails> {
                       child: Text(
                         S.of(context).general_delete,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 13),
+                            color: gray3, weight: FontWeight.bold, size: 13),
                       ),
                       onPressed: () {},
                     ),
@@ -245,7 +246,7 @@ class UserDetailsState extends State<UserDetails> {
               child: Text(
                 title,
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 15),
+                    color: gray3, weight: FontWeight.bold, size: 15),
               ),
             ),
           )
@@ -263,7 +264,7 @@ class UserDetailsState extends State<UserDetails> {
           child: Text(
             S.of(context).user_profile_change_password,
             style: TextHelper.customTextStyle(
-                null, Colors.blue, FontWeight.bold, 16),
+                color: Colors.blue, weight: FontWeight.bold, size: 16),
           ),
           onPressed: () {},
         ),
@@ -282,8 +283,7 @@ class UserDetailsState extends State<UserDetails> {
             Container(
               child: Text(
                 '${S.of(context).auth_name} : ',
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                style: TextHelper.customTextStyle(color: gray2, size: 16),
               ),
             ),
             Expanded(
@@ -293,7 +293,7 @@ class UserDetailsState extends State<UserDetails> {
                 autovalidate: true,
                 initialValue: userProvider.name,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
+                    color: black_text, weight: FontWeight.bold, size: 16),
                 validator: (value) {
                   if (value.isEmpty) {
                     return S.of(context).auth_error_nameRequired;
@@ -321,8 +321,7 @@ class UserDetailsState extends State<UserDetails> {
             Container(
               child: Text(
                 '${S.of(context).auth_email} : ',
-                style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                style: TextHelper.customTextStyle(color: gray2, size: 16),
               ),
             ),
             Expanded(
@@ -332,7 +331,7 @@ class UserDetailsState extends State<UserDetails> {
                 autovalidate: true,
                 initialValue: userProvider.email,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
+                    color: black_text, weight: FontWeight.bold, size: 16),
                 validator: (value) {
                   if (value.isEmpty || !value.contains('@')) {
                     return S.of(context).auth_error_invalidEmail;
@@ -379,8 +378,7 @@ class UserDetailsState extends State<UserDetails> {
               child: Container(
                 child: Text(
                   '${S.of(context).user_profile_current_password} : ',
-                  style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.normal, 16),
+                  style: TextHelper.customTextStyle(color: gray2, size: 16),
                 ),
               ),
             ),
@@ -392,7 +390,7 @@ class UserDetailsState extends State<UserDetails> {
                     obscureText: true,
                     initialValue: 'password',
                     style: TextHelper.customTextStyle(
-                        null, black_text, FontWeight.bold, 16),
+                        color: black_text, weight: FontWeight.bold, size: 16),
                   ),
                 ))
           ],
@@ -412,8 +410,7 @@ class UserDetailsState extends State<UserDetails> {
               child: Container(
                 child: Text(
                   '${S.of(context).user_profile_new_password} : ',
-                  style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.normal, 16),
+                  style: TextHelper.customTextStyle(color: gray2, size: 16),
                 ),
               ),
             ),
@@ -425,7 +422,7 @@ class UserDetailsState extends State<UserDetails> {
                     obscureText: true,
                     initialValue: 'password',
                     style: TextHelper.customTextStyle(
-                        null, black_text, FontWeight.bold, 16),
+                        color: black_text, weight: FontWeight.bold, size: 16),
                   ),
                 ))
           ],
@@ -445,8 +442,7 @@ class UserDetailsState extends State<UserDetails> {
               child: Container(
                 child: Text(
                   '${S.of(context).user_profile_confirm_password} : ',
-                  style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.normal, 16),
+                  style: TextHelper.customTextStyle(color: gray2, size: 16),
                 ),
               ),
             ),
@@ -458,7 +454,7 @@ class UserDetailsState extends State<UserDetails> {
                     obscureText: true,
                     initialValue: 'password',
                     style: TextHelper.customTextStyle(
-                        null, black_text, FontWeight.bold, 16),
+                        color: black_text, weight: FontWeight.bold, size: 16),
                   ),
                 ))
           ],

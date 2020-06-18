@@ -110,7 +110,7 @@ class WorkEstimateCardConsultant extends StatelessWidget {
       child: Text(
         workEstimate.statusTitle(context).toUpperCase(),
         textAlign: TextAlign.right,
-        style: TextHelper.customTextStyle(null, color, FontWeight.bold, 14),
+        style: TextHelper.customTextStyle(color: color, weight: FontWeight.bold, size: 14),
       ),
     );
   }

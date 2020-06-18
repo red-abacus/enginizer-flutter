@@ -34,7 +34,7 @@ class ServiceProviderReviewCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      _leftReviewContainer(context),
+                      _leftReviewContainer(),
                       _rightReviewContainer(context),
                     ],
                   ),
@@ -78,7 +78,7 @@ class ServiceProviderReviewCard extends StatelessWidget {
             child: Text(
               value.toString(),
               style:
-                  TextHelper.customTextStyle(null, gray2, FontWeight.bold, 12),
+                  TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 12),
             ),
           ),
           Container(
@@ -86,7 +86,7 @@ class ServiceProviderReviewCard extends StatelessWidget {
             child: Text(
               title,
               style: TextHelper.customTextStyle(
-                  null, gray2, FontWeight.normal, 12),
+                  color: gray2, size: 12),
             ),
           ),
         ],
@@ -94,7 +94,7 @@ class ServiceProviderReviewCard extends StatelessWidget {
     );
   }
 
-  _leftReviewContainer(BuildContext) {
+  _leftReviewContainer() {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
@@ -106,7 +106,7 @@ class ServiceProviderReviewCard extends StatelessWidget {
               child: Text(
                 '${review.client?.name} - ${review.reviewDate}',
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 14),
+                    color: black_text, weight: FontWeight.bold),
               ),
             ),
             Align(
@@ -116,8 +116,7 @@ class ServiceProviderReviewCard extends StatelessWidget {
                 child: Text(
                   review.feedback,
                   textAlign: TextAlign.left,
-                  style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.normal, 14),
+                  style: TextHelper.customTextStyle(color: gray2),
                 ),
               ),
             ),

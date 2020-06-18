@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/promotions/enum/promotion-status.enum.dart';
@@ -111,7 +110,7 @@ class PromotionsList extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 15),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 15),
     );
   }
 

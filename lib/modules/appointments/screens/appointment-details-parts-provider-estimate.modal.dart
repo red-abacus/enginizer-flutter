@@ -177,7 +177,7 @@ class _AppointmentDetailsPartsProviderEstimateModalState
               color: gray2,
               child: Text(
                 S.of(context).general_send,
-                style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+                style: TextHelper.customTextStyle(color: Colors.white),
               ),
               onPressed: () {
                 _requestItems();

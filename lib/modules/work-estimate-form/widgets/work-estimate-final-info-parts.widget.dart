@@ -34,8 +34,8 @@ class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
             children: <Widget>[
               Text(
                 S.of(context).estimator_bid_action,
-                style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold, size: 20),
               ),
               Container(
                 margin: EdgeInsets.only(top: 10),
@@ -44,13 +44,14 @@ class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       S.of(context).estimator_max_time,
-                      style: TextHelper.customTextStyle(null, gray3, null, 14),
+                      style: TextHelper.customTextStyle(color: gray3),
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 6),
                       child: Text(
                         DateUtils.stringFromDate(maxResponseTime, 'dd/MM/yyyy'),
-                        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+                        style: TextHelper.customTextStyle(
+                            color: red, weight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -81,7 +82,9 @@ class WorkEstimateFinalInfoPartsWidget extends StatelessWidget {
                   child: new Text(
                     S.of(context).general_send,
                     style: TextHelper.customTextStyle(
-                        null, Colors.white, FontWeight.bold, 18.0),
+                        color: Colors.white,
+                        weight: FontWeight.bold,
+                        size: 18.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {

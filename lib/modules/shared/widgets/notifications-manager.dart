@@ -17,8 +17,8 @@ class NotificationsManager {
 
     showSimpleNotification(
       Text(
-        '$body' ,
-        style: TextHelper.customTextStyle(null, gray, FontWeight.normal, 16),
+        '$body',
+        style: TextHelper.customTextStyle(color: gray, size: 16),
       ),
       leading: Container(
         width: 24,

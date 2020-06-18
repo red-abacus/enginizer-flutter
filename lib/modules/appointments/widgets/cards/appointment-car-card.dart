@@ -70,7 +70,7 @@ class AppointmentCarCard extends StatelessWidget {
                               Text(
                                 "${car.brand.name} ${car.year.name}",
                                 style: TextHelper.customTextStyle(
-                                    null, Colors.grey, null, 12),
+                                    color: Colors.grey, size: 12),
                               ),
                             ],
                           ),

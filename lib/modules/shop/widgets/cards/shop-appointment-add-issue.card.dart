@@ -37,7 +37,7 @@ class ShopAppointmentAddIssueCard extends StatelessWidget {
                     border: InputBorder.none,
                     hintText: S.of(context).appointment_create_issues,
                     hintStyle:
-                        TextHelper.customTextStyle(null, gray, null, 14)),
+                        TextHelper.customTextStyle(color: gray)),
                 showCursor: false,
                 onChanged: (val) {
                   issue.name = val;

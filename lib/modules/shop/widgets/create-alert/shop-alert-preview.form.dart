@@ -83,7 +83,8 @@ class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
       margin: EdgeInsets.only(top: 10),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 18),
+        style: TextHelper.customTextStyle(
+            color: gray2, weight: FontWeight.bold, size: 18),
       ),
     );
   }
@@ -96,8 +97,7 @@ class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
           Expanded(
             child: Text(
               text,
-              style: TextHelper.customTextStyle(
-                  null, Colors.black, FontWeight.normal, 18),
+              style: TextHelper.customTextStyle(size: 18),
             ),
           )
         ],

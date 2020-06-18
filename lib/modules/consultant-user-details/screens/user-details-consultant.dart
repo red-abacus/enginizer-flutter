@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/consultant-user-details/enums/user-details-tabbar-state-consultant.enum.dart';
@@ -15,8 +14,6 @@ import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class UserDetailsConsultant extends StatefulWidget {
@@ -134,7 +131,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                   Text(
                     userConsultantProvider.userDetails.name,
                     style: TextHelper.customTextStyle(
-                        null, Colors.white, FontWeight.bold, 16),
+                        color: Colors.white, weight: FontWeight.bold, size: 16),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10),
@@ -142,7 +139,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                       userConsultantProvider.userDetails.email,
                       textAlign: TextAlign.center,
                       style: TextHelper.customTextStyle(
-                          null, Colors.white, FontWeight.normal, 14),
+                          color: Colors.white),
                     ),
                   ),
                   Container(
@@ -150,8 +147,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       child: Text(
                         S.of(context).user_profile_change_password,
-                        style: TextHelper.customTextStyle(null,
-                            Colors.lightBlueAccent, FontWeight.normal, 14),
+                        style: TextHelper.customTextStyle(color: Colors.lightBlueAccent),
                       ),
                       onPressed: () {},
                     ),
@@ -281,7 +277,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
               child: Text(
                 '${S.of(context).auth_name} : ',
                 style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                    color: gray2, size: 16),
               ),
             ),
             Expanded(
@@ -291,7 +287,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                 autovalidate: true,
                 initialValue: userConsultantProvider.name,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
+                    color: black_text, weight: FontWeight.bold, size: 16),
                 validator: (value) {
                   if (value.isEmpty) {
                     return S.of(context).auth_error_nameRequired;
@@ -320,7 +316,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
               child: Text(
                 '${S.of(context).user_profile_fiscal_name} : ',
                 style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                    color: gray2, size: 16),
               ),
             ),
             Expanded(
@@ -330,7 +326,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                 autovalidate: true,
                 initialValue: userConsultantProvider.fiscalName,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
+                    color: black_text, weight: FontWeight.bold, size: 16),
                 validator: (value) {
                   if (value.isEmpty) {
                     return S.of(context).auth_error_nameRequired;
@@ -359,7 +355,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
               child: Text(
                 '${S.of(context).user_profile_registration_number} : ',
                 style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                    color: gray2, size: 16),
               ),
             ),
             Expanded(
@@ -369,7 +365,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                 autovalidate: true,
                 initialValue: userConsultantProvider.registrationNumber,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
+                    color: black_text, weight: FontWeight.bold, size: 16),
                 validator: (value) {
                   if (value.isEmpty) {
                     return S.of(context).user_profile_fiscal_name_error;
@@ -398,7 +394,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
               child: Text(
                 '${S.of(context).user_profile_vta_payer} : ',
                 style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                    color: gray2, size: 16),
               ),
             ),
             Container(
@@ -427,7 +423,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
               child: Text(
                 '${S.of(context).user_profile_cui} : ',
                 style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.normal, 16),
+                    color: gray2, size: 16),
               ),
             ),
             Expanded(
@@ -437,7 +433,7 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
                 autovalidate: true,
                 initialValue: userConsultantProvider.cui,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 16),
+                    color: black_text, weight: FontWeight.bold, size: 16),
                 validator: (value) {
                   if (value.isEmpty) {
                     return S.of(context).user_profile_cui_error;

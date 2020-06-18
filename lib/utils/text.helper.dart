@@ -4,23 +4,21 @@ import 'package:flutter/material.dart';
 
 class TextHelper {
   static final Color defaultTextColor = Colors.black;
-  static final String defaultFont = "Lato";
+  static final String defaultFont = 'Lato';
   static final FontWeight defaultWeight = FontWeight.normal;
   static final double defaultFontSize = 14;
 
-  static TextStyle customTextStyle(String fontName, Color textColor,
-      FontWeight fontWeight, double fontSize) {
+  static TextStyle customTextStyle(
+      {String fontName, Color color, FontWeight weight, double size}) {
     String _fontName = (fontName == null) ? defaultFont : fontName;
-    Color _textColor = (textColor == null) ? defaultTextColor : textColor;
-    FontWeight _textFontWeight =
-        (fontWeight == null) ? defaultWeight : fontWeight;
-    double _textFontSize = (fontSize == null) ? defaultFontSize : fontSize;
+    Color _textColor = (color == null) ? defaultTextColor : color;
+    FontWeight _textFontWeight = (weight == null) ? defaultWeight : weight;
+    double _textFontSize = (size == null) ? defaultFontSize : size;
 
     return TextStyle(
         fontFamily: _fontName,
         color: _textColor,
         fontWeight: _textFontWeight,
-        fontSize: _textFontSize
-    );
+        fontSize: _textFontSize);
   }
 }

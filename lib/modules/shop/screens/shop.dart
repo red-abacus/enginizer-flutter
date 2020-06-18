@@ -51,7 +51,7 @@ class ShopState extends State<Shop> {
           onPressed: () => _openShopAlertModal(),
           label: Text(
             S.of(context).general_alert,
-            style: TextHelper.customTextStyle(null, Colors.white, null, 12),
+            style: TextHelper.customTextStyle(color: Colors.white, size: 12),
           ),
           icon: Icon(Icons.add),
         ),

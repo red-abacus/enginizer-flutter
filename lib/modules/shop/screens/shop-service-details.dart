@@ -32,7 +32,7 @@ class _ShopServiceDetailsState extends State<ShopServiceDetails> {
         title: Text(
           '',
           style: TextHelper.customTextStyle(
-              null, Colors.white, FontWeight.bold, 20),
+              color: Colors.white, weight: FontWeight.bold, size: 20),
         ),
         iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
       ),

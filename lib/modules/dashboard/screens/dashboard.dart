@@ -47,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
             margin: EdgeInsets.only(left: 20, top: 20),
             child: Text(
               S.of(context).dashboard_expenses,
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 20),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
             ),
           ),
           _filterButtons(),
@@ -109,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
         isDense: true,
         hint: Text(
           S.of(context).dashboard_select_car,
-          style: TextHelper.customTextStyle(null, Colors.grey, null, 15),
+          style: TextHelper.customTextStyle(color: Colors.grey, size: 15),
         ),
         items: _carsDropdownItems(),
         onChanged: (newValue) {

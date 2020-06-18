@@ -39,7 +39,7 @@ class _CarRecommendationsWidgetState extends State<CarRecommendationsWidget> {
                       S.of(context).cars_no_recommendations_title,
                       textAlign: TextAlign.center,
                       style: TextHelper.customTextStyle(
-                          null, gray3, FontWeight.bold, 16),
+                          color: gray3, weight: FontWeight.bold, size: 16),
                     ),
                   ),
                 ],

@@ -88,7 +88,7 @@ class ServiceProviderReviewsWidgetState
         children: <Widget>[
           Text(
             title,
-            style: TextHelper.customTextStyle(null, gray2, null, 14),
+            style: TextHelper.customTextStyle(color: gray2),
           ),
           Expanded(
             child: Container(
@@ -96,7 +96,7 @@ class ServiceProviderReviewsWidgetState
               child: Text(
                 value,
                 style: TextHelper.customTextStyle(
-                    null, black_text, FontWeight.bold, 14),
+                    color: black_text, weight: FontWeight.bold),
               ),
             ),
           ),

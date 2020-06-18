@@ -85,7 +85,8 @@ class NavigationApp extends StatefulWidget {
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PROMOTIONS)) {
-      items.add(new DrawerItem('Promotions', Promotions.route, Promotions.icon));
+      items
+          .add(new DrawerItem('Promotions', Promotions.route, Promotions.icon));
     }
 
     if (PermissionsManager.getInstance()
@@ -269,7 +270,9 @@ class NavigationAppState extends State<NavigationApp> {
                   children: <Widget>[
                     Text('${NotificationsManager.notificationsCount}',
                         style: TextHelper.customTextStyle(
-                            null, Colors.white, FontWeight.bold, 12))
+                            color: Colors.white,
+                            weight: FontWeight.bold,
+                            size: 12))
                   ],
                 ),
               )

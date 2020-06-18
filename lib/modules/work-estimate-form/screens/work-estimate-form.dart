@@ -240,17 +240,15 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         children: <Widget>[
           Text(
             S.of(context).estimator_cost_estimate,
-            style: TextHelper.customTextStyle(null, red, FontWeight.normal, 22),
+            style: TextHelper.customTextStyle(color: red, size: 22),
           ),
           Text(
             '${S.of(context).estimator_percent}: ${_provider.selectedAppointmentDetail?.forwardPaymentPercent}',
-            style:
-                TextHelper.customTextStyle(null, gray, FontWeight.normal, 14),
+            style: TextHelper.customTextStyle(color: gray),
           ),
           Text(
             '${S.of(context).estimator_max_time}: ${_provider.selectedAppointmentDetail?.timeToRespond}',
-            style:
-                TextHelper.customTextStyle(null, gray, FontWeight.normal, 14),
+            style: TextHelper.customTextStyle(color: gray),
           ),
         ],
       ),
@@ -271,8 +269,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         foregroundColor: red,
         backgroundColor: Colors.white,
         label: S.of(context).general_save,
-        labelStyle:
-            TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+        labelStyle: TextHelper.customTextStyle(
+            color: Colors.grey, weight: FontWeight.bold, size: 16),
         onTap: () => _save());
 
     var operationHistoryButton = SpeedDialChild(
@@ -280,8 +278,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         foregroundColor: red,
         backgroundColor: Colors.white,
         label: S.of(context).estimator_operations_history,
-        labelStyle:
-            TextHelper.customTextStyle(null, Colors.grey, FontWeight.bold, 16),
+        labelStyle: TextHelper.customTextStyle(
+            color: Colors.grey, weight: FontWeight.bold, size: 16),
         onTap: () => print('operation history'));
 
     var buttons = List<SpeedDialChild>();
@@ -294,7 +292,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             backgroundColor: Colors.white,
             label: S.of(context).estimator_create_from_selection,
             labelStyle: TextHelper.customTextStyle(
-                null, Colors.grey, FontWeight.bold, 16),
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _acceptRecommendations()));
         break;
       case EstimatorMode.Edit:
@@ -306,7 +304,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             backgroundColor: Colors.white,
             label: S.of(context).estimator_order_title,
             labelStyle: TextHelper.customTextStyle(
-                null, Colors.grey, FontWeight.bold, 16),
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _orderItems()));
         break;
       case EstimatorMode.Create:
@@ -317,7 +315,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             backgroundColor: Colors.white,
             label: S.of(context).estimator_assign_mechanic,
             labelStyle: TextHelper.customTextStyle(
-                null, Colors.grey, FontWeight.bold, 16),
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _assignMechanic()));
         break;
       case EstimatorMode.CreatePart:
@@ -390,8 +388,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             Container(
               child: Text(
                 '${S.of(context).estimator_total}: ${totalCost.toStringAsFixed(2)} RON',
-                style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold),
               ),
             ),
             if (widget.mode == EstimatorMode.ClientAccept)
@@ -408,7 +406,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         FlatButton(
           child: Text(
             S.of(context).general_decline,
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(
+                color: gray3, weight: FontWeight.bold),
           ),
           onPressed: () {
             _declineEstimateAlert();
@@ -417,7 +416,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         FlatButton(
           child: Text(
             S.of(context).general_accept,
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            style:
+                TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
           ),
           onPressed: () {
             _acceptEstimateAlert();

@@ -47,7 +47,7 @@ class CarHistoryCard extends StatelessWidget {
           Expanded(
             child: Text(
               carHistory.appointmentName,
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
             ),
           ),
           Text(
@@ -55,7 +55,7 @@ class CarHistoryCard extends StatelessWidget {
                 ? DateUtils.stringFromDate(
                     carHistory.appointmentScheduledDateTime, 'dd MMMM yyyy')
                 : '',
-            style: TextHelper.customTextStyle(null, gray3, null, 14),
+            style: TextHelper.customTextStyle(color: gray3),
           )
         ],
       ),
@@ -77,7 +77,7 @@ class CarHistoryCard extends StatelessWidget {
               Text(
                 intervention.name,
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 14),
+                    color: gray3, weight: FontWeight.bold, size: 14),
               ),
               Icon(selected ? Icons.check_box : Icons.check_box_outline_blank,
                   color: red)

@@ -58,7 +58,7 @@ class AppointmentsList extends StatelessWidget {
     return Container(
       child: TextField(
         key: Key('searchBar'),
-        style: TextHelper.customTextStyle(null, null, null, null),
+        style: TextHelper.customTextStyle(),
         autofocus: false,
         decoration: InputDecoration(
             labelText: S.of(context).appointments_list_search_hint),
@@ -133,7 +133,7 @@ class AppointmentsList extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 15),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 15),
     );
   }
 

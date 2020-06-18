@@ -1,16 +1,11 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/authentication/models/roles.model.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/orders/widgets/cards/order.card.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class OrdersList extends StatelessWidget {
   List<Appointment> appointments = [];
@@ -65,7 +60,7 @@ class OrdersList extends StatelessWidget {
     return Container(
       child: TextField(
         key: Key('searchBar'),
-        style: TextHelper.customTextStyle(null, null, null, null),
+        style: TextHelper.customTextStyle(),
         autofocus: false,
         decoration: InputDecoration(
             labelText: S
@@ -146,7 +141,7 @@ class OrdersList extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 15),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 15),
     );
   }
 

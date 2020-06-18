@@ -58,7 +58,7 @@ class AuctionAppointmentDetailsWidgetState
 //                      ${widget.auction?.status?.name}
                       maxLines: 3,
                       style: TextHelper.customTextStyle(
-                          null, gray3, FontWeight.bold, 16),
+                          color: gray3, weight: FontWeight.bold, size: 16),
                     ),
                   ),
                 ),
@@ -69,7 +69,7 @@ class AuctionAppointmentDetailsWidgetState
               child: Text(
                 S.of(context).appointment_details_services_title,
                 style: TextHelper.customTextStyle(
-                    null, gray2, FontWeight.bold, 13),
+                    color: gray2, weight: FontWeight.bold, size: 13),
               ),
             ),
             if (widget.appointmentDetail != null)
@@ -83,7 +83,7 @@ class AuctionAppointmentDetailsWidgetState
                 child: Text(
                   S.of(context).appointment_details_services_issues,
                   style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.bold, 13),
+                      color: gray2, weight: FontWeight.bold, size: 13),
                 ),
               ),
             if (showIssues)
@@ -97,7 +97,7 @@ class AuctionAppointmentDetailsWidgetState
                 child: Text(
                   S.of(context).appointment_details_services_appointment_date,
                   style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.bold, 13),
+                      color: gray2, weight: FontWeight.bold, size: 13),
                 ),
               ),
             Container(
@@ -111,7 +111,7 @@ class AuctionAppointmentDetailsWidgetState
                             .replaceAll(" ", " ${S.of(context).general_at} ")
                         : 'N/A',
                     style: TextHelper.customTextStyle(
-                        null, Colors.black, null, 18),
+                        size: 18),
                   ),
                 ],
               ),
@@ -130,7 +130,7 @@ class AuctionAppointmentDetailsWidgetState
             margin: EdgeInsets.only(top: 4),
             child: Text(
               serviceItem.getTranslatedServiceName(context),
-              style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+              style: TextHelper.customTextStyle(size: 13),
             ),
           ),
         ),
@@ -158,7 +158,7 @@ class AuctionAppointmentDetailsWidgetState
               child: Text(
                 (index + 1).toString(),
                 style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 11),
+                    color: Colors.white, weight: FontWeight.bold, size: 11),
               ),
             ),
           ),
@@ -167,7 +167,7 @@ class AuctionAppointmentDetailsWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 item.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),

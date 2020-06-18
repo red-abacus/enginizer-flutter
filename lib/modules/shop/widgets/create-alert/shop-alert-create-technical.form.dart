@@ -40,7 +40,7 @@ class ShopAlertCreateTechnicalFormState
             margin: EdgeInsets.only(top: 10),
             child: Text(
               S.of(context).online_shop_alert_manufacturer_date,
-              style: TextHelper.customTextStyle(null, gray3, null, 14),
+              style: TextHelper.customTextStyle(color: gray3),
             ),
           ),
           _buildDateWidget(),
@@ -48,7 +48,7 @@ class ShopAlertCreateTechnicalFormState
             margin: EdgeInsets.only(top: 10),
             child: Text(
               S.of(context).general_mileage,
-              style: TextHelper.customTextStyle(null, gray3, null, 14),
+              style: TextHelper.customTextStyle(color: gray3),
             ),
           ),
           _buildStartMileageWidget(),
@@ -57,7 +57,7 @@ class ShopAlertCreateTechnicalFormState
             margin: EdgeInsets.only(top: 10),
             child: Text(
               S.of(context).general_price,
-              style: TextHelper.customTextStyle(null, gray3, null, 14),
+              style: TextHelper.customTextStyle(color: gray3),
             ),
           ),
           _buildStartPriceWidget(),

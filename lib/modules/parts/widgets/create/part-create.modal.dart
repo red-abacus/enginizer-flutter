@@ -172,7 +172,7 @@ class _PartCreateModalState extends State<PartCreateModal> {
                 Text(
                   S.of(context).part_create_form_photos_title,
                   style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 16),
+                      color: red, weight: FontWeight.bold, size: 16),
                 ),
                 ImageSelectionWidget(
                     addImage: _addImage, files: _provider.request.files),

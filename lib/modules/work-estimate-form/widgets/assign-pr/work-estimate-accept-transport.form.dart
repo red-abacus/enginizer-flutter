@@ -42,7 +42,7 @@ class WorkEstimateAcceptTransportFormState
                     S
                         .of(context)
                         .estimator_accept_modal_step1_personal_transport,
-                    style: TextHelper.customTextStyle(null, gray3, null, 16)),
+                    style: TextHelper.customTextStyle(color: gray3, size: 16)),
                 Icon(
                   provider.workEstimateAcceptState ==
                           WorkEstimateAcceptState.Personal
@@ -69,7 +69,8 @@ class WorkEstimateAcceptTransportFormState
                     padding: EdgeInsets.all(10.0),
                     margin: EdgeInsets.all(20.0),
                     waitDuration: const Duration(milliseconds: 1),
-                    message: S.of(context).estimator_accept_modal_tooltip_message,
+                    message:
+                        S.of(context).estimator_accept_modal_tooltip_message,
                     child: Icon(Icons.info, color: red),
                   ),
                   Expanded(
@@ -80,7 +81,7 @@ class WorkEstimateAcceptTransportFormState
                             .of(context)
                             .estimator_accept_modal_step1_pickup_transport,
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 16),
+                            TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                     ),
                   ),

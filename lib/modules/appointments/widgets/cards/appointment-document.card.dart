@@ -14,7 +14,7 @@ class AppointmentDocumentCard extends StatelessWidget {
           Expanded(
             child: Text(
               'Deviz Initial',
-              style: TextHelper.customTextStyle(null, gray3, null, 14),
+              style: TextHelper.customTextStyle(color: gray3),
             ),
           ),
           Container(

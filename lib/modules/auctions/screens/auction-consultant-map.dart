@@ -11,7 +11,6 @@ import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
-import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/constants.dart';
@@ -177,7 +176,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
                             .appointment_details_estimator
                             .toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                   backgroundColor: Colors.white,
                 )
@@ -191,7 +190,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
     return Text(
       _provider.selectedAuction?.appointment?.name ?? 'N/A',
       style:
-          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 

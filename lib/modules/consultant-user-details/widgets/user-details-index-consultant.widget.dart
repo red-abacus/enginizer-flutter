@@ -15,14 +15,14 @@ class UserDetailsIndexConsultantWidget extends StatelessWidget {
             Text(
               S.of(context).user_profile_index_time,
               style: TextHelper.customTextStyle(
-                  null, gray3, FontWeight.normal, 24),
+                  color: gray3, size: 24),
             ),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: Text(
                 '80%',
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 40),
+                    color: gray3, weight: FontWeight.bold, size: 40),
               ),
             )
           ],

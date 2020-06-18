@@ -68,7 +68,7 @@ class WorkEstimateIssueWidget extends StatelessWidget {
           child: Text(
             '${issueItem.name} (${issueItem.code})',
             style: TextHelper.customTextStyle(
-                null, black_text, FontWeight.bold, 16),
+                color: black_text, weight: FontWeight.bold, size: 16),
           ),
         ),
       ],
@@ -85,7 +85,7 @@ class WorkEstimateIssueWidget extends StatelessWidget {
             child: Text(
               '${S.of(context).estimator_type}: ${_translateType(context, issueItem.type.name)}',
               style:
-                  TextHelper.customTextStyle(null, gray2, FontWeight.bold, 14),
+                  TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold),
             ),
           ),
         ],
@@ -102,13 +102,13 @@ class WorkEstimateIssueWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             '${S.of(context).car_details_quantity}:',
-            style: TextHelper.customTextStyle(null, black_text, null, 14),
+            style: TextHelper.customTextStyle(color: black_text),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
               issueItem.quantity.toString(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
             ),
           ),
         ],
@@ -125,27 +125,27 @@ class WorkEstimateIssueWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             '${S.of(context).general_price}:',
-            style: TextHelper.customTextStyle(null, black_text, null, 14),
+            style: TextHelper.customTextStyle(color: black_text),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
               issueItem.price.toString(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
             ),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
               '(${(issueItem.price + issueItem.priceVAT).toString()}',
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
             ),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
               '${S.of(context).estimator_priceVAT})',
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
             ),
           )
         ],
@@ -165,14 +165,14 @@ class WorkEstimateIssueWidget extends StatelessWidget {
               children: <Widget>[
                 Text(
                   '${S.of(context).general_addition}:',
-                  style: TextHelper.customTextStyle(null, black_text, null, 14),
+                  style: TextHelper.customTextStyle(color: black_text),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 5),
                   child: Text(
                     '${issueItem.addition.toString()}%',
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 14),
+                        color: red, weight: FontWeight.bold, size: 14),
                   ),
                 ),
               ],

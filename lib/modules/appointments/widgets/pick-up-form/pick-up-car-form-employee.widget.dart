@@ -11,7 +11,8 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
   final Function selectEmployeeTimeSerie;
   final EmployeeTimeSerie selectedTimeSerie;
 
-  PickUpCarFormEmployeeWidget({this.employee, this.selectEmployeeTimeSerie, this.selectedTimeSerie});
+  PickUpCarFormEmployeeWidget(
+      {this.employee, this.selectEmployeeTimeSerie, this.selectedTimeSerie});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
         employee?.name,
         maxLines: 2,
         textAlign: TextAlign.center,
-        style: TextHelper.customTextStyle(null, Colors.black, null, 14),
+        style: TextHelper.customTextStyle(),
       ),
     );
   }

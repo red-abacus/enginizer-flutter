@@ -42,7 +42,7 @@ class ServiceProviderFiscalInfoWidgetState
       margin: EdgeInsets.only(top: 10),
       child: Text(
         title,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 16),
+        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 16),
       ),
     );
   }
@@ -55,7 +55,7 @@ class ServiceProviderFiscalInfoWidgetState
       child: Text(
         '${S.of(context).appointment_details_service_vta_payer}: $payer',
         style: TextHelper.customTextStyle(
-            null, gray2, FontWeight.bold, 16),
+            color: gray2, weight: FontWeight.bold, size: 16),
       ),
     );
   }

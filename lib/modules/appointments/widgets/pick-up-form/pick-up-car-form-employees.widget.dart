@@ -81,7 +81,7 @@ class _PickUpCarFormEmployeesWidgetState
                 Text(
                   S.of(context).appointment_details_assiged_mechanic,
                   style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 16),
+                      color: red, weight: FontWeight.bold, size: 16),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 8),
@@ -90,7 +90,7 @@ class _PickUpCarFormEmployeesWidgetState
                       FadeInImage.assetNetwork(
                         image: employee.profilePhoto,
                         placeholder:
-                        'assets/images/defaults/default_profile_icon.png',
+                            'assets/images/defaults/default_profile_icon.png',
                         fit: BoxFit.fitHeight,
                         height: 32,
                         width: 32,
@@ -100,8 +100,7 @@ class _PickUpCarFormEmployeesWidgetState
                           margin: EdgeInsets.only(left: 4),
                           child: Text(
                             employee?.name,
-                            style: TextHelper.customTextStyle(
-                                null, Colors.black, null, 14),
+                            style: TextHelper.customTextStyle(),
                           ),
                         ),
                       ),

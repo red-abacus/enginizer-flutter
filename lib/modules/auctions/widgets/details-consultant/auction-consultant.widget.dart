@@ -68,7 +68,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 //                      ${widget.auction?.status?.name}
                         maxLines: 3,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                     ),
                   ),
@@ -79,7 +79,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                 child: Text(
                   S.of(context).appointment_details_services_title,
                   style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.bold, 13),
+                      color: gray2, weight: FontWeight.bold, size: 13),
                 ),
               ),
               if (widget.auctionDetails != null)
@@ -93,7 +93,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                   child: Text(
                     S.of(context).appointment_details_services_issues,
                     style: TextHelper.customTextStyle(
-                        null, gray2, FontWeight.bold, 13),
+                        color: gray2, weight: FontWeight.bold, size: 13),
                   ),
                 ),
               if (showIssues)
@@ -105,7 +105,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                 child: Text(
                   S.of(context).appointment_details_services_appointment_date,
                   style: TextHelper.customTextStyle(
-                      null, gray2, FontWeight.bold, 13),
+                      color: gray2, weight: FontWeight.bold, size: 13),
                 ),
               ),
               Container(
@@ -119,7 +119,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
                               .replaceAll(" ", " ${S.of(context).general_at} ")
                           : 'N/A',
                       style: TextHelper.customTextStyle(
-                          null, Colors.black, null, 18),
+                          size: 18),
                     ),
                   ],
                 ),
@@ -143,7 +143,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
             margin: EdgeInsets.only(top: 4),
             child: Text(
               serviceItem.getTranslatedServiceName(context),
-              style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+              style: TextHelper.customTextStyle(size: 13),
             ),
           ),
         ),
@@ -171,7 +171,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
               child: Text(
                 (index + 1).toString(),
                 style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 11),
+                    color: Colors.white, weight: FontWeight.bold, size: 11),
               ),
             ),
           ),
@@ -180,7 +180,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 item.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -233,7 +233,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
           return FlatButton(
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 24),
             ),
             onPressed: () {
               _seeEstimate(userBid);
@@ -246,7 +246,7 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
     return FlatButton(
       child: Text(
         S.of(context).auction_create_estimate.toUpperCase(),
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 24),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 24),
       ),
       onPressed: () {
         widget.createEstimate();

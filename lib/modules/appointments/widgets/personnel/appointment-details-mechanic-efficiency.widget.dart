@@ -38,7 +38,7 @@ class _AppointmentDetailsMechanicEfficiencyWidgetState
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
                     S.of(context).mechanic_appointment_chart_your_time,
-                    style: TextHelper.customTextStyle(null, gray3, null, 14),
+                    style: TextHelper.customTextStyle(color: gray3),
                   ),
                 ),
               ],
@@ -57,7 +57,7 @@ class _AppointmentDetailsMechanicEfficiencyWidgetState
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
                     S.of(context).mechanic_appointment_chart_standard_time,
-                    style: TextHelper.customTextStyle(null, gray3, null, 14),
+                    style: TextHelper.customTextStyle(color: gray3),
                   ),
                 ),
               ],

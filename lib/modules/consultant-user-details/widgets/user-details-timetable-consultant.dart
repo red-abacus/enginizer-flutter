@@ -37,7 +37,7 @@ class UserDetailsTimetableConsultant extends StatelessWidget {
             child: Text(
               schedule.dayOfWeek,
               style: TextHelper.customTextStyle(
-                  null, black_text, FontWeight.bold, 14),
+                  color: black_text, weight: FontWeight.bold),
             ),
           ),
           for (UserProviderScheduleSlot slot in schedule.slots) _hourContainer(slot),

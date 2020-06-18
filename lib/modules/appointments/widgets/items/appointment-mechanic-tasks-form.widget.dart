@@ -29,7 +29,7 @@ class AppointmentMechanicTasksFormWidget extends StatelessWidget {
                 '${S.of(context).mechanic_appointment_tasks_form_title}',
                 textAlign: TextAlign.center,
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 16),
+                    color: gray3, weight: FontWeight.bold, size: 16),
               ),
               margin: EdgeInsets.only(top: 20),
             ),
@@ -39,7 +39,7 @@ class AppointmentMechanicTasksFormWidget extends StatelessWidget {
                   child: new Text(
                     S.of(context).general_no.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, gray3, FontWeight.bold, 16.0),
+                        color: gray3, weight: FontWeight.bold, size: 16.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
@@ -54,7 +54,7 @@ class AppointmentMechanicTasksFormWidget extends StatelessWidget {
                   child: new Text(
                     S.of(context).general_yes.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16.0),
+                        color: red, weight: FontWeight.bold, size: 16.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {

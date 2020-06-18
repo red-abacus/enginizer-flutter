@@ -59,13 +59,17 @@ class FirestoreManager {
 
   getLocation(int appointmentId, int providerId,
       Function providerLocationChanged) async {
+    print('appointment id $appointmentId');
+    print('provider id $providerId');
     Query query = locations
         .where('provider_id', isEqualTo: providerId)
         .where('appointment_id', isEqualTo: appointmentId)
+        .orderBy('timestamp', descending: true)
         .limit(1);
 
     query.snapshots().listen((data) {
       if (data.documents.length > 0) {
+        print('data ${data.documents}');
         providerLocationChanged(
             FirestoreLocation.fromJson(data.documents.last.data));
       }

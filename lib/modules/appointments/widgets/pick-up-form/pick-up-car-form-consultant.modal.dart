@@ -188,7 +188,7 @@ class _PickUpCarFormConsultantWidgetState
                 Text(
                   S.of(context).appointment_consultant_car_form_photos_title,
                   style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 16),
+                      color: red, weight: FontWeight.bold, size: 16),
                 ),
                 ImageSelectionWidget(
                     addImage: _addImage,

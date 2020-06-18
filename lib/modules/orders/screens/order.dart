@@ -149,7 +149,7 @@ class OrderDetailsState extends State<OrderDetails>
     return Text(
       _provider.order?.name ?? 'N/A',
       style:
-          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 

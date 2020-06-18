@@ -88,7 +88,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                             Text(
                               S.of(context).estimator_add_new_product,
                               style: TextHelper.customTextStyle(
-                                  null, Colors.white, FontWeight.normal, 14),
+                                  color: Colors.white),
                             ),
                           ],
                         ),
@@ -113,7 +113,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                               Text(
                                 S.of(context).estimator_import_product,
                                 style: TextHelper.customTextStyle(
-                                    null, Colors.white, FontWeight.normal, 14),
+                                    color: Colors.white),
                               ),
                             ],
                           ),

@@ -107,7 +107,7 @@ class _PartState extends State<Part> {
             child: Text(
               _provider.selectedPart.name,
               style:
-                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: gray3, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -124,7 +124,7 @@ class _PartState extends State<Part> {
             child: Text(
               _provider.selectedPart.code,
               style:
-                  TextHelper.customTextStyle(null, gray, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: gray, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -150,12 +150,12 @@ class _PartState extends State<Part> {
           Expanded(
             child: Text(
               '${S.of(context).general_guarantee}:',
-              style: TextHelper.customTextStyle(null, black_text, null, 14),
+              style: TextHelper.customTextStyle(color: black_text),
             ),
           ),
           Text(
             guaranteeTitle,
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
           )
         ],
       ),
@@ -170,12 +170,12 @@ class _PartState extends State<Part> {
           Expanded(
             child: Text(
               '${S.of(context).estimator_priceNoVAT}',
-              style: TextHelper.customTextStyle(null, black_text, null, 14),
+              style: TextHelper.customTextStyle(color: black_text),
             ),
           ),
           Text(
             '${_provider.selectedPart.price}',
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
           )
         ],
       ),
@@ -190,12 +190,12 @@ class _PartState extends State<Part> {
           Expanded(
             child: Text(
               '${S.of(context).general_addition}',
-              style: TextHelper.customTextStyle(null, black_text, null, 14),
+              style: TextHelper.customTextStyle(color: black_text),
             ),
           ),
           Text(
             '${_provider.selectedPart.addition}',
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
           )
         ],
       ),
@@ -210,12 +210,12 @@ class _PartState extends State<Part> {
           Expanded(
             child: Text(
               '${S.of(context).estimator_total}',
-              style: TextHelper.customTextStyle(null, black_text, null, 14),
+              style: TextHelper.customTextStyle(color: black_text),
             ),
           ),
           Text(
             '${_provider.selectedPart.price + _provider.selectedPart.priceVAT}',
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
           )
         ],
       ),

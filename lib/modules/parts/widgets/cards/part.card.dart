@@ -30,9 +30,7 @@ class PartCard extends StatelessWidget {
           color: Colors.white,
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
-            onTap: () => {
-              selectPart(providerItem)
-            },
+            onTap: () => {selectPart(providerItem)},
             child: ClipRRect(
               child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -80,14 +78,16 @@ class PartCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         height: 1.5)),
-                Text('${S.of(context).general_price}: ${providerItem.price} RON',
+                Text(
+                    '${S.of(context).general_price}: ${providerItem.price} RON',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.normal,
                         fontSize: 12.8,
                         height: 1.5)),
-                Text('${S.of(context).general_tva}: ${providerItem.priceVAT} RON',
+                Text(
+                    '${S.of(context).general_tva}: ${providerItem.priceVAT} RON',
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: 'Lato',
@@ -123,7 +123,8 @@ class PartCard extends StatelessWidget {
       child: Text(
         '${providerItem.price + providerItem.priceVAT} RON',
         textAlign: TextAlign.right,
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(
+            color: red, weight: FontWeight.bold, size: 12),
       ),
     );
   }

@@ -48,7 +48,7 @@ class _AppointmentMapDetailsWidgetState
                   child: Text(
                     S.of(context).appointment_details_applicant,
                     style: TextHelper.customTextStyle(
-                        null, gray2, FontWeight.bold, 13),
+                        color: gray2, weight: FontWeight.bold, size: 13),
                   ),
                 ),
                 _applicantContainer(),
@@ -99,15 +99,16 @@ class _AppointmentMapDetailsWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 S.of(context).appointment_consultant_no_pick_up_car_form,
-                style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold, size: 15),
               ),
             ),
           ),
           FlatButton(
             child: Text(
               S.of(context).general_create.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 15),
             ),
             onPressed: () {
               widget.createPickUpCarForm(PickupFormState.Receive);
@@ -137,8 +138,8 @@ class _AppointmentMapDetailsWidgetState
               _provider.selectedAppointmentDetail?.car?.registrationNumber ??
                   'N/A',
               maxLines: 3,
-              style:
-                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(
+                  color: gray3, weight: FontWeight.bold, size: 16),
             ),
           ),
         ),
@@ -171,7 +172,7 @@ class _AppointmentMapDetailsWidgetState
               child: Text(
                 _provider.selectedAppointmentDetail?.user?.name ??
                     'Client Name',
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -243,14 +244,14 @@ class _AppointmentMapDetailsWidgetState
                     Text(
                       '$title:',
                       style: TextHelper.customTextStyle(
-                          null, gray3, FontWeight.bold, 14),
+                          color: gray3, weight: FontWeight.bold),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Text(
                         point.address,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     ),
                     Container(
@@ -261,7 +262,7 @@ class _AppointmentMapDetailsWidgetState
                                 point.dateTime, 'dd.MM.yyyy')
                             : '',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     ),
                     Container(
@@ -271,7 +272,7 @@ class _AppointmentMapDetailsWidgetState
                             ? DateUtils.stringFromDate(point.dateTime, 'HH:mm')
                             : '',
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 14),
+                            color: gray3, weight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -294,11 +295,12 @@ class _AppointmentMapDetailsWidgetState
         children: [
           Text(
             '${S.of(context).auction_route_total_distance}:',
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(
+                color: gray3, weight: FontWeight.bold, size: 16),
           ),
           Text(
             '${distanceInKm.toStringAsFixed(1)} km',
-            style: TextHelper.customTextStyle(null, gray3, null, 16),
+            style: TextHelper.customTextStyle(color: gray3, size: 16),
           ),
         ],
       ),

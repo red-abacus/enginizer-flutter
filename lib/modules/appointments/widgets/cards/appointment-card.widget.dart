@@ -131,8 +131,7 @@ class AppointmentCard extends StatelessWidget {
           AppointmentStatusStateUtils.title(context, appointment.status.getState())
             .toUpperCase(),
           textAlign: TextAlign.right,
-          style: TextHelper.customTextStyle(
-              null, appointment.status.resolveStatusColor(), FontWeight.bold, 12),
+          style: TextHelper.customTextStyle(color: appointment.status.resolveStatusColor(), weight: FontWeight.bold, size: 12),
         ),
       ),
     );

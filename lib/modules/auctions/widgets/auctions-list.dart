@@ -88,7 +88,7 @@ class AuctionsList extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 12),
     );
   }
 

@@ -72,7 +72,7 @@ class AuctionsConsultantList extends StatelessWidget {
               isDense: true,
               hint: Text(
                 AuctionStatusUtils.titleFromStatus(auctionStatus, context),
-                style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
+                style: TextHelper.customTextStyle(color: Colors.grey, size: 12),
               ),
               items: _statusDropdownItems(context),
               onChanged: (newValue) {
@@ -106,7 +106,7 @@ class AuctionsConsultantList extends StatelessWidget {
 
     return Text(
       title,
-      style: TextHelper.customTextStyle(null, Colors.grey, null, 12),
+      style: TextHelper.customTextStyle(color: Colors.grey, size: 12),
     );
   }
 

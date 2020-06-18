@@ -33,7 +33,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
         title: Text(
           '',
           style: TextHelper.customTextStyle(
-              null, Colors.white, FontWeight.bold, 20),
+              color: Colors.white, weight: FontWeight.bold, size: 20),
         ),
         iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
       ),
@@ -103,7 +103,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
                   label: Text(
                     S.of(context).online_shop_call,
                     style: TextHelper.customTextStyle(
-                        null, Colors.white, null, 14),
+                        color: Colors.white),
                   ),
                   onPressed: () {
                     _callSeller();

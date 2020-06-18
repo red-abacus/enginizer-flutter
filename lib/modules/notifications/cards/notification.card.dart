@@ -41,7 +41,7 @@ class NotificationCard extends StatelessWidget {
                           Text(
                             appNotification.translateNotificationType(context),
                             style: TextHelper.customTextStyle(
-                                null, black_text, FontWeight.bold, 14),
+                                color: black_text, weight: FontWeight.bold),
                           ),
                           Text(
                             appNotification.date != null
@@ -49,7 +49,7 @@ class NotificationCard extends StatelessWidget {
                                 context, appNotification.date)
                                 : '',
                             style: TextHelper.customTextStyle(
-                                null, gray, FontWeight.normal, 14),
+                                color: gray),
                           )
                         ],
                       ),

@@ -13,13 +13,13 @@ class AlertWarningDialog {
         return AlertDialog(
           title: Text(title,
               style:
-                  TextHelper.customTextStyle(null, null, FontWeight.bold, 16)),
+              TextHelper.customTextStyle(weight: FontWeight.bold, size: 16)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
                   subtitle,
-                  style: TextHelper.customTextStyle(null, null, null, 16),
+                  style: TextHelper.customTextStyle(size: 16),
                 ),
               ],
             ),

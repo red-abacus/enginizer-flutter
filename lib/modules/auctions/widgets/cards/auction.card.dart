@@ -126,7 +126,7 @@ class AuctionCard extends StatelessWidget {
       child: Text(
         S.of(context).general_auction.toUpperCase(),
         textAlign: TextAlign.right,
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
       ),
     );
   }

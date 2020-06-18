@@ -89,7 +89,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                         "${widget.appointmentDetail?.name ?? 'N/A'}",
                         maxLines: 3,
                         style: TextHelper.customTextStyle(
-                            null, gray3, FontWeight.bold, 16),
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                     ),
                   ),
@@ -136,7 +136,7 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).general_decline.toUpperCase(),
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
@@ -150,7 +150,7 @@ class AppointmentDetailsGenericConsultantWidgetState
             },
             label: Text(
               S.of(context).auction_create_estimate.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
             ),
             backgroundColor: Colors.white,
           ));
@@ -164,7 +164,7 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).general_decline.toUpperCase(),
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
@@ -176,7 +176,7 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).auction_create_estimate.toUpperCase(),
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
@@ -192,7 +192,7 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).appointment_request_items.toUpperCase(),
-            style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
@@ -255,7 +255,7 @@ class AppointmentDetailsGenericConsultantWidgetState
             onPressed: () => {widget.viewEstimate()},
             child: Text(
               buttonTitle,
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 16),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -283,7 +283,7 @@ class AppointmentDetailsGenericConsultantWidgetState
               child: Text(
                 (index + 1).toString(),
                 style: TextHelper.customTextStyle(
-                    null, Colors.white, FontWeight.bold, 11),
+                    color: Colors.white, weight: FontWeight.bold, size: 11),
               ),
             ),
           ),
@@ -292,7 +292,7 @@ class AppointmentDetailsGenericConsultantWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 item.name,
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -321,7 +321,7 @@ class AppointmentDetailsGenericConsultantWidgetState
       margin: EdgeInsets.only(top: 10),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(null, gray2, FontWeight.bold, 13),
+        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -351,7 +351,7 @@ class AppointmentDetailsGenericConsultantWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 "${widget.appointmentDetail?.user?.name ?? "N/A"}",
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -383,8 +383,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                   Expanded(
                     child: Text(
                       item.name,
-                      style: TextHelper.customTextStyle(
-                          null, Colors.black, null, 14),
+                      style: TextHelper.customTextStyle(),
                     ),
                   ),
                   Container(
@@ -416,7 +415,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                     ? widget.appointmentDetail.scheduledDate
                         .replaceAll(" ", " ${S.of(context).general_at} ")
                     : 'N/A',
-                style: TextHelper.customTextStyle(null, Colors.black, null, 18),
+                style: TextHelper.customTextStyle(size: 18),
               ),
             ),
           ),
@@ -435,7 +434,7 @@ class AppointmentDetailsGenericConsultantWidgetState
     return FlatButton(
       child: Text(
         "(${S.of(context).appointment_details_request_reprogramming.toLowerCase()})",
-        style: TextHelper.customTextStyle(null, red, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
       ),
       onPressed: () {
         widget.viewEstimate();
@@ -484,7 +483,7 @@ class AppointmentDetailsGenericConsultantWidgetState
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 widget.appointmentDetail?.personnel?.name ?? '',
-                style: TextHelper.customTextStyle(null, Colors.black, null, 13),
+                style: TextHelper.customTextStyle(size: 13),
               ),
             ),
           ),
@@ -515,14 +514,14 @@ class AppointmentDetailsGenericConsultantWidgetState
               child: Text(
                 S.of(context).appointment_consultant_no_pick_up_car_form,
                 style:
-                    TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 15),
               ),
             ),
           ),
           FlatButton(
             child: Text(
               S.of(context).general_create.toUpperCase(),
-              style: TextHelper.customTextStyle(null, red, FontWeight.bold, 15),
+              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 15),
             ),
             onPressed: () {
               widget.createPickUpCarForm();
@@ -551,7 +550,7 @@ class AppointmentDetailsGenericConsultantWidgetState
                   child: Text(
                     S.of(context).appointment_video_button_title.toUpperCase(),
                     style: TextHelper.customTextStyle(
-                        null, red, FontWeight.bold, 16),
+                        color: red, weight: FontWeight.bold, size: 16),
                   ),
                 ),
               )

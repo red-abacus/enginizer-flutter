@@ -61,7 +61,8 @@ class _WorkEstimateOrderModalState extends State<WorkEstimateOrderModal> {
         ? Center(
             child: Text(
             S.of(context).estimator_no_items_to_order,
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(
+                color: gray3, weight: FontWeight.bold, size: 16),
           ))
         : Stack(
             children: [
@@ -70,7 +71,7 @@ class _WorkEstimateOrderModalState extends State<WorkEstimateOrderModal> {
                   Text(
                     S.of(context).estimator_items_order_title,
                     style: TextHelper.customTextStyle(
-                        null, gray3, FontWeight.bold, 14),
+                        color: gray3, weight: FontWeight.bold),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10),
@@ -100,7 +101,7 @@ class _WorkEstimateOrderModalState extends State<WorkEstimateOrderModal> {
                     child: Text(
                       S.of(context).general_order,
                       style: TextHelper.customTextStyle(
-                          null, red, FontWeight.bold, 16),
+                          color: red, weight: FontWeight.bold, size: 16),
                     ),
                   ),
                 ),

@@ -102,7 +102,7 @@ class AppointmentDetailsTaskIssueWidget extends StatelessWidget {
               color: red,
               child: Text(
                 S.of(context).mechanic_appointment_task_issue_edit,
-                style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+                style: TextHelper.customTextStyle(color: Colors.white),
               ),
             ),
     );

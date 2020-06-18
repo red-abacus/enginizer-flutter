@@ -200,7 +200,7 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
                   children: <Widget>[
                     Text('${NotificationsManager.notificationsCount}',
                         style: TextHelper.customTextStyle(
-                            null, Colors.white, FontWeight.bold, 12))
+                            color: Colors.white, weight: FontWeight.bold, size: 12))
                   ],
                 ),
               )
@@ -300,7 +300,7 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
                 Text(
                   item.title,
                   style:
-                      TextHelper.customTextStyle(null, Colors.white, null, 14),
+                      TextHelper.customTextStyle(color: Colors.white),
                 )
               ],
             ),

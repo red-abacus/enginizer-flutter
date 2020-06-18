@@ -278,7 +278,7 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
                 Text(
                   S.of(context).promotions_create_step_1_upload_image_title,
                   style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 16),
+                      color: red, weight: FontWeight.bold, size: 16),
                 ),
                 ImageSelectionWidget(
                     addImage: _addImage,

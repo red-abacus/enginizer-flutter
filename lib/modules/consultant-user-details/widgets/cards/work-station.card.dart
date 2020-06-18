@@ -98,7 +98,7 @@ class WorkStationCard extends StatelessWidget {
         },
         child: Text(
           S.of(context).appointment_video_button_title.toUpperCase(),
-          style: TextHelper.customTextStyle(null, red, FontWeight.bold, 14),
+          style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
         ),
       ),
     );

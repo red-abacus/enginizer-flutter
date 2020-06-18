@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
@@ -69,7 +68,8 @@ class _WorkEstimateImportModalState extends State<WorkEstimateImportModal> {
         ? Center(
             child: Text(
             S.of(context).estimator_no_items_to_import,
-            style: TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+            style: TextHelper.customTextStyle(
+                color: gray3, weight: FontWeight.bold, size: 16),
           ))
         : ListView.builder(
             shrinkWrap: true,

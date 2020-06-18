@@ -146,7 +146,7 @@ class CarExtraFormState extends State<CarExtraForm> {
                   Text(
                     S.of(context).cars_create_rca_expiry_date_notification,
                     style: TextHelper.customTextStyle(
-                        null, color, FontWeight.bold, 14),
+                        color: color, weight: FontWeight.bold),
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 4),
@@ -213,7 +213,7 @@ class CarExtraFormState extends State<CarExtraForm> {
                   Text(
                     S.of(context).cars_create_itp_expiry_date_notification,
                     style: TextHelper.customTextStyle(
-                        null, color, FontWeight.bold, 14),
+                        color: color, weight: FontWeight.bold),
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 4),
@@ -255,7 +255,7 @@ class CarExtraFormState extends State<CarExtraForm> {
                 margin: EdgeInsets.only(left: 10),
                 child: Text(
                   S.of(context).car_create_exhaust_test,
-                  style: TextHelper.customTextStyle(null, _provider.carExtraFormState['exhaust'] != null ? red : gray2, null, 16),
+                  style: TextHelper.customTextStyle(color: _provider.carExtraFormState['exhaust'] != null ? red : gray2, size: 16),
                 ),
               ),
             )
@@ -291,7 +291,7 @@ class CarExtraFormState extends State<CarExtraForm> {
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 S.of(context).car_create_diagnosis_protocol,
-                style: TextHelper.customTextStyle(null, _provider.carExtraFormState['diagnosisProtocol'] != null ? red : gray2, null, 16),
+                style: TextHelper.customTextStyle(color: _provider.carExtraFormState['diagnosisProtocol'] != null ? red : gray2, size: 16),
               ),
             )
           ],
@@ -326,7 +326,7 @@ class CarExtraFormState extends State<CarExtraForm> {
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 S.of(context).car_create_general_car_verification,
-                style: TextHelper.customTextStyle(null, _provider.carExtraFormState['generalVerification'] != null ? red : gray2, null, 16),
+                style: TextHelper.customTextStyle(color: _provider.carExtraFormState['generalVerification'] != null ? red : gray2, size: 16),
               ),
             )
           ],

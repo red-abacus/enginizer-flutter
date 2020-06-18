@@ -125,7 +125,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
     return Text(
       auctionProvider.selectedAuction?.appointment?.name ?? 'N/A',
       style:
-          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 

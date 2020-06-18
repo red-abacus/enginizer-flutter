@@ -4,7 +4,6 @@ import 'package:app/modules/shared/widgets/custom-show-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/custom-text-form-field.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +51,7 @@ class _WorkEstimateIssueEditWidgetState
                 Text(
                   widget.issueItem.name,
                   style: TextHelper.customTextStyle(
-                      null, red, FontWeight.bold, 20),
+                      color: red, weight: FontWeight.bold, size: 20),
                 ),
                 _infoWidget(S.of(context).import_item_type_title,
                     S.of(context).estimator_product),
@@ -91,7 +90,7 @@ class _WorkEstimateIssueEditWidgetState
                 '$leftString:',
                 textAlign: TextAlign.right,
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 14),
+                    color: gray3, weight: FontWeight.bold),
               ),
             ),
           ),
@@ -102,7 +101,7 @@ class _WorkEstimateIssueEditWidgetState
               child: Text(
                 rightString,
                 textAlign: TextAlign.left,
-                style: TextHelper.customTextStyle(null, gray3, null, 14),
+                style: TextHelper.customTextStyle(color: gray3),
               ),
             ),
           ),
@@ -125,7 +124,7 @@ class _WorkEstimateIssueEditWidgetState
                 '$leftString:',
                 textAlign: TextAlign.right,
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 14),
+                    color: gray3, weight: FontWeight.bold),
               ),
             ),
           ),
@@ -163,7 +162,7 @@ class _WorkEstimateIssueEditWidgetState
                 '$leftString:',
                 textAlign: TextAlign.right,
                 style: TextHelper.customTextStyle(
-                    null, gray3, FontWeight.bold, 14),
+                    color: gray3, weight: FontWeight.bold),
               ),
             ),
           ),
@@ -200,7 +199,7 @@ class _WorkEstimateIssueEditWidgetState
             child: Text(
               S.of(context).general_back.toUpperCase(),
               style:
-                  TextHelper.customTextStyle(null, gray3, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: gray3, weight: FontWeight.bold, size: 16),
             ),
           ),
           FlatButton(
@@ -210,7 +209,7 @@ class _WorkEstimateIssueEditWidgetState
             child: Text(
               S.of(context).general_edit.toUpperCase(),
               style:
-                  TextHelper.customTextStyle(null, green, FontWeight.bold, 16),
+                  TextHelper.customTextStyle(color: green, weight: FontWeight.bold, size: 16),
             ),
           )
         ],

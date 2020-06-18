@@ -114,7 +114,7 @@ class AuctionDetailsState extends State<AuctionDetails> {
     return Text(
       _provider.selectedAuction?.appointment?.name ?? 'N/A',
       style:
-          TextHelper.customTextStyle(null, Colors.white, FontWeight.bold, 20),
+          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 

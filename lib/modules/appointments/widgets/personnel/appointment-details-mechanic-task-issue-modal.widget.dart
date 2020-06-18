@@ -60,7 +60,7 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
                                   .of(context)
                                   .mechanic_appointment_task_issue_finish,
                               style: TextHelper.customTextStyle(
-                                  null, Colors.white, null, 14))),
+                                  color: Colors.white))),
                     ),
                   ],
                 ),
@@ -154,7 +154,7 @@ class _AppointmentDetailsDetailsMechanicTaskIssueModalState
     return widget.mechanicTaskIssue.image == null
         ? Text(
             S.of(context).mechanic_appointment_task_add_image,
-            style: TextHelper.customTextStyle(null, red, FontWeight.normal, 14),
+            style: TextHelper.customTextStyle(color: red),
           )
         : Container(
             width: 60,

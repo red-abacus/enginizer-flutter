@@ -53,7 +53,7 @@ class AppointmentCreateServicesFormState
                       child: Text(
                         S.of(context).appointment_create_step1_location_alert,
                         style:
-                            TextHelper.customTextStyle(null, gray3, null, 14),
+                            TextHelper.customTextStyle(color: gray3),
                       ),
                     ),
                 ],

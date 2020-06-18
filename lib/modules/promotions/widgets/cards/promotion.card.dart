@@ -126,8 +126,7 @@ class PromotionCard extends StatelessWidget {
                     child: Center(
                         child: Text(
                       '-${promotion.discount.toStringAsFixed(0)}%',
-                      style: TextHelper.customTextStyle(
-                          null, Colors.white, null, 14),
+                      style: TextHelper.customTextStyle(color: Colors.white),
                     )),
                   ),
                 )
@@ -175,7 +174,7 @@ class PromotionCard extends StatelessWidget {
                                       .of(context)
                                       .online_shop_card_no_photos_title,
                                   style: TextHelper.customTextStyle(
-                                      null, gray2, null, 12),
+                                      color: gray2, size: 12),
                                 ),
                               ),
                             ],
@@ -259,7 +258,7 @@ class PromotionCard extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               S.of(context).general_details.toUpperCase(),
-              style: TextHelper.customTextStyle(null, Colors.white, null, 14),
+              style: TextHelper.customTextStyle(color: Colors.white),
             ),
           )
         ],
@@ -293,8 +292,8 @@ class PromotionCard extends StatelessWidget {
       margin: EdgeInsets.only(top: 10),
       child: Text(
         title,
-        style:
-            TextHelper.customTextStyle(null, black_text, FontWeight.bold, 12),
+        style: TextHelper.customTextStyle(
+            color: black_text, weight: FontWeight.bold, size: 12),
       ),
     );
   }
