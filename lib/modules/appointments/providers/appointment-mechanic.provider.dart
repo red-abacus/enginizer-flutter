@@ -6,12 +6,15 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/appointments/enum/mechanic-task-status.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
+import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentMechanicProvider with ChangeNotifier {
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
+  CarService _carService = inject<CarService>();
 
   Appointment selectedAppointment;
   AppointmentDetail selectedAppointmentDetails;
@@ -19,7 +22,7 @@ class AppointmentMechanicProvider with ChangeNotifier {
   List<MechanicTask> standardTasks = [];
   List<MechanicTask> issueTasks = [];
 
-  List<dynamic> serviceHistory = [];
+  List<CarHistory> carHistory = [];
 
   MechanicTask currentTask;
 
@@ -27,7 +30,7 @@ class AppointmentMechanicProvider with ChangeNotifier {
     selectedAppointment = null;
     standardTasks = [];
     issueTasks = [];
-    serviceHistory = [];
+    carHistory = [];
     currentTask = null;
     selectedAppointmentDetails = null;
   }
@@ -61,6 +64,8 @@ class AppointmentMechanicProvider with ChangeNotifier {
       issueTasks =
           await _appointmentsService.getAppointmentClientTasks(appointmentId);
 
+      List<MechanicTask> list = [];
+
       for (MechanicTask mechanicTask in issueTasks) {
         bool remove = true;
         for (Issue issue in selectedAppointmentDetails.issues) {
@@ -70,10 +75,12 @@ class AppointmentMechanicProvider with ChangeNotifier {
           }
         }
 
-        if (remove) {
-          issueTasks.remove(mechanicTask);
+        if (!remove) {
+          list.add(mechanicTask);
         }
       }
+
+      this.issueTasks = list;
       notifyListeners();
       return issueTasks;
     } catch (error) {
@@ -193,5 +200,24 @@ class AppointmentMechanicProvider with ChangeNotifier {
     }
 
     return null;
+  }
+
+  Future<List<CarHistory>> getCarHistory(int carId) async {
+    try {
+      carHistory = await _carService.getCarHistory(carId);
+      carHistory.sort((a, b) {
+        if (a.appointmentScheduledDateTime != null &&
+            b.appointmentScheduledDateTime != null) {
+          return a.appointmentScheduledDateTime
+              .compareTo(b.appointmentScheduledDateTime);
+        } else {
+          return 0;
+        }
+      });
+      notifyListeners();
+      return carHistory;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

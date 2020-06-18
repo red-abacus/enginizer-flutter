@@ -128,7 +128,6 @@ class ProviderService {
     try {
       final response = await _dio.get(_buildProviderTimetablePath(providerId),
           queryParameters: {"startDate": startDate, "endDate": endDate});
-
       if (response.statusCode == 200) {
         return _mapServiceProviderTimetable(response.data);
       } else {

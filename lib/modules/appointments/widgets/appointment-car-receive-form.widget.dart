@@ -320,7 +320,7 @@ class _AppointmentCarReceiveFormModalState
                             ? S.of(context).mechanic_appointment_i_received
                             : S.of(context).mechanic_appointment_i_handed_over,
                         style: TextHelper.customTextStyle(
-                            color: Colors.white, weight: FontWeight.normal, size: 16)),
+                            color: Colors.white, size: 16)),
                     onPressed: () {
                       _showConfirmationAlert();
                     },
@@ -333,7 +333,7 @@ class _AppointmentCarReceiveFormModalState
                       color: gray2,
                       child: Text(S.of(context).appointment_extended_form,
                           style: TextHelper.customTextStyle(
-                              color: Colors.white, weight: FontWeight.normal, size: 16)),
+                              color: Colors.white, size: 16)),
                       onPressed: () {
                         _showExtendedForm();
                       },

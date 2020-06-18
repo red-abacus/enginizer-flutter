@@ -162,21 +162,16 @@ class AppointmentsService {
 
   Future<Appointment> createAppointment(
       AppointmentRequest appointmentRequest) async {
-    print('json ${appointmentRequest.toJson()}');
     try {
       final response = await _dio.post(_APPOINTMENTS_API_PATH,
           data: jsonEncode(appointmentRequest.toJson()));
 
-      print('response status code ${response.statusCode}');
-      print('response status code ${response.data}');
       if (response.statusCode == 201) {
         return _mapAppointment(response.data);
       } else {
         throw Exception(CREATE_APPOINTMENT_EXCEPTION);
       }
     } catch (error) {
-      print('error ${error}');
-      print('error ${error.response}');
       throw Exception(CREATE_APPOINTMENT_EXCEPTION);
     }
   }

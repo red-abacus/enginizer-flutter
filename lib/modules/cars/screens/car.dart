@@ -78,38 +78,42 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     try {
       await _provider.getCarDetails().then((_) async {
         await _provider.getCarFuelConsumptionGraphic().then((_) async {
-          if (PermissionsManager.getInstance().hasAccess(
-              MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
-            await _provider
-                .getCarHistory(_provider.carDetails.id)
-                .then((_) async {
-              setState(() {
-                _isLoading = false;
-              });
-            });
-          } else {
-            setState(() {
-              _isLoading = false;
-            });
-          }
+          _downloadCarHistory();
         });
       });
     } catch (error) {
       if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_car_fuel, context);
+      } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_car_details, context);
+      }
+
+      _downloadCarHistory();
+    }
+  }
+
+  _downloadCarHistory() async {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
+      try {
+        await _provider.getCarHistory(_provider.carDetails.id).then((_) async {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error.toString().contains(CarService.CAR_HISTORY_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_car_history, context);
+        }
 
         setState(() {
           _isLoading = false;
         });
-      } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_car_details, context);
-      } else if (error.toString().contains(CarService.CAR_HISTORY_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_car_history, context);
       }
-
+    } else {
       setState(() {
         _isLoading = false;
       });

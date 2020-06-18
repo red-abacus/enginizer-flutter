@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
@@ -24,7 +25,8 @@ import 'appointments.dart';
 class AppointmentDetailsMechanic extends StatefulWidget {
   static const String route =
       '${Appointments.route}/appointment-details-mechanic';
-  static const String notificationsRoute = '${Notifications.route}/appointment-details-mechanic';
+  static const String notificationsRoute =
+      '${Notifications.route}/appointment-details-mechanic';
 
   @override
   State<StatefulWidget> createState() {
@@ -43,7 +45,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   AppointmentDetailsMechanicState({this.route});
 
-  AppointmentMechanicProvider _appointmentMechanicProvider;
+  AppointmentMechanicProvider _provider;
 
   @override
   void initState() {
@@ -59,8 +61,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   @override
   Widget build(BuildContext context) {
-    if (_appointmentMechanicProvider != null &&
-        _appointmentMechanicProvider.selectedAppointment == null) {
+    if (_provider != null && _provider.selectedAppointment == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -84,6 +85,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
             appBar: AppBar(
               iconTheme: IconThemeData(color: Theme.of(context).cardColor),
               bottom: TabBar(
+                isScrollable: true,
                 controller: _tabController,
                 tabs: _getTabs(),
               ),
@@ -100,10 +102,9 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      _appointmentMechanicProvider =
-          Provider.of<AppointmentMechanicProvider>(context);
+      _provider = Provider.of<AppointmentMechanicProvider>(context);
 
-      if (_appointmentMechanicProvider.selectedAppointment != null) {
+      if (_provider.selectedAppointment != null) {
         _loadData();
       }
       _initDone = true;
@@ -117,21 +118,22 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     });
 
     try {
-      await _appointmentMechanicProvider
-          .getAppointmentDetails(
-              _appointmentMechanicProvider.selectedAppointment)
+      await _provider
+          .getAppointmentDetails(_provider.selectedAppointment)
           .then((value) async {
-            _appointmentMechanicProvider.selectedAppointmentDetails = value;
-        await _appointmentMechanicProvider
-            .getStandardTasks(
-                _appointmentMechanicProvider.selectedAppointment.id)
+        _provider.selectedAppointmentDetails = value;
+        await _provider
+            .getStandardTasks(_provider.selectedAppointment.id)
             .then((tasks) async {
-          await _appointmentMechanicProvider
-              .getClientTasks(
-                  _appointmentMechanicProvider.selectedAppointment.id)
-              .then((tasks) {
-            setState(() {
-              _isLoading = false;
+          await _provider
+              .getClientTasks(_provider.selectedAppointment.id)
+              .then((tasks) async {
+            await _provider
+                .getCarHistory(_provider.selectedAppointment.car.id)
+                .then((value) {
+              setState(() {
+                _isLoading = false;
+              });
             });
           });
         });
@@ -157,6 +159,9 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           .contains(AppointmentsService.GET_CLIENT_TASKS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_client_tasks, context);
+      } else if (error.toString().contains(CarService.CAR_HISTORY_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_history, context);
       }
 
       setState(() {
@@ -185,7 +190,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
 
   _titleText() {
     return Text(
-      _appointmentMechanicProvider.selectedAppointment?.name ?? 'N/A',
+      _provider.selectedAppointment?.name ?? 'N/A',
       style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     );
@@ -194,16 +199,14 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   _buildContent() {
     List<Widget> list = [
       AppointmentDetailsMechanicWidget(
-          appointment: _appointmentMechanicProvider.selectedAppointment,
-          appointmentDetail:
-              _appointmentMechanicProvider.selectedAppointmentDetails,
+          appointment: _provider.selectedAppointment,
+          appointmentDetail: _provider.selectedAppointmentDetails,
           viewEstimate: _viewEstimate),
       AppointmentDetailsCarDetails(),
       AppointmentDetailsServiceHistory()
     ];
 
-    switch (
-        _appointmentMechanicProvider.selectedAppointment.status.getState()) {
+    switch (_provider.selectedAppointment.status.getState()) {
       case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.ON_HOLD:
@@ -215,6 +218,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     }
 
     return TabBarView(
+      physics: ScrollPhysics(),
       controller: _tabController,
       children: list,
     );
@@ -227,8 +231,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       Tab(text: S.of(context).appointment_details_service_history)
     ];
 
-    switch (
-        _appointmentMechanicProvider.selectedAppointment.status.getState()) {
+    switch (_provider.selectedAppointment.status.getState()) {
       case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.ON_HOLD:
@@ -248,8 +251,8 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   }
 
   _viewEstimate() {
-    int workEstimateId = _appointmentMechanicProvider.selectedAppointmentDetails
-        .lastWorkEstimate();
+    int workEstimateId =
+        _provider.selectedAppointmentDetails.lastWorkEstimate();
 
     if (workEstimateId != 0) {
       Provider.of<WorkEstimateProvider>(context)
@@ -257,8 +260,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       Provider.of<WorkEstimateProvider>(context).workEstimateId =
           workEstimateId;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          _appointmentMechanicProvider
-              .selectedAppointmentDetails.serviceProvider.id;
+          _provider.selectedAppointmentDetails.serviceProvider.id;
 
       Navigator.push(
         context,
