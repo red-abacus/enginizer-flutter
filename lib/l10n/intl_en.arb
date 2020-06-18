@@ -126,6 +126,7 @@
   "appointment_details_car_details": "Car Details",
   "appointment_details_tasks_list": "Tasks",
   "appointment_details_service_history": "Service History",
+  "appointment_details_documentation": "Documentation",
   "appointment_details_task_check_lights": "Lighting system check",
   "appointment_details_task_check_battery": "Battery status check",
   "appointment_details_task_check_liquids": "Fluids state check",
@@ -135,6 +136,7 @@
   "appointment_details_task_add_issue": "Issue description",
   "appointment_details_car_details_error": "Car details couldn't be displayed",
   "appointment_details_service_history_error": "There's no service history data yet",
+  "appointment_details_documentation_topics_error": "There's no documentation data yet",
   "appointment_details_service_vta_payer": "VTA Payer",
   "appointment_reviews_executed_appointments": "Executed appointments:",
   "appointment_reviews_respected_appointments": "Respected appointments:",
@@ -613,5 +615,7 @@
   "exception_edit_promotion": "There was an error trying to edit this promotion.",
   "exception_remove_promotion_image": "There was an error trying to delete this image.",
   "exception_transport_request": "There was an error trying to request transport.",
-  "exception_car_sell": "There was a problem creating a sale offer."
+  "exception_car_sell": "There was a problem creating a sale offer.",
+  "exception_car_documentation_topics": "There was an error trying to get car documentation.",
+  "exception_car_documentation_document_exception": "There was an error trying to load document."
 }

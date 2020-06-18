@@ -1,6 +1,8 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/documentation/car-documentation-document.model.dart';
+import 'package:app/modules/appointments/model/documentation/car-documentation-topic.model.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task-issue.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
@@ -23,6 +25,7 @@ class AppointmentMechanicProvider with ChangeNotifier {
   List<MechanicTask> issueTasks = [];
 
   List<CarHistory> carHistory = [];
+  List<CarDocumentationTopic> topics = [];
 
   MechanicTask currentTask;
 
@@ -33,6 +36,7 @@ class AppointmentMechanicProvider with ChangeNotifier {
     carHistory = [];
     currentTask = null;
     selectedAppointmentDetails = null;
+    topics = [];
   }
 
   Future<AppointmentDetail> getAppointmentDetails(
@@ -216,6 +220,30 @@ class AppointmentMechanicProvider with ChangeNotifier {
       });
       notifyListeners();
       return carHistory;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<CarDocumentationTopic>> getCarDocumentationTopics(
+      int carId, String language) async {
+    try {
+      topics = await _carService.getCarDocumentationTopics(language, carId);
+      notifyListeners();
+      return topics;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<CarDocumentationDocument> getCarDocumentationDocument(
+      int carId, String language, CarDocumentationTopic topic) async {
+    try {
+      CarDocumentationDocument document =
+          await _carService.getCarDocument(language, carId, topic.id);
+      topic.document = document;
+      notifyListeners();
+      return document;
     } catch (error) {
       throw (error);
     }

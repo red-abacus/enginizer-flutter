@@ -89,10 +89,17 @@ android {
             useProguard true
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            ndk {
+                abiFilters 'armeabi-v7a'
+            }
         }
 
         debug {
             signingConfig signingConfigs.debug
+
+            minifyEnabled false
+            useProguard false
         }
     }
 }

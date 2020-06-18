@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/widgets/personnel/appointment-details-mechanic-documentations.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
@@ -16,6 +17,7 @@ import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +52,7 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 4, initialIndex: 2);
+    _tabController = new TabController(vsync: this, length: 5, initialIndex: 2);
   }
 
   @override
@@ -130,9 +132,15 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
               .then((tasks) async {
             await _provider
                 .getCarHistory(_provider.selectedAppointment.car.id)
-                .then((value) {
-              setState(() {
-                _isLoading = false;
+                .then((value) async {
+              await _provider
+                  .getCarDocumentationTopics(
+                      _provider.selectedAppointment.car.id,
+                      LocaleManager.language(context))
+                  .then((value) {
+                setState(() {
+                  _isLoading = false;
+                });
               });
             });
           });
@@ -162,6 +170,11 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
       } else if (error.toString().contains(CarService.CAR_HISTORY_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_car_history, context);
+      } else if (error
+          .toString()
+          .contains(CarService.CAR_DOCUMENTATION_TOPICS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_documentation_topics, context);
       }
 
       setState(() {
@@ -203,7 +216,8 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           appointmentDetail: _provider.selectedAppointmentDetails,
           viewEstimate: _viewEstimate),
       AppointmentDetailsCarDetails(),
-      AppointmentDetailsServiceHistory()
+      AppointmentDetailsServiceHistory(),
+      AppointmentDetailsMechanicDocumentationsWidget()
     ];
 
     switch (_provider.selectedAppointment.status.getState()) {
@@ -228,7 +242,8 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     List<Tab> tabs = [
       Tab(text: S.of(context).general_details),
       Tab(text: S.of(context).appointment_details_car_details),
-      Tab(text: S.of(context).appointment_details_service_history)
+      Tab(text: S.of(context).appointment_details_service_history),
+      Tab(text: S.of(context).appointment_details_documentation)
     ];
 
     switch (_provider.selectedAppointment.status.getState()) {

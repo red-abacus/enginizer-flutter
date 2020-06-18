@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/modules/appointments/model/documentation/car-documentation-document.model.dart';
+import 'package:app/modules/appointments/model/documentation/car-documentation-topic.model.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
@@ -24,6 +26,10 @@ class CarService {
   static String CAR_ADD_IMAGE_EXCEPTION = 'CAR_ADD_IMAGE_EXCEPTION';
   static String CAR_HISTORY_EXCEPTION = 'CAR_HISTORY_EXCEPTION';
   static String CAR_SELL_EXCEPTION = 'CAR_SELL_EXCEPTION';
+  static String CAR_DOCUMENTATION_TOPICS_EXCEPTION =
+      'CAR.CAR_DOCUMENTATION_TOPICS_EXCEPTION';
+  static String CAR_DOCUMENTATION_DOCUMENT_EXCEPTION =
+      'CAR.CAR_DOCUMENTATION_DOCUMENT_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -33,6 +39,10 @@ class CarService {
 
   static const String _CAR_SELL_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_SELL_SUFFIX = '/sell';
+  static const String _CAR_DOCUMENTATION_TOPICS =
+      '${Environment.CARS_BASE_API}/techDocumentation/topic';
+  static const String _CAR_DOCUMENTATION_DOCUMENT =
+      '${Environment.CARS_BASE_API}/techDocumentation/document';
 
   Dio _dio = inject<Dio>();
 
@@ -176,6 +186,49 @@ class CarService {
     }
   }
 
+  Future<List<CarDocumentationTopic>> getCarDocumentationTopics(
+      String language, int carId) async {
+    Map<String, dynamic> map = {
+      'carId': carId,
+      'language': language,
+    };
+
+    try {
+      final response =
+          await _dio.get(_CAR_DOCUMENTATION_TOPICS, queryParameters: map);
+
+      if (response.statusCode == 200) {
+        return _mapCarDocumentationTopics(response.data);
+      } else {
+        throw Exception(CAR_DOCUMENTATION_TOPICS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_DOCUMENTATION_TOPICS_EXCEPTION);
+    }
+  }
+
+  Future<CarDocumentationDocument> getCarDocument(
+      String language, int carId, String topicId) async {
+    Map<String, dynamic> map = {
+      'carId': carId.toString(),
+      'language': language,
+      'topicId': topicId
+    };
+
+    try {
+      final response =
+          await _dio.get(_CAR_DOCUMENTATION_DOCUMENT, queryParameters: map);
+
+      if (response.statusCode == 200) {
+        return CarDocumentationDocument.fromJson(response.data);
+      } else {
+        throw Exception(CAR_DOCUMENTATION_DOCUMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_DOCUMENTATION_DOCUMENT_EXCEPTION);
+    }
+  }
+
   _buildCarHistoryPath(int carId) {
     return _CAR_HISTORY_PREFIX + carId.toString() + _CAR_HISTORY_SUFFIX;
   }
@@ -190,5 +243,13 @@ class CarService {
       histories.add(CarHistory.fromJson(history));
     });
     return histories;
+  }
+
+  _mapCarDocumentationTopics(List<dynamic> response) {
+    List<CarDocumentationTopic> list = [];
+    response.forEach((item) {
+      list.add(CarDocumentationTopic.fromJson(item));
+    });
+    return list;
   }
 }

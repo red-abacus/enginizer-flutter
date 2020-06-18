@@ -120,6 +120,7 @@
   "appointment_details_car_details": "Detalii Mașină",
   "appointment_details_tasks_list": "Sarcini",
   "appointment_details_service_history": "Istoric Service",
+  "appointment_details_documentation": "Documentație",
   "appointment_details_task_check_lights": "Verificare sistem iluminare",
   "appointment_details_task_check_battery": "Verificare stare acumulator",
   "appointment_details_task_check_liquids": "Verificare stare lichide",
@@ -129,6 +130,7 @@
   "appointment_details_task_add_issue": "Descriere problemă",
   "appointment_details_car_details_error": "Detaliile mașinii nu au putut fi afișate",
   "appointment_details_service_history_error": "Nu există date despre istoric",
+  "appointment_details_documentation_topics_error": "Nu există documentație",
   "appointment_details_service_vta_payer": "Plătitor de TVA",
   "appointment_reviews_executed_appointments": "Comenzi efectuate:",
   "appointment_reviews_respected_appointments": "Respectare programări:",
@@ -608,5 +610,7 @@
   "exception_edit_promotion": "A intervenit o problemă la editarea acestei promoții.",
   "exception_remove_promotion_image": "A intervenit o problemă la ștergerea acestei imagini.",
   "exception_transport_request": "A intervenit o problemă la cererea pentru transport.",
-  "exception_car_sell": "A intervenit o problema la crearea unei oferte de vânzare."
+  "exception_car_sell": "A intervenit o problema la crearea unei oferte de vânzare.",
+  "exception_car_documentation_topics": "A intervenit o problemă la încărcarea documentației mașinii.",
+  "exception_car_documentation_document_exception": "A intervenit o problemă la încărcarea documentului."
 }
