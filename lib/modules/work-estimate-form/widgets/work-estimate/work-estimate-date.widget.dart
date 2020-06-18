@@ -11,7 +11,8 @@ class WorkEstimateDateWidget extends StatefulWidget {
   final EstimatorMode estimatorMode;
   final DateEntry dateEntry;
 
-  WorkEstimateDateWidget({this.estimateDateSelect, this.estimatorMode, this.dateEntry});
+  WorkEstimateDateWidget(
+      {this.estimateDateSelect, this.estimatorMode, this.dateEntry});
 
   @override
   WorkEstimateDateWidgetState createState() => WorkEstimateDateWidgetState();
@@ -31,7 +32,8 @@ class WorkEstimateDateWidgetState extends State<WorkEstimateDateWidget> {
             DateTime.now(), [], provider.serviceProviderTimetable),
         dateEntrySelected: _dateEntrySelected,
         dateEntry: widget.dateEntry,
-        disableSelect: widget.estimatorMode == EstimatorMode.ReadOnly || widget.estimatorMode == EstimatorMode.Client,
+        disableSelect: widget.estimatorMode == EstimatorMode.ReadOnly ||
+            widget.estimatorMode == EstimatorMode.Client,
       ),
     );
   }

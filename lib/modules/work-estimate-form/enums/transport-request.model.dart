@@ -12,7 +12,7 @@ class TransportRequest {
     map['address'] = appointmentPosition.toJson();
 
     if (serviceProvider != null) {
-      map['providerId'] = serviceProvider.id;
+      map['providerId'] = serviceProvider.id.toString();
     }
     return map;
   }

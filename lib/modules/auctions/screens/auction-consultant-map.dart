@@ -189,8 +189,8 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   _titleText() {
     return Text(
       _provider.selectedAuction?.appointment?.name ?? 'N/A',
-      style:
-          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
+      style: TextHelper.customTextStyle(
+          color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 
@@ -209,8 +209,6 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
   _createEstimate() {
     if (_provider.auctionDetails != null &&
         _provider.appointmentDetails != null) {
-      print(
-          'total distance ${_provider.appointmentDetails.auctionMapDirections.totalDistance}');
       Provider.of<WorkEstimateProvider>(context)
           .refreshValues(EstimatorMode.CreatePr);
       Provider.of<WorkEstimateProvider>(context)
@@ -223,11 +221,11 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
           (_provider.appointmentDetails.auctionMapDirections.totalDistance /
                   1000)
               .round();
-      Provider.of<WorkEstimateProvider>(context)
-              .workEstimateRequest
-              .proposedDate =
-          _provider.appointmentDetails.auctionMapDirections.destinationPoints[0]
-              .dateTime;
+      Provider.of<WorkEstimateProvider>(context).maxDate = _provider
+          .appointmentDetails
+          .auctionMapDirections
+          .destinationPoints[0]
+          .dateTime;
 
       Navigator.push(
         context,

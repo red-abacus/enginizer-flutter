@@ -136,6 +136,7 @@ class NavigationAppState extends State<NavigationApp> {
   Widget build(BuildContext context) {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
         PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+      LocatorManager.getInstance().refresh();
       LocatorManager.getInstance().getActiveAppointment(context);
     }
 

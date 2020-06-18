@@ -38,6 +38,10 @@ class LocatorManager {
   StreamSubscription _getPositionSubscription;
   OverlaySupportEntry _entry;
 
+  void refresh() {
+    _shouldDownload = true;
+  }
+
   void getActiveAppointment(BuildContext context) {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
         PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
@@ -50,6 +54,7 @@ class LocatorManager {
         Provider.of<AppointmentsProvider>(context)
             .getActiveAppointments(request)
             .then((value) {
+              _shouldDownload = false;
           if (value.length > 0) {
             if (_appointment != null && value[0].id == _appointment.id) {
             } else {
@@ -68,6 +73,12 @@ class LocatorManager {
 
   void removeActiveAppointment() {
     _shouldDownload = true;
+    _appointment = null;
+    _dismissGeolocator();
+  }
+
+  void logout() {
+    _shouldDownload = false;
     _appointment = null;
     _dismissGeolocator();
   }

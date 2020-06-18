@@ -28,6 +28,7 @@ import 'package:app/modules/appointments/providers/appointment-consultant.provid
 import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-pr/work-estimate-accept.modal.dart';
+import 'package:app/modules/work-estimate-form/widgets/assign-pr/work-estimate-propose-date.modal.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
@@ -327,6 +328,14 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         break;
       case EstimatorMode.CreatePr:
         buttons.add(saveButton);
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.date_range),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).auction_proposed_date,
+            labelStyle: TextHelper.customTextStyle(
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
+            onTap: () => _showProposedDateModal()));
         break;
       default:
         break;
@@ -870,5 +879,27 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  _showProposedDateModal() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return WorkEstimateProposeDateModal(
+              selectDateEntry: _selectDateEntry,
+              maxDate: _provider.maxDate,
+            );
+          });
+        });
+  }
+
+  _selectDateEntry(DateEntry dateEntry) {
+    _provider.workEstimateRequest.dateEntry = dateEntry;
   }
 }

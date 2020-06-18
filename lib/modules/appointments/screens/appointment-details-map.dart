@@ -190,8 +190,8 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
               },
               label: Text(
                 S.of(context).appointment_hand_over_car.toUpperCase(),
-                style:
-                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold, size: 16),
               ),
               backgroundColor: Colors.white,
             ),
@@ -206,8 +206,8 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
   _titleText() {
     return Text(
       _provider.selectedAppointmentDetail?.name ?? 'N/A',
-      style:
-          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
+      style: TextHelper.customTextStyle(
+          color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 
@@ -260,11 +260,11 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
                 .selectedAppointmentDetail.auctionMapDirections.totalDistance /
             1000)
         .round();
-    Provider.of<WorkEstimateProvider>(context)
-            .workEstimateRequest
-            .proposedDate =
-        _provider.selectedAppointmentDetail.auctionMapDirections
-            .destinationPoints[0].dateTime;
+    Provider.of<WorkEstimateProvider>(context).maxDate = _provider
+        .selectedAppointmentDetail
+        .auctionMapDirections
+        .destinationPoints[0]
+        .dateTime;
 
     Navigator.push(
       context,

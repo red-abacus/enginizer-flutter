@@ -1,6 +1,7 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
@@ -46,6 +47,10 @@ class WorkEstimateProvider with ChangeNotifier {
   List<ServiceProviderTimetable> serviceProviderTimetable = [];
   WorkEstimateRequest workEstimateRequest;
   WorkEstimateDetails workEstimateDetails;
+
+  DateTime maxDate;
+  List<ServiceProviderTimetable> timetable;
+  DateEntry selectedDateEntry;
 
   AppointmentDetail selectedAppointmentDetail;
   AuctionDetail selectedAuctionDetails;
@@ -426,5 +431,17 @@ class WorkEstimateProvider with ChangeNotifier {
     });
 
     return request;
+  }
+
+  Future<List<ServiceProviderTimetable>> loadServiceProviderTimetables(
+      int providerId, String startDate, String endDate) async {
+    try {
+      timetable = await _providerService.getServiceProviderTimetables(
+          providerId, startDate, endDate);
+      notifyListeners();
+      return timetable;
+    } catch (error) {
+      throw (error);
+    }
   }
 }

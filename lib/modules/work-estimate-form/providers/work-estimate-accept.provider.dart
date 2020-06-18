@@ -2,6 +2,7 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-position.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';

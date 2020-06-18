@@ -12,7 +12,9 @@ import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
+import 'package:app/utils/firebase/firestore_manager.dart';
 import 'package:app/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,6 +68,8 @@ class Auth with ChangeNotifier {
     if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
       await unregister(FirebaseManager.getInstance().fcmToken);
     }
+
+    LocatorManager.getInstance().logout();
 
     PermissionsManager.removeInstance();
     _token = null;

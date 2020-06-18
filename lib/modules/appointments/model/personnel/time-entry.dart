@@ -1,6 +1,5 @@
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
-import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/utils/date_utils.dart';
 
 enum DateEntryStatus { Free, Booked }
@@ -53,16 +52,16 @@ class CalendarEntry {
   CalendarEntry(this.dateTime);
 
   static List<CalendarEntry> getDateEntries(DateTime currentDate,
-      List<Appointment> appointments, ServiceProvider serviceProvider) {
+      List<Appointment> appointments, List<ServiceProviderTimetable> timetables) {
     List<CalendarEntry> calendarEntries = [];
 
     List<String> appointmentEntries =
         AppointmentTimeEntry.entriesFromAppointments(appointments);
 
-    if (serviceProvider != null) {
+    if (timetables != null) {
       appointmentEntries +=
           ServiceProviderTimeEntry.entriesFromServiceProviderTimetable(
-              serviceProvider.timetables);
+              timetables);
     }
 
     DateTime startDate =
@@ -74,7 +73,7 @@ class CalendarEntry {
       for (int j = 0; j < 9; j++) {
         DateEntry dateEntry = DateEntry(startDate);
 
-        if (serviceProvider == null) {
+        if (timetables == null) {
           dateEntry.status = DateEntryStatus.Free;
         } else {
           if (appointmentEntries.contains(dateEntry.dateForAppointment())) {

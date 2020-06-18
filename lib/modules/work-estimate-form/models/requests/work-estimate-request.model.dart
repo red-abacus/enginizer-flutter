@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +13,8 @@ class WorkEstimateRequest {
   int percent;
   DateTime timeToRespond;
   EmployeeTimeSerie employeeTimeSerie;
+  DateEntry dateEntry;
 
-  DateTime proposedDate;
   final EstimatorMode estimatorMode;
 
   WorkEstimateRequest(this.estimatorMode);
@@ -55,6 +56,12 @@ class WorkEstimateRequest {
       }
     }
 
+    if (estimatorMode == EstimatorMode.CreatePr) {
+      if (dateEntry == null) {
+        return S.of(context).auction_proposed_date_error;
+      }
+    }
+
     return null;
   }
 
@@ -78,10 +85,9 @@ class WorkEstimateRequest {
     if (estimatorMode == EstimatorMode.CreatePart) {
       map['proposedDate'] =
           DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy HH:mm');
-    } else if (estimatorMode == EstimatorMode.CreatePr &&
-        proposedDate != null) {
+    } else if (estimatorMode == EstimatorMode.CreatePr && dateEntry != null) {
       map['proposedDate'] =
-          DateUtils.stringFromDate(proposedDate, 'dd/MM/yyyy HH:mm');
+          DateUtils.stringFromDate(dateEntry.dateTime, 'dd/MM/yyyy HH:mm');
     }
     return map;
   }

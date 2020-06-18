@@ -42,7 +42,7 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
         children: [
           SchedulerWidget(
             calendarEntries: CalendarEntry.getDateEntries(
-                DateTime.now(), [], _providerServiceProvider.selectedProvider),
+                DateTime.now(), [], _providerServiceProvider.selectedProvider.timetables),
             dateEntrySelected: _dateEntrySelected,
             dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry,
             disableSelect: false,
