@@ -11,6 +11,7 @@ import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/authentication/services/auth.service.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
@@ -107,6 +108,12 @@ class Auth with ChangeNotifier {
             PermissionsManager.getInstance().setServiceItemsResponse(
                 await _providerService.getProviderServiceItems(
                     this.authUserDetails.userProvider.id));
+
+            if (PermissionsManager.getInstance().hasAccess(
+                MainPermissions.Appointments,
+                PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+              LocatorManager.getInstance().refresh();
+            }
           }
         }
       }
@@ -142,6 +149,12 @@ class Auth with ChangeNotifier {
               PermissionsManager.getInstance().setServiceItemsResponse(
                   await _providerService.getProviderServiceItems(
                       this.authUserDetails.userProvider.id));
+
+              if (PermissionsManager.getInstance().hasAccess(
+                  MainPermissions.Appointments,
+                  PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+                LocatorManager.getInstance().refresh();
+              }
             }
           }
         }

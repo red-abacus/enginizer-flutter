@@ -137,12 +137,6 @@ class NavigationAppState extends State<NavigationApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
-        PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
-      LocatorManager.getInstance().refresh();
-      LocatorManager.getInstance().getActiveAppointment(context);
-    }
-
     FirebaseManager.getInstance().setContext(context);
     NotificationsManager.navigationAppState = this;
 

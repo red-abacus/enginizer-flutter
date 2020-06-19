@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/firebase/firestore_manager.dart';
 import 'package:app/utils/firebase/models/firestore-location.model.dart';
 import 'package:app/utils/svg.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ClientMapDirectionsModal extends StatefulWidget {
@@ -59,28 +61,51 @@ class _ClientMapDirectionsModalState extends State<ClientMapDirectionsModal> {
     return widget.appointmentDetail.auctionMapDirections.destinationPoints
                 .length >
             0
-        ? GoogleMap(
-            mapType: MapType.normal,
-            markers: _markers,
-            polylines: widget.appointmentDetail.auctionMapDirections.polylines,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  widget.appointmentDetail.auctionMapDirections
-                      .destinationPoints[0].location.latitude,
-                  widget.appointmentDetail.auctionMapDirections
-                      .destinationPoints[0].location.longitude),
-              zoom: 14.0,
-            ),
-            onMapCreated: (GoogleMapController controller) {
-              _mapController = controller;
+        ? Stack(
+            children: [
+              GoogleMap(
+                mapType: MapType.normal,
+                markers: _markers,
+                polylines:
+                    widget.appointmentDetail.auctionMapDirections.polylines,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      widget.appointmentDetail.auctionMapDirections
+                          .destinationPoints[0].location.latitude,
+                      widget.appointmentDetail.auctionMapDirections
+                          .destinationPoints[0].location.longitude),
+                  zoom: 14.0,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
 
-              if (widget.appointmentDetail.canShareLocation()) {
-                FirestoreManager.getInstance().getLocation(
-                    widget.appointmentDetail.id,
-                    widget.appointmentDetail.serviceProvider.id,
-                    _providerChangedLocation);
-              }
-            },
+                  if (widget.appointmentDetail.canShareLocation()) {
+                    FirestoreManager.getInstance().getLocation(
+                        widget.appointmentDetail.id,
+                        widget.appointmentDetail.serviceProvider.id,
+                        _providerChangedLocation);
+                  }
+                },
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: GestureDetector(
+                  onTap: () {
+                    _centerOnProvider();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 30, left: 10),
+                    child: SvgPicture.asset(
+                      'assets/images/icons/current_location_icon.svg',
+                      semanticsLabel: 'Provider Location',
+                      color: gray4,
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                ),
+              )
+            ],
           )
         : Center(
             child: Text(S.of(context).appointment_no_map_data),
@@ -96,8 +121,8 @@ class _ClientMapDirectionsModalState extends State<ClientMapDirectionsModal> {
     });
 
     if (_providerMarker == null) {
-      _mapController?.animateCamera(
-          CameraUpdate.newLatLng(LatLng(location.latitude, location.longitude)));
+      _mapController?.animateCamera(CameraUpdate.newLatLng(
+          LatLng(location.latitude, location.longitude)));
     }
 
     setState(() {
@@ -110,5 +135,12 @@ class _ClientMapDirectionsModalState extends State<ClientMapDirectionsModal> {
           position: LatLng(location.latitude, location.longitude));
       _markers.add(_providerMarker);
     });
+  }
+
+  _centerOnProvider() {
+    if (_providerMarker != null) {
+      _mapController?.animateCamera(CameraUpdate.newLatLng(
+          LatLng(_providerMarker.position.latitude, _providerMarker.position.longitude)));
+    }
   }
 }

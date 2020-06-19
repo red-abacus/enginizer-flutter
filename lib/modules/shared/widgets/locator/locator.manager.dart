@@ -119,6 +119,11 @@ class LocatorManager {
   }
 
   showLocatorBanner(BuildContext context) {
+    if (_entry != null) {
+      _entry.dismiss(animate: false);
+      _entry = null;
+    }
+
     _entry = showSimpleNotification(
       Text(
         '${_appointment.name}\n${S.of(context).appointment_locator_title}',

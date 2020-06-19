@@ -13,6 +13,7 @@ import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,8 @@ class AppointmentsState extends State<Appointments> {
   @override
   Widget build(BuildContext context) {
     _provider = Provider.of<AppointmentsProvider>(context);
+
+    LocatorManager.getInstance().getActiveAppointment(context);
 
     return Consumer<AppointmentsProvider>(
       builder: (context, appointmentsProvider, _) =>
