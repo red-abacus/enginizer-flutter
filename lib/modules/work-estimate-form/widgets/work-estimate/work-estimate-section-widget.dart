@@ -153,7 +153,7 @@ class WorkEstimateSectionWidget extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            '${S.of(context).estimator_total}: ${issueRecommendation.totalCost()} RON',
+            '${S.of(context).estimator_total}: ${issueRecommendation.totalCost().toStringAsFixed(2)} ${S.of(context).general_currency}',
             style: TextHelper.customTextStyle(
                 color: red, weight: FontWeight.bold, size: 16),
           )

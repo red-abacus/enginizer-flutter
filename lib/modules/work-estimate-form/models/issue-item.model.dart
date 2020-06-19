@@ -21,6 +21,7 @@ class IssueItem {
   int recommendationId;
   bool accepted;
   bool ordered;
+
   // TODO - manufacturer not provider by API
   String manufacturer;
 
@@ -108,7 +109,15 @@ class IssueItem {
         'providerId': provider.id
       };
 
+  getTotalPrice() {
+    return quantity * (getPrice() + priceVAT);
+  }
+
   getPrice() {
-    return quantity * (price + priceVAT);
+    if (addition != null) {
+      return price + addition / 100 * price;
+    }
+
+    return price;
   }
 }

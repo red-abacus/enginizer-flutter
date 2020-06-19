@@ -9,4 +9,8 @@ class ItemType {
   }
 
   Map<String, dynamic> toJson() => {'id': id, 'name': name};
+
+  isProduct() {
+    return this.name.toLowerCase() == 'product';
+  }
 }

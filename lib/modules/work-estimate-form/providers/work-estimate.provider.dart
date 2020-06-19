@@ -36,7 +36,8 @@ class WorkEstimateProvider with ChangeNotifier {
     'name': null,
     'quantity': '',
     'price': '',
-    'priceVAT': ''
+    'priceVAT': '',
+    'addition': 0
   };
 
   List<ItemType> itemTypes = [];
@@ -331,14 +332,14 @@ class WorkEstimateProvider with ChangeNotifier {
 
   issueItemFromFormState() {
     return IssueItem(
-      id: estimatorFormState['id'].id,
-      type: estimatorFormState['type'],
-      code: estimatorFormState['code'],
-      name: estimatorFormState['name'],
-      quantity: estimatorFormState['quantity'],
-      price: estimatorFormState['price'],
-      priceVAT: estimatorFormState['priceVAT'],
-    );
+        id: estimatorFormState['id'].id,
+        type: estimatorFormState['type'],
+        code: estimatorFormState['code'],
+        name: estimatorFormState['name'],
+        quantity: estimatorFormState['quantity'],
+        price: estimatorFormState['price'],
+        priceVAT: estimatorFormState['priceVAT'],
+        addition: estimatorFormState['addition']);
   }
 
   removeIssueItem(Issue issue, IssueRecommendation issueRecommendation,

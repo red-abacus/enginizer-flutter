@@ -248,6 +248,7 @@
   "estimator_form_error_nameNotSelected": "Denumire neselectată!",
   "estimator_form_error_quantityIsEmpty": "Cantitate necompletată!",
   "estimator_form_error_priceIsEmpty": "Preț necompletat!",
+  "estimator_form_error_addition": "Adaos necompletat!",
   "estimator_form_error_priceVATIsEmpty": "Preț (cu TVA) necompletat!",
   "estimator_add_new_operation": "Adaugă secțiune",
   "estimator_assign_mechanic": "Asignează mecanic",

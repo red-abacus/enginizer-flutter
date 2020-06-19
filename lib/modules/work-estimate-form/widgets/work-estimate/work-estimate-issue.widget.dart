@@ -84,8 +84,8 @@ class WorkEstimateIssueWidget extends StatelessWidget {
           Expanded(
             child: Text(
               '${S.of(context).estimator_type}: ${_translateType(context, issueItem.type.name)}',
-              style:
-                  TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold),
+              style: TextHelper.customTextStyle(
+                  color: gray2, weight: FontWeight.bold),
             ),
           ),
         ],
@@ -108,7 +108,8 @@ class WorkEstimateIssueWidget extends StatelessWidget {
             margin: EdgeInsets.only(left: 5),
             child: Text(
               issueItem.quantity.toString(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold),
             ),
           ),
         ],
@@ -117,6 +118,8 @@ class WorkEstimateIssueWidget extends StatelessWidget {
   }
 
   _priceContainer(BuildContext context) {
+    double price = issueItem.getPrice() + issueItem.priceVAT;
+
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Row(
@@ -130,22 +133,25 @@ class WorkEstimateIssueWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
-              issueItem.price.toString(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
+              issueItem.price.toStringAsFixed(2),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold),
             ),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
-              '(${(issueItem.price + issueItem.priceVAT).toString()}',
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
+              '(${price.toStringAsFixed(2)}',
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold),
             ),
           ),
           Container(
             margin: EdgeInsets.only(left: 5),
             child: Text(
               '${S.of(context).estimator_priceVAT})',
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold),
             ),
           )
         ],
@@ -154,34 +160,28 @@ class WorkEstimateIssueWidget extends StatelessWidget {
   }
 
   _additionContainer(BuildContext context) {
-    switch (estimatorMode) {
-      case EstimatorMode.Edit:
-        if (issueItem.addition != null && issueItem.addition != 0) {
-          return Container(
-            margin: EdgeInsets.only(top: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '${S.of(context).general_addition}:',
-                  style: TextHelper.customTextStyle(color: black_text),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 5),
-                  child: Text(
-                    '${issueItem.addition.toString()}%',
-                    style: TextHelper.customTextStyle(
-                        color: red, weight: FontWeight.bold, size: 14),
-                  ),
-                ),
-              ],
+    if (issueItem.addition != null && issueItem.addition != 0) {
+      return Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '${S.of(context).general_addition}:',
+              style: TextHelper.customTextStyle(color: black_text),
             ),
-          );
-        }
-        break;
-      default:
-        return Container();
+            Container(
+              margin: EdgeInsets.only(left: 5),
+              child: Text(
+                '${issueItem.addition.toString()}%',
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold, size: 14),
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     return Container();

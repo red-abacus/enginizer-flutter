@@ -79,7 +79,7 @@ class IssueRecommendation {
   double totalCost() {
     double total = 0.0;
     for (IssueItem item in this.items) {
-      total += item.getPrice();
+      total += item.getTotalPrice();
     }
     return total;
   }

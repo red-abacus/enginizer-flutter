@@ -6,7 +6,9 @@ import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -165,7 +167,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                         items: provider.estimatorFormState['type'] != null
                             ? _buildNameDropdownItems(provider.providerItems)
                             : [],
-                        value: provider.estimatorFormState['name'],
+                        value: provider.estimatorFormState['id']?.id,
                         validator: (value) {
                           if (value == null) {
                             return S
@@ -192,7 +194,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                                         var foundProviderItem =
                                             providerItems.firstWhere(
                                                 (provider) =>
-                                                    provider.name ==
+                                                    provider.id ==
                                                     selectedProviderItem,
                                                 orElse: () => null);
                                         provider.estimatorFormState['id'] =
@@ -305,6 +307,36 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                   ),
                 ],
               ),
+              if (provider.estimatorFormState['type'] != null &&
+                  provider.estimatorFormState['type'].isProduct())
+                Row(
+                  children: <Widget>[
+                    // PRICE
+                    Flexible(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            labelText: '${S.of(context).general_addition} (%)',
+                            contentPadding:
+                                EdgeInsets.symmetric(vertical: 14.5)),
+                        keyboardType: TextInputType.number,
+                        controller: TextEditingController(
+                            text: provider.estimatorFormState['addition']
+                                .toString()),
+                        onChanged: (newPrice) {
+                          provider.estimatorFormState['addition'] =
+                              double.parse(newPrice);
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return S.of(context).estimator_form_error_addition;
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               Container(
                 margin: EdgeInsets.only(top: 20),
                 padding: EdgeInsets.symmetric(vertical: 15),
@@ -336,21 +368,30 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
 
   List<DropdownMenuItem<String>> _buildCodeDropdownItems(
       List<ProviderItem> providerItems) {
+    List<String> list = [];
+
+    providerItems.forEach((element) {
+      if (!list.contains(element.code)) {
+        list.add(element.code);
+      }
+    });
+
     List<DropdownMenuItem<String>> codeDropdownList = [];
-    providerItems.forEach((providerItem) => codeDropdownList.add(
-        DropdownMenuItem(
-            value: providerItem.code,
-            child: Text(providerItem.code, overflow: TextOverflow.ellipsis))));
+    list.forEach((providerItem) => codeDropdownList.add(DropdownMenuItem(
+        value: providerItem,
+        child: Text(providerItem, overflow: TextOverflow.ellipsis))));
     return codeDropdownList;
   }
 
-  List<DropdownMenuItem<String>> _buildNameDropdownItems(
+  List<DropdownMenuItem<int>> _buildNameDropdownItems(
       List<ProviderItem> providerItems) {
-    List<DropdownMenuItem<String>> nameDropdownList = [];
-    providerItems.forEach((providerItem) => nameDropdownList.add(
-        DropdownMenuItem(
-            value: providerItem.name,
-            child: Text(providerItem.name, overflow: TextOverflow.ellipsis))));
+    List<DropdownMenuItem<int>> nameDropdownList = [];
+    providerItems.forEach((providerItem) {
+      nameDropdownList.add(DropdownMenuItem(
+          value: providerItem.id,
+          child: Text(providerItem.name, overflow: TextOverflow.ellipsis)));
+    });
+
     return nameDropdownList;
   }
 
