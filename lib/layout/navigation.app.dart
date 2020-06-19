@@ -113,7 +113,10 @@ class NavigationApp extends StatefulWidget {
       case Roles.ProviderAdmin:
         return Promotions.route;
       case Roles.ProviderConsultant:
-        return drawerItems.first.route;
+        if (drawerItems.isNotEmpty) {
+          return drawerItems.first.route;
+        }
+        return '/';
       case Roles.ProviderPersonnel:
         return Appointments.route;
       default:
@@ -148,11 +151,12 @@ class NavigationAppState extends State<NavigationApp> {
     }
 
     var auth = Provider.of<Auth>(context);
-    if (_selectedDrawerRoute == null) {
+    if (_selectedDrawerRoute == null || _selectedDrawerRoute == '/') {
       _selectedDrawerRoute = widget.activeDrawerRoute;
     }
 
     List<Widget> drawerOptions = _buildDrawerOptions();
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -238,7 +242,7 @@ class NavigationAppState extends State<NavigationApp> {
       case Promotions.route:
         return Promotions();
       default:
-        return new Text("Error");
+        return new Container();
     }
   }
 
