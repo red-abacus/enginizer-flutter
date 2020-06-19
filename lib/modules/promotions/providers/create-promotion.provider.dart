@@ -5,6 +5,7 @@ import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/promotions/models/promotion.model.dart';
@@ -65,8 +66,7 @@ class CreatePromotionProvider with ChangeNotifier {
           if (item.isSellerService()) {
             list.add(item);
           }
-        }
-        else {
+        } else {
           list.add(item);
         }
       });
@@ -145,9 +145,15 @@ class CreatePromotionProvider with ChangeNotifier {
       var response = await this._carService.getCars();
       cars = response.items;
 
-      if (filterValue.isNotEmpty) {
-        cars = cars.where((car) => car.filtered(filterValue)).toList();
-      }
+      cars = cars.where((car) {
+        bool value = car.status == CarStatus.Pending;
+
+        if (filterValue.isNotEmpty) {
+          value = value && car.filtered(filterValue);
+        }
+
+        return value;
+      }).toList();
 
       notifyListeners();
       return cars;

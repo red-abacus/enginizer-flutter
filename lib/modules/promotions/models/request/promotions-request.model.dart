@@ -19,6 +19,7 @@ class PromotionsRequest {
       propMap['search'] = searchString;
     }
 
+    // TODO - filtering with status does not work
     if (status != null) {
       propMap['status'] = PromotionStatusUtils.status(status);
     }

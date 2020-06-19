@@ -32,6 +32,7 @@ class PromotionService {
   static const String _ADD_PROMOTION_IMAGES_SUFFIX = '/images';
 
   Future<PromotionsResponse> getPromotions(PromotionsRequest request) async {
+    print('get promotions ${request.toJson()}');
     try {
       final response = await _dio.get(_GET_PROMOTIONS_PATH,
           queryParameters: request.toJson());

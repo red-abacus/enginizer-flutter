@@ -1,3 +1,4 @@
+import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-color.model.dart';
 import 'package:app/modules/cars/models/car-cylinder-capacity.model.dart';
@@ -28,6 +29,7 @@ class Car {
   String fuelConsumption;
   int ownerId;
   int providerId;
+  CarStatus status;
 
   Car(
       {this.id,
@@ -47,7 +49,8 @@ class Car {
       this.mileage,
       this.fuelConsumption,
       this.ownerId,
-      this.providerId});
+      this.providerId,
+      this.status});
 
   factory Car.fromJson(Map<String, dynamic> json) {
     return Car(
@@ -78,7 +81,10 @@ class Car {
         mileage: json['mileage'],
         fuelConsumption: json['fuelConsumption'],
         ownerId: json['ownerId'] != null ? json['ownerId'] : null,
-        providerId: json['providerId'] != null ? json['providerId'] : null);
+        providerId: json['providerId'] != null ? json['providerId'] : null,
+        status: json['status'] != null
+            ? CarStatusUtils.statusFromString(json['status'])
+            : null);
   }
 
   Map<String, dynamic> toJson() {

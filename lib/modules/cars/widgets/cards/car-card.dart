@@ -1,7 +1,11 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/utils/constants.dart';
+import 'package:app/utils/text.helper.dart';
+import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,9 +46,41 @@ class CarCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Image.network(
-                        '${car.image}',
-                        fit: BoxFit.fill,
+                      Stack(
+                        children: [
+                          Image.network(
+                            '${car.image}',
+                            fit: BoxFit.fill,
+                          ),
+                          if (car.status == CarStatus.ForSell)
+                            Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 5,
+                                    height: 40,
+                                    color: red_dark,
+                                  ),
+                                  Point(
+                                    triangleHeight: 10,
+                                    edge: Edge.RIGHT,
+                                    child: Container(
+                                      color: red_light,
+                                      width: 70,
+                                      height: 40,
+                                      child: Center(
+                                          child: Text(
+                                        S.of(context).car_status_for_sell,
+                                        style: TextHelper.customTextStyle(
+                                            color: Colors.white),
+                                      )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                        ],
                       ),
                       Container(
                         padding: EdgeInsets.all(10),
@@ -101,7 +137,8 @@ class CarCard extends StatelessWidget {
     List<Widget> list = [];
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR)) {
+            .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR) &&
+        car.status == CarStatus.Pending) {
       list.add(FlatButton(
         padding: EdgeInsets.all(0),
         splashColor: Theme.of(context).primaryColor,

@@ -9,7 +9,6 @@ import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/promotions/widgets/promotions-list.widget.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-promotions.dart';
-import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/presentation/custom_icons.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,8 +33,6 @@ class PromotionsState extends State<Promotions> {
   PromotionsProvider _provider;
 
   PromotionsState({this.route});
-
-  ShopCategoryType shopCategoryType = ShopCategoryType.SERVICES;
 
   @override
   Widget build(BuildContext context) {
