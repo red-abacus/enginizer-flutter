@@ -35,7 +35,6 @@ class Auth with ChangeNotifier {
   ServiceProviderResponse serviceProviderResponse;
 
   bool get isAuth {
-    print('is auth $_token');
     return _token != null && authUserDetails != null;
   }
 

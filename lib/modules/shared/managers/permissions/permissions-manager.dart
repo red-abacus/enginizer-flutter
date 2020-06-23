@@ -80,7 +80,7 @@ enum MainPermissions {
   Orders,
   Appointments,
   Cars,
-  Promotions
+  Promotions,
 }
 
 enum ConsultantServiceType {

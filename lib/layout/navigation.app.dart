@@ -1,3 +1,4 @@
+import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
@@ -23,10 +24,12 @@ import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../modules/auctions/screens/auctions.dart';
 import '../modules/dashboard/screens/dashboard.dart';
@@ -179,6 +182,24 @@ class NavigationAppState extends State<NavigationApp> {
           ),
           Column(
             children: <Widget>[
+              if (PermissionsManager.getInstance().hasAccess(
+                  MainPermissions.Sidebar, PermissionsSideBar.TICKETS))
+                ListTile(
+                    title: new Text(
+                      'Tax Payment',
+                      style: TextHelper.customTextStyle(),
+                      textAlign: TextAlign.left,
+                    ),
+                    leading: new Icon(Icons.payment),
+                    onTap: () async {
+                      const url = "https://www.ghiseul.ro";
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        FlushBarHelper.showFlushBar(S.of(context).general_error,
+                            S.of(context).exception_open_url, context);
+                      }
+                    }),
               ListTile(
                   title: new Text(
                     "Logout",
