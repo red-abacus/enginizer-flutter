@@ -2,8 +2,8 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-model.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
-import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
+import 'package:app/modules/shop/providers/shop-alert-make.provider.dart';
 import 'package:app/utils/locale.manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,11 +18,11 @@ class ShopAlertCreateIdentificationForm extends StatefulWidget {
 
 class ShopAlertCreateIdentificationFormState
     extends State<ShopAlertCreateIdentificationForm> {
-  CarsMakeProvider _carsMakeProvider;
+  ShopAlertMakeProvider _provider;
 
   @override
   Widget build(BuildContext context) {
-    _carsMakeProvider = Provider.of<CarsMakeProvider>(context);
+    _provider = Provider.of<ShopAlertMakeProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -38,8 +38,8 @@ class ShopAlertCreateIdentificationFormState
       isExpanded: true,
       hint: Text(S.of(context).cars_create_selectBrand),
       // Not necessary for Option 1
-      items: _buildBrandDropdownItems(_carsMakeProvider.brands),
-      value: _carsMakeProvider.carMakeFormState['brand'],
+      items: _buildBrandDropdownItems(_provider.brands),
+      value: _provider.shopAlert.brand,
       validator: (value) {
         if (value == null) {
           return S.of(context).cars_create_error_brandNotSelected;
@@ -49,19 +49,18 @@ class ShopAlertCreateIdentificationFormState
       },
       onChanged: (newValue) async {
         try {
-          await _carsMakeProvider
+          await _provider
               .loadCarModel(CarQuery(
                   language: LocaleManager.language(context), brand: newValue))
               .then((_) => {
                     setState(() {
-                      _carsMakeProvider.carMakeFormState['brand'] = newValue;
-                      _carsMakeProvider.carMakeFormState['model'] = null;
-                      _carsMakeProvider.carMakeFormState['year'] = null;
+                      _provider.shopAlert.brand = newValue;
+                      _provider.shopAlert.carModel = null;
                     })
                   });
         } catch (error) {
           setState(() {
-            _carsMakeProvider.carMakeFormState['brand'] = newValue;
+            _provider.shopAlert.brand = newValue;
           });
 
           if (error
@@ -76,12 +75,12 @@ class ShopAlertCreateIdentificationFormState
   }
 
   _modelDropdownWidget() {
-    return _carsMakeProvider.carMakeFormState['brand'] != null
+    return _provider.shopAlert.brand != null
         ? DropdownButtonFormField(
             isExpanded: true,
             hint: Text(S.of(context).cars_create_selectModel),
-            items: _buildCarModelDropdownItems(_carsMakeProvider.carModels),
-            value: _carsMakeProvider.carMakeFormState['model'],
+            items: _buildCarModelDropdownItems(_provider.carModels),
+            value: _provider.shopAlert.carModel,
             validator: (value) {
               if (value == null) {
                 return S.of(context).cars_create_error_modelNotSelected;
@@ -90,31 +89,10 @@ class ShopAlertCreateIdentificationFormState
               }
             },
             onChanged: (selectedModel) async {
-              try {
-                await _carsMakeProvider
-                    .loadCarTypes(CarQuery(
-                        language: LocaleManager.language(context),
-                        brand: _carsMakeProvider.carMakeFormState['brand'],
-                        model: selectedModel))
-                    .then((_) => {
-                          setState(() {
-                            _carsMakeProvider.carMakeFormState['model'] =
-                                selectedModel;
-                            _carsMakeProvider.carMakeFormState['type'] = null;
-                          })
-                        });
-              } catch (error) {
-                if (error
-                    .toString()
-                    .contains(CarMakeService.LOAD_CAR_TYPE_FAILED_EXCEPTION)) {
-                  FlushBarHelper.showFlushBar(S.of(context).general_error,
-                      S.of(context).exception_load_car_types, context);
-
-                  setState(() {
-                    _carsMakeProvider.carMakeFormState['model'] = selectedModel;
-                  });
-                }
-              }
+              setState(() {
+                _provider.shopAlert.carModel =
+                    selectedModel;
+              });
             })
         : DropdownButtonFormField(
             hint: Text(S.of(context).cars_create_selectModel));

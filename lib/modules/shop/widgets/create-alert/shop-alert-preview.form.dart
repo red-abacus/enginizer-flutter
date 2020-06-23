@@ -1,10 +1,7 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-model.model.dart';
-import 'package:app/modules/cars/providers/cars-make.provider.dart';
-import 'package:app/modules/shared/widgets/custom-dropdown-field.dart';
+import 'package:app/modules/shop/providers/shop-alert-make.provider.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,37 +13,37 @@ class ShopAlertPreviewForm extends StatefulWidget {
 }
 
 class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
-  CarsMakeProvider _provider;
+  ShopAlertMakeProvider _provider;
 
   Widget build(BuildContext context) {
-    _provider = Provider.of<CarsMakeProvider>(context);
+    _provider = Provider.of<ShopAlertMakeProvider>(context);
 
     String year = '';
 
-    if (_provider.carTechnicalFormState['start_year'] != null) {
-      year = _provider.carTechnicalFormState['start_year'].toString();
+    if (_provider.shopAlert.startYear != null) {
+      year = _provider.shopAlert.startYear.toString();
     }
 
-    if (_provider.carTechnicalFormState['end_year'] != null) {
+    if (_provider.shopAlert.endYear != null) {
       if (year.isEmpty) {
-        year = _provider.carTechnicalFormState['end_year'].toString();
+        year = _provider.shopAlert.endYear.toString();
       } else {
         year =
-            '$year - ${_provider.carTechnicalFormState['end_year'].toString()}';
+            '$year - ${_provider.shopAlert.endYear.toString()}';
       }
     }
 
     String price = '';
 
-    if (_provider.carTechnicalFormState['start_price'] != null) {
-      price = _provider.carTechnicalFormState['start_price'];
+    if (_provider.shopAlert.startPrice != null) {
+      price = _provider.shopAlert.startPrice.toString();
     }
 
-    if (_provider.carTechnicalFormState['end_price'] != null) {
+    if (_provider.shopAlert.endPrice != null) {
       if (price.isEmpty) {
-        price = _provider.carTechnicalFormState['end_price'];
+        price = _provider.shopAlert.endPrice.toString();
       } else {
-        price = '$price - ${_provider.carTechnicalFormState['end_price']}';
+        price = '$price - ${_provider.shopAlert.endPrice}';
       }
     }
 
@@ -59,16 +56,16 @@ class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (_provider.carMakeFormState['brand'] != null)
+          if (_provider.shopAlert.brand != null)
             _titleContainer(S.of(context).general_brand),
-          if (_provider.carMakeFormState['brand'] != null)
+          if (_provider.shopAlert.brand != null)
             _subtitleContainer(
-                (_provider.carMakeFormState['brand'] as CarBrand).name),
-          if (_provider.carMakeFormState['model'] != null)
+                (_provider.shopAlert.brand.name)),
+          if (_provider.shopAlert.carModel != null)
             _titleContainer(S.of(context).general_model),
-          if (_provider.carMakeFormState['model'] != null)
+          if (_provider.shopAlert.carModel != null)
             _subtitleContainer(
-                (_provider.carMakeFormState['model'] as CarModel).name),
+                (_provider.shopAlert.carModel as CarModel).name),
           if (year.isNotEmpty) _titleContainer(S.of(context).general_year),
           if (year.isNotEmpty) _subtitleContainer(year),
           if (price.isNotEmpty) _titleContainer(S.of(context).general_price),

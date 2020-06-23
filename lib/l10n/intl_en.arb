@@ -539,6 +539,7 @@
   "general_sell": "Sell",
   "general_rent": "Rent",
   "general_alert": "Alert",
+  "general_alerts": "Alerts",
   "general_mileage": "Mileage",
   "general_from": "From",
   "general_up_to": "Up to",
@@ -627,5 +628,6 @@
   "exception_car_sell": "There was a problem creating a sale offer.",
   "exception_car_documentation_topics": "There was an error trying to get car documentation.",
   "exception_car_documentation_document_exception": "There was an error trying to load document.",
-  "exception_open_url": "Page url is not valid."
+  "exception_open_url": "Page url is not valid.",
+  "exception_add_shop_alert": "There was an error trying to add new shop alert."
 }

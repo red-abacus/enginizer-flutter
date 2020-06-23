@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/shared/widgets/custom-dropdown-field.dart';
+import 'package:app/modules/shop/providers/shop-alert-make.provider.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
@@ -16,7 +16,7 @@ class ShopAlertCreateTechnicalForm extends StatefulWidget {
 
 class ShopAlertCreateTechnicalFormState
     extends State<ShopAlertCreateTechnicalForm> {
-  CarsMakeProvider _carsMakeProvider;
+  ShopAlertMakeProvider _provider;
 
   String _customEndMileageValue;
   String _customStartMileageValue;
@@ -30,7 +30,7 @@ class ShopAlertCreateTechnicalFormState
   TextEditingController _endPriceController = TextEditingController();
 
   Widget build(BuildContext context) {
-    _carsMakeProvider = Provider.of<CarsMakeProvider>(context);
+    _provider = Provider.of<ShopAlertMakeProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -93,11 +93,10 @@ class ShopAlertCreateTechnicalFormState
                       hint: Text(S.of(context).general_start_date),
                       items: _buildStartCarYearDropdownItems(),
                       value:
-                          _carsMakeProvider.carTechnicalFormState['start_year'],
+                      _provider.shopAlert.startYear?.toString(),
                       onChanged: (value) {
                         setState(() {
-                          _carsMakeProvider
-                              .carTechnicalFormState['start_year'] = value;
+                          _provider.shopAlert.startYear = int.parse(value);
                         });
                       },
                     ),
@@ -125,10 +124,10 @@ class ShopAlertCreateTechnicalFormState
                       hint: Text(S.of(context).general_end_date),
                       items: _buildEndCarYearDropdownItems(),
                       value:
-                          _carsMakeProvider.carTechnicalFormState['end_year'],
+                      _provider.shopAlert.endYear?.toString(),
                       onChanged: (value) {
-                        _carsMakeProvider.carTechnicalFormState['end_year'] =
-                            value;
+                        _provider.shopAlert.endYear =
+                            int.parse(value);
                       },
                     ),
                   )
@@ -160,7 +159,7 @@ class ShopAlertCreateTechnicalFormState
                   required: false,
                   strict: false,
                   value:
-                      _carsMakeProvider.carTechnicalFormState['start_mileage'],
+                  _provider.shopAlert.startMileage.toString(),
                   controller: _startMileageController,
                   onChangedListener: (value) {
                     setState(() {
@@ -168,23 +167,20 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _carsMakeProvider.carTechnicalFormState['start_mileage'] =
-                        newValue;
+                    _provider.shopAlert.startMileage =
+                        int.parse(newValue);
 
-                    if (_carsMakeProvider
-                            .carTechnicalFormState['end_mileage'] !=
+                    if (_provider.shopAlert.endMileage !=
                         null) {
                       try {
                         int startMileage = int.parse(newValue);
-                        int endMileage = int.parse(_carsMakeProvider
-                            .carTechnicalFormState['end_mileage']);
+                        int endMileage = _provider.shopAlert.endMileage;
 
                         if (startMileage > endMileage) {
                           setState(() {
                             _endMileageController =
                                 TextEditingController(text: '');
-                            _carsMakeProvider
-                                .carTechnicalFormState['end_mileage'] = null;
+                            _provider.shopAlert.endMileage = null;
                           });
                         }
                       } catch (error) {}
@@ -216,7 +212,7 @@ class ShopAlertCreateTechnicalFormState
             Container(
               margin: EdgeInsets.only(left: 10),
               child: DropDownField(
-                  value: _carsMakeProvider.carTechnicalFormState['end_mileage'],
+                  value: _provider.shopAlert.endMileage.toString(),
                   required: false,
                   controller: _endMileageController,
                   strict: false,
@@ -226,21 +222,18 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _carsMakeProvider.carTechnicalFormState['end_mileage'] =
-                        newValue;
+                    _provider.shopAlert.endMileage =
+                        int.parse(newValue);
 
-                    if (_carsMakeProvider
-                            .carTechnicalFormState['start_mileage'] !=
+                    if (_provider.shopAlert.startMileage !=
                         null) {
                       try {
-                        int startMileage = int.parse(_carsMakeProvider
-                            .carTechnicalFormState['start_mileage']);
+                        int startMileage = _provider.shopAlert.startMileage;
                         int endMileage = int.parse(newValue);
 
                         if (startMileage > endMileage) {
                           setState(() {
-                            _carsMakeProvider
-                                .carTechnicalFormState['start_mileage'] = null;
+                            _provider.shopAlert.startMileage = null;
                             _startMileageController =
                                 TextEditingController(text: '');
                           });
@@ -277,7 +270,7 @@ class ShopAlertCreateTechnicalFormState
                   required: false,
                   strict: false,
                   value:
-                      _carsMakeProvider.carTechnicalFormState['start_price'],
+                  _provider.shopAlert.startPrice.toString(),
                   controller: _startPriceController,
                   onChangedListener: (value) {
                     setState(() {
@@ -285,23 +278,20 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _carsMakeProvider.carTechnicalFormState['start_price'] =
-                        newValue;
+                    _provider.shopAlert.startPrice =
+                        int.parse(newValue);
 
-                    if (_carsMakeProvider
-                            .carTechnicalFormState['end_price'] !=
+                    if (_provider.shopAlert.endPrice !=
                         null) {
                       try {
                         int startPrice = int.parse(newValue);
-                        int endPrice = int.parse(_carsMakeProvider
-                            .carTechnicalFormState['end_price']);
+                        int endPrice = _provider.shopAlert.endPrice;
 
                         if (startPrice > endPrice) {
                           setState(() {
                             _endPriceController =
                                 TextEditingController(text: '');
-                            _carsMakeProvider
-                                .carTechnicalFormState['end_price'] = null;
+                            _provider.shopAlert.endPrice = null;
                           });
                         }
                       } catch (error) {}
@@ -333,7 +323,7 @@ class ShopAlertCreateTechnicalFormState
             Container(
               margin: EdgeInsets.only(left: 10),
               child: DropDownField(
-                  value: _carsMakeProvider.carTechnicalFormState['end_price'],
+                  value: _provider.shopAlert.endPrice.toString(),
                   required: false,
                   controller: _endPriceController,
                   strict: false,
@@ -343,21 +333,18 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _carsMakeProvider.carTechnicalFormState['end_price'] =
-                        newValue;
+                    _provider.shopAlert.endPrice =
+                        int.parse(newValue);
 
-                    if (_carsMakeProvider
-                            .carTechnicalFormState['start_price'] !=
+                    if (_provider.shopAlert.startPrice !=
                         null) {
                       try {
-                        int startPrice = int.parse(_carsMakeProvider
-                            .carTechnicalFormState['start_price']);
+                        int startPrice = _provider.shopAlert.startPrice;
                         int endPrice = int.parse(newValue);
 
                         if (startPrice > endPrice) {
                           setState(() {
-                            _carsMakeProvider
-                                .carTechnicalFormState['start_price'] = null;
+                            _provider.shopAlert.startPrice = null;
                             _startPriceController =
                                 TextEditingController(text: '');
                           });
@@ -376,27 +363,27 @@ class ShopAlertCreateTechnicalFormState
   }
 
   _buildStartCarYearDropdownItems() {
-    List<DropdownMenuItem<int>> list = [];
+    List<DropdownMenuItem<String>> list = [];
 
     for (int i = 0; i < 30; i++) {
       DateTime date = DateTime(DateTime.now().year - i);
       int year = int.parse(DateUtils.stringFromDate(date, 'yyyy'));
-      list.add(DropdownMenuItem(value: year, child: Text('$year')));
+      list.add(DropdownMenuItem(value: year.toString(), child: Text('$year')));
     }
     return list;
   }
 
   _buildEndCarYearDropdownItems() {
-    int startYear = _carsMakeProvider.carTechnicalFormState['start_year'];
+    int startYear = _provider.shopAlert.startYear;
 
-    List<DropdownMenuItem<int>> list = [];
+    List<DropdownMenuItem<String>> list = [];
 
     for (int i = 0; i < 30; i++) {
       DateTime date = DateTime(DateTime.now().year - i);
       int year = int.parse(DateUtils.stringFromDate(date, 'yyyy'));
 
       if (startYear == null || year > startYear) {
-        list.add(DropdownMenuItem(value: year, child: Text('$year')));
+        list.add(DropdownMenuItem(value: year.toString(), child: Text('$year')));
       }
     }
     return list;

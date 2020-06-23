@@ -534,6 +534,7 @@
   "general_sell": "Vinde",
   "general_rent": "Închiriază",
   "general_alert": "Alertă",
+  "general_alerts": "Alertă",
   "general_mileage": "Kilometraj",
   "general_from": "De la",
   "general_up_to": "Până la",
@@ -622,5 +623,6 @@
   "exception_car_sell": "A intervenit o problema la crearea unei oferte de vânzare.",
   "exception_car_documentation_topics": "A intervenit o problemă la încărcarea documentației mașinii.",
   "exception_car_documentation_document_exception": "A intervenit o problemă la încărcarea documentului.",
-  "exception_open_url": "Adresa paginii nu este validă."
+  "exception_open_url": "Adresa paginii nu este validă.",
+  "exception_add_shop_alert": "A intervenit o problemă la la crearea unei noi alerte."
 }

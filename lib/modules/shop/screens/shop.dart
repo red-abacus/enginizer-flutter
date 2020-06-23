@@ -1,12 +1,11 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
-import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
-import 'package:app/modules/shop/screens/shop-alert-create.modal.dart';
+import 'package:app/modules/shop/screens/shop-alerts.dart';
 import 'package:app/modules/shop/screens/shop-product-details.dart';
 import 'package:app/modules/shop/screens/shop-service-details.dart';
 import 'package:app/modules/shop/widgets/shop-list.widget.dart';
@@ -50,10 +49,9 @@ class ShopState extends State<Shop> {
           elevation: 1,
           onPressed: () => _openShopAlertModal(),
           label: Text(
-            S.of(context).general_alert,
+            S.of(context).general_alerts,
             style: TextHelper.customTextStyle(color: Colors.white, size: 12),
-          ),
-          icon: Icon(Icons.add),
+          )
         ),
       ),
     );
@@ -117,19 +115,6 @@ class ShopState extends State<Shop> {
   }
 
   _openShopAlertModal() {
-    Provider.of<CarsMakeProvider>(context).initParams();
-
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return ShopAlertCreateModal();
-          });
-        });
+    Navigator.of(context).pushNamed(ShopAlerts.route);
   }
 }

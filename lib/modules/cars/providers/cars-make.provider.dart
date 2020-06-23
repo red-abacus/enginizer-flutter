@@ -31,12 +31,6 @@ class CarsMakeProvider with ChangeNotifier {
     'color': null,
     'variant': null,
     'vin': null,
-    'start_year': null,
-    'end_year': null,
-    'start_mileage': null,
-    'end_mileage': null,
-    'start_price': null,
-    'end_price': null
   };
 
   Map<String, dynamic> carExtraFormState = {
@@ -70,12 +64,6 @@ class CarsMakeProvider with ChangeNotifier {
       'color': null,
       'variant': null,
       'vin': null,
-      'start_year': null,
-      'end_year': null,
-      'start_mileage': null,
-      'end_mileage': null,
-      'start_price': null,
-      'end_price': null
     };
 
     carExtraFormState['registrationNumber'] = null;
@@ -84,17 +72,6 @@ class CarsMakeProvider with ChangeNotifier {
     carExtraFormState['rcaExpiryDateNotification'] = false;
     carExtraFormState['itpExpiryDate'] = null;
     carExtraFormState['itpExpiryDateNotification'] = false;
-  }
-
-  bool validShopAlert() {
-    return carMakeFormState['brand'] != null ||
-        carMakeFormState['model'] != null ||
-        carTechnicalFormState['start_year'] != null ||
-        carTechnicalFormState['endYear'] != null ||
-        carTechnicalFormState['start_mileage'] != null ||
-        carTechnicalFormState['end_year'] != null ||
-        carTechnicalFormState['start_price'] != null ||
-        carTechnicalFormState['end_price'] != null;
   }
 
   CarMakeService carMakeService = inject<CarMakeService>();

@@ -15,6 +15,7 @@ import 'package:app/modules/parts/providers/parts.provider.dart';
 import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/modules/promotions/providers/promotions.provider.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
+import 'package:app/modules/shop/providers/shop-alert-make.provider.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
@@ -115,6 +116,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => CarReceptionFormProvider());
   inject.registerFactory(() => DashboardProvider());
   inject.registerFactory(() => ShopProvider());
+  inject.registerFactory(() => ShopAlertMakeProvider());
   inject.registerFactory(() => ShopAppointmentProvider());
   inject.registerFactory(() => PartsProvider());
   inject.registerFactory(() => PartCreateProvider());

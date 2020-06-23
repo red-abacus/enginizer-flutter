@@ -74,8 +74,10 @@ import 'modules/parts/providers/parts.provider.dart';
 import 'modules/parts/screens/part.dart';
 import 'modules/parts/screens/parts.dart';
 import 'modules/promotions/providers/create-promotion.provider.dart';
+import 'modules/shop/providers/shop-alert-make.provider.dart';
 import 'modules/shop/providers/shop-appointment.provider.dart';
 import 'modules/shop/providers/shop.provider.dart';
+import 'modules/shop/screens/shop-alerts.dart';
 import 'modules/shop/screens/shop-product-details.dart';
 import 'modules/shop/screens/shop-service-details.dart';
 import 'modules/shop/screens/shop.dart';
@@ -141,6 +143,7 @@ class AppState extends State<App> {
               value: CarReceptionFormProvider()),
           ChangeNotifierProvider.value(value: DashboardProvider()),
           ChangeNotifierProvider.value(value: ShopProvider()),
+          ChangeNotifierProvider.value(value: ShopAlertMakeProvider()),
           ChangeNotifierProvider.value(value: ShopAppointmentProvider()),
           ChangeNotifierProvider.value(value: PartsProvider()),
           ChangeNotifierProvider.value(value: PartCreateProvider()),
@@ -202,6 +205,7 @@ class AppState extends State<App> {
                 AppointmentDetails.route: (context) => AppointmentDetails(),
                 Auctions.route: (context) => Auctions(),
                 Shop.route: (context) => Shop(),
+                ShopAlerts.route: (context) => ShopAlerts(),
                 ShopServiceDetails.route: (context) => ShopServiceDetails(),
                 ShopProductDetails.route: (context) => ShopProductDetails(),
                 AuctionDetails.route: (context) => AuctionDetails(),

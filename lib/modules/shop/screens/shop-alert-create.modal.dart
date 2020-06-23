@@ -1,8 +1,9 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
-import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/cars/services/car-make.service.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
+import 'package:app/modules/shop/providers/shop-alert-make.provider.dart';
+import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:app/modules/shop/widgets/create-alert/shop-alert-create-identification.form.dart';
 import 'package:app/modules/shop/widgets/create-alert/shop-alert-create-technical.form.dart';
 import 'package:app/modules/shop/widgets/create-alert/shop-alert-preview.form.dart';
@@ -19,7 +20,7 @@ class ShopAlertCreateModal extends StatefulWidget {
 }
 
 class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
-  CarsMakeProvider _carsMakeProvider;
+  ShopAlertMakeProvider _provider;
   int _currentStepIndex = 0;
   bool isLastStep = false;
   List<Step> steps = [];
@@ -36,7 +37,7 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      _carsMakeProvider = Provider.of<CarsMakeProvider>(context);
+      _provider = Provider.of<ShopAlertMakeProvider>(context);
 
       setState(() {
         _isLoading = true;
@@ -51,13 +52,11 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
 
   _loadData() async {
     try {
-      await _carsMakeProvider
+      await _provider
           .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
           .then((_) async {
-        await _carsMakeProvider.loadCarColors().then((_) {
-          setState(() {
-            _isLoading = false;
-          });
+        setState(() {
+          _isLoading = false;
         });
       });
     } catch (error) {
@@ -66,11 +65,6 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_load_car_brands, context);
-      } else if (error
-          .toString()
-          .contains(CarMakeService.LOAD_CAR_COLOR_FAILED_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_load_car_colors, context);
       }
 
       setState(() {
@@ -156,7 +150,7 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
         });
         break;
       case 1:
-        if (_carsMakeProvider.validShopAlert()) {
+        if (_provider.validShopAlert()) {
           _stepStateData[_currentStepIndex]['state'] = StepState.complete;
           _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
           _stepStateData[_currentStepIndex + 1]['active'] = true;
@@ -217,7 +211,22 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
     );
   }
 
-  _submit() {
+  _submit() async {
+    if (_provider.validShopAlert()) {
+      setState(() {
+        _isLoading = true;
+      });
 
+      try {
+        await _provider
+            .createShopAlert(_provider.shopAlert)
+            .then((shopAlert) {});
+      } catch (error) {
+        if (error.toString().contains(ShopService.ADD_SHOP_ALERT_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_add_shop_alert, context);
+        }
+      }
+    }
   }
 }
