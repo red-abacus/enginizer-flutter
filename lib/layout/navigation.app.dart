@@ -10,6 +10,7 @@ import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
+import 'package:app/modules/extra-services/screens/extra-services.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/parking-lots/screens/parking-lots.dart';
@@ -92,6 +93,18 @@ class NavigationApp extends StatefulWidget {
     }
 
     if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PARKING_LOTS)) {
+      items.add(
+          new DrawerItem('Parking Lots', ParkingLots.route, ParkingLots.icon));
+    }
+
+    if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Sidebar, PermissionsSideBar.EXTRA_SERVICES)) {
+      items.add(new DrawerItem(
+          'Extra Services', ExtraServices.route, ExtraServices.icon));
+    }
+
+    if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.NOTIFICATIONS)) {
       items.add(new DrawerItem(
           'Notifications',
@@ -99,12 +112,6 @@ class NavigationApp extends StatefulWidget {
           NotificationsManager.notificationsCount == 0
               ? Icons.notifications
               : Icons.notifications_active));
-    }
-
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PARKING_LOTS)) {
-      items.add(
-          new DrawerItem('Parking Lots', ParkingLots.route, ParkingLots.icon));
     }
 
     return items;
@@ -268,6 +275,8 @@ class NavigationAppState extends State<NavigationApp> {
         return Promotions();
       case ParkingLots.route:
         return ParkingLots();
+      case ExtraServices.route:
+        return ExtraServices();
       default:
         return new Container();
     }

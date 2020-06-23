@@ -461,6 +461,7 @@
   "map_services_atm": "ATM",
   "map_services_accommodation": "Accommodations",
   "map_services_service_auto": "Service auto",
+  "map_services_select_extra_service": "Select extra service",
   "SERVICE": "Service",
   "CAR_WASHING": "Car washing",
   "PAINT_SHOP": "Paint shop",
