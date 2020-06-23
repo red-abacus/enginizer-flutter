@@ -62,8 +62,8 @@ class _AuthScreenState extends State<AuthScreen> {
                         authFailedHandler: _handleAuthenticationFailure),
                   ),
                   // TODO - remove this
-                  _testWidget(),
-                  _testWidget2(),
+//                  _testWidget(),
+//                  _testWidget2(),
                 ],
               ),
             ),
