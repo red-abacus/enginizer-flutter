@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
@@ -240,7 +241,8 @@ class CarExtraFormState extends State<CarExtraForm> {
           );
 
           setState(() {
-            _provider.carExtraFormState['exhaust'] = file;
+            _provider.exhaust =
+                CarDocument(file, S.of(context).car_create_exhaust_test);
           });
         },
         child: Row(
@@ -248,14 +250,18 @@ class CarExtraFormState extends State<CarExtraForm> {
             Icon(
               Icons.attach_file,
               color:
-                  _provider.carExtraFormState['exhaust'] == null ? gray2 : red,
+                  _provider.exhaust == null ? gray2 : red,
             ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(left: 10),
                 child: Text(
                   S.of(context).car_create_exhaust_test,
-                  style: TextHelper.customTextStyle(color: _provider.carExtraFormState['exhaust'] != null ? red : gray2, size: 16),
+                  style: TextHelper.customTextStyle(
+                      color: _provider.exhaust != null
+                          ? red
+                          : gray2,
+                      size: 16),
                 ),
               ),
             )
@@ -276,14 +282,15 @@ class CarExtraFormState extends State<CarExtraForm> {
           );
 
           setState(() {
-            _provider.carExtraFormState['diagnosisProtocol'] = file;
+            _provider.diagnosisProtocol =
+                CarDocument(file, S.of(context).car_create_diagnosis_protocol);
           });
         },
         child: Row(
           children: [
             Icon(
               Icons.attach_file,
-              color: _provider.carExtraFormState['diagnosisProtocol'] == null
+              color: _provider.diagnosisProtocol == null
                   ? gray2
                   : red,
             ),
@@ -291,7 +298,12 @@ class CarExtraFormState extends State<CarExtraForm> {
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 S.of(context).car_create_diagnosis_protocol,
-                style: TextHelper.customTextStyle(color: _provider.carExtraFormState['diagnosisProtocol'] != null ? red : gray2, size: 16),
+                style: TextHelper.customTextStyle(
+                    color:
+                        _provider.diagnosisProtocol != null
+                            ? red
+                            : gray2,
+                    size: 16),
               ),
             )
           ],
@@ -311,14 +323,15 @@ class CarExtraFormState extends State<CarExtraForm> {
           );
 
           setState(() {
-            _provider.carExtraFormState['generalVerification'] = file;
+            _provider.exhaust = CarDocument(
+                file, S.of(context).car_create_general_car_verification);
           });
         },
         child: Row(
           children: [
             Icon(
               Icons.attach_file,
-              color: _provider.carExtraFormState['generalVerification'] == null
+              color: _provider.exhaust == null
                   ? gray2
                   : red,
             ),
@@ -326,7 +339,12 @@ class CarExtraFormState extends State<CarExtraForm> {
               margin: EdgeInsets.only(left: 10),
               child: Text(
                 S.of(context).car_create_general_car_verification,
-                style: TextHelper.customTextStyle(color: _provider.carExtraFormState['generalVerification'] != null ? red : gray2, size: 16),
+                style: TextHelper.customTextStyle(
+                    color: _provider.exhaust !=
+                            null
+                        ? red
+                        : gray2,
+                    size: 16),
               ),
             )
           ],

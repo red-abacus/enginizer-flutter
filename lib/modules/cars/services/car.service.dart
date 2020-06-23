@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app/modules/appointments/model/documentation/car-documentation-document.model.dart';
 import 'package:app/modules/appointments/model/documentation/car-documentation-topic.model.dart';
+import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
 import 'package:dio/dio.dart';
-
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
@@ -14,6 +15,7 @@ import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/cars-reponse.model.dart';
 import 'package:app/utils/environment.constants.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'package:http_parser/http_parser.dart';
 
@@ -26,10 +28,13 @@ class CarService {
   static String CAR_ADD_IMAGE_EXCEPTION = 'CAR_ADD_IMAGE_EXCEPTION';
   static String CAR_HISTORY_EXCEPTION = 'CAR_HISTORY_EXCEPTION';
   static String CAR_SELL_EXCEPTION = 'CAR_SELL_EXCEPTION';
+
   static String CAR_DOCUMENTATION_TOPICS_EXCEPTION =
       'CAR.CAR_DOCUMENTATION_TOPICS_EXCEPTION';
   static String CAR_DOCUMENTATION_DOCUMENT_EXCEPTION =
       'CAR.CAR_DOCUMENTATION_DOCUMENT_EXCEPTION';
+
+  static String CAR_ADD_DOCUMENT_EXCEPTION = 'CAR_ADD_DOCUMENT_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -44,13 +49,16 @@ class CarService {
   static const String _CAR_DOCUMENTATION_DOCUMENT =
       '${Environment.CARS_BASE_API}/techDocumentation/document';
 
+  static const String _CAR_ADD_DOCUMENT_PREFIX =
+      '${Environment.CARS_BASE_API}/cars/';
+  static const String _CAR_ADD_DOCUMENT_SUFFIX = '/documents';
+
   Dio _dio = inject<Dio>();
 
   CarService();
 
   Future<CarsResponse> getCars({String searchString}) async {
     // TODO - when create a new promotion with car, i need a filtering for status
-    // TODO - get cars need to retrieve status as well
     try {
       var queryParams =
           searchString != null ? {'search': searchString} : {'search': ''};
@@ -229,12 +237,46 @@ class CarService {
     }
   }
 
+  Future<GenericModel> addCarDocument(int carId, CarDocument document) async {
+    print('car id $carId');
+    FormData formData = FormData.fromMap({
+      "file": await await MultipartFile.fromFile(document.file.path,
+          filename: document.file.path.split('/').last,
+          contentType: MediaType(document.fileType, document.file.path.split('.').last)),
+    });
+
+    print('path ${_buildAddCarDocumentPath(carId)}');
+
+    try {
+      final response =
+          await _dio.patch(_buildAddCarDocumentPath(carId), data: formData);
+
+      print('response status code ${response.statusCode}');
+      print('response status code ${response.statusMessage}');
+      if (response.statusCode < 300) {
+        return GenericModel.fromJson(response.data);
+      } else {
+        throw Exception(CAR_ADD_DOCUMENT_EXCEPTION);
+      }
+    } catch (error) {
+      print('error $error');
+      print('error ${error.response}');
+      throw Exception(CAR_ADD_DOCUMENT_EXCEPTION);
+    }
+  }
+
   _buildCarHistoryPath(int carId) {
     return _CAR_HISTORY_PREFIX + carId.toString() + _CAR_HISTORY_SUFFIX;
   }
 
   _buildCarSellPath(int carId) {
     return _CAR_SELL_PREFIX + carId.toString() + _CAR_SELL_SUFFIX;
+  }
+
+  _buildAddCarDocumentPath(int carId) {
+    return _CAR_ADD_DOCUMENT_PREFIX +
+        carId.toString() +
+        _CAR_ADD_DOCUMENT_SUFFIX;
   }
 
   _mapCarHistory(List<dynamic> response) {

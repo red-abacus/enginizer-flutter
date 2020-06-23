@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
@@ -25,6 +27,10 @@ class CarProvider with ChangeNotifier {
 
   List<CarHistory> carHistory = [];
   List<CarIntervention> selectedInterventions = [];
+
+  CarDocument exhaust;
+  CarDocument diagnosisProtocol;
+  CarDocument generalVerification;
 
   selectCar(Car car) {
     this.selectedCar = car;
@@ -77,6 +83,16 @@ class CarProvider with ChangeNotifier {
       uploadImageAPI = ApiResponse.error("error");
     }
     notifyListeners();
+  }
+
+  Future<GenericModel> uploadDocument(int carId, CarDocument document) async {
+    try {
+      GenericModel model = await carService.addCarDocument(carId, document);
+      notifyListeners();
+      return model;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<List<CarHistory>> getCarHistory(int carId) async {

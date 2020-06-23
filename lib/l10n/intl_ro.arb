@@ -331,6 +331,7 @@
   "user_profile_no_active_personnel": "Nu există personal activ în acest moment",
   "user_profile_number_of_active_personnel": "Nr. de personal:",
   "car_details_title": "Detalii Mașină",
+  "car_documents_title": "Documente",
   "car_service_recommendations_title": "Recomandări Service",
   "work_estimate_status_pending": "În Așteptare",
   "work_estimate_status_accepted": "Acceptată",
@@ -622,5 +623,6 @@
   "exception_car_sell": "A intervenit o problema la crearea unei oferte de vânzare.",
   "exception_car_documentation_topics": "A intervenit o problemă la încărcarea documentației mașinii.",
   "exception_car_documentation_document_exception": "A intervenit o problemă la încărcarea documentului.",
-  "exception_open_url": "Adresa paginii nu este validă."
+  "exception_open_url": "Adresa paginii nu este validă.",
+  "exception_add_car_document": "A intervenit o problemă la încărcarea documentului."
 }

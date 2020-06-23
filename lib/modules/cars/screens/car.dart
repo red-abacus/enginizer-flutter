@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
+import 'package:app/modules/cars/widgets/car-documents.widget.dart';
 import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
@@ -42,12 +43,12 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         vsync: this,
         length: PermissionsManager.getInstance()
                 .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)
-            ? 2
-            : 1,
+            ? 3
+            : 2,
         initialIndex: 0);
 
     _tabController.addListener(() {
-      if (_tabController.index == 1) {
+      if (_tabController.index == 2) {
         _provider.selectedInterventions = [];
       }
     });
@@ -130,6 +131,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
           controller: _tabController,
           tabs: [
             Tab(text: S.of(context).car_details_title),
+            Tab(text: S.of(context).car_documents_title),
             if (PermissionsManager.getInstance().hasAccess(
                 MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR))
               Tab(text: S.of(context).car_service_recommendations_title),
@@ -165,6 +167,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         uploadCarImageListener: _uploadCarImageListener,
         showCameraDialog: _showCameraDialog,
       ),
+      CarDocumentsWidget(),
     ];
 
     if (PermissionsManager.getInstance()
