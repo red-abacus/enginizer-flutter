@@ -16,6 +16,7 @@ class PermissionsSideBar {
   static final String CARS = 'SIDEBAR.CARS';
   static final String SHOP = 'SIDEBAR.SHOP';
   static final String TICKETS = 'SIDEBAR.TICKETS';
+  static final String PARKING_LOTS = 'SIDEBAR.PARKING_LOTS';
 
   Map<String, List<String>> _permissionsMap = Map();
 
@@ -38,7 +39,8 @@ class PermissionsSideBar {
             NOTIFICATIONS,
             PROMOTIONS,
             SHOP,
-            TICKETS
+            TICKETS,
+            PARKING_LOTS
           ];
           break;
         case Roles.ProviderAccountant:

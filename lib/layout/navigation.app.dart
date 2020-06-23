@@ -12,12 +12,11 @@ import 'package:app/modules/consultant-user-details/provider/user-consultant.pro
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
+import 'package:app/modules/parking-lots/screens/parking-lots.dart';
 import 'package:app/modules/parts/screens/parts.dart';
 import 'package:app/modules/promotions/screens/promotions.screen.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
-import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
@@ -102,6 +101,12 @@ class NavigationApp extends StatefulWidget {
               : Icons.notifications_active));
     }
 
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PARKING_LOTS)) {
+      items.add(
+          new DrawerItem('Parking Lots', ParkingLots.route, ParkingLots.icon));
+    }
+
     return items;
   }
 
@@ -162,64 +167,69 @@ class NavigationAppState extends State<NavigationApp> {
         actions: <Widget>[],
       ),
       drawer: Drawer(
-        child: Column(children: [
-          FlatButton(
-            padding: EdgeInsets.all(0.0),
-            child: UserAccountsDrawerHeader(
-              accountEmail: Text(widget.authUserDetails.email),
-              accountName: Text(widget.authUserDetails.name),
-              currentAccountPicture: CircleAvatar(),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 40),
+          child: Column(children: [
+            FlatButton(
+              padding: EdgeInsets.all(0.0),
+              child: UserAccountsDrawerHeader(
+                accountEmail: Text(widget.authUserDetails.email),
+                accountName: Text(widget.authUserDetails.name),
+                currentAccountPicture: CircleAvatar(),
+              ),
+              onPressed: () {
+                _showUserDetails();
+              },
             ),
-            onPressed: () {
-              _showUserDetails();
-            },
-          ),
-          Column(
-            children: drawerOptions,
-          ),
-          Divider(
-            height: 1,
-          ),
-          Column(
-            children: <Widget>[
-              if (PermissionsManager.getInstance().hasAccess(
-                  MainPermissions.Sidebar, PermissionsSideBar.TICKETS))
+            Column(
+              children: drawerOptions,
+            ),
+            Divider(
+              height: 1,
+            ),
+            Column(
+              children: <Widget>[
+                if (PermissionsManager.getInstance().hasAccess(
+                    MainPermissions.Sidebar, PermissionsSideBar.TICKETS))
+                  ListTile(
+                      title: new Text(
+                        'Tax Payment',
+                        style: TextHelper.customTextStyle(),
+                        textAlign: TextAlign.left,
+                      ),
+                      leading: new Icon(Icons.payment),
+                      onTap: () async {
+                        const url = "https://www.ghiseul.ro";
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          FlushBarHelper.showFlushBar(
+                              S.of(context).general_error,
+                              S.of(context).exception_open_url,
+                              context);
+                        }
+                      }),
                 ListTile(
                     title: new Text(
-                      'Tax Payment',
-                      style: TextHelper.customTextStyle(),
+                      "Logout",
+                      style: new TextStyle(
+                        fontFamily: 'Lato',
+                        fontWeight: FontWeight.w600,
+                      ),
                       textAlign: TextAlign.left,
                     ),
-                    leading: new Icon(Icons.payment),
-                    onTap: () async {
-                      const url = "https://www.ghiseul.ro";
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        FlushBarHelper.showFlushBar(S.of(context).general_error,
-                            S.of(context).exception_open_url, context);
-                      }
-                    }),
-              ListTile(
-                  title: new Text(
-                    "Logout",
-                    style: new TextStyle(
-                      fontFamily: 'Lato',
-                      fontWeight: FontWeight.w600,
+                    leading: new Icon(
+                      Icons.power_settings_new,
+                      color: Colors.red,
                     ),
-                    textAlign: TextAlign.left,
-                  ),
-                  leading: new Icon(
-                    Icons.power_settings_new,
-                    color: Colors.red,
-                  ),
-                  onTap: () => auth.logout()),
-              SizedBox(
-                height: MediaQuery.of(context).padding.bottom,
-              )
-            ],
-          ),
-        ]),
+                    onTap: () => auth.logout()),
+                SizedBox(
+                  height: MediaQuery.of(context).padding.bottom,
+                )
+              ],
+            ),
+          ]),
+        ),
       ),
       body: _getDrawerItemWidget(_selectedDrawerRoute),
     );
@@ -256,6 +266,8 @@ class NavigationAppState extends State<NavigationApp> {
         return Orders();
       case Promotions.route:
         return Promotions();
+      case ParkingLots.route:
+        return ParkingLots();
       default:
         return new Container();
     }
