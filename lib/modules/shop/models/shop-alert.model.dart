@@ -7,8 +7,8 @@ class ShopAlert {
   CarModel carModel;
   int startMileage;
   int endMileage;
-  int startPrice;
-  int endPrice;
+  double startPrice;
+  double endPrice;
   int startYear;
   int endYear;
 
@@ -29,12 +29,12 @@ class ShopAlert {
         brand: json['brand'] != null ? CarBrand.fromJson(json['brand']) : null,
         carModel:
             json['model'] != null ? CarModel.fromJson(json['model']) : null,
-        startMileage: json['startMileage'] != null ? json['startMileage'] : 0,
-        endMileage: json['endMileage'] != null ? json['endMileage'] : 0,
-        startPrice: json['startPrice'] != null ? json['startPrice'] : 0,
-        endPrice: json['endPrice'] != null ? json['endPrice'] : 0,
-        startYear: json['startYear'] != null ? json['startYear'] : 0,
-        endYear: json['endYear'] != null ? json['endYear'] : 0);
+        startMileage: json['startMileage'] != null ? json['startMileage'] : null,
+        endMileage: json['endMileage'] != null ? json['endMileage'] : null,
+        startPrice: json['startPrice'] != null ? json['startPrice'] : null,
+        endPrice: json['endPrice'] != null ? json['endPrice'] : null,
+        startYear: json['startYear'] != null ? json['startYear'] : null,
+        endYear: json['endYear'] != null ? json['endYear'] : null);
   }
 
   Map<String, dynamic> toJson() {

@@ -29,8 +29,29 @@ class ShopAlertCreateTechnicalFormState
   TextEditingController _startPriceController = TextEditingController();
   TextEditingController _endPriceController = TextEditingController();
 
+  bool _initDone = false;
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      _provider = Provider.of<ShopAlertMakeProvider>(context);
+
+      _startMileageController = TextEditingController(
+          text: _provider.shopAlert.startMileage.toString());
+      _endMileageController = TextEditingController(
+          text: _provider.shopAlert.endMileage.toString());
+
+      _startPriceController = TextEditingController(
+          text: _provider.shopAlert.startPrice.toString());
+      _endPriceController =
+          TextEditingController(text: _provider.shopAlert.endPrice.toString());
+
+      _initDone = true;
+    }
+    super.didChangeDependencies();
+  }
+
   Widget build(BuildContext context) {
-    _provider = Provider.of<ShopAlertMakeProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -67,6 +88,20 @@ class ShopAlertCreateTechnicalFormState
     );
   }
 
+//  @override
+//  void initState() {
+//    super.initState();
+//    _provider = Provider.of<ShopAlertMakeProvider>(context);
+//
+//    print('init state ! ${_provider.shopAlert}');
+//
+//    _startMileageController = TextEditingController(text: _provider.shopAlert.startMileage.toString());
+//    _endMileageController = TextEditingController(text: _provider.shopAlert.endMileage.toString());
+//
+//    _startPriceController = TextEditingController(text: _provider.shopAlert.startPrice.toString());
+//    _endPriceController = TextEditingController(text: _provider.shopAlert.endPrice.toString());
+//  }
+
   _buildDateWidget() {
     return Container(
       margin: EdgeInsets.only(top: 6),
@@ -92,8 +127,7 @@ class ShopAlertCreateTechnicalFormState
                       isExpanded: true,
                       hint: Text(S.of(context).general_start_date),
                       items: _buildStartCarYearDropdownItems(),
-                      value:
-                      _provider.shopAlert.startYear?.toString(),
+                      value: _provider.shopAlert.startYear?.toString(),
                       onChanged: (value) {
                         setState(() {
                           _provider.shopAlert.startYear = int.parse(value);
@@ -123,11 +157,9 @@ class ShopAlertCreateTechnicalFormState
                       isExpanded: true,
                       hint: Text(S.of(context).general_end_date),
                       items: _buildEndCarYearDropdownItems(),
-                      value:
-                      _provider.shopAlert.endYear?.toString(),
+                      value: _provider.shopAlert.endYear?.toString(),
                       onChanged: (value) {
-                        _provider.shopAlert.endYear =
-                            int.parse(value);
+                        _provider.shopAlert.endYear = int.parse(value);
                       },
                     ),
                   )
@@ -158,8 +190,7 @@ class ShopAlertCreateTechnicalFormState
               child: DropDownField(
                   required: false,
                   strict: false,
-                  value:
-                  _provider.shopAlert.startMileage.toString(),
+                  value: _provider.shopAlert.startMileage.toString(),
                   controller: _startMileageController,
                   onChangedListener: (value) {
                     setState(() {
@@ -167,11 +198,9 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _provider.shopAlert.startMileage =
-                        int.parse(newValue);
+                    _provider.shopAlert.startMileage = int.parse(newValue);
 
-                    if (_provider.shopAlert.endMileage !=
-                        null) {
+                    if (_provider.shopAlert.endMileage != null) {
                       try {
                         int startMileage = int.parse(newValue);
                         int endMileage = _provider.shopAlert.endMileage;
@@ -222,11 +251,9 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _provider.shopAlert.endMileage =
-                        int.parse(newValue);
+                    _provider.shopAlert.endMileage = int.parse(newValue);
 
-                    if (_provider.shopAlert.startMileage !=
-                        null) {
+                    if (_provider.shopAlert.startMileage != null) {
                       try {
                         int startMileage = _provider.shopAlert.startMileage;
                         int endMileage = int.parse(newValue);
@@ -269,8 +296,7 @@ class ShopAlertCreateTechnicalFormState
               child: DropDownField(
                   required: false,
                   strict: false,
-                  value:
-                  _provider.shopAlert.startPrice.toString(),
+                  value: _provider.shopAlert.startPrice.toString(),
                   controller: _startPriceController,
                   onChangedListener: (value) {
                     setState(() {
@@ -278,14 +304,12 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _provider.shopAlert.startPrice =
-                        int.parse(newValue);
+                    _provider.shopAlert.startPrice = double.parse(newValue);
 
-                    if (_provider.shopAlert.endPrice !=
-                        null) {
+                    if (_provider.shopAlert.endPrice != null) {
                       try {
-                        int startPrice = int.parse(newValue);
-                        int endPrice = _provider.shopAlert.endPrice;
+                        double startPrice = double.parse(newValue);
+                        double endPrice = _provider.shopAlert.endPrice;
 
                         if (startPrice > endPrice) {
                           setState(() {
@@ -333,14 +357,12 @@ class ShopAlertCreateTechnicalFormState
                     });
                   },
                   onValueChanged: (newValue) {
-                    _provider.shopAlert.endPrice =
-                        int.parse(newValue);
+                    _provider.shopAlert.endPrice = double.parse(newValue);
 
-                    if (_provider.shopAlert.startPrice !=
-                        null) {
+                    if (_provider.shopAlert.startPrice != null) {
                       try {
-                        int startPrice = _provider.shopAlert.startPrice;
-                        int endPrice = int.parse(newValue);
+                        double startPrice = _provider.shopAlert.startPrice;
+                        double endPrice = double.parse(newValue);
 
                         if (startPrice > endPrice) {
                           setState(() {
@@ -383,7 +405,8 @@ class ShopAlertCreateTechnicalFormState
       int year = int.parse(DateUtils.stringFromDate(date, 'yyyy'));
 
       if (startYear == null || year > startYear) {
-        list.add(DropdownMenuItem(value: year.toString(), child: Text('$year')));
+        list.add(
+            DropdownMenuItem(value: year.toString(), child: Text('$year')));
       }
     }
     return list;

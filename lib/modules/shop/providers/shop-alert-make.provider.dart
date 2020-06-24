@@ -29,13 +29,13 @@ class ShopAlertMakeProvider with ChangeNotifier {
 
   bool validShopAlert() {
     return shopAlert.brand != null ||
-        shopAlert.brand != null ||
-        shopAlert.brand != null ||
-        shopAlert.brand != null ||
-        shopAlert.brand != null ||
-        shopAlert.brand != null ||
-        shopAlert.brand != null ||
-        shopAlert.brand  != null;
+        shopAlert.carModel != null ||
+        shopAlert.startYear != null ||
+        shopAlert.endYear != null ||
+        shopAlert.startMileage != null ||
+        shopAlert.endMileage != null ||
+        shopAlert.startPrice != null ||
+        shopAlert.endPrice != null;
   }
 
   Future<List<CarBrand>> loadCarBrands(CarQuery carQuery) async {
@@ -58,14 +58,23 @@ class ShopAlertMakeProvider with ChangeNotifier {
     }
   }
 
-  Future<ShopAlert> createShopAlert(ShopAlert shopAlert) async {
+  Future<bool> createShopAlert(ShopAlert shopAlert) async {
     try {
-      ShopAlert result = await _shopService.createShopAlert(shopAlert);
+      bool response = await _shopService.createShopAlert(shopAlert);
       notifyListeners();
-      return result;
+      return response;
+    } catch (error) {
+      throw (error);
     }
-    catch (error) {
-      throw(error);
+  }
+
+  Future<bool> editShopAlert(ShopAlert shopAlert) async {
+    try {
+      bool response = await _shopService.editShopAlert(shopAlert);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
     }
   }
 }

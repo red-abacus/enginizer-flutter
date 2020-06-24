@@ -409,7 +409,9 @@
   "online_shop_service_details_title": "Detalii Furnizor",
   "online_shop_list_title": "Tip afișare",
   "online_shop_alert_manufacturer_date": "Dată fabricație",
-  "online_shop_alert": "Trebuie să alegi macar 1 opțiune pentru filtrare.",
+  "online_shop_alert": "Trebuie să alegi măcar brand-ul și modelul mașinii.",
+  "online_shop_no_alerts_title": "Nu există nicio alertă...",
+  "online_shop_remove_alert": "Ești sigur că dorești să ștergi această alertă?",
   "parts_search_name_title": "Caută după nume",
   "parts_search_code_title": "sau cod",
   "part_create_form_photos_title": "Adaugă Imagini Piesă Auto (maxim 5)",
@@ -542,6 +544,7 @@
   "general_model": "Model",
   "general_preview": "Previzualizare",
   "general_year": "An",
+  "general_km": "km",
   "exception_get_car_fuel": "A intervenit o problemă la încărcarea combustibilului mașinii.",
   "exception_get_car_details": "A intervenit o problemă la încărcarea detaliilor mașinii.",
   "exception_get_appointments": "A intervenit o problemă la încărcarea programărilor tale.",
@@ -624,5 +627,8 @@
   "exception_car_documentation_topics": "A intervenit o problemă la încărcarea documentației mașinii.",
   "exception_car_documentation_document_exception": "A intervenit o problemă la încărcarea documentului.",
   "exception_open_url": "Adresa paginii nu este validă.",
-  "exception_add_shop_alert": "A intervenit o problemă la la crearea unei noi alerte."
+  "exception_add_shop_alert": "A intervenit o problemă la crearea unei noi alerte.",
+  "exception_get_shop_alerts": "A intervenit o problemă la încărcarea alertelor tale.",
+  "exception_remove_shop_alert": "A intervenit o problemă la ștergerea alertei.",
+  "exception_edit_shop_alert": "A intervenit o problemă la editarea alertei."
 }

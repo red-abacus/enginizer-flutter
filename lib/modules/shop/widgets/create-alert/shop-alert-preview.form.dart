@@ -28,8 +28,7 @@ class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
       if (year.isEmpty) {
         year = _provider.shopAlert.endYear.toString();
       } else {
-        year =
-            '$year - ${_provider.shopAlert.endYear.toString()}';
+        year = '$year - ${_provider.shopAlert.endYear.toString()}';
       }
     }
 
@@ -51,6 +50,24 @@ class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
       price = '$price ${S.of(context).general_currency}';
     }
 
+    String mileage = '';
+
+    if (_provider.shopAlert.startMileage != null) {
+      mileage = _provider.shopAlert.startMileage.toString();
+    }
+
+    if (_provider.shopAlert.endMileage != null) {
+      if (mileage.isEmpty) {
+        mileage = _provider.shopAlert.endMileage.toString();
+      } else {
+        mileage = '$mileage - ${_provider.shopAlert.endMileage}';
+      }
+    }
+
+    if (mileage.isNotEmpty) {
+      mileage = '$mileage ${S.of(context).general_km}';
+    }
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -59,15 +76,14 @@ class ShopAlertPreviewFormState extends State<ShopAlertPreviewForm> {
           if (_provider.shopAlert.brand != null)
             _titleContainer(S.of(context).general_brand),
           if (_provider.shopAlert.brand != null)
-            _subtitleContainer(
-                (_provider.shopAlert.brand.name)),
+            _subtitleContainer((_provider.shopAlert.brand.name)),
           if (_provider.shopAlert.carModel != null)
             _titleContainer(S.of(context).general_model),
           if (_provider.shopAlert.carModel != null)
-            _subtitleContainer(
-                (_provider.shopAlert.carModel as CarModel).name),
-          if (year.isNotEmpty) _titleContainer(S.of(context).general_year),
+            _subtitleContainer(_provider.shopAlert.carModel.name),
           if (year.isNotEmpty) _subtitleContainer(year),
+          if (mileage.isNotEmpty) _titleContainer(S.of(context).general_mileage),
+          if (mileage.isNotEmpty) _subtitleContainer(mileage),
           if (price.isNotEmpty) _titleContainer(S.of(context).general_price),
           if (price.isNotEmpty) _subtitleContainer(price),
         ],

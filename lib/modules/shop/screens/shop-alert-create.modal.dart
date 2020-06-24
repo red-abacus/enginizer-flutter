@@ -15,6 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ShopAlertCreateModal extends StatefulWidget {
+  final Function refreshState;
+
+  ShopAlertCreateModal({this.refreshState});
+
   @override
   _ShopAlertCreateModalState createState() => _ShopAlertCreateModalState();
 }
@@ -55,9 +59,21 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
       await _provider
           .loadCarBrands(CarQuery(language: LocaleManager.language(context)))
           .then((_) async {
-        setState(() {
-          _isLoading = false;
-        });
+        if (_provider.shopAlert.brand != null) {
+          await _provider
+              .loadCarModel(CarQuery(
+                  language: LocaleManager.language(context),
+                  brand: _provider.shopAlert.brand))
+              .then((value) {
+            setState(() {
+              _isLoading = false;
+            });
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     } catch (error) {
       if (error
@@ -65,6 +81,11 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
           .contains(CarMakeService.LOAD_CAR_BRANDS_FAILED_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_load_car_brands, context);
+      } else if (error
+          .toString()
+          .contains(CarMakeService.LOAD_CAR_MODELS_FAILED_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_load_car_models, context);
       }
 
       setState(() {
@@ -217,14 +238,37 @@ class _ShopAlertCreateModalState extends State<ShopAlertCreateModal> {
         _isLoading = true;
       });
 
-      try {
-        await _provider
-            .createShopAlert(_provider.shopAlert)
-            .then((shopAlert) {});
-      } catch (error) {
-        if (error.toString().contains(ShopService.ADD_SHOP_ALERT_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_add_shop_alert, context);
+      if (_provider.shopAlert.id == null) {
+        try {
+          await _provider
+              .createShopAlert(_provider.shopAlert)
+              .then((shopAlert) {
+            if (widget.refreshState != null) {
+              widget.refreshState();
+            }
+            Navigator.pop(context);
+          });
+        } catch (error) {
+          if (error.toString().contains(ShopService.ADD_SHOP_ALERT_EXCEPTION)) {
+            FlushBarHelper.showFlushBar(S.of(context).general_error,
+                S.of(context).exception_add_shop_alert, context);
+          }
+        }
+      } else {
+        try {
+          await _provider.editShopAlert(_provider.shopAlert).then((shopAlert) {
+            if (widget.refreshState != null) {
+              widget.refreshState();
+            }
+            Navigator.pop(context);
+          });
+        } catch (error) {
+          if (error
+              .toString()
+              .contains(ShopService.EDIT_SHOP_ALERT_EXCEPTION)) {
+            FlushBarHelper.showFlushBar(S.of(context).general_error,
+                S.of(context).exception_edit_shop_alert, context);
+          }
         }
       }
     }

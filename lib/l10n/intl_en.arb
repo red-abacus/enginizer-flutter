@@ -399,7 +399,9 @@
   "online_shop_service_details_title": "Provider Details",
   "online_shop_list_title": "List type",
   "online_shop_alert_manufacturer_date": "Manufacturer date",
-  "online_shop_alert": "You need to add at least 1 filter option.",
+  "online_shop_alert": "You need to add at least car brand and model.",
+  "online_shop_no_alerts_title": "You have no alerts...",
+  "online_shop_remove_alert": "Are you sure you want to remove this alert?",
   "parts_search_name_title": "Search by name",
   "parts_search_code_title": "or code",
   "part_create_form_photos_title": "Add Part Images (max 5)",
@@ -547,6 +549,7 @@
   "general_model": "Model",
   "general_preview": "Preview",
   "general_year": "Year",
+  "general_km": "km",
   "exception_get_car_fuel": "There was an error trying to load car fuel.",
   "exception_get_car_details": "There was an error trying to get car details.",
   "exception_get_appointments": "There was an error trying to load your appointments.",
@@ -629,5 +632,8 @@
   "exception_car_documentation_topics": "There was an error trying to get car documentation.",
   "exception_car_documentation_document_exception": "There was an error trying to load document.",
   "exception_open_url": "Page url is not valid.",
-  "exception_add_shop_alert": "There was an error trying to add new shop alert."
+  "exception_add_shop_alert": "There was an error trying to add new shop alert.",
+  "exception_get_shop_alerts": "There was an error trying to get your shop alerts.",
+  "exception_remove_shop_alert": "There was an error trying to remove shop alert.",
+  "exception_edit_shop_alert": "There was an error trying to edit shop alert."
 }
