@@ -5,6 +5,7 @@ import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/modules/shop/widgets/cards/shop-item-grid.card.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -21,6 +22,7 @@ class ShopListWidget extends StatelessWidget {
   final Function selectListType;
   final ShopCategorySort searchCategorySort;
   final ShopListType shopListType;
+  final List<ShopItem> items;
 
   String searchString;
   List<ShopCategory> searchShopCategories;
@@ -37,7 +39,8 @@ class ShopListWidget extends StatelessWidget {
       this.selectCategoryType,
       this.selectShopItem,
       this.shopListType,
-      this.selectListType});
+      this.selectListType,
+      this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,6 @@ class ShopListWidget extends StatelessWidget {
               _buildListingWidget(context),
               _buildTabBar(context),
               _buildList(context)
-//            _buildList(context),
             ],
           ),
         ),
@@ -324,13 +326,13 @@ class ShopListWidget extends StatelessWidget {
                 return ShopItemCard(
                     index: index, selectShopItem: selectShopItem);
               },
-              itemCount: 10,
+              itemCount: this.items.length,
             )
           : GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               primary: false,
-              itemCount: 10,
+              itemCount: this.items.length,
               itemBuilder: (BuildContext context, int index) {
                 return ShopItemGrid(
                     index: index, selectShopItem: selectShopItem);

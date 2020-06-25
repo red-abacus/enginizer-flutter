@@ -638,5 +638,6 @@
   "exception_add_shop_alert": "A intervenit o problemă la crearea unei noi alerte.",
   "exception_get_shop_alerts": "A intervenit o problemă la încărcarea alertelor tale.",
   "exception_remove_shop_alert": "A intervenit o problemă la ștergerea alertei.",
-  "exception_edit_shop_alert": "A intervenit o problemă la editarea alertei."
+  "exception_edit_shop_alert": "A intervenit o problemă la editarea alertei.",
+  "exception_get_shop_items": "A intervenit o problemă la încărcarea ofertelor din magazin."
 }

@@ -8,7 +8,9 @@ import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/screens/shop-alerts.dart';
 import 'package:app/modules/shop/screens/shop-product-details.dart';
 import 'package:app/modules/shop/screens/shop-service-details.dart';
+import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:app/modules/shop/widgets/shop-list.widget.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,27 +46,55 @@ class ShopState extends State<Shop> {
           child: _renderList(_isLoading),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          heroTag: null,
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 1,
-          onPressed: () => _openShopAlertModal(),
-          label: Text(
-            S.of(context).general_alerts,
-            style: TextHelper.customTextStyle(color: Colors.white, size: 12),
-          )
-        ),
+            heroTag: null,
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 1,
+            onPressed: () => _openShopAlertModal(),
+            label: Text(
+              S.of(context).general_alerts,
+              style: TextHelper.customTextStyle(color: Colors.white, size: 12),
+            )),
       ),
     );
   }
 
   @override
   void didChangeDependencies() {
+    _provider = Provider.of<ShopProvider>(context);
+    _initDone = _initDone == false ? false : _provider.initDone;
+
     if (!_initDone) {
-      _provider = Provider.of<ShopProvider>(context);
+      _provider.initialise();
+      setState(() {
+        _isLoading = true;
+      });
+
+      _loadData();
     }
 
     _initDone = true;
+    _provider.initDone = true;
+
     super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    try {
+      await _provider.getShopItems().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(ShopService.GET_SHOP_ITEMS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_shop_items, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _renderList(bool _isLoading) {
@@ -83,6 +113,7 @@ class ShopState extends State<Shop> {
             selectShopItem: _selectShopItem,
             shopListType: _shopListType,
             selectListType: _selectListType,
+            items: _provider.items,
           );
   }
 
@@ -95,7 +126,6 @@ class ShopState extends State<Shop> {
 
   _selectCategoryType(ShopCategoryType categoryType) {
     setState(() {
-      _provider.initialiseParameters();
       this.shopCategoryType = categoryType;
     });
   }

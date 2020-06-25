@@ -1,7 +1,10 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
+import 'package:app/modules/shop/models/request/shop-item-request.model.dart';
+import 'package:app/modules/shop/models/response/shop-item-response.model.dart';
 import 'package:app/modules/shop/models/shop-alert.model.dart';
 import 'package:app/modules/shop/models/shop-category.model.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -14,12 +17,47 @@ class ShopProvider with ChangeNotifier {
   ShopCategorySort searchSort;
 
   List<ShopAlert> alerts = [];
+  List<ShopItem> items = [];
 
-  void initialiseParameters() {
+  ShopItemRequest _shopItemRequest;
+  ShopItemResponse _shopItemResponse;
+
+  bool initDone = false;
+
+  void initialise() {
+    _shopItemRequest = ShopItemRequest();
+    _shopItemResponse = null;
     searchSort = null;
     searchCategories.clear();
     searchSort = null;
     alerts = [];
+    items = [];
+  }
+
+  Future<List<ShopItem>> getShopItems() async {
+    if (!shouldDownload()) {
+      return null;
+    }
+
+    try {
+      ShopItemResponse response =
+          await _shopService.getShopItems(_shopItemRequest);
+      this.items.addAll(response.items);
+      notifyListeners();
+      return this.items;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  bool shouldDownload() {
+    if (_shopItemResponse != null) {
+      if (_shopItemRequest.currentPage >= _shopItemResponse.totalPages) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void filterShopItems(String searchString, List<ShopCategory> categories,

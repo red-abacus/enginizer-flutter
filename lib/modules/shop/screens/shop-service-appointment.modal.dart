@@ -312,7 +312,6 @@ class _ShopServiceAppointmentModalState
   }
 
   _submit() async {
-    print('submit !');
   }
 
   _searchCars(String searchString) {

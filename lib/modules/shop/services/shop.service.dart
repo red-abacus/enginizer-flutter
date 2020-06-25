@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/shop/models/request/shop-item-request.model.dart';
+import 'package:app/modules/shop/models/response/shop-item-response.model.dart';
 import 'package:app/modules/shop/models/shop-alert.model.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/utils/environment.constants.dart';
 import 'package:dio/dio.dart';
 
@@ -15,6 +18,7 @@ class ShopService {
   static const String REMOVE_SHOP_ALERT_EXCEPTION =
       'REMOVE_SHOP_ALERT_EXCEPTION';
   static const String EDIT_SHOP_ALERT_EXCEPTION = 'EDIT_SHOP_ALERT_EXCEPTION';
+  static const String GET_SHOP_ITEMS_EXCEPTION = 'GET_SHOP_ITEMS_EXCEPTION';
 
   static const String _GET_SHOP_ALERTS_PATH =
       '${Environment.PROMOTIONS_BASE_API}/alerts';
@@ -24,6 +28,9 @@ class ShopService {
 
   static const String _REMOVE_SHOP_ALERT_PATH =
       '${Environment.PROMOTIONS_BASE_API}/alerts/';
+
+  static const String _GET_SHOP_ITEMS_PATH =
+      '${Environment.PROMOTIONS_BASE_API}/marketplace';
 
   Future<List<ShopAlert>> getShopAlerts() async {
     try {
@@ -79,6 +86,20 @@ class ShopService {
       }
     } catch (error) {
       throw Exception(REMOVE_SHOP_ALERT_EXCEPTION);
+    }
+  }
+
+  Future<ShopItemResponse> getShopItems(ShopItemRequest shopItemRequest) async {
+    try {
+      final response = await _dio.get(_GET_SHOP_ITEMS_PATH);
+
+      if (response.statusCode == 200) {
+        return ShopItemResponse.fromJson(response.data);
+      } else {
+        throw Exception(GET_SHOP_ITEMS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_SHOP_ITEMS_EXCEPTION);
     }
   }
 

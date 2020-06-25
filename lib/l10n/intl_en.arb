@@ -639,5 +639,6 @@
   "exception_add_shop_alert": "There was an error trying to add new shop alert.",
   "exception_get_shop_alerts": "There was an error trying to get your shop alerts.",
   "exception_remove_shop_alert": "There was an error trying to remove shop alert.",
-  "exception_edit_shop_alert": "There was an error trying to edit shop alert."
+  "exception_edit_shop_alert": "There was an error trying to edit shop alert.",
+  "exception_get_shop_items": "There was an error trying to load shop offers."
 }
