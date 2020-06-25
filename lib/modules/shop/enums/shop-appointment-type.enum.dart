@@ -2,9 +2,9 @@ enum ShopAppointmentType {
   CarWash,
   Paint,
   Service,
+  Itp,
   Tow,
   Pr,
-  Itp,
   CarRent,
   Rca,
 }

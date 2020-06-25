@@ -5,16 +5,13 @@ import 'package:app/modules/appointments/model/provider/service-provider-timetab
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
-import 'package:app/modules/shop/models/shop-appointment-issue.model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ShopAppointmentProvider with ChangeNotifier {
   CarService carService = inject<CarService>();
   ProviderService _providerService = inject<ProviderService>();
 
   List<Car> cars;
-  List<ShopAppointmentIssue> issues;
   List<ServiceProviderTimetable> timetables = [];
 
   Car selectedCar;
@@ -30,7 +27,6 @@ class ShopAppointmentProvider with ChangeNotifier {
     selectedCar = null;
     cars = [];
     searchString = '';
-    issues = [];
     dateEntry = null;
     timetables = [];
   }

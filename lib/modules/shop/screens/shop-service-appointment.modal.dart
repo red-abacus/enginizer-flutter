@@ -2,14 +2,11 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shop/enums/shop-appointment-type.enum.dart';
-import 'package:app/modules/shop/models/shop-appointment-issue.model.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/widgets/service/shop-service-appointment-cars.widget.dart';
-import 'package:app/modules/shop/widgets/service/shop-service-appointment-issues.widget.dart';
 import 'package:app/modules/shop/widgets/service/shop-service-appointment-pickup-map.widget.dart';
 import 'package:app/modules/shop/widgets/service/shop-service-appointment-return-map.widget.dart';
 import 'package:app/modules/shop/widgets/service/shop-service-appointment-scheduler.widget.dart';
-import 'package:app/modules/shop/widgets/service/shop-service-appointment-services.widget.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,14 +27,13 @@ class _ShopServiceAppointmentModalState
   bool _isLastStep = false;
   List<Step> _steps = [];
 
-  ShopAppointmentType appointmentType = ShopAppointmentType.Pr;
+  ShopAppointmentType appointmentType = ShopAppointmentType.Tow;
 
   Map<int, dynamic> _stepStateData = {
     0: {"state": StepState.indexed, "active": true},
     1: {"state": StepState.disabled, "active": false},
     2: {"state": StepState.disabled, "active": false},
     3: {"state": StepState.disabled, "active": false},
-    4: {"state": StepState.disabled, "active": false},
   };
 
   ShopAppointmentProvider _provider;
@@ -123,78 +119,37 @@ class _ShopServiceAppointmentModalState
       case ShopAppointmentType.CarWash:
       case ShopAppointmentType.Paint:
       case ShopAppointmentType.Service:
-        steps.addAll([
-          Step(
-              isActive: _stepStateData[1]['active'],
-              title: Text(_currentStepIndex == 1
-                  ? S.of(context).online_shop_appointment_step_2_title
-                  : ''),
-              content: ShopServiceAppointmentServicesWidget(),
-              state: _stepStateData[1]['state']),
-          Step(
-              isActive: _stepStateData[2]['active'],
-              title: Text(_currentStepIndex == 2
-                  ? S.of(context).online_shop_appointment_step_3_title
-                  : ''),
-              content: ShopServiceAppointmentIssuesWidget(
-                  issues: _provider.issues, addNewIssue: _addNewIssue),
-              state: _stepStateData[2]['state']),
-          Step(
-              isActive: _stepStateData[3]['active'],
-              title: Text(_currentStepIndex == 3
-                  ? S.of(context).online_shop_appointment_step_4_title
-                  : ''),
-              content: ShopServiceAppointmentSchedulerWidget(),
-              state: _stepStateData[3]['state'])
-        ]);
-        break;
-      case ShopAppointmentType.Tow:
-        // TODO: Handle this case.
-        break;
-      case ShopAppointmentType.Pr:
-        steps.addAll([
-          Step(
-              isActive: _stepStateData[1]['active'],
-              title: Text(_currentStepIndex == 1
-                  ? S.of(context).online_shop_appointment_step_2_title
-                  : ''),
-              content: ShopServiceAppointmentServicesWidget(),
-              state: _stepStateData[1]['state']),
-          Step(
-              isActive: _stepStateData[2]['active'],
-              title: Text(_currentStepIndex == 2
-                  ? S.of(context).online_shop_appointment_step_5_title
-                  : ''),
-              content: ShopServiceAppointmentPickupMapWidget(),
-              state: _stepStateData[2]['state']),
-          Step(
-              isActive: _stepStateData[3]['active'],
-              title: Text(_currentStepIndex == 3
-                  ? S.of(context).online_shop_appointment_step_6_title
-                  : ''),
-              content: ShopServiceAppointmentReturnMapWidget(),
-              state: _stepStateData[3]['state']),
-          Step(
-              isActive: _stepStateData[4]['active'],
-              title: Text(_currentStepIndex == 4
-                  ? S.of(context).online_shop_appointment_step_4_title
-                  : ''),
-              content: ShopServiceAppointmentSchedulerWidget(),
-              state: _stepStateData[4]['state'])
-        ]);
-        break;
       case ShopAppointmentType.Itp:
         steps.addAll([
           Step(
               isActive: _stepStateData[1]['active'],
               title: Text(_currentStepIndex == 1
-                  ? S.of(context).online_shop_appointment_step_2_title
+                  ? S.of(context).online_shop_appointment_step_4_title
                   : ''),
-              content: ShopServiceAppointmentServicesWidget(),
+              content: ShopServiceAppointmentSchedulerWidget(),
+              state: _stepStateData[1]['state'])
+        ]);
+        break;
+      case ShopAppointmentType.Pr:
+      case ShopAppointmentType.Tow:
+        steps.addAll([
+          Step(
+              isActive: _stepStateData[1]['active'],
+              title: Text(_currentStepIndex == 1
+                  ? S.of(context).online_shop_appointment_step_5_title
+                  : ''),
+              content: ShopServiceAppointmentPickupMapWidget(),
               state: _stepStateData[1]['state']),
           Step(
               isActive: _stepStateData[2]['active'],
               title: Text(_currentStepIndex == 2
+                  ? S.of(context).online_shop_appointment_step_6_title
+                  : ''),
+              content: ShopServiceAppointmentReturnMapWidget(),
+              state: _stepStateData[2]['state']),
+          Step(
+              isActive: _stepStateData[3]['active'],
+              title: Text(_currentStepIndex == 3
                   ? S.of(context).online_shop_appointment_step_4_title
                   : ''),
               content: ShopServiceAppointmentSchedulerWidget(),
@@ -262,6 +217,7 @@ class _ShopServiceAppointmentModalState
       case ShopAppointmentType.CarWash:
       case ShopAppointmentType.Paint:
       case ShopAppointmentType.Service:
+      case ShopAppointmentType.Itp:
         switch (_currentStepIndex) {
           case 0:
             if (_provider.selectedCar != null) {
@@ -270,34 +226,19 @@ class _ShopServiceAppointmentModalState
                   StepState.indexed;
               _stepStateData[_currentStepIndex + 1]['active'] = true;
               _goTo(_currentStepIndex + 1);
-              _isLastStep = false;
-            }
-            break;
-          case 1:
-            _provider.issues = [ShopAppointmentIssue.defaultIssue()];
-
-            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
-            _stepStateData[_currentStepIndex + 1]['active'] = true;
-            _goTo(_currentStepIndex + 1);
-            _isLastStep = false;
-            break;
-          case 2:
-            if (_provider.issues.length > 0 && _provider.issues[0].id != -1) {
-              _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-              _stepStateData[_currentStepIndex + 1]['state'] =
-                  StepState.indexed;
-              _stepStateData[_currentStepIndex + 1]['active'] = true;
-              _goTo(_currentStepIndex + 1);
               _isLastStep = true;
             }
             break;
+          case 1:
+            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
+            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
+            _stepStateData[_currentStepIndex + 1]['active'] = true;
+            _submit();
+            break;
         }
         break;
-      case ShopAppointmentType.Tow:
-        // TODO: Handle this case.
-        break;
       case ShopAppointmentType.Pr:
+      case ShopAppointmentType.Tow:
         switch (_currentStepIndex) {
           case 0:
             if (_provider.selectedCar != null) {
@@ -338,29 +279,6 @@ class _ShopServiceAppointmentModalState
             break;
         }
         break;
-      case ShopAppointmentType.Itp:
-        switch (_currentStepIndex) {
-          case 0:
-            if (_provider.selectedCar != null) {
-              _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-              _stepStateData[_currentStepIndex + 1]['state'] =
-                  StepState.indexed;
-              _stepStateData[_currentStepIndex + 1]['active'] = true;
-              _goTo(_currentStepIndex + 1);
-              _isLastStep = false;
-            }
-            break;
-          case 1:
-            _provider.issues = [ShopAppointmentIssue.defaultIssue()];
-
-            _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-            _stepStateData[_currentStepIndex + 1]['state'] = StepState.indexed;
-            _stepStateData[_currentStepIndex + 1]['active'] = true;
-            _goTo(_currentStepIndex + 1);
-            _isLastStep = true;
-            break;
-        }
-        break;
       case ShopAppointmentType.CarRent:
         // TODO: Handle this case.
         break;
@@ -393,7 +311,9 @@ class _ShopServiceAppointmentModalState
     }
   }
 
-  _submit() async {}
+  _submit() async {
+    print('submit !');
+  }
 
   _searchCars(String searchString) {
     _provider.selectedCar = null;
@@ -404,13 +324,6 @@ class _ShopServiceAppointmentModalState
   _selectCar(Car car) {
     setState(() {
       _provider.selectedCar = car;
-    });
-  }
-
-  _addNewIssue(ShopAppointmentIssue shopAppointmentIssue) {
-    setState(() {
-      shopAppointmentIssue.id = 0;
-      _provider.issues.add(ShopAppointmentIssue.defaultIssue());
     });
   }
 }
