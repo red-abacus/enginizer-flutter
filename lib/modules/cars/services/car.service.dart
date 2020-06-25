@@ -18,6 +18,7 @@ import 'package:app/utils/environment.constants.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:http_parser/http_parser.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CarService {
   static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';
@@ -28,13 +29,14 @@ class CarService {
   static String CAR_ADD_IMAGE_EXCEPTION = 'CAR_ADD_IMAGE_EXCEPTION';
   static String CAR_HISTORY_EXCEPTION = 'CAR_HISTORY_EXCEPTION';
   static String CAR_SELL_EXCEPTION = 'CAR_SELL_EXCEPTION';
-
   static String CAR_DOCUMENTATION_TOPICS_EXCEPTION =
       'CAR.CAR_DOCUMENTATION_TOPICS_EXCEPTION';
   static String CAR_DOCUMENTATION_DOCUMENT_EXCEPTION =
       'CAR.CAR_DOCUMENTATION_DOCUMENT_EXCEPTION';
-
   static String CAR_ADD_DOCUMENT_EXCEPTION = 'CAR_ADD_DOCUMENT_EXCEPTION';
+  static String GET_CAR_DOCUMENTS_EXCEPTION = 'GET_CAR_DOCUMENTS_EXCEPTION';
+  static String GET_CAR_DOCUMENT_DETAILS_EXCEPTION =
+      'GET_CAR_DOCUMENT_DETAILS_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -52,6 +54,14 @@ class CarService {
   static const String _CAR_ADD_DOCUMENT_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_ADD_DOCUMENT_SUFFIX = '/documents';
+
+  static const String _GET_CAR_DOCUMENTS_PREFIX =
+      '${Environment.CARS_BASE_API}/cars/';
+  static const String _GET_CAR_DOCUMENTS_SUFFIX = '/documents';
+
+  static const String _GET_CAR_DOCUMENT_DETAILS_PREFIX =
+      '${Environment.CARS_BASE_API}/cars/';
+  static const String _GET_CAR_DOCUMENT_DETAILS_SUFFIX = '/documents/';
 
   Dio _dio = inject<Dio>();
 
@@ -238,30 +248,53 @@ class CarService {
   }
 
   Future<GenericModel> addCarDocument(int carId, CarDocument document) async {
-    print('car id $carId');
     FormData formData = FormData.fromMap({
       "file": await await MultipartFile.fromFile(document.file.path,
           filename: document.file.path.split('/').last,
-          contentType: MediaType(document.fileType, document.file.path.split('.').last)),
+          contentType:
+              MediaType(document.fileType, document.file.path.split('.').last)),
+      'name': document.name
     });
-
-    print('path ${_buildAddCarDocumentPath(carId)}');
 
     try {
       final response =
           await _dio.patch(_buildAddCarDocumentPath(carId), data: formData);
-
-      print('response status code ${response.statusCode}');
-      print('response status code ${response.statusMessage}');
       if (response.statusCode < 300) {
         return GenericModel.fromJson(response.data);
       } else {
         throw Exception(CAR_ADD_DOCUMENT_EXCEPTION);
       }
     } catch (error) {
-      print('error $error');
-      print('error ${error.response}');
       throw Exception(CAR_ADD_DOCUMENT_EXCEPTION);
+    }
+  }
+
+  Future<List<CarDocument>> getCarDocuments(int carId) async {
+    try {
+      final response = await _dio.get(_buildGetCarDocumentsPath(carId));
+      if (response.statusCode < 300) {
+        return _mapCarDocuments(response.data);
+      } else {
+        throw Exception(GET_CAR_DOCUMENTS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_CAR_DOCUMENTS_EXCEPTION);
+    }
+  }
+
+  Future<String> getCarDocumentDetails(
+      int carId, CarDocument carDocument) async {
+    try {
+      final response = await _dio
+          .get(_buildGetCarDocumentDetailsPath(carId, carDocument.id));
+
+      if (response.statusCode < 300) {
+        return response.data;
+      } else {
+        throw Exception(GET_CAR_DOCUMENT_DETAILS_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_CAR_DOCUMENT_DETAILS_EXCEPTION);
     }
   }
 
@@ -279,6 +312,19 @@ class CarService {
         _CAR_ADD_DOCUMENT_SUFFIX;
   }
 
+  _buildGetCarDocumentsPath(int carId) {
+    return _GET_CAR_DOCUMENTS_PREFIX +
+        carId.toString() +
+        _GET_CAR_DOCUMENTS_SUFFIX;
+  }
+
+  _buildGetCarDocumentDetailsPath(int carId, int documentId) {
+    return _GET_CAR_DOCUMENT_DETAILS_PREFIX +
+        carId.toString() +
+        _GET_CAR_DOCUMENT_DETAILS_SUFFIX +
+        documentId.toString();
+  }
+
   _mapCarHistory(List<dynamic> response) {
     List<CarHistory> histories = [];
     response.forEach((history) {
@@ -291,6 +337,14 @@ class CarService {
     List<CarDocumentationTopic> list = [];
     response.forEach((item) {
       list.add(CarDocumentationTopic.fromJson(item));
+    });
+    return list;
+  }
+
+  _mapCarDocuments(List<dynamic> response) {
+    List<CarDocument> list = [];
+    response.forEach((element) {
+      list.add(CarDocument.fromJson(element));
     });
     return list;
   }

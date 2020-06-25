@@ -28,6 +28,7 @@ class CarProvider with ChangeNotifier {
   List<CarHistory> carHistory = [];
   List<CarIntervention> selectedInterventions = [];
 
+  CarDocument talon;
   CarDocument exhaust;
   CarDocument diagnosisProtocol;
   CarDocument generalVerification;
@@ -100,6 +101,28 @@ class CarProvider with ChangeNotifier {
       carHistory = await carService.getCarHistory(carId);
       notifyListeners();
       return carHistory;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<CarDocument>> getCarDocuments(int carId) async {
+    try {
+      List<CarDocument> list = await carService.getCarDocuments(carId);
+      notifyListeners();
+      return list;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<String> getCarDocumentDetails(
+      int carId, CarDocument carDocument) async {
+    try {
+      String response =
+          await carService.getCarDocumentDetails(carId, carDocument);
+      notifyListeners();
+      return response;
     } catch (error) {
       throw (error);
     }

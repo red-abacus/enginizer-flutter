@@ -1,7 +1,6 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-color.model.dart';
-import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/models/car-fuel.model.dart';
 import 'package:app/modules/cars/models/car-model.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
@@ -19,10 +18,6 @@ class CarsMakeProvider with ChangeNotifier {
   List<CarFuelType> carFuelTypes = [];
   List<CarColor> carColors = [];
   List<CarVariant> carVariants = [];
-
-  CarDocument exhaust;
-  CarDocument diagnosisProtocol;
-  CarDocument generalVerification;
 
   Map<String, dynamic> carMakeFormState = {
     'brand': null,
@@ -54,10 +49,6 @@ class CarsMakeProvider with ChangeNotifier {
   };
 
   initParams() {
-    exhaust = null;
-    diagnosisProtocol = null;
-    generalVerification = null;
-
     brands = [];
     carModels = [];
     carTypes = [];

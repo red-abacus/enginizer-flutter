@@ -1,6 +1,8 @@
 import 'dart:io';
 
 class CarDocument {
+  int id;
+  String fileName;
   String name;
   File file;
   String fileType;
@@ -17,5 +19,18 @@ class CarDocument {
     } else if (extension == 'png') {
       fileType = 'image/png';
     }
+  }
+
+  CarDocument.fromDocument({this.id, this.fileName, this.name});
+
+  factory CarDocument.fromJson(Map<String, dynamic> json) {
+    return CarDocument.fromDocument(
+        id: json['id'],
+        fileName: json['fileName'] != null ? json['fileName'] : '',
+        name: json['name'] != null ? json['name'] : '');
+  }
+
+  String getExtension() {
+    return fileName.split('.').last;
   }
 }

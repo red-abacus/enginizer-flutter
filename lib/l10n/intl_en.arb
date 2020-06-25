@@ -81,6 +81,7 @@
   "car_create_exhaust_test": "Exhaust gas tests",
   "car_create_diagnosis_protocol": "Diagnosis protocol",
   "car_create_general_car_verification": "Car general verification form",
+  "car_create_talon": "Talon",
   "car_status_pending": "Pending",
   "car_status_for_sell": "For Sale",
   "no_car_available_alert": "No cars available...",
@@ -629,5 +630,7 @@
   "exception_car_documentation_topics": "There was an error trying to get car documentation.",
   "exception_car_documentation_document_exception": "There was an error trying to load document.",
   "exception_open_url": "Page url is not valid.",
-  "exception_add_car_document": "There was an error trying to load car document."
+  "exception_add_car_document": "There was an error trying to upload car document.",
+  "exception_get_car_documents": "There was an error trying to load documents.",
+  "exception_get_car_document_details": "There was an error trying to download document."
 }

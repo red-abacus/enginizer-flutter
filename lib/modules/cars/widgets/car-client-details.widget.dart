@@ -153,23 +153,24 @@ class CarClientDetailsWidget extends StatelessWidget {
         color: Colors.red,
         height: MediaQuery.of(context).size.height / 3,
         width: MediaQuery.of(context).size.width,
-        child: BezierChart(
-          bezierChartScale: BezierChartScale.WEEKLY,
-          fromDate: fromDate,
-          toDate: now,
-          selectedDate: now,
-          series: [
-            BezierLine(label: "Consum", data: points),
-          ],
-          config: BezierChartConfig(
-            verticalIndicatorStrokeWidth: 3.0,
-            verticalIndicatorColor: Colors.black26,
-            showVerticalIndicator: true,
-            verticalIndicatorFixedPosition: false,
-            backgroundColor: Colors.red,
-            footerHeight: 35.0,
-          ),
-        ),
+// TODO
+//        child: BezierChart(
+//          bezierChartScale: BezierChartScale.WEEKLY,
+//          fromDate: fromDate,
+//          toDate: now,
+//          selectedDate: now,
+//          series: [
+//            BezierLine(label: "Consum", data: points),
+//          ],
+//          config: BezierChartConfig(
+//            verticalIndicatorStrokeWidth: 3.0,
+//            verticalIndicatorColor: Colors.black26,
+//            showVerticalIndicator: true,
+//            verticalIndicatorFixedPosition: false,
+//            backgroundColor: Colors.red,
+//            footerHeight: 35.0,
+//          ),
+//        ),
       ),
     );
   }
