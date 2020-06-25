@@ -1,9 +1,9 @@
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
+import 'package:app/modules/shop/screens/shop-service-appointment.modal.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/shop/widgets/service/shop-service-details.widget.dart';
-import 'package:app/modules/shop/widgets/shop-service-modal.widget.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,13 +55,13 @@ class _ShopServiceDetailsState extends State<ShopServiceDetails> {
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ShopServiceDetailsModal();
+            return ShopServiceAppointmentModal();
           });
         });
   }
 
   _showProviderDetails() {
-    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = 7;
+    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = 1;
 
     showModalBottomSheet(
         isScrollControlled: true,
