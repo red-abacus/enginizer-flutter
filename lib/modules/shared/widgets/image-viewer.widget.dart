@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImageViewer extends StatelessWidget {
   final File file;
@@ -15,8 +16,8 @@ class ImageViewer extends StatelessWidget {
       appBar: AppBar(
         title: Text(name),
       ),
-      body: Container(
-        child: Image.file(file),
+      body: PhotoView(
+        imageProvider: FileImage(file),
       ),
     );
   }

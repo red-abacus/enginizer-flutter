@@ -63,6 +63,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
+      _provider = Provider.of<CarProvider>(context);
+      _provider.initialise();
       _loadData();
     }
     _initDone = true;
@@ -73,8 +75,6 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     setState(() {
       _isLoading = true;
     });
-
-    _provider = Provider.of<CarProvider>(context);
 
     try {
       await _provider.getCarDetails().then((_) async {

@@ -13,6 +13,7 @@ import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CarProvider with ChangeNotifier {
   CarService carService = inject<CarService>();
@@ -32,6 +33,15 @@ class CarProvider with ChangeNotifier {
   CarDocument exhaust;
   CarDocument diagnosisProtocol;
   CarDocument generalVerification;
+
+  initialise() {
+    talon = null;
+    exhaust = null;
+    diagnosisProtocol = null;
+    generalVerification = null;
+    selectedInterventions = [];
+    carHistory = [];
+  }
 
   selectCar(Car car) {
     this.selectedCar = car;
@@ -116,11 +126,11 @@ class CarProvider with ChangeNotifier {
     }
   }
 
-  Future<String> getCarDocumentDetails(
-      int carId, CarDocument carDocument) async {
+  Future<File> getCarDocumentDetails(
+      String path, int carId, CarDocument carDocument) async {
     try {
-      String response =
-          await carService.getCarDocumentDetails(carId, carDocument);
+      File response =
+          await carService.getCarDocumentDetails(carId, carDocument, path);
       notifyListeners();
       return response;
     } catch (error) {

@@ -282,18 +282,24 @@ class CarService {
     }
   }
 
-  Future<String> getCarDocumentDetails(
-      int carId, CarDocument carDocument) async {
+  Future<File> getCarDocumentDetails(
+      int carId, CarDocument carDocument, String savePath) async {
     try {
-      final response = await _dio
-          .get(_buildGetCarDocumentDetailsPath(carId, carDocument.id));
-
-      if (response.statusCode < 300) {
-        return response.data;
-      } else {
-        throw Exception(GET_CAR_DOCUMENT_DETAILS_EXCEPTION);
-      }
-    } catch (error) {
+      Response response = await _dio.get(
+        _buildGetCarDocumentDetailsPath(carId, carDocument.id),
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+      File file = File(savePath);
+      var raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+      return file;
+    } catch (e) {
       throw Exception(GET_CAR_DOCUMENT_DETAILS_EXCEPTION);
     }
   }

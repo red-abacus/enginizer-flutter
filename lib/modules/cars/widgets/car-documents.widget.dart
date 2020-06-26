@@ -255,7 +255,7 @@ class _CarDocumentsWidgetState extends State<CarDocumentsWidget> {
   _getDocument(CarDocumentType type) async {
     File file = await FilePicker.getFile(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
+      allowedExtensions: ['jpg', 'pdf', 'png', 'jpeg'],
     );
 
     if (file != null) {
@@ -268,9 +268,12 @@ class _CarDocumentsWidgetState extends State<CarDocumentsWidget> {
       _isLoading = true;
     });
 
+    String dir =
+        '${(await getApplicationDocumentsDirectory()).path}/${document.fileName}';
+
     try {
       await _provider
-          .getCarDocumentDetails(_provider.carDetails.id, document)
+          .getCarDocumentDetails(dir, _provider.carDetails.id, document)
           .then((value) async {
         setState(() {
           _isLoading = false;
@@ -290,13 +293,7 @@ class _CarDocumentsWidgetState extends State<CarDocumentsWidget> {
     }
   }
 
-  _showFile(String bytes, CarDocument carDocument) async {
-    File file = await createFile(bytes, carDocument.fileName);
-
-    // TODO - need to check image uploading / download
-    // TODO - need to check pdf is not downloading
-    // TODO - need to check doc file types
-
+  _showFile(File file, CarDocument carDocument) async {
     switch (carDocument.getExtension()) {
       case 'pdf':
         Navigator.push(
@@ -323,13 +320,6 @@ class _CarDocumentsWidgetState extends State<CarDocumentsWidget> {
         );
         break;
     }
-  }
-
-  Future<File> createFile(String bytes, String name) async {
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$name');
-    await file.writeAsString(bytes);
-    return file;
   }
 
   _loadDocument(CarDocument document) async {
