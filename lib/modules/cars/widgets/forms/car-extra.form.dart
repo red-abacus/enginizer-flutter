@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/providers/cars-make.provider.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
@@ -39,15 +40,6 @@ class CarExtraFormState extends State<CarExtraForm> {
             _mileageContainer(),
             _rcaContainer(),
             _itpContainer(),
-            if (PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Cars, PermissionsCar.CREATE_CAR_EXTRA))
-              _exhaustContainer(),
-            if (PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Cars, PermissionsCar.CREATE_CAR_EXTRA))
-              _diagnosisContainer(),
-            if (PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Cars, PermissionsCar.CREATE_CAR_EXTRA))
-              _generalVerificationContainer()
           ],
         ),
       ),
@@ -227,112 +219,6 @@ class CarExtraFormState extends State<CarExtraForm> {
             ),
           )
         : Container();
-  }
-
-  _exhaustContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: InkWell(
-        onTap: () async {
-          File file = await FilePicker.getFile(
-            type: FileType.custom,
-            allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
-          );
-
-          setState(() {
-            _provider.carExtraFormState['exhaust'] = file;
-          });
-        },
-        child: Row(
-          children: [
-            Icon(
-              Icons.attach_file,
-              color:
-                  _provider.carExtraFormState['exhaust'] == null ? gray2 : red,
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Text(
-                  S.of(context).car_create_exhaust_test,
-                  style: TextHelper.customTextStyle(color: _provider.carExtraFormState['exhaust'] != null ? red : gray2, size: 16),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _diagnosisContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: InkWell(
-        onTap: () async {
-          File file = await FilePicker.getFile(
-            type: FileType.custom,
-            allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
-          );
-
-          setState(() {
-            _provider.carExtraFormState['diagnosisProtocol'] = file;
-          });
-        },
-        child: Row(
-          children: [
-            Icon(
-              Icons.attach_file,
-              color: _provider.carExtraFormState['diagnosisProtocol'] == null
-                  ? gray2
-                  : red,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                S.of(context).car_create_diagnosis_protocol,
-                style: TextHelper.customTextStyle(color: _provider.carExtraFormState['diagnosisProtocol'] != null ? red : gray2, size: 16),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _generalVerificationContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: InkWell(
-        onTap: () async {
-          File file = await FilePicker.getFile(
-            type: FileType.custom,
-            allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
-          );
-
-          setState(() {
-            _provider.carExtraFormState['generalVerification'] = file;
-          });
-        },
-        child: Row(
-          children: [
-            Icon(
-              Icons.attach_file,
-              color: _provider.carExtraFormState['generalVerification'] == null
-                  ? gray2
-                  : red,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                S.of(context).car_create_general_car_verification,
-                style: TextHelper.customTextStyle(color: _provider.carExtraFormState['generalVerification'] != null ? red : gray2, size: 16),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   valid() {

@@ -39,10 +39,7 @@ class CarsMakeProvider with ChangeNotifier {
     'rcaExpiryDate': null,
     'rcaExpiryDateNotification': false,
     'itpExpiryDate': null,
-    'itpExpiryDateNotification': false,
-    'exhaust': null,
-    'diagnosisProtocol': null,
-    'generalVerification': null
+    'itpExpiryDateNotification': false
   };
 
   initParams() {

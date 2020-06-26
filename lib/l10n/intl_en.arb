@@ -74,12 +74,14 @@
   "car_details_quantity": "Quantity",
   "car_details_quantity_empty": "Quantity is empty!",
   "car_details_title": "Car Details",
+  "car_documents_title": "Documents",
   "car_service_recommendations_title": "Service Recommendations",
   "cars_no_recommendations_title": "No service recommendations recorded for this car.",
   "car_create_appointment_from_interventions_alert": "Please select recommendations in order to create an appointment.",
   "car_create_exhaust_test": "Exhaust gas tests",
   "car_create_diagnosis_protocol": "Diagnosis protocol",
   "car_create_general_car_verification": "Car general verification form",
+  "car_create_talon": "Talon",
   "car_status_pending": "Pending",
   "car_status_for_sell": "For Sale",
   "no_car_available_alert": "No cars available...",
@@ -635,5 +637,8 @@
   "exception_add_shop_alert": "There was an error trying to add new shop alert.",
   "exception_get_shop_alerts": "There was an error trying to get your shop alerts.",
   "exception_remove_shop_alert": "There was an error trying to remove shop alert.",
-  "exception_edit_shop_alert": "There was an error trying to edit shop alert."
+  "exception_edit_shop_alert": "There was an error trying to edit shop alert.",
+  "exception_add_car_document": "There was an error trying to upload car document.",
+  "exception_get_car_documents": "There was an error trying to load documents.",
+  "exception_get_car_document_details": "There was an error trying to download document."
 }

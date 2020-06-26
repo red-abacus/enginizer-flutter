@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
 import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
@@ -11,6 +13,7 @@ import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CarProvider with ChangeNotifier {
   CarService carService = inject<CarService>();
@@ -25,6 +28,20 @@ class CarProvider with ChangeNotifier {
 
   List<CarHistory> carHistory = [];
   List<CarIntervention> selectedInterventions = [];
+
+  CarDocument talon;
+  CarDocument exhaust;
+  CarDocument diagnosisProtocol;
+  CarDocument generalVerification;
+
+  initialise() {
+    talon = null;
+    exhaust = null;
+    diagnosisProtocol = null;
+    generalVerification = null;
+    selectedInterventions = [];
+    carHistory = [];
+  }
 
   selectCar(Car car) {
     this.selectedCar = car;
@@ -79,11 +96,43 @@ class CarProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<GenericModel> uploadDocument(int carId, CarDocument document) async {
+    try {
+      GenericModel model = await carService.addCarDocument(carId, document);
+      notifyListeners();
+      return model;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   Future<List<CarHistory>> getCarHistory(int carId) async {
     try {
       carHistory = await carService.getCarHistory(carId);
       notifyListeners();
       return carHistory;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<CarDocument>> getCarDocuments(int carId) async {
+    try {
+      List<CarDocument> list = await carService.getCarDocuments(carId);
+      notifyListeners();
+      return list;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<File> getCarDocumentDetails(
+      String path, int carId, CarDocument carDocument) async {
+    try {
+      File response =
+          await carService.getCarDocumentDetails(carId, carDocument, path);
+      notifyListeners();
+      return response;
     } catch (error) {
       throw (error);
     }

@@ -77,6 +77,7 @@
   "cars_no_recommendations_title": "Nu a fost înregistrată nicio recomandare pentru această mașină.",
   "car_create_appointment_from_interventions_alert": "Te rog selectează recomandările dorite pentru a crea o programare.",
   "car_create_exhaust_test": "Teste gaze esapament",
+  "car_create_talon": "Talon",
   "car_create_diagnosis_protocol": "Protocol de diagnoză",
   "car_create_general_car_verification": "Fișă verificare generală autoturism",
   "car_status_pending": "În așteptare",
@@ -331,6 +332,7 @@
   "user_profile_no_active_personnel": "Nu există personal activ în acest moment",
   "user_profile_number_of_active_personnel": "Nr. de personal:",
   "car_details_title": "Detalii Mașină",
+  "car_documents_title": "Documente",
   "car_service_recommendations_title": "Recomandări Service",
   "work_estimate_status_pending": "În Așteptare",
   "work_estimate_status_accepted": "Acceptată",
@@ -630,5 +632,8 @@
   "exception_add_shop_alert": "A intervenit o problemă la crearea unei noi alerte.",
   "exception_get_shop_alerts": "A intervenit o problemă la încărcarea alertelor tale.",
   "exception_remove_shop_alert": "A intervenit o problemă la ștergerea alertei.",
-  "exception_edit_shop_alert": "A intervenit o problemă la editarea alertei."
+  "exception_edit_shop_alert": "A intervenit o problemă la editarea alertei.",
+  "exception_add_car_document": "A intervenit o problemă la încărcarea documentului.",
+  "exception_get_car_documents": "A intervenit o problemă la încărcarea documentelor.",
+  "exception_get_car_document_details": "A intervenit o problemă la descărcarea documentelor."
 }

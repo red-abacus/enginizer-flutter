@@ -19,7 +19,7 @@ class PermissionsCar {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [APPOINTMENT_CAR, SELL_CAR];
+          permissions = [APPOINTMENT_CAR, SELL_CAR, CREATE_CAR_EXTRA];
           break;
         case Roles.ProviderAccountant:
           break;
