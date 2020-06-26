@@ -249,7 +249,7 @@ class CarService {
 
   Future<GenericModel> addCarDocument(int carId, CarDocument document) async {
     FormData formData = FormData.fromMap({
-      "file": await await MultipartFile.fromFile(document.file.path,
+      "file": await MultipartFile.fromFile(document.file.path,
           filename: document.file.path.split('/').last,
           contentType:
               MediaType(document.fileType, document.file.path.split('.').last)),

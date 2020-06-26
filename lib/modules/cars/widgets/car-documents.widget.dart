@@ -303,6 +303,7 @@ class _CarDocumentsWidgetState extends State<CarDocumentsWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => PdfViewer(
+              name: carDocument.name,
               pathPDF: file.path,
             ),
           ),

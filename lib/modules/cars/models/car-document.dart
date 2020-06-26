@@ -13,7 +13,7 @@ class CarDocument {
     if (extension == 'jpg' || extension == 'jpeg') {
       fileType = 'image';
     } else if (extension == 'pdf') {
-      fileType = 'application/pdf';
+      fileType = 'pdf';
     } else if (extension == 'doc') {
       fileType = 'application/msword';
     } else if (extension == 'png') {
