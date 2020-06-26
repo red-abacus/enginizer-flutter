@@ -1,4 +1,7 @@
+import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,9 +11,9 @@ import 'package:app/generated/l10n.dart';
 
 class ShopItemGrid extends StatelessWidget {
   final Function selectShopItem;
-  final int index;
+  final ShopItem shopItem;
 
-  ShopItemGrid({this.index, this.selectShopItem});
+  ShopItemGrid({this.shopItem, this.selectShopItem});
 
   @override
   Widget build(BuildContext context) {
@@ -64,40 +67,48 @@ class ShopItemGrid extends StatelessWidget {
       );
     });
   }
-  
+
   _pointContainer(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 5,
-            height: 40,
-            color: red_dark,
-          ),
-          Point(
-            triangleHeight: 10,
-            edge: Edge.RIGHT,
-            child: Container(
-              color: red_light,
-              width: 50,
-              height: 40,
-              child: Center(
-                  child: Text(
-                '-50%',
-                style: TextHelper.customTextStyle(color: Colors.white),
-              )),
+    return this.shopItem.discount > 0
+        ? Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 5,
+                  height: 40,
+                  color: red_dark,
+                ),
+                Point(
+                  triangleHeight: 10,
+                  edge: Edge.RIGHT,
+                  child: Container(
+                    color: red_light,
+                    width: 50,
+                    height: 40,
+                    child: Center(
+                        child: Text(
+                      '-${this.shopItem.discount.toStringAsFixed(1)}%',
+                      style: TextHelper.customTextStyle(color: Colors.white),
+                    )),
+                  ),
+                )
+              ],
             ),
           )
-        ],
-      ),
-    );
+        : Container();
   }
 
   _imageContainer(BuildContext context) {
+    GenericModel image;
+
+    if (this.shopItem.images.length > 0) {
+      image = this.shopItem.images.first;
+    }
+
     return Container(
         height: 150,
-        color: index % 2 == 0 ? Colors.white : light_gray_2,
+        color: image != null ? Colors.white : light_gray_2,
         child: Stack(
           children: <Widget>[
             Row(
@@ -106,9 +117,10 @@ class ShopItemGrid extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    child: index % 2 == 0
+                    child: image != null
                         ? Image.network(
-                            'https://s12emagst.akamaized.net/products/16094/16093852/images/res_79d7f7169b8c13ec5cbb1142dcaa4499_450x450_tiqb.jpg',
+                            image.name,
+                            width: 150,
                             fit: BoxFit.fitHeight,
                           )
                         : Column(
@@ -137,7 +149,7 @@ class ShopItemGrid extends StatelessWidget {
                           ))
               ],
             ),
-            if (index % 2 == 0) _pointContainer(context),
+            _pointContainer(context),
           ],
         ));
   }
@@ -145,8 +157,7 @@ class ShopItemGrid extends StatelessWidget {
   _titleContainer() {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-      child: Text(
-          'Pickup & Return Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pickup & Return / Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      child: Text(this.shopItem.title,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
@@ -160,8 +171,7 @@ class ShopItemGrid extends StatelessWidget {
   _detailsContainer() {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-      child: Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent gravida condimentum purus ut rhoncus. Etiam malesuada orci turpis, a varius orci sagittis at. Curabitur rutrum eget quam et ullamcorper. Nullam vel ante rhoncus, aliquet lacus vel, sodales nisi. Suspendisse potenti. Curabitur in purus varius, fermentum ante id, porttitor nunc. Donec sit amet eros aliquam, pellentesque arcu et, ultrices sem. Morbi eu turpis quis enim tincidunt mollis. Maecenas eget ante euismod, dictum leo ac, fringilla neque. Phasellus eget arcu massa. Aenean imperdiet ullamcorper nisi et hendrerit. ',
+      child: Text(this.shopItem.description,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
@@ -173,21 +183,26 @@ class ShopItemGrid extends StatelessWidget {
   }
 
   _priceContainer(BuildContext context) {
+    double finalPrice = this.shopItem.price -
+        this.shopItem.discount / 100 * this.shopItem.price;
+
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Expanded(
-            child: Text(S.of(context).online_shop_card_seller_info_title,
+          if (this.shopItem.discount > 0)
+            Text(
+                '${this.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: red,
+                    decoration: TextDecoration.lineThrough,
+                    color: black_text,
                     fontFamily: null,
                     fontWeight: FontWeight.normal,
-                    fontSize: 12)),
-          ),
-          Text('1200 LEI',
+                    fontSize: 14)),
+          Text(
+              '${finalPrice.toStringAsFixed(1)} ${S.of(context).general_currency}',
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: red,
@@ -239,8 +254,24 @@ class ShopItemGrid extends StatelessWidget {
   }
 
   _valabilityContainer(BuildContext context) {
-    String title =
-        '${S.of(context).online_shop_card_valability_title}: 20 Mai - 15 Iunie';
+    DateTime startDate =
+        DateUtils.dateFromString(this.shopItem.startDate, 'dd/MM/yyyy');
+    DateTime endDate =
+        DateUtils.dateFromString(this.shopItem.endDate, 'dd/MM/yyyy');
+
+    String title = '';
+
+    if (startDate != null) {
+      title = DateUtils.stringFromDate(startDate, 'dd MMMM');
+    }
+
+    if (endDate != null) {
+      if (title.isEmpty) {
+        title = DateUtils.stringFromDate(endDate, 'dd MMMM');
+      } else {
+        title = '$title - ${DateUtils.stringFromDate(endDate, 'dd MMMM')}';
+      }
+    }
 
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),

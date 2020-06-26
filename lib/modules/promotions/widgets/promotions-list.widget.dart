@@ -53,6 +53,7 @@ class PromotionsList extends StatelessWidget {
   Widget _buildSearchBar(BuildContext context) {
     return Container(
       child: CustomDebouncerTextField(
+        labelText: S.of(context).promotions_list_search_hint,
         currentValue: searchString != null ? searchString : '',
         listener: (val) {
           filterPromotions(val, this.promotionStatus);

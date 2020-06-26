@@ -479,6 +479,8 @@
   "TENANCY_SERVICE": "Tenancy Service",
   "RENT_SERVICE": "Rent Service",
   "SELLER_SERVICE": "Sell Service",
+  "DISMANTLING_SERVICE": "Dismantling Service",
+  "PART_SHOP": "Part Shop",
   "service_services": "Services",
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",

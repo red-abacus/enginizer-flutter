@@ -1,6 +1,4 @@
-import 'dart:async';
 
-import 'package:app/generated/l10n.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +28,7 @@ class CustomDebouncerTextField extends StatelessWidget {
       keyboardType: textInputType,
       autofocus: false,
       decoration:
-          InputDecoration(labelText: S.of(context).promotions_list_search_hint),
+          InputDecoration(labelText: labelText),
       style: TextHelper.customTextStyle(),
       onChanged: (value) {
         _debouncer.run(() => listener(value));

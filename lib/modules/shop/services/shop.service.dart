@@ -91,7 +91,7 @@ class ShopService {
 
   Future<ShopItemResponse> getShopItems(ShopItemRequest shopItemRequest) async {
     try {
-      final response = await _dio.get(_GET_SHOP_ITEMS_PATH);
+      final response = await _dio.get(_GET_SHOP_ITEMS_PATH, queryParameters: shopItemRequest.toJson());
 
       if (response.statusCode == 200) {
         return ShopItemResponse.fromJson(response.data);

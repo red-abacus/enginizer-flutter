@@ -349,6 +349,8 @@
   "TENANCY_SERVICE": "Serviciu de închiriere",
   "RENT_SERVICE": "Serviciu de închiriere",
   "SELLER_SERVICE": "Serviciu de vânzare",
+  "DISMANTLING_SERVICE": "Serviciu de dezmembrări",
+  "PART_SHOP": "Magazin de piese",
   "service_services": "Services",
   "service_reviews": "Reviews",
   "service_fiscal": "Fiscal info",

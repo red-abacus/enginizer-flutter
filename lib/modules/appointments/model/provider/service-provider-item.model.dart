@@ -39,7 +39,7 @@ class ServiceProviderItem {
 
     if (list != null) {
       list.forEach((item) {
-//        items.add(ServiceProviderSubItem.fromJson(item));
+        items.add(ServiceProviderSubItem.fromJson(item));
       });
     }
 
@@ -70,6 +70,10 @@ class ServiceProviderItem {
         return S.of(context).SELLER_SERVICE;
       case 'RENT_SERVICE':
         return S.of(context).RENT_SERVICE;
+      case 'DISMANTLING_SHOP':
+        return S.of(context).DISMANTLING_SERVICE;
+      case 'PART_SHOP':
+        return S.of(context).PART_SHOP;
       default:
         return name;
     }
