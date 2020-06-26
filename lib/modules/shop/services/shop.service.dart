@@ -4,7 +4,6 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/shop/models/request/shop-item-request.model.dart';
 import 'package:app/modules/shop/models/response/shop-item-response.model.dart';
 import 'package:app/modules/shop/models/shop-alert.model.dart';
-import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/utils/environment.constants.dart';
 import 'package:dio/dio.dart';
 

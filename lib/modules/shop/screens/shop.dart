@@ -4,7 +4,9 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/providers/auctions-provider.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
+import 'package:app/modules/shop/enums/shop-item-type.enum.dart';
 import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/screens/shop-alerts.dart';
 import 'package:app/modules/shop/screens/shop-product-details.dart';
@@ -189,11 +191,16 @@ class ShopState extends State<Shop> {
     }
   }
 
-  _selectShopItem() {
-    if (shopCategoryType == ShopCategoryType.SERVICES) {
-      Navigator.of(context).pushNamed(ShopServiceDetails.route);
-    } else {
-      Navigator.of(context).pushNamed(ShopProductDetails.route);
+  _selectShopItem(ShopItem shopItem) {
+    _provider.selectedShopItem = shopItem;
+
+    switch (ShopItemTypeUtils.type(shopItem.type)) {
+      case ShopItemType.Promotion:
+        Navigator.of(context).pushNamed(ShopServiceDetails.route);
+        break;
+      case ShopItemType.Car:
+        Navigator.of(context).pushNamed(ShopProductDetails.route);
+        break;
     }
   }
 

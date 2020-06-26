@@ -2,6 +2,9 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/screens/car.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/enums/shop-item-type.enum.dart';
@@ -15,6 +18,7 @@ import 'package:flutter/cupertino.dart';
 class ShopProvider with ChangeNotifier {
   ShopService _shopService = inject<ShopService>();
   ProviderService _providerService = inject<ProviderService>();
+  CarService _carService = inject<CarService>();
 
   List<ShopAlert> alerts = [];
   List<ShopItem> serviceItems = [];
@@ -28,11 +32,17 @@ class ShopProvider with ChangeNotifier {
 
   ServiceProviderItemsResponse serviceProviderItemsResponse;
 
+  ShopItem selectedShopItem;
+
+  Car carDetails;
+
   bool initDone = false;
 
   void initialise() {
     shopServiceItemRequest = ShopItemRequest(ShopItemType.Promotion);
     shopProductItemRequest = ShopItemRequest(ShopItemType.Car);
+
+    selectedShopItem = null;
 
     _shopServiceItemResponse = null;
     alerts = [];
@@ -148,6 +158,16 @@ class ShopProvider with ChangeNotifier {
           await _providerService.getServices(null);
       notifyListeners();
       return serviceProviderItemsResponse;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<Car> getCarDetails(int carId) async {
+    try {
+      carDetails = await _carService.getCarDetails(carId);
+      notifyListeners();
+      return carDetails;
     } catch (error) {
       throw (error);
     }

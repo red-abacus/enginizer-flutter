@@ -34,7 +34,7 @@ class ShopItemGrid extends StatelessWidget {
           color: Colors.white,
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
-            onTap: () => this.selectShopItem(),
+            onTap: () => this.selectShopItem(shopItem),
             child: ClipRRect(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,25 +254,6 @@ class ShopItemGrid extends StatelessWidget {
   }
 
   _valabilityContainer(BuildContext context) {
-    DateTime startDate =
-        DateUtils.dateFromString(this.shopItem.startDate, 'dd/MM/yyyy');
-    DateTime endDate =
-        DateUtils.dateFromString(this.shopItem.endDate, 'dd/MM/yyyy');
-
-    String title = '';
-
-    if (startDate != null) {
-      title = DateUtils.stringFromDate(startDate, 'dd MMMM');
-    }
-
-    if (endDate != null) {
-      if (title.isEmpty) {
-        title = DateUtils.stringFromDate(endDate, 'dd MMMM');
-      } else {
-        title = '$title - ${DateUtils.stringFromDate(endDate, 'dd MMMM')}';
-      }
-    }
-
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       child: Row(
@@ -280,7 +261,7 @@ class ShopItemGrid extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            title,
+            shopItem.getDateTitle(),
             style: TextHelper.customTextStyle(
                 color: black_text, weight: FontWeight.bold, size: 12),
           )

@@ -2,6 +2,8 @@ import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-model.model.dart';
+import 'package:app/modules/user-details/screens/user-details.dart';
+import 'package:app/utils/date_utils.dart';
 
 class ShopItem {
   int id;
@@ -44,7 +46,7 @@ class ShopItem {
         discount: json['discount'] != null ? json['discount'] : 0,
         startDate: json['startDate'] != null ? json['startDate'] : '',
         endDate: json['endDate'] != null ? json['endDate'] : '',
-        providerId: json['providerId'] != null ? json['providerId'] : 0,
+        providerId: json['providerId'] != null ? json['providerId'] : null,
         carId: json['carId'] != null ? json['carId'] : 0,
         user: json['user'] != null ? User.fromJson(json['user']) : null,
         type: json['type'] != null ? json['type'] : '',
@@ -59,5 +61,28 @@ class ShopItem {
       models.add(GenericModel.imageFromJson(element));
     });
     return models;
+  }
+
+  String getDateTitle() {
+    DateTime startDate =
+    DateUtils.dateFromString(this.startDate, 'dd/MM/yyyy');
+    DateTime endDate =
+    DateUtils.dateFromString(this.endDate, 'dd/MM/yyyy');
+
+    String title = '';
+
+    if (startDate != null) {
+      title = DateUtils.stringFromDate(startDate, 'dd MMMM');
+    }
+
+    if (endDate != null) {
+      if (title.isEmpty) {
+        title = DateUtils.stringFromDate(endDate, 'dd MMMM');
+      } else {
+        title = '$title - ${DateUtils.stringFromDate(endDate, 'dd MMMM')}';
+      }
+    }
+
+    return title;
   }
 }

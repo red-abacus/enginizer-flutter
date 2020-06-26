@@ -35,7 +35,7 @@ class ShopItemCard extends StatelessWidget {
           color: Colors.white,
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
-            onTap: () => this.selectShopItem(),
+            onTap: () => this.selectShopItem(shopItem),
             child: ClipRRect(
               child: Container(
                 height: 120,
@@ -273,29 +273,10 @@ class ShopItemCard extends StatelessWidget {
   }
 
   _valabilityContainer(BuildContext context) {
-    DateTime startDate =
-        DateUtils.dateFromString(this.shopItem.startDate, 'dd/MM/yyyy');
-    DateTime endDate =
-        DateUtils.dateFromString(this.shopItem.endDate, 'dd/MM/yyyy');
-
-    String title = '';
-
-    if (startDate != null) {
-      title = DateUtils.stringFromDate(startDate, 'dd MMMM');
-    }
-
-    if (endDate != null) {
-      if (title.isEmpty) {
-        title = DateUtils.stringFromDate(endDate, 'dd MMMM');
-      } else {
-        title = '$title - ${DateUtils.stringFromDate(endDate, 'dd MMMM')}';
-      }
-    }
-
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        title,
+        shopItem.getDateTitle(),
         style: TextHelper.customTextStyle(
             color: black_text, weight: FontWeight.bold, size: 12),
       ),
