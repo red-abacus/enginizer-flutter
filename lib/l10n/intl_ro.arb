@@ -82,6 +82,9 @@
   "car_create_general_car_verification": "Fișă verificare generală autoturism",
   "car_status_pending": "În așteptare",
   "car_status_for_sell": "De vânzare",
+  "car_status_sold": "Vândută",
+  "car_mark_as_sold": "Marcheazâ ca Vândută",
+  "car_mark_as_sold_alert_body": "Ești sigur că dorești să marchezi aceasta mașină că vândută?",
   "no_car_available_alert": "Nicio mașină disponibilă...",
   "COLOR_RED": "Roșu",
   "COLOR_BLACK": "Negru",
@@ -635,5 +638,6 @@
   "exception_edit_shop_alert": "A intervenit o problemă la editarea alertei.",
   "exception_add_car_document": "A intervenit o problemă la încărcarea documentului.",
   "exception_get_car_documents": "A intervenit o problemă la încărcarea documentelor.",
-  "exception_get_car_document_details": "A intervenit o problemă la descărcarea documentelor."
+  "exception_get_car_document_details": "A intervenit o problemă la descărcarea documentelor.",
+  "exception_car_mark_as_sold": "A intervenit o problemă la marcarea mașinii că vândută."
 }

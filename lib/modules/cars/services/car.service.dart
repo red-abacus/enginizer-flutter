@@ -37,6 +37,7 @@ class CarService {
   static String GET_CAR_DOCUMENTS_EXCEPTION = 'GET_CAR_DOCUMENTS_EXCEPTION';
   static String GET_CAR_DOCUMENT_DETAILS_EXCEPTION =
       'GET_CAR_DOCUMENT_DETAILS_EXCEPTION';
+  static String CAR_MARK_AS_SOLD_EXCEPTION = 'CAR_MARK_AS_SOLD_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -62,6 +63,10 @@ class CarService {
   static const String _GET_CAR_DOCUMENT_DETAILS_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _GET_CAR_DOCUMENT_DETAILS_SUFFIX = '/documents/';
+
+  static const String _MARK_AS_SOLD_PREFIX =
+      '${Environment.CARS_BASE_API}/cars/';
+  static const String _MARK_AS_SOLD_SUFFIX = '/sold';
 
   Dio _dio = inject<Dio>();
 
@@ -304,6 +309,22 @@ class CarService {
     }
   }
 
+  Future<Car> carMarkAsSold(int carId) async {
+    try {
+      var response = await _dio.patch(_buildMarkAsSoldPath(carId));
+
+      if (response.statusCode == 200) {
+        return Car.fromJson(response.data);
+      }
+      else {
+        throw Exception(CAR_MARK_AS_SOLD_EXCEPTION);
+      }
+    }
+    catch (e) {
+      throw Exception(CAR_MARK_AS_SOLD_EXCEPTION);
+    }
+  }
+
   _buildCarHistoryPath(int carId) {
     return _CAR_HISTORY_PREFIX + carId.toString() + _CAR_HISTORY_SUFFIX;
   }
@@ -329,6 +350,10 @@ class CarService {
         carId.toString() +
         _GET_CAR_DOCUMENT_DETAILS_SUFFIX +
         documentId.toString();
+  }
+
+  _buildMarkAsSoldPath(int carId) {
+    return _MARK_AS_SOLD_PREFIX + carId.toString() + _MARK_AS_SOLD_SUFFIX;
   }
 
   _mapCarHistory(List<dynamic> response) {

@@ -1,4 +1,5 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shop/models/shop-appointment-issue.model.dart';
@@ -24,7 +25,7 @@ class ShopAppointmentProvider with ChangeNotifier {
   Future<List<Car>> loadCars() async {
     try {
       var response = await this.carService.getCars(searchString: searchString);
-      cars = response.items;
+      cars = response.items.where((car) => car.status != CarStatus.Sold).toList();
       notifyListeners();
       return cars;
     } catch (error) {

@@ -103,7 +103,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     try {
       await _provider.loadServices('APPOINTMENT').then((_) async {
         if (_provider.selectedCar == null) {
-          await Provider.of<CarsProvider>(context).loadCars().then((_) {
+          await _provider.loadCars().then((_) {
             setState(() {
               _isLoading = false;
             });
@@ -291,7 +291,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           _calendarChecker();
           break;
       }
-    } else if (_provider.createAppointmentState == CreateAppointmentState.Default) {
+    } else if (_provider.createAppointmentState ==
+        CreateAppointmentState.Default) {
       switch (_currentStepIndex) {
         case 0:
           _servicesChecker();

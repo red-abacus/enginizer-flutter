@@ -137,4 +137,14 @@ class CarProvider with ChangeNotifier {
       throw (error);
     }
   }
+
+  Future<Car> carMarkAsSold(int carId) async {
+    try {
+      Car car = await carService.carMarkAsSold(carId);
+      notifyListeners();
+      return car;
+    } catch (error) {
+      throw (error);
+    }
+  }
 }

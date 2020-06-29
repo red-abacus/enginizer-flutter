@@ -35,6 +35,8 @@ class CarsState extends State<Cars> {
 
   CarsState({this.route});
 
+  CarsProvider _provider;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CarsProvider>(
@@ -52,6 +54,10 @@ class CarsState extends State<Cars> {
 
   @override
   void didChangeDependencies() {
+    _provider = Provider.of<CarsProvider>(context);
+
+    _initDone = _initDone == false ? false : _provider.initDone;
+
     if (!_initDone) {
       setState(() {
         _isLoading = true;
@@ -60,6 +66,7 @@ class CarsState extends State<Cars> {
       _loadData();
     }
     _initDone = true;
+    _provider.initDone = true;
     super.didChangeDependencies();
   }
 

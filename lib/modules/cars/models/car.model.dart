@@ -137,4 +137,8 @@ class Car {
 
     return filtered;
   }
+
+  bool canEdit() {
+    return status != CarStatus.Sold;
+  }
 }

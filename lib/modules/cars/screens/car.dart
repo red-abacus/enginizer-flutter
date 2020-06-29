@@ -7,6 +7,7 @@ import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
@@ -166,6 +167,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         openModalAddFuelConsumption: _openModalAddFuelConsumption,
         uploadCarImageListener: _uploadCarImageListener,
         showCameraDialog: _showCameraDialog,
+        markAsSold: _showMarkAsSoldAlert,
       ),
       CarDocumentsWidget(),
     ];
@@ -244,6 +246,45 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_car_fuel, context);
       }
+    }
+  }
+
+  _showMarkAsSoldAlert() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AlertConfirmationDialogWidget(
+                confirmFunction: (confirm) => {
+                      if (confirm) {_markAsSold()}
+                    },
+                title: S.of(context).car_mark_as_sold_alert_body);
+          });
+        });
+  }
+
+  _markAsSold() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider.carMarkAsSold(_provider.selectedCar.id).then((value) {
+        setState(() {
+          _provider.selectedCar = value;
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_MARK_AS_SOLD_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_mark_as_sold, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

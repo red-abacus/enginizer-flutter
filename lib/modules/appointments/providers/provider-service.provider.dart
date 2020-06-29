@@ -12,15 +12,20 @@ import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
+import 'package:app/modules/cars/enums/car-status.enum.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/presentation/custom_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ProviderServiceProvider with ChangeNotifier {
   JwtUser authUser;
+
+  CarService _carService = inject<CarService>();
 
   AppointmentPosition appointmentPosition;
   List<ServiceProviderItem> serviceItems = [];
@@ -33,6 +38,7 @@ class ProviderServiceProvider with ChangeNotifier {
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
   // Form entries
+  List<Car> cars;
   Car selectedCar;
   List<ServiceProviderItem> selectedServiceItems;
   List<Issue> issuesFormState;
@@ -48,6 +54,7 @@ class ProviderServiceProvider with ChangeNotifier {
   ServiceProviderResponse _serviceProviderResponse;
 
   void initFormValues() {
+    cars = [];
     appointmentPosition = AppointmentPosition();
     selectedCar = null;
     selectedServiceItems = [];
@@ -124,6 +131,17 @@ class ProviderServiceProvider with ChangeNotifier {
       providerItems = response;
       notifyListeners();
       return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<Car>> loadCars({String filterValue = ''}) async {
+    try {
+      var response = await this._carService.getCars();
+      cars = response.items.where((car) => car.status != CarStatus.Sold).toList();
+      notifyListeners();
+      return cars;
     } catch (error) {
       throw (error);
     }

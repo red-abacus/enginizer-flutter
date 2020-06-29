@@ -84,6 +84,9 @@
   "car_create_talon": "Talon",
   "car_status_pending": "Pending",
   "car_status_for_sell": "For Sale",
+  "car_status_sold": "Sold",
+  "car_mark_as_sold": "Mark as Sold",
+  "car_mark_as_sold_alert_body": "Are you sure you want to mark this car as sold?",
   "no_car_available_alert": "No cars available...",
   "COLOR_RED": "Red",
   "COLOR_BLACK": "Black",
@@ -640,5 +643,6 @@
   "exception_edit_shop_alert": "There was an error trying to edit shop alert.",
   "exception_add_car_document": "There was an error trying to upload car document.",
   "exception_get_car_documents": "There was an error trying to load documents.",
-  "exception_get_car_document_details": "There was an error trying to download document."
+  "exception_get_car_document_details": "There was an error trying to download document.",
+  "exception_car_mark_as_sold": "There was an error trying to mark car as sold."
 }

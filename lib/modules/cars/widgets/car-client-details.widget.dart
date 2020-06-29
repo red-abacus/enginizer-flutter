@@ -1,9 +1,11 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,24 +16,47 @@ class CarClientDetailsWidget extends StatelessWidget {
   final Function openModalAddFuelConsumption;
   final Function uploadCarImageListener;
   final Function showCameraDialog;
+  final Function markAsSold;
 
   CarClientDetailsWidget(
       {this.car,
       this.carFuelGraphicResponse,
       this.openModalAddFuelConsumption,
       this.uploadCarImageListener,
-      this.showCameraDialog});
+      this.showCameraDialog,
+      this.markAsSold});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _contentWidget(context),
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 1,
-        onPressed: () => openModalAddFuelConsumption(),
-        child: Icon(Icons.add),
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(left: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (car.status == CarStatus.ForSell)
+              FloatingActionButton.extended(
+                heroTag: null,
+                backgroundColor: Theme.of(context).primaryColor,
+                elevation: 1,
+                onPressed: () => this.markAsSold(),
+                label: Text(
+                  S.of(context).car_mark_as_sold,
+                  style:
+                      TextHelper.customTextStyle(color: Colors.white, size: 12),
+                ),
+              ),
+            if (car.status == CarStatus.ForSell) Spacer(),
+            FloatingActionButton(
+              heroTag: null,
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 1,
+              onPressed: () => openModalAddFuelConsumption(),
+              child: Icon(Icons.add),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -112,20 +137,20 @@ class CarClientDetailsWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.topRight,
-              child: FlatButton(
-                padding: EdgeInsets.all(30),
-                splashColor: Theme.of(context).primaryColor,
-                onPressed: () async {
-                  showCameraDialog();
-                },
-                child: TextWidget(
-                  'Upload Image',
-                  color: Theme.of(context).accentColor,
+              Container(
+                alignment: Alignment.topRight,
+                child: FlatButton(
+                  padding: EdgeInsets.all(30),
+                  splashColor: Theme.of(context).primaryColor,
+                  onPressed: () async {
+                    showCameraDialog();
+                  },
+                  child: TextWidget(
+                    'Upload Image',
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
-              ),
-            )
+              )
           ],
         ),
       ),
