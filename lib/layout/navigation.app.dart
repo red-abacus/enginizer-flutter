@@ -11,6 +11,7 @@ import 'package:app/modules/consultant-estimators/screens/work-estimates-consult
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/extra-services/screens/extra-services.dart';
+import 'package:app/modules/invoices/screens/invoices.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/parking-lots/screens/parking-lots.dart';
@@ -90,6 +91,11 @@ class NavigationApp extends StatefulWidget {
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PROMOTIONS)) {
       items
           .add(new DrawerItem('Promotions', Promotions.route, Promotions.icon));
+    }
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.INVOICES)) {
+      items.add(new DrawerItem('Invoices', Invoices.route, Invoices.icon));
     }
 
     if (PermissionsManager.getInstance()
@@ -277,6 +283,8 @@ class NavigationAppState extends State<NavigationApp> {
         return ParkingLots();
       case ExtraServices.route:
         return ExtraServices();
+      case Invoices.route:
+        return Invoices();
       default:
         return new Container();
     }

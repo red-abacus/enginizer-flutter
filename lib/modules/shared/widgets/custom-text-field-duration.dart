@@ -29,8 +29,10 @@ class CustomDebouncerTextField extends StatelessWidget {
     return TextField(
       keyboardType: textInputType,
       autofocus: false,
-      decoration:
-          InputDecoration(labelText: S.of(context).promotions_list_search_hint),
+      decoration: InputDecoration(
+          labelText: this.labelText != null
+              ? this.labelText
+              : S.of(context).promotions_list_search_hint),
       style: TextHelper.customTextStyle(),
       onChanged: (value) {
         _debouncer.run(() => listener(value));

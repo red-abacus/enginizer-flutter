@@ -22,7 +22,10 @@ const Color stop = Color(0xFFB94047);
 const Color foreground = Color(0xFF424242);
 
 const Color green = Color(0xFF009919);
+const Color green2 = Color.fromRGBO(61, 153, 112, 1);
+
 const Color yellow = Color(0xFFECE43C);
+const Color yellow2 = Color.fromRGBO(253, 181, 21, 1);
 
 const Color gray = Color(0xFF838383);
 const Color gray2 = Color.fromRGBO(120, 120, 120, 1);
@@ -52,7 +55,8 @@ class Constants {
 const String kGoogleKeyiOS = 'AIzaSyD9M1eI1kL7GP62FoM8XAA4cKAS9kstTwE';
 const String kGoogleKeyAndroid = 'AIzaSyCsA-lBjHv66qgd2TFvcV805w1Sq9LJNWg';
 
-const String kFirebaseAppIdAndroid = '1:617758597624:android:1ce45d11b056053b87b60d';
+const String kFirebaseAppIdAndroid =
+    '1:617758597624:android:1ce45d11b056053b87b60d';
 const String kFirebaseAppIdiOS = '1:617758597624:ios:bf0e06b3eca8bdff87b60d';
 const String kFirebaseGcmSenderId = '617758597624';
 const String kFirebaseProjectId = 'autowass-dev';

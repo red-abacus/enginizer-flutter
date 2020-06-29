@@ -158,7 +158,7 @@ class AppointmentDetailsConsultantState
     List<Tab> tabs = [
       Tab(text: S.of(context).appointment_details_request),
       Tab(text: S.of(context).appointment_details_car),
-      Tab(text: S.of(context).appoontment_consultant_provider_documents_title)
+      Tab(text: S.of(context).appointment_consultant_provider_documents_title)
     ];
 
 //    if (_provider.selectedAppointmentDetail.status.getState() ==

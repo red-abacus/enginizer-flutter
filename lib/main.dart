@@ -21,6 +21,8 @@ import 'package:app/modules/auctions/screens/auction-consultant.dart';
 import 'package:app/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
+import 'package:app/modules/invoices/providers/invoices.provider.dart';
+import 'package:app/modules/invoices/screens/invoices.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/order.dart';
 import 'package:app/modules/parts/providers/part-create.provider.dart';
@@ -154,6 +156,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: OrderProvider()),
           ChangeNotifierProvider.value(value: PromotionsProvider()),
           ChangeNotifierProvider.value(value: CreatePromotionProvider()),
+          ChangeNotifierProvider.value(value: InvoicesProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -238,6 +241,7 @@ class AppState extends State<App> {
                 Orders.route: (context) => Orders(),
                 OrderDetails.route: (context) => OrderDetails(),
                 Promotions.route: (context) => Promotions(),
+                Invoices.route: (context) => Invoices(),
               },
             ),
           );
