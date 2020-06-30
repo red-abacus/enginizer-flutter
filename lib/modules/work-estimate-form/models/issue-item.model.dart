@@ -21,6 +21,7 @@ class IssueItem {
   int recommendationId;
   bool accepted;
   bool ordered;
+  int guarantee;
 
   // TODO - manufacturer not provider by API
   String manufacturer;
@@ -44,7 +45,8 @@ class IssueItem {
       this.issueId,
       this.accepted,
       this.ordered,
-      this.manufacturer});
+      this.manufacturer,
+      this.guarantee});
 
   factory IssueItem.fromJson(Map<String, dynamic> json) {
     return IssueItem(
@@ -72,8 +74,8 @@ class IssueItem {
         issueId: json['issueId'] != null ? json['issueId'] : null,
         accepted: json['accepted'] != null ? json['accepted'] : null,
         ordered: json['ordered'] != null ? json['ordered'] : null,
-        manufacturer:
-            json['manufacturer'] != null ? json['manufacturer'] : '-');
+        manufacturer: json['manufacturer'] != null ? json['manufacturer'] : '-',
+        guarantee: json['guarantee'] != null ? json['guarantee'] : 0);
   }
 
   Map<String, dynamic> toMap() => {

@@ -126,7 +126,7 @@ class InvoiceCard extends StatelessWidget {
           InvoiceStatusUtils.value(this.invoice.status).toUpperCase(),
           textAlign: TextAlign.right,
           style: TextHelper.customTextStyle(
-              color: this.invoice.getStatusColor(),
+              color: InvoiceStatusUtils.color(this.invoice.status),
               weight: FontWeight.bold,
               size: 12),
         ),

@@ -72,6 +72,8 @@ import 'modules/dashboard/providers/dashboard.provider.dart';
 import 'modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'modules/appointments/screens/appointment-details-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/invoices/providers/invoice.provider.dart';
+import 'modules/invoices/screens/invoice.dart';
 import 'modules/notifications/providers/notification.provider.dart';
 import 'modules/orders/providers/order.provider.dart';
 import 'modules/orders/providers/orders.provider.dart';
@@ -157,8 +159,10 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: PromotionsProvider()),
           ChangeNotifierProvider.value(value: CreatePromotionProvider()),
           ChangeNotifierProvider.value(value: InvoicesProvider()),
+          ChangeNotifierProvider.value(value: InvoiceProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
+          final invoiceDetail = InvoiceDetail;
           return OverlaySupport(
             child: MaterialApp(
               home: authProvider.isAuth
@@ -242,6 +246,7 @@ class AppState extends State<App> {
                 OrderDetails.route: (context) => OrderDetails(),
                 Promotions.route: (context) => Promotions(),
                 Invoices.route: (context) => Invoices(),
+                InvoiceDetail.route: (context) => InvoiceDetail()
               },
             ),
           );

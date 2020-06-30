@@ -31,6 +31,7 @@ const Color gray = Color(0xFF838383);
 const Color gray2 = Color.fromRGBO(120, 120, 120, 1);
 const Color gray3 = Color.fromRGBO(33, 33, 33, 1);
 const Color gray4 = Color.fromRGBO(102, 102, 102, 1);
+const Color darkGray = Color.fromRGBO(87, 87, 87, 1);
 const Color gray_80 = Color.fromRGBO(70, 70, 72, 0.4);
 const Color gray_20 = Color.fromRGBO(70, 70, 72, 0.2);
 const Color gray_10 = Color.fromRGBO(120, 120, 120, 0.1);

@@ -5,6 +5,7 @@ import 'package:app/modules/appointments/providers/car-reception-form.provider.d
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/appointments/services/camera.service.dart';
 import 'package:app/modules/dashboard/providers/dashboard.provider.dart';
+import 'package:app/modules/invoices/providers/invoice.provider.dart';
 import 'package:app/modules/invoices/providers/invoices.provider.dart';
 import 'package:app/modules/notifications/providers/notification.provider.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
@@ -128,4 +129,5 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => PromotionsProvider());
   inject.registerFactory(() => CreatePromotionProvider());
   inject.registerFactory(() => InvoicesProvider());
+  inject.registerFactory(() => InvoiceProvider());
 }

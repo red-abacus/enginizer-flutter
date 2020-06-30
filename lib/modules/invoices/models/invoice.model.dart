@@ -31,15 +31,4 @@ class Invoice {
             ? InvoiceStatusUtils.status(json['status'])
             : null);
   }
-
-  getStatusColor() {
-    switch (this.status) {
-      case InvoiceStatus.Issued:
-        return yellow2;
-        break;
-      case InvoiceStatus.Paid:
-        return green2;
-        break;
-    }
-  }
 }

@@ -130,7 +130,8 @@ class NavigationApp extends StatefulWidget {
       case Roles.Super:
         return Dashboard.route;
       case Roles.Client:
-        return Cars.route;
+        return Invoices.route;
+//        return Cars.route;
       case Roles.ProviderAdmin:
         return Promotions.route;
       case Roles.ProviderConsultant:

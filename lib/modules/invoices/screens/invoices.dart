@@ -1,7 +1,10 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/invoices/enums/invoice-sort.enum.dart';
 import 'package:app/modules/invoices/enums/invoice-type.enum.dart';
+import 'package:app/modules/invoices/models/invoice.model.dart';
+import 'package:app/modules/invoices/providers/invoice.provider.dart';
 import 'package:app/modules/invoices/providers/invoices.provider.dart';
+import 'package:app/modules/invoices/screens/invoice.dart';
 import 'package:app/modules/invoices/widgets/invoices-list.widget.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -47,6 +50,7 @@ class InvoicesState extends State<Invoices> {
               searchString: _provider.invoicesRequest.searchString,
               downloadNextPage: _loadData,
               shouldDownload: _provider.shouldDownload(),
+              selectInvoice: _selectInvoice,
             ),
     ));
   }
@@ -92,47 +96,15 @@ class InvoicesState extends State<Invoices> {
     }
   }
 
-//  _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
-//    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
-//        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_CLIENT)) {
-//      Provider.of<AppointmentProvider>(context).initialise();
-//      Provider
-//          .of<AppointmentProvider>(context)
-//          .selectedAppointment =
-//          selectedAppointment;
-//      Navigator.of(context).pushNamed(AppointmentDetails.route);
-//    } else if (PermissionsManager.getInstance().hasAccess(
-//        MainPermissions.Appointments,
-//        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER)) {
-//      Provider.of<AppointmentConsultantProvider>(context).initialise();
-//      Provider
-//          .of<AppointmentConsultantProvider>(context)
-//          .selectedAppointment =
-//          selectedAppointment;
-//      Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
-//    } else if (PermissionsManager.getInstance().hasAccess(
-//        MainPermissions.Appointments,
-//        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PERSONNEL)) {
-//      Provider.of<AppointmentMechanicProvider>(context).initialise();
-//      Provider
-//          .of<AppointmentMechanicProvider>(context)
-//          .selectedAppointment =
-//          selectedAppointment;
-//      Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
-//    } else if (PermissionsManager.getInstance().hasAccess(
-//        MainPermissions.Appointments,
-//        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
-//      Provider.of<AppointmentProvider>(context).initialise();
-//      Provider
-//          .of<AppointmentProvider>(context)
-//          .selectedAppointment =
-//          selectedAppointment;
-//      Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
-//    }
-//  }
-
   _filterInvoices(String string, InvoiceSort sort, InvoiceType invoiceType) {
     _provider.filterInvoices(string, sort, invoiceType);
     _loadData();
+  }
+
+  _selectInvoice(Invoice invoice) {
+    Provider.of<InvoiceProvider>(context).initialise();
+    Provider.of<InvoiceProvider>(context).invoice = invoice;
+
+    Navigator.of(context).pushNamed(InvoiceDetail.route);
   }
 }
