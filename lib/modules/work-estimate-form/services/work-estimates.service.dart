@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:app/modules/invoices/models/invoice-details.model.dart';
+import 'package:app/modules/invoices/models/requests/invoices-request.model.dart';
+import 'package:app/modules/invoices/models/responses/invoices-response.model.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
@@ -27,6 +30,8 @@ class WorkEstimatesService {
       'WORK_ESTIMATE_IMPORT_ITEM_EXCEPTION';
   static const String WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION =
       'WORK_ESTIMATE_EDIT_ISSUE_ITEMEXCEPTION';
+  static const String GET_INVOICES_EXCEPTION = 'GET_INVOICES_EXCEPTION';
+  static const String GET_INVOICE_DETAILS_EXCEPTION = 'GET_INVOICE_DETAILS_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -49,6 +54,10 @@ class WorkEstimatesService {
   static const String _WORK_ESTIMATE_IMPORT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_IMPORT_SUFFIX = '/items/import';
+
+  static const String _GET_INVOICES_PATH = '${Environment.WORK_ESTIMATES_BASE_API}/invoices';
+
+  static const String _GET_INVOICE_DETAILS_PATH = '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
 
   Dio _dio = inject<Dio>();
 
@@ -193,6 +202,39 @@ class WorkEstimatesService {
       }
     } catch (error) {
       throw Exception(WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION);
+    }
+  }
+
+  Future<InvoicesResponse> getInvoices(InvoicesRequest request) async {
+    try {
+      final response = await _dio.get(_GET_INVOICES_PATH, queryParameters: request.toJson());
+
+      if (response.statusCode == 200) {
+        return InvoicesResponse.fromJson(response.data);
+      }
+      else {
+        throw Exception(_GET_INVOICES_PATH);
+      }
+    }
+    catch (error) {
+      throw Exception(_GET_INVOICES_PATH);
+    }
+  }
+
+
+  Future<InvoiceDetails> getInvoiceDetails(int invoiceId) async {
+    try {
+      final response = await _dio.get(_GET_INVOICE_DETAILS_PATH + invoiceId.toString());
+
+      if (response.statusCode == 200) {
+        return InvoiceDetails.fromJson(response.data);
+      }
+      else {
+        throw Exception(GET_INVOICE_DETAILS_EXCEPTION);
+      }
+    }
+    catch (error) {
+      throw Exception(GET_INVOICE_DETAILS_EXCEPTION);
     }
   }
 

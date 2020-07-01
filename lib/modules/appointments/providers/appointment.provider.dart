@@ -2,10 +2,7 @@ import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/auctions/models/auction-map.model.dart';
-import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {

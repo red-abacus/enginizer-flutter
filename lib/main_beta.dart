@@ -63,6 +63,10 @@ import 'modules/dashboard/providers/dashboard.provider.dart';
 import 'modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'modules/appointments/screens/appointment-details-mechanic.dart';
 import 'modules/consultant-user-details/provider/user-consultant.provider.dart';
+import 'modules/invoices/providers/invoice.provider.dart';
+import 'modules/invoices/providers/invoices.provider.dart';
+import 'modules/invoices/screens/invoice.dart';
+import 'modules/invoices/screens/invoices.dart';
 import 'modules/notifications/providers/notification.provider.dart';
 import 'modules/notifications/screens/notifications.dart';
 import 'modules/orders/providers/order.provider.dart';
@@ -154,6 +158,8 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: OrderProvider()),
           ChangeNotifierProvider.value(value: PromotionsProvider()),
           ChangeNotifierProvider.value(value: CreatePromotionProvider()),
+          ChangeNotifierProvider.value(value: InvoicesProvider()),
+          ChangeNotifierProvider.value(value: InvoiceProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
           return OverlaySupport(
@@ -229,6 +235,8 @@ class AppState extends State<App> {
                 Orders.route: (context) => Orders(),
                 OrderDetails.route: (context) => OrderDetails(),
                 Promotions.route: (context) => Promotions(),
+                Invoices.route: (context) => Invoices(),
+                InvoiceDetail.route: (context) => InvoiceDetail()
               },
             ),
           );

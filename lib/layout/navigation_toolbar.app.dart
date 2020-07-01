@@ -9,6 +9,7 @@ import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
+import 'package:app/modules/invoices/screens/invoices.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/promotions/screens/promotions.screen.dart';
@@ -166,6 +167,8 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
         return Notifications();
       case Promotions.route:
         return Promotions();
+      case Invoices.route:
+        return Invoices();
       default:
         return new Text("Error");
     }
