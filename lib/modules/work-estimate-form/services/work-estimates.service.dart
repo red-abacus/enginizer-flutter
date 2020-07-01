@@ -6,11 +6,13 @@ import 'package:app/modules/invoices/models/responses/invoices-response.model.da
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimates/models/request/work-estimates-request.model.dart';
+import 'package:app/modules/work-estimates/models/responses/work-estimate-response.model.dart';
+import 'package:app/modules/work-estimates/models/work-estimate.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:app/modules/consultant-estimators/models/responses/work-estimate-response.model.dart';
-import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
 import 'package:app/utils/environment.constants.dart';
 
 class WorkEstimatesService {
@@ -31,7 +33,8 @@ class WorkEstimatesService {
   static const String WORK_ESTIMATE_EDIT_ISSUE_ITEM_EXCEPTION =
       'WORK_ESTIMATE_EDIT_ISSUE_ITEMEXCEPTION';
   static const String GET_INVOICES_EXCEPTION = 'GET_INVOICES_EXCEPTION';
-  static const String GET_INVOICE_DETAILS_EXCEPTION = 'GET_INVOICE_DETAILS_EXCEPTION';
+  static const String GET_INVOICE_DETAILS_EXCEPTION =
+      'GET_INVOICE_DETAILS_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -55,9 +58,11 @@ class WorkEstimatesService {
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_IMPORT_SUFFIX = '/items/import';
 
-  static const String _GET_INVOICES_PATH = '${Environment.WORK_ESTIMATES_BASE_API}/invoices';
+  static const String _GET_INVOICES_PATH =
+      '${Environment.WORK_ESTIMATES_BASE_API}/invoices';
 
-  static const String _GET_INVOICE_DETAILS_PATH = '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
+  static const String _GET_INVOICE_DETAILS_PATH =
+      '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
 
   Dio _dio = inject<Dio>();
 
@@ -79,10 +84,11 @@ class WorkEstimatesService {
     }
   }
 
-  Future<WorkEstimateResponse> getWorkEstimates() async {
+  Future<WorkEstimateResponse> getWorkEstimates(
+      WorkEstimatesRequest workEstimatesRequest) async {
     try {
-      final response = await _dio.get('$_WORK_ESTIMATES_PATH');
-
+      final response = await _dio.get('$_WORK_ESTIMATES_PATH',
+          queryParameters: workEstimatesRequest.toJson());
       if (response.statusCode < 300) {
         return WorkEstimateResponse.fromJson(response.data);
       } else {
@@ -207,33 +213,30 @@ class WorkEstimatesService {
 
   Future<InvoicesResponse> getInvoices(InvoicesRequest request) async {
     try {
-      final response = await _dio.get(_GET_INVOICES_PATH, queryParameters: request.toJson());
+      final response =
+          await _dio.get(_GET_INVOICES_PATH, queryParameters: request.toJson());
 
       if (response.statusCode == 200) {
         return InvoicesResponse.fromJson(response.data);
-      }
-      else {
+      } else {
         throw Exception(_GET_INVOICES_PATH);
       }
-    }
-    catch (error) {
+    } catch (error) {
       throw Exception(_GET_INVOICES_PATH);
     }
   }
 
-
   Future<InvoiceDetails> getInvoiceDetails(int invoiceId) async {
     try {
-      final response = await _dio.get(_GET_INVOICE_DETAILS_PATH + invoiceId.toString());
+      final response =
+          await _dio.get(_GET_INVOICE_DETAILS_PATH + invoiceId.toString());
 
       if (response.statusCode == 200) {
         return InvoiceDetails.fromJson(response.data);
-      }
-      else {
+      } else {
         throw Exception(GET_INVOICE_DETAILS_EXCEPTION);
       }
-    }
-    catch (error) {
+    } catch (error) {
       throw Exception(GET_INVOICE_DETAILS_EXCEPTION);
     }
   }

@@ -45,6 +45,7 @@ class PermissionsSideBar {
             TICKETS,
             PARKING_LOTS,
             EXTRA_SERVICES,
+            WORK_ESTIMATE
           ];
           break;
         case Roles.ProviderAccountant:
@@ -62,19 +63,19 @@ class PermissionsSideBar {
               ConsultantServiceType serviceType =
                   ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
+              permissions.add(WORK_ESTIMATE);
+
               if (serviceType != null) {
                 switch (serviceType) {
                   case ConsultantServiceType.PickUpAndReturn:
                     permissions.add(APPOINTMENT);
                     permissions.add(AUCTION);
-                    permissions.add(WORK_ESTIMATE);
                     permissions.add(NOTIFICATIONS);
                     break;
                   case ConsultantServiceType.Service:
                     permissions.add(PROFILE);
                     permissions.add(APPOINTMENT);
                     permissions.add(AUCTION);
-                    permissions.add(WORK_ESTIMATE);
                     permissions.add(NOTIFICATIONS);
                     permissions.add(ORDERS);
                     break;

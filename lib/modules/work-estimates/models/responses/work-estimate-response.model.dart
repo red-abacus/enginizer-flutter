@@ -1,5 +1,4 @@
-import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
-import 'package:app/modules/consultant-estimators/models/work-estimate.model.dart';
+import '../work-estimate.model.dart';
 
 class WorkEstimateResponse {
   int total;

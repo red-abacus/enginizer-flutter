@@ -1,10 +1,8 @@
-import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app/modules/work-estimates/enums/work-estimate-payment-status.enum.dart';
 
 class WorkEstimate {
   Appointment appointment;
@@ -13,6 +11,10 @@ class WorkEstimate {
   int id;
   ServiceProvider serviceProvider;
   WorkEstimateStatus status;
+  double totalCost;
+  double totalProducts;
+  double totalServices;
+  WorkEstimatePaymentStatus paymentStatus;
 
   WorkEstimate(
       {this.appointment,
@@ -20,7 +22,11 @@ class WorkEstimate {
       this.createdDate,
       this.id,
       this.serviceProvider,
-      this.status});
+      this.status,
+      this.totalCost,
+      this.paymentStatus,
+      this.totalProducts,
+      this.totalServices});
 
   factory WorkEstimate.fromJson(Map<String, dynamic> json) {
     return WorkEstimate(
@@ -33,35 +39,14 @@ class WorkEstimate {
         serviceProvider: json['providerDto'] != null
             ? ServiceProvider.fromJson(json['providerDto'])
             : null,
-        status: json['status'] != null ? WorkEstimateStatusUtils.fromString(json['status']) : null);
-  }
-
-  bool filtered(
-      String value, WorkEstimateStatus workEstimateStatus, CarBrand carBrand) {
-    bool filterStatus = false;
-
-    if (workEstimateStatus != null) {
-      if (workEstimateStatus == WorkEstimateStatus.All ||
-          workEstimateStatus == status) {
-        filterStatus = true;
-      }
-    } else {
-      filterStatus = true;
-    }
-
-    return filterStatus;
-  }
-
-  String statusTitle(BuildContext context) {
-    switch (this.status) {
-      case WorkEstimateStatus.Pending:
-        return S.of(context).work_estimate_status_pending;
-      case WorkEstimateStatus.Accepted:
-        return S.of(context).work_estimate_status_accepted;
-      case WorkEstimateStatus.All:
-        return S.of(context).general_all;
-      default:
-        return '';
-    }
+        status: json['status'] != null
+            ? WorkEstimateStatusUtils.fromString(json['status'])
+            : null,
+        totalCost: json['totalCost'] != null ? json['totalCost'] : 0,
+        paymentStatus: json['paymentStatus'] != null
+            ? WorkEstimatePaymentStatusUtils.status(json['paymentStatus'])
+            : null,
+    totalProducts: json['productsCost'] != null ? json['productsCost'] : 0,
+        totalServices: json['servicesCost'] != null ? json['servicesCost'] : 0);
   }
 }

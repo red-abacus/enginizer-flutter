@@ -22,7 +22,7 @@ class CustomDebouncerTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     _textController = TextEditingController(text: currentValue);
     _textController
-      ..selection = TextSelection.collapsed(offset: currentValue.length);
+      ..selection = TextSelection.collapsed(offset: currentValue != null ? currentValue.length : 0);
 
     return TextField(
       keyboardType: textInputType,

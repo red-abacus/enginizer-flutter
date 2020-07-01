@@ -7,7 +7,6 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
-import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/extra-services/screens/extra-services.dart';
@@ -21,6 +20,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dar
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
+import 'package:app/modules/work-estimates/screens/work-estimates.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
@@ -95,6 +95,11 @@ class NavigationApp extends StatefulWidget {
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.INVOICES)) {
       items.add(new DrawerItem('Invoices', Invoices.route, Invoices.icon));
+    }
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.WORK_ESTIMATE)) {
+      items.add(new DrawerItem('Work Estimates', WorkEstimates.route, WorkEstimates.icon));
     }
 
     if (PermissionsManager.getInstance().hasAccess(
@@ -262,8 +267,8 @@ class NavigationAppState extends State<NavigationApp> {
         return Shop();
       case UserDetailsConsultant.route:
         return UserDetailsConsultant();
-      case WorkEstimatesConsultant.route:
-        return WorkEstimatesConsultant();
+      case WorkEstimates.route:
+        return WorkEstimates();
       case Notifications.route:
         return Notifications();
       case Parts.route:

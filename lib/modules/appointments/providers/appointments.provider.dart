@@ -33,7 +33,6 @@ class AppointmentsProvider with ChangeNotifier {
     appointmentsResponse = null;
 
     appointments = [];
-    appointmentsRequest = null;
     appointmentsRequest = AppointmentsRequest();
   }
 

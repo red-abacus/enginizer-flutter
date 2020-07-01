@@ -18,8 +18,6 @@ import 'package:app/modules/cars/screens/car.dart';
 import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/auctions/screens/auction-consultant.dart';
-import 'package:app/modules/consultant-estimators/providers/work-estimates-consultant.provider.dart';
-import 'package:app/modules/consultant-estimators/screens/work-estimates-consultant.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/invoices/providers/invoices.provider.dart';
 import 'package:app/modules/invoices/screens/invoices.dart';
@@ -89,6 +87,8 @@ import 'modules/shop/screens/shop.dart';
 import 'modules/user-details/screens/user-details.dart';
 import 'modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'modules/work-estimates/providers/work-estimates.provider.dart';
+import 'modules/work-estimates/screens/work-estimates.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -141,7 +141,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
           ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider()),
           ChangeNotifierProvider.value(
-              value: WorkEstimatesConsultantProvider()),
+              value: WorkEstimatesProvider()),
           ChangeNotifierProvider.value(
               value: PickUpCarFormConsultantProvider()),
           ChangeNotifierProvider.value(
@@ -162,7 +162,6 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: InvoiceProvider()),
         ],
         child: Consumer<Auth>(builder: (context, authProvider, _) {
-          final invoiceDetail = InvoiceDetail;
           return OverlaySupport(
             child: MaterialApp(
               home: authProvider.isAuth
@@ -237,8 +236,8 @@ class AppState extends State<App> {
                 UserDetails.route: (context) => UserDetails(),
                 UserDetailsConsultant.route: (context) =>
                     UserDetailsConsultant(),
-                WorkEstimatesConsultant.route: (context) =>
-                    WorkEstimatesConsultant(),
+                WorkEstimates.route: (context) =>
+                    WorkEstimates(),
                 Notifications.route: (context) => Notifications(),
                 Parts.route: (context) => Parts(),
                 Part.route: (context) => Part(),
