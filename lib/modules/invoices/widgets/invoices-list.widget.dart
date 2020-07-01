@@ -1,9 +1,9 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/invoices/enums/invoice-sort.enum.dart';
-import 'package:app/modules/invoices/enums/invoice-type.enum.dart';
 import 'package:app/modules/invoices/models/invoice.model.dart';
 import 'package:app/modules/invoices/widgets/cards/invoice.card.dart';
 import 'package:app/modules/shared/widgets/custom-text-field-duration.dart';
+import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/modules/shared/widgets/single-select-dialog.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -19,8 +19,9 @@ class InvoicesList extends StatelessWidget {
   final Function filterInvoices;
   final Function selectInvoice;
   final Function downloadNextPage;
+  DateTime startDate;
+  final DateTime endDate;
   final InvoiceSort invoiceSort;
-  final InvoiceType invoiceType;
   bool shouldDownload = true;
 
   InvoicesList(
@@ -31,7 +32,8 @@ class InvoicesList extends StatelessWidget {
       this.downloadNextPage,
       this.shouldDownload,
       this.invoiceSort,
-      this.invoiceType});
+      this.startDate,
+      this.endDate});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class InvoicesList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _buildSearchBar(context),
+          _buildDateWidget(context),
           _buildFilterWidget(context),
           _buildListView(context),
         ],
@@ -55,7 +58,7 @@ class InvoicesList extends StatelessWidget {
         labelText: S.of(context).invoice_search_title,
         currentValue: searchString != null ? searchString : '',
         listener: (val) {
-          this.filterInvoices(val, this.invoiceSort, this.invoiceType);
+          this.filterInvoices(val, this.invoiceSort, this.startDate, this.endDate);
         },
       ),
     );
@@ -77,36 +80,38 @@ class InvoicesList extends StatelessWidget {
                   border: Border.all(width: 0.5, color: gray),
                 ),
                 height: 40,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[_sortText(context)],
-                ),
+                child: _sortText(context),
               ),
               onTap: () => _showSortPicker(
                 (context),
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  _buildDateWidget(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           Expanded(
             flex: 1,
-            child: GestureDetector(
-              child: Container(
-                margin: EdgeInsets.only(left: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(width: 0.5, color: gray),
-                ),
-                height: 40,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[_typeText(context)],
-                ),
-              ),
-              onTap: () => _showTypePicker(context),
+            child: Container(
+              margin: EdgeInsets.only(right: 5),
+              child: _startDateWidget(context),
             ),
           ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: EdgeInsets.only(left: 5),
+              child: _endDateWidget(context),
+            ),
+          )
         ],
       ),
     );
@@ -118,7 +123,10 @@ class InvoicesList extends StatelessWidget {
           padding: EdgeInsets.only(top: 10),
           child: this.invoices.length == 0
               ? Center(
-                  child: Text(S.of(context).invoice_empty_list_title, style: TextHelper.customTextStyle(size: 16, color: gray3),),
+                  child: Text(
+                    S.of(context).invoice_empty_list_title,
+                    style: TextHelper.customTextStyle(size: 16, color: gray3),
+                  ),
                 )
               : ListView.builder(
                   itemBuilder: (ctx, index) {
@@ -166,34 +174,26 @@ class InvoicesList extends StatelessWidget {
     );
   }
 
-  _typeText(BuildContext context) {
-    String title = (this.invoiceType == null)
-        ? S.of(context).invoice_type_title
-        : InvoiceTypeUtils.title(context, this.invoiceType);
+  _startDateWidget(BuildContext context) {
+    return BasicDateField(
+        dateTime: this.startDate,
+        maxDate: this.endDate != null ? this.endDate : null,
+        labelText: S.of(context).general_start_date,
+        onChange: (value) {
+          this.filterInvoices(
+              this.searchString, this.invoiceSort, value, this.endDate);
+        });
+  }
 
-    return Row(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          width: 20,
-          height: 20,
-          child: SvgPicture.asset(
-            'assets/images/icons/filter.svg'.toLowerCase(),
-            color: red,
-          ),
-        ),
-        Flexible(
-          child: Container(
-            margin: EdgeInsets.only(right: 2),
-            child: Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              style: TextHelper.customTextStyle(color: gray3, size: 16),
-            ),
-          ),
-        )
-      ],
-    );
+  _endDateWidget(BuildContext context) {
+    return BasicDateField(
+        dateTime: this.endDate,
+        minDate: this.startDate != null ? this.startDate : null,
+        labelText: S.of(context).general_end_date,
+        onChange: (value) {
+          this.filterInvoices(
+              this.searchString, this.invoiceSort, this.startDate, value);
+        });
   }
 
   _showSortPicker(BuildContext context) async {
@@ -215,28 +215,6 @@ class InvoicesList extends StatelessWidget {
       },
     );
 
-    this.filterInvoices(this.searchString, sort, this.invoiceType);
-  }
-
-  _showTypePicker(BuildContext context) async {
-    List<SingleSelectDialogItem<InvoiceType>> items = [];
-
-    InvoiceTypeUtils.list().forEach((type) {
-      items.add(
-          SingleSelectDialogItem(type, InvoiceTypeUtils.title(context, type)));
-    });
-
-    InvoiceType type = await showDialog<InvoiceType>(
-      context: context,
-      builder: (BuildContext context) {
-        return SingleSelectDialog(
-          items: items,
-          initialSelectedValue: this.invoiceType,
-          title: S.of(context).invoice_type_title,
-        );
-      },
-    );
-
-    this.filterInvoices(this.searchString, this.invoiceSort, type);
+    this.filterInvoices(this.searchString, sort, this.startDate, this.endDate);
   }
 }

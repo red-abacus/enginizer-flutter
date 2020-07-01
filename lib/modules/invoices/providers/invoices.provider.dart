@@ -1,6 +1,5 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/invoices/enums/invoice-sort.enum.dart';
-import 'package:app/modules/invoices/enums/invoice-type.enum.dart';
 import 'package:app/modules/invoices/models/invoice.model.dart';
 import 'package:app/modules/invoices/models/requests/invoices-request.model.dart';
 import 'package:app/modules/invoices/models/responses/invoices-response.model.dart';
@@ -49,12 +48,13 @@ class InvoicesProvider with ChangeNotifier {
   }
 
   filterInvoices(
-      String searchString, InvoiceSort invoiceSort, InvoiceType invoiceType) {
+      String searchString, InvoiceSort invoiceSort, DateTime startDate, DateTime endDate) {
     invoicesResponse = null;
     invoices = [];
     invoicesRequest = InvoicesRequest();
     invoicesRequest.searchString = searchString;
     invoicesRequest.invoiceSort = invoiceSort;
-    invoicesRequest.invoiceType = invoiceType;
+    invoicesRequest.startDate = startDate;
+    invoicesRequest.endDate = endDate;
   }
 }

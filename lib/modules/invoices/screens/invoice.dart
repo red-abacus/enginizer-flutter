@@ -208,7 +208,11 @@ class _InvoiceDetailState extends State<InvoiceDetail> {
     );
   }
 
-  _print() {}
+  _print() {
+    // TODO - need to print document when pdf is ready on backend
+  }
 
-  _save() {}
+  _save() {
+    // TODO - need to print document when pdf is ready on backend
+  }
 }

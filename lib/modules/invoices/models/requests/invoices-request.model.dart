@@ -1,12 +1,13 @@
 import 'package:app/modules/invoices/enums/invoice-sort.enum.dart';
-import 'package:app/modules/invoices/enums/invoice-type.enum.dart';
+import 'package:app/utils/date_utils.dart';
 
 class InvoicesRequest {
   String searchString;
   int pageSize = 20;
   int currentPage = 0;
   InvoiceSort invoiceSort;
-  InvoiceType invoiceType;
+  DateTime startDate;
+  DateTime endDate;
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
@@ -22,8 +23,12 @@ class InvoicesRequest {
       propMap['sortBy'] = InvoiceSortUtils.value(this.invoiceSort);
     }
 
-    if (invoiceType != null) {
-      propMap['type'] = InvoiceTypeUtils.value(this.invoiceType);
+    if (startDate != null) {
+      propMap['startDate'] = DateUtils.stringFromDate(startDate, 'dd/MM/yyyy');
+    }
+
+    if (endDate != null) {
+      propMap['endDate'] = DateUtils.stringFromDate(endDate, 'dd/MM/yyyy');
     }
 
     propMap['isSortingAscending'] = false;

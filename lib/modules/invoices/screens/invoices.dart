@@ -1,6 +1,5 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/invoices/enums/invoice-sort.enum.dart';
-import 'package:app/modules/invoices/enums/invoice-type.enum.dart';
 import 'package:app/modules/invoices/models/invoice.model.dart';
 import 'package:app/modules/invoices/providers/invoice.provider.dart';
 import 'package:app/modules/invoices/providers/invoices.provider.dart';
@@ -46,11 +45,12 @@ class InvoicesState extends State<Invoices> {
               invoices: _provider.invoices,
               filterInvoices: _filterInvoices,
               invoiceSort: _provider.invoicesRequest.invoiceSort,
-              invoiceType: _provider.invoicesRequest.invoiceType,
               searchString: _provider.invoicesRequest.searchString,
               downloadNextPage: _loadData,
               shouldDownload: _provider.shouldDownload(),
               selectInvoice: _selectInvoice,
+              startDate: _provider.invoicesRequest.startDate,
+              endDate: _provider.invoicesRequest.endDate,
             ),
     ));
   }
@@ -96,8 +96,8 @@ class InvoicesState extends State<Invoices> {
     }
   }
 
-  _filterInvoices(String string, InvoiceSort sort, InvoiceType invoiceType) {
-    _provider.filterInvoices(string, sort, invoiceType);
+  _filterInvoices(String string, InvoiceSort sort, DateTime startDate, DateTime endDate) {
+    _provider.filterInvoices(string, sort, startDate, endDate);
     _loadData();
   }
 
