@@ -9,6 +9,7 @@ import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
@@ -129,19 +130,55 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                       workEstimateDetails, widget.mode);
                 }
               }
-              setState(() {
-                _isLoading = false;
-              });
+
+              _checkAppointmentPromotion();
             });
           } else {
-            setState(() {
-              _isLoading = false;
-            });
+            _checkAppointmentPromotion();
           }
         });
       });
     } catch (error) {
       _handleError(error);
+    }
+  }
+
+  _checkAppointmentPromotion() async {
+    if (_provider.selectedAppointmentDetail.promotionId != null &&
+        widget.mode == EstimatorMode.Create) {
+      try {
+        await _provider
+            .getShopItemDetails(_provider.selectedAppointmentDetail.promotionId)
+            .then((promotion) {
+          ItemType itemType;
+
+          for (ItemType type in _provider.itemTypes) {
+            if (!type.isProduct()) {
+              itemType = type;
+            }
+          }
+
+          IssueItem issueItem = promotion.getIssueItem(itemType);
+
+          if (_provider.workEstimateRequest.issues.length > 0) {
+            if (_provider.workEstimateRequest.issues[0].recommendations.length > 0) {
+              _provider.workEstimateRequest.issues[0].recommendations[0].items = [issueItem];
+            }
+          }
+
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

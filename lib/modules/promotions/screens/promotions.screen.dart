@@ -128,24 +128,26 @@ class PromotionsState extends State<Promotions> {
   }
 
   _selectPromotion(Promotion promotion) {
-    Provider.of<CreatePromotionProvider>(context).initialise(
-        Provider.of<Auth>(context).authUser.providerId,
-        promotion: promotion);
+    if (promotion.getStatus() != PromotionStatus.Finished ) {
+      Provider.of<CreatePromotionProvider>(context).initialise(
+          Provider.of<Auth>(context).authUser.providerId,
+          promotion: promotion);
 
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return CreatePromotionModal(
-              refreshState: _refreshState,
-            );
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+                  return CreatePromotionModal(
+                    refreshState: _refreshState,
+                  );
+                });
           });
-        });
+    }
   }
 
   _openPromotionCreateModal() {

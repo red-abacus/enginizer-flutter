@@ -9,7 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class ExtraServices extends StatefulWidget {
   static const String route = '/extraServices';
-  static final IconData icon = Icons.map;
+  static final IconData icon = Icons.local_parking;
 
   @override
   _ExtraServicesState createState() => _ExtraServicesState();

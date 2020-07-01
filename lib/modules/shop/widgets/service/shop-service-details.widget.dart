@@ -128,45 +128,51 @@ class ShopServiceDetailsWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Text(
-              shopItem.description,
-              style: TextHelper.customTextStyle(color: gray3, size: 16),
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: Text(
+                shopItem.title,
+                style: TextHelper.customTextStyle(color: gray3, size: 16),
+              ),
             ),
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                      '${this.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: black_text,
-                          fontFamily: null,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14)),
-                  if (shopItem.discount > 0)
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Text(
-                        '(-${shopItem.discount}%)',
-                        style: TextHelper.customTextStyle(color: red, size: 16),
+          Container(
+            margin: EdgeInsets.only(left: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        '${this.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            color: black_text,
+                            fontFamily: null,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14)),
+                    if (shopItem.discount > 0)
+                      Container(
+                        margin: EdgeInsets.only(left: 20),
+                        child: Text(
+                          '(-${shopItem.discount}%)',
+                          style: TextHelper.customTextStyle(color: red, size: 16),
+                        ),
                       ),
-                    ),
-                ],
-              ),
-              Text(
-                  '${finalPrice.toStringAsFixed(1)} ${S.of(context).general_currency}',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: red,
-                      fontFamily: null,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14))
-            ],
+                  ],
+                ),
+                Text(
+                    '${finalPrice.toStringAsFixed(1)} ${S.of(context).general_currency}',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: red,
+                        fontFamily: null,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14))
+              ],
+            ),
           )
         ],
       ),
@@ -186,7 +192,7 @@ class ShopServiceDetailsWidget extends StatelessWidget {
           Text(
             title,
             style: TextHelper.customTextStyle(
-                color: gray, weight: FontWeight.bold, size: 10),
+                color: gray, weight: FontWeight.bold, size: 12),
           )
         ],
       ),

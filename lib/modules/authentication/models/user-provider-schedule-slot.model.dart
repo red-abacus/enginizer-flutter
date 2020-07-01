@@ -5,7 +5,8 @@ class UserProviderScheduleSlot {
   UserProviderScheduleSlot({this.startTime, this.endTime});
 
   factory UserProviderScheduleSlot.fromJson(Map<String, dynamic> json) {
-    return UserProviderScheduleSlot(
-        startTime: json['startTime'], endTime: json['endTime']);
+    return UserProviderScheduleSlot();
+    // TODO
+//        startTime: json['startTime'], endTime: json['endTime']);
   }
 }

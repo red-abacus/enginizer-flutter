@@ -1,4 +1,7 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shop/enums/shop-appointment-type.enum.dart';
@@ -27,7 +30,7 @@ class _ShopServiceAppointmentModalState
   bool _isLastStep = false;
   List<Step> _steps = [];
 
-  ShopAppointmentType appointmentType = ShopAppointmentType.Tow;
+  ShopAppointmentType appointmentType = ShopAppointmentType.Simple;
 
   Map<int, dynamic> _stepStateData = {
     0: {"state": StepState.indexed, "active": true},
@@ -63,7 +66,6 @@ class _ShopServiceAppointmentModalState
   void didChangeDependencies() {
     if (!_initDone) {
       _provider = Provider.of<ShopAppointmentProvider>(context);
-      _provider.initialiseParameters();
 
       setState(() {
         _isLoading = true;
@@ -115,11 +117,8 @@ class _ShopServiceAppointmentModalState
           state: _stepStateData[0]['state'])
     ];
 
-    switch (this.appointmentType) {
-      case ShopAppointmentType.CarWash:
-      case ShopAppointmentType.Paint:
-      case ShopAppointmentType.Service:
-      case ShopAppointmentType.Itp:
+    switch (_provider.shopItem.getShopAppointmentType()) {
+      case ShopAppointmentType.Simple:
         steps.addAll([
           Step(
               isActive: _stepStateData[1]['active'],
@@ -130,8 +129,7 @@ class _ShopServiceAppointmentModalState
               state: _stepStateData[1]['state'])
         ]);
         break;
-      case ShopAppointmentType.Pr:
-      case ShopAppointmentType.Tow:
+      case ShopAppointmentType.Location:
         steps.addAll([
           Step(
               isActive: _stepStateData[1]['active'],
@@ -157,10 +155,10 @@ class _ShopServiceAppointmentModalState
         ]);
         break;
       case ShopAppointmentType.CarRent:
-        // TODO: Handle this case.
+        // TODO
         break;
       case ShopAppointmentType.Rca:
-        // TODO: Handle this case.
+        // TODO
         break;
     }
     return steps;
@@ -214,10 +212,7 @@ class _ShopServiceAppointmentModalState
 
   _next() {
     switch (this.appointmentType) {
-      case ShopAppointmentType.CarWash:
-      case ShopAppointmentType.Paint:
-      case ShopAppointmentType.Service:
-      case ShopAppointmentType.Itp:
+      case ShopAppointmentType.Simple:
         switch (_currentStepIndex) {
           case 0:
             if (_provider.selectedCar != null) {
@@ -237,8 +232,8 @@ class _ShopServiceAppointmentModalState
             break;
         }
         break;
-      case ShopAppointmentType.Pr:
-      case ShopAppointmentType.Tow:
+        break;
+      case ShopAppointmentType.Location:
         switch (_currentStepIndex) {
           case 0:
             if (_provider.selectedCar != null) {
@@ -280,10 +275,8 @@ class _ShopServiceAppointmentModalState
         }
         break;
       case ShopAppointmentType.CarRent:
-        // TODO: Handle this case.
         break;
       case ShopAppointmentType.Rca:
-        // TODO: Handle this case.
         break;
     }
   }
@@ -312,6 +305,33 @@ class _ShopServiceAppointmentModalState
   }
 
   _submit() async {
+    AppointmentRequest appointmentRequest = _provider.getAppointmentRequest();
+    appointmentRequest.userId = Provider.of<Auth>(context).authUser.userId;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider.createAppointment(appointmentRequest)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context);
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.CREATE_APPOINTMENT_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_create_appointment, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _searchCars(String searchString) {

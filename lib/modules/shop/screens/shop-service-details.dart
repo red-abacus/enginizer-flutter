@@ -1,6 +1,7 @@
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/shop/models/shop-item.model.dart';
+import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/screens/shop-service-appointment.modal.dart';
 import 'package:app/modules/shop/screens/shop.dart';
@@ -53,19 +54,26 @@ class _ShopServiceDetailsState extends State<ShopServiceDetails> {
   }
 
   _showAppointment() {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (_) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return ShopServiceAppointmentModal();
+    if (_provider.selectedShopItem.getShopAppointmentType() != null) {
+      Provider.of<ShopAppointmentProvider>(context).initialise();
+      Provider.of<ShopAppointmentProvider>(context).shopItem =
+          _provider.selectedShopItem;
+
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (_) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return ShopServiceAppointmentModal();
+            });
           });
-        });
+    }
   }
 
   _showProviderDetails() {
-    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = _provider.selectedShopItem.providerId;
+    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
+        _provider.selectedShopItem.providerId;
 
     showModalBottomSheet(
         isScrollControlled: true,

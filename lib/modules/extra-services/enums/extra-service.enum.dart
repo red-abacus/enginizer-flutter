@@ -12,6 +12,8 @@ class ExtraServiceUtils {
         return S.of(context).map_services_accommodation;
       case ExtraService.ServiceUnits:
         return S.of(context).map_services_service_auto;
+      case ExtraService.ParkingLots:
+        return S.of(context).map_services_parking_lots;
     }
 
     return '';
@@ -19,6 +21,8 @@ class ExtraServiceUtils {
 
   static String value(ExtraService extraService) {
     switch (extraService) {
+      case ExtraService.ParkingLots:
+        return 'Parking near me';
       case ExtraService.GasStation:
         return 'Gas stations';
       case ExtraService.Atm:
@@ -34,6 +38,7 @@ class ExtraServiceUtils {
 
   static List<ExtraService> getList() {
     return [
+      ExtraService.ParkingLots,
       ExtraService.GasStation,
       ExtraService.Atm,
       ExtraService.Accommodation,
@@ -42,4 +47,4 @@ class ExtraServiceUtils {
   }
 }
 
-enum ExtraService { GasStation, Atm, Accommodation, ServiceUnits }
+enum ExtraService { ParkingLots, GasStation, Atm, Accommodation, ServiceUnits }

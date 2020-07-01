@@ -1,8 +1,8 @@
 import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
-import 'package:app/modules/cars/models/car-brand.model.dart';
-import 'package:app/modules/cars/models/car-model.model.dart';
-import 'package:app/modules/user-details/screens/user-details.dart';
+import 'package:app/modules/shop/enums/shop-appointment-type.enum.dart';
+import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/utils/date_utils.dart';
 
 class ShopItem {
@@ -20,6 +20,7 @@ class ShopItem {
   String currency;
   List<GenericModel> images;
   int createdBy;
+  GenericModel service;
 
   ShopItem(
       {this.id,
@@ -35,7 +36,8 @@ class ShopItem {
       this.type,
       this.currency,
       this.images,
-      this.createdBy});
+      this.createdBy,
+      this.service});
 
   factory ShopItem.fromJson(Map<String, dynamic> json) {
     return ShopItem(
@@ -52,7 +54,10 @@ class ShopItem {
         type: json['type'] != null ? json['type'] : '',
         currency: json['currency'] != null ? json['currency'] : '',
         images: json['images'] != null ? _mapImages(json['images']) : [],
-        createdBy: json['createdBy'] != null ? json['createdBy'] : 0);
+        createdBy: json['createdBy'] != null ? json['createdBy'] : 0,
+        service: json['service'] != null
+            ? GenericModel.fromJson(json['service'])
+            : null);
   }
 
   static _mapImages(List<dynamic> response) {
@@ -64,10 +69,8 @@ class ShopItem {
   }
 
   String getDateTitle() {
-    DateTime startDate =
-    DateUtils.dateFromString(this.startDate, 'dd/MM/yyyy');
-    DateTime endDate =
-    DateUtils.dateFromString(this.endDate, 'dd/MM/yyyy');
+    DateTime startDate = DateUtils.dateFromString(this.startDate, 'dd/MM/yyyy');
+    DateTime endDate = DateUtils.dateFromString(this.endDate, 'dd/MM/yyyy');
 
     String title = '';
 
@@ -84,5 +87,26 @@ class ShopItem {
     }
 
     return title;
+  }
+
+  ShopAppointmentType getShopAppointmentType() {
+    if (service != null) {
+      return service.getShopAppointmentType();
+    }
+  }
+
+  _getPrice() {
+    return this.price - this.discount / 100 * this.price;
+  }
+
+  IssueItem getIssueItem(ItemType type) {
+    return IssueItem(
+        type: type,
+        code: 'PROMO${this.id}',
+        name: this.title,
+        quantity: 1,
+        price: _getPrice(),
+        priceVAT: 0,
+        addition: 0);
   }
 }

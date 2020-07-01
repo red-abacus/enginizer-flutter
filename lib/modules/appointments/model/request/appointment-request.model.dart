@@ -9,6 +9,7 @@ class AppointmentRequest {
   List<int> serviceIds;
   int userId;
   AppointmentProviderType providerType;
+  int promotionId;
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
@@ -22,6 +23,10 @@ class AppointmentRequest {
       'specific':
           providerType == AppointmentProviderType.Specific ? true : false
     };
+
+    if (promotionId != null) {
+      propMap['promotionId'] = promotionId;
+    }
 
     return propMap;
   }

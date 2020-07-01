@@ -1,7 +1,6 @@
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/utils/constants.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
