@@ -50,29 +50,26 @@ class AppointmentsState extends State<Appointments> {
     LocatorManager.getInstance().getActiveAppointment(context);
 
     return Consumer<AppointmentsProvider>(
-      builder: (context, appointmentsProvider, _) =>
-          Scaffold(
-            body: Center(
-              child: _renderAppointments(_isLoading, _provider.appointments),
-            ),
-            floatingActionButton: _floatingActionButton()
+      builder: (context, appointmentsProvider, _) => Scaffold(
+          body: Center(
+            child: _renderAppointments(_isLoading, _provider.appointments),
           ),
+          floatingActionButton: _floatingActionButton()),
     );
   }
 
   _floatingActionButton() {
     return (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Appointments,
-        PermissionsAppointment.CREATE_APPOINTMENT)) ? FloatingActionButton(
-      heroTag: null,
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
-      elevation: 1,
-      onPressed: () => _openAppointmentCreateModal(context),
-      child: Icon(Icons.add),
-    ) :
-    Container();
+            MainPermissions.Appointments,
+            PermissionsAppointment.CREATE_APPOINTMENT))
+        ? FloatingActionButton(
+            heroTag: null,
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 1,
+            onPressed: () => _openAppointmentCreateModal(context),
+            child: Icon(Icons.add),
+          )
+        : Container();
   }
 
   @override
@@ -106,12 +103,8 @@ class AppointmentsState extends State<Appointments> {
       if (error
           .toString()
           .contains(AppointmentsService.GET_APPOINTMENTS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S
-            .of(context)
-            .general_error,
-            S
-                .of(context)
-                .exception_get_appointments, context);
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_appointments, context);
       }
 
       setState(() {
@@ -124,43 +117,35 @@ class AppointmentsState extends State<Appointments> {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_CLIENT)) {
       Provider.of<AppointmentProvider>(context).initialise();
-      Provider
-          .of<AppointmentProvider>(context)
-          .selectedAppointment =
+      Provider.of<AppointmentProvider>(context).selectedAppointment =
           selectedAppointment;
       Navigator.of(context).pushNamed(AppointmentDetails.route);
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER)) {
       Provider.of<AppointmentConsultantProvider>(context).initialise();
-      Provider
-          .of<AppointmentConsultantProvider>(context)
-          .selectedAppointment =
+      Provider.of<AppointmentConsultantProvider>(context).selectedAppointment =
           selectedAppointment;
       Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PERSONNEL)) {
       Provider.of<AppointmentMechanicProvider>(context).initialise();
-      Provider
-          .of<AppointmentMechanicProvider>(context)
-          .selectedAppointment =
+      Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
           selectedAppointment;
       Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
       Provider.of<AppointmentProvider>(context).initialise();
-      Provider
-          .of<AppointmentProvider>(context)
-          .selectedAppointment =
+      Provider.of<AppointmentProvider>(context).selectedAppointment =
           selectedAppointment;
       Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
     }
   }
 
-  _filterAppointments(String string, AppointmentStatusState state,
-      DateTime dateTime) {
+  _filterAppointments(
+      String string, AppointmentStatusState state, DateTime dateTime) {
     _provider.filterAppointments(string, state, dateTime);
     _loadData();
   }
@@ -169,22 +154,20 @@ class AppointmentsState extends State<Appointments> {
     return _isLoading
         ? CircularProgressIndicator()
         : AppointmentsList(
-      appointments: appointments,
-      selectAppointment: _selectAppointment,
-      filterAppointments: _filterAppointments,
-      searchString: _provider.appointmentsRequest.searchString,
-      appointmentStatusState: _provider.appointmentsRequest.state,
-      filterDateTime: _provider.appointmentsRequest.dateTime,
-      downloadNextPage: _loadData,
-      shouldDownload: _provider.shouldDownload(),
-    );
+            appointments: appointments,
+            selectAppointment: _selectAppointment,
+            filterAppointments: _filterAppointments,
+            searchString: _provider.appointmentsRequest.searchString,
+            appointmentStatusState: _provider.appointmentsRequest.state,
+            filterDateTime: _provider.appointmentsRequest.dateTime,
+            downloadNextPage: _loadData,
+            shouldDownload: _provider.shouldDownload(),
+          );
   }
 
   void _openAppointmentCreateModal(BuildContext buildContext) {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
-    Provider
-        .of<ProviderServiceProvider>(context)
-        .createAppointmentState =
+    Provider.of<ProviderServiceProvider>(context).createAppointmentState =
         CreateAppointmentState.SelectCar;
 
     showModalBottomSheet<void>(
@@ -196,8 +179,8 @@ class AppointmentsState extends State<Appointments> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentCreateModal();
-              });
+            return AppointmentCreateModal();
+          });
         });
   }
 }

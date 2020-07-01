@@ -1,10 +1,11 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/shared/widgets/multi-select-dialog.widget.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/shared/widgets/custom-text-field-duration.dart';
 import 'package:app/modules/shared/widgets/single-select-dialog.widget.dart';
 import 'package:app/modules/shop/enums/shop-category-sort.enum.dart';
 import 'package:app/modules/shop/enums/shop-category-type.enum.dart';
 import 'package:app/modules/shop/enums/shop-list-type.enum.dart';
-import 'package:app/modules/shop/models/shop-category.model.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/modules/shop/widgets/cards/shop-item-grid.card.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -21,31 +22,53 @@ class ShopListWidget extends StatelessWidget {
   final Function selectListType;
   final ShopCategorySort searchCategorySort;
   final ShopListType shopListType;
+  final List<ShopItem> items;
+  bool shouldDownload = true;
+  final Function downloadNextPage;
 
   String searchString;
-  List<ShopCategory> searchShopCategories;
-  List<ShopCategory> categories;
-  ShopCategoryType shopCategoryType;
+  final List<ServiceProviderItem> serviceProviderItems;
+  final ServiceProviderItem selectedServiceProviderItem;
+  final ShopCategoryType shopCategoryType;
+
+  ScrollController _scrollController;
 
   ShopListWidget(
-      {this.searchShopCategories,
+      {this.serviceProviderItems,
       this.searchString,
       this.filterShopItems,
-      this.categories,
+      this.selectedServiceProviderItem,
       this.searchCategorySort,
       this.shopCategoryType,
       this.selectCategoryType,
       this.selectShopItem,
       this.shopListType,
-      this.selectListType});
+      this.selectListType,
+      this.items,
+      this.shouldDownload,
+      this.downloadNextPage});
 
   @override
   Widget build(BuildContext context) {
+    if (_scrollController == null) {
+      _scrollController = ScrollController();
+      _scrollController.addListener(() {
+        if (_scrollController.position.atEdge) {
+          if (_scrollController.position.pixels == 0) {
+          } else {
+            if (shouldDownload) {
+              this.downloadNextPage();
+            }
+          }
+        }
+      });
+    }
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       child: Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
+          controller: _scrollController,
           padding: EdgeInsets.only(bottom: 60),
           child: Column(
             children: <Widget>[
@@ -54,7 +77,6 @@ class ShopListWidget extends StatelessWidget {
               _buildListingWidget(context),
               _buildTabBar(context),
               _buildList(context)
-//            _buildList(context),
             ],
           ),
         ),
@@ -64,39 +86,39 @@ class ShopListWidget extends StatelessWidget {
 
   Widget _buildSearchWidget(BuildContext context) {
     return Container(
-      child: TextField(
-        key: Key('searchBar'),
-        autofocus: false,
-        decoration: InputDecoration(
-            labelText: S.of(context).online_shop_search_title,
-            suffixIcon: Icon(Icons.search)),
-        onChanged: (val) {
-          this.filterShopItems(val, this.searchShopCategories);
+      child: CustomDebouncerTextField(
+        labelText: S.of(context).online_shop_search_title,
+        currentValue: searchString != null ? searchString : '',
+        listener: (val) {
+          this.filterShopItems(
+              val, this.selectedServiceProviderItem, searchCategorySort);
         },
       ),
     );
   }
 
   _showCategoryPicker(BuildContext context) async {
-    List<MultiSelectDialogItem<ShopCategory>> items = [];
+    List<SingleSelectDialogItem<ServiceProviderItem>> items = [];
 
-    this.categories.forEach((category) {
-      items.add(MultiSelectDialogItem(category, category.name));
+    this.serviceProviderItems.forEach((item) {
+      items.add(
+          SingleSelectDialogItem(item, item.getTranslatedServiceName(context)));
     });
 
-    Set<ShopCategory> categories = await showDialog<Set<ShopCategory>>(
+    ServiceProviderItem item = await showDialog<ServiceProviderItem>(
       context: context,
       builder: (BuildContext context) {
-        return MultiSelectDialog(
+        return SingleSelectDialog(
           items: items,
-          initialSelectedValues: searchShopCategories.toSet(),
+          initialSelectedValue: selectedServiceProviderItem,
           title: S.of(context).online_shop_search_category_select_title,
         );
       },
     );
 
-    this.filterShopItems(
-        this.searchString, categories.toList(), searchCategorySort);
+    if (item != null) {
+      this.filterShopItems(this.searchString, item, searchCategorySort);
+    }
   }
 
   _showOrderPicker(BuildContext context) async {
@@ -119,7 +141,7 @@ class ShopListWidget extends StatelessWidget {
     );
 
     this.filterShopItems(
-        this.searchString, this.searchShopCategories, selectedSort);
+        this.searchString, this.selectedServiceProviderItem, selectedSort);
   }
 
   Widget _buildFilterWidget(BuildContext context) {
@@ -128,25 +150,26 @@ class ShopListWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              child: Container(
-                margin: EdgeInsets.only(right: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(width: 0.5, color: gray),
+          if (shopCategoryType == ShopCategoryType.SERVICES)
+            Expanded(
+              flex: 1,
+              child: GestureDetector(
+                child: Container(
+                  margin: EdgeInsets.only(right: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(width: 0.5, color: gray),
+                  ),
+                  height: 40,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[_categoryText(context)],
+                  ),
                 ),
-                height: 40,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[_categoryText(context)],
-                ),
+                onTap: () => _showCategoryPicker(context),
               ),
-              onTap: () => _showCategoryPicker(context),
             ),
-          ),
           Expanded(
             flex: 1,
             child: GestureDetector(
@@ -201,9 +224,9 @@ class ShopListWidget extends StatelessWidget {
   }
 
   _categoryText(BuildContext context) {
-    String title = (this.searchShopCategories.isEmpty)
+    String title = (this.selectedServiceProviderItem == null)
         ? S.of(context).online_shop_search_category_title
-        : _titleFromCategories(this.searchShopCategories);
+        : this.selectedServiceProviderItem.getTranslatedServiceName(context);
 
     return Row(
       children: <Widget>[
@@ -260,16 +283,6 @@ class ShopListWidget extends StatelessWidget {
     );
   }
 
-  _titleFromCategories(List<ShopCategory> categories) {
-    String title = '';
-
-    categories.forEach((category) {
-      title = title.isEmpty ? category.name : '$title, ${category.name}';
-    });
-
-    return title;
-  }
-
   _buildTabBar(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
@@ -322,18 +335,20 @@ class ShopListWidget extends StatelessWidget {
               shrinkWrap: true,
               itemBuilder: (ctx, index) {
                 return ShopItemCard(
-                    index: index, selectShopItem: selectShopItem);
+                    shopItem: this.items[index],
+                    selectShopItem: selectShopItem);
               },
-              itemCount: 10,
+              itemCount: this.items.length,
             )
           : GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               primary: false,
-              itemCount: 10,
+              itemCount: this.items.length,
               itemBuilder: (BuildContext context, int index) {
                 return ShopItemGrid(
-                    index: index, selectShopItem: selectShopItem);
+                    shopItem: this.items[index],
+                    selectShopItem: selectShopItem);
               },
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: gridCount,

@@ -41,6 +41,7 @@ class AppointmentDetail {
   AppointmentTransportInfo appointmentTransportInfo;
   GenericModel personnel;
   List<GenericModel> children;
+  int promotionId;
 
   AuctionMapDirections auctionMapDirections;
 
@@ -66,7 +67,8 @@ class AppointmentDetail {
       this.seller,
       this.appointmentTransportInfo,
       this.personnel,
-      this.children});
+      this.children,
+      this.promotionId});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -116,7 +118,8 @@ class AppointmentDetail {
             ? GenericModel.fromJson(json['personalProductive'])
             : null,
         children:
-            json['children'] != null ? _mapChildren(json['children']) : []);
+            json['children'] != null ? _mapChildren(json['children']) : [],
+        promotionId: json['promotionId'] != null ? json['promotionId'] : null);
   }
 
   static _mapChildren(List<dynamic> response) {

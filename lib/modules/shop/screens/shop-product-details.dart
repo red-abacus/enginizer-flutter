@@ -1,13 +1,20 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
+import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
+import 'package:app/modules/shop/screens/shop-seller-details.modal.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ShopProductDetails extends StatefulWidget {
@@ -26,6 +33,9 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
 
   _ShopProductDetailsState({this.route});
 
+  bool _initDone = false;
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +47,49 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
         ),
         iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
       ),
-      body: Center(
-        child: _buildContent(context),
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : _buildContent(context),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initDone) {
+      _provider = Provider.of<ShopProvider>(context);
+
+      _loadData();
+
+      _initDone = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .getCarDetails(_provider.selectedShopItem.carId)
+          .then((_) async {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_car_details, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   _buildContent(BuildContext context) {
@@ -50,11 +99,11 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _imageWidget(),
+            if (_provider.selectedShopItem.images.length > 0) _imageWidget(),
             Padding(
               padding: EdgeInsets.only(left: 20, top: 20, right: 20),
               child: TextWidget(
-                'Seat Ibiza',
+                _provider.carDetails?.brand?.name,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -62,54 +111,70 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
             Padding(
               padding: EdgeInsets.only(top: 5, left: 20, right: 20),
               child: TextWidget(
-                '1997, Albastru',
+                '${_provider.carDetails?.year?.name}, ${_provider.carDetails.color.translateColorName(context)}',
                 fontSize: 14,
               ),
             ),
             Padding(
                 padding: EdgeInsets.only(left: 20, right: 20, top: 25),
-                child: TextWidget('Benzina, Transmisie manuala')),
+                child: TextWidget(
+                    '${_provider.carDetails?.power?.name}, ${_provider.carDetails?.motor?.name}')),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: TextWidget('102 CP, 120 kW'),
+              child: TextWidget(
+                  '${NumberFormat.decimalPattern().format(_provider.carDetails.mileage)} ${S.of(context).general_mileage}'),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: TextWidget('227.000 km'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: TextWidget('VIN: VZZTA34AAGH6AWIXCZ'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: TextWidget('CJ-10-GTI'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: TextWidget('RCA valabil pana in: 01.03.2020'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: TextWidget('ITP valabil pana in: 01.03.2020'),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
-                child: FlatButton.icon(
-                  icon: Icon(Icons.phone, color: Colors.white),
-                  color: red,
-                  label: Text(
-                    S.of(context).online_shop_call,
-                    style: TextHelper.customTextStyle(
-                        color: Colors.white),
-                  ),
-                  onPressed: () {
-                    _callSeller();
-                  },
-                ),
+            if (_provider.carDetails.vin != null)
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: TextWidget(
+                    '${S.of(context).cars_create_vin}: ${_provider.carDetails.vin}'),
               ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: TextWidget(_provider.carDetails.registrationNumber),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: TextWidget(
+                  '${S.of(context).car_details_rca_availability}: ${DateUtils.stringFromDate(_provider.carDetails.rcaExpireDate, 'dd.MM.yyyy')}'),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: TextWidget(
+                  '${S.of(context).car_details_itp_availability}: ${DateUtils.stringFromDate(_provider.carDetails.itpExpireDate, 'dd.MM.yyyy')}'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: FlatButton.icon(
+                    icon: Icon(Icons.phone, color: Colors.white),
+                    color: red,
+                    label: Text(
+                      S.of(context).online_shop_call,
+                      style: TextHelper.customTextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      _callSeller();
+                    },
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 10),
+                  child: FlatButton(
+                    color: red,
+                    child: Text(
+                      S.of(context).online_shop_appointment_seller_details,
+                      style: TextHelper.customTextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      _showSellerDetails();
+                    },
+                  ),
+                ),
+              ],
             )
           ],
         ),
@@ -124,41 +189,49 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
           outer: true,
           itemBuilder: (BuildContext context, int index) {
             return Image.network(
-              'https://www.extremetech.com/wp-content/uploads/2019/12/SONATA-hero-option1-764A5360-edit.jpg',
+              _provider.selectedShopItem.images[index].name,
               fit: BoxFit.fill,
             );
           },
           autoplay: true,
-          itemCount: 10,
+          itemCount: _provider.selectedShopItem.images.length,
           scrollDirection: Axis.horizontal,
           pagination: new SwiperPagination(
               margin: new EdgeInsets.all(0.0),
               builder: new SwiperCustomPagination(
                   builder: (BuildContext context, SwiperPluginConfig config) {
-                    return new ConstrainedBox(
-                      child: new Row(
-                        children: <Widget>[
-                          new Expanded(
-                            child: new Align(
-                              alignment: Alignment.center,
-                              child: new DotSwiperPaginationBuilder(
+                return new ConstrainedBox(
+                  child: new Row(
+                    children: <Widget>[
+                      new Expanded(
+                        child: new Align(
+                          alignment: Alignment.center,
+                          child: new DotSwiperPaginationBuilder(
                                   color: gray_80,
                                   activeColor: red,
                                   size: 10.0,
                                   activeSize: 10.0)
-                                  .build(context, config),
-                            ),
-                          )
-                        ],
-                      ),
-                      constraints: new BoxConstraints.expand(height: 50.0),
-                    );
-                  }))),
+                              .build(context, config),
+                        ),
+                      )
+                    ],
+                  ),
+                  constraints: new BoxConstraints.expand(height: 50.0),
+                );
+              }))),
     );
   }
 
   _callSeller() async {
-    const url = "tel:40123456789";
+    String url;
+
+    if (_provider.selectedShopItem.user != null) {
+      url = 'tel:${_provider.selectedShopItem.user.phoneNumber}';
+    }
+    else {
+
+    }
+
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -167,7 +240,31 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
     }
   }
 
-  _showAppointment() {
+  _showSellerDetails() {
+    if (_provider.selectedShopItem.providerId != null) {
+      Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
+          _provider.selectedShopItem.providerId;
 
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (_) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+              return ServiceDetailsModal();
+            });
+          });
+    }
+    else {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (_) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+                  return ShopSellerDetailsModal();
+                });
+          });
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:app/modules/appointments/model/generic-model.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:clippy_flutter/clippy_flutter.dart';
@@ -7,10 +9,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:app/generated/l10n.dart';
 
 class ShopItemCard extends StatelessWidget {
+  final ShopItem shopItem;
   final Function selectShopItem;
-  final int index;
 
-  ShopItemCard({this.index, this.selectShopItem});
+  ShopItemCard({this.selectShopItem, this.shopItem});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class ShopItemCard extends StatelessWidget {
           color: Colors.white,
           child: InkWell(
             splashColor: Theme.of(context).primaryColor,
-            onTap: () => this.selectShopItem(),
+            onTap: () => this.selectShopItem(shopItem),
             child: ClipRRect(
               child: Container(
                 height: 120,
@@ -73,13 +75,6 @@ class ShopItemCard extends StatelessWidget {
                         ),
                       ),
                     ),
-//                    _titleContainer(),
-//                    _detailsContainer(),
-//                    _priceContainer(context),
-//                    _detailsButton(context),
-//                    _valabilityContainer(context),
-
-//                    _statusContainer(context),
                   ],
                 ),
               ),
@@ -91,38 +86,46 @@ class ShopItemCard extends StatelessWidget {
   }
 
   _pointContainer(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 5,
-            height: 40,
-            color: red_dark,
-          ),
-          Point(
-            triangleHeight: 10,
-            edge: Edge.RIGHT,
-            child: Container(
-              color: red_light,
-              width: 50,
-              height: 40,
-              child: Center(
-                  child: Text(
-                '-50%',
-                style: TextHelper.customTextStyle(color: Colors.white),
-              )),
+    return this.shopItem.discount > 0
+        ? Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 5,
+                  height: 40,
+                  color: red_dark,
+                ),
+                Point(
+                  triangleHeight: 10,
+                  edge: Edge.RIGHT,
+                  child: Container(
+                    color: red_light,
+                    width: 50,
+                    height: 40,
+                    child: Center(
+                        child: Text(
+                      '-50%',
+                      style: TextHelper.customTextStyle(color: Colors.white),
+                    )),
+                  ),
+                )
+              ],
             ),
           )
-        ],
-      ),
-    );
+        : Container();
   }
 
   _imageContainer(BuildContext context) {
+    GenericModel image;
+
+    if (this.shopItem.images.length > 0) {
+      image = this.shopItem.images.first;
+    }
+
     return Container(
-        width: 120,
-        color: index % 2 == 0 ? Colors.white : light_gray_2,
+        width: 100,
+        color: image != null ? Colors.white : light_gray_2,
         child: Stack(
           children: <Widget>[
             Row(
@@ -131,9 +134,11 @@ class ShopItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    child: index % 2 == 0
+                    child: image != null
                         ? Image.network(
-                            'https://s12emagst.akamaized.net/products/16094/16093852/images/res_79d7f7169b8c13ec5cbb1142dcaa4499_450x450_tiqb.jpg',
+                            image.name,
+                            width: 100,
+                            height: 120,
                             fit: BoxFit.fitWidth,
                           )
                         : Column(
@@ -155,14 +160,14 @@ class ShopItemCard extends StatelessWidget {
                                       .of(context)
                                       .online_shop_card_no_photos_title,
                                   style: TextHelper.customTextStyle(
-                                      color: gray2, size: 12),
+                                      color: gray2, size: 10),
                                 ),
                               ),
                             ],
                           ))
               ],
             ),
-            if (index % 2 == 0) _pointContainer(context),
+            _pointContainer(context),
           ],
         ));
   }
@@ -170,7 +175,7 @@ class ShopItemCard extends StatelessWidget {
   _titleContainer() {
     return Container(
       margin: EdgeInsets.only(top: 10),
-      child: Text('Pickup & Return',
+      child: Text(this.shopItem.title,
           maxLines: 2,
           style: TextStyle(
               color: Colors.black87,
@@ -183,8 +188,7 @@ class ShopItemCard extends StatelessWidget {
   _detailsContainer() {
     return Container(
       margin: EdgeInsets.only(top: 10),
-      child: Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent gravida condimentum purus ut rhoncus. Etiam malesuada orci turpis, a varius orci sagittis at. Curabitur rutrum eget quam et ullamcorper. Nullam vel ante rhoncus, aliquet lacus vel, sodales nisi. Suspendisse potenti. Curabitur in purus varius, fermentum ante id, porttitor nunc. Donec sit amet eros aliquam, pellentesque arcu et, ultrices sem. Morbi eu turpis quis enim tincidunt mollis. Maecenas eget ante euismod, dictum leo ac, fringilla neque. Phasellus eget arcu massa. Aenean imperdiet ullamcorper nisi et hendrerit. ',
+      child: Text(this.shopItem.description,
           overflow: TextOverflow.ellipsis,
           maxLines: 10,
           style: TextStyle(
@@ -196,14 +200,34 @@ class ShopItemCard extends StatelessWidget {
   }
 
   _priceContainer(BuildContext context) {
-    return Container(
-      child: Text('1200 LEI',
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              color: red,
-              fontFamily: null,
-              fontWeight: FontWeight.normal,
-              fontSize: 14)),
+    double finalPrice = this.shopItem.price -
+        this.shopItem.discount / 100 * this.shopItem.price;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (this.shopItem.discount > 0)
+          Container(
+            child: Text('${this.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    color: black_text,
+                    fontFamily: null,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14)),
+          ),
+        Container(
+          child: Text(
+              '${finalPrice.toStringAsFixed(1)} ${S.of(context).general_currency}',
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: red,
+                  fontFamily: null,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14)),
+        )
+      ],
     );
   }
 
@@ -248,14 +272,12 @@ class ShopItemCard extends StatelessWidget {
   }
 
   _valabilityContainer(BuildContext context) {
-    String title = '20 Mai - 15 Iunie';
-
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Text(
-        title,
-        style:
-            TextHelper.customTextStyle(color: black_text, weight: FontWeight.bold, size: 12),
+        shopItem.getDateTitle(),
+        style: TextHelper.customTextStyle(
+            color: black_text, weight: FontWeight.bold, size: 12),
       ),
     );
   }

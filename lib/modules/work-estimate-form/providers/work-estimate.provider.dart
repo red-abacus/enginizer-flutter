@@ -9,6 +9,9 @@ import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/promotions/services/promotion.service.dart';
+import 'package:app/modules/shop/models/shop-item.model.dart';
+import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/issue-recommendation-status.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
@@ -29,6 +32,7 @@ class WorkEstimateProvider with ChangeNotifier {
   WorkEstimatesService _workEstimatesService = inject<WorkEstimatesService>();
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
   BidsService _bidsService = inject<BidsService>();
+  ShopService _shopService = inject<ShopService>();
 
   static final Map<String, dynamic> initialEstimatorFormState = {
     'type': null,
@@ -441,6 +445,16 @@ class WorkEstimateProvider with ChangeNotifier {
           providerId, startDate, endDate);
       notifyListeners();
       return timetable;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<ShopItem> getShopItemDetails(int promotionId) async {
+    try {
+      ShopItem shopItem = await _shopService.getShopItemDetails(promotionId);
+      notifyListeners();
+      return shopItem;
     } catch (error) {
       throw (error);
     }

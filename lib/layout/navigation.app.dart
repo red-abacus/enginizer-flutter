@@ -13,7 +13,6 @@ import 'package:app/modules/consultant-user-details/screens/user-details-consult
 import 'package:app/modules/extra-services/screens/extra-services.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/orders/screens/orders.dart';
-import 'package:app/modules/parking-lots/screens/parking-lots.dart';
 import 'package:app/modules/parts/screens/parts.dart';
 import 'package:app/modules/promotions/screens/promotions.screen.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
@@ -90,12 +89,6 @@ class NavigationApp extends StatefulWidget {
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PROMOTIONS)) {
       items
           .add(new DrawerItem('Promotions', Promotions.route, Promotions.icon));
-    }
-
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PARKING_LOTS)) {
-      items.add(
-          new DrawerItem('Parking Lots', ParkingLots.route, ParkingLots.icon));
     }
 
     if (PermissionsManager.getInstance().hasAccess(
@@ -273,8 +266,6 @@ class NavigationAppState extends State<NavigationApp> {
         return Orders();
       case Promotions.route:
         return Promotions();
-      case ParkingLots.route:
-        return ParkingLots();
       case ExtraServices.route:
         return ExtraServices();
       default:

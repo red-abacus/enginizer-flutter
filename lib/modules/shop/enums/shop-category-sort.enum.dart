@@ -13,6 +13,17 @@ class ShopCategorySortUtils {
     return '';
   }
 
+  static String value(ShopCategorySort shopCategorySort) {
+    switch (shopCategorySort) {
+      case ShopCategorySort.PRICE:
+        return 'price';
+        break;
+      case ShopCategorySort.DATE:
+        return 'endDate';
+        break;
+    }
+  }
+
   static List<ShopCategorySort> getList() {
     return [ShopCategorySort.PRICE, ShopCategorySort.DATE];
   }

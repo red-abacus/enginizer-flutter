@@ -53,7 +53,7 @@ class ServiceProvider {
             ? ServiceProviderRating.fromJson(json["ratingDto"])
             : null,
         isVATPayer: json['isVATPayer'] != null ? json['isVATPayer'] : true,
-        userProviderSchedules: _mapUserProviderSchedules(json['schedule']));
+        userProviderSchedules: json['schedule'] != null ? _mapUserProviderSchedules(json['schedule']) : []);
   }
 
   Map<String, dynamic> toJson() {
