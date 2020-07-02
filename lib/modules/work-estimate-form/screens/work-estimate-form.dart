@@ -114,6 +114,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 _provider.serviceProviderId, startDate, endDate)
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
+              widget.mode == EstimatorMode.ReadOnlyHistory ||
               widget.mode == EstimatorMode.CreateFinal ||
               widget.mode == EstimatorMode.Client ||
               widget.mode == EstimatorMode.ClientAccept ||
@@ -144,7 +145,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _checkAppointmentPromotion() async {
-    if (_provider.selectedAppointmentDetail.promotionId != null &&
+    if (_provider.selectedAppointmentDetail != null &&
+        _provider.selectedAppointmentDetail.promotionId != null &&
         widget.mode == EstimatorMode.Create) {
       try {
         await _provider
@@ -161,8 +163,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           IssueItem issueItem = promotion.getIssueItem(itemType);
 
           if (_provider.workEstimateRequest.issues.length > 0) {
-            if (_provider.workEstimateRequest.issues[0].recommendations.length > 0) {
-              _provider.workEstimateRequest.issues[0].recommendations[0].items = [issueItem];
+            if (_provider.workEstimateRequest.issues[0].recommendations.length >
+                0) {
+              _provider.workEstimateRequest.issues[0].recommendations[0].items =
+                  [issueItem];
             }
           }
 
@@ -374,6 +378,16 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _showProposedDateModal()));
         break;
+      case EstimatorMode.ReadOnlyHistory:
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.print),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).estimator_print,
+            labelStyle: TextHelper.customTextStyle(
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
+            onTap: () => _print()));
+        break;
       default:
         break;
     }
@@ -407,19 +421,16 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       case EstimatorMode.CreatePr:
         totalCost = _provider.workEstimateRequest.totalCost();
         break;
-      case EstimatorMode.Edit:
-        totalCost = _provider.workEstimateDetails?.totalCost;
-        break;
       case EstimatorMode.CreateFinal:
         break;
       case EstimatorMode.ReadOnly:
+      case EstimatorMode.ReadOnlyHistory:
+      case EstimatorMode.Edit:
+      case EstimatorMode.ClientAccept:
         totalCost = _provider.workEstimateDetails?.totalCost;
         break;
       case EstimatorMode.Client:
         totalCost = _provider.selectedRecommendationTotalCost();
-        break;
-      case EstimatorMode.ClientAccept:
-        totalCost = _provider.workEstimateDetails?.totalCost;
         break;
     }
 
@@ -938,5 +949,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _selectDateEntry(DateEntry dateEntry) {
     _provider.workEstimateRequest.dateEntry = dateEntry;
+  }
+
+  _print() {
+    // TODO - need to print work estimate
   }
 }

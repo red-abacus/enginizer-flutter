@@ -63,6 +63,7 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
 
   _addContainer(BuildContext context) {
     return estimatorMode == EstimatorMode.ReadOnly ||
+            estimatorMode == EstimatorMode.ReadOnlyHistory ||
             estimatorMode == EstimatorMode.Client ||
             estimatorMode == EstimatorMode.ClientAccept
         ? Container()

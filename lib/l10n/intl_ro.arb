@@ -297,6 +297,7 @@
   "estimator_accept_modal_step2_title": "Selectează locația",
   "estimator_accept_modal_step3_title": "Alege furnizor",
   "estimator_accept_modal_step3_alert": "În modul Licitație, service-urile vor licita pentru a efectua transportul.",
+  "estimator_print": "Printează",
   "import_item_imported_title": "Importator",
   "import_item_imported_manufacturer": "Producător",
   "import_item_status_title": "Status",

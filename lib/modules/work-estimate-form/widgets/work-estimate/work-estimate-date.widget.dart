@@ -33,6 +33,7 @@ class WorkEstimateDateWidgetState extends State<WorkEstimateDateWidget> {
         dateEntrySelected: _dateEntrySelected,
         dateEntry: widget.dateEntry,
         disableSelect: widget.estimatorMode == EstimatorMode.ReadOnly ||
+            widget.estimatorMode == EstimatorMode.ReadOnlyHistory ||
             widget.estimatorMode == EstimatorMode.Client,
       ),
     );

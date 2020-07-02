@@ -18,7 +18,6 @@ import 'package:app/utils/environment.constants.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:http_parser/http_parser.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CarService {
   static String CAR_FUEL_EXCEPITON = 'GET_FUEL_FAILED';

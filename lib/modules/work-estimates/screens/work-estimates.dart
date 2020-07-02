@@ -1,7 +1,12 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
+import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
+import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
+import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimates/enums/work-estimate-sort.enum.dart';
+import 'package:app/modules/work-estimates/models/work-estimate.model.dart';
 import 'package:app/modules/work-estimates/providers/work-estimates.provider.dart';
 import 'package:app/modules/work-estimates/widgets/work-estimates-list.widget.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -96,5 +101,19 @@ class WorkEstimatesState extends State<WorkEstimates> {
     _loadData();
   }
 
-  _selectWorkEstimate() {}
+  _selectWorkEstimate(WorkEstimate workEstimate) {
+    Provider.of<WorkEstimateProvider>(context)
+        .refreshValues(EstimatorMode.ReadOnlyHistory);
+    Provider.of<WorkEstimateProvider>(context).workEstimateId = workEstimate.id;
+    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
+        workEstimate.serviceProvider.id;
+    Provider.of<WorkEstimateProvider>(context).shouldAskForPr = false;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WorkEstimateForm(
+              mode: EstimatorMode.ReadOnlyHistory, dateEntry: null)),
+    );
+  }
 }

@@ -305,6 +305,7 @@
   "estimator_accept_modal_step2_title": "Select location",
   "estimator_accept_modal_step3_title": "Select provider",
   "estimator_accept_modal_step3_alert": "In Auction mode, the services will bid to carry out your transport",
+  "estimator_print": "Print",
   "import_item_imported_title": "Importer",
   "import_item_imported_manufacturer": "Manufacturer",
   "import_item_status_title": "Status",

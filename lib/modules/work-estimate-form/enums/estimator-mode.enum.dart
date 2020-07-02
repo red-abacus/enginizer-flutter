@@ -4,5 +4,6 @@ enum EstimatorMode { Create,
   CreateFinal,
   CreatePr,
   ReadOnly,
+  ReadOnlyHistory,
   Client,
   ClientAccept }

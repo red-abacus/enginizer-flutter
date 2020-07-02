@@ -190,6 +190,7 @@ class WorkEstimateIssueWidget extends StatelessWidget {
   _getRemoveButton(BuildContext context, IssueItem issueItem) {
     switch (estimatorMode) {
       case EstimatorMode.ReadOnly:
+      case EstimatorMode.ReadOnlyHistory:
       case EstimatorMode.Client:
       case EstimatorMode.ClientAccept:
       case EstimatorMode.Edit:

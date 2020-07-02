@@ -68,7 +68,7 @@ class IssueItem {
                 json['availableFrom'], 'dd/MM/yyyy HH:mm')
             : null,
         warranty: json['warranty'] != null ? json['warranty'] : 0,
-        addition: json['addition'] != null ? json['addition'] : null,
+        addition: json['addition'] != null ? double.parse(json['addition'].toString()) : null,
         recommendationId:
             json['recommendationId'] != null ? json['recommendationId'] : null,
         issueId: json['issueId'] != null ? json['issueId'] : null,
