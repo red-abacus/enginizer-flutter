@@ -1,6 +1,7 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -457,6 +458,17 @@ class WorkEstimateProvider with ChangeNotifier {
       return shopItem;
     } catch (error) {
       throw (error);
+    }
+  }
+
+  Future<GenericModel> getWorkEstimatePdf(int workEstimateId) async {
+    try {
+      GenericModel genericModel =
+          await _workEstimatesService.getWorkEstimatePdf(workEstimateId);
+      notifyListeners();
+      return genericModel;
+    } catch (error) {
+      throw(error);
     }
   }
 }

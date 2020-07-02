@@ -701,5 +701,6 @@
   "exception_car_mark_as_sold": "There was an error trying to mark car as sold.",
   "exception_get_shop_items": "There was an error trying to load shop offers.",
   "exception_get_invoices": "There was an error trying to load invoices.",
-  "exception_get_invoice_details": "There was an error trying to load invoice details."
+  "exception_get_invoice_details": "There was an error trying to load invoice details.",
+  "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf."
 }

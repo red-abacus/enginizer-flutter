@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/invoices/models/invoice-details.model.dart';
 import 'package:app/modules/invoices/models/requests/invoices-request.model.dart';
 import 'package:app/modules/invoices/models/responses/invoices-response.model.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
-import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
 import 'package:app/modules/work-estimates/models/request/work-estimates-request.model.dart';
 import 'package:app/modules/work-estimates/models/responses/work-estimate-response.model.dart';
 import 'package:app/modules/work-estimates/models/work-estimate.model.dart';
@@ -35,6 +35,8 @@ class WorkEstimatesService {
   static const String GET_INVOICES_EXCEPTION = 'GET_INVOICES_EXCEPTION';
   static const String GET_INVOICE_DETAILS_EXCEPTION =
       'GET_INVOICE_DETAILS_EXCEPTION';
+  static const String GET_WORK_ESTIMATE_PDF_EXCEPTION =
+      'GET_WORK_ESTIMATE_PDF_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -57,6 +59,10 @@ class WorkEstimatesService {
   static const String _WORK_ESTIMATE_IMPORT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_IMPORT_SUFFIX = '/items/import';
+
+  static const String _GET_WORK_ESTIMATE_PDF_PREFIX =
+      '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
+  static const String _GET_WORK_ESTIMATE_PDF_SUFFIX = '/download';
 
   static const String _GET_INVOICES_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/invoices';
@@ -241,6 +247,20 @@ class WorkEstimatesService {
     }
   }
 
+  Future<GenericModel> getWorkEstimatePdf(int workEstimateId) async {
+    try {
+      final response = await _dio.get(_buildGetWorkEstimatePdf(workEstimateId));
+
+      if (response.statusCode == 200) {
+        return GenericModel.fromJson(response.data);
+      } else {
+        return throw Exception(GET_WORK_ESTIMATE_PDF_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_WORK_ESTIMATE_PDF_EXCEPTION);
+    }
+  }
+
   _buildAcceptWorkEstimate(int workEstimateId) {
     return _WORK_ESTIMATE_ACCEPT_PREFIX +
         workEstimateId.toString() +
@@ -263,5 +283,11 @@ class WorkEstimatesService {
     return _WORK_ESTIMATE_IMPORT_PREFIX +
         workEstimateId.toString() +
         _WORK_ESTIMATE_IMPORT_SUFFIX;
+  }
+
+  _buildGetWorkEstimatePdf(int workEstimateId) {
+    return _GET_WORK_ESTIMATE_PDF_PREFIX +
+        workEstimateId.toString() +
+        _GET_WORK_ESTIMATE_PDF_SUFFIX;
   }
 }

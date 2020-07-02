@@ -700,5 +700,6 @@
   "exception_car_mark_as_sold": "A intervenit o problemă la marcarea mașinii că vândută.",
   "exception_get_shop_items": "A intervenit o problemă la încărcarea ofertelor din magazin.",
   "exception_get_invoices": "A intervenit o problemă la încărcarea facturilor.",
-  "exception_get_invoice_details": "A intervenit o problemă la încărcarea detaliilor facturii."
+  "exception_get_invoice_details": "A intervenit o problemă la încărcarea detaliilor facturii.",
+  "exception_get_work_estimate_pdf": "A intervenit o problemă încărcarea PDF-ului."
 }

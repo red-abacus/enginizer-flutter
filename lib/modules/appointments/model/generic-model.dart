@@ -5,8 +5,10 @@ class GenericModel {
   String name;
   String profilePhoto;
   String fileName;
+  String value;
 
-  GenericModel({this.id, this.name, this.profilePhoto, this.fileName});
+  GenericModel(
+      {this.id, this.name, this.profilePhoto, this.fileName, this.value});
 
   factory GenericModel.fromJson(Map<String, dynamic> json) {
     return GenericModel(
@@ -14,7 +16,8 @@ class GenericModel {
         name: json['name'],
         profilePhoto:
             json['profilePhotoUrl'] != null ? json['profilePhotoUrl'] : '',
-        fileName: json['fileName'] != null ? json['fileName'] : '');
+        fileName: json['fileName'] != null ? json['fileName'] : '',
+        value: json['value'] != null ? json['value'] : null);
   }
 
   factory GenericModel.imageFromJson(Map<String, dynamic> json) {
@@ -28,14 +31,14 @@ class GenericModel {
       case 'SERVICE':
       case 'ITP_SERVICE':
         return ShopAppointmentType.Simple;
-        // TODO - need to check appointment for this
+      // TODO - need to check appointment for this
       case 'TOW_SERVICE':
       case 'PICKUP_RETURN':
         return ShopAppointmentType.Location;
-    // TODO - need to check appointment for this
+      // TODO - need to check appointment for this
       case 'RENT_SERVICE':
         return ShopAppointmentType.CarRent;
-    // TODO - need to check appointment for this
+      // TODO - need to check appointment for this
       case 'RCA_SERVICE':
         return ShopAppointmentType.Rca;
     }

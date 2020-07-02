@@ -67,7 +67,7 @@ dependencies:
   webview_flutter: ^0.3.22+1
   photo_view: ^0.9.2
   dotted_decoration: ^1.2.1
-
+  printing: ^3.5.0
 
 dev_dependencies:
   flutter_test:

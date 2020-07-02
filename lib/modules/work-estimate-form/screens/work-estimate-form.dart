@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
@@ -42,7 +43,9 @@ import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class WorkEstimateForm extends StatefulWidget {
   static const String route =
@@ -952,6 +955,28 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _print() {
-    // TODO - need to print work estimate
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _provider
+          .getWorkEstimatePdf(_provider.workEstimateId)
+          .then((model) async {
+            // TODO - need to check if widget is working
+        await Printing.layoutPdf(onLayout: (_) => base64.decode(model.value));
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_PDF_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_pdf, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }
