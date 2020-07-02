@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/invoices/models/invoice-details.model.dart';
@@ -247,16 +248,23 @@ class WorkEstimatesService {
     }
   }
 
-  Future<GenericModel> getWorkEstimatePdf(int workEstimateId) async {
+  Future<File> getWorkEstimatePdf(int workEstimateId, String savePath) async {
     try {
-      final response = await _dio.get(_buildGetWorkEstimatePdf(workEstimateId));
-
-      if (response.statusCode == 200) {
-        return GenericModel.fromJson(response.data);
-      } else {
-        return throw Exception(GET_WORK_ESTIMATE_PDF_EXCEPTION);
-      }
-    } catch (error) {
+      Response response = await _dio.get(
+        _buildGetWorkEstimatePdf(workEstimateId),
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+      File file = File(savePath);
+      var raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+      return file;
+    } catch (e) {
       throw Exception(GET_WORK_ESTIMATE_PDF_EXCEPTION);
     }
   }

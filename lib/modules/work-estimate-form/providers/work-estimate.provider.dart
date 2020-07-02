@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
@@ -461,12 +463,12 @@ class WorkEstimateProvider with ChangeNotifier {
     }
   }
 
-  Future<GenericModel> getWorkEstimatePdf(int workEstimateId) async {
+  Future<File> getWorkEstimatePdf(int workEstimateId, String path) async {
     try {
-      GenericModel genericModel =
-          await _workEstimatesService.getWorkEstimatePdf(workEstimateId);
+      File file =
+          await _workEstimatesService.getWorkEstimatePdf(workEstimateId, path);
       notifyListeners();
-      return genericModel;
+      return file;
     } catch (error) {
       throw(error);
     }
