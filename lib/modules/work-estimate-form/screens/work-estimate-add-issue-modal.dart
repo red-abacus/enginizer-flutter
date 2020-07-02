@@ -33,6 +33,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
     var provider = Provider.of<WorkEstimateProvider>(context);
 
     return Container(
+      padding: MediaQuery.of(context).viewInsets,
       margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 40),
       child: Form(
         key: _formKey,
