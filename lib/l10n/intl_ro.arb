@@ -702,5 +702,6 @@
   "exception_get_invoices": "A intervenit o problemă la încărcarea facturilor.",
   "exception_get_invoice_details": "A intervenit o problemă la încărcarea detaliilor facturii.",
   "exception_receive_procedure_info": "A intervenit o problema la încărcarea informațiilor procedurii de primire.",
-  "exception_return_procedure_info": "a intervenit o problema la încărcarea informațiilor procedurii de returnare."
+  "exception_return_procedure_info": "a intervenit o problema la încărcarea informațiilor procedurii de returnare.",
+  "exception_get_work_estimate_pdf": "A intervenit o problemă încărcarea PDF-ului."
 }

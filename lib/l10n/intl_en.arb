@@ -703,5 +703,6 @@
   "exception_get_invoices": "There was an error trying to load invoices.",
   "exception_get_invoice_details": "There was an error trying to load invoice details.",
   "exception_receive_procedure_info": "There was an error trying to load receive procedure info",
-  "exception_return_procedure_info": "There was an error trying to load return procedure info"
+  "exception_return_procedure_info": "There was an error trying to load return procedure info",
+  "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf."
 }

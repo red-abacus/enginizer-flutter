@@ -228,7 +228,6 @@ class ProviderService {
     try {
       final response =
           await _dio.get(_buildGetProviderServiceItemsPath(providerId));
-
       if (response.statusCode == 200) {
         return _mapProviderServiceItems(response.data);
       } else {

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
@@ -41,8 +42,12 @@ import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 
 class WorkEstimateForm extends StatefulWidget {
   static const String route =
@@ -951,7 +956,41 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     _provider.workEstimateRequest.dateEntry = dateEntry;
   }
 
-  _print() {
-    // TODO - need to print work estimate
+  _print() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String dir =
+        '${(await getApplicationDocumentsDirectory()).path}/work_estimate.pdf';
+
+    try {
+      _provider
+          .getWorkEstimatePdf(_provider.workEstimateId, dir)
+          .then((file) async {
+        Uint8List bytes = file.readAsBytesSync();
+
+        try {
+          await Share.file('Work Estimate PDF', 'work_estimate.pdf',
+              bytes.buffer.asUint8List(), 'image/png',
+              text: 'Work Estimate PDF');
+        } catch (e) {}
+
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(WorkEstimatesService.GET_WORK_ESTIMATE_PDF_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_work_estimate_pdf, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }
