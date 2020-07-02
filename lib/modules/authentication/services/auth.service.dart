@@ -27,8 +27,6 @@ class AuthService {
           options:
               Options(headers: {}, contentType: ContentType.json.toString()));
     } catch (e) {
-      print('error ${e}');
-      print('error ${e.response}');
       if (e.response.statusCode == 401) {
         throw HttpException('INVALID_CREDENTIALS');
       } else {
