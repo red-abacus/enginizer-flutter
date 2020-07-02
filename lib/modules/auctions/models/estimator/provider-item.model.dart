@@ -39,6 +39,6 @@ class ProviderItem {
         priceVAT: json['priceVAT'],
         total: json['total'],
         guarantee: json['guarantee'] != null ? json['guarantee'] : 0,
-        addition: json['addition'] != null ? json['addition'] : 0);
+        addition: json['addition'] != null ? json['addition'] : 0.0);
   }
 }

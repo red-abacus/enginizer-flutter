@@ -14,7 +14,7 @@ class WorkEstimateIssueEditWidget extends StatefulWidget {
 
   Map<String, dynamic> formState = {
     'quantity': '0',
-    'addition': '0',
+    'addition': '0.0',
   };
 
   WorkEstimateIssueEditWidget({this.issueItem, this.editItem}) {

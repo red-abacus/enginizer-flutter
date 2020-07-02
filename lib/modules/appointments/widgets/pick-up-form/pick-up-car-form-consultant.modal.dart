@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
@@ -97,9 +98,14 @@ class _PickUpCarFormConsultantWidgetState
       await _provider
           .getProviderEmployees(
               widget.appointmentDetail.serviceProvider.id, startDate, endDate)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
+          .then((_) async {
+        await _provider
+            .getProcedureInfo(
+                widget.appointmentDetail.id, _provider.pickupFormState)
+            .then((value) {
+          setState(() {
+            _isLoading = false;
+          });
         });
       });
     } catch (error) {
@@ -108,6 +114,16 @@ class _PickUpCarFormConsultantWidgetState
           .contains(ProviderService.GET_PROVIDER_EMPLOYEES_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_provider_employees, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.GET_RECEIVE_PROCEDURE_INFO_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_receive_procedure_info, context);
+      } else if (error
+          .toString()
+          .contains(AppointmentsService.GET_RETURN_PROCEDURE_INFO_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_return_procedure_info, context);
       }
 
       setState(() {

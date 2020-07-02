@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
+import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
@@ -13,8 +14,9 @@ import 'package:provider/provider.dart';
 class OrderPartsReceiveFormModal extends StatefulWidget {
   final AppointmentDetail orderDetails;
   final Function finishOrder;
+  final ProcedureInfo procedureInfo;
 
-  OrderPartsReceiveFormModal({this.orderDetails, this.finishOrder});
+  OrderPartsReceiveFormModal({this.orderDetails, this.finishOrder, this.procedureInfo});
 
   @override
   State<StatefulWidget> createState() {
@@ -103,7 +105,7 @@ class _OrderPartsReceiveFormModalState
                       ),
                       TextSpan(
                         text:
-                            ' ${S.of(context).mechanic_appointment_receive_form_part_4} ',
+                            ' ${S.of(context).mechanic_appointment_receive_form_part_3} ',
                         style:
                             TextHelper.customTextStyle(color: gray3, size: 16),
                       ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task-issue.model.dart';
 import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
 import 'package:app/modules/appointments/model/request/assign-employee-request.model.dart';
@@ -59,6 +60,10 @@ class AppointmentsService {
       'ORDER_APPOINTMENT_ITEMS_EXCEPTION';
   static const String APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION =
       'APPOINTMENT_REQUEST_TRANSPORT_EXCEPTION';
+  static const String GET_RECEIVE_PROCEDURE_INFO_EXCEPTION =
+      'GET_RECEIVE_PROCEDURE_INFO_EXCEPTION';
+  static const String GET_RETURN_PROCEDURE_INFO_EXCEPTION =
+      'GET_RECEIVE_PROCEDURE_INFO_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -235,6 +240,20 @@ class AppointmentsService {
     }
   }
 
+  Future<ProcedureInfo> getReceiveProcedureInfo(int appointmentId) async {
+    try {
+      final response =
+          await _dio.get(_buildReceiveProcedurePath(appointmentId));
+      if (response.statusCode == 200) {
+        return ProcedureInfo.fromJson(response.data);
+      } else {
+        throw Exception(GET_RECEIVE_PROCEDURE_INFO_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_RECEIVE_PROCEDURE_INFO_EXCEPTION);
+    }
+  }
+
   Future<int> createReceiveProcedure(
       ReceiveFormRequest receiveFormRequest) async {
     try {
@@ -248,6 +267,20 @@ class AppointmentsService {
       }
     } catch (error) {
       throw Exception(CREATE_RECEIVE_PROCEDURE_EXCEPTION);
+    }
+  }
+
+  Future<ProcedureInfo> getReturnProcedureInfo(int appointmentId) async {
+    try {
+      final response =
+          await _dio.get(_buildReturnProcedurePath(appointmentId));
+      if (response.statusCode == 200) {
+        return ProcedureInfo.fromJson(response.data);
+      } else {
+        throw Exception(GET_RETURN_PROCEDURE_INFO_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_RETURN_PROCEDURE_INFO_EXCEPTION);
     }
   }
 

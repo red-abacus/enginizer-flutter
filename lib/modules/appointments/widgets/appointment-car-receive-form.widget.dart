@@ -3,13 +3,18 @@ import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/enum/receive-car-form-state.enum.dart';
+import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
+import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-consultant.modal.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppointmentCarReceiveFormModal extends StatefulWidget {
   final AppointmentDetail appointmentDetail;
@@ -34,6 +39,11 @@ class _AppointmentCarReceiveFormModalState
   bool _showPickUpButton = false;
   ReceiveCarFormState _receiveCarFormState = ReceiveCarFormState.FORM;
 
+  bool _initDone = false;
+  bool _isLoading = false;
+
+  PickUpCarFormConsultantProvider _provider;
+
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
@@ -51,10 +61,48 @@ class _AppointmentCarReceiveFormModalState
               data: ThemeData(
                   accentColor: Theme.of(context).primaryColor,
                   primaryColor: Theme.of(context).primaryColor),
-              child: _buildContent(),
+              child: _isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : _buildContent(),
             ),
           ),
         )));
+  }
+
+  @override
+  Future<void> didChangeDependencies() async {
+    if (!_initDone) {
+      _provider = Provider.of<PickUpCarFormConsultantProvider>(context);
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _provider
+            .getProcedureInfo(
+                widget.appointmentDetail.id, PickupFormState.Receive)
+            .then((_) async {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error.toString().contains(
+            AppointmentsService.GET_RECEIVE_PROCEDURE_INFO_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_receive_procedure_info, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+
+    _initDone = true;
+
+    super.didChangeDependencies();
   }
 
   Widget _buildContent() {
@@ -107,7 +155,7 @@ class _AppointmentCarReceiveFormModalState
                       ),
                       TextSpan(
                         text:
-                            ' ${widget.appointmentDetail?.serviceProvider?.name}',
+                            ' ${_provider.procedureInfo?.receivedBy?.providerName ?? '-'}',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -118,8 +166,8 @@ class _AppointmentCarReceiveFormModalState
                             TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
-                        // TODO - need to add representative name for service provider
-                        text: 'Mircea Pop',
+                        text:
+                            '${_provider.procedureInfo?.receivedBy?.userName ?? '-'}',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -129,9 +177,9 @@ class _AppointmentCarReceiveFormModalState
                         style:
                             TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
-                      // TODO - need to add represantive name for service provider
                       TextSpan(
-                        text: 'Mircea Pop.',
+                        text:
+                            '${_provider.procedureInfo?.handoverBy?.userName ?? '-'}.',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -147,8 +195,8 @@ class _AppointmentCarReceiveFormModalState
                     style: TextHelper.customTextStyle(color: gray3, size: 16),
                     children: <TextSpan>[
                       TextSpan(
-                        // TODO - need to add representative name for representative service provider
-                        text: 'Mircea Pop ',
+                        text:
+                            '${_provider.procedureInfo?.receivedBy?.providerName ?? '-'} ',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -160,7 +208,7 @@ class _AppointmentCarReceiveFormModalState
                             TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
-                        text: ' ${widget.appointmentDetail?.user?.name} ',
+                        text: ' ${_provider.procedureInfo?.handoverBy?.userName ?? '-'} ',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -183,7 +231,7 @@ class _AppointmentCarReceiveFormModalState
                     children: <TextSpan>[
                       TextSpan(
                         text:
-                            '${widget.appointmentDetail?.car?.registrationNumber}, ${widget.appointmentDetail?.car?.brand?.name}, ${widget.appointmentDetail?.car?.year?.name}, ${widget.appointmentDetail?.car?.color?.translateColorName(context)}',
+                            '${_provider.procedureInfo?.car?.registrationNumber}, ${_provider.procedureInfo?.car?.brand?.name}, ${_provider.procedureInfo?.car?.year?.name}, ${_provider.procedureInfo?.car?.color?.translateColorName(context)}',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -238,7 +286,8 @@ class _AppointmentCarReceiveFormModalState
               widget.pickupFormState == PickupFormState.Receive
                   ? S.of(context).mechanic_appointment_receive_form_title
                   : S.of(context).mechanic_appointment_hand_form_title,
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 18),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 18),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
@@ -261,7 +310,19 @@ class _AppointmentCarReceiveFormModalState
                       ),
                       TextSpan(
                         text:
-                            ' ${widget.appointmentDetail?.serviceProvider?.name}.',
+                            ' ${_provider.procedureInfo.handoverBy?.providerName ?? '-'}',
+                        style: TextHelper.customTextStyle(
+                            color: gray3, weight: FontWeight.bold, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                        ' ${S.of(context).mechanic_appointment_receive_form_part_3} ',
+                        style:
+                        TextHelper.customTextStyle(color: gray3, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                        '${_provider.procedureInfo?.handoverBy?.userName ?? '-'}.',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -278,15 +339,33 @@ class _AppointmentCarReceiveFormModalState
                     children: <TextSpan>[
                       TextSpan(
                         text:
-                            '${widget.appointmentDetail?.serviceProvider?.name} ',
+                            '${_provider.procedureInfo?.handoverBy?.providerName ?? '-'} ',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text:
-                            '${S.of(context).mechanic_appointment_return_form_part_1}:',
+                        ' ${S.of(context).mechanic_appointment_receive_form_part_3} ',
+                        style:
+                        TextHelper.customTextStyle(color: gray3, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                        '${_provider.procedureInfo?.handoverBy?.userName ?? '-'} ',
+                        style: TextHelper.customTextStyle(
+                            color: gray3, weight: FontWeight.bold, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                            '${S.of(context).mechanic_appointment_return_form_part_1}',
                         style:
                             TextHelper.customTextStyle(color: gray3, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                        ' ${_provider.procedureInfo?.receivedBy?.userName ?? '-'}:',
+                        style: TextHelper.customTextStyle(
+                            color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                     ]),
               ),
@@ -301,7 +380,7 @@ class _AppointmentCarReceiveFormModalState
                     children: <TextSpan>[
                       TextSpan(
                         text:
-                            '${widget.appointmentDetail?.car?.registrationNumber}, ${widget.appointmentDetail?.car?.brand?.name}, ${widget.appointmentDetail?.car?.year?.name}, ${widget.appointmentDetail?.car?.color?.translateColorName(context)}',
+                            '${_provider.procedureInfo?.car?.registrationNumber}, ${_provider.procedureInfo?.car?.brand?.name}, ${_provider.procedureInfo?.car?.year?.name}, ${_provider.procedureInfo?.car?.color?.translateColorName(context)}',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),

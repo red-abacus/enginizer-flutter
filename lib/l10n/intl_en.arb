@@ -370,7 +370,7 @@
   "mechanic_appointment_receive_form_part_6": "received from Mr/Mrs",
   "mechanic_appointment_receive_form_part_7": "the following",
   "mechanic_appointment_receive_form_part_8": "The automobile",
-  "mechanic_appointment_return_form_part_1": "returned the following",
+  "mechanic_appointment_return_form_part_1": "returned the following to",
   "mechanic_appointment_i_received": "I received",
   "mechanic_appointment_i_handed_over": "I handed over",
   "mechanic_appointment_receive_form_alert_title": "Confirm car receiving",
@@ -701,5 +701,7 @@
   "exception_car_mark_as_sold": "There was an error trying to mark car as sold.",
   "exception_get_shop_items": "There was an error trying to load shop offers.",
   "exception_get_invoices": "There was an error trying to load invoices.",
-  "exception_get_invoice_details": "There was an error trying to load invoice details."
+  "exception_get_invoice_details": "There was an error trying to load invoice details.",
+  "exception_receive_procedure_info": "There was an error trying to load receive procedure info",
+  "exception_return_procedure_info": "There was an error trying to load return procedure info"
 }

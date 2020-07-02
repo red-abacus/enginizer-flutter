@@ -385,7 +385,7 @@
   "mechanic_appointment_receive_form_part_6": "a primit de la dl./dna",
   "mechanic_appointment_receive_form_part_7": "următoarele",
   "mechanic_appointment_receive_form_part_8": "Autoturismul",
-  "mechanic_appointment_return_form_part_1": "predă următoarele",
+  "mechanic_appointment_return_form_part_1": "predă următoarele către",
   "mechanic_appointment_i_received": "Am primit",
   "mechanic_appointment_i_handed_over": "Am predat",
   "mechanic_appointment_receive_form_alert_title": "Confirmă primirea autoturismului",
@@ -700,5 +700,7 @@
   "exception_car_mark_as_sold": "A intervenit o problemă la marcarea mașinii că vândută.",
   "exception_get_shop_items": "A intervenit o problemă la încărcarea ofertelor din magazin.",
   "exception_get_invoices": "A intervenit o problemă la încărcarea facturilor.",
-  "exception_get_invoice_details": "A intervenit o problemă la încărcarea detaliilor facturii."
+  "exception_get_invoice_details": "A intervenit o problemă la încărcarea detaliilor facturii.",
+  "exception_receive_procedure_info": "A intervenit o problema la încărcarea informațiilor procedurii de primire.",
+  "exception_return_procedure_info": "a intervenit o problema la încărcarea informațiilor procedurii de returnare."
 }

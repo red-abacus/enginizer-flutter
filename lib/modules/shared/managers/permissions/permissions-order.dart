@@ -41,6 +41,10 @@ class PermissionsOrder {
                   case ConsultantServiceType.DismantlingShop:
                     permissions.add(CREATE_ORDER);
                     break;
+                  case ConsultantServiceType.Sell:
+                    break;
+                  case ConsultantServiceType.Rent:
+                    break;
                 }
               }
             }

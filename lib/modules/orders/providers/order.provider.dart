@@ -1,6 +1,7 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/orders/screens/order.dart';
 import 'package:app/modules/orders/services/order.service.dart';
