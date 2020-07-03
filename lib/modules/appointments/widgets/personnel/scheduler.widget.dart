@@ -1,6 +1,7 @@
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/utils/constants.dart' as Constants;
 import 'package:app/utils/date_utils.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -13,12 +14,21 @@ class SchedulerWidget extends StatefulWidget {
   bool disableSelect = true;
   final bool shouldScroll;
 
-  SchedulerWidget(
-      {this.calendarEntries = const [],
-      this.dateEntrySelected,
-      this.dateEntry,
-      this.disableSelect,
-      this.shouldScroll});
+  final DateTime startDate;
+  final DateTime endDate;
+
+  final Function back;
+  final Function forward;
+
+  SchedulerWidget({this.calendarEntries = const [],
+    this.dateEntrySelected,
+    this.dateEntry,
+    this.disableSelect,
+    this.shouldScroll,
+    this.startDate,
+    this.endDate,
+    this.back,
+    this.forward});
 
   @override
   SchedulerWidgetState createState() {
@@ -30,7 +40,9 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
   @override
   Widget build(BuildContext context) {
     bool shrinkWrap = !widget.shouldScroll;
-    ScrollPhysics physics = widget.shouldScroll ? ClampingScrollPhysics() : NeverScrollableScrollPhysics();
+    ScrollPhysics physics = widget.shouldScroll
+        ? ClampingScrollPhysics()
+        : NeverScrollableScrollPhysics();
 
     return Container(
       color: Colors.white,
@@ -43,6 +55,41 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
         scrollDirection: Axis.vertical,
         itemCount: 1,
       ),
+    );
+  }
+
+  _getScheduler() {
+    return Row(
+      children: [
+        Text(
+          '${DateUtils.stringFromDate(widget.startDate, 'dd MMM')} - ${DateUtils
+              .stringFromDate(widget.endDate, 'dd MMM')}',
+          style:
+          TextHelper.customTextStyle(color: Constants.red, size: 16),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: DateUtils.isSameDay(widget.startDate, DateTime.now())
+                ? Constants.gray2
+                : Constants.red,
+          ),
+          onPressed: () {
+            if (!DateUtils.isSameDay(widget.startDate, DateTime.now())) {
+              widget.back();
+            }
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.arrow_forward_ios,
+            color: Constants.red,
+          ),
+          onPressed: () {
+            widget.forward();
+          },
+        )
+      ],
     );
   }
 
@@ -77,7 +124,7 @@ class SchedulerWidgetState extends State<SchedulerWidget> {
             crossAxisCount: 3,
             children: List.generate(
               calendarEntry.entries.length,
-              (int index) {
+                  (int index) {
                 return _buildGridCard(calendarEntry.entries[index]);
               },
             ),

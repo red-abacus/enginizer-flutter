@@ -9,10 +9,11 @@ import 'package:flutter/material.dart';
 class PickUpCarFormEmployeeWidget extends StatelessWidget {
   final Employee employee;
   final Function selectEmployeeTimeSerie;
-  final EmployeeTimeSerie selectedTimeSerie;
+  final Function deselectEmployeeTimeSerie;
+  final List<EmployeeTimeSerie> selectedTimeSeries;
 
   PickUpCarFormEmployeeWidget(
-      {this.employee, this.selectEmployeeTimeSerie, this.selectedTimeSerie});
+      {this.employee, this.selectEmployeeTimeSerie, this.selectedTimeSeries, this.deselectEmployeeTimeSerie});
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +57,10 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
   }
 
   _employeeTimeslotContainer(EmployeeTimeSerie entry) {
-    Color boxBackground = Colors.transparent;
-    Color textColor = black_text;
+    bool booked = this.selectedTimeSeries.contains(entry);
 
-    if (entry == this.selectedTimeSerie) {
-      boxBackground = red;
-      textColor = Colors.white;
-    }
+    Color boxBackground = booked ? red : Colors.transparent;
+    Color textColor = booked ? Colors.white : black_text;
 
     double opacity = (entry.getStatus() == DateEntryStatus.Free) ? 1.0 : 0.4;
 
@@ -80,7 +78,12 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
                     color: textColor),
                 textAlign: TextAlign.center),
             onPressed: () {
-              _onClicked(entry);
+              if (booked) {
+                this.deselectEmployeeTimeSerie(entry);
+              }
+              else {
+                this.selectEmployeeTimeSerie(entry);
+              }
             },
           ),
           margin: EdgeInsets.all(4),
@@ -93,9 +96,5 @@ class PickUpCarFormEmployeeWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _onClicked(EmployeeTimeSerie entry) {
-    selectEmployeeTimeSerie(entry);
   }
 }

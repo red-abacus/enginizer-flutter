@@ -12,7 +12,6 @@ import 'package:app/modules/appointments/widgets/forms/appointment-create-issue.
 import 'package:app/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-services.form.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
-import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

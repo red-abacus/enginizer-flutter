@@ -37,7 +37,6 @@ class ProviderServiceProvider with ChangeNotifier {
   ProviderService providerService = inject<ProviderService>();
   AppointmentsService appointmentsService = inject<AppointmentsService>();
 
-  // Form entries
   List<Car> cars;
   Car selectedCar;
   List<ServiceProviderItem> selectedServiceItems;
@@ -47,6 +46,8 @@ class ProviderServiceProvider with ChangeNotifier {
   DateEntry dateEntry;
   CreateAppointmentState createAppointmentState;
 
+  List<ServiceProviderTimetable> serviceProviderTimetable;
+
   Map<int, dynamic> stepStateData;
 
   int _currentPage = 0;
@@ -54,6 +55,7 @@ class ProviderServiceProvider with ChangeNotifier {
   ServiceProviderResponse _serviceProviderResponse;
 
   void initFormValues() {
+    serviceProviderTimetable = [];
     cars = [];
     appointmentPosition = AppointmentPosition();
     selectedCar = null;
@@ -113,11 +115,10 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<ServiceProviderTimetable>> loadServiceProviderTimetables(
       ServiceProvider serviceProvider, String startDate, String endDate) async {
     try {
-      var response = await providerService.getServiceProviderTimetables(
+      this.serviceProviderTimetable = await providerService.getServiceProviderTimetables(
           serviceProvider.id, startDate, endDate);
-      serviceProvider.timetables = response;
       notifyListeners();
-      return response;
+      return this.serviceProviderTimetable;
     } catch (error) {
       throw (error);
     }

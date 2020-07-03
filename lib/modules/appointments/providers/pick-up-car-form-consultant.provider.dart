@@ -20,7 +20,7 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
 
   List<Employee> employees = [];
 
-  EmployeeTimeSerie selectedTimeSerie;
+  List<EmployeeTimeSerie> selectedTimeSeries;
   ReceiveFormRequest receiveFormRequest;
 
   PickupFormState pickupFormState;
@@ -28,7 +28,7 @@ class PickUpCarFormConsultantProvider with ChangeNotifier {
   ProcedureInfo procedureInfo;
 
   initialise() {
-    selectedTimeSerie = null;
+    selectedTimeSeries = [];
     informationFormState = null;
 
     receiveFormRequest = ReceiveFormRequest();

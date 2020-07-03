@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/enum/service-provider-timetable-status.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/utils/date_utils.dart';
@@ -24,7 +25,7 @@ class ServiceProviderTimeEntry {
     List<String> entries = [];
 
     for (ServiceProviderTimetable timetable in timetables) {
-      if (timetable.slotStatus.toLowerCase() != "closed") {
+      if (timetable.status == ServiceProviderTimetableStatus.Free) {
         entries.add(timetable.date());
       }
     }
@@ -81,7 +82,9 @@ class CalendarEntry {
           }
         }
 
-        calendarEntry.entries.add(dateEntry);
+        if (dateEntry.status == DateEntryStatus.Free) {
+          calendarEntry.entries.add(dateEntry);
+        }
         startDate = DateUtils.addHourToDate(startDate, 1);
       }
 

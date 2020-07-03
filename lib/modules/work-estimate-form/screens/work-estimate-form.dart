@@ -42,7 +42,6 @@ import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
@@ -264,19 +263,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       );
     });
 
-    //    if (widget.mode != EstimatorMode.ReadOnly) {
-    //      stepsList.add(FAStep(
-    //        isActive: _isStepActive(widget.mode == EstimatorMode.Client
-    //            ? issues.length + 1
-    //            : issues.length),
-    //        title: Text(S.of(context).auction_proposed_date),
-    //        content: WorkEstimateDateWidget(
-    //            dateEntry: _workEstimateProvider.workEstimateRequest.dateEntry,
-    //            estimateDateSelect: _estimateDateSelect,
-    //            estimatorMode: widget.mode),
-    //      ));
-    //    }
-
     return stepsList;
   }
 
@@ -353,9 +339,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             labelStyle: TextHelper.customTextStyle(
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _orderItems()));
-        break;
-      case EstimatorMode.Create:
-        buttons.add(saveButton);
+
         buttons.add(SpeedDialChild(
             child: Icon(Icons.assignment),
             foregroundColor: red,
@@ -364,6 +348,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             labelStyle: TextHelper.customTextStyle(
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _assignMechanic()));
+        break;
+      case EstimatorMode.Create:
+        buttons.add(saveButton);
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.date_range),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).estimator_select_date,
+            labelStyle: TextHelper.customTextStyle(
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
+            onTap: () => _showProposedDateModal()));
         break;
       case EstimatorMode.CreatePart:
         buttons.add(saveButton);
@@ -520,7 +515,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _assignEmployee(EmployeeTimeSerie timeSerie) {
-    _provider.workEstimateRequest.employeeTimeSerie = timeSerie;
+//    _provider.workEstimateRequest.employeeTimeSerie = timeSerie;
   }
 
   _refreshState() {}
@@ -635,7 +630,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           context, S.of(context).general_warning, validationString);
     } else {
       DateTime maxResponseTime = widget.mode == EstimatorMode.Create
-          ? _provider.workEstimateRequest.employeeTimeSerie.getDate()
+          ? _provider.workEstimateRequest.dateEntry.dateTime
           : new DateTime(DateTime.now().year + 1, DateTime.now().month,
               DateTime.now().day);
 
@@ -935,6 +930,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
   }
 
   _showProposedDateModal() {
+    Provider.of<WorkEstimateProvider>(context).selectedDateEntry =
+        _provider.selectedAppointmentDetail.getWorkEstimateDateEntry();
+
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

@@ -239,13 +239,6 @@ class AppointmentDetailsNewConsultantWidgetState
               ),
             ),
           ),
-          FlatButton(
-            child: Text(
-              "(${S.of(context).appointment_details_request_reprogramming.toLowerCase()})",
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
-            ),
-            onPressed: () {},
-          )
         ],
       ),
     );

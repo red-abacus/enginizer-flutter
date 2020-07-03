@@ -63,7 +63,6 @@ class _WorkEstimateProposeDateModalState
     if (!_initDone) {
       _provider = Provider.of<WorkEstimateProvider>(context);
       _provider.timetable = [];
-      _provider.selectedDateEntry = null;
 
       _loadData();
     }

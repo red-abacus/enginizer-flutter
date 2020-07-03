@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/modules/appointments/enum/service-provider-timetable-status.enum.dart';
 import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';

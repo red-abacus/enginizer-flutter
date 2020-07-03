@@ -419,26 +419,8 @@ class AppointmentDetailsGenericConsultantWidgetState
               ),
             ),
           ),
-          _requestReprogrammingButton(),
         ],
       ),
-    );
-  }
-
-  _requestReprogrammingButton() {
-    if (widget.appointmentDetail.status.getState() ==
-        AppointmentStatusState.CANCELED) {
-      return Container();
-    }
-
-    return FlatButton(
-      child: Text(
-        "(${S.of(context).appointment_details_request_reprogramming.toLowerCase()})",
-        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
-      ),
-      onPressed: () {
-        widget.viewEstimate();
-      },
     );
   }
 

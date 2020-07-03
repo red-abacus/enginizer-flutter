@@ -52,7 +52,7 @@ class _PickUpCarFormEmployeesWidgetState
               for (Employee employee in _provider.employees)
                 PickUpCarFormEmployeeWidget(
                   employee: employee,
-                  selectedTimeSerie: _provider.selectedTimeSerie,
+                  selectedTimeSeries: _provider.selectedTimeSeries,
                   selectEmployeeTimeSerie: _selectEmployeeTimeSerie,
                 )
             ],
@@ -62,9 +62,9 @@ class _PickUpCarFormEmployeesWidgetState
     );
   }
 
-  _selectEmployeeTimeSerie(EmployeeTimeSerie timeSerie) {
+  _selectEmployeeTimeSerie(List<EmployeeTimeSerie> timeSeries) {
     setState(() {
-      _provider.selectedTimeSerie = timeSerie;
+      _provider.selectedTimeSeries = timeSeries;
     });
   }
 

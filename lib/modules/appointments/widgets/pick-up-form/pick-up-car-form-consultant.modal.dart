@@ -2,11 +2,10 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
-import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
+import 'package:app/modules/appointments/model/request/assign-employee-request.model.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/appointments/model/request/assign-employee-request.model.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-employees.widget.dart';
@@ -281,16 +280,17 @@ class _PickUpCarFormConsultantWidgetState
 
     try {
       _provider.receiveFormRequest.appointmentId = widget.appointmentDetail.id;
+
       await _provider
           .createProcedure(_provider.receiveFormRequest, widget.pickupFormState)
           .then((_) async {
         await _provider
             .addReceiveProcedurePhotos(_provider.receiveFormRequest)
             .then((_) async {
-          if (_provider.selectedTimeSerie != null) {
+          if (_provider.selectedTimeSeries != null) {
             AssignEmployeeRequest request = new AssignEmployeeRequest();
-            request.timeSerie = _provider.selectedTimeSerie;
-            request.employeeId = _provider.selectedTimeSerie.employeeId;
+            request.timeSeries = _provider.selectedTimeSeries;
+            request.employeeId = _provider.selectedTimeSeries.first.employeeId;
 
             await _provider
                 .assignEmployeeToAppointment(

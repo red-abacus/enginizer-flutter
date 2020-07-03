@@ -6,19 +6,23 @@ import 'package:flutter/material.dart';
 
 class EstimateAssignEmployeesWidget extends StatefulWidget {
   final Function selectEmployee;
+  final Function deselectEmployee;
   final List<Employee> employees;
-  final EmployeeTimeSerie employeeTimeSerie;
+  final List<EmployeeTimeSerie> employeeTimeSeries;
 
   @override
   _EstimateAssignEmployeesWidgetState createState() =>
       _EstimateAssignEmployeesWidgetState();
 
-  EstimateAssignEmployeesWidget({this.selectEmployee, this.employees, this.employeeTimeSerie});
+  EstimateAssignEmployeesWidget(
+      {this.selectEmployee,
+      this.employees,
+      this.employeeTimeSeries,
+      this.deselectEmployee});
 }
 
 class _EstimateAssignEmployeesWidgetState
     extends State<EstimateAssignEmployeesWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,19 +44,14 @@ class _EstimateAssignEmployeesWidgetState
               for (Employee employee in widget.employees)
                 PickUpCarFormEmployeeWidget(
                   employee: employee,
-                  selectedTimeSerie: widget.employeeTimeSerie,
-                  selectEmployeeTimeSerie: _selectEmployeeTimeSerie,
+                  selectedTimeSeries: widget.employeeTimeSeries,
+                  deselectEmployeeTimeSerie: widget.deselectEmployee,
+                  selectEmployeeTimeSerie: widget.selectEmployee,
                 )
             ],
           ),
         ),
       ),
     );
-  }
-
-  _selectEmployeeTimeSerie(EmployeeTimeSerie timeSerie) {
-    if (widget.selectEmployee != null) {
-      widget.selectEmployee(timeSerie);
-    }
   }
 }

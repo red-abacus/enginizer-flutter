@@ -1,12 +1,17 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
+import 'package:app/modules/appointments/model/request/assign-employee-request.model.dart';
+import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
+import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +65,9 @@ class _EstimateAssignMechanicModalState
               data: ThemeData(
                   accentColor: Theme.of(context).primaryColor,
                   primaryColor: Theme.of(context).primaryColor),
-              child: _buildContent(),
+              child: Stack(
+                children: [_buildContent(), _bottomButton()],
+              ),
             ),
           ),
         )));
@@ -70,6 +77,7 @@ class _EstimateAssignMechanicModalState
   void didChangeDependencies() {
     if (!_initDone) {
       _provider = Provider.of<PickUpCarFormConsultantProvider>(context);
+      _provider.initialise();
 
       setState(() {
         _isLoading = true;
@@ -90,8 +98,7 @@ class _EstimateAssignMechanicModalState
 
     if (widget.appointmentDetail != null) {
       scheduleDateTime = widget.appointmentDetail.scheduledDate;
-    }
-    else if (widget.auctionDetail != null) {
+    } else if (widget.auctionDetail != null) {
       scheduleDateTime = widget.auctionDetail.scheduledDateTime;
     }
 
@@ -107,8 +114,7 @@ class _EstimateAssignMechanicModalState
 
     try {
       await _provider
-          .getProviderEmployees(
-              widget.providerId, startDate, endDate)
+          .getProviderEmployees(widget.providerId, startDate, endDate)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -134,47 +140,109 @@ class _EstimateAssignMechanicModalState
         : SingleChildScrollView(
             child: EstimateAssignEmployeesWidget(
                 selectEmployee: _selectEmployee,
+                deselectEmployee: _deselectEmployee,
                 employees: _provider.employees,
-                employeeTimeSerie: _provider.selectedTimeSerie),
+                employeeTimeSeries: _provider.selectedTimeSeries),
           );
   }
 
-  _selectEmployee(EmployeeTimeSerie employeeTimeSerie) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertConfirmationDialogWidget(
-          title: S.of(context).estimator_assign_mechanic_title,
-          confirmFunction: (confirmation) async {
-            if (confirmation) {
-              widget.assignEmployee(employeeTimeSerie);
-              Navigator.pop(context);
-            }
-          },
-        );
-      },
+  _bottomButton() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 50,
+        padding: EdgeInsets.only(left: 20, right: 20),
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Spacer(),
+            FlatButton(
+              color: red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: new Text(
+                S.of(context).general_assign,
+                style: TextHelper.customTextStyle(
+                    color: Colors.white, weight: FontWeight.bold, size: 16.0),
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () {
+                _save();
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 
-//  _assignEmployee(EmployeeTimeSerie employeeTimeSerie) async {
-//    AssignEmployeeRequest request = new AssignEmployeeRequest();
-//    request.timeSerie = employeeTimeSerie;
-//    request.appointmentId = widget.appointmentDetail.id;
-//    request.employeeId = employeeTimeSerie.employeeId;
-//    request.providerId = widget.appointmentDetail.serviceProvider.id;
-//
-//    try {
-//      await _provider.assignEmployeeToAppointment(request).then((_) {
-//        Navigator.of(context).pop();
-//      });
-//    } catch (error) {
-//      if (error.toString().contains(
-//          ProviderService.ASSIGN_MECHANIC_TO_APPOINTMENT_EXCEPTION)) {
-//        FlushBarHelper.showFlushBar(
-//            S.of(context).general_error,
-//            S.of(context).exception_assign_mechanic_to_appointment,
-//            context);
-//      }
-//    }
-//  }
+  _selectEmployee(EmployeeTimeSerie employeeTimeSerie) {
+    setState(() {
+      if (_provider.selectedTimeSeries.length > 0 &&
+          _provider.selectedTimeSeries.first.employeeId !=
+              employeeTimeSerie.employeeId) {
+        _provider.selectedTimeSeries = [employeeTimeSerie];
+      } else {
+        _provider.selectedTimeSeries.add(employeeTimeSerie);
+      }
+    });
+  }
+
+  _deselectEmployee(EmployeeTimeSerie employeeTimeSerie) {
+    setState(() {
+      _provider.selectedTimeSeries.remove(employeeTimeSerie);
+    });
+  }
+
+  _save() {
+    if (_provider.selectedTimeSeries.length > 0) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertConfirmationDialogWidget(
+            title: S.of(context).estimator_assign_mechanic_title,
+            confirmFunction: (confirmation) async {
+              if (confirmation) {
+                _assignEmployee();
+              }
+            },
+          );
+        },
+      );
+    } else {
+      AlertWarningDialog.showAlertDialog(context, S.of(context).general_warning,
+          S.of(context).estimator_assign_no_mechanic_selected);
+    }
+  }
+
+  _assignEmployee() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    AssignEmployeeRequest request = new AssignEmployeeRequest();
+    request.timeSeries = _provider.selectedTimeSeries;
+    request.employeeId = _provider.selectedTimeSeries.first.employeeId;
+
+    try {
+      await _provider
+          .assignEmployeeToAppointment(widget.appointmentDetail.id, request)
+          .then((_) {
+        Navigator.of(context).pop();
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.ASSIGN_EMPLOYEE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_assign_mechanic_to_appointment, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 }

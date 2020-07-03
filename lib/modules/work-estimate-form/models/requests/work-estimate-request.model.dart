@@ -12,7 +12,8 @@ class WorkEstimateRequest {
   List<Issue> issues = [];
   int percent;
   DateTime timeToRespond;
-  EmployeeTimeSerie employeeTimeSerie;
+
+//  EmployeeTimeSerie employeeTimeSerie;
   DateEntry dateEntry;
 
   final EstimatorMode estimatorMode;
@@ -50,13 +51,8 @@ class WorkEstimateRequest {
       }
     }
 
-    if (estimatorMode == EstimatorMode.Create) {
-      if (employeeTimeSerie == null) {
-        return S.of(context).estimator_date_warning;
-      }
-    }
-
-    if (estimatorMode == EstimatorMode.CreatePr) {
+    if (estimatorMode == EstimatorMode.Create ||
+        estimatorMode == EstimatorMode.CreatePr) {
       if (dateEntry == null) {
         return S.of(context).auction_proposed_date_error;
       }
@@ -67,9 +63,9 @@ class WorkEstimateRequest {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = new Map();
-    map['proposedDate'] = this.employeeTimeSerie != null
-        ? '${this.employeeTimeSerie.date} ${this.employeeTimeSerie.hour}'
-        : '';
+//    map['proposedDate'] = this.employeeTimeSerie != null
+//        ? '${this.employeeTimeSerie.date} ${this.employeeTimeSerie.hour}'
+//        : '';
 
     List<dynamic> issuesList = [];
 
@@ -82,7 +78,10 @@ class WorkEstimateRequest {
     map['timeToRespond'] =
         DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy');
 
-    if (estimatorMode == EstimatorMode.CreatePart) {
+    if (estimatorMode == EstimatorMode.Create) {
+      map['proposedDate'] =
+          DateUtils.stringFromDate(dateEntry.dateTime, 'dd/MM/yyyy HH:mm');
+    } else if (estimatorMode == EstimatorMode.CreatePart) {
       map['proposedDate'] =
           DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy HH:mm');
     } else if (estimatorMode == EstimatorMode.CreatePr && dateEntry != null) {
