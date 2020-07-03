@@ -1,3 +1,3 @@
 enum CarReceiveFormState {
-  Service, Pr
+  Service, Pr, ServiceReturnCar
 }

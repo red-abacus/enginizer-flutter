@@ -76,4 +76,15 @@ class AppointmentConsultantProvider with ChangeNotifier {
       throw (error);
     }
   }
+
+  Future<AppointmentDetail> finishAppointment(int appointmentId) async {
+    try {
+      selectedAppointmentDetail = await _appointmentsService.finishAppointment(appointmentId);
+      notifyListeners();
+      return selectedAppointmentDetail;
+    }
+    catch (error) {
+      throw(error);
+    }
+  }
 }

@@ -1,7 +1,6 @@
 enum EstimatorMode { Create,
   Edit,
   CreatePart,
-  CreateFinal,
   CreatePr,
   ReadOnly,
   ReadOnlyHistory,

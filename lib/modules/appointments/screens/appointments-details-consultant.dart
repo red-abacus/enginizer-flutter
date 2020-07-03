@@ -8,7 +8,6 @@ import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
@@ -16,7 +15,6 @@ import 'package:app/modules/appointments/providers/appointment-consultant.provid
 import 'package:app/modules/appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-documents.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
-import 'package:app/modules/appointments/screens/appointment-details-parts-provider-estimate.modal.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
@@ -161,12 +159,6 @@ class AppointmentDetailsConsultantState
       Tab(text: S.of(context).appointment_consultant_provider_documents_title)
     ];
 
-//    if (_provider.selectedAppointmentDetail.status.getState() ==
-//        AppointmentStatusState.IN_REVIEW) {
-////      tabs.add(Tab(
-////          text: S.of(context).appointment_consultant_provider_estimate_title));
-//    }
-
     return tabs;
   }
 
@@ -198,7 +190,8 @@ class AppointmentDetailsConsultantState
       case AppointmentStatusState.CANCELED:
       case AppointmentStatusState.DONE:
       case AppointmentStatusState.IN_REVIEW:
-        return AppointmentDetailsGenericConsultantWidget(
+      case AppointmentStatusState.READY_FOR_PICKUP:
+        return AppointmentDetailsConsultantWidget(
           appointmentDetail: _provider.selectedAppointmentDetail,
           serviceProviderItems: _provider.serviceProviderItems,
           declineAppointment: _declineAppointment,
@@ -206,8 +199,9 @@ class AppointmentDetailsConsultantState
           viewEstimate: _viewEstimate,
           assignMechanic: _assignMechanic,
           createPickUpCarForm: _createPickUpCarForm,
+          createHandoverCarForm: _createHandoverCarForm,
           workEstimateDetails: _provider.workEstimateDetails,
-          requestPartsProvider: _requestPartsProvider,
+          finishAppointment: _finishAppointment,
           seeCamera: _seeCamera,
         );
       default:
@@ -304,25 +298,6 @@ class AppointmentDetailsConsultantState
     }
   }
 
-  _requestPartsProvider() {
-    Provider.of<SelectPartsProviderProvider>(context).resetParams();
-    Provider.of<SelectPartsProviderProvider>(context)
-        .selectedAppointmentDetails = _provider.selectedAppointmentDetail;
-
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return AppointmentDetailsPartsProviderEstimateModal();
-          });
-        });
-  }
-
   _assignMechanic() {
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
@@ -358,6 +333,26 @@ class AppointmentDetailsConsultantState
         });
   }
 
+  _createHandoverCarForm() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return AppointmentCarReceiveFormModal(
+                  carReceiveFormState: CarReceiveFormState.ServiceReturnCar,
+                  appointmentDetail: _provider.selectedAppointmentDetail,
+                  refreshState: _refreshState,
+                  pickupFormState: PickupFormState.Return,
+                );
+              });
+        });
+  }
+
   _refreshState() {
     setState(() {
       _isLoading = true;
@@ -365,26 +360,6 @@ class AppointmentDetailsConsultantState
 
     _loadData();
   }
-
-//  _createFinalEstimate() {
-//    Provider.of<WorkEstimateProvider>(context).refreshValues();
-//    Provider.of<WorkEstimateProvider>(context)
-//        .setIssues(_provider.selectedAppointmentDetail.issues);
-//    Provider.of<WorkEstimateProvider>(context).selectedAppointment =
-//        _provider.selectedAppointment;
-//    Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
-//        _provider.selectedAppointmentDetail;
-//    Provider.of<WorkEstimateProvider>(context).workEstimateId =
-//        _provider.selectedAppointmentDetail.lastWorkEstimate();
-//    Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-//        _provider.selectedAppointment.serviceProvider.id;
-//
-//    Navigator.push(
-//      context,
-//      MaterialPageRoute(
-//          builder: (context) => WorkEstimateForm(mode: EstimatorMode.CreateFinal)),
-//    );
-//  }
 
   _seeCamera() {
     showModalBottomSheet<void>(
@@ -399,5 +374,47 @@ class AppointmentDetailsConsultantState
             return AppointmentCameraModal();
           });
         });
+  }
+
+  _finishAppointment() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AlertConfirmationDialogWidget(
+                confirmFunction: (confirm) => {
+                      if (confirm) {_finishAppointmentConfirmed()}
+                    },
+                title: S.of(context).appointment_finish_appointment_alert);
+          });
+        });
+  }
+
+  _finishAppointmentConfirmed() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _provider
+          .finishAppointment(_provider.selectedAppointmentDetail.id)
+          .then((value) {
+        Provider.of<AppointmentsProvider>(context).initDone = false;
+
+        setState(() {});
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.FINISH_APPOINTMENT_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_finish_appointment, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

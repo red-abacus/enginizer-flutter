@@ -64,6 +64,8 @@ class AppointmentsService {
       'GET_RECEIVE_PROCEDURE_INFO_EXCEPTION';
   static const String GET_RETURN_PROCEDURE_INFO_EXCEPTION =
       'GET_RECEIVE_PROCEDURE_INFO_EXCEPTION';
+  static const String FINISH_APPOINTMENT_EXCEPTION =
+      'FINISH_APPOINTMENT_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -140,6 +142,10 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX =
       '/requestTransport';
+
+  static const String _FINISH_APPOINTMENT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _FINISH_APPOINTMENT_SUFFIX = '/finish';
 
   Dio _dio = inject<Dio>();
 
@@ -272,8 +278,7 @@ class AppointmentsService {
 
   Future<ProcedureInfo> getReturnProcedureInfo(int appointmentId) async {
     try {
-      final response =
-          await _dio.get(_buildReturnProcedurePath(appointmentId));
+      final response = await _dio.get(_buildReturnProcedurePath(appointmentId));
       if (response.statusCode == 200) {
         return ProcedureInfo.fromJson(response.data);
       } else {
@@ -537,6 +542,19 @@ class AppointmentsService {
     }
   }
 
+  Future<AppointmentDetail> finishAppointment(int appointmentId) async {
+    try {
+      final response = await _dio.patch(_buildFinishAppointment(appointmentId));
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(FINISH_APPOINTMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(FINISH_APPOINTMENT_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -682,5 +700,11 @@ class AppointmentsService {
     return _APPOINTMENT_REQUEST_TRANSPORT_PREFIX +
         appointmentId.toString() +
         _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX;
+  }
+
+  _buildFinishAppointment(int appointmentId) {
+    return _FINISH_APPOINTMENT_PREFIX +
+        appointmentId.toString() +
+        _FINISH_APPOINTMENT_SUFFIX;
   }
 }

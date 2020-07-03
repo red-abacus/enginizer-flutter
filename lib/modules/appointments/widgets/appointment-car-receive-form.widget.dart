@@ -3,7 +3,6 @@ import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/enum/receive-car-form-state.enum.dart';
-import 'package:app/modules/appointments/model/handover/procedure-info.model.dart';
 import 'package:app/modules/appointments/providers/pick-up-car-form-consultant.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/pick-up-form/pick-up-car-form-consultant.modal.dart';
@@ -304,19 +303,31 @@ class _AppointmentCarReceiveFormModalState
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
-                        text: S.of(context).general_by,
+                        text: S.of(context).mechanic_appointment_receive_form_part_2,
                         style:
                             TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
                         text:
-                            ' ${_provider.procedureInfo.handoverBy?.providerName ?? '-'}',
+                            ' ${_provider.procedureInfo.receivedBy?.providerName ?? '-'}',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
                       TextSpan(
                         text:
                         ' ${S.of(context).mechanic_appointment_receive_form_part_3} ',
+                        style:
+                        TextHelper.customTextStyle(color: gray3, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                        '${_provider.procedureInfo?.receivedBy?.userName ?? '-'}.',
+                        style: TextHelper.customTextStyle(
+                            color: gray3, weight: FontWeight.bold, size: 16),
+                      ),
+                      TextSpan(
+                        text:
+                        ' ${S.of(context).mechanic_appointment_receive_form_part_4} ',
                         style:
                         TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
@@ -339,7 +350,7 @@ class _AppointmentCarReceiveFormModalState
                     children: <TextSpan>[
                       TextSpan(
                         text:
-                            '${_provider.procedureInfo?.handoverBy?.providerName ?? '-'} ',
+                            '${_provider.procedureInfo?.receivedBy?.providerName ?? '-'} ',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -351,7 +362,7 @@ class _AppointmentCarReceiveFormModalState
                       ),
                       TextSpan(
                         text:
-                        '${_provider.procedureInfo?.handoverBy?.userName ?? '-'} ',
+                        '${_provider.procedureInfo?.receivedBy?.userName ?? '-'} ',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),
@@ -363,7 +374,7 @@ class _AppointmentCarReceiveFormModalState
                       ),
                       TextSpan(
                         text:
-                        ' ${_provider.procedureInfo?.receivedBy?.userName ?? '-'}:',
+                        ' ${_provider.procedureInfo?.handoverBy?.userName ?? '-'}:',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),

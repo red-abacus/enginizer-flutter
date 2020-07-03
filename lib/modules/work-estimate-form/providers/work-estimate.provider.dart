@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
-import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
@@ -12,7 +11,6 @@ import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
-import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
@@ -370,12 +368,6 @@ class WorkEstimateProvider with ChangeNotifier {
       WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
     this.workEstimateRequest =
         workEstimateDetails.workEstimateRequest(estimatorMode);
-  }
-
-  createFinalWorkEstimateRequest(
-      WorkEstimateDetails workEstimateDetails, EstimatorMode estimatorMode) {
-    this.workEstimateRequest =
-        workEstimateDetails.finalWorkEstimateRequest(estimatorMode);
   }
 
   double selectedRecommendationTotalCost() {

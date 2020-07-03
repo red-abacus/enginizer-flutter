@@ -129,6 +129,7 @@
   "appointment_status_in_review": "In Review",
   "appointment_status_new": "New",
   "appointment_status_accepted": "Accepted",
+  "appointment_status_ready_for_pickup": "Ready for Pickup",
   "appointment_details_applicant": "Applicant",
   "appointment_details_assiged_mechanic": "Assigned Mechanic",
   "appointment_details_no_mechanic_alert": "No mechanic is assigned!",
@@ -157,6 +158,7 @@
   "appointment_client_rating_readiness": "Readiness",
   "appointment_consultant_pick_up_car_title": "Receive Car Form",
   "appointment_consultant_no_pick_up_car_form": "There is no receive car form!",
+  "appointment_consultant_no_handover_car_form": "There is no handover car form!",
   "appointment_consultant_car_form_photos_title": "Add Car Images (max 5)",
   "appointment_consultant_car_form_real_km": "Real km number",
   "appointment_consultant_car_form_real_km_error": "Add real km number!",
@@ -212,6 +214,9 @@
   "appointment_no_map_data": "No coordinates info",
   "appointment_locator_title": "Your location is shared.",
   "appointment_hand_over_car": "Car Handover",
+  "appointment_put_in_work": "Put to work",
+  "appointment_finish_appointment": "Finish appointment",
+  "appointment_finish_appointment_alert": "Are you sure you want to finish this appointment?",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -705,5 +710,6 @@
   "exception_get_invoice_details": "There was an error trying to load invoice details.",
   "exception_receive_procedure_info": "There was an error trying to load receive procedure info",
   "exception_return_procedure_info": "There was an error trying to load return procedure info",
-  "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf."
+  "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf.",
+  "exception_finish_appointment": "There was an error trying to finish appointment."
 }

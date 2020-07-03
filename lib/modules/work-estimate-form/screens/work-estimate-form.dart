@@ -3,11 +3,12 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/personnel/employee-timeserie.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
+import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
+import 'package:app/modules/appointments/screens/appointment-details-parts-provider-estimate.modal.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
@@ -36,6 +37,7 @@ import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
+import 'package:app/presentation/custom_icons.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -119,7 +121,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             .then((_) async {
           if (widget.mode == EstimatorMode.ReadOnly ||
               widget.mode == EstimatorMode.ReadOnlyHistory ||
-              widget.mode == EstimatorMode.CreateFinal ||
               widget.mode == EstimatorMode.Client ||
               widget.mode == EstimatorMode.ClientAccept ||
               widget.mode == EstimatorMode.Edit) {
@@ -127,13 +128,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                 .getWorkEstimateDetails(_provider.workEstimateId)
                 .then((workEstimateDetails) {
               if (workEstimateDetails != null) {
-                if (widget.mode == EstimatorMode.CreateFinal) {
-                  _provider.createFinalWorkEstimateRequest(
-                      workEstimateDetails, widget.mode);
-                } else {
-                  _provider.createWorkEstimateRequest(
-                      workEstimateDetails, widget.mode);
-                }
+                _provider.createWorkEstimateRequest(
+                    workEstimateDetails, widget.mode);
               }
 
               _checkAppointmentPromotion();
@@ -348,6 +344,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             labelStyle: TextHelper.customTextStyle(
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _assignMechanic()));
+
+        if (_provider.selectedAppointmentDetail.canOrderItems()) {
+          buttons.add(SpeedDialChild(
+              child: Icon(Custom.car),
+              foregroundColor: red,
+              backgroundColor: Colors.white,
+              label: S.of(context).appointment_request_items,
+              labelStyle: TextHelper.customTextStyle(
+                  color: Colors.grey, weight: FontWeight.bold, size: 16),
+              onTap: () => _requestParts()));
+        }
         break;
       case EstimatorMode.Create:
         buttons.add(saveButton);
@@ -362,10 +369,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         break;
       case EstimatorMode.CreatePart:
         buttons.add(saveButton);
-        break;
-      case EstimatorMode.CreateFinal:
-        buttons.add(saveButton);
-        buttons.add(operationHistoryButton);
         break;
       case EstimatorMode.CreatePr:
         buttons.add(saveButton);
@@ -420,8 +423,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       case EstimatorMode.CreatePart:
       case EstimatorMode.CreatePr:
         totalCost = _provider.workEstimateRequest.totalCost();
-        break;
-      case EstimatorMode.CreateFinal:
         break;
       case EstimatorMode.ReadOnly:
       case EstimatorMode.ReadOnlyHistory:
@@ -507,18 +508,10 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             return EstimateAssignMechanicModal(
                 providerId: _provider.serviceProviderId,
                 appointmentDetail: _provider.selectedAppointmentDetail,
-                auctionDetail: _provider.selectedAuctionDetails,
-                refreshState: _refreshState,
-                assignEmployee: _assignEmployee);
+                auctionDetail: _provider.selectedAuctionDetails);
           });
         });
   }
-
-  _assignEmployee(EmployeeTimeSerie timeSerie) {
-//    _provider.workEstimateRequest.employeeTimeSerie = timeSerie;
-  }
-
-  _refreshState() {}
 
   _expandSection(Issue issue, IssueRecommendation issueSection) {
     setState(() {
@@ -952,6 +945,25 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 
   _selectDateEntry(DateEntry dateEntry) {
     _provider.workEstimateRequest.dateEntry = dateEntry;
+  }
+
+  _requestParts() {
+    Provider.of<SelectPartsProviderProvider>(context).resetParams();
+    Provider.of<SelectPartsProviderProvider>(context)
+        .selectedAppointmentDetails = _provider.selectedAppointmentDetail;
+
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AppointmentDetailsPartsProviderEstimateModal();
+          });
+        });
   }
 
   _print() async {

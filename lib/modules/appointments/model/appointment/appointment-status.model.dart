@@ -33,7 +33,6 @@ class AppointmentStatus {
   Color resolveStatusColor() {
     switch (getState()) {
       case AppointmentStatusState.SUBMITTED:
-      case AppointmentStatusState.IN_REVIEW:
       case AppointmentStatusState.NEW:
         return gray;
       case AppointmentStatusState.CANCELED:
@@ -42,6 +41,7 @@ class AppointmentStatus {
       case AppointmentStatusState.DONE:
       case AppointmentStatusState.ACCEPTED:
       case AppointmentStatusState.IN_TRANSPORT:
+      case AppointmentStatusState.READY_FOR_PICKUP:
         return green;
       case AppointmentStatusState.NONE:
         return gray2;
@@ -99,6 +99,8 @@ class AppointmentStatus {
         return AppointmentStatusState.ACCEPTED;
       case 'IN_TRANSPORT':
         return AppointmentStatusState.IN_TRANSPORT;
+      case 'READY_FOR_PICKUP':
+        return AppointmentStatusState.READY_FOR_PICKUP;
       default:
         return AppointmentStatusState.NONE;
     }

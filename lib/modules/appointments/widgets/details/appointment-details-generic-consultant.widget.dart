@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
+class AppointmentDetailsConsultantWidget extends StatefulWidget {
   AppointmentDetail appointmentDetail;
   WorkEstimateDetails workEstimateDetails;
   List<ServiceProviderItem> serviceProviderItems;
@@ -20,29 +20,31 @@ class AppointmentDetailsGenericConsultantWidget extends StatefulWidget {
   final Function viewEstimate;
   final Function assignMechanic;
   final Function createPickUpCarForm;
-  final Function requestPartsProvider;
+  final Function createHandoverCarForm;
   final Function seeCamera;
+  final Function finishAppointment;
 
-  AppointmentDetailsGenericConsultantWidget(
+  AppointmentDetailsConsultantWidget(
       {this.appointmentDetail,
       this.serviceProviderItems = const [],
       this.declineAppointment,
       this.createEstimate,
       this.viewEstimate,
       this.assignMechanic,
+      this.createHandoverCarForm,
       this.createPickUpCarForm,
       this.workEstimateDetails,
-      this.requestPartsProvider,
-      this.seeCamera});
+      this.seeCamera,
+      this.finishAppointment});
 
   @override
-  AppointmentDetailsGenericConsultantWidgetState createState() {
-    return AppointmentDetailsGenericConsultantWidgetState();
+  _AppointmentDetailsConsultantWidgetState createState() {
+    return _AppointmentDetailsConsultantWidgetState();
   }
 }
 
-class AppointmentDetailsGenericConsultantWidgetState
-    extends State<AppointmentDetailsGenericConsultantWidget> {
+class _AppointmentDetailsConsultantWidgetState
+    extends State<AppointmentDetailsConsultantWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +104,9 @@ class AppointmentDetailsGenericConsultantWidgetState
                   AppointmentStatusState.SCHEDULED)
                 _scheduledSpecificContainer(),
               if (widget.appointmentDetail.status.getState() ==
+                  AppointmentStatusState.READY_FOR_PICKUP)
+                _readyForPickUpSpecificContainer(),
+              if (widget.appointmentDetail.status.getState() ==
                   AppointmentStatusState.IN_WORK)
                 _inWorkSpecificContainer(),
               _titleContainer(S.of(context).appointment_details_services_title),
@@ -136,7 +141,8 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).general_decline.toUpperCase(),
-            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+            style: TextHelper.customTextStyle(
+                color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
@@ -150,7 +156,8 @@ class AppointmentDetailsGenericConsultantWidgetState
             },
             label: Text(
               S.of(context).auction_create_estimate.toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 16),
             ),
             backgroundColor: Colors.white,
           ));
@@ -164,7 +171,8 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).general_decline.toUpperCase(),
-            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+            style: TextHelper.customTextStyle(
+                color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
@@ -176,27 +184,38 @@ class AppointmentDetailsGenericConsultantWidgetState
           },
           label: Text(
             S.of(context).auction_create_estimate.toUpperCase(),
-            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+            style: TextHelper.customTextStyle(
+                color: red, weight: FontWeight.bold, size: 16),
           ),
           backgroundColor: Colors.white,
         ));
         break;
-      case AppointmentStatusState.SCHEDULED:
-      case AppointmentStatusState.IN_UNIT:
-      case AppointmentStatusState.IN_WORK:
-      case AppointmentStatusState.ON_HOLD:
+      case AppointmentStatusState.IN_REVIEW:
         buttons.add(FloatingActionButton.extended(
-          heroTag: null,
+          heroTag: 'putInWork',
           onPressed: () {
-            widget.requestPartsProvider();
+            // TODO
           },
           label: Text(
-            S.of(context).appointment_request_items.toUpperCase(),
-            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+            S.of(context).appointment_put_in_work,
+            style: TextHelper.customTextStyle(
+                color: red, weight: FontWeight.bold, size: 14),
           ),
           backgroundColor: Colors.white,
         ));
-        break;
+
+        buttons.add(FloatingActionButton.extended(
+          heroTag: 'finishAppointment',
+          onPressed: () {
+            widget.finishAppointment();
+          },
+          label: Text(
+            S.of(context).appointment_finish_appointment,
+            style: TextHelper.customTextStyle(
+                color: red, weight: FontWeight.bold, size: 14),
+          ),
+          backgroundColor: Colors.white,
+        ));
         break;
       default:
         break;
@@ -255,7 +274,8 @@ class AppointmentDetailsGenericConsultantWidgetState
             onPressed: () => {widget.viewEstimate()},
             child: Text(
               buttonTitle,
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -321,7 +341,8 @@ class AppointmentDetailsGenericConsultantWidgetState
       margin: EdgeInsets.only(top: 10),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
+        style: TextHelper.customTextStyle(
+            color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -364,7 +385,8 @@ class AppointmentDetailsGenericConsultantWidgetState
     return Column(
       children: <Widget>[
         if (widget.appointmentDetail.serviceItems != null)
-          for (ServiceProviderItem item in widget.appointmentDetail.serviceItems)
+          for (ServiceProviderItem item
+              in widget.appointmentDetail.serviceItems)
             _getServiceRow(item),
       ],
     );
@@ -429,7 +451,92 @@ class AppointmentDetailsGenericConsultantWidgetState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _titleContainer(S.of(context).mechanic_appointment_receive_form_title),
-        _pickUpCarForm(),
+        Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 20,
+                height: 20,
+                decoration: new BoxDecoration(
+                  color: gray,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Text(
+                    S.of(context).appointment_consultant_no_pick_up_car_form,
+                    style: TextHelper.customTextStyle(
+                        color: red, weight: FontWeight.bold, size: 15),
+                  ),
+                ),
+              ),
+              FlatButton(
+                child: Text(
+                  S.of(context).general_create.toUpperCase(),
+                  style: TextHelper.customTextStyle(
+                      color: red, weight: FontWeight.bold, size: 15),
+                ),
+                onPressed: () {
+                  widget.createPickUpCarForm();
+                },
+              )
+            ],
+          ),
+        ),
+        _buildSeparator(),
+      ],
+    );
+  }
+
+  _readyForPickUpSpecificContainer() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _titleContainer(S.of(context).mechanic_appointment_hand_form_title),
+        Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 20,
+                height: 20,
+                decoration: new BoxDecoration(
+                  color: gray,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Text(
+                    S.of(context).appointment_consultant_no_handover_car_form,
+                    style: TextHelper.customTextStyle(
+                        color: red, weight: FontWeight.bold, size: 15),
+                  ),
+                ),
+              ),
+              FlatButton(
+                child: Text(
+                  S.of(context).general_create.toUpperCase(),
+                  style: TextHelper.customTextStyle(
+                      color: red, weight: FontWeight.bold, size: 15),
+                ),
+                onPressed: () {
+                  widget.createHandoverCarForm();
+                },
+              )
+            ],
+          ),
+        ),
         _buildSeparator(),
       ],
     );
@@ -469,46 +576,6 @@ class AppointmentDetailsGenericConsultantWidgetState
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  _pickUpCarForm() {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 20,
-            height: 20,
-            decoration: new BoxDecoration(
-              color: gray,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Text(
-                S.of(context).appointment_consultant_no_pick_up_car_form,
-                style:
-                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 15),
-              ),
-            ),
-          ),
-          FlatButton(
-            child: Text(
-              S.of(context).general_create.toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 15),
-            ),
-            onPressed: () {
-              widget.createPickUpCarForm();
-            },
-          )
         ],
       ),
     );

@@ -30,6 +30,8 @@ class AppointmentStatusStateUtils {
         return S.of(context).appointment_status_accepted;
       case AppointmentStatusState.IN_TRANSPORT:
         return S.of(context).appointment_status_in_transport;
+      case AppointmentStatusState.READY_FOR_PICKUP:
+        return S.of(context).appointment_status_ready_for_pickup;
       case AppointmentStatusState.NONE:
         return '';
         break;
@@ -64,6 +66,8 @@ class AppointmentStatusStateUtils {
         return 'ACCEPTED';
       case AppointmentStatusState.IN_TRANSPORT:
         return 'IN_TRANSPORT';
+      case AppointmentStatusState.READY_FOR_PICKUP:
+        return 'READY_FOR_PICKUP';
       default:
         return '';
     }
@@ -81,7 +85,8 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.IN_REVIEW,
       AppointmentStatusState.ON_HOLD,
       AppointmentStatusState.IN_TRANSPORT,
-      AppointmentStatusState.DONE
+      AppointmentStatusState.DONE,
+      AppointmentStatusState.READY_FOR_PICKUP,
     ];
   }
 
@@ -118,5 +123,6 @@ enum AppointmentStatusState {
   IN_REVIEW,
   NEW,
   ACCEPTED,
-  IN_TRANSPORT
+  IN_TRANSPORT,
+  READY_FOR_PICKUP
 }

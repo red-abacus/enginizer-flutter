@@ -1,4 +1,3 @@
-import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-status.model.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/operating-unit.model.dart';
@@ -10,7 +9,6 @@ import 'package:intl/intl.dart';
 
 import '../../../cars/models/car.model.dart';
 import '../operating-unit.model.dart';
-import 'appointment-type.model.dart';
 
 class Appointment {
   int id;
@@ -68,14 +66,6 @@ class Appointment {
         seller: json['seller'] != null
             ? GenericModel.fromJson(json['seller'])
             : null);
-  }
-
-  static _mapAppointmentTypes(List<dynamic> response) {
-    List<AppointmentType> appointmentTypes = [];
-    response.forEach((item) {
-      appointmentTypes.add(AppointmentType.fromJson(item));
-    });
-    return appointmentTypes;
   }
 
   Map<String, dynamic> toJson() {

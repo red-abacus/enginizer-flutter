@@ -53,7 +53,9 @@ class _PickUpCarFormConsultantWidgetState
   @override
   Widget build(BuildContext context) {
     steps = _buildSteps(context);
-    return _getContent();
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _buildStepper();
   }
 
   @override
@@ -129,12 +131,6 @@ class _PickUpCarFormConsultantWidgetState
         _isLoading = false;
       });
     }
-  }
-
-  _getContent() {
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : _buildStepper();
   }
 
   Widget _buildStepper() => Stepper(
@@ -250,6 +246,7 @@ class _PickUpCarFormConsultantWidgetState
               _goTo(2);
               break;
             case CarReceiveFormState.Pr:
+            case CarReceiveFormState.ServiceReturnCar:
               _createReceiveForm();
               break;
           }
@@ -287,7 +284,7 @@ class _PickUpCarFormConsultantWidgetState
         await _provider
             .addReceiveProcedurePhotos(_provider.receiveFormRequest)
             .then((_) async {
-          if (_provider.selectedTimeSeries != null) {
+          if (_provider.selectedTimeSeries != null && _provider.selectedTimeSeries.length > 0) {
             AssignEmployeeRequest request = new AssignEmployeeRequest();
             request.timeSeries = _provider.selectedTimeSeries;
             request.employeeId = _provider.selectedTimeSeries.first.employeeId;

@@ -230,6 +230,7 @@ class AppointmentDetail {
       case AppointmentStatusState.IN_UNIT:
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.ON_HOLD:
+      case AppointmentStatusState.IN_REVIEW:
         return true;
       default:
         return false;
@@ -265,6 +266,31 @@ class AppointmentDetail {
           .fetchDistanceAndDurations(inject<AuctionsService>());
     } catch (error) {
       throw (error);
+    }
+  }
+
+  bool canOrderItems() {
+    switch (this.status.getState()) {
+      case AppointmentStatusState.SCHEDULED:
+      case AppointmentStatusState.IN_UNIT:
+      case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
+      case AppointmentStatusState.IN_REVIEW:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  bool canAssignMechanic() {
+    switch (this.status.getState()) {
+      case AppointmentStatusState.SCHEDULED:
+      case AppointmentStatusState.IN_UNIT:
+      case AppointmentStatusState.IN_WORK:
+      case AppointmentStatusState.ON_HOLD:
+        return true;
+      default:
+        return false;
     }
   }
 }

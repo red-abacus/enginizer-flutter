@@ -40,14 +40,22 @@ class _PickupCarFormInformationWidgetState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _clientBoughtPartsWidget(),
-            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+            if (widget.carReceiveFormState == CarReceiveFormState.Service ||
+                widget.carReceiveFormState ==
+                    CarReceiveFormState.ServiceReturnCar)
               _clientKeepPartsWidget(),
-            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+            if (widget.carReceiveFormState == CarReceiveFormState.Service ||
+                widget.carReceiveFormState ==
+                    CarReceiveFormState.ServiceReturnCar)
               _fuelWidget(),
             _paymentMethodWidget(),
-            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+            if (widget.carReceiveFormState == CarReceiveFormState.Service ||
+                widget.carReceiveFormState ==
+                    CarReceiveFormState.ServiceReturnCar)
               _kmWidget(),
-            if (widget.carReceiveFormState == CarReceiveFormState.Service)
+            if (widget.carReceiveFormState == CarReceiveFormState.Service ||
+                widget.carReceiveFormState ==
+                    CarReceiveFormState.ServiceReturnCar)
               _oilChangeWidget(),
             Container(
               margin: EdgeInsets.only(top: 20),
@@ -266,7 +274,8 @@ class _PickupCarFormInformationWidgetState
     return Container(
       child: Text(
         title,
-        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+        style: TextHelper.customTextStyle(
+            color: red, weight: FontWeight.bold, size: 16),
       ),
     );
   }

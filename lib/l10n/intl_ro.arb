@@ -121,6 +121,7 @@
   "appointment_status_in_progress": "În Lucru",
   "appointment_status_finished": "Finalizată",
   "appointment_status_on_hold": "Pauză",
+  "appointment_status_ready_for_pickup": "Poate fi Ridicată",
   "appointment_details_applicant": "Solicitant",
   "appointment_details_assiged_mechanic": "Mecanic asignat",
   "appointment_details_no_mechanic_alert": "Niciun mecanic nu este asignat!",
@@ -149,6 +150,7 @@
   "appointment_client_rating_readiness": "Promptitudine",
   "appointment_consultant_pick_up_car_title": "Formular Preluare Autoturism",
   "appointment_consultant_no_pick_up_car_form": "Nu s-a completat niciun formular de preluare autoturism!",
+  "appointment_consultant_no_handover_car_form": "Nu s-a completat niciun formular de predare autoturism!",
   "appointment_consultant_car_form_photos_title": "Adaugă Imagini Autoturism (maxim 5)",
   "appointment_consultant_car_form_real_km": "Număr km reali",
   "appointment_consultant_car_form_real_km_error": "Numărul de km reali necompletat!",
@@ -176,7 +178,7 @@
   "appointment_status_submitted": "Prezentat",
   "appointment_status_scheduled": "Programat",
   "appointment_status_in_unit": "În Unitate",
-  "appointment_status_in_review": "În revizuire",
+  "appointment_status_in_review": "În revizie",
   "appointment_status_new": "Nou",
   "appointment_status_accepted": "Acceptată",
   "work_estimate_status_new": "Nou",
@@ -204,6 +206,9 @@
   "appointment_no_map_data": "Nicio informatie despre coordonate.",
   "appointment_locator_title": "Locația dvs. este distribuită.",
   "appointment_hand_over_car": "Predare Mașină",
+  "appointment_put_in_work": "Pune în lucru",
+  "appointment_finish_appointment": "Finalizează programare",
+  "appointment_finish_appointment_alert": "Are you sure you want to finish this appointment?",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
@@ -704,5 +709,6 @@
   "exception_get_invoice_details": "A intervenit o problemă la încărcarea detaliilor facturii.",
   "exception_receive_procedure_info": "A intervenit o problema la încărcarea informațiilor procedurii de primire.",
   "exception_return_procedure_info": "a intervenit o problema la încărcarea informațiilor procedurii de returnare.",
-  "exception_get_work_estimate_pdf": "A intervenit o problemă încărcarea PDF-ului."
+  "exception_get_work_estimate_pdf": "A intervenit o problemă încărcarea PDF-ului.",
+  "exception_finish_appointment": "A intervenit o problemă în procesul de finalizare a programării."
 }

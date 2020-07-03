@@ -23,14 +23,10 @@ class EstimateAssignMechanicModal extends StatefulWidget {
   final AuctionDetail auctionDetail;
   final int providerId;
 
-  final Function refreshState;
-  final Function assignEmployee;
   final EmployeeTimeSerie employeeTimeSerie;
 
   EstimateAssignMechanicModal(
       {this.appointmentDetail,
-      this.refreshState,
-      this.assignEmployee,
       this.employeeTimeSerie,
       this.auctionDetail,
       this.providerId});

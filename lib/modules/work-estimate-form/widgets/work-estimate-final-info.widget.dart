@@ -44,17 +44,6 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
                 style:
                     TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
               ),
-              if (estimatorMode != EstimatorMode.CreateFinal)
-                CustomTextFormField(
-                  labelText: S.of(context).estimator_percent,
-                  listener: (value) {
-                    this.percentage = value;
-                  },
-                  currentValue: '',
-                  errorText: S.of(context).estimator_percent_warning,
-                  validate: true,
-                  textInputType: TextInputType.number,
-                ),
               BasicDateField(
                 minDate: DateUtils.addDayToDate(DateTime.now(), -1),
                 maxDate: maxResponseTime,

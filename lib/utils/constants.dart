@@ -24,7 +24,7 @@ const Color foreground = Color(0xFF424242);
 const Color green = Color(0xFF009919);
 const Color green2 = Color.fromRGBO(61, 153, 112, 1);
 
-const Color yellow = Color(0xFFECE43C);
+const Color yellow = Color.fromRGBO(236, 228, 60, 1);
 const Color yellow2 = Color.fromRGBO(253, 181, 21, 1);
 
 const Color gray = Color(0xFF838383);
