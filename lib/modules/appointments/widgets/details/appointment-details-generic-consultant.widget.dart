@@ -106,8 +106,7 @@ class _AppointmentDetailsConsultantWidgetState
               if (widget.appointmentDetail.status.getState() ==
                   AppointmentStatusState.READY_FOR_PICKUP)
                 _readyForPickUpSpecificContainer(),
-              if (widget.appointmentDetail.status.getState() ==
-                  AppointmentStatusState.IN_WORK)
+              if (widget.appointmentDetail.personnel != null)
                 _inWorkSpecificContainer(),
               _titleContainer(S.of(context).appointment_details_services_title),
               _servicesContainer(),
