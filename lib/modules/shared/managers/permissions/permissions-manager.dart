@@ -1,4 +1,5 @@
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
@@ -30,9 +31,9 @@ class PermissionsManager {
     manager = PermissionsManager();
   }
 
-  setServiceItemsResponse(
+  setServiceItemsResponse(JwtUser jwtUser,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
-    _permissionsSideBar = PermissionsSideBar(serviceProviderItemsResponse);
+    _permissionsSideBar = PermissionsSideBar(jwtUser, serviceProviderItemsResponse);
     _permissionsAuction = PermissionsAuction(serviceProviderItemsResponse);
     _permissionsUserProfile = PermissionsUserProfile();
     _permissionAppointmentsStatuses =
@@ -89,7 +90,8 @@ enum ConsultantServiceType {
   DismantlingShop,
   PickUpAndReturn,
   Sell,
-  Rent
+  Rent,
+  Painter
 }
 
 class ConsultantServiceTypeUtils {
@@ -107,6 +109,8 @@ class ConsultantServiceTypeUtils {
         return ConsultantServiceType.Sell;
       case 'RENT_SERVICE':
         return ConsultantServiceType.Rent;
+      case 'PAINT_SHOP':
+        return ConsultantServiceType.Painter;
     }
 
     return null;

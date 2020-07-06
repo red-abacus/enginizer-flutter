@@ -7,7 +7,7 @@ class JwtUser {
   String given_name;
   String badgeId;
   String role;
-  List<dynamic> permissions;
+  List<String> permissions;
   dynamic userType;
   int providerId;
   int exp;
@@ -34,7 +34,7 @@ class JwtUser {
         email: json['email'],
         sub: json['sub'],
         role: json['role'],
-        permissions: json['permissions'],
+        permissions: json['permissions'] != null ? json['permissions'].cast<String>() : [],
         userType: json['userType'],
         providerId: json['providerId']);
   }

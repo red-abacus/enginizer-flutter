@@ -6,10 +6,12 @@ import 'package:app/modules/shared/managers/permissions/permissions-manager.dart
 class PermissionsAuction {
   static final String AUCTION_DETAILS = 'AUCTION.AUCTION_DETAILS';
   static final String AUCTION_MAP_DETAILS = 'AUCTION.AUCTION_MAP_DETAILS';
-  static final String CONSULTANT_AUCTION_DETAILS = 'AUCTION.CONSULTANT_AUCTION_DETAILS';
+  static final String CONSULTANT_AUCTION_DETAILS =
+      'AUCTION.CONSULTANT_AUCTION_DETAILS';
   static final String APPOINTMENT_DETAILS = 'AUCTION.APPOINTMENT_DETAILS';
   static final String CAR_DETAILS = 'AUCTION.CAR_DETAILS';
-  static final String CREATE_PART_WORK_ESTIMATE = 'AUCTION.CREATE_PART_WORK_ESTIMATE';
+  static final String CREATE_PART_WORK_ESTIMATE =
+      'AUCTION.CREATE_PART_WORK_ESTIMATE';
   static final String CREATE_WORK_ESTIMATE = 'AUCTION.CREATE_WORK_ESTIMATE';
 
   Map<String, List<String>> permissionsMap = Map();
@@ -31,8 +33,10 @@ class PermissionsAuction {
           break;
         case Roles.ProviderConsultant:
           if (serviceProviderItemsResponse != null) {
-            for(ServiceProviderItem item in serviceProviderItemsResponse.items) {
-              ConsultantServiceType serviceType = ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
+            for (ServiceProviderItem item
+                in serviceProviderItemsResponse.items) {
+              ConsultantServiceType serviceType =
+                  ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
               if (serviceType != null) {
                 switch (serviceType) {
@@ -54,6 +58,12 @@ class PermissionsAuction {
                     permissions.add(CAR_DETAILS);
                     permissions.add(CREATE_WORK_ESTIMATE);
                     permissions.add(CONSULTANT_AUCTION_DETAILS);
+                    break;
+                  case ConsultantServiceType.Sell:
+                    break;
+                  case ConsultantServiceType.Rent:
+                    break;
+                  case ConsultantServiceType.Painter:
                     break;
                 }
               }

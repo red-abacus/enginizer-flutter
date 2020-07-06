@@ -64,6 +64,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   // TODO - remove this
                   _testWidget(),
                   _testWidget2(),
+                  _testWidget3(),
                 ],
               ),
             ),
@@ -128,6 +129,20 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Text('Admin Provider'),
           onPressed: () {
             _login('admin.provider@autowass.com', 'password');
+          },
+        ),
+      ],
+    );
+  }
+
+  _testWidget3() {
+    // admin.provider@autowas.com
+    return Row(
+      children: <Widget>[
+        FlatButton(
+          child: Text('Painter Consultant'),
+          onPressed: () {
+            _login('painter.provider@autowass.com', 'autowass123');
           },
         ),
       ],

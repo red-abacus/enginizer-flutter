@@ -1,101 +1,74 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsSideBar {
-  static final String DASHBOARD = 'SIDEBAR.DASHBOARD';
-  static final String PROFILE = 'SIDEBAR.PROFILE';
-  static final String APPOINTMENT = 'SIDEBAR.APPOINTMENT';
-  static final String AUCTION = 'SIDEBAR.AUCTION';
-  static final String WORK_ESTIMATE = 'SIDEBAR.WORK_ESTIMATE';
+  static final String DASHBOARD = 'VIEW_DASHBOARD';
+  static final String PROFILE = 'MANAGE_PERSONAL_PROFILE';
+  static final String APPOINTMENT = 'VIEW_APPOINTMENTS';
+  static final String AUCTION = 'VIEW_AUCTIONS';
+  static final String WORK_ESTIMATE = 'VIEW_WORK_ESTIMATES';
   static final String NOTIFICATIONS = 'SIDEBAR.NOTIFICATIONS';
   static final String PARTS = 'SIDEBAR.PARTS';
-  static final String ORDERS = 'SIDEBAR.ORDERS';
-  static final String PROMOTIONS = 'SIDEBAR.PROMOTIONS';
-  static final String CARS = 'SIDEBAR.CARS';
-  static final String SHOP = 'SIDEBAR.SHOP';
+  static final String ORDERS = 'VIEW_ORDERS';
+  static final String PROMOTIONS = 'VIEW_PROMOTIONS';
+  static final String CARS = 'VIEW_CARS';
+  static final String SHOP = 'VIEW_ONLINE_STORE';
   static final String TICKETS = 'SIDEBAR.TICKETS';
-  static final String PARKING_LOTS = 'SIDEBAR.PARKING_LOTS';
   static final String EXTRA_SERVICES = 'SIDEBAR.EXTRA_SERVICES';
-  static final String INVOICES = 'SIDEBAR.INVOICES';
+  static final String INVOICES = 'VIEW_INVOICES';
 
   Map<String, List<String>> _permissionsMap = Map();
 
-  PermissionsSideBar(
+  PermissionsSideBar(JwtUser jwtUser,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = [];
+      List<String> permissions = jwtUser.permissions;
 
       switch (role) {
         case Roles.Super:
-          permissions = [PROFILE];
+          permissions = [];
           break;
         case Roles.Client:
           permissions = [
-            DASHBOARD,
-            CARS,
-            PROFILE,
-            APPOINTMENT,
-            AUCTION,
             NOTIFICATIONS,
-            PROMOTIONS,
-            SHOP,
-            INVOICES,
-            TICKETS,
-            PARKING_LOTS,
             EXTRA_SERVICES,
-            WORK_ESTIMATE
           ];
           break;
         case Roles.ProviderAccountant:
-          permissions = [PROFILE];
           break;
         case Roles.ProviderPersonnel:
-          permissions = [PROFILE, APPOINTMENT, NOTIFICATIONS];
+          permissions = [NOTIFICATIONS];
           break;
         case Roles.ProviderConsultant:
-          permissions = [PROFILE];
-
           if (serviceProviderItemsResponse != null) {
             for (ServiceProviderItem item
                 in serviceProviderItemsResponse.items) {
               ConsultantServiceType serviceType =
                   ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
 
-              permissions.add(WORK_ESTIMATE);
-
               if (serviceType != null) {
                 switch (serviceType) {
                   case ConsultantServiceType.PickUpAndReturn:
-                    permissions.add(APPOINTMENT);
-                    permissions.add(AUCTION);
                     permissions.add(NOTIFICATIONS);
                     break;
                   case ConsultantServiceType.Service:
-                    permissions.add(PROFILE);
-                    permissions.add(APPOINTMENT);
-                    permissions.add(AUCTION);
                     permissions.add(NOTIFICATIONS);
-                    permissions.add(ORDERS);
                     break;
                   case ConsultantServiceType.PartShop:
-                    permissions.add(PROFILE);
-                    permissions.add(AUCTION);
                     permissions.add(NOTIFICATIONS);
-                    permissions.add(ORDERS);
                     break;
                   case ConsultantServiceType.DismantlingShop:
-                    permissions.add(PROFILE);
-                    permissions.add(AUCTION);
                     permissions.add(NOTIFICATIONS);
                     permissions.add(PARTS);
-                    permissions.add(ORDERS);
                     break;
                   case ConsultantServiceType.Sell:
+                    break;
                   case ConsultantServiceType.Rent:
-                    permissions.add(CARS);
-                    permissions.add(PROMOTIONS);
+                    break;
+                  case ConsultantServiceType.Painter:
                     break;
                 }
               }
@@ -103,7 +76,6 @@ class PermissionsSideBar {
           }
           break;
         case Roles.ProviderAdmin:
-          permissions = [PROFILE, PROMOTIONS];
           break;
       }
 

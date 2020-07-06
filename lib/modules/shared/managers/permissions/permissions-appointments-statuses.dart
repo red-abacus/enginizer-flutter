@@ -50,6 +50,10 @@ class PermissionAppointmentsStatuses {
                   case ConsultantServiceType.DismantlingShop:
                     permissions.add(PARTS_STATUSES);
                     break;
+                  case ConsultantServiceType.Sell:
+                    break;
+                  case ConsultantServiceType.Rent:
+                    break;
                 }
               }
             }
