@@ -4,11 +4,11 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionAppointmentsStatuses {
-  static final String ALL_STATUSES = 'APPOINTMENT_STATUSES.ALL_PERMISSIONS';
-  static final String PARTS_STATUSES = 'APPOINTMENT_STATUSES.PARTS_STATUSES';
+  static final String ALL_STATUSES = 'APPOINTMENT_STATUSES.ALL_PERMISSIONS'; // TODO
+  static final String PARTS_STATUSES = 'APPOINTMENT_STATUSES.PARTS_STATUSES'; // TODO
   static final String PERSONNEL_STATUSES =
-      'APPOINTMENT_STATUSES.PERSONNEL_STATUSES';
-  static final String PR_STATUSES = 'APPOINTMENT_STATUSES.PR_STATUSES';
+      'APPOINTMENT_STATUSES.PERSONNEL_STATUSES'; // TODO
+  static final String PR_STATUSES = 'APPOINTMENT_STATUSES.PR_STATUSES'; // TODO
 
   Map<String, List<String>> permissionsMap = Map();
   Map<String, List<String>> serviceItemsPermissionsMap = Map();
@@ -42,6 +42,7 @@ class PermissionAppointmentsStatuses {
                     permissions.add(PR_STATUSES);
                     break;
                   case ConsultantServiceType.Service:
+                  case ConsultantServiceType.Painter:
                     permissions.add(ALL_STATUSES);
                     break;
                   case ConsultantServiceType.PartShop:

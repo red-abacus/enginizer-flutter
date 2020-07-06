@@ -1,25 +1,26 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsCar {
-  static final String CREATE_CAR_EXTRA = 'CAR.CREATE_CAR_EXTRA';
-  static final String APPOINTMENT_CAR = 'CAR.APPOINTMENT_CAR';
-  static final String SELL_CAR = 'CAR.SELL_CAR';
-  static final String RENT_CAR = 'CAR.RENT_CAR';
+  static final String CREATE_CAR_EXTRA = 'CAR.CREATE_CAR_EXTRA'; // TODO
+  static final String APPOINTMENT_CAR = 'CAR.APPOINTMENT_CAR'; // TODO
+  static final String SELL_CAR = 'SELL_CARS';
+  static final String RENT_CAR = 'RENT_CARS';
 
   Map<String, List<String>> permissionsMap = Map();
 
-  PermissionsCar(ServiceProviderItemsResponse serviceProviderItemsResponse) {
+  PermissionsCar(JwtUser jwtUser, ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = [];
+      List<String> permissions = jwtUser.permissions;
 
       switch (role) {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [APPOINTMENT_CAR, SELL_CAR, CREATE_CAR_EXTRA];
+          permissions = [APPOINTMENT_CAR, CREATE_CAR_EXTRA];
           break;
         case Roles.ProviderAccountant:
           break;
@@ -36,11 +37,9 @@ class PermissionsCar {
                 switch (serviceType) {
                   case ConsultantServiceType.Sell:
                     permissions.add(CREATE_CAR_EXTRA);
-                    permissions.add(SELL_CAR);
                     break;
                   case ConsultantServiceType.Rent:
                     permissions.add(CREATE_CAR_EXTRA);
-                    permissions.add(RENT_CAR);
                     break;
                   default:
                     break;

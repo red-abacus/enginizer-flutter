@@ -10,14 +10,14 @@ class PermissionsSideBar {
   static final String APPOINTMENT = 'VIEW_APPOINTMENTS';
   static final String AUCTION = 'VIEW_AUCTIONS';
   static final String WORK_ESTIMATE = 'VIEW_WORK_ESTIMATES';
-  static final String NOTIFICATIONS = 'SIDEBAR.NOTIFICATIONS';
-  static final String PARTS = 'SIDEBAR.PARTS';
+  static final String NOTIFICATIONS = 'SIDEBAR.NOTIFICATIONS'; // TODO
+  static final String PARTS = 'SIDEBAR.PARTS'; // TODO
   static final String ORDERS = 'VIEW_ORDERS';
   static final String PROMOTIONS = 'VIEW_PROMOTIONS';
   static final String CARS = 'VIEW_CARS';
   static final String SHOP = 'VIEW_ONLINE_STORE';
-  static final String TICKETS = 'SIDEBAR.TICKETS';
-  static final String EXTRA_SERVICES = 'SIDEBAR.EXTRA_SERVICES';
+  static final String TICKETS = 'SIDEBAR.TICKETS'; // TODO
+  static final String EXTRA_SERVICES = 'SIDEBAR.EXTRA_SERVICES'; // TODO
   static final String INVOICES = 'VIEW_INVOICES';
 
   Map<String, List<String>> _permissionsMap = Map();

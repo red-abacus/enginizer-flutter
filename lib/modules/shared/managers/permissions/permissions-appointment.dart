@@ -1,33 +1,34 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsAppointment {
   static final String VIEW_APPOINTMENT_DETAILS_CLIENT =
-      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_CLIENT';
+      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_CLIENT'; // TODO
   static final String VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER =
-      'APPOINTMENT.SERVICE_PROVIDER';
+      'APPOINTMENT.SERVICE_PROVIDER'; // TODO
   static final String VIEW_APPOINTMENT_DETAILS_PERSONNEL =
-      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PERSONNEL';
+      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PERSONNEL'; // TODO
   static final String VIEW_APPOINTMENT_DETAILS_PR =
-      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PR';
-  static final String CREATE_APPOINTMENT = 'APPOINTMENT.CREATE_APPOINTMENT';
+      'APPOINTMENT.VIEW_APPOINTMENT_DETAILS_PR'; // TODO
+  static final String CREATE_APPOINTMENT = 'CREATE_APPOINTMENTS';
   static final String SHARE_APPOINTMENT_LOCATION =
-      'APPOINTMENT.SHARE_APPOINTMENT_LOCATION';
+      'APPOINTMENT.SHARE_APPOINTMENT_LOCATION'; // TODO
 
   Map<String, List<String>> permissionsMap = Map();
 
-  PermissionsAppointment(
+  PermissionsAppointment(JwtUser user,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = [];
+      List<String> permissions = user.permissions;
 
       switch (role) {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [CREATE_APPOINTMENT, VIEW_APPOINTMENT_DETAILS_CLIENT];
+          permissions = [VIEW_APPOINTMENT_DETAILS_CLIENT];
           break;
         case Roles.ProviderAccountant:
           break;
@@ -53,6 +54,12 @@ class PermissionsAppointment {
                   case ConsultantServiceType.PartShop:
                     break;
                   case ConsultantServiceType.DismantlingShop:
+                    break;
+                  case ConsultantServiceType.Sell:
+                    break;
+                  case ConsultantServiceType.Rent:
+                    break;
+                  case ConsultantServiceType.Painter:
                     break;
                 }
               }

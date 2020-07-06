@@ -4,8 +4,8 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsPromotion {
-  static final String CREATE_PROMOTION = 'PROMOTION.CREATE_PROMOTION';
-  static final String SELLER_PROMOTION = 'PROMOTION.SELLER_PROMOTION';
+  static final String CREATE_PROMOTION = 'MANAGE_PROMOTIONS';
+  static final String SELLER_PROMOTION = 'PROMOTION.SELLER_PROMOTION'; // TODO
 
   Map<String, List<String>> permissionsMap = Map();
   Map<String, List<String>> serviceItemsPermissionsMap = Map();
@@ -39,9 +39,11 @@ class PermissionsPromotion {
                   case ConsultantServiceType.DismantlingShop:
                     break;
                   case ConsultantServiceType.Sell:
-                    permissions = [CREATE_PROMOTION, SELLER_PROMOTION];
+                    permissions = [SELLER_PROMOTION];
                     break;
                   case ConsultantServiceType.Rent:
+                    break;
+                  case ConsultantServiceType.Painter:
                     break;
                 }
               }
@@ -49,7 +51,6 @@ class PermissionsPromotion {
           }
           break;
         case Roles.ProviderAdmin:
-          permissions = [CREATE_PROMOTION];
           break;
       }
 
