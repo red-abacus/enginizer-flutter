@@ -22,18 +22,19 @@ class PermissionsAppointment {
   PermissionsAppointment(JwtUser user,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = user.permissions;
+      List<String> permissions = List<String>();
+      permissions.addAll(user.permissions);
 
       switch (role) {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [VIEW_APPOINTMENT_DETAILS_CLIENT];
+          permissions.add(VIEW_APPOINTMENT_DETAILS_CLIENT);
           break;
         case Roles.ProviderAccountant:
           break;
         case Roles.ProviderPersonnel:
-          permissions = [VIEW_APPOINTMENT_DETAILS_PERSONNEL];
+          permissions.add(VIEW_APPOINTMENT_DETAILS_PERSONNEL);
           break;
         case Roles.ProviderConsultant:
           if (serviceProviderItemsResponse != null) {
@@ -60,6 +61,7 @@ class PermissionsAppointment {
                   case ConsultantServiceType.Rent:
                     break;
                   case ConsultantServiceType.Painter:
+                    permissions.add(VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER);
                     break;
                 }
               }
@@ -75,6 +77,11 @@ class PermissionsAppointment {
   }
 
   bool hasAccess(String userRole, String permission) {
+    print('user role: $userRole permission: $permission');
+
+    for(String key in permissionsMap.keys) {
+      print('$key: ${permissionsMap[key]}');
+    }
     return permissionsMap[userRole].contains(permission);
   }
 }

@@ -22,12 +22,12 @@ class PermissionAppointmentsStatuses {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [ALL_STATUSES];
+          permissions.add(ALL_STATUSES);
           break;
         case Roles.ProviderAccountant:
           break;
         case Roles.ProviderPersonnel:
-          permissions = [PERSONNEL_STATUSES];
+          permissions.add(PERSONNEL_STATUSES);
           break;
         case Roles.ProviderConsultant:
           if (serviceProviderItemsResponse != null) {

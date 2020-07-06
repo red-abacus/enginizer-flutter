@@ -14,13 +14,14 @@ class PermissionsCar {
 
   PermissionsCar(JwtUser jwtUser, ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = jwtUser.permissions;
+      List<String> permissions = List<String>();
+      permissions.addAll(jwtUser.permissions);
 
       switch (role) {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [APPOINTMENT_CAR, CREATE_CAR_EXTRA];
+          permissions.addAll([APPOINTMENT_CAR, CREATE_CAR_EXTRA]);
           break;
         case Roles.ProviderAccountant:
           break;

@@ -25,22 +25,22 @@ class PermissionsSideBar {
   PermissionsSideBar(JwtUser jwtUser,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = jwtUser.permissions;
+      List<String> permissions = List<String>();
+      permissions.addAll(jwtUser.permissions);
 
       switch (role) {
         case Roles.Super:
-          permissions = [];
           break;
         case Roles.Client:
-          permissions = [
+          permissions.addAll([
             NOTIFICATIONS,
             EXTRA_SERVICES,
-          ];
+          ]);
           break;
         case Roles.ProviderAccountant:
           break;
         case Roles.ProviderPersonnel:
-          permissions = [NOTIFICATIONS];
+          permissions.add(NOTIFICATIONS);
           break;
         case Roles.ProviderConsultant:
           if (serviceProviderItemsResponse != null) {

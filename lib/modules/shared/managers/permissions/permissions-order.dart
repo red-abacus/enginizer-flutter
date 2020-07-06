@@ -14,7 +14,8 @@ class PermissionsOrder {
   PermissionsOrder(JwtUser jwtUser,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = jwtUser.permissions;
+      List<String> permissions = List<String>();
+      permissions.addAll(jwtUser.permissions);
 
       switch (role) {
         case Roles.Super:

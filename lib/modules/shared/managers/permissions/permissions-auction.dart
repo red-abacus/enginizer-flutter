@@ -22,7 +22,7 @@ class PermissionsAuction {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions = [AUCTION_DETAILS];
+          permissions.add(AUCTION_DETAILS);
           break;
         case Roles.ProviderAccountant:
           break;
