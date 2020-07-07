@@ -1,3 +1,4 @@
+import 'package:app/modules/appointments/widgets/cards/appointment-service.intervention.card.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/recommendations/car-intervention.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
@@ -29,6 +30,7 @@ class CarHistoryCard extends StatelessWidget {
         widgets.add(Divider());
       }
     }
+
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Column(
@@ -39,6 +41,7 @@ class CarHistoryCard extends StatelessWidget {
 
   _appointmentContainer() {
     return Container(
+      margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
       color: gray_10,
       child: Row(
@@ -47,7 +50,8 @@ class CarHistoryCard extends StatelessWidget {
           Expanded(
             child: Text(
               carHistory.appointmentName,
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold),
             ),
           ),
           Text(
@@ -63,28 +67,45 @@ class CarHistoryCard extends StatelessWidget {
   }
 
   _interventionContainer(CarIntervention intervention, bool selected) {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
-      child: InkWell(
-        onTap: () {
-          selectIntervention(intervention);
-        },
-        child: Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                intervention.name,
-                style: TextHelper.customTextStyle(
-                    color: gray3, weight: FontWeight.bold, size: 14),
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 20, right: 20),
+          child: InkWell(
+            onTap: () {
+              selectIntervention(intervention);
+            },
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    intervention.name,
+                    style: TextHelper.customTextStyle(
+                        color: gray3, weight: FontWeight.bold, size: 14),
+                  ),
+                  Icon(
+                      selected
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      color: red)
+                ],
               ),
-              Icon(selected ? Icons.check_box : Icons.check_box_outline_blank,
-                  color: red)
-            ],
+            ),
           ),
         ),
-      ),
+        if (intervention.products.length > 0)
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            shrinkWrap: true,
+            itemCount: intervention.products.length,
+            itemBuilder: (context, index) {
+              return AppointmentServiceInterventionCard(
+                  carInterventionProduct: intervention.products[index]);
+            },
+          ),
+      ],
     );
   }
 }
