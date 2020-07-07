@@ -9,9 +9,13 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-datetime.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-issue.form.dart';
+import 'package:app/modules/appointments/widgets/forms/appointment-create-pickup-map.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-providers.form.dart';
+import 'package:app/modules/appointments/widgets/forms/appointment-create-return-map.form.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-services.form.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +44,7 @@ class AppointmentCreateModal extends StatefulWidget {
 class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   int _currentStepIndex = 0;
   bool isLastStep = false;
-  List<Step> steps = [];
+  List<FAStep> steps = [];
 
   FlatButton btnPrev;
   RaisedButton btnNext;
@@ -133,12 +137,14 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
           );
   }
 
-  Widget _buildStepper(BuildContext context) => Stepper(
+  Widget _buildStepper(BuildContext context) => FAStepper(
+      stepNumberColor: red,
+      type: FAStepperType.horizontal,
+      titleIconArrange: FAStepperTitleIconArrange.row,
       currentStep: _currentStepIndex,
       onStepContinue: _next,
       key: _stepperKey,
       onStepCancel: _back,
-      type: StepperType.horizontal,
       steps: steps,
       controlsBuilder: (BuildContext context,
           {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
@@ -179,12 +185,12 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     );
   }
 
-  List<Step> _buildSteps(BuildContext context) {
-    List<Step> steps = [];
+  List<FAStep> _buildSteps(BuildContext context) {
+    List<FAStep> steps = [];
 
     if (_provider.createAppointmentState == CreateAppointmentState.SelectCar) {
       steps = [
-        Step(
+        FAStep(
           isActive: _provider.stepStateData[0]["active"],
           title: _currentStepIndex == 0
               ? Text(S.of(context).appointment_create_step0)
@@ -193,7 +199,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               key: appointmentCarSelectionStateKey),
           state: _provider.stepStateData[0]['state'],
         ),
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[1]['active'],
             title: _currentStepIndex == 1
                 ? Text(S.of(context).appointment_create_step1)
@@ -203,14 +209,14 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               serviceItems: _provider.serviceItems,
             ),
             state: _provider.stepStateData[1]['state']),
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[2]['active'],
             title: _currentStepIndex == 2
                 ? Text(S.of(context).appointment_create_step2)
                 : Text(''),
             content: AppointmentCreateIssueForm(key: appointmentIssuesStateKey),
             state: _provider.stepStateData[2]['state']),
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[3]['active'],
             title: _currentStepIndex == 3
                 ? Text(S.of(context).appointment_create_step3)
@@ -219,7 +225,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               key: appointmentShopsStateKey,
             ),
             state: _provider.stepStateData[3]['state']),
-        Step(
+        FAStep(
             isActive: _currentStepIndex == 4,
             title: _provider.stepStateData[4]['active']
                 ? Text(S.of(context).appointment_create_step4)
@@ -230,7 +236,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     } else if (_provider.createAppointmentState ==
         CreateAppointmentState.Default) {
       steps = [
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[0]['active'],
             title: _currentStepIndex == 0
                 ? Text(S.of(context).appointment_create_step1)
@@ -240,14 +246,14 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               serviceItems: _provider.serviceItems,
             ),
             state: _provider.stepStateData[0]['state']),
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[1]['active'],
             title: _currentStepIndex == 1
                 ? Text(S.of(context).appointment_create_step2)
                 : Text(''),
             content: AppointmentCreateIssueForm(key: appointmentIssuesStateKey),
             state: _provider.stepStateData[1]['state']),
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[2]['active'],
             title: _currentStepIndex == 2
                 ? Text(S.of(context).appointment_create_step3)
@@ -256,7 +262,7 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
               key: appointmentShopsStateKey,
             ),
             state: _provider.stepStateData[2]['state']),
-        Step(
+        FAStep(
             isActive: _provider.stepStateData[3]['active'],
             title: _currentStepIndex == 3
                 ? Text(S.of(context).appointment_create_step4)
@@ -264,6 +270,29 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
             content: AppointmentDateTimeForm(),
             state: _provider.stepStateData[3]['state'])
       ];
+    }
+
+    if (_provider.hasTowService()) {
+      int towIndex =
+          _provider.createAppointmentState == CreateAppointmentState.SelectCar
+              ? 5
+              : 4;
+
+      steps.add(FAStep(
+          isActive: _provider.stepStateData[towIndex]['active'],
+          title: _currentStepIndex == towIndex
+              ? Text(S.of(context).appointment_create_step5)
+              : Text(''),
+          content: AppointmentCreatePickupMapForm(),
+          state: _provider.stepStateData[towIndex]['state']));
+
+      steps.add(FAStep(
+          isActive: _provider.stepStateData[towIndex + 1]['active'],
+          title: _currentStepIndex == towIndex + 1
+              ? Text(S.of(context).appointment_create_step6)
+              : Text(''),
+          content: AppointmentCreateReturnMapForm(),
+          state: _provider.stepStateData[towIndex + 1]['state']));
     }
 
     return steps;
@@ -289,6 +318,11 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         case 4:
           _calendarChecker();
           break;
+        case 5:
+          _pickupChecker();
+          break;
+        case 6:
+          _returnChecker();
       }
     } else if (_provider.createAppointmentState ==
         CreateAppointmentState.Default) {
@@ -305,6 +339,11 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         case 3:
           _calendarChecker();
           break;
+        case 4:
+          _pickupChecker();
+          break;
+        case 5:
+          _returnChecker();
       }
     }
   }
@@ -313,9 +352,9 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     if (appointmentCarSelectionStateKey.currentState.valid()) {
       setState(() {
         _provider.stepStateData[_currentStepIndex]['state'] =
-            StepState.complete;
+            FAStepstate.complete;
         _provider.stepStateData[_currentStepIndex + 1]['state'] =
-            StepState.indexed;
+            FAStepstate.indexed;
         _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
         _goTo(_currentStepIndex + 1);
         isLastStep = false;
@@ -329,9 +368,9 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
         _stepperKey = Key(Random.secure().nextDouble().toString());
 
         _provider.stepStateData[_currentStepIndex]['state'] =
-            StepState.complete;
+            FAStepstate.complete;
         _provider.stepStateData[_currentStepIndex + 1]['state'] =
-            StepState.indexed;
+            FAStepstate.indexed;
         _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
         _goTo(_currentStepIndex + 1);
         isLastStep = false;
@@ -343,9 +382,9 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     if (appointmentIssuesStateKey.currentState.valid()) {
       setState(() {
         _provider.stepStateData[_currentStepIndex]['state'] =
-            StepState.complete;
+            FAStepstate.complete;
         _provider.stepStateData[_currentStepIndex + 1]['state'] =
-            StepState.indexed;
+            FAStepstate.indexed;
         _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
         _goTo(_currentStepIndex + 1);
         isLastStep = false;
@@ -359,9 +398,45 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     else {
       setState(() {
         _provider.stepStateData[_currentStepIndex]['state'] =
-            StepState.complete;
+            FAStepstate.complete;
         _provider.stepStateData[_currentStepIndex + 1]['state'] =
-            StepState.indexed;
+            FAStepstate.indexed;
+        _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
+        _goTo(_currentStepIndex + 1);
+
+        if (!_provider.hasTowService()) {
+          isLastStep = true;
+        } else {
+          isLastStep = false;
+        }
+      });
+    }
+  }
+
+  _calendarChecker() {
+    if (_provider.dateEntry != null) {
+      if (!_provider.hasTowService()) {
+        _submit();
+      } else {
+        setState(() {
+          _provider.stepStateData[_currentStepIndex]['state'] =
+              FAStepstate.complete;
+          _provider.stepStateData[_currentStepIndex + 1]['state'] =
+              FAStepstate.indexed;
+          _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
+          _goTo(_currentStepIndex + 1);
+        });
+      }
+    }
+  }
+
+  _pickupChecker() {
+    if (_provider.pickupPosition.isValid()) {
+      setState(() {
+        _provider.stepStateData[_currentStepIndex]['state'] =
+            FAStepstate.complete;
+        _provider.stepStateData[_currentStepIndex + 1]['state'] =
+            FAStepstate.indexed;
         _provider.stepStateData[_currentStepIndex + 1]['active'] = true;
         _goTo(_currentStepIndex + 1);
 
@@ -370,8 +445,8 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     }
   }
 
-  _calendarChecker() {
-    if (_provider.dateEntry != null) {
+  _returnChecker() {
+    if (_provider.returnPosition.isValid()) {
       _submit();
     }
   }
@@ -386,10 +461,10 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
     setState(() {
       if (_currentStepIndex > 0) {
         _provider.stepStateData[_currentStepIndex]['state'] =
-            StepState.disabled;
+            FAStepstate.disabled;
         _provider.stepStateData[_currentStepIndex]['active'] = false;
         _provider.stepStateData[_currentStepIndex - 1]['state'] =
-            StepState.indexed;
+            FAStepstate.indexed;
         _provider.stepStateData[_currentStepIndex - 1]['active'] = true;
         _goTo(_currentStepIndex - 1);
         isLastStep = false;
