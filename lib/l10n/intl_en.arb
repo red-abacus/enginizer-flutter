@@ -217,6 +217,11 @@
   "appointment_put_in_work": "Put to work",
   "appointment_finish_appointment": "Finish appointment",
   "appointment_finish_appointment_alert": "Are you sure you want to finish this appointment?",
+  "appointment_write_review": "Write review",
+  "appointment_write_review_title": "Your opinion counts!",
+  "appointment_write_review_body": "How many starts do you give for next characteristics:",
+  "appointment_write_review_feedback": "Write feedback",
+  "appointment_write_review_alert_title": "Are you sure you want to send this review?",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -711,5 +716,6 @@
   "exception_receive_procedure_info": "There was an error trying to load receive procedure info",
   "exception_return_procedure_info": "There was an error trying to load return procedure info",
   "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf.",
-  "exception_finish_appointment": "There was an error trying to finish appointment."
+  "exception_finish_appointment": "There was an error trying to finish appointment.",
+  "exception_send_provider_review": "There was an error trying to send provider review."
 }

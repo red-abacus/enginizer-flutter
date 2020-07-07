@@ -6,6 +6,7 @@ import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
+import 'package:app/modules/appointments/screens/appointment-review.modal.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-children.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
@@ -168,7 +169,8 @@ class AppointmentDetailsState extends State<AppointmentDetails>
           appointmentDetail: _provider.selectedAppointmentDetail,
           viewEstimate: _seeEstimate,
           cancelAppointment: _cancelAppointment,
-          seeCamera: _seeCamera),
+          seeCamera: _seeCamera,
+      writeReview: _writeReview,),
       CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car)
     ];
 
@@ -289,6 +291,24 @@ class AppointmentDetailsState extends State<AppointmentDetails>
               appointmentDetail: appointmentDetail,
             );
           });
+        });
+  }
+
+  _writeReview(AppointmentDetail appointmentDetail) {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+                return AppointmentReviewModal(
+                  appointmentDetail: appointmentDetail,
+                );
+              });
         });
   }
 }

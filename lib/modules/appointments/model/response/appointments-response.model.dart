@@ -8,9 +8,6 @@ class AppointmentsResponse {
   AppointmentsResponse({this.total, this.totalPages, this.items});
 
   factory AppointmentsResponse.fromJson(Map<String, dynamic> json) {
-    for(String key in json.keys) {
-      print('$key: ${json[key]}');
-    }
     return AppointmentsResponse(
         total: json['total'],
         totalPages: json['totalPages'],

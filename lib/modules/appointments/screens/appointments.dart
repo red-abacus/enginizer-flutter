@@ -116,7 +116,6 @@ class AppointmentsState extends State<Appointments> {
   _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_CLIENT)) {
-      print('1');
       Provider.of<AppointmentProvider>(context).initialise();
       Provider.of<AppointmentProvider>(context).selectedAppointment =
           selectedAppointment;
@@ -124,7 +123,6 @@ class AppointmentsState extends State<Appointments> {
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER)) {
-      print('2');
       Provider.of<AppointmentConsultantProvider>(context).initialise();
       Provider.of<AppointmentConsultantProvider>(context).selectedAppointment =
           selectedAppointment;
@@ -132,7 +130,6 @@ class AppointmentsState extends State<Appointments> {
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PERSONNEL)) {
-      print('3');
       Provider.of<AppointmentMechanicProvider>(context).initialise();
       Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
           selectedAppointment;
@@ -140,7 +137,6 @@ class AppointmentsState extends State<Appointments> {
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
         PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
-      print('4');
       Provider.of<AppointmentProvider>(context).initialise();
       Provider.of<AppointmentProvider>(context).selectedAppointment =
           selectedAppointment;

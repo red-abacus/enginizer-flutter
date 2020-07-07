@@ -15,12 +15,14 @@ class AppointmentGenericDetailsWidget extends StatefulWidget {
   Function cancelAppointment;
   Function viewEstimate;
   Function seeCamera;
+  Function writeReview;
 
   AppointmentGenericDetailsWidget(
       {this.appointmentDetail,
       this.cancelAppointment,
       this.viewEstimate,
-      this.seeCamera});
+      this.seeCamera,
+      this.writeReview});
 
   @override
   AppointmentGenericDetailsWidgetState createState() {
@@ -78,7 +80,8 @@ class AppointmentGenericDetailsWidgetState
                 ],
               ),
               _titleContainer(S.of(context).appointment_details_services_title),
-              for (ServiceProviderItem item in widget.appointmentDetail.serviceItems)
+              for (ServiceProviderItem item
+                  in widget.appointmentDetail.serviceItems)
                 _serviceItemText(item),
               _buildSeparator(),
               _titleContainer(
@@ -96,8 +99,7 @@ class AppointmentGenericDetailsWidgetState
                     Text(
                       widget.appointmentDetail.scheduledDate
                           .replaceAll(" ", " ${S.of(context).general_at} "),
-                      style: TextHelper.customTextStyle(
-                          size: 18),
+                      style: TextHelper.customTextStyle(size: 18),
                     )
                   ],
                 ),
@@ -141,7 +143,8 @@ class AppointmentGenericDetailsWidgetState
             onPressed: () => {widget.viewEstimate(widget.appointmentDetail)},
             child: Text(
               S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 16),
             ),
           ),
         ],
@@ -232,7 +235,8 @@ class AppointmentGenericDetailsWidgetState
       margin: EdgeInsets.only(top: 15),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
+        style: TextHelper.customTextStyle(
+            color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -243,6 +247,8 @@ class AppointmentGenericDetailsWidgetState
         return _getSubmittedFloatingButtons();
       case AppointmentStatusState.PENDING:
         return _getPendingFloatingButtons();
+      case AppointmentStatusState.DONE:
+        return _getDoneFloatingButtons();
       default:
         return Container();
     }
@@ -265,7 +271,8 @@ class AppointmentGenericDetailsWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           )
@@ -290,7 +297,32 @@ class AppointmentGenericDetailsWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 20),
+            ),
+            backgroundColor: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _getDoneFloatingButtons() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Spacer(),
+          FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () {
+              widget.writeReview(widget.appointmentDetail);
+            },
+            label: Text(
+              S.of(context).appointment_write_review.toUpperCase(),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           ),

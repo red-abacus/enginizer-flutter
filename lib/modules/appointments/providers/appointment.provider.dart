@@ -1,13 +1,16 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/request/provider-review-request.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
   BidsService _bidsService = inject<BidsService>();
+  ProviderService _providerService = inject<ProviderService>();
 
   bool initDone = false;
 
@@ -58,6 +61,16 @@ class AppointmentProvider with ChangeNotifier {
   Future<bool> acceptBid(int bidId) async {
     try {
       bool response = await this._bidsService.acceptBid(bidId);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> writeReview(ProviderReviewRequest request) async {
+    try {
+      bool response = await this._providerService.writeProviderReview(request);
       notifyListeners();
       return response;
     } catch (error) {

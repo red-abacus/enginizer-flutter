@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/modules/appointments/enum/service-provider-timetable-status.enum.dart';
+import 'package:app/modules/appointments/model/request/provider-review-request.model.dart';
 import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
@@ -36,6 +37,7 @@ class ProviderService {
   static const CREATE_PROVIDER_ITEM_EXCEPTION =
       'CREATE_PROVIDER_ITEM_EXCEPTION';
   static const GET_WORK_STATIONS_EXCEPTION = 'GET_WORK_STATIONS_EXCEPTION';
+  static const WRITE_PROVIDER_REVIEW_EXCEPTION = 'WRITE_PROVIDER_REVIEW_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -155,8 +157,8 @@ class ProviderService {
     }
   }
 
-  Future<List<Employee>> getProviderEmployees(
-      int providerId, String startDate, String endDate) async {
+  Future<List<Employee>> getProviderEmployees(int providerId, String startDate,
+      String endDate) async {
     try {
       final response = await _dio.get(
           _buildGetProviderEmployeesPath(providerId),
@@ -194,8 +196,8 @@ class ProviderService {
     return itemTypes;
   }
 
-  Future<List<ProviderItem>> getProviderItems(
-      int providerId, Map<String, dynamic> query) async {
+  Future<List<ProviderItem>> getProviderItems(int providerId,
+      Map<String, dynamic> query) async {
     try {
       final response = await _dio.get(_buildProviderItemsPath(providerId),
           queryParameters: query);
@@ -209,8 +211,8 @@ class ProviderService {
     }
   }
 
-  Future<ProviderItem> addProviderItem(
-      int providerId, Map<String, dynamic> params) async {
+  Future<ProviderItem> addProviderItem(int providerId,
+      Map<String, dynamic> params) async {
     try {
       final response = await _dio.post(_buildProviderItemsPath(providerId),
           data: jsonEncode(params));
@@ -228,7 +230,7 @@ class ProviderService {
       int providerId) async {
     try {
       final response =
-          await _dio.get(_buildGetProviderServiceItemsPath(providerId));
+      await _dio.get(_buildGetProviderServiceItemsPath(providerId));
       if (response.statusCode == 200) {
         return _mapProviderServiceItems(response.data);
       } else {
@@ -243,7 +245,7 @@ class ProviderService {
       int providerId) async {
     try {
       final response =
-          await _dio.get(_buildGetServiceProviderReviews(providerId));
+      await _dio.get(_buildGetServiceProviderReviews(providerId));
 
       if (response.statusCode == 200) {
         return ServiceProviderReview.fromJson(response.data);
@@ -255,8 +257,8 @@ class ProviderService {
     }
   }
 
-  Future<ServiceProvider> updateServiceProviderDetails(
-      int providerId, String body) async {
+  Future<ServiceProvider> updateServiceProviderDetails(int providerId,
+      String body) async {
     String path = _APPOINTMENTS_PATH + providerId.toString();
 
     try {
@@ -285,6 +287,21 @@ class ProviderService {
       }
     } catch (error) {
       throw Exception(GET_WORK_STATIONS_EXCEPTION);
+    }
+  }
+
+  Future<bool> writeProviderReview(ProviderReviewRequest request) async {
+    try {
+      final response = await _dio.post(
+          _buildGetServiceProviderReviews(request.providerId), data: request.toJson());
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(WRITE_PROVIDER_REVIEW_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(WRITE_PROVIDER_REVIEW_EXCEPTION);
     }
   }
 

@@ -77,11 +77,6 @@ class PermissionsAppointment {
   }
 
   bool hasAccess(String userRole, String permission) {
-    print('user role: $userRole permission: $permission');
-
-    for(String key in permissionsMap.keys) {
-      print('$key: ${permissionsMap[key]}');
-    }
     return permissionsMap[userRole].contains(permission);
   }
 }
