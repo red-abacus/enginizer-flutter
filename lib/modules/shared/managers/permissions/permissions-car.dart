@@ -21,7 +21,7 @@ class PermissionsCar {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions.addAll([APPOINTMENT_CAR, CREATE_CAR_EXTRA]);
+          permissions.addAll([APPOINTMENT_CAR, CREATE_CAR_EXTRA, RENT_CAR, SELL_CAR]);
           break;
         case Roles.ProviderAccountant:
           break;
@@ -38,9 +38,11 @@ class PermissionsCar {
                 switch (serviceType) {
                   case ConsultantServiceType.Sell:
                     permissions.add(CREATE_CAR_EXTRA);
+                    permissions.add(SELL_CAR);
                     break;
                   case ConsultantServiceType.Rent:
                     permissions.add(CREATE_CAR_EXTRA);
+                    permissions.add(RENT_CAR);
                     break;
                   default:
                     break;

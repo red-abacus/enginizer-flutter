@@ -55,7 +55,7 @@ class CarGeneralDetailsWidget extends StatelessWidget {
                     ? Padding(
                   padding: EdgeInsets.only(top: 5, left: 20, right: 20),
                   child: TextWidget(
-                    "${car.year?.name}, ${_translateColorName(car.color?.name, context)}",
+                    "${car.year?.name}, ${car.color.translateColorName(context)}",
                     fontSize: 14,
                   ),
                 )
@@ -103,30 +103,5 @@ class CarGeneralDetailsWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _translateColorName(String colorName, BuildContext context) {
-    switch (colorName) {
-      case 'COLOR_RED':
-        return S.of(context).COLOR_RED;
-      case 'COLOR_BLACK':
-        return S.of(context).COLOR_BLACK;
-      case 'COLOR_GREEN':
-        return S.of(context).COLOR_GREEN;
-      case 'COLOR_SILVER':
-        return S.of(context).COLOR_SILVER;
-      case 'COLOR_WHITE':
-        return S.of(context).COLOR_WHITE;
-      case 'COLOR_GRAY':
-        return S.of(context).COLOR_GRAY;
-      case 'COLOR_DARK_BLUE':
-        return S.of(context).COLOR_DARK_BLUE;
-      case 'COLOR_DARK_GRAY':
-        return S.of(context).COLOR_DARK_GRAY;
-      case 'COLOR_GOLD':
-        return S.of(context).COLOR_GOLD;
-      default:
-        return '';
-    }
   }
 }

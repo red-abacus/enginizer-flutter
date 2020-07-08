@@ -13,14 +13,10 @@ class CarCard extends StatelessWidget {
   final Car car;
   final Function selectCar;
   final Function openAppointmentCreateModal;
-  final Function sellCar;
-  final Function rentCar;
 
   CarCard({this.car,
     this.selectCar,
-    this.openAppointmentCreateModal,
-    this.sellCar,
-    this.rentCar});
+    this.openAppointmentCreateModal});
 
   @override
   Widget build(BuildContext context) {
@@ -115,53 +111,9 @@ class CarCard extends StatelessWidget {
     List<Widget> list = [];
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR) &&
-        car.status == CarStatus.Pending) {
-      list.add(FlatButton(
-        padding: EdgeInsets.all(0),
-        splashColor: Theme
-            .of(context)
-            .primaryColor,
-        onPressed: () => {this.sellCar(this.car)},
-        child: Text(S
-            .of(context)
-            .general_sell
-            .toUpperCase(),
-            style: TextStyle(
-                color: Theme
-                    .of(context)
-                    .accentColor,
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.bold,
-                fontSize: 14)),
-      ));
-    }
-
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.RENT_CAR)) {
-      list.add(FlatButton(
-        padding: EdgeInsets.all(0),
-        splashColor: Theme
-            .of(context)
-            .primaryColor,
-        onPressed: () => {this.rentCar(this.car)},
-        child: Text(S
-            .of(context)
-            .general_rent
-            .toUpperCase(),
-            style: TextStyle(
-                color: Theme
-                    .of(context)
-                    .accentColor,
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.bold,
-                fontSize: 14)),
-      ));
-    }
-
-    if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR) &&
         car.canEdit()) {
+      list.insert(0, Spacer());
       list.add(FlatButton(
         padding: EdgeInsets.all(0),
         splashColor: Theme
@@ -180,10 +132,6 @@ class CarCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 14)),
       ));
-    }
-
-    if (list.length == 1) {
-      list.insert(0, Spacer());
     }
 
     return Container(

@@ -88,6 +88,7 @@
   "car_status_sold": "Sold",
   "car_mark_as_sold": "Mark as Sold",
   "car_mark_as_sold_alert_body": "Are you sure you want to mark this car as sold?",
+  "car_add_fuel_consumption": "Add fuel consumption",
   "no_car_available_alert": "No cars available...",
   "COLOR_RED": "Red",
   "COLOR_BLACK": "Black",

@@ -1,7 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/widgets/cards/car-card.dart';
-import 'package:app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CarList extends StatelessWidget {
@@ -9,16 +8,12 @@ class CarList extends StatelessWidget {
   Function filterCars;
   Function selectCar;
   Function openAppointmentCreateModal;
-  final Function sellCar;
-  final Function rentCar;
 
   CarList(
       {this.cars,
       this.filterCars,
       this.selectCar,
-      this.openAppointmentCreateModal,
-      this.sellCar,
-      this.rentCar});
+      this.openAppointmentCreateModal});
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +44,6 @@ class CarList extends StatelessWidget {
                     car: this.cars.elementAt(index),
                     selectCar: this.selectCar,
                     openAppointmentCreateModal: this.openAppointmentCreateModal,
-                    sellCar: this.sellCar,
-                      rentCar: this.rentCar,
                   );
                 },
                 itemCount: this.cars.length,

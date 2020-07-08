@@ -1,25 +1,33 @@
 import 'dart:io';
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
+import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
 import 'package:app/modules/cars/widgets/car-documents.widget.dart';
 import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
+import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
+import 'package:app/modules/promotions/screens/create-promotion.modal.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
+import 'package:app/presentation/custom_icons.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
 class CarDetails extends StatefulWidget {
   final String route = '/car';
-
-  Car model;
 
   @override
   State<StatefulWidget> createState() {
@@ -28,7 +36,6 @@ class CarDetails extends StatefulWidget {
 }
 
 class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
-  Car model;
   File uploadImage;
   CarProvider _provider;
 
@@ -141,7 +148,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : _buildContent(),
+          : _buildContent()
     );
   }
 
@@ -168,6 +175,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         uploadCarImageListener: _uploadCarImageListener,
         showCameraDialog: _showCameraDialog,
         markAsSold: _showMarkAsSoldAlert,
+        sellCar: _sellCar,
+        rentCar: _rentCar,
       ),
       CarDocumentsWidget(),
     ];
@@ -286,5 +295,123 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         _isLoading = false;
       });
     }
+  }
+
+  _sellCar(Car car) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    CreatePromotionProvider provider =
+    Provider.of<CreatePromotionProvider>(context);
+
+    int providerId = Provider.of<Auth>(context).authUser.providerId;
+
+    if (providerId != null) {
+      try {
+        await provider
+            .getServiceProviderItems(
+            Provider.of<Auth>(context).authUser.providerId)
+            .then((response) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          ServiceProviderItem sellProviderItem;
+
+          for (ServiceProviderItem item in response.items) {
+            if (item.isSellerService()) {
+              sellProviderItem = item;
+            }
+          }
+
+          if (sellProviderItem != null) {
+            Provider.of<CreatePromotionProvider>(context).initialise(
+                Provider.of<Auth>(context).authUser.providerId,
+                car: car,
+                serviceProviderItem: sellProviderItem);
+            Provider.of<CreatePromotionProvider>(context)
+                .serviceProviderItemsResponse = response;
+
+            showModalBottomSheet<void>(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                      builder: (BuildContext context, StateSetter state) {
+                        return CreatePromotionModal(
+                          refreshState: null,
+                        );
+                      });
+                });
+          }
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_provider_service_items, context);
+
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else {
+      try {
+        await provider.loadServices(null).then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          ServiceProviderItem sellProviderItem;
+
+          for (ServiceProviderItem providerItem in value.items) {
+            if (providerItem.isSellerService()) {
+              sellProviderItem = providerItem;
+              break;
+            }
+          }
+
+          if (sellProviderItem != null) {
+            Provider.of<CreatePromotionProvider>(context).initialise(null,
+                car: car, serviceProviderItem: sellProviderItem);
+            Provider.of<CreatePromotionProvider>(context).serviceProviderItemsResponse = value;
+
+            showModalBottomSheet<void>(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                      builder: (BuildContext context, StateSetter state) {
+                        return CreatePromotionModal(
+                          refreshState: null,
+                        );
+                      });
+                });
+          }
+        });
+      } catch (error) {
+        if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_services, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  _rentCar(Car car) {
+
   }
 }
