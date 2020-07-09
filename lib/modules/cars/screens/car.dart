@@ -5,6 +5,7 @@ import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
 import 'package:app/modules/cars/widgets/car-documents.widget.dart';
 import 'package:app/modules/cars/widgets/car-recommendations.widget.dart';
 import 'package:app/modules/cars/widgets/forms/car-fuel-consumption.form.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
@@ -43,7 +44,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     _tabController = new TabController(
         vsync: this,
         length: PermissionsManager.getInstance()
-                .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)
+                .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT)
             ? 3
             : 2,
         initialIndex: 0);
@@ -98,7 +99,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
 
   _downloadCarHistory() async {
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
+        .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT)) {
       try {
         await _provider.getCarHistory(_provider.carDetails.id).then((_) async {
           setState(() {
@@ -134,7 +135,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
             Tab(text: S.of(context).car_details_title),
             Tab(text: S.of(context).car_documents_title),
             if (PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR))
+                MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT))
               Tab(text: S.of(context).car_service_recommendations_title),
           ],
         ),
@@ -173,7 +174,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     ];
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR)) {
+        .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT)) {
       list.add(CarRecommendationsWidget(carHistory: _provider.carHistory));
     }
 

@@ -33,8 +33,9 @@ class PermissionsManager {
 
   setServiceItemsResponse(JwtUser jwtUser,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
-    _permissionsSideBar = PermissionsSideBar(jwtUser, serviceProviderItemsResponse);
-    _permissionsAuction = PermissionsAuction(serviceProviderItemsResponse);
+    _permissionsSideBar =
+        PermissionsSideBar(jwtUser, serviceProviderItemsResponse);
+    _permissionsAuction = PermissionsAuction(jwtUser, serviceProviderItemsResponse);
     _permissionsUserProfile = PermissionsUserProfile();
     _permissionAppointmentsStatuses =
         PermissionAppointmentsStatuses(serviceProviderItemsResponse);
@@ -42,7 +43,8 @@ class PermissionsManager {
     _permissionsAppointment =
         PermissionsAppointment(jwtUser, serviceProviderItemsResponse);
     _permissionsCar = PermissionsCar(jwtUser, serviceProviderItemsResponse);
-    _permissionsPromotion = PermissionsPromotion(serviceProviderItemsResponse);
+    _permissionsPromotion =
+        PermissionsPromotion(jwtUser, serviceProviderItemsResponse);
   }
 
   bool hasAccess(MainPermissions mainPermission, String permission) {

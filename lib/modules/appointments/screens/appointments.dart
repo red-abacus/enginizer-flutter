@@ -1,5 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/create-appointment-state.enum.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
@@ -113,34 +114,61 @@ class AppointmentsState extends State<Appointments> {
     }
   }
 
-  _selectAppointment(BuildContext ctx, Appointment selectedAppointment) {
+  _selectAppointment(BuildContext ctx, Appointment selectedAppointment) async {
     if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
-        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_CLIENT)) {
-      Provider.of<AppointmentProvider>(context).initialise();
-      Provider.of<AppointmentProvider>(context).selectedAppointment =
-          selectedAppointment;
-      Navigator.of(context).pushNamed(AppointmentDetails.route);
+        PermissionsAppointment.MANAGE_APPOINTMENTS)) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _provider
+            .getAppointmentDetails(selectedAppointment.id)
+            .then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (value.serviceItems.length > 0) {
+            ServiceProviderItem item = value.serviceItems.first;
+
+            if (item.isPickUpAndReturnService() || item.isTowService()) {
+              Provider.of<AppointmentProvider>(context).initialise();
+              Provider.of<AppointmentProvider>(context).selectedAppointment =
+                  selectedAppointment;
+              Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
+            } else {
+              Provider.of<AppointmentConsultantProvider>(context).initialise();
+              Provider.of<AppointmentConsultantProvider>(context)
+                  .selectedAppointment = selectedAppointment;
+              Navigator.of(context)
+                  .pushNamed(AppointmentDetailsConsultant.route);
+            }
+          }
+        });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(AppointmentsService.GET_APPOINTMENT_DETAILS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_appointment_details, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } else if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Appointments,
-        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_SERVICE_PROVIDER)) {
-      Provider.of<AppointmentConsultantProvider>(context).initialise();
-      Provider.of<AppointmentConsultantProvider>(context).selectedAppointment =
-          selectedAppointment;
-      Navigator.of(context).pushNamed(AppointmentDetailsConsultant.route);
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Appointments,
-        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PERSONNEL)) {
+        PermissionsAppointment.EXECUTE_APPOINTMENTS)) {
       Provider.of<AppointmentMechanicProvider>(context).initialise();
       Provider.of<AppointmentMechanicProvider>(context).selectedAppointment =
           selectedAppointment;
       Navigator.of(context).pushNamed(AppointmentDetailsMechanic.route);
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Appointments,
-        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
+    } else {
       Provider.of<AppointmentProvider>(context).initialise();
       Provider.of<AppointmentProvider>(context).selectedAppointment =
           selectedAppointment;
-      Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
+      Navigator.of(context).pushNamed(AppointmentDetails.route);
     }
   }
 

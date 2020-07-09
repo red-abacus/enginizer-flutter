@@ -6,8 +6,6 @@ import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/image-viewer.widget.dart';
 import 'package:app/modules/shared/widgets/pdf-viewer.widget.dart';
 import 'package:app/utils/constants.dart';
@@ -45,15 +43,9 @@ class _CarDocumentsWidgetState extends State<CarDocumentsWidget> {
             child: Column(
               children: [
                 _talonContainer(),
-                if (PermissionsManager.getInstance().hasAccess(
-                    MainPermissions.Cars, PermissionsCar.CREATE_CAR_EXTRA))
-                  _exhaustContainer(),
-                if (PermissionsManager.getInstance().hasAccess(
-                    MainPermissions.Cars, PermissionsCar.CREATE_CAR_EXTRA))
-                  _diagnosisContainer(),
-                if (PermissionsManager.getInstance().hasAccess(
-                    MainPermissions.Cars, PermissionsCar.CREATE_CAR_EXTRA))
-                  _generalVerificationContainer()
+                _exhaustContainer(),
+                _diagnosisContainer(),
+                _generalVerificationContainer()
               ],
             ),
           );

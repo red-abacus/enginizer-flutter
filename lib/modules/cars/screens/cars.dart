@@ -14,6 +14,8 @@ import 'package:app/modules/cars/screens/car-create-modal.dart';
 import 'package:app/modules/cars/widgets/cars-list.dart';
 import 'package:app/modules/promotions/providers/create-promotion.provider.dart';
 import 'package:app/modules/promotions/screens/create-promotion.modal.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,14 +43,9 @@ class CarsState extends State<Cars> {
   Widget build(BuildContext context) {
     return Consumer<CarsProvider>(
       builder: (context, carsProvider, _) => Scaffold(
-          body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
-          floatingActionButton: FloatingActionButton(
-            heroTag: null,
-            backgroundColor: Theme.of(context).primaryColor,
-            elevation: 1,
-            onPressed: () => _openCarCreateModal(context),
-            child: Icon(Icons.add),
-          )),
+        body: Center(child: _renderCars(_isLoading, carsProvider.cars)),
+        floatingActionButton: _floatingActionButton(),
+      ),
     );
   }
 
@@ -89,6 +86,21 @@ class CarsState extends State<Cars> {
     }
   }
 
+  _floatingActionButton() {
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.MANAGE_CARS)) {
+      return FloatingActionButton(
+        heroTag: null,
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 1,
+        onPressed: () => _openCarCreateModal(context),
+        child: Icon(Icons.add),
+      );
+    }
+
+    return Container();
+  }
+
   Future<void> _openAppointmentCreateModal(
       BuildContext ctx, Car selectedCar) async {
     Provider.of<ProviderServiceProvider>(context).initFormValues();
@@ -122,10 +134,13 @@ class CarsState extends State<Cars> {
   }
 
   void _selectCar(BuildContext ctx, Car selectedCar) {
-    Provider.of<CarProvider>(ctx).selectCar(selectedCar);
-    Navigator.of(ctx).pushNamed(
-      '/cars/details',
-    );
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.MANAGE_CARS)) {
+      Provider.of<CarProvider>(ctx).selectCar(selectedCar);
+      Navigator.of(ctx).pushNamed(
+        '/cars/details',
+      );
+    }
   }
 
   _renderCars(bool _isLoading, List<Car> cars) {
@@ -241,7 +256,8 @@ class CarsState extends State<Cars> {
           if (sellProviderItem != null) {
             Provider.of<CreatePromotionProvider>(context).initialise(null,
                 car: car, serviceProviderItem: sellProviderItem);
-            Provider.of<CreatePromotionProvider>(context).serviceProviderItemsResponse = value;
+            Provider.of<CreatePromotionProvider>(context)
+                .serviceProviderItemsResponse = value;
 
             showModalBottomSheet<void>(
                 shape: RoundedRectangleBorder(

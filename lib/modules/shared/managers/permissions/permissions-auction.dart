@@ -1,28 +1,30 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsAuction {
-  static final String AUCTION_DETAILS = 'AUCTION.AUCTION_DETAILS'; // TODO
-  static final String AUCTION_MAP_DETAILS = 'AUCTION.AUCTION_MAP_DETAILS'; // TODO
-  static final String CONSULTANT_AUCTION_DETAILS =
-      'AUCTION.CONSULTANT_AUCTION_DETAILS'; // TODO
-  static final String APPOINTMENT_DETAILS = 'AUCTION.APPOINTMENT_DETAILS'; // TODO
+  static final String APPOINTMENT_DETAILS =
+      'AUCTION.APPOINTMENT_DETAILS'; // TODO
   static final String CAR_DETAILS = 'AUCTION.CAR_DETAILS'; // TODO
+
+  static final String BID_AUCTIONS = 'BID_AUCTIONS';
+  static final String VIEW_BIDS = 'VIEW_BIDS';
 
   Map<String, List<String>> permissionsMap = Map();
   Map<String, List<String>> serviceItemsPermissionsMap = Map();
 
-  PermissionsAuction(ServiceProviderItemsResponse serviceProviderItemsResponse) {
+  PermissionsAuction(JwtUser jwtUser,
+      ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = [];
+      List<String> permissions = List<String>();
+      permissions.addAll(jwtUser.permissions);
 
       switch (role) {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions.add(AUCTION_DETAILS);
           break;
         case Roles.ProviderAccountant:
           break;
@@ -38,19 +40,15 @@ class PermissionsAuction {
               if (serviceType != null) {
                 switch (serviceType) {
                   case ConsultantServiceType.PickUpAndReturn:
-                    permissions.add(AUCTION_MAP_DETAILS);
                     break;
                   case ConsultantServiceType.Service:
                     permissions.add(APPOINTMENT_DETAILS);
-                    permissions.add(CONSULTANT_AUCTION_DETAILS);
                     break;
                   case ConsultantServiceType.PartShop:
                     permissions.add(CAR_DETAILS);
-                    permissions.add(CONSULTANT_AUCTION_DETAILS);
                     break;
                   case ConsultantServiceType.DismantlingShop:
                     permissions.add(CAR_DETAILS);
-                    permissions.add(CONSULTANT_AUCTION_DETAILS);
                     break;
                   case ConsultantServiceType.Sell:
                     break;

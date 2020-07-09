@@ -1,4 +1,6 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
@@ -97,7 +99,10 @@ class WorkEstimateSectionItemsWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (estimatorMode == EstimatorMode.Edit)
+                if (estimatorMode == EstimatorMode.Edit &&
+                    PermissionsManager.getInstance().hasAccess(
+                        MainPermissions.Appointments,
+                        PermissionsAppointment.WORK_ESTIMATE_IMPORT_PARTS))
                   InkWell(
                     onTap: () => this._openImportIssueModal(context),
                     child: Container(

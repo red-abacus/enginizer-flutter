@@ -17,6 +17,8 @@ import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/widgets/details-map/auction-map-decline.widget.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
@@ -165,37 +167,43 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
                   ),
                   backgroundColor: Colors.white,
                 ),
-                FloatingActionButton.extended(
-                  heroTag: null,
-                  onPressed: () {
-                    _createEstimate();
-                  },
-                  label: Text(
-                    S.of(context).auction_create_estimate.toUpperCase(),
-                    style: TextHelper.customTextStyle(
-                        color: red, weight: FontWeight.bold, size: 16),
-                  ),
-                  backgroundColor: Colors.white,
-                )
+                if (PermissionsManager.getInstance().hasAccess(
+                    MainPermissions.Appointments,
+                    PermissionsAppointment.MANAGE_WORK_ESTIMATES))
+                  FloatingActionButton.extended(
+                    heroTag: null,
+                    onPressed: () {
+                      _createEstimate();
+                    },
+                    label: Text(
+                      S.of(context).auction_create_estimate.toUpperCase(),
+                      style: TextHelper.customTextStyle(
+                          color: red, weight: FontWeight.bold, size: 16),
+                    ),
+                    backgroundColor: Colors.white,
+                  )
               ],
             ),
           );
           break;
         case AppointmentStatusState.IN_TRANSPORT:
-          return Container(
-            child: FloatingActionButton.extended(
-              heroTag: null,
-              onPressed: () {
-                _createPickUpCarForm(PickupFormState.Return);
-              },
-              label: Text(
-                S.of(context).appointment_hand_over_car.toUpperCase(),
-                style: TextHelper.customTextStyle(
-                    color: red, weight: FontWeight.bold, size: 16),
+          if (PermissionsManager.getInstance().hasAccess(
+              MainPermissions.Appointments,
+              PermissionsAppointment.EXECUTE_RETURN_CAR_PROCEDURE))
+            return Container(
+              child: FloatingActionButton.extended(
+                heroTag: null,
+                onPressed: () {
+                  _createPickUpCarForm(PickupFormState.Return);
+                },
+                label: Text(
+                  S.of(context).appointment_hand_over_car.toUpperCase(),
+                  style: TextHelper.customTextStyle(
+                      color: red, weight: FontWeight.bold, size: 16),
+                ),
+                backgroundColor: Colors.white,
               ),
-              backgroundColor: Colors.white,
-            ),
-          );
+            );
           break;
         default:
           break;

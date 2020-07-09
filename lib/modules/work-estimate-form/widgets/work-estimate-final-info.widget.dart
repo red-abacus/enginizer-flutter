@@ -41,9 +41,22 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
             children: <Widget>[
               Text(
                 S.of(context).estimator_bid_action,
-                style:
-                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold, size: 20),
               ),
+              if (estimatorMode == EstimatorMode.Create ||
+                  estimatorMode == EstimatorMode.CreatePr ||
+                  estimatorMode == EstimatorMode.CreatePart)
+                CustomTextFormField(
+                  labelText: S.of(context).estimator_percent,
+                  listener: (value) {
+                    this.percentage = value;
+                  },
+                  currentValue: '',
+                  errorText: S.of(context).estimator_percent_warning,
+                  validate: true,
+                  textInputType: TextInputType.number,
+                ),
               BasicDateField(
                 minDate: DateUtils.addDayToDate(DateTime.now(), -1),
                 maxDate: maxResponseTime,
@@ -69,7 +82,9 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
                   child: new Text(
                     S.of(context).general_send,
                     style: TextHelper.customTextStyle(
-                        color: Colors.white, weight: FontWeight.bold, size: 18.0),
+                        color: Colors.white,
+                        weight: FontWeight.bold,
+                        size: 18.0),
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
@@ -86,7 +101,9 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
 
   _save(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      if (estimatorMode == EstimatorMode.Create) {
+      if (estimatorMode == EstimatorMode.Create ||
+          estimatorMode == EstimatorMode.CreatePr ||
+          estimatorMode == EstimatorMode.CreatePart) {
         int value = int.tryParse(percentage);
 
         if (value != null) {
@@ -103,8 +120,7 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
             }
           }
         }
-      }
-      else {
+      } else {
         Navigator.pop(context);
 
         if (infoAdded != null) {

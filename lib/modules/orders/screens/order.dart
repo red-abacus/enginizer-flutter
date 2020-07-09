@@ -44,7 +44,7 @@ class OrderDetailsState extends State<OrderDetails>
     super.initState();
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+        .hasAccess(MainPermissions.Orders, PermissionsOrder.EXECUTE_ORDERS)) {
       _tabController =
           new TabController(vsync: this, length: 2, initialIndex: 1);
     } else if (PermissionsManager.getInstance()
@@ -94,7 +94,7 @@ class OrderDetailsState extends State<OrderDetails>
     List<Tab> tabs = [];
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+        .hasAccess(MainPermissions.Orders, PermissionsOrder.EXECUTE_ORDERS)) {
       tabs = [
         Tab(text: S.of(context).appointment_details_car_details),
         Tab(text: S.of(context).parts_delivery_title),
@@ -148,8 +148,8 @@ class OrderDetailsState extends State<OrderDetails>
   _titleText() {
     return Text(
       _provider.order?.name ?? 'N/A',
-      style:
-          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
+      style: TextHelper.customTextStyle(
+          color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 
@@ -157,7 +157,7 @@ class OrderDetailsState extends State<OrderDetails>
     List<Widget> list = [];
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+        .hasAccess(MainPermissions.Orders, PermissionsOrder.EXECUTE_ORDERS)) {
       list = [
         CarDetailsPartsWidget(car: _provider.order.car),
         OrderDeliveryParts(
@@ -183,7 +183,7 @@ class OrderDetailsState extends State<OrderDetails>
   _showProviderDetails() {
     if (_provider.orderDetails.buyer != null) {
       if (PermissionsManager.getInstance()
-          .hasAccess(MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+          .hasAccess(MainPermissions.Orders, PermissionsOrder.EXECUTE_ORDERS)) {
         Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
             _provider.orderDetails.buyer.id;
       }
@@ -236,7 +236,7 @@ class OrderDetailsState extends State<OrderDetails>
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
       await _provider.finishOrder(_provider.order.id).then((value) {
         Provider.of<OrdersProvider>(context).initDone = false;

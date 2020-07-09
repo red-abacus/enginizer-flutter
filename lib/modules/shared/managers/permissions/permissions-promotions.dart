@@ -1,5 +1,6 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
+import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
@@ -10,9 +11,10 @@ class PermissionsPromotion {
   Map<String, List<String>> permissionsMap = Map();
   Map<String, List<String>> serviceItemsPermissionsMap = Map();
 
-  PermissionsPromotion(ServiceProviderItemsResponse serviceProviderItemsResponse) {
+  PermissionsPromotion(JwtUser jwtUser, ServiceProviderItemsResponse serviceProviderItemsResponse) {
     for (String role in Roles.roles) {
-      List<String> permissions = [];
+      List<String> permissions = List<String>();
+      permissions.addAll(jwtUser.permissions);
 
       switch (role) {
         case Roles.Super:
@@ -39,7 +41,7 @@ class PermissionsPromotion {
                   case ConsultantServiceType.DismantlingShop:
                     break;
                   case ConsultantServiceType.Sell:
-                    permissions = [SELLER_PROMOTION];
+                    permissions.add(SELLER_PROMOTION);
                     break;
                   case ConsultantServiceType.Rent:
                     break;

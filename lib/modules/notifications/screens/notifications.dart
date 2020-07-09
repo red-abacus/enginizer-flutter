@@ -9,11 +9,6 @@ import 'package:app/modules/appointments/screens/appointments-details-consultant
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
-import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
-import 'package:app/modules/auctions/providers/auction-provider.dart';
-import 'package:app/modules/auctions/screens/auction-consultant-map.dart';
-import 'package:app/modules/auctions/screens/auction-consultant.dart';
-import 'package:app/modules/auctions/screens/auction.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
@@ -23,8 +18,6 @@ import 'package:app/modules/notifications/enums/notification-type.enum.dart';
 import 'package:app/modules/notifications/models/app-notification.model.dart';
 import 'package:app/modules/notifications/providers/notification.provider.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
@@ -248,30 +241,31 @@ class NotificationsState extends State<Notifications> {
   }
 
   _showAuctionDetails(Auction auction, Bid bid) {
-    if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
-      AuctionProvider provider = Provider.of<AuctionProvider>(context);
-      provider.initialise();
-      provider.selectedAuction = auction;
-
-      Navigator.of(context).pushNamed(AuctionConsultantMap.route);
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
-      AuctionProvider provider = Provider.of<AuctionProvider>(context);
-      provider.initialise();
-      provider.selectedAuction = auction;
-      provider.redirectBid = bid;
-
-      Navigator.of(context).pushNamed(AuctionDetails.route);
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Auctions,
-        PermissionsAuction.CONSULTANT_AUCTION_DETAILS)) {
-      AuctionConsultantProvider provider =
-          Provider.of<AuctionConsultantProvider>(context);
-      provider.selectedAuction = auction;
-
-      Navigator.of(context).pushNamed(AuctionConsultant.route);
-    }
+    // TODO - routing here
+//    if (PermissionsManager.getInstance().hasAccess(
+//        MainPermissions.Auctions, PermissionsAuction.AUCTION_MAP_DETAILS)) {
+//      AuctionProvider provider = Provider.of<AuctionProvider>(context);
+//      provider.initialise();
+//      provider.selectedAuction = auction;
+//
+//      Navigator.of(context).pushNamed(AuctionConsultantMap.route);
+//    } else if (PermissionsManager.getInstance().hasAccess(
+//        MainPermissions.Auctions, PermissionsAuction.AUCTION_DETAILS)) {
+//      AuctionProvider provider = Provider.of<AuctionProvider>(context);
+//      provider.initialise();
+//      provider.selectedAuction = auction;
+//      provider.redirectBid = bid;
+//
+//      Navigator.of(context).pushNamed(AuctionDetails.route);
+//    } else if (PermissionsManager.getInstance().hasAccess(
+//        MainPermissions.Auctions,
+//        PermissionsAuction.CONSULTANT_AUCTION_DETAILS)) {
+//      AuctionConsultantProvider provider =
+//          Provider.of<AuctionConsultantProvider>(context);
+//      provider.selectedAuction = auction;
+//
+//      Navigator.of(context).pushNamed(AuctionConsultant.route);
+//    }
   }
 
   _markAllAsRead() async {

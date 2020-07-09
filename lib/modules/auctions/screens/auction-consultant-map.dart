@@ -10,6 +10,8 @@ import 'package:app/modules/auctions/widgets/details-map/auction-consultant-map.
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -152,6 +154,38 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
       }
     }
 
+    var button = Container();
+
+    if (providerBid != null) {
+      FloatingActionButton.extended(
+        heroTag: null,
+        onPressed: () {
+          _seeEstimate();
+        },
+        label: Text(
+          S.of(context).appointment_details_estimator,
+          style: TextHelper.customTextStyle(
+              color: red, weight: FontWeight.bold, size: 16),
+        ),
+        backgroundColor: Colors.white,
+      );
+    } else if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Appointments,
+        PermissionsAppointment.MANAGE_WORK_ESTIMATES)) {
+      FloatingActionButton.extended(
+        heroTag: null,
+        onPressed: () {
+          _createEstimate();
+        },
+        label: Text(
+          S.of(context).auction_create_estimate.toUpperCase(),
+          style: TextHelper.customTextStyle(
+              color: red, weight: FontWeight.bold, size: 16),
+        ),
+        backgroundColor: Colors.white,
+      );
+    }
+
     return _tabController.index == 0
         ? Container(
             margin: EdgeInsets.only(left: 20),
@@ -159,27 +193,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Spacer(),
-                FloatingActionButton.extended(
-                  heroTag: null,
-                  onPressed: () {
-                    if (providerBid == null) {
-                      _createEstimate();
-                    } else {
-                      _seeEstimate();
-                    }
-                  },
-                  label: Text(
-                    providerBid == null
-                        ? S.of(context).auction_create_estimate.toUpperCase()
-                        : S
-                            .of(context)
-                            .appointment_details_estimator
-                            .toUpperCase(),
-                    style: TextHelper.customTextStyle(
-                        color: red, weight: FontWeight.bold, size: 16),
-                  ),
-                  backgroundColor: Colors.white,
-                )
+                button,
               ],
             ),
           )

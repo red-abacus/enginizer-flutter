@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
@@ -35,6 +37,7 @@ class LocatorManager {
 
   bool _shouldDownload = true;
   Appointment _appointment;
+  AppointmentDetail _appointmentDetail;
   StreamSubscription _getPositionSubscription;
   OverlaySupportEntry _entry;
 
@@ -54,17 +57,24 @@ class LocatorManager {
         Provider.of<AppointmentsProvider>(context)
             .getActiveAppointments(request)
             .then((value) {
-              _shouldDownload = false;
+          _shouldDownload = false;
           if (value.length > 0) {
-            if (_appointment != null && value[0].id == _appointment.id) {
-            } else {
-              _dismissGeolocator();
-              _appointment = value[0];
-              _initialiseLocator(context);
-            }
+            Provider.of<AppointmentsProvider>(context)
+                .getAppointmentDetails(value.first.id)
+                .then((appointmentDetail) {
+              if (_appointmentDetail != null &&
+                  appointmentDetail.id == _appointmentDetail.id) {
+              } else {
+                _dismissGeolocator();
+                _appointment = value[0];
+                _appointmentDetail = appointmentDetail;
+                _initialiseLocator(context);
+              }
+            });
           } else {
             _dismissGeolocator();
             _appointment = null;
+            _appointmentDetail = null;
           }
         });
       }
@@ -74,12 +84,14 @@ class LocatorManager {
   void removeActiveAppointment() {
     _shouldDownload = true;
     _appointment = null;
+    _appointmentDetail = null;
     _dismissGeolocator();
   }
 
   void logout() {
     _shouldDownload = false;
     _appointment = null;
+    _appointmentDetail = null;
     _dismissGeolocator();
   }
 
@@ -96,7 +108,7 @@ class LocatorManager {
   }
 
   _initialiseLocator(BuildContext context) async {
-    if (_appointment != null) {
+    if (_appointmentDetail != null) {
       showLocatorBanner(context);
 
       var locationOptions =
@@ -110,7 +122,7 @@ class LocatorManager {
           location.latitude = position.latitude;
           location.longitude = position.longitude;
           location.providerId = Provider.of<Auth>(context).authUser.providerId;
-          location.appointmentId = _appointment.id;
+          location.appointmentId = _appointmentDetail.id;
 
           FirestoreManager.getInstance().writeLocation(location.toJson());
         }
@@ -126,7 +138,7 @@ class LocatorManager {
 
     _entry = showSimpleNotification(
       Text(
-        '${_appointment.name}\n${S.of(context).appointment_locator_title}',
+        '${_appointmentDetail.name}\n${S.of(context).appointment_locator_title}',
         style: TextHelper.customTextStyle(color: gray, size: 16),
       ),
       leading: Container(
@@ -153,12 +165,15 @@ class LocatorManager {
   }
 
   _showAppointmentDetails(BuildContext context) {
-    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
-        PermissionsAppointment.VIEW_APPOINTMENT_DETAILS_PR)) {
-      Provider.of<AppointmentProvider>(context).initialise();
-      Provider.of<AppointmentProvider>(context).selectedAppointment =
-          _appointment;
-      Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
+    if (_appointmentDetail.serviceItems.length > 0) {
+      ServiceProviderItem item = _appointmentDetail.serviceItems.first;
+
+      if (item.isPickUpAndReturnService() || item.isTowService()) {
+        Provider.of<AppointmentProvider>(context).initialise();
+        Provider.of<AppointmentProvider>(context).selectedAppointment =
+            _appointment;
+        Navigator.of(context).pushNamed(AppointmentDetailsMap.route);
+      }
     }
   }
 }

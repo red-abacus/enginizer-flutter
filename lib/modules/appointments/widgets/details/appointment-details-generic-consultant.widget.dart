@@ -3,6 +3,8 @@ import 'package:app/modules/appointments/model/appointment/appointment-details.m
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/models/work-estimate-details.model.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
@@ -147,7 +149,10 @@ class _AppointmentDetailsConsultantWidgetState
         ));
 
         if (widget.workEstimateDetails != null &&
-            widget.workEstimateDetails.status == WorkEstimateStatus.Rejected) {
+            widget.workEstimateDetails.status == WorkEstimateStatus.Rejected &&
+            PermissionsManager.getInstance().hasAccess(
+                MainPermissions.Appointments,
+                PermissionsAppointment.MANAGE_WORK_ESTIMATES)) {
           buttons.add(FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
@@ -176,18 +181,22 @@ class _AppointmentDetailsConsultantWidgetState
           backgroundColor: Colors.white,
         ));
 
-        buttons.add(FloatingActionButton.extended(
-          heroTag: null,
-          onPressed: () {
-            widget.createEstimate();
-          },
-          label: Text(
-            S.of(context).auction_create_estimate.toUpperCase(),
-            style: TextHelper.customTextStyle(
-                color: red, weight: FontWeight.bold, size: 16),
-          ),
-          backgroundColor: Colors.white,
-        ));
+        if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Appointments,
+            PermissionsAppointment.MANAGE_WORK_ESTIMATES)) {
+          buttons.add(FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () {
+              widget.createEstimate();
+            },
+            label: Text(
+              S.of(context).auction_create_estimate.toUpperCase(),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 16),
+            ),
+            backgroundColor: Colors.white,
+          ));
+        }
         break;
       case AppointmentStatusState.IN_REVIEW:
         buttons.add(FloatingActionButton.extended(
@@ -475,16 +484,19 @@ class _AppointmentDetailsConsultantWidgetState
                   ),
                 ),
               ),
-              FlatButton(
-                child: Text(
-                  S.of(context).general_create.toUpperCase(),
-                  style: TextHelper.customTextStyle(
-                      color: red, weight: FontWeight.bold, size: 15),
-                ),
-                onPressed: () {
-                  widget.createPickUpCarForm();
-                },
-              )
+              if (PermissionsManager.getInstance().hasAccess(
+                  MainPermissions.Appointments,
+                  PermissionsAppointment.EXECUTE_RECEIVE_CAR_PROCEDURE))
+                FlatButton(
+                  child: Text(
+                    S.of(context).general_create.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        color: red, weight: FontWeight.bold, size: 15),
+                  ),
+                  onPressed: () {
+                    widget.createPickUpCarForm();
+                  },
+                )
             ],
           ),
         ),
@@ -523,16 +535,19 @@ class _AppointmentDetailsConsultantWidgetState
                   ),
                 ),
               ),
-              FlatButton(
-                child: Text(
-                  S.of(context).general_create.toUpperCase(),
-                  style: TextHelper.customTextStyle(
-                      color: red, weight: FontWeight.bold, size: 15),
-                ),
-                onPressed: () {
-                  widget.createHandoverCarForm();
-                },
-              )
+              if (PermissionsManager.getInstance().hasAccess(
+                  MainPermissions.Appointments,
+                  PermissionsAppointment.EXECUTE_RETURN_CAR_PROCEDURE))
+                FlatButton(
+                  child: Text(
+                    S.of(context).general_create.toUpperCase(),
+                    style: TextHelper.customTextStyle(
+                        color: red, weight: FontWeight.bold, size: 15),
+                  ),
+                  onPressed: () {
+                    widget.createHandoverCarForm();
+                  },
+                )
             ],
           ),
         ),

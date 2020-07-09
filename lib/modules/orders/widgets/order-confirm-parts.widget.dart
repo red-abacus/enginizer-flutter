@@ -49,7 +49,7 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
               children: <Widget>[
                 Text(
                   _provider.orderDetails.status.getState() ==
-                      AppointmentStatusState.ACCEPTED
+                          AppointmentStatusState.ACCEPTED
                       ? '${S.of(context).appointment_delivery_time}:'
                       : '${S.of(context).parts_suggested_delivery_date}:',
                   style: TextHelper.customTextStyle(color: gray3),
@@ -92,7 +92,8 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
       },
       label: Text(
         S.of(context).online_shop_appointment_provider_details.toUpperCase(),
-        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
+        style: TextHelper.customTextStyle(
+            color: red, weight: FontWeight.bold, size: 12),
       ),
       backgroundColor: Colors.white,
     ));
@@ -106,7 +107,8 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
         },
         label: Text(
           S.of(context).parts_delivery_confirm_button_title.toUpperCase(),
-          style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 12),
+          style: TextHelper.customTextStyle(
+              color: red, weight: FontWeight.bold, size: 12),
         ),
         backgroundColor: Colors.white,
       ));
@@ -131,9 +133,10 @@ class _OrderConfirmPartsState extends State<OrderConfirmParts> {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return OrderPartsReceiveFormModal(
-                    orderDetails: _provider.orderDetails, finishOrder: widget.finishOrder);
-              });
+            return OrderPartsReceiveFormModal(
+                orderDetails: _provider.orderDetails,
+                finishOrder: widget.finishOrder);
+          });
         });
   }
 }

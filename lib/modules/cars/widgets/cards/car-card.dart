@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/utils/constants.dart';
@@ -160,7 +161,7 @@ class CarCard extends StatelessWidget {
     }
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.APPOINTMENT_CAR) &&
+        .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT) &&
         car.canEdit()) {
       list.add(FlatButton(
         padding: EdgeInsets.all(0),

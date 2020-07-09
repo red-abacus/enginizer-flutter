@@ -1,5 +1,6 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/auctions/enum/auction-status.enum.dart';
+import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/request/auction-request.model.dart';
 import 'package:app/modules/auctions/models/response/auction-response.model.dart';
@@ -41,6 +42,16 @@ class AuctionsProvider with ChangeNotifier {
       this.auctions.addAll(auctionResponse.auctions);
       auctionRequest.auctionPage += 1;
       return auctionResponse;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AuctionDetail> getAuctionDetails(int auctionId) async {
+    try {
+      AuctionDetail auctionDetail = await auctionsService.getAuctionDetails(auctionId);
+      notifyListeners();
+      return auctionDetail;
     } catch (error) {
       throw (error);
     }

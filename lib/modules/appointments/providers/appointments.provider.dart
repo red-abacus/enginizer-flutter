@@ -1,4 +1,5 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/model/request/appointments-request.model.dart';
@@ -81,6 +82,17 @@ class AppointmentsProvider with ChangeNotifier {
       appointments.add(newAppointment);
       notifyListeners();
       return newAppointment;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<AppointmentDetail> getAppointmentDetails(int appointmentId) async {
+    try {
+      var appointmentDetail =
+      await this.appointmentsService.getAppointmentDetails(appointmentId);
+      notifyListeners();
+      return appointmentDetail;
     } catch (error) {
       throw (error);
     }

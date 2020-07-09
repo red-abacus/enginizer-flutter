@@ -5,10 +5,11 @@ import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsCar {
-  static final String CREATE_CAR_EXTRA = 'CAR.CREATE_CAR_EXTRA'; // TODO
-  static final String APPOINTMENT_CAR = 'CAR.APPOINTMENT_CAR'; // TODO
   static final String SELL_CAR = 'SELL_CARS';
   static final String RENT_CAR = 'RENT_CARS';
+  static final String MANAGE_CARS = 'MANAGE_CARS';
+  static final String VIEW_CAR_TECHNICAL_DOCUMENTATION = 'VIEW_CAR_TECHNICAL_DOCUMENTATION';
+  static final String VIEW_CAR_HISTORY = 'VIEW_CAR_HISTORY';
 
   Map<String, List<String>> permissionsMap = Map();
 
@@ -21,7 +22,6 @@ class PermissionsCar {
         case Roles.Super:
           break;
         case Roles.Client:
-          permissions.addAll([APPOINTMENT_CAR, CREATE_CAR_EXTRA]);
           break;
         case Roles.ProviderAccountant:
           break;
@@ -37,10 +37,8 @@ class PermissionsCar {
               if (serviceType != null) {
                 switch (serviceType) {
                   case ConsultantServiceType.Sell:
-                    permissions.add(CREATE_CAR_EXTRA);
                     break;
                   case ConsultantServiceType.Rent:
-                    permissions.add(CREATE_CAR_EXTRA);
                     break;
                   default:
                     break;

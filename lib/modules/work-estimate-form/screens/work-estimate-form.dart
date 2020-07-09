@@ -15,6 +15,8 @@ import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/providers/auction-consultant.provider.dart';
 import 'package:app/modules/auctions/providers/auction-provider.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
@@ -327,14 +329,17 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       case EstimatorMode.Edit:
         buttons.add(operationHistoryButton);
 
-        buttons.add(SpeedDialChild(
-            child: Icon(Icons.shopping_cart),
-            foregroundColor: red,
-            backgroundColor: Colors.white,
-            label: S.of(context).estimator_order_title,
-            labelStyle: TextHelper.customTextStyle(
-                color: Colors.grey, weight: FontWeight.bold, size: 16),
-            onTap: () => _orderItems()));
+        if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+          buttons.add(SpeedDialChild(
+              child: Icon(Icons.shopping_cart),
+              foregroundColor: red,
+              backgroundColor: Colors.white,
+              label: S.of(context).estimator_order_title,
+              labelStyle: TextHelper.customTextStyle(
+                  color: Colors.grey, weight: FontWeight.bold, size: 16),
+              onTap: () => _orderItems()));
+        }
 
         buttons.add(SpeedDialChild(
             child: Icon(Icons.assignment),

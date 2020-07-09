@@ -3,6 +3,8 @@ import 'package:app/modules/appointments/model/provider/service-provider-item.mo
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/models/auction.model.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
@@ -243,14 +245,24 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
       }
     }
 
-    return FlatButton(
-      child: Text(
-        S.of(context).auction_create_estimate.toUpperCase(),
-        style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 24),
-      ),
-      onPressed: () {
-        widget.createEstimate();
-      },
-    );
+    if (PermissionsManager.getInstance().hasAccess(
+        MainPermissions.Appointments,
+        PermissionsAppointment.MANAGE_WORK_ESTIMATES)) {
+      return FlatButton(
+        child: Text(
+          S
+              .of(context)
+              .auction_create_estimate
+              .toUpperCase(),
+          style: TextHelper.customTextStyle(
+              color: red, weight: FontWeight.bold, size: 24),
+        ),
+        onPressed: () {
+          widget.createEstimate();
+        },
+      );
+    }
+
+    return Container();
   }
 }

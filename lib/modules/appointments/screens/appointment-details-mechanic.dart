@@ -5,6 +5,8 @@ import 'package:app/modules/appointments/widgets/personnel/appointment-details-m
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/appointments/providers/appointment-mechanic.provider.dart';
 import 'package:app/modules/appointments/widgets/personnel/appointment-details-mechanic-car-details.widget.dart';
@@ -52,7 +54,20 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 5, initialIndex: 2);
+    int count = 3;
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.VIEW_CAR_HISTORY)) {
+      count += 1;
+    }
+
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Cars,
+        PermissionsCar.VIEW_CAR_TECHNICAL_DOCUMENTATION)) {
+      count += 1;
+    }
+
+    _tabController =
+        new TabController(vsync: this, length: count, initialIndex: 2);
   }
 
   @override
@@ -216,9 +231,17 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
           appointmentDetail: _provider.selectedAppointmentDetails,
           viewEstimate: _viewEstimate),
       AppointmentDetailsCarDetails(),
-      AppointmentDetailsServiceHistory(),
-      AppointmentDetailsMechanicDocumentationsWidget()
     ];
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.VIEW_CAR_HISTORY)) {
+      list.add(AppointmentDetailsServiceHistory());
+    }
+
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Cars,
+        PermissionsCar.VIEW_CAR_TECHNICAL_DOCUMENTATION)) {
+      list.add(AppointmentDetailsMechanicDocumentationsWidget());
+    }
 
     switch (_provider.selectedAppointment.status.getState()) {
       case AppointmentStatusState.IN_UNIT:
@@ -242,9 +265,17 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
     List<Tab> tabs = [
       Tab(text: S.of(context).general_details),
       Tab(text: S.of(context).appointment_details_car_details),
-      Tab(text: S.of(context).appointment_details_service_history),
-      Tab(text: S.of(context).appointment_details_documentation)
     ];
+
+    if (PermissionsManager.getInstance()
+        .hasAccess(MainPermissions.Cars, PermissionsCar.VIEW_CAR_HISTORY)) {
+      tabs.add(Tab(text: S.of(context).appointment_details_service_history));
+    }
+
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Cars,
+        PermissionsCar.VIEW_CAR_TECHNICAL_DOCUMENTATION)) {
+      tabs.add(Tab(text: S.of(context).appointment_details_documentation));
+    }
 
     switch (_provider.selectedAppointment.status.getState()) {
       case AppointmentStatusState.IN_UNIT:
