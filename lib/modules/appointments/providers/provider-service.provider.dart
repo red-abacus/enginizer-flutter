@@ -101,9 +101,7 @@ class ProviderServiceProvider with ChangeNotifier {
     List<String> serviceNames = [];
 
     selectedServiceItems.forEach((element) {
-      if (!element.isPickUpAndReturnService() && !element.isTowService()) {
-        serviceNames.add(element.name);
-      }
+      serviceNames.add(element.name);
     });
 
     try {
@@ -121,8 +119,8 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<ServiceProviderTimetable>> loadServiceProviderTimetables(
       ServiceProvider serviceProvider, String startDate, String endDate) async {
     try {
-      this.serviceProviderTimetable = await providerService.getServiceProviderTimetables(
-          serviceProvider.id, startDate, endDate);
+      this.serviceProviderTimetable = await providerService
+          .getServiceProviderTimetables(serviceProvider.id, startDate, endDate);
       notifyListeners();
       return this.serviceProviderTimetable;
     } catch (error) {
@@ -146,7 +144,8 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<Car>> loadCars({String filterValue = ''}) async {
     try {
       var response = await this._carService.getCars();
-      cars = response.items.where((car) => car.status != CarStatus.Sold).toList();
+      cars =
+          response.items.where((car) => car.status != CarStatus.Sold).toList();
       notifyListeners();
       return cars;
     } catch (error) {
@@ -175,6 +174,14 @@ class ProviderServiceProvider with ChangeNotifier {
     if (selectedProvider != null) {
       appointmentRequest.providerId = selectedProvider.id;
       appointmentRequest.address = selectedProvider.address;
+    }
+
+    if (pickupPosition != null &&
+        pickupPosition.isValid() &&
+        returnPosition != null &&
+        returnPosition.isValid()) {
+      appointmentRequest.pickupPosition = pickupPosition;
+      appointmentRequest.returnPosition = returnPosition;
     }
 
     appointmentRequest.scheduledTime = dateEntry.dateForAppointment();
@@ -219,7 +226,8 @@ class ProviderServiceProvider with ChangeNotifier {
     }
     return this.selectedServiceItems.firstWhere(
             (element) => element.isPickUpAndReturnService(),
-            orElse: () => null) != null;
+            orElse: () => null) !=
+        null;
   }
 
   bool hasTowService() {
