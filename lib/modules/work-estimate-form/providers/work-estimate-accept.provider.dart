@@ -1,8 +1,6 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/appointment-position.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
-import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:app/modules/appointments/model/provider/service-provider-timetable.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
 import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
@@ -23,14 +21,12 @@ class WorkEstimateAcceptProvider with ChangeNotifier {
   final int _pageSize = 20;
 
   ServiceProvider selectedProvider;
-  ServiceProviderItem pickupServiceItem;
 
   AppointmentProviderType appointmentProviderType;
 
   initialise() {
     selectedProvider = null;
     appointmentProviderType = AppointmentProviderType.Specific;
-    pickupServiceItem = null;
     resetServiceProviderParams();
 
     workEstimateAcceptState = null;
@@ -56,7 +52,7 @@ class WorkEstimateAcceptProvider with ChangeNotifier {
       }
     }
 
-    List<String> serviceNames = [pickupServiceItem.name];
+    List<String> serviceNames = ['PICKUP_RETURN'];
 
     try {
       _serviceProviderResponse = await _providerService.getProviders(

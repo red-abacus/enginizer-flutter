@@ -742,40 +742,42 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             });
       }
     } else {
-      ServiceProviderItem pickupServiceItem =
-          _provider.selectedAppointmentDetail.pickupServiceItem();
-      if (pickupServiceItem == null || !_provider.shouldAskForPr) {
-        showDialog<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return StatefulBuilder(
-                  builder: (BuildContext context, StateSetter state) {
-                return AlertConfirmationDialogWidget(
-                    confirmFunction: (confirm) => {
-                          if (confirm) {_acceptWorkEstimate()}
-                        },
-                    title: S.of(context).estimator_accept_alert_body);
-              });
-            });
-      } else {
-        Provider.of<WorkEstimateAcceptProvider>(context).initialise();
-        Provider.of<WorkEstimateAcceptProvider>(context).pickupServiceItem =
-            pickupServiceItem;
+      Provider.of<WorkEstimateAcceptProvider>(context).initialise();
+//      Provider.of<WorkEstimateAcceptProvider>(context).pickupServiceItem =
+//          pickupServiceItem;
 
-        showModalBottomSheet<void>(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            context: context,
-            isScrollControlled: true,
-            builder: (BuildContext context) {
-              return StatefulBuilder(
-                  builder: (BuildContext context, StateSetter state) {
-                return WorkEstimateAcceptModal(
-                    acceptWorkEstimate: _acceptWorkEstimate);
-              });
-            });
-      }
+      showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter state) {
+                  return WorkEstimateAcceptModal(
+                      acceptWorkEstimate: _acceptWorkEstimate);
+                });
+          });
+
+//      ServiceProviderItem pickupServiceItem =
+//          _provider.selectedAppointmentDetail.pickupServiceItem();
+//      if (pickupServiceItem == null || !_provider.shouldAskForPr) {
+//        showDialog<void>(
+//            context: context,
+//            builder: (BuildContext context) {
+//              return StatefulBuilder(
+//                  builder: (BuildContext context, StateSetter state) {
+//                return AlertConfirmationDialogWidget(
+//                    confirmFunction: (confirm) => {
+//                          if (confirm) {_acceptWorkEstimate()}
+//                        },
+//                    title: S.of(context).estimator_accept_alert_body);
+//              });
+//            });
+//      } else {
+//
+//      }
     }
   }
 
