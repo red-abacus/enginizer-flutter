@@ -1,5 +1,7 @@
 import 'package:app/modules/appointments/model/appointment/appointment-provider-type.dart';
 
+import '../appointment-position.model.dart';
+
 class AppointmentRequest {
   String address;
   int carId;
@@ -10,6 +12,9 @@ class AppointmentRequest {
   int userId;
   AppointmentProviderType providerType;
   int promotionId;
+
+  AppointmentPosition pickupPosition = new AppointmentPosition();
+  AppointmentPosition returnPosition = new AppointmentPosition();
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> propMap = {
@@ -23,6 +28,14 @@ class AppointmentRequest {
       'specific':
           providerType == AppointmentProviderType.Specific ? true : false
     };
+
+    if (pickupPosition != null) {
+      propMap['from'] = pickupPosition.toJson();
+    }
+
+    if (returnPosition != null) {
+      propMap['to'] = returnPosition.toJson();
+    }
 
     if (promotionId != null) {
       propMap['promotionId'] = promotionId;

@@ -14,6 +14,7 @@ import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/models/estimator/issue-item-query.model.dart';
 import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/modules/shared/widgets/horizontal-stepper.widget.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
@@ -54,7 +55,12 @@ class ProviderServiceProvider with ChangeNotifier {
   final int _pageSize = 20;
   ServiceProviderResponse _serviceProviderResponse;
 
+  AppointmentPosition pickupPosition = new AppointmentPosition();
+  AppointmentPosition returnPosition = new AppointmentPosition();
+
   void initFormValues() {
+    pickupPosition = new AppointmentPosition();
+    returnPosition = new AppointmentPosition();
     serviceProviderTimetable = [];
     cars = [];
     appointmentPosition = AppointmentPosition();
@@ -95,9 +101,7 @@ class ProviderServiceProvider with ChangeNotifier {
     List<String> serviceNames = [];
 
     selectedServiceItems.forEach((element) {
-      if (!element.isPickUpAndReturnService() && !element.isTowService()) {
-        serviceNames.add(element.name);
-      }
+      serviceNames.add(element.name);
     });
 
     try {
@@ -115,8 +119,8 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<ServiceProviderTimetable>> loadServiceProviderTimetables(
       ServiceProvider serviceProvider, String startDate, String endDate) async {
     try {
-      this.serviceProviderTimetable = await providerService.getServiceProviderTimetables(
-          serviceProvider.id, startDate, endDate);
+      this.serviceProviderTimetable = await providerService
+          .getServiceProviderTimetables(serviceProvider.id, startDate, endDate);
       notifyListeners();
       return this.serviceProviderTimetable;
     } catch (error) {
@@ -140,7 +144,8 @@ class ProviderServiceProvider with ChangeNotifier {
   Future<List<Car>> loadCars({String filterValue = ''}) async {
     try {
       var response = await this._carService.getCars();
-      cars = response.items.where((car) => car.status != CarStatus.Sold).toList();
+      cars =
+          response.items.where((car) => car.status != CarStatus.Sold).toList();
       notifyListeners();
       return cars;
     } catch (error) {
@@ -171,6 +176,14 @@ class ProviderServiceProvider with ChangeNotifier {
       appointmentRequest.address = selectedProvider.address;
     }
 
+    if (pickupPosition != null &&
+        pickupPosition.isValid() &&
+        returnPosition != null &&
+        returnPosition.isValid()) {
+      appointmentRequest.pickupPosition = pickupPosition;
+      appointmentRequest.returnPosition = returnPosition;
+    }
+
     appointmentRequest.scheduledTime = dateEntry.dateForAppointment();
     return appointmentRequest;
   }
@@ -185,20 +198,24 @@ class ProviderServiceProvider with ChangeNotifier {
   generateStateData(bool showCarSelection) {
     if (!showCarSelection) {
       stepStateData = {
-        0: {"state": StepState.indexed, "active": true, "title": Text("")},
-        1: {"state": StepState.disabled, "active": false, "title": Text("")},
-        2: {"state": StepState.disabled, "active": false, "title": Text("")},
-        3: {"state": StepState.disabled, "active": false, "title": Text("")},
-        4: {"state": StepState.disabled, "active": false, "title": Text("")},
+        0: {"state": FAStepstate.indexed, "active": true, "title": Text("")},
+        1: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        2: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        3: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        4: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        5: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        6: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
       };
     } else {
       stepStateData = {
-        0: {"state": StepState.indexed, "active": true, "title": Text("")},
-        1: {"state": StepState.disabled, "active": false, "title": Text("")},
-        2: {"state": StepState.disabled, "active": false, "title": Text("")},
-        3: {"state": StepState.disabled, "active": false, "title": Text("")},
-        4: {"state": StepState.disabled, "active": false, "title": Text("")},
-        5: {"state": StepState.disabled, "active": false, "title": Text("")},
+        0: {"state": FAStepstate.indexed, "active": true, "title": Text("")},
+        1: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        2: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        3: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        4: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        5: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        6: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
+        7: {"state": FAStepstate.disabled, "active": false, "title": Text("")},
       };
     }
   }
@@ -209,6 +226,14 @@ class ProviderServiceProvider with ChangeNotifier {
     }
     return this.selectedServiceItems.firstWhere(
             (element) => element.isPickUpAndReturnService(),
-            orElse: () => null) != null;
+            orElse: () => null) !=
+        null;
+  }
+
+  bool hasTowService() {
+    ServiceProviderItem serviceItem = selectedServiceItems
+        .firstWhere((element) => element.isTowService(), orElse: () => null);
+
+    return serviceItem != null;
   }
 }

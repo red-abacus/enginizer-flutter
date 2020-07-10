@@ -179,6 +179,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     }
 
     return TabBarView(
+      physics: ScrollPhysics(),
       controller: _tabController,
       children: list,
     );
