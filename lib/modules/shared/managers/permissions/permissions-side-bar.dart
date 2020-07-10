@@ -10,7 +10,6 @@ class PermissionsSideBar {
   static final String APPOINTMENT = 'VIEW_APPOINTMENTS';
   static final String AUCTION = 'VIEW_AUCTIONS';
   static final String WORK_ESTIMATE = 'VIEW_WORK_ESTIMATES';
-  static final String NOTIFICATIONS = 'SIDEBAR.NOTIFICATIONS'; // TODO
   static final String PARTS = 'SIDEBAR.PARTS'; // TODO
   static final String ORDERS = 'VIEW_ORDERS';
   static final String PROMOTIONS = 'VIEW_PROMOTIONS';
@@ -33,14 +32,12 @@ class PermissionsSideBar {
           break;
         case Roles.Client:
           permissions.addAll([
-            NOTIFICATIONS,
             EXTRA_SERVICES,
           ]);
           break;
         case Roles.ProviderAccountant:
           break;
         case Roles.ProviderPersonnel:
-          permissions.add(NOTIFICATIONS);
           break;
         case Roles.ProviderConsultant:
           if (serviceProviderItemsResponse != null) {
@@ -52,16 +49,12 @@ class PermissionsSideBar {
               if (serviceType != null) {
                 switch (serviceType) {
                   case ConsultantServiceType.PickUpAndReturn:
-                    permissions.add(NOTIFICATIONS);
                     break;
                   case ConsultantServiceType.Service:
-                    permissions.add(NOTIFICATIONS);
                     break;
                   case ConsultantServiceType.PartShop:
-                    permissions.add(NOTIFICATIONS);
                     break;
                   case ConsultantServiceType.DismantlingShop:
-                    permissions.add(NOTIFICATIONS);
                     permissions.add(PARTS);
                     break;
                   case ConsultantServiceType.Sell:

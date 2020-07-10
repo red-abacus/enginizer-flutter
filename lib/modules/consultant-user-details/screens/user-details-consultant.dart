@@ -202,10 +202,10 @@ class UserDetailsConsultantState extends State<UserDetailsConsultant> {
         children: <Widget>[
           _buildTabBarButton(UserDetailsTabbarStateConsultant.GRAPH),
           _buildTabBarButton(UserDetailsTabbarStateConsultant.INDEX),
-          if (PermissionsManager.getInstance().hasAccess(
-              MainPermissions.UserProfile,
-              PermissionsUserProfile.ACTIVE_PERSONNEL))
-            _buildTabBarButton(UserDetailsTabbarStateConsultant.WORKSTATIONS)
+//          if (PermissionsManager.getInstance().hasAccess(
+//              MainPermissions.UserProfile,
+//              PermissionsUserProfile.ACTIVE_PERSONNEL))
+//            _buildTabBarButton(UserDetailsTabbarStateConsultant.WORKSTATIONS)
         ],
       ),
     );

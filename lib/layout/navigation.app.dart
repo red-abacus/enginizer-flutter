@@ -108,15 +108,12 @@ class NavigationApp extends StatefulWidget {
           'Extra Services', ExtraServices.route, ExtraServices.icon));
     }
 
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.NOTIFICATIONS)) {
-      items.add(new DrawerItem(
-          'Notifications',
-          Notifications.route,
-          NotificationsManager.notificationsCount == 0
-              ? Icons.notifications
-              : Icons.notifications_active));
-    }
+    items.add(new DrawerItem(
+        'Notifications',
+        Notifications.route,
+        NotificationsManager.notificationsCount == 0
+            ? Icons.notifications
+            : Icons.notifications_active));
 
     return items;
   }

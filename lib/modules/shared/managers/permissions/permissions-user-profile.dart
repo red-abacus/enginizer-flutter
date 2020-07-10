@@ -1,7 +1,7 @@
 import 'package:app/modules/authentication/models/roles.model.dart';
 
 class PermissionsUserProfile {
-  static final String ACTIVE_PERSONNEL = 'ACTIVE_PERSONNEL'; // TODO
+//  static final String ACTIVE_PERSONNEL = 'ACTIVE_PERSONNEL'; // TODO
 
   Map<String, List<String>> permissionsMap = Map();
 
@@ -19,10 +19,10 @@ class PermissionsUserProfile {
         case Roles.ProviderPersonnel:
           break;
         case Roles.ProviderConsultant:
-          permissions = [ACTIVE_PERSONNEL];
+//          permissions = [ACTIVE_PERSONNEL];
           break;
         case Roles.ProviderAdmin:
-          permissions = [ACTIVE_PERSONNEL];
+//          permissions = [ACTIVE_PERSONNEL];
           break;
       }
 
