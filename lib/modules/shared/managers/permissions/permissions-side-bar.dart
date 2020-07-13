@@ -13,7 +13,7 @@ class PermissionsSideBar {
   static final String PARTS = 'SIDEBAR.PARTS'; // TODO
   static final String ORDERS = 'VIEW_ORDERS';
   static final String PROMOTIONS = 'VIEW_PROMOTIONS';
-  static final String CARS = 'VIEW_CARS';
+  static final String CARS = 'VIEW_CARS'; // TODO - this need to be updated on backend. Service providers with sell or rent car needs this permission
   static final String SHOP = 'VIEW_ONLINE_STORE';
   static final String TICKETS = 'SIDEBAR.TICKETS'; // TODO
   static final String EXTRA_SERVICES = 'SIDEBAR.EXTRA_SERVICES'; // TODO

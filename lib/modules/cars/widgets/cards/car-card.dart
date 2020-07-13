@@ -14,14 +14,8 @@ class CarCard extends StatelessWidget {
   final Car car;
   final Function selectCar;
   final Function openAppointmentCreateModal;
-  final Function sellCar;
-  final Function rentCar;
 
-  CarCard({this.car,
-    this.selectCar,
-    this.openAppointmentCreateModal,
-    this.sellCar,
-    this.rentCar});
+  CarCard({this.car, this.selectCar, this.openAppointmentCreateModal});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +30,7 @@ class CarCard extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             children: <Widget>[
               InkWell(
-                splashColor: Theme
-                    .of(context)
-                    .primaryColor,
+                splashColor: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(10),
                 onTap: () {
                   if (this.car.canEdit()) {
@@ -115,76 +107,21 @@ class CarCard extends StatelessWidget {
   _scheduleButton(BuildContext context) {
     List<Widget> list = [];
 
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR) &&
-        car.status == CarStatus.Pending) {
-      list.add(FlatButton(
-        padding: EdgeInsets.all(0),
-        splashColor: Theme
-            .of(context)
-            .primaryColor,
-        onPressed: () => {this.sellCar(this.car)},
-        child: Text(S
-            .of(context)
-            .general_sell
-            .toUpperCase(),
-            style: TextStyle(
-                color: Theme
-                    .of(context)
-                    .accentColor,
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.bold,
-                fontSize: 14)),
-      ));
-    }
-
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.RENT_CAR)) {
-      list.add(FlatButton(
-        padding: EdgeInsets.all(0),
-        splashColor: Theme
-            .of(context)
-            .primaryColor,
-        onPressed: () => {this.rentCar(this.car)},
-        child: Text(S
-            .of(context)
-            .general_rent
-            .toUpperCase(),
-            style: TextStyle(
-                color: Theme
-                    .of(context)
-                    .accentColor,
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.bold,
-                fontSize: 14)),
-      ));
-    }
-
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT) &&
+    if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Cars, PermissionsAppointment.CREATE_APPOINTMENT) &&
         car.canEdit()) {
+      list.insert(0, Spacer());
       list.add(FlatButton(
         padding: EdgeInsets.all(0),
-        splashColor: Theme
-            .of(context)
-            .primaryColor,
+        splashColor: Theme.of(context).primaryColor,
         onPressed: () => {this.openAppointmentCreateModal(context, this.car)},
-        child: Text(S
-            .of(context)
-            .general_schedule
-            .toUpperCase(),
+        child: Text(S.of(context).general_schedule.toUpperCase(),
             style: TextStyle(
-                color: Theme
-                    .of(context)
-                    .accentColor,
+                color: Theme.of(context).accentColor,
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.bold,
                 fontSize: 14)),
       ));
-    }
-
-    if (list.length == 1) {
-      list.insert(0, Spacer());
     }
 
     return Container(
@@ -198,13 +135,9 @@ class CarCard extends StatelessWidget {
     String status = '';
 
     if (car.status == CarStatus.ForSell) {
-      status = S
-          .of(context)
-          .car_status_for_sell;
+      status = S.of(context).car_status_for_sell;
     } else if (car.status == CarStatus.Sold) {
-      status = S
-          .of(context)
-          .car_status_sold;
+      status = S.of(context).car_status_sold;
     }
 
     switch (car.status) {
@@ -230,9 +163,9 @@ class CarCard extends StatelessWidget {
                   height: 40,
                   child: Center(
                       child: Text(
-                        status,
-                        style: TextHelper.customTextStyle(color: Colors.white),
-                      )),
+                    status,
+                    style: TextHelper.customTextStyle(color: Colors.white),
+                  )),
                 ),
               )
             ],

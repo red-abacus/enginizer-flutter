@@ -150,10 +150,7 @@ class CarsState extends State<Cars> {
             cars: cars,
             filterCars: _filterCars,
             selectCar: _selectCar,
-            openAppointmentCreateModal: _openAppointmentCreateModal,
-            sellCar: _sellCar,
-            rentCar: _rentCar,
-          );
+            openAppointmentCreateModal: _openAppointmentCreateModal);
   }
 
   _openCarCreateModal(BuildContext ctx) {
@@ -172,7 +169,6 @@ class CarsState extends State<Cars> {
           });
         });
   }
-
   _sellCar(Car car) async {
     setState(() {
       _isLoading = true;

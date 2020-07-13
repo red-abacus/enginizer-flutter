@@ -23,4 +23,7 @@ class Custom {
 
   static const IconData car = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData discount = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData car_sell = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData car_rent = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fuel = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

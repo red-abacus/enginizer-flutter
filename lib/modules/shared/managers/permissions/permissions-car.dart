@@ -28,24 +28,6 @@ class PermissionsCar {
         case Roles.ProviderPersonnel:
           break;
         case Roles.ProviderConsultant:
-          if (serviceProviderItemsResponse != null) {
-            for (ServiceProviderItem item
-                in serviceProviderItemsResponse.items) {
-              ConsultantServiceType serviceType =
-                  ConsultantServiceTypeUtils.serviceTypeFromString(item.name);
-
-              if (serviceType != null) {
-                switch (serviceType) {
-                  case ConsultantServiceType.Sell:
-                    break;
-                  case ConsultantServiceType.Rent:
-                    break;
-                  default:
-                    break;
-                }
-              }
-            }
-          }
           break;
         case Roles.ProviderAdmin:
           break;
