@@ -37,6 +37,7 @@ class CarService {
   static String GET_CAR_DOCUMENT_DETAILS_EXCEPTION =
       'GET_CAR_DOCUMENT_DETAILS_EXCEPTION';
   static String CAR_MARK_AS_SOLD_EXCEPTION = 'CAR_MARK_AS_SOLD_EXCEPTION';
+  static String CAR_RENT_EXCEPTION = 'CAR_RENT_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -46,6 +47,10 @@ class CarService {
 
   static const String _CAR_SELL_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_SELL_SUFFIX = '/sell';
+
+  static const String _CAR_RENT_PREFIX = '${Environment.CARS_BASE_API}/cars/';
+  static const String _CAR_RENT_SUFFIX = '/rent';
+
   static const String _CAR_DOCUMENTATION_TOPICS =
       '${Environment.CARS_BASE_API}/techDocumentation/topic';
   static const String _CAR_DOCUMENTATION_DOCUMENT =
@@ -192,19 +197,34 @@ class CarService {
     }
   }
 
-  Future<Car> sellCar(CreatePromotionRequest createPromotionRequest) async {
+  Future<int> sellCar(CreatePromotionRequest createPromotionRequest) async {
     try {
       final response = await _dio.patch(
           _buildCarSellPath(createPromotionRequest.car.id),
           data: jsonEncode(createPromotionRequest.toJson()));
-
       if (response.statusCode == 200) {
-        return Car.fromJson(response.data);
+        return response.data;
       } else {
         throw Exception(CAR_SELL_EXCEPTION);
       }
     } catch (error) {
       throw Exception(CAR_SELL_EXCEPTION);
+    }
+  }
+
+  Future<int> rentCar(CreatePromotionRequest createPromotionRequest) async {
+    try {
+      final response = await _dio.patch(
+          _buildRentCarPath(createPromotionRequest.car.id),
+          data: jsonEncode(createPromotionRequest.toJson()));
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception(CAR_RENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(CAR_RENT_EXCEPTION);
     }
   }
 
@@ -314,12 +334,10 @@ class CarService {
 
       if (response.statusCode == 200) {
         return Car.fromJson(response.data);
-      }
-      else {
+      } else {
         throw Exception(CAR_MARK_AS_SOLD_EXCEPTION);
       }
-    }
-    catch (e) {
+    } catch (e) {
       throw Exception(CAR_MARK_AS_SOLD_EXCEPTION);
     }
   }
@@ -353,6 +371,10 @@ class CarService {
 
   _buildMarkAsSoldPath(int carId) {
     return _MARK_AS_SOLD_PREFIX + carId.toString() + _MARK_AS_SOLD_SUFFIX;
+  }
+
+  _buildRentCarPath(int carId) {
+    return _CAR_RENT_PREFIX + carId.toString() + _CAR_RENT_SUFFIX;
   }
 
   _mapCarHistory(List<dynamic> response) {

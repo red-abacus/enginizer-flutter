@@ -37,9 +37,8 @@ class CarClientDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _contentWidget(context),
-      floatingActionButton: _floatingActionButtons(context)
-    );
+        body: _contentWidget(context),
+        floatingActionButton: _floatingActionButtons(context));
   }
 
   _contentWidget(BuildContext context) {
@@ -118,20 +117,20 @@ class CarClientDetailsWidget extends StatelessWidget {
                 ),
               ],
             ),
-              Container(
-                alignment: Alignment.topRight,
-                child: FlatButton(
-                  padding: EdgeInsets.all(30),
-                  splashColor: Theme.of(context).primaryColor,
-                  onPressed: () async {
-                    showCameraDialog();
-                  },
-                  child: TextWidget(
-                    'Upload Image',
-                    color: Theme.of(context).accentColor,
-                  ),
+            Container(
+              alignment: Alignment.topRight,
+              child: FlatButton(
+                padding: EdgeInsets.all(30),
+                splashColor: Theme.of(context).primaryColor,
+                onPressed: () async {
+                  showCameraDialog();
+                },
+                child: TextWidget(
+                  'Upload Image',
+                  color: Theme.of(context).accentColor,
                 ),
-              )
+              ),
+            )
           ],
         ),
       ),
@@ -204,7 +203,7 @@ class CarClientDetailsWidget extends StatelessWidget {
     var buttons = List<SpeedDialChild>();
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR) &&
+            .hasAccess(MainPermissions.Cars, PermissionsCar.SELL_CAR) &&
         car.status == CarStatus.Pending) {
       buttons.add(SpeedDialChild(
           child: Icon(Custom.car_sell),
@@ -217,7 +216,8 @@ class CarClientDetailsWidget extends StatelessWidget {
     }
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Cars, PermissionsCar.RENT_CAR)) {
+            .hasAccess(MainPermissions.Cars, PermissionsCar.RENT_CAR) &&
+        car.status == CarStatus.Pending) {
       buttons.add(SpeedDialChild(
           child: Icon(Custom.car_rent),
           foregroundColor: red,
@@ -257,7 +257,7 @@ class CarClientDetailsWidget extends StatelessWidget {
     );
   }
 
-  /*
+/*
   Container(
         margin: EdgeInsets.only(left: 20),
         child: Row(

@@ -701,6 +701,7 @@
   "exception_remove_promotion_image": "There was an error trying to delete this image.",
   "exception_transport_request": "There was an error trying to request transport.",
   "exception_car_sell": "There was a problem creating a sale offer.",
+  "exception_car_rent": "There was a problem creating a rent offer.",
   "exception_car_documentation_topics": "There was an error trying to get car documentation.",
   "exception_car_documentation_document_exception": "There was an error trying to load document.",
   "exception_open_url": "Page url is not valid.",

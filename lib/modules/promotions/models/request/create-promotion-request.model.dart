@@ -120,4 +120,8 @@ class CreatePromotionRequest {
   hasSellerService() {
     return this.serviceProviderItem != null && this.serviceProviderItem.isSellerService();
   }
+
+  hasRentService() {
+    return this.serviceProviderItem != null && this.serviceProviderItem.isRentService();
+  }
 }

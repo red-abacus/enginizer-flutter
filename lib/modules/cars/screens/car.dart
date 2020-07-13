@@ -44,8 +44,9 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     super.initState();
     _tabController = new TabController(
         vsync: this,
-        length: PermissionsManager.getInstance()
-                .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT)
+        length: PermissionsManager.getInstance().hasAccess(
+                MainPermissions.Appointments,
+                PermissionsAppointment.CREATE_APPOINTMENT)
             ? 3
             : 2,
         initialIndex: 0);
@@ -99,8 +100,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
   }
 
   _downloadCarHistory() async {
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
+        PermissionsAppointment.CREATE_APPOINTMENT)) {
       try {
         await _provider.getCarHistory(_provider.carDetails.id).then((_) async {
           setState(() {
@@ -127,24 +128,24 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('${_provider.selectedCar?.brand?.name}'),
-        iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(text: S.of(context).car_details_title),
-            Tab(text: S.of(context).car_documents_title),
-            if (PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT))
-              Tab(text: S.of(context).car_service_recommendations_title),
-          ],
+        appBar: AppBar(
+          title: Text('${_provider.selectedCar?.brand?.name}'),
+          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(text: S.of(context).car_details_title),
+              Tab(text: S.of(context).car_documents_title),
+              if (PermissionsManager.getInstance().hasAccess(
+                  MainPermissions.Appointments,
+                  PermissionsAppointment.CREATE_APPOINTMENT))
+                Tab(text: S.of(context).car_service_recommendations_title),
+            ],
+          ),
         ),
-      ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : _buildContent()
-    );
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : _buildContent());
   }
 
   showPicture(car) {
@@ -176,8 +177,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
       CarDocumentsWidget(),
     ];
 
-    if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Appointments, PermissionsAppointment.CREATE_APPOINTMENT)) {
+    if (PermissionsManager.getInstance().hasAccess(MainPermissions.Appointments,
+        PermissionsAppointment.CREATE_APPOINTMENT)) {
       list.add(CarRecommendationsWidget(carHistory: _provider.carHistory));
     }
 
@@ -299,115 +300,111 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     });
 
     CreatePromotionProvider provider =
-    Provider.of<CreatePromotionProvider>(context);
+        Provider.of<CreatePromotionProvider>(context);
 
-    int providerId = Provider.of<Auth>(context).authUser.providerId;
-
-    if (providerId != null) {
-      try {
-        await provider
-            .getServiceProviderItems(
-            Provider.of<Auth>(context).authUser.providerId)
-            .then((response) {
-          setState(() {
-            _isLoading = false;
-          });
-
-          ServiceProviderItem sellProviderItem;
-
-          for (ServiceProviderItem item in response.items) {
-            if (item.isSellerService()) {
-              sellProviderItem = item;
-            }
-          }
-
-          if (sellProviderItem != null) {
-            Provider.of<CreatePromotionProvider>(context).initialise(
-                Provider.of<Auth>(context).authUser.providerId,
-                car: car,
-                serviceProviderItem: sellProviderItem);
-            Provider.of<CreatePromotionProvider>(context)
-                .serviceProviderItemsResponse = response;
-
-            showModalBottomSheet<void>(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return StatefulBuilder(
-                      builder: (BuildContext context, StateSetter state) {
-                        return CreatePromotionModal(
-                          refreshState: null,
-                        );
-                      });
-                });
-          }
-        });
-      } catch (error) {
-        if (error
-            .toString()
-            .contains(ProviderService.GET_PROVIDER_SERVICE_ITEMS_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_get_provider_service_items, context);
-
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      }
-    } else {
-      try {
-        await provider.loadServices(null).then((value) {
-          setState(() {
-            _isLoading = false;
-          });
-
-          ServiceProviderItem sellProviderItem;
-
-          for (ServiceProviderItem providerItem in value.items) {
-            if (providerItem.isSellerService()) {
-              sellProviderItem = providerItem;
-              break;
-            }
-          }
-
-          if (sellProviderItem != null) {
-            Provider.of<CreatePromotionProvider>(context).initialise(null,
-                car: car, serviceProviderItem: sellProviderItem);
-            Provider.of<CreatePromotionProvider>(context).serviceProviderItemsResponse = value;
-
-            showModalBottomSheet<void>(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return StatefulBuilder(
-                      builder: (BuildContext context, StateSetter state) {
-                        return CreatePromotionModal(
-                          refreshState: null,
-                        );
-                      });
-                });
-          }
-        });
-      } catch (error) {
-        if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_get_services, context);
-        }
-
+    try {
+      await provider.loadServices(null).then((value) {
         setState(() {
           _isLoading = false;
         });
+
+        ServiceProviderItem sellProviderItem;
+
+        for (ServiceProviderItem providerItem in value.items) {
+          if (providerItem.isSellerService()) {
+            sellProviderItem = providerItem;
+            break;
+          }
+        }
+
+        if (sellProviderItem != null) {
+          Provider.of<CreatePromotionProvider>(context).initialise(null,
+              car: car, serviceProviderItem: sellProviderItem);
+          Provider.of<CreatePromotionProvider>(context)
+              .serviceProviderItemsResponse = value;
+
+          showModalBottomSheet<void>(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter state) {
+                  return CreatePromotionModal(
+                    refreshState: null,
+                  );
+                });
+              });
+        }
+      });
+    } catch (error) {
+      if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_services, context);
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
-  _rentCar(Car car) {
+  _rentCar(Car car) async {
+    setState(() {
+      _isLoading = true;
+    });
 
+    CreatePromotionProvider provider =
+    Provider.of<CreatePromotionProvider>(context);
+
+    try {
+      await provider.loadServices(null).then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        ServiceProviderItem sellProviderItem;
+
+        for (ServiceProviderItem providerItem in value.items) {
+          if (providerItem.isRentService()) {
+            sellProviderItem = providerItem;
+            break;
+          }
+        }
+
+        if (sellProviderItem != null) {
+          Provider.of<CreatePromotionProvider>(context).initialise(null,
+              car: car, serviceProviderItem: sellProviderItem);
+          Provider.of<CreatePromotionProvider>(context)
+              .serviceProviderItemsResponse = value;
+
+          showModalBottomSheet<void>(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter state) {
+                      return CreatePromotionModal(
+                        refreshState: null,
+                      );
+                    });
+              });
+        }
+      });
+    } catch (error) {
+      if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_get_services, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

@@ -91,12 +91,21 @@ class CreatePromotionProvider with ChangeNotifier {
     }
   }
 
-  Future<Car> createCarPromotion(
-      CreatePromotionRequest createPromotionRequest) async {
+  Future<int> sellCar(CreatePromotionRequest createPromotionRequest) async {
     try {
-      Car car = await this._carService.sellCar(createPromotionRequest);
+      int promotionId = await this._carService.sellCar(createPromotionRequest);
       notifyListeners();
-      return car;
+      return promotionId;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<int> rentCar(CreatePromotionRequest createPromotionRequest) async {
+    try {
+      int promotionId = await this._carService.rentCar(createPromotionRequest);
+      notifyListeners();
+      return promotionId;
     } catch (error) {
       throw (error);
     }

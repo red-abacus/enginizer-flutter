@@ -29,9 +29,6 @@ class JwtUser {
       this.aud});
 
   factory JwtUser.fromJson(Map<String, dynamic> json) {
-    for(String key in json.keys) {
-      print('$key: ${json[key]}');
-    }
     return JwtUser(
         userId: json['userId'],
         email: json['email'],

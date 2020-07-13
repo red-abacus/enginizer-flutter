@@ -132,7 +132,8 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
   _bottomButtonsWidget() {
     bool isLastStep = false;
     if (_currentStepIndex == 1 &&
-        !_provider.createPromotionRequest.hasSellerService()) {
+        !_provider.createPromotionRequest.hasSellerService() &&
+        !_provider.createPromotionRequest.hasRentService()) {
       isLastStep = true;
     } else if (_currentStepIndex == 2) {
       isLastStep = true;
@@ -298,7 +299,8 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
           state: StepState.indexed)
     ];
 
-    if (_provider.createPromotionRequest.hasSellerService()) {
+    if (_provider.createPromotionRequest.hasSellerService() ||
+        _provider.createPromotionRequest.hasRentService()) {
       steps.add(Step(
           isActive: _currentStepIndex == 2,
           title: Text(_currentStepIndex == 2
@@ -320,12 +322,21 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
         break;
       case 1:
         if (_provider.informationFormState.currentState.validate()) {
-          if (_provider.createPromotionRequest.hasSellerService()) {
+          if (_provider.createPromotionRequest.hasSellerService() ||
+              _provider.createPromotionRequest.hasRentService()) {
             _goTo(2);
           } else if (_provider.createPromotionRequest.car != null &&
               _provider.createPromotionRequest.presetServiceProviderItem !=
-                  null) {
+                  null &&
+              _provider.createPromotionRequest.presetServiceProviderItem
+                  .isSellerService()) {
             _sellCar();
+          } else if (_provider.createPromotionRequest.car != null &&
+              _provider.createPromotionRequest.presetServiceProviderItem !=
+                  null &&
+              _provider.createPromotionRequest.presetServiceProviderItem
+                  .isRentService()) {
+            _rentCar();
           } else {
             if (_provider.createPromotionRequest.promotionId == null) {
               _createPromotion();
@@ -471,9 +482,7 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
     });
 
     try {
-      await _provider
-          .createCarPromotion(_provider.createPromotionRequest)
-          .then((car) {
+      await _provider.sellCar(_provider.createPromotionRequest).then((car) {
         if (widget.refreshState != null) {
           widget.refreshState();
         }
@@ -483,6 +492,30 @@ class _CreatePromotionModalState extends State<CreatePromotionModal> {
       if (error.toString().contains(CarService.CAR_SELL_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_car_sell, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _rentCar() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider.rentCar(_provider.createPromotionRequest).then((car) {
+        if (widget.refreshState != null) {
+          widget.refreshState();
+        }
+        Navigator.pop(context);
+      });
+    } catch (error) {
+      if (error.toString().contains(CarService.CAR_RENT_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_rent, context);
       }
 
       setState(() {

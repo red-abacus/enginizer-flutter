@@ -89,4 +89,8 @@ class ServiceProviderItem {
   bool isTowService() {
     return name == 'TOW_SERVICE';
   }
+
+  bool isRentService() {
+    return name == 'RENT_SERVICE';
+  }
 }
