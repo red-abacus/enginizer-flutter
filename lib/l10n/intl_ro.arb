@@ -717,5 +717,6 @@
   "exception_return_procedure_info": "a intervenit o problema la încărcarea informațiilor procedurii de returnare.",
   "exception_get_work_estimate_pdf": "A intervenit o problemă încărcarea PDF-ului.",
   "exception_finish_appointment": "A intervenit o problemă în procesul de finalizare a programării.",
-  "exception_send_provider_review": "A intervenit o problemă în procesul de trimitere a recenziei."
+  "exception_send_provider_review": "A intervenit o problemă în procesul de trimitere a recenziei.",
+  "exception_get_invoice_pdf": "A intervenit o problemă încărcarea PDF-ului."
 }

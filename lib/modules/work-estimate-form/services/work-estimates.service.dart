@@ -38,6 +38,7 @@ class WorkEstimatesService {
       'GET_INVOICE_DETAILS_EXCEPTION';
   static const String GET_WORK_ESTIMATE_PDF_EXCEPTION =
       'GET_WORK_ESTIMATE_PDF_EXCEPTION';
+  static const String GET_INVOICE_PDF_EXCEPTION = 'GET_INVOICE_PDF_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -70,6 +71,10 @@ class WorkEstimatesService {
 
   static const String _GET_INVOICE_DETAILS_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
+
+  static const String _GET_INVOICE_PDF_PREFIX =
+      '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
+  static const String _GET_INVOICE_PDF_SUFFIX = '/download';
 
   Dio _dio = inject<Dio>();
 
@@ -248,6 +253,27 @@ class WorkEstimatesService {
     }
   }
 
+  Future<File> getInvoicePdf(int invoiceId, String savePath) async {
+    try {
+      Response response = await _dio.get(
+        _buildGetInvoicePdf(invoiceId),
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+      File file = File(savePath);
+      var raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+      return file;
+    } catch (e) {
+      throw Exception(GET_INVOICE_PDF_EXCEPTION);
+    }
+  }
+
   Future<File> getWorkEstimatePdf(int workEstimateId, String savePath) async {
     try {
       Response response = await _dio.get(
@@ -297,5 +323,11 @@ class WorkEstimatesService {
     return _GET_WORK_ESTIMATE_PDF_PREFIX +
         workEstimateId.toString() +
         _GET_WORK_ESTIMATE_PDF_SUFFIX;
+  }
+
+  _buildGetInvoicePdf(int invoiceId) {
+    return _GET_INVOICE_PDF_PREFIX +
+        invoiceId.toString() +
+        _GET_INVOICE_PDF_SUFFIX;
   }
 }

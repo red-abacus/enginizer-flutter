@@ -718,5 +718,6 @@
   "exception_return_procedure_info": "There was an error trying to load return procedure info",
   "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf.",
   "exception_finish_appointment": "There was an error trying to finish appointment.",
-  "exception_send_provider_review": "There was an error trying to send provider review."
+  "exception_send_provider_review": "There was an error trying to send provider review.",
+  "exception_get_invoice_pdf": "There was an error trying to load invoice pdf."
 }

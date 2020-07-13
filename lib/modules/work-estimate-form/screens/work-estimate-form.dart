@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
-import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
@@ -329,8 +328,8 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       case EstimatorMode.Edit:
         buttons.add(operationHistoryButton);
 
-        if (PermissionsManager.getInstance().hasAccess(
-            MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
+        if (PermissionsManager.getInstance()
+            .hasAccess(MainPermissions.Orders, PermissionsOrder.CREATE_ORDER)) {
           buttons.add(SpeedDialChild(
               child: Icon(Icons.shopping_cart),
               foregroundColor: red,
@@ -755,9 +754,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
           builder: (BuildContext context) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter state) {
-                  return WorkEstimateAcceptModal(
-                      acceptWorkEstimate: _acceptWorkEstimate);
-                });
+              return WorkEstimateAcceptModal(
+                  acceptWorkEstimate: _acceptWorkEstimate);
+            });
           });
 
 //      ServiceProviderItem pickupServiceItem =
@@ -979,7 +978,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
     });
 
     String dir =
-        '${(await getApplicationDocumentsDirectory()).path}/work_estimate.pdf';
+        '${(await getApplicationDocumentsDirectory()).path}/work_estimate_${_provider.workEstimateId}.pdf';
 
     try {
       _provider
@@ -988,9 +987,12 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         Uint8List bytes = file.readAsBytesSync();
 
         try {
-          await Share.file('Work Estimate PDF', 'work_estimate.pdf',
-              bytes.buffer.asUint8List(), 'image/png',
-              text: 'Work Estimate PDF');
+          await Share.file(
+              'Work Estimate ${_provider.workEstimateId} PDF',
+              'work_estimate_${_provider.workEstimateId}.pdf',
+              bytes.buffer.asUint8List(),
+              'image/png',
+              text: 'Work Estimate ${_provider.workEstimateId} PDF');
         } catch (e) {}
 
         setState(() {
