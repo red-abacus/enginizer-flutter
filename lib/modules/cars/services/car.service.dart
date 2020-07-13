@@ -149,12 +149,17 @@ class CarService {
   }
 
   Future<Car> getCarDetails(int id) async {
-    final response = await _dio.get('$_CAR_API_PATH/$id');
+    try {
+      final response = await _dio.get('$_CAR_API_PATH/$id');
 
-    if (response.statusCode < 300) {
-      return Car.fromJson(response.data);
-    } else {
-      // If that response was not OK, throw an error
+      if (response.statusCode < 300) {
+        return Car.fromJson(response.data);
+      } else {
+        // If that response was not OK, throw an error
+        throw Exception(CAR_DETAILS_EXCEPTION);
+      }
+    }
+    catch (error) {
       throw Exception(CAR_DETAILS_EXCEPTION);
     }
   }

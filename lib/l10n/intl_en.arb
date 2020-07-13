@@ -47,7 +47,7 @@
   "cars_create_rca_expiry_date_notification": "Please notify me when RCA expires",
   "cars_create_itpExpiryDate": "Insert ITP Expiry date",
   "cars_create_itp_expiry_date_notification": "Please notify me when ITP expires",
-  "cars_create_vin": "Insert VIN",
+  "cars_create_vin": "VIN",
   "cars_create_error_brandNotSelected": "Brand not selected!",
   "cars_create_error_modelNotSelected": "Model not selected!",
   "cars_create_error_type_not_selected": "Engine not selected!",

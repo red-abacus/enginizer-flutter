@@ -103,7 +103,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
             Padding(
               padding: EdgeInsets.only(left: 20, top: 20, right: 20),
               child: TextWidget(
-                _provider.carDetails?.brand?.name,
+                _provider.carDetails?.brand?.name ?? 'N/A',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -111,14 +111,14 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
             Padding(
               padding: EdgeInsets.only(top: 5, left: 20, right: 20),
               child: TextWidget(
-                '${_provider.carDetails?.year?.name}, ${_provider.carDetails.color.translateColorName(context)}',
+                '${_provider.carDetails?.year?.name ?? 'N/A'}, ${_provider.carDetails.color.translateColorName(context)}',
                 fontSize: 14,
               ),
             ),
             Padding(
                 padding: EdgeInsets.only(left: 20, right: 20, top: 25),
                 child: TextWidget(
-                    '${_provider.carDetails?.power?.name}, ${_provider.carDetails?.motor?.name}')),
+                    '${_provider.carDetails?.power?.name ?? 'N/A'}, ${_provider.carDetails?.motor?.name ?? 'N/A'}')),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 10),
               child: TextWidget(
@@ -128,7 +128,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                 child: TextWidget(
-                    '${S.of(context).cars_create_vin}: ${_provider.carDetails.vin}'),
+                    '${S.of(context).cars_create_vin}: ${_provider.carDetails?.vin ?? ''}'),
               ),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 10),

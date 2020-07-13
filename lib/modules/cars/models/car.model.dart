@@ -76,10 +76,10 @@ class Car {
         rcaExpireDate: json['rcaExpireDate'] != null
             ? DateFormat('dd/MM/yyyy').parse(json['rcaExpireDate'])
             : null,
-        vin: json['vin'],
-        registrationNumber: json['registrationNumber'],
-        mileage: json['mileage'],
-        fuelConsumption: json['fuelConsumption'],
+        vin: json['vin'] != null ? json['vin'] : '',
+        registrationNumber: json['registrationNumber'] != null ? json['registrationNumber'] : '',
+        mileage: json['mileage'] != null ? json['mileage'] : 0,
+        fuelConsumption: json['fuelConsumption'] != null ? json['fuelConsumption'] : '',
         ownerId: json['ownerId'] != null ? json['ownerId'] : null,
         providerId: json['providerId'] != null ? json['providerId'] : null,
         status: json['status'] != null
