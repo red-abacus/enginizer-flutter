@@ -31,7 +31,6 @@ class GenericModel {
       case 'SERVICE':
       case 'ITP_SERVICE':
         return ShopAppointmentType.Simple;
-      // TODO - need to check appointment for this
       case 'TOW_SERVICE':
       case 'PICKUP_RETURN':
         return ShopAppointmentType.Location;

@@ -10,6 +10,8 @@ class CarStatusUtils {
         return CarStatus.ForSell;
       case 'SOLD':
         return CarStatus.Sold;
+      case 'FOR_RENT':
+        return CarStatus.ForRent;
       default:
         break;
     }
@@ -26,7 +28,8 @@ class CarStatusUtils {
           return S.of(context).auctions_finished;
         case CarStatus.Sold:
           return S.of(context).car_status_sold;
-          break;
+        case CarStatus.ForRent:
+          return S.of(context).car_status_for_rent;
       }
     }
 
@@ -41,8 +44,11 @@ class CarStatusUtils {
         return 'FOR_SELL';
       case CarStatus.Sold:
         return "SOLD";
+      case CarStatus.ForRent:
+        return 'FOR_RENT';
+
     }
   }
 }
 
-enum CarStatus { Pending, ForSell, Sold }
+enum CarStatus { Pending, ForSell, Sold, ForRent }

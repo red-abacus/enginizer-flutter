@@ -2,7 +2,6 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/enums/car-status.enum.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
@@ -132,19 +131,14 @@ class CarCard extends StatelessWidget {
   }
 
   _getStatusContainer(BuildContext context) {
-    String status = '';
-
-    if (car.status == CarStatus.ForSell) {
-      status = S.of(context).car_status_for_sell;
-    } else if (car.status == CarStatus.Sold) {
-      status = S.of(context).car_status_sold;
-    }
+    String status = CarStatusUtils.titleFromStatus(car.status, context);
 
     switch (car.status) {
       case CarStatus.Pending:
         break;
       case CarStatus.ForSell:
       case CarStatus.Sold:
+      case CarStatus.ForRent:
         return Container(
           margin: EdgeInsets.only(top: 10),
           child: Row(

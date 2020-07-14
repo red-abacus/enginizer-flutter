@@ -109,4 +109,12 @@ class ShopItem {
         priceVAT: 0,
         addition: 0);
   }
+
+  DateTime getStartDate() {
+    return DateUtils.dateFromString(startDate, 'dd/MM/yyyy');
+  }
+
+  DateTime getEndDate() {
+    return DateUtils.dateFromString(endDate, 'dd/MM/yyyy');
+  }
 }

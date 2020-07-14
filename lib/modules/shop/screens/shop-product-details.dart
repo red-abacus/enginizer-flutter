@@ -3,7 +3,9 @@ import 'package:app/modules/appointments/providers/service-provider-details.prov
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
+import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
+import 'package:app/modules/shop/screens/shop-rent.modal.dart';
 import 'package:app/modules/shop/screens/shop-seller-details.modal.dart';
 import 'package:app/modules/shop/screens/shop.dart';
 import 'package:app/utils/constants.dart';
@@ -223,21 +225,40 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
   }
 
   _callSeller() async {
-    String url;
+    Provider.of<ShopAppointmentProvider>(context).initialise();
+    Provider.of<ShopAppointmentProvider>(context).shopItem =
+        _provider.selectedShopItem;
 
-    if (_provider.selectedShopItem.user != null) {
-      url = 'tel:${_provider.selectedShopItem.user.phoneNumber}';
-    }
-    else {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return ShopRentModal();
+          });
+        });
 
-    }
+    // TODO
 
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      FlushBarHelper.showFlushBar(S.of(context).general_error,
-          S.of(context).online_shop_call_error, context);
-    }
+//    String url;
+//
+//    if (_provider.selectedShopItem.user != null) {
+//      url = 'tel:${_provider.selectedShopItem.user.phoneNumber}';
+//    }
+//    else {
+//
+//    }
+//
+//    if (await canLaunch(url)) {
+//      await launch(url);
+//    } else {
+//      FlushBarHelper.showFlushBar(S.of(context).general_error,
+//          S.of(context).online_shop_call_error, context);
+//    }
   }
 
   _showSellerDetails() {
@@ -254,16 +275,15 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
               return ServiceDetailsModal();
             });
           });
-    }
-    else {
+    } else {
       showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           builder: (_) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter state) {
-                  return ShopSellerDetailsModal();
-                });
+              return ShopSellerDetailsModal();
+            });
           });
     }
   }

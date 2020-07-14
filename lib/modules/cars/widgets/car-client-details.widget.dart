@@ -228,6 +228,17 @@ class CarClientDetailsWidget extends StatelessWidget {
           onTap: () => rentCar(this.car)));
     }
 
+    if (car.status == CarStatus.ForSell) {
+      buttons.add(SpeedDialChild(
+          child: Icon(Icons.attach_money),
+          foregroundColor: red,
+          backgroundColor: Colors.white,
+          label: S.of(context).car_mark_as_sold,
+          labelStyle: TextHelper.customTextStyle(
+              color: Colors.grey, weight: FontWeight.bold, size: 16),
+          onTap: () => this.markAsSold));
+    }
+
     buttons.add(SpeedDialChild(
         child: Icon(Icons.local_gas_station),
         foregroundColor: red,
