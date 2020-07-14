@@ -7,6 +7,7 @@ import 'package:app/modules/promotions/models/promotion.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
 import 'package:app/modules/promotions/models/request/promotions-request.model.dart';
 import 'package:app/modules/promotions/models/response/promotions.response.dart';
+import 'package:app/modules/shop/models/request/use-promotion-request.model.dart';
 import 'package:app/utils/environment.constants.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -23,6 +24,7 @@ class PromotionService {
   static const String EDIT_PROMOTION_EXCEPTION = 'EDIT_PROMOTION_EXCEPTION';
   static const String DELETE_PROMOTION_IMAGE_EXCEPTION =
       'DELETE_PROMOTION_IMAGE_EXCEPTION';
+  static const String USE_PROMOTION_EXCEPTION = 'USE_PROMOTION_EXCEPTION';
 
   static const String _GET_PROMOTIONS_PATH =
       '${Environment.PROMOTIONS_BASE_API}/promotions';
@@ -30,6 +32,10 @@ class PromotionService {
   static const String _ADD_PROMOTION_IMAGES_PREFIX =
       '${Environment.PROMOTIONS_BASE_API}/promotions/';
   static const String _ADD_PROMOTION_IMAGES_SUFFIX = '/images';
+
+  static const String _USE_PROMOTION_PREFIX =
+      '${Environment.PROMOTIONS_BASE_API}/promotions/';
+  static const String _USE_PROMOTION_SUFFIX = '/use';
 
   Future<PromotionsResponse> getPromotions(PromotionsRequest request) async {
     try {
@@ -90,9 +96,8 @@ class PromotionService {
     }
 
     try {
-      final response = await _dio.patch(
-          _buildAddPromotionImagesPath(promotionId),
-          data: formData);
+      final response = await _dio
+          .patch(_buildAddPromotionImagesPath(promotionId), data: formData);
 
       if (response.statusCode == 200) {
         return _mapPromotionsImages(response.data);
@@ -107,8 +112,8 @@ class PromotionService {
   Future<bool> deletePromotionImage(
       int providerId, int promotionId, int imageId) async {
     try {
-      final response = await _dio.delete(
-          _buildDeletePromotionImagesPath(promotionId, imageId));
+      final response = await _dio
+          .delete(_buildDeletePromotionImagesPath(promotionId, imageId));
       if (response.statusCode == 200) {
         return true;
       } else {
@@ -116,6 +121,25 @@ class PromotionService {
       }
     } catch (error) {
       throw Exception(DELETE_PROMOTION_IMAGE_EXCEPTION);
+    }
+  }
+
+  Future<bool> usePromotion(UsePromotionRequest usePromotionRequest) async {
+    try {
+      final response = await _dio
+          .post(_buildUsePromotionPath(usePromotionRequest.promotionId), data: jsonEncode(usePromotionRequest.toJson()));
+      print('response ${response.data}');
+      print('response ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('za exception !');
+        throw Exception(USE_PROMOTION_EXCEPTION);
+      }
+    } catch (error) {
+      print('error $error');
+      print('error ${error.response}');
+      throw Exception(USE_PROMOTION_EXCEPTION);
     }
   }
 
@@ -134,6 +158,12 @@ class PromotionService {
         promotionId.toString() +
         _ADD_PROMOTION_IMAGES_SUFFIX +
         '/${imageId.toString()}';
+  }
+
+  _buildUsePromotionPath(int promotionId) {
+    return _USE_PROMOTION_PREFIX +
+        promotionId.toString() +
+        _USE_PROMOTION_SUFFIX;
   }
 
   _mapPromotionsImages(List<dynamic> response) {

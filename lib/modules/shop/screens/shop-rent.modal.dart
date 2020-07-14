@@ -1,6 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/widgets/rent-form/shop-rent-details.form.dart';
 import 'package:app/modules/shop/widgets/rent-form/shop-rent-schedule.form.dart';
@@ -95,6 +96,15 @@ class _ShopRentModalState extends State<ShopRentModal> {
   }
 
   _contentWidget() {
+    double finalPrice = 0;
+
+    if (this._provider.shopItem != null) {
+      finalPrice = this._provider.shopItem.price -
+          this._provider.shopItem.discount /
+              100 *
+              this._provider.shopItem.price;
+    }
+
     return Stack(
       children: <Widget>[
         Container(
@@ -102,8 +112,6 @@ class _ShopRentModalState extends State<ShopRentModal> {
           child: SingleChildScrollView(
             padding: EdgeInsets.only(bottom: 60),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   height: 80,
@@ -115,10 +123,31 @@ class _ShopRentModalState extends State<ShopRentModal> {
                         style:
                             TextHelper.customTextStyle(size: 20, color: gray3),
                       ),
-                      Text(
-                        '-${_provider.shopItem?.discount?.toStringAsFixed(1) ?? 'n/a'} %',
-                        style: TextHelper.customTextStyle(size: 20, color: red),
-                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (this._provider.shopItem != null &&
+                              this._provider.shopItem.discount > 0)
+                            Text(
+                                '${_provider.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: black_text,
+                                    fontFamily: null,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14)),
+                          Text(
+                              '${finalPrice.toStringAsFixed(1)} ${S.of(context).general_currency}',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: red,
+                                  fontFamily: null,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14))
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -205,5 +234,28 @@ class _ShopRentModalState extends State<ShopRentModal> {
     }
   }
 
-  _submit() async {}
+  _submit() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .usePromotion(_provider.getUsePromotionRequest())
+          .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error.toString().contains(PromotionService.USE_PROMOTION_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_use_promotion, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 }

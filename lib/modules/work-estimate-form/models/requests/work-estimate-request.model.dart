@@ -34,6 +34,12 @@ class WorkEstimateRequest {
             .add(IssueRecommendation.defaultPrRecommendation(context));
       });
     }
+    else if (estimatorMode == EstimatorMode.CreateRent) {
+      this.issues.forEach((issue) {
+        issue.recommendations
+            .add(IssueRecommendation.defaultRentRecommendation(context));
+      });
+    }
   }
 
   String isValid(BuildContext context, EstimatorMode estimatorMode) {
@@ -52,7 +58,8 @@ class WorkEstimateRequest {
     }
 
     if (estimatorMode == EstimatorMode.Create ||
-        estimatorMode == EstimatorMode.CreatePr) {
+        estimatorMode == EstimatorMode.CreatePr ||
+        estimatorMode == EstimatorMode.CreateRent) {
       if (dateEntry == null) {
         return S.of(context).auction_proposed_date_error;
       }
@@ -78,7 +85,7 @@ class WorkEstimateRequest {
     map['timeToRespond'] =
         DateUtils.stringFromDate(timeToRespond, 'dd/MM/yyyy');
 
-    if (estimatorMode == EstimatorMode.Create) {
+    if (estimatorMode == EstimatorMode.Create || estimatorMode == EstimatorMode.CreateRent) {
       map['proposedDate'] =
           DateUtils.stringFromDate(dateEntry.dateTime, 'dd/MM/yyyy HH:mm');
     } else if (estimatorMode == EstimatorMode.CreatePart) {

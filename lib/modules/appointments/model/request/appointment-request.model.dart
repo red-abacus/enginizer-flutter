@@ -8,10 +8,10 @@ class AppointmentRequest {
   List<String> issues;
   int providerId;
   String scheduledTime;
-  List<int> serviceIds;
   int userId;
   AppointmentProviderType providerType;
   int promotionId;
+  List<int> serviceIds;
 
   AppointmentPosition pickupPosition = new AppointmentPosition();
   AppointmentPosition returnPosition = new AppointmentPosition();

@@ -361,6 +361,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         }
         break;
       case EstimatorMode.Create:
+      case EstimatorMode.CreateRent:
         buttons.add(saveButton);
         buttons.add(SpeedDialChild(
             child: Icon(Icons.date_range),
@@ -426,6 +427,7 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
       case EstimatorMode.Create:
       case EstimatorMode.CreatePart:
       case EstimatorMode.CreatePr:
+      case EstimatorMode.CreateRent:
         totalCost = _provider.workEstimateRequest.totalCost();
         break;
       case EstimatorMode.ReadOnly:

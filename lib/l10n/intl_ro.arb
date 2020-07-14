@@ -296,6 +296,7 @@
   "estimator_accept_recommendations_alert_body": "Ești sigur că dorești să accepți recomandările selectate?",
   "estimator_accept_alert_body": "Ești sigur că dorești să accepți acest deviz?",
   "estimator_default_recommendation": "Verificare / Diagnoză",
+  "estimator_rent_default_recommendation": "Închiriere mașină",
   "estimator_default_issue": "Transport",
   "estimator_no_items_to_import": "Nu există produse pentru importare.",
   "estimator_no_items_to_order": "Nu există produse pentru comandă",
@@ -436,6 +437,7 @@
   "online_shop_appointment_title": "Programează",
   "online_shop_appointment_provider_details": "Detalii Furnizor",
   "online_shop_appointment_seller_details": "Detalii vânzător",
+  "online_shop_appointment_renter_details": "Detalii închiriator",
   "online_shop_call": "Sună",
   "online_shop_call_error": "Numărul de telefon indisponibil.",
   "online_shop_appointment_step_1_title": "Alege mașina",
@@ -727,5 +729,6 @@
   "exception_get_work_estimate_pdf": "A intervenit o problemă încărcarea PDF-ului.",
   "exception_finish_appointment": "A intervenit o problemă în procesul de finalizare a programării.",
   "exception_send_provider_review": "A intervenit o problemă în procesul de trimitere a recenziei.",
-  "exception_get_invoice_pdf": "A intervenit o problemă încărcarea PDF-ului."
+  "exception_get_invoice_pdf": "A intervenit o problemă încărcarea PDF-ului.",
+  "exception_use_promotion": "A intervenit o problemă la utilizarea promoției."
 }

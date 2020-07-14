@@ -254,8 +254,12 @@ class AppointmentDetailsConsultantState
 
   _createEstimate() {
     if (_provider.selectedAppointmentDetail != null) {
-      Provider.of<WorkEstimateProvider>(context)
-          .refreshValues(EstimatorMode.Create);
+      EstimatorMode estimatorMode =
+          _provider.selectedAppointmentDetail.rentServiceItem() == null
+              ? EstimatorMode.Create
+              : EstimatorMode.CreateRent;
+
+      Provider.of<WorkEstimateProvider>(context).refreshValues(estimatorMode);
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(context, _provider.selectedAppointmentDetail.issues);
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
@@ -266,7 +270,7 @@ class AppointmentDetailsConsultantState
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WorkEstimateForm(mode: EstimatorMode.Create)),
+            builder: (context) => WorkEstimateForm(mode: estimatorMode)),
       );
     }
   }
@@ -343,13 +347,13 @@ class AppointmentDetailsConsultantState
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return AppointmentCarReceiveFormModal(
-                  carReceiveFormState: CarReceiveFormState.ServiceReturnCar,
-                  appointmentDetail: _provider.selectedAppointmentDetail,
-                  refreshState: _refreshState,
-                  pickupFormState: PickupFormState.Return,
-                );
-              });
+            return AppointmentCarReceiveFormModal(
+              carReceiveFormState: CarReceiveFormState.ServiceReturnCar,
+              appointmentDetail: _provider.selectedAppointmentDetail,
+              refreshState: _refreshState,
+              pickupFormState: PickupFormState.Return,
+            );
+          });
         });
   }
 

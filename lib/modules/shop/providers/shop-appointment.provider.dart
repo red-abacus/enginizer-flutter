@@ -11,13 +11,17 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/modules/promotions/services/promotion.service.dart';
+import 'package:app/modules/shop/models/request/use-promotion-request.model.dart';
 import 'package:app/modules/shop/models/shop-item.model.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class ShopAppointmentProvider with ChangeNotifier {
   CarService _carService = inject<CarService>();
   ProviderService _providerService = inject<ProviderService>();
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
+  PromotionService _promotionService = inject<PromotionService>();
 
   List<Car> cars;
   List<ServiceProviderTimetable> timetables = [];
@@ -75,18 +79,6 @@ class ShopAppointmentProvider with ChangeNotifier {
     }
   }
 
-  Future<Appointment> createAppointment(
-      AppointmentRequest appointmentRequest) async {
-    try {
-      var appointment =
-          await this._appointmentsService.createAppointment(appointmentRequest);
-      notifyListeners();
-      return appointment;
-    } catch (error) {
-      throw (error);
-    }
-  }
-
   Future<ServiceProvider> getServiceProvider(int providerId) async {
     try {
       serviceProvider = await this._providerService.getProviderDetails(providerId);
@@ -107,18 +99,25 @@ class ShopAppointmentProvider with ChangeNotifier {
     }
   }
 
-  AppointmentRequest getAppointmentRequest() {
-    AppointmentRequest request = new AppointmentRequest();
-    request.serviceIds = [shopItem.service.id];
+  Future<bool> usePromotion(UsePromotionRequest usePromotionRequest) async {
+    try {
+      bool response = await this._promotionService.usePromotion(usePromotionRequest);
+      notifyListeners();
+      return response;
+    } catch (error) {
+      throw(error);
+    }
+  }
+
+  UsePromotionRequest getUsePromotionRequest() {
+    UsePromotionRequest request = new UsePromotionRequest();
     request.carId = selectedCar.id;
-    request.providerType = AppointmentProviderType.Specific;
-
-    request.issues = [];
-    request.providerId = shopItem.providerId;
     request.promotionId = shopItem.id;
-    request.scheduledTime = dateEntry.dateForAppointment();
-    request.issues = [shopItem.title];
-
+    request.scheduleDateTime = dateEntry?.dateTime;
+    request.pickupDateTime = startDateTime;
+    request.returnDateTime = endDateTime;
+    request.pickupPosition = pickupPosition;
+    request.returnPosition = returnPosition;
     return request;
   }
 }

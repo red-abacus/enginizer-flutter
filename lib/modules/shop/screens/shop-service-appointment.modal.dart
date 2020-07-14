@@ -1,9 +1,7 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
-import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
+import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/enums/shop-appointment-type.enum.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/widgets/service/shop-service-appointment-cars.widget.dart';
@@ -305,15 +303,13 @@ class _ShopServiceAppointmentModalState
   }
 
   _submit() async {
-    AppointmentRequest appointmentRequest = _provider.getAppointmentRequest();
-    appointmentRequest.userId = Provider.of<Auth>(context).authUser.userId;
-
     setState(() {
       _isLoading = true;
     });
 
     try {
-      await _provider.createAppointment(appointmentRequest)
+      await _provider
+          .usePromotion(_provider.getUsePromotionRequest())
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -321,11 +317,9 @@ class _ShopServiceAppointmentModalState
         Navigator.pop(context);
       });
     } catch (error) {
-      if (error
-          .toString()
-          .contains(AppointmentsService.CREATE_APPOINTMENT_EXCEPTION)) {
+      if (error.toString().contains(PromotionService.USE_PROMOTION_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_create_appointment, context);
+            S.of(context).exception_use_promotion, context);
       }
 
       setState(() {

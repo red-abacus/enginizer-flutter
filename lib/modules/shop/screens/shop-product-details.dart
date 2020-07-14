@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/providers/service-provider-details.prov
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/text_widget.dart';
+import 'package:app/modules/shop/enums/shop-appointment-type.enum.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/screens/shop-rent.modal.dart';
@@ -149,39 +150,77 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: FlatButton.icon(
-                    icon: Icon(Icons.phone, color: Colors.white),
-                    color: red,
-                    label: Text(
-                      S.of(context).online_shop_call,
-                      style: TextHelper.customTextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      _callSeller();
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 10),
-                  child: FlatButton(
-                    color: red,
-                    child: Text(
-                      S.of(context).online_shop_appointment_seller_details,
-                      style: TextHelper.customTextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      _showSellerDetails();
-                    },
-                  ),
-                ),
+                _appointmentButton(),
+                _detailsButton(),
               ],
             )
           ],
         ),
       ),
     );
+  }
+
+  _appointmentButton() {
+    return _provider.selectedShopItem.service.getShopAppointmentType() ==
+            ShopAppointmentType.CarRent
+        ? Container(
+            margin: EdgeInsets.only(top: 20),
+            child: FlatButton(
+              color: red,
+              child: Text(
+                S.of(context).online_shop_appointment_title,
+                style: TextHelper.customTextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                _carRent();
+              },
+            ),
+          )
+        : Container(
+            margin: EdgeInsets.only(top: 20),
+            child: FlatButton.icon(
+              icon: Icon(Icons.phone, color: Colors.white),
+              color: red,
+              label: Text(
+                S.of(context).online_shop_appointment_title,
+                style: TextHelper.customTextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                _callSeller();
+              },
+            ),
+          );
+  }
+
+  _detailsButton() {
+    return _provider.selectedShopItem.service.getShopAppointmentType() ==
+            ShopAppointmentType.CarRent
+        ? Container(
+            margin: EdgeInsets.only(top: 20, left: 10),
+            child: FlatButton(
+              color: red,
+              child: Text(
+                S.of(context).online_shop_appointment_renter_details,
+                style: TextHelper.customTextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                _showSellerDetails();
+              },
+            ),
+          )
+        : Container(
+            margin: EdgeInsets.only(top: 20, left: 10),
+            child: FlatButton(
+              color: red,
+              child: Text(
+                S.of(context).online_shop_appointment_seller_details,
+                style: TextHelper.customTextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                _showSellerDetails();
+              },
+            ),
+          );
   }
 
   _imageWidget() {
@@ -225,6 +264,21 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
   }
 
   _callSeller() async {
+    String url;
+
+    if (_provider.selectedShopItem.user != null) {
+      url = 'tel:${_provider.selectedShopItem.user.phoneNumber}';
+    } else {}
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      FlushBarHelper.showFlushBar(S.of(context).general_error,
+          S.of(context).online_shop_call_error, context);
+    }
+  }
+
+  _carRent() async {
     Provider.of<ShopAppointmentProvider>(context).initialise();
     Provider.of<ShopAppointmentProvider>(context).shopItem =
         _provider.selectedShopItem;
@@ -241,24 +295,6 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
             return ShopRentModal();
           });
         });
-
-    // TODO
-
-//    String url;
-//
-//    if (_provider.selectedShopItem.user != null) {
-//      url = 'tel:${_provider.selectedShopItem.user.phoneNumber}';
-//    }
-//    else {
-//
-//    }
-//
-//    if (await canLaunch(url)) {
-//      await launch(url);
-//    } else {
-//      FlushBarHelper.showFlushBar(S.of(context).general_error,
-//          S.of(context).online_shop_call_error, context);
-//    }
   }
 
   _showSellerDetails() {

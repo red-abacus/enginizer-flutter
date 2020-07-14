@@ -304,6 +304,7 @@
   "estimator_accept_recommendations_alert_body": "Are you sure you want to accept selected recommendations?",
   "estimator_accept_alert_body": "Are you sure you want to accept this work estimate?",
   "estimator_default_recommendation": "Verification / Diagnosis",
+  "estimator_rent_default_recommendation": "Rent car",
   "estimator_default_issue": "Transport",
   "estimator_no_items_to_import": "No items to import.",
   "estimator_no_items_to_order": "No items to order.",
@@ -421,6 +422,7 @@
   "online_shop_appointment_title": "Schedule",
   "online_shop_appointment_provider_details": "Provider Details",
   "online_shop_appointment_seller_details": "Seller Details",
+  "online_shop_appointment_renter_details": "Renter Details",
   "online_shop_call": "Call",
   "online_shop_call_error": "Phone number unavailable.",
   "online_shop_appointment_step_1_title": "Select car",
@@ -728,5 +730,6 @@
   "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf.",
   "exception_finish_appointment": "There was an error trying to finish appointment.",
   "exception_send_provider_review": "There was an error trying to send provider review.",
-  "exception_get_invoice_pdf": "There was an error trying to load invoice pdf."
+  "exception_get_invoice_pdf": "There was an error trying to load invoice pdf.",
+  "exception_use_promotion": "There was an error trying to use this promotion."
 }

@@ -254,6 +254,15 @@ class AppointmentDetail {
     return null;
   }
 
+  ServiceProviderItem rentServiceItem() {
+    for (ServiceProviderItem serviceItem in this.serviceItems) {
+      if (serviceItem.isRentService()) {
+        return serviceItem;
+      }
+    }
+    return null;
+  }
+
   Future<void> loadMapData(BuildContext context) async {
     auctionMapDirections = AuctionMapDirections(
         destinationPoints: appointmentTransportInfo.getLocations());

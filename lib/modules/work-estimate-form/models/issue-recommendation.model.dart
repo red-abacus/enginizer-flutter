@@ -66,10 +66,19 @@ class IssueRecommendation {
     return recommendation;
   }
 
+  static IssueRecommendation defaultRentRecommendation(BuildContext context) {
+    IssueRecommendation recommendation = new IssueRecommendation();
+    recommendation.name = S.of(context).estimator_rent_default_recommendation;
+    recommendation.id = null;
+    recommendation.items = [];
+    return recommendation;
+  }
+
+
   Map<String, dynamic> toCreateJson(EstimatorMode estimatorMode) {
     Map<String, dynamic> propMap = {
       'id': estimatorMode == EstimatorMode.CreatePart ? id : null,
-      'name': estimatorMode == EstimatorMode.CreatePart || estimatorMode == EstimatorMode.CreatePr ? name : null,
+      'name': estimatorMode == EstimatorMode.CreatePart || estimatorMode == EstimatorMode.CreatePr || estimatorMode == EstimatorMode.CreateRent ? name : null,
       'items': items.map((item) => item.toCreateJson()).toList()
     };
 

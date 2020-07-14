@@ -46,7 +46,8 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
               ),
               if (estimatorMode == EstimatorMode.Create ||
                   estimatorMode == EstimatorMode.CreatePr ||
-                  estimatorMode == EstimatorMode.CreatePart)
+                  estimatorMode == EstimatorMode.CreatePart ||
+                  estimatorMode == EstimatorMode.CreateRent)
                 CustomTextFormField(
                   labelText: S.of(context).estimator_percent,
                   listener: (value) {
@@ -103,7 +104,8 @@ class WorkEstimateFinalInfoWidget extends StatelessWidget {
     if (_formKey.currentState.validate()) {
       if (estimatorMode == EstimatorMode.Create ||
           estimatorMode == EstimatorMode.CreatePr ||
-          estimatorMode == EstimatorMode.CreatePart) {
+          estimatorMode == EstimatorMode.CreatePart ||
+          estimatorMode == EstimatorMode.CreateRent) {
         int value = int.tryParse(percentage);
 
         if (value != null) {
