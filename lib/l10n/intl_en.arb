@@ -226,6 +226,8 @@
   "appointment_write_review_feedback": "Write feedback",
   "appointment_write_review_alert_title": "Are you sure you want to send this review?",
   "appointment_availability": "Availability",
+  "appointment_complete_appointment": "Complete appointment",
+  "appointment_complete_appointment_alert": "Are you sure you want to complete this appointment?",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -441,7 +443,7 @@
   "online_shop_no_alerts_title": "You have no alerts...",
   "online_shop_remove_alert": "Are you sure you want to remove this alert?",
   "online_shop_rent_car_title": "Car renting",
-  "online_shop_rent_car_choose_date_title": "Choose date and hour:",
+  "online_shop_rent_car_choose_date_title": "Choose date",
   "online_shop_provider": "Provider",
   "online_shop_car": "Car",
   "online_shop_taking_over": "Taking over",
@@ -730,8 +732,9 @@
   "exception_return_procedure_info": "There was an error trying to load return procedure info",
   "exception_get_work_estimate_pdf": "There was an error trying to load work estimate pdf.",
   "exception_finish_appointment": "There was an error trying to finish appointment.",
+  "exception_complete_appointment": "There was an error trying to complete appointment.",
   "exception_send_provider_review": "There was an error trying to send provider review.",
   "exception_get_invoice_pdf": "There was an error trying to load invoice pdf.",
   "exception_use_promotion": "There was an error trying to use this promotion.",
-  "exception_car_timetable": "There was an error trying to load car availability",
+  "exception_car_timetable": "There was an error trying to load car availability"
 }

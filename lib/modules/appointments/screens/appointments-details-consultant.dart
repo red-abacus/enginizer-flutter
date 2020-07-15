@@ -2,6 +2,7 @@ import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/enum/car-receive-form-state.enum.dart';
 import 'package:app/modules/appointments/enum/pick-up-form-state.enum.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
+import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
 import 'package:app/modules/appointments/screens/appointments.dart';
@@ -181,8 +182,7 @@ class AppointmentDetailsConsultantState
 
     if (_provider.selectedAppointmentDetail.rentServiceItem() != null) {
       list.add(AppointmentDetailsAvailabilityWidget());
-    }
-    else {
+    } else {
       list.add(AppointmentDetailsDocumentsWidget());
     }
 
@@ -216,6 +216,7 @@ class AppointmentDetailsConsultantState
           workEstimateDetails: _provider.workEstimateDetails,
           finishAppointment: _finishAppointment,
           seeCamera: _seeCamera,
+          completeAppointment: _completeAppointment,
         );
       default:
         return Container();
@@ -273,12 +274,24 @@ class AppointmentDetailsConsultantState
               : EstimatorMode.CreateRent;
 
       Provider.of<WorkEstimateProvider>(context).refreshValues(estimatorMode);
+
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(context, _provider.selectedAppointmentDetail.issues);
       Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
           _provider.selectedAppointmentDetail;
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           _provider.selectedAppointment.serviceProvider.id;
+
+      if (_provider.selectedAppointmentDetail.rentServiceItem() != null) {
+        DateTime date = _provider
+            .selectedAppointmentDetail?.appointmentTimes?.pickupDateTime;
+
+        if (date != null) {
+          Provider.of<WorkEstimateProvider>(context)
+              .workEstimateRequest
+              .dateEntry = new DateEntry(date);
+        }
+      }
 
       Navigator.push(
         context,
@@ -427,6 +440,48 @@ class AppointmentDetailsConsultantState
           .contains(AppointmentsService.FINISH_APPOINTMENT_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_finish_appointment, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _completeAppointment() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return AlertConfirmationDialogWidget(
+                confirmFunction: (confirm) => {
+                      if (confirm) {_completeAppointmentConfirmed()}
+                    },
+                title: S.of(context).appointment_complete_appointment_alert);
+          });
+        });
+  }
+
+  _completeAppointmentConfirmed() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _provider
+          .completeAppointment(_provider.selectedAppointmentDetail.id)
+          .then((value) {
+        Provider.of<AppointmentsProvider>(context).initDone = false;
+
+        setState(() {});
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(AppointmentsService.COMPLETE_APPOOINTMENT_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_complete_appointment, context);
       }
 
       setState(() {

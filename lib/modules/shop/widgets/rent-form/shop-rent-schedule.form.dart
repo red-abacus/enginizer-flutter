@@ -24,7 +24,7 @@ class _ShopRentScheduleFormState extends State<ShopRentScheduleForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).online_shop_rent_car_choose_date_title,
+          '${S.of(context).online_shop_rent_car_choose_date_title}:',
           style: TextHelper.customTextStyle(size: 16, color: gray3),
         ),
         Container(

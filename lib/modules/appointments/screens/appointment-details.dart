@@ -9,7 +9,7 @@ import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
 import 'package:app/modules/appointments/screens/appointment-review.modal.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-children.widget.dart';
-import 'package:app/modules/appointments/widgets/details/appointment-generic-details.widget.dart';
+import 'package:app/modules/appointments/widgets/details/appointment-details.widget.dart';
 import 'package:app/modules/appointments/widgets/map/client-map-directions.modal.dart';
 import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -165,7 +165,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
 
   _contentWidget() {
     var widgets = [
-      AppointmentGenericDetailsWidget(
+      AppointmentDetailsWidget(
           appointmentDetail: _provider.selectedAppointmentDetail,
           viewEstimate: _seeEstimate,
           cancelAppointment: _cancelAppointment,

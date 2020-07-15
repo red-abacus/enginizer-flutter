@@ -27,6 +27,7 @@ class AppointmentDetailsConsultantWidget extends StatefulWidget {
   final Function createHandoverCarForm;
   final Function seeCamera;
   final Function finishAppointment;
+  final Function completeAppointment;
 
   AppointmentDetailsConsultantWidget(
       {this.appointmentDetail,
@@ -39,7 +40,8 @@ class AppointmentDetailsConsultantWidget extends StatefulWidget {
       this.createPickUpCarForm,
       this.workEstimateDetails,
       this.seeCamera,
-      this.finishAppointment});
+      this.finishAppointment,
+      this.completeAppointment});
 
   @override
   _AppointmentDetailsConsultantWidgetState createState() {
@@ -104,8 +106,7 @@ class _AppointmentDetailsConsultantWidgetState
               _titleContainer(S.of(context).appointment_details_applicant),
               _applicantContainer(),
               _buildSeparator(),
-              if (widget.appointmentDetail.status.getState() ==
-                  AppointmentStatusState.SCHEDULED)
+              if (widget.appointmentDetail.canCreateCarReceiveForm())
                 _scheduledSpecificContainer(),
               if (widget.appointmentDetail.status.getState() ==
                   AppointmentStatusState.READY_FOR_PICKUP)
@@ -229,6 +230,23 @@ class _AppointmentDetailsConsultantWidgetState
           ),
           backgroundColor: Colors.white,
         ));
+        break;
+      case AppointmentStatusState.SCHEDULED:
+        if (widget.appointmentDetail.rentServiceItem() != null) {
+          buttons.add(Spacer());
+          buttons.add(FloatingActionButton.extended(
+            heroTag: 'completeAppointment',
+            onPressed: () {
+              widget.completeAppointment();
+            },
+            label: Text(
+              S.of(context).appointment_complete_appointment,
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 14),
+            ),
+            backgroundColor: Colors.white,
+          ));
+        }
         break;
       default:
         break;

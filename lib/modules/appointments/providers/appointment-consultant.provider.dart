@@ -101,6 +101,17 @@ class AppointmentConsultantProvider with ChangeNotifier {
     }
   }
 
+  Future<AppointmentDetail> completeAppointment(int appointmentId) async {
+    try {
+      selectedAppointmentDetail =
+      await _appointmentsService.completeAppointment(appointmentId);
+      notifyListeners();
+      return selectedAppointmentDetail;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   Future<List<CarTimetable>> getCarTimetable(
       CarTimetableRequest request) async {
     try {

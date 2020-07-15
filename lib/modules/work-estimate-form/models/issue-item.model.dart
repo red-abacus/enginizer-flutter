@@ -8,7 +8,7 @@ class IssueItem {
   int typeId;
   String code;
   String name;
-  int quantity;
+  double quantity;
   double price;
   double priceVAT;
   int issueId;
@@ -39,7 +39,6 @@ class IssueItem {
       this.imported,
       this.provider,
       this.availableFrom,
-      this.warranty,
       this.addition,
       this.recommendationId,
       this.issueId,
@@ -55,7 +54,7 @@ class IssueItem {
         typeId: json['typeId'],
         code: json['code'],
         name: json['name'],
-        quantity: json['quantity'],
+        quantity: json['quantity'] != null ? json['quantity'] : 0.0,
         price: json['price'] != null ? json['price'] : 0.0,
         priceVAT: json['priceVAT'] != null ? json['priceVAT'] : 0.0,
         total: json['total'] != null ? json['total'] : 0.0,
@@ -67,7 +66,6 @@ class IssueItem {
             ? DateUtils.dateFromString(
                 json['availableFrom'], 'dd/MM/yyyy HH:mm')
             : null,
-        warranty: json['warranty'] != null ? json['warranty'] : 0,
         addition: json['addition'] != null ? double.parse(json['addition'].toString()) : null,
         recommendationId:
             json['recommendationId'] != null ? json['recommendationId'] : null,

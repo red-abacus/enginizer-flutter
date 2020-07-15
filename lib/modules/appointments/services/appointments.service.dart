@@ -66,6 +66,8 @@ class AppointmentsService {
       'GET_RECEIVE_PROCEDURE_INFO_EXCEPTION';
   static const String FINISH_APPOINTMENT_EXCEPTION =
       'FINISH_APPOINTMENT_EXCEPTION';
+  static const String COMPLETE_APPOOINTMENT_EXCEPTION =
+      'COMPLETE_APPOOINTMENT_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -142,6 +144,10 @@ class AppointmentsService {
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX =
       '/requestTransport';
+
+  static const String _COMPLETE_APPOINTMENT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _COMPLETE_APPOINTMENT_SUFFIX = '/complete';
 
   static const String _FINISH_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
@@ -555,6 +561,20 @@ class AppointmentsService {
     }
   }
 
+  Future<AppointmentDetail> completeAppointment(int appointmentId) async {
+    try {
+      final response =
+          await _dio.patch(_buildCompleteAppointment(appointmentId));
+      if (response.statusCode == 200) {
+        return AppointmentDetail.fromJson(response.data);
+      } else {
+        throw Exception(COMPLETE_APPOOINTMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(COMPLETE_APPOOINTMENT_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -706,5 +726,11 @@ class AppointmentsService {
     return _FINISH_APPOINTMENT_PREFIX +
         appointmentId.toString() +
         _FINISH_APPOINTMENT_SUFFIX;
+  }
+
+  _buildCompleteAppointment(int appointmentId) {
+    return _COMPLETE_APPOINTMENT_PREFIX +
+        appointmentId.toString() +
+        _COMPLETE_APPOINTMENT_SUFFIX;
   }
 }

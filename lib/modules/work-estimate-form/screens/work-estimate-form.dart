@@ -361,7 +361,6 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         }
         break;
       case EstimatorMode.Create:
-      case EstimatorMode.CreateRent:
         buttons.add(saveButton);
         buttons.add(SpeedDialChild(
             child: Icon(Icons.date_range),
@@ -371,6 +370,9 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             labelStyle: TextHelper.customTextStyle(
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _showProposedDateModal()));
+        break;
+      case EstimatorMode.CreateRent:
+        buttons.add(saveButton);
         break;
       case EstimatorMode.CreatePart:
         buttons.add(saveButton);
@@ -747,19 +749,23 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
 //      Provider.of<WorkEstimateAcceptProvider>(context).pickupServiceItem =
 //          pickupServiceItem;
 
-      showModalBottomSheet<void>(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter state) {
-              return WorkEstimateAcceptModal(
-                  acceptWorkEstimate: _acceptWorkEstimate);
+      if (_provider.selectedAppointmentDetail.rentServiceItem() != null) {
+        _acceptWorkEstimate();
+      } else {
+        showModalBottomSheet<void>(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter state) {
+                return WorkEstimateAcceptModal(
+                    acceptWorkEstimate: _acceptWorkEstimate);
+              });
             });
-          });
+      }
 
 //      ServiceProviderItem pickupServiceItem =
 //          _provider.selectedAppointmentDetail.pickupServiceItem();

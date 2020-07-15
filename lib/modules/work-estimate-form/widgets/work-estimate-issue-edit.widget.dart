@@ -18,7 +18,7 @@ class WorkEstimateIssueEditWidget extends StatefulWidget {
   };
 
   WorkEstimateIssueEditWidget({this.issueItem, this.editItem}) {
-    formState['quantity'] = this.issueItem.quantity != null ? this.issueItem.quantity.toString() : '0';
+    formState['quantity'] = this.issueItem.quantity != null ? this.issueItem.quantity.toString() : '0.0';
     formState['addition'] = this.issueItem.addition != null ? this.issueItem.addition.toString() : '0';
   }
 
@@ -219,10 +219,10 @@ class _WorkEstimateIssueEditWidgetState
 
   _editItem() {
     if (_formKey.currentState.validate()) {
-      int quantity = int.parse(widget.formState['quantity']);
+      double quantity = double.parse(widget.formState['quantity']);
 
       if (quantity != null) {
-        if (quantity == 0) {
+        if (quantity == 0.0) {
           AlertWarningDialog.showAlertDialog(
               context,
               S.of(context).general_warning,

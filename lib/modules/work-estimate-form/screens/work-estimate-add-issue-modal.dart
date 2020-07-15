@@ -236,7 +236,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                               .toString()),
                       onChanged: (newQuantity) {
                         provider.estimatorFormState['quantity'] =
-                            int.parse(newQuantity);
+                            double.parse(newQuantity);
                       },
                       validator: (value) {
                         if (value == null) {

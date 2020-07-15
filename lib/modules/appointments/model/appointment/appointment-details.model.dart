@@ -235,7 +235,13 @@ class AppointmentDetail {
       case AppointmentStatusState.IN_WORK:
       case AppointmentStatusState.ON_HOLD:
       case AppointmentStatusState.IN_REVIEW:
-        return true;
+        if (rentServiceItem() == null) {
+          return true;
+        }
+        else {
+          return false;
+        }
+        break;
       default:
         return false;
     }
@@ -246,7 +252,7 @@ class AppointmentDetail {
   }
 
   bool canCreateCarReceiveForm() {
-    return status.getState() == AppointmentStatusState.SCHEDULED;
+    return status.getState() == AppointmentStatusState.SCHEDULED && rentServiceItem() == null;
   }
 
   ServiceProviderItem pickupServiceItem() {

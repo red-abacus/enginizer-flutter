@@ -43,7 +43,7 @@ class WorkEstimateDetails {
         status: json['status'] != null
             ? WorkEstimateStatusUtils.fromString(json['status'])
             : null,
-        totalCost: json['totalCost'] != null ? json['totalCost'] : 0);
+        totalCost: json['totalCost'] != null ? json['totalCost'] : 0.0);
   }
 
   workEstimateRequest(EstimatorMode estimatorMode) {
