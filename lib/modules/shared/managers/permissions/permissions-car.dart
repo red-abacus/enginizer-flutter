@@ -1,8 +1,6 @@
-import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsCar {
   static final String SELL_CAR = 'SELL_CARS';
@@ -13,25 +11,10 @@ class PermissionsCar {
 
   Map<String, List<String>> permissionsMap = Map();
 
-  PermissionsCar(JwtUser jwtUser, ServiceProviderItemsResponse serviceProviderItemsResponse) {
+  PermissionsCar(JwtUser jwtUser) {
     for (String role in Roles.roles) {
       List<String> permissions = List<String>();
       permissions.addAll(jwtUser.permissions);
-
-      switch (role) {
-        case Roles.Super:
-          break;
-        case Roles.Client:
-          break;
-        case Roles.ProviderAccountant:
-          break;
-        case Roles.ProviderPersonnel:
-          break;
-        case Roles.ProviderConsultant:
-          break;
-        case Roles.ProviderAdmin:
-          break;
-      }
 
       permissionsMap[role] = permissions;
     }

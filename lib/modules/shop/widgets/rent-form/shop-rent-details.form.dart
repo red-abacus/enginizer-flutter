@@ -82,15 +82,11 @@ class _ShopRentDetailsFormState extends State<ShopRentDetailsForm> {
           Container(
             width: 30,
             height: 30,
-            child: CircleAvatar(
-              backgroundColor: gray3,
-              radius: 15,
-              child: ClipOval(
-                child: FadeInImage.assetNetwork(
-                  image: _provider.serviceProvider?.image ?? '',
-                  placeholder: ServiceProvider.defaultImage(),
-                  fit: BoxFit.fill,
-                ),
+            child: ClipOval(
+              child: FadeInImage.assetNetwork(
+                image: _provider.serviceProvider?.image ?? '',
+                placeholder: ServiceProvider.defaultImage(),
+                fit: BoxFit.fill,
               ),
             ),
           ),

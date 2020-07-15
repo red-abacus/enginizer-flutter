@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
 import 'package:app/modules/cars/widgets/car-documents.widget.dart';
@@ -333,7 +332,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter state) {
                   return CreatePromotionModal(
-                    refreshState: null,
+                    refreshState: _loadData(),
                   );
                 });
               });
@@ -390,7 +389,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter state) {
                       return CreatePromotionModal(
-                        refreshState: null,
+                        refreshState: _loadData(),
                       );
                     });
               });

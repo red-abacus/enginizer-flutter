@@ -128,17 +128,12 @@ class PromotionService {
     try {
       final response = await _dio
           .post(_buildUsePromotionPath(usePromotionRequest.promotionId), data: jsonEncode(usePromotionRequest.toJson()));
-      print('response ${response.data}');
-      print('response ${response.statusCode}');
       if (response.statusCode == 200) {
         return true;
       } else {
-        print('za exception !');
         throw Exception(USE_PROMOTION_EXCEPTION);
       }
     } catch (error) {
-      print('error $error');
-      print('error ${error.response}');
       throw Exception(USE_PROMOTION_EXCEPTION);
     }
   }

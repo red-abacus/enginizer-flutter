@@ -34,15 +34,15 @@ class PermissionsManager {
   setServiceItemsResponse(JwtUser jwtUser,
       ServiceProviderItemsResponse serviceProviderItemsResponse) {
     _permissionsSideBar =
-        PermissionsSideBar(jwtUser, serviceProviderItemsResponse);
+        PermissionsSideBar(jwtUser);
     _permissionsAuction = PermissionsAuction(jwtUser, serviceProviderItemsResponse);
     _permissionsUserProfile = PermissionsUserProfile();
     _permissionAppointmentsStatuses =
         PermissionAppointmentsStatuses(serviceProviderItemsResponse);
-    _permissionsOrder = PermissionsOrder(jwtUser, serviceProviderItemsResponse);
+    _permissionsOrder = PermissionsOrder(jwtUser);
     _permissionsAppointment =
         PermissionsAppointment(jwtUser, serviceProviderItemsResponse);
-    _permissionsCar = PermissionsCar(jwtUser, serviceProviderItemsResponse);
+    _permissionsCar = PermissionsCar(jwtUser);
     _permissionsPromotion =
         PermissionsPromotion(jwtUser, serviceProviderItemsResponse);
   }

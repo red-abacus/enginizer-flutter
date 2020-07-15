@@ -29,7 +29,6 @@ class Promotion {
       this.status});
 
   factory Promotion.fromJson(Map<String, dynamic> json) {
-    print('promotion $json');
     return Promotion(
         id: json['id'],
         title: json['title'] != null ? json['title'] : '',

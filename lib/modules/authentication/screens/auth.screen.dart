@@ -82,13 +82,13 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Text('Client'),
           onPressed: () {
 //            _login('client2@autowass.com', 'password');
-            _login('client2@autowass.com', 'password');
+            _login('client.service@autowass.com', 'autowass123');
           },
         ),
         FlatButton(
           child: Text('Consultant Provider'),
           onPressed: () {
-            _login('consultant.provider@autowass.com', 'password');
+            _login('consilier.service@autowass.com', 'autowass123');
           },
         ),
         FlatButton(
@@ -114,21 +114,21 @@ class _AuthScreenState extends State<AuthScreen> {
     return Row(
       children: <Widget>[
         FlatButton(
-          child: Text('PR Consultant'),
+          child: Text('Renter'),
           onPressed: () {
-            _login('pr.consultant@autowass.com', 'autowass123');
+            _login('renter.service@autowass.com', 'autowass123');
           },
         ),
         FlatButton(
-          child: Text('PR Consultant'),
+          child: Text('Dezmembrari'),
           onPressed: () {
-            _login('pickup.consultant@autowass.com', 'autowass123');
+            _login('parts.service@autowass.com', 'autowass123');
           },
         ),
         FlatButton(
           child: Text('Admin Provider'),
           onPressed: () {
-            _login('admin.provider@autowass.com', 'password');
+            _login('admin.service@autowass.com', 'password');
           },
         ),
       ],

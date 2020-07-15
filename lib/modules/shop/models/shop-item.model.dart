@@ -40,8 +40,6 @@ class ShopItem {
       this.service});
 
   factory ShopItem.fromJson(Map<String, dynamic> json) {
-    print('json $json');
-
     return ShopItem(
         id: json['id'] != null ? json['id'] : '',
         title: json['title'] != null ? json['title'] : '',
