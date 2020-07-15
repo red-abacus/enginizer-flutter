@@ -4,8 +4,10 @@ import 'package:app/modules/appointments/model/documentation/car-documentation-d
 import 'package:app/modules/appointments/model/documentation/car-documentation-topic.model.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/cars/models/car-document.dart';
+import 'package:app/modules/cars/models/car-timetable.model.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
+import 'package:app/modules/cars/models/request/car-timetable-request.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
@@ -15,8 +17,6 @@ import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/cars-reponse.model.dart';
 import 'package:app/utils/environment.constants.dart';
-import 'package:http_parser/http_parser.dart';
-
 import 'package:http_parser/http_parser.dart';
 
 class CarService {
@@ -38,6 +38,7 @@ class CarService {
       'GET_CAR_DOCUMENT_DETAILS_EXCEPTION';
   static String CAR_MARK_AS_SOLD_EXCEPTION = 'CAR_MARK_AS_SOLD_EXCEPTION';
   static String CAR_RENT_EXCEPTION = 'CAR_RENT_EXCEPTION';
+  static String CAR_TIMETABLE_EXCEPTION = 'CAR_RENT_EXCEPTION';
 
   static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
@@ -71,6 +72,10 @@ class CarService {
   static const String _MARK_AS_SOLD_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _MARK_AS_SOLD_SUFFIX = '/sold';
+
+  static const String _CAR_TIMETABLE_PREFIX =
+      '${Environment.CARS_BASE_API}/cars/';
+  static const String _CAR_TIMETABLE_SUFFIX = '/timetable';
 
   Dio _dio = inject<Dio>();
 
@@ -158,8 +163,7 @@ class CarService {
         // If that response was not OK, throw an error
         throw Exception(CAR_DETAILS_EXCEPTION);
       }
-    }
-    catch (error) {
+    } catch (error) {
       throw Exception(CAR_DETAILS_EXCEPTION);
     }
   }
@@ -347,6 +351,19 @@ class CarService {
     }
   }
 
+  Future<List<CarTimetable>> getCarTimetable(CarTimetableRequest request) async {
+    try {
+      var response = await _dio.get(_buildCarTimetablePath(request.carId), queryParameters: request.toJson());
+      if (response.statusCode == 200) {
+        return _mapCarTimetable(response.data);
+      } else {
+        throw Exception(CAR_TIMETABLE_EXCEPTION);
+      }
+    } catch (e) {
+      throw Exception(CAR_TIMETABLE_EXCEPTION);
+    }
+  }
+
   _buildCarHistoryPath(int carId) {
     return _CAR_HISTORY_PREFIX + carId.toString() + _CAR_HISTORY_SUFFIX;
   }
@@ -382,6 +399,10 @@ class CarService {
     return _CAR_RENT_PREFIX + carId.toString() + _CAR_RENT_SUFFIX;
   }
 
+  _buildCarTimetablePath(int carId) {
+    return _CAR_TIMETABLE_PREFIX + carId.toString() + _CAR_TIMETABLE_SUFFIX;
+  }
+
   _mapCarHistory(List<dynamic> response) {
     List<CarHistory> histories = [];
     response.forEach((history) {
@@ -402,6 +423,14 @@ class CarService {
     List<CarDocument> list = [];
     response.forEach((element) {
       list.add(CarDocument.fromJson(element));
+    });
+    return list;
+  }
+
+  _mapCarTimetable(List<dynamic> response) {
+    List<CarTimetable> list = [];
+    response.forEach((element) {
+      list.add(CarTimetable.fromJson(element));
     });
     return list;
   }

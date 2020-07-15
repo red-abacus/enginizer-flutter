@@ -125,9 +125,6 @@ class AppointmentsState extends State<Appointments> {
         await _provider
             .getAppointmentDetails(selectedAppointment.id)
             .then((value) {
-          setState(() {
-            _isLoading = false;
-          });
           if (value.serviceItems.length > 0) {
             ServiceProviderItem item = value.serviceItems.first;
 
@@ -143,6 +140,14 @@ class AppointmentsState extends State<Appointments> {
               Navigator.of(context)
                   .pushNamed(AppointmentDetailsConsultant.route);
             }
+
+            new Future.delayed(const Duration(seconds: 1), () {
+              setState(() => {
+                    setState(() {
+                      _isLoading = false;
+                    })
+                  });
+            });
           }
         });
       } catch (error) {

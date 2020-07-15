@@ -31,11 +31,11 @@ class UsePromotionRequest {
       propMap['scheduleDateTime'] = DateUtils.stringFromDate(scheduleDateTime, 'dd/MM/yyyy HH:mm');
     }
 
-    if (pickupPosition != null) {
+    if (pickupPosition != null && pickupPosition.isValid()) {
       propMap['from'] = pickupPosition.toJson();
     }
 
-    if (returnPosition != null) {
+    if (returnPosition != null && pickupPosition.isValid()) {
       propMap['to'] = returnPosition.toJson();
     }
 

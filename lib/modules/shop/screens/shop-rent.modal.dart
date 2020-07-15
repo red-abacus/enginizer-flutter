@@ -246,6 +246,8 @@ class _ShopRentModalState extends State<ShopRentModal> {
         setState(() {
           _isLoading = false;
         });
+
+        Navigator.of(context).pop();
       });
     } catch (error) {
       if (error.toString().contains(PromotionService.USE_PROMOTION_EXCEPTION)) {

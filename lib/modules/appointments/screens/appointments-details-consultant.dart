@@ -7,6 +7,7 @@ import 'package:app/modules/appointments/screens/appointment-camera.modal.dart';
 import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/appointments/widgets/details/appointment-details-availability.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
@@ -14,7 +15,7 @@ import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/appointments/providers/appointment-consultant.provider.dart';
 import 'package:app/modules/appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-documents.widget.dart';
-import 'package:app/modules/appointments/widgets/details/appointment-details-generic-consultant.widget.dart';
+import 'package:app/modules/appointments/widgets/details/appointment-details-consultant.widget.dart';
 import 'package:app/modules/shared/widgets/alert-confirmation-dialog.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
@@ -156,8 +157,14 @@ class AppointmentDetailsConsultantState
     List<Tab> tabs = [
       Tab(text: S.of(context).appointment_details_request),
       Tab(text: S.of(context).appointment_details_car),
-      Tab(text: S.of(context).appointment_consultant_provider_documents_title)
     ];
+
+    if (_provider.selectedAppointmentDetail.rentServiceItem() != null) {
+      tabs.add(Tab(text: S.of(context).appointment_availability));
+    } else {
+      tabs.add(Tab(
+          text: S.of(context).appointment_consultant_provider_documents_title));
+    }
 
     return tabs;
   }
@@ -170,8 +177,14 @@ class AppointmentDetailsConsultantState
     List<Widget> list = [
       _getAppointmentDetailsScreen(),
       CarGeneralDetailsWidget(car: _provider.selectedAppointmentDetail.car),
-      AppointmentDetailsDocumentsWidget()
     ];
+
+    if (_provider.selectedAppointmentDetail.rentServiceItem() != null) {
+      list.add(AppointmentDetailsAvailabilityWidget());
+    }
+    else {
+      list.add(AppointmentDetailsDocumentsWidget());
+    }
 
     return TabBarView(
       controller: _tabController,

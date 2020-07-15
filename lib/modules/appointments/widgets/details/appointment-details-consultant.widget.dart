@@ -1,4 +1,5 @@
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/appointments/model/appointment-times.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -8,6 +9,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-manager.dart
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -120,9 +122,12 @@ class _AppointmentDetailsConsultantWidgetState
               if (widget.appointmentDetail.status.getState() ==
                   AppointmentStatusState.IN_WORK)
                 _videoFeedContainer(),
-              _titleContainer(
-                  S.of(context).appointment_details_services_appointment_date),
-              _appointmentDateContainer(),
+              if (widget.appointmentDetail.rentServiceItem() == null)
+                _appointmentDateContainer(),
+              if (widget.appointmentDetail.rentServiceItem() != null &&
+                  widget.appointmentDetail?.appointmentTimes != null)
+                _rentSpecificContainer(
+                    widget.appointmentDetail.appointmentTimes),
             ],
           )
         ],
@@ -412,7 +417,7 @@ class _AppointmentDetailsConsultantWidgetState
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      item.name,
+                      item.getTranslatedServiceName(context),
                       style: TextHelper.customTextStyle(),
                     ),
                   ),
@@ -432,25 +437,33 @@ class _AppointmentDetailsConsultantWidgetState
   }
 
   _appointmentDateContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(top: 5),
-              child: Text(
-                (widget.appointmentDetail != null &&
-                        widget.appointmentDetail.scheduledDate != null)
-                    ? widget.appointmentDetail.scheduledDate
-                        .replaceAll(" ", " ${S.of(context).general_at} ")
-                    : 'N/A',
-                style: TextHelper.customTextStyle(size: 18),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _titleContainer(
+            S.of(context).appointment_details_services_appointment_date),
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    (widget.appointmentDetail != null &&
+                            widget.appointmentDetail.scheduledDate != null)
+                        ? widget.appointmentDetail.scheduledDate
+                            .replaceAll(" ", " ${S.of(context).general_at} ")
+                        : 'N/A',
+                    style: TextHelper.customTextStyle(size: 18),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        _buildSeparator(),
+      ],
     );
   }
 
@@ -622,6 +635,58 @@ class _AppointmentDetailsConsultantWidgetState
           _buildSeparator()
         ],
       ),
+    );
+  }
+
+  _rentSpecificContainer(AppointmentTimes appointmentTimes) {
+    DateTime startDate = appointmentTimes.pickupDateTime;
+    DateTime endDate = appointmentTimes.returnDateTime;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _titleContainer(S.of(context).online_shop_taking_over),
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    startDate != null
+                        ? DateUtils.stringFromDate(
+                            startDate, 'dd/MM/yyyy HH:mm')
+                        : '-',
+                    style: TextHelper.customTextStyle(size: 18),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        _buildSeparator(),
+        _titleContainer(S.of(context).online_shop_delivery),
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    endDate != null
+                        ? DateUtils.stringFromDate(endDate, 'dd/MM/yyyy HH:mm')
+                        : '-',
+                    style: TextHelper.customTextStyle(size: 18),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        _buildSeparator(),
+      ],
     );
   }
 }

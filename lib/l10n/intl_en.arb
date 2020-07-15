@@ -225,6 +225,7 @@
   "appointment_write_review_body": "How many starts do you give for next characteristics:",
   "appointment_write_review_feedback": "Write feedback",
   "appointment_write_review_alert_title": "Are you sure you want to send this review?",
+  "appointment_availability": "Availability",
   "auction_details_title": "Auction Details",
   "auction_bids_title": "Bids",
   "auction_bids_provider": "Service Provider",
@@ -731,5 +732,6 @@
   "exception_finish_appointment": "There was an error trying to finish appointment.",
   "exception_send_provider_review": "There was an error trying to send provider review.",
   "exception_get_invoice_pdf": "There was an error trying to load invoice pdf.",
-  "exception_use_promotion": "There was an error trying to use this promotion."
+  "exception_use_promotion": "There was an error trying to use this promotion.",
+  "exception_car_timetable": "There was an error trying to load car availability",
 }

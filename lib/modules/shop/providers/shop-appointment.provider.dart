@@ -111,7 +111,7 @@ class ShopAppointmentProvider with ChangeNotifier {
 
   UsePromotionRequest getUsePromotionRequest() {
     UsePromotionRequest request = new UsePromotionRequest();
-    request.carId = selectedCar.id;
+    request.carId = selectedCar?.id;
     request.promotionId = shopItem.id;
     request.scheduleDateTime = dateEntry?.dateTime;
     request.pickupDateTime = startDateTime;

@@ -1,4 +1,5 @@
 import 'package:app/config/injection.dart';
+import 'package:app/modules/appointments/model/appointment-times.model.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-transport.model.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
@@ -42,6 +43,7 @@ class AppointmentDetail {
   GenericModel personnel;
   List<GenericModel> children;
   int promotionId;
+  AppointmentTimes appointmentTimes;
 
   AuctionMapDirections auctionMapDirections;
 
@@ -68,7 +70,8 @@ class AppointmentDetail {
       this.appointmentTransportInfo,
       this.personnel,
       this.children,
-      this.promotionId});
+      this.promotionId,
+      this.appointmentTimes});
 
   factory AppointmentDetail.fromJson(Map<String, dynamic> json) {
     return AppointmentDetail(
@@ -119,7 +122,8 @@ class AppointmentDetail {
             : null,
         children:
             json['children'] != null ? _mapChildren(json['children']) : [],
-        promotionId: json['promotionId'] != null ? json['promotionId'] : null);
+        promotionId: json['promotionId'] != null ? json['promotionId'] : null,
+        appointmentTimes: json['appointmentTimes'] != null ? AppointmentTimes.fromJson(json['appointmentTimes']) : null);
   }
 
   static _mapChildren(List<dynamic> response) {

@@ -5,12 +5,14 @@ import 'package:app/modules/appointments/model/request/provider-review-request.m
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/auctions/services/bid.service.dart';
+import 'package:app/modules/cars/services/car.service.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentProvider with ChangeNotifier {
   AppointmentsService _appointmentsService = inject<AppointmentsService>();
   BidsService _bidsService = inject<BidsService>();
   ProviderService _providerService = inject<ProviderService>();
+  CarService _carService = inject<CarService>();
 
   bool initDone = false;
 

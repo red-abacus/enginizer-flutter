@@ -217,6 +217,7 @@
   "appointment_write_review_body": "Câte stele oferi pentru următoarele caracteristici:",
   "appointment_write_review_feedback": "Completează feedback-ul",
   "appointment_write_review_alert_title": "Ești sigur că dorești să trimiți acest review?",
+  "appointment_availability": "Disponibilitate",
   "auction_details_title": "Detalii Licitație",
   "auction_bids_title": "Oferte",
   "auction_bids_provider": "Operator",
@@ -730,5 +731,6 @@
   "exception_finish_appointment": "A intervenit o problemă în procesul de finalizare a programării.",
   "exception_send_provider_review": "A intervenit o problemă în procesul de trimitere a recenziei.",
   "exception_get_invoice_pdf": "A intervenit o problemă încărcarea PDF-ului.",
-  "exception_use_promotion": "A intervenit o problemă la utilizarea promoției."
+  "exception_use_promotion": "A intervenit o problemă la utilizarea promoției.",
+  "exception_car_timetable": "A apărut o eroare la încercarea de a încărca disponibilitatea mașinii."
 }
