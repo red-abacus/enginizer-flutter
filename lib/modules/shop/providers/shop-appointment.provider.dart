@@ -9,7 +9,9 @@ import 'package:app/modules/appointments/model/provider/service-provider-timetab
 import 'package:app/modules/appointments/model/request/appointment-request.model.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/cars/models/car-timetable.model.dart';
 import 'package:app/modules/cars/models/car.model.dart';
+import 'package:app/modules/cars/models/request/car-timetable-request.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/promotions/services/promotion.service.dart';
 import 'package:app/modules/shop/models/request/use-promotion-request.model.dart';
@@ -34,16 +36,19 @@ class ShopAppointmentProvider with ChangeNotifier {
 
   DateEntry dateEntry;
 
-  DateTime startDateTime;
-  DateTime endDateTime;
+  CarTimetable startDateTime;
+  CarTimetable endDateTime;
 
   ServiceProvider serviceProvider;
   Car car;
+
+  List<CarTimetable> carTimetable = [];
 
   AppointmentPosition pickupPosition = new AppointmentPosition();
   AppointmentPosition returnPosition = new AppointmentPosition();
 
   initialise() {
+    carTimetable = [];
     startDateTime = null;
     endDateTime = null;
     serviceProvider = null;
@@ -59,7 +64,8 @@ class ShopAppointmentProvider with ChangeNotifier {
   Future<List<Car>> loadCars() async {
     try {
       var response = await this._carService.getCars(searchString: searchString);
-      cars = response.items.where((car) => car.status != CarStatus.Sold).toList();
+      cars =
+          response.items.where((car) => car.status != CarStatus.Sold).toList();
       notifyListeners();
       return cars;
     } catch (error) {
@@ -81,7 +87,8 @@ class ShopAppointmentProvider with ChangeNotifier {
 
   Future<ServiceProvider> getServiceProvider(int providerId) async {
     try {
-      serviceProvider = await this._providerService.getProviderDetails(providerId);
+      serviceProvider =
+          await this._providerService.getProviderDetails(providerId);
       notifyListeners();
       return serviceProvider;
     } catch (error) {
@@ -101,11 +108,23 @@ class ShopAppointmentProvider with ChangeNotifier {
 
   Future<bool> usePromotion(UsePromotionRequest usePromotionRequest) async {
     try {
-      bool response = await this._promotionService.usePromotion(usePromotionRequest);
+      bool response =
+          await this._promotionService.usePromotion(usePromotionRequest);
       notifyListeners();
       return response;
     } catch (error) {
-      throw(error);
+      throw (error);
+    }
+  }
+
+  Future<List<CarTimetable>> getCarTimetable(
+      CarTimetableRequest request) async {
+    try {
+      this.carTimetable = await this._carService.getCarTimetable(request);
+      notifyListeners();
+      return this.carTimetable;
+    } catch (error) {
+      throw (error);
     }
   }
 
@@ -114,10 +133,18 @@ class ShopAppointmentProvider with ChangeNotifier {
     request.carId = selectedCar?.id;
     request.promotionId = shopItem.id;
     request.scheduleDateTime = dateEntry?.dateTime;
-    request.pickupDateTime = startDateTime;
-    request.returnDateTime = endDateTime;
+    request.pickupDateTime = startDateTime.date;
+    request.returnDateTime = endDateTime.date;
     request.pickupPosition = pickupPosition;
     request.returnPosition = returnPosition;
+    return request;
+  }
+
+  getCarTimetableRequest() {
+    CarTimetableRequest request = new CarTimetableRequest();
+    request.carId = this.shopItem?.carId;
+    request.startDate = this.shopItem?.startDate;
+    request.endDate = this.shopItem?.endDate;
     return request;
   }
 }

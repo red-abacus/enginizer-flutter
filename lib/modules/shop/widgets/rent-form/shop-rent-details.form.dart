@@ -42,7 +42,7 @@ class _ShopRentDetailsFormState extends State<ShopRentDetailsForm> {
           margin: EdgeInsets.only(top: 10),
           child: _subtitleContainer(_provider.startDateTime != null
               ? DateUtils.stringFromDate(
-                  _provider.startDateTime, 'dd/MM/yyyy HH:mm')
+                  _provider.startDateTime.date, 'dd/MM/yyyy HH:mm')
               : 'n/a'),
         ),
         Container(
@@ -53,7 +53,7 @@ class _ShopRentDetailsFormState extends State<ShopRentDetailsForm> {
           margin: EdgeInsets.only(top: 10),
           child: _subtitleContainer(_provider.endDateTime != null
               ? DateUtils.stringFromDate(
-                  _provider.endDateTime, 'dd/MM/yyyy HH:mm')
+                  _provider.endDateTime.date, 'dd/MM/yyyy HH:mm')
               : 'n/a'),
         ),
       ],

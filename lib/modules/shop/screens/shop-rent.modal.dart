@@ -72,9 +72,15 @@ class _ShopRentModalState extends State<ShopRentModal> {
       await _provider
           .getServiceProvider(_provider.shopItem.providerId)
           .then((_) async {
-        await _provider.getCarDetails(_provider.shopItem.carId).then((value) {
-          setState(() {
-            _isLoading = false;
+        await _provider
+            .getCarDetails(_provider.shopItem.carId)
+            .then((value) async {
+          await _provider
+              .getCarTimetable(_provider.getCarTimetableRequest())
+              .then((value) {
+            setState(() {
+              _isLoading = false;
+            });
           });
         });
       });
@@ -87,6 +93,11 @@ class _ShopRentModalState extends State<ShopRentModal> {
       } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
         FlushBarHelper.showFlushBar(S.of(context).general_error,
             S.of(context).exception_get_car_details, context);
+      } else if (error
+          .toString()
+          .contains(CarService.CAR_TIMETABLE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_car_timetable, context);
       }
 
       setState(() {
