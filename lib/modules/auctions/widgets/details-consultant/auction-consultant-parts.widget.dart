@@ -1,7 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/auctions/models/auction-details.model.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/car-details-parts.widget.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/utils/constants.dart';

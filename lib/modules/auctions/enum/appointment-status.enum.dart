@@ -84,28 +84,19 @@ class AppointmentStatusStateUtils {
       AppointmentStatusState.CANCELED,
       AppointmentStatusState.IN_REVIEW,
       AppointmentStatusState.ON_HOLD,
+      AppointmentStatusState.IN_UNIT,
       AppointmentStatusState.IN_TRANSPORT,
       AppointmentStatusState.DONE,
       AppointmentStatusState.READY_FOR_PICKUP,
     ];
   }
 
-  static List<AppointmentStatusState> statusesMechanic() {
-    return [
-      AppointmentStatusState.NONE,
-      AppointmentStatusState.IN_WORK,
-      AppointmentStatusState.ON_HOLD,
-      AppointmentStatusState.IN_UNIT,
-      AppointmentStatusState.IN_REVIEW
-    ];
-  }
-
   static List<AppointmentStatusState> statusesParts() {
-    return [AppointmentStatusState.NEW, AppointmentStatusState.ACCEPTED, AppointmentStatusState.DONE];
-  }
-
-  static List<AppointmentStatusState> statusesPr() {
-    return [AppointmentStatusState.SUBMITTED, AppointmentStatusState.SCHEDULED, AppointmentStatusState.IN_TRANSPORT];
+    return [
+      AppointmentStatusState.NEW,
+      AppointmentStatusState.ACCEPTED,
+      AppointmentStatusState.DONE
+    ];
   }
 }
 

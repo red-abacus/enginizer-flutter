@@ -25,6 +25,7 @@ class AuctionDetail {
   List<Bid> bids = [];
   AuctionMapDirections auctionMapDirections;
   GenericModel appointment;
+  String type;
 
   AuctionDetail(
       {this.id,
@@ -39,7 +40,8 @@ class AuctionDetail {
       this.workEstimateId,
       this.appointmentType,
       this.bids,
-      this.appointment});
+      this.appointment,
+      this.type});
 
   factory AuctionDetail.fromJson(Map<String, dynamic> json) {
     return AuctionDetail(
@@ -60,7 +62,8 @@ class AuctionDetail {
         bids: json['bids'] != null ? _mapBids(json['bids']) : [],
         appointment: json['appointment'] != null
             ? GenericModel.fromJson(json['appointment'])
-            : null);
+            : null,
+        type: json['type'] != null ? json['type'] : '');
   }
 
   static _mapIssuesList(List<dynamic> response) {
@@ -94,6 +97,10 @@ class AuctionDetail {
       }
     }
     return null;
+  }
+
+  isOrder() {
+    return this.type == 'APPOINTMENT_ITEMS';
   }
 
   Future<void> loadMapData(BuildContext context) async {

@@ -12,6 +12,7 @@ import 'package:app/modules/auctions/widgets/details-consultant/auction-consulta
 import 'package:app/modules/notifications/screens/notifications.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
@@ -23,7 +24,8 @@ import 'package:provider/provider.dart';
 
 class AuctionConsultant extends StatefulWidget {
   static const String route = '/${Auctions.route}/auction-consultant';
-  static const String notificationRoute = '/${Notifications.route}/auction-consultant';
+  static const String notificationRoute =
+      '/${Notifications.route}/auction-consultant';
 
   @override
   State<StatefulWidget> createState() {
@@ -39,14 +41,13 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
   AuctionConsultantState({this.route});
 
-  AuctionConsultantProvider auctionProvider;
+  AuctionConsultantProvider _provider;
 
   @override
   Widget build(BuildContext context) {
-    auctionProvider =
-        Provider.of<AuctionConsultantProvider>(context, listen: false);
+    _provider = Provider.of<AuctionConsultantProvider>(context, listen: false);
 
-    if (auctionProvider.selectedAuction == null) {
+    if (_provider.selectedAuction == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pop();
       });
@@ -63,15 +64,15 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
   @override
   void didChangeDependencies() {
-    auctionProvider = Provider.of<AuctionConsultantProvider>(context);
-    _initDone = _initDone == false ? false : auctionProvider.initDone;
+    _provider = Provider.of<AuctionConsultantProvider>(context);
+    _initDone = _initDone == false ? false : _provider.initDone;
 
     if (!_initDone) {
-      if (auctionProvider.selectedAuction != null) {
+      if (_provider.selectedAuction != null) {
         _loadData();
       }
 
-      auctionProvider.initDone = true;
+      _provider.initDone = true;
       _initDone = true;
     }
     super.didChangeDependencies();
@@ -83,14 +84,12 @@ class AuctionConsultantState extends State<AuctionConsultant> {
     });
 
     try {
-      await auctionProvider
-          .getAuctionDetails(auctionProvider.selectedAuction.id)
+      await _provider
+          .getAuctionDetails(_provider.selectedAuction.id)
           .then((_) async {
-        if (PermissionsManager.getInstance().hasAccess(
-            MainPermissions.Auctions, PermissionsAuction.CAR_DETAILS)) {
-          await auctionProvider
-              .getAppointmentDetails(
-                  auctionProvider.selectedAuction.appointment.id)
+        if (_provider.auctionDetails.isOrder()) {
+          await _provider
+              .getAppointmentDetails(_provider.selectedAuction.appointment.id)
               .then((_) async {
             setState(() {
               _isLoading = false;
@@ -123,9 +122,9 @@ class AuctionConsultantState extends State<AuctionConsultant> {
 
   _titleText() {
     return Text(
-      auctionProvider.selectedAuction?.appointment?.name ?? 'N/A',
-      style:
-          TextHelper.customTextStyle(color: Colors.white, weight: FontWeight.bold, size: 20),
+      _provider.selectedAuction?.appointment?.name ?? 'N/A',
+      style: TextHelper.customTextStyle(
+          color: Colors.white, weight: FontWeight.bold, size: 20),
     );
   }
 
@@ -144,43 +143,43 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _buildContent() {
-    if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.Auctions, PermissionsAuction.APPOINTMENT_DETAILS)) {
-      return AuctionConsultantWidget(
-          auction: auctionProvider.selectedAuction,
-          auctionDetails: auctionProvider.auctionDetails,
-          createEstimate: _createEstimate);
-    } else if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Auctions, PermissionsAuction.CAR_DETAILS)) {
-      Bid providerBid;
+    Bid providerBid;
 
-      for (Bid bid in auctionProvider.auctionDetails.bids) {
-        if (bid.serviceProvider.id ==
-            Provider.of<Auth>(context).authUser.providerId) {
-          providerBid = bid;
-          break;
-        }
+    for (Bid bid in _provider.auctionDetails.bids) {
+      if (bid.serviceProvider.id ==
+          Provider.of<Auth>(context).authUser.providerId) {
+        providerBid = bid;
+        break;
       }
+    }
+
+    // TODO - need to recheck parts functionality completely
+    if (_provider.auctionDetails.isOrder() &&
+        PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Orders, PermissionsOrder.EXECUTE_ORDERS)) {
       return AuctionConsultantPartsWidget(
-          auctionDetails: auctionProvider.auctionDetails,
+          auctionDetails: _provider.auctionDetails,
           createEstimate: providerBid == null ? _createPartEstimate : null,
           seeEstimate: providerBid != null ? _seeEstimate : null,
           showProviderDetails: _showProviderDetails);
+    } else {
+      return AuctionConsultantWidget(
+          auction: _provider.selectedAuction,
+          auctionDetails: _provider.auctionDetails,
+          createEstimate: _createEstimate);
     }
-
-    return Container(child: Text('No permission !'));
   }
 
   _createEstimate() {
-    if (auctionProvider.auctionDetails != null) {
+    if (_provider.auctionDetails != null) {
       Provider.of<WorkEstimateProvider>(context)
           .refreshValues(EstimatorMode.Create);
       Provider.of<WorkEstimateProvider>(context)
-          .setIssues(context, auctionProvider.auctionDetails.issues);
+          .setIssues(context, _provider.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           Provider.of<Auth>(context).authUserDetails.userProvider.id;
       Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
-          auctionProvider.auctionDetails;
+          _provider.auctionDetails;
 
       Navigator.push(
         context,
@@ -191,13 +190,13 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _createPartEstimate() {
-    if (auctionProvider.auctionDetails != null) {
+    if (_provider.auctionDetails != null) {
       Provider.of<WorkEstimateProvider>(context)
           .refreshValues(EstimatorMode.CreatePart);
       Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
-          auctionProvider.auctionDetails;
+          _provider.auctionDetails;
       Provider.of<WorkEstimateProvider>(context)
-          .setIssuesWithRecommendations(auctionProvider.auctionDetails.issues);
+          .setIssuesWithRecommendations(_provider.auctionDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
           Provider.of<Auth>(context).authUserDetails.userProvider.id;
 
@@ -215,7 +214,7 @@ class AuctionConsultantState extends State<AuctionConsultant> {
         .refreshValues(EstimatorMode.ReadOnly);
 
     Bid providerBid;
-    for (Bid bid in auctionProvider.auctionDetails.bids) {
+    for (Bid bid in _provider.auctionDetails.bids) {
       if (bid.serviceProvider.id ==
           Provider.of<Auth>(context).authUser.providerId) {
         providerBid = bid;
@@ -237,9 +236,9 @@ class AuctionConsultantState extends State<AuctionConsultant> {
   }
 
   _showProviderDetails() {
-    if (auctionProvider.appointmentDetails.serviceProvider != null) {
+    if (_provider.appointmentDetails.serviceProvider != null) {
       Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId =
-          auctionProvider.appointmentDetails.serviceProvider.id;
+          _provider.appointmentDetails.serviceProvider.id;
 
       showModalBottomSheet(
           isScrollControlled: true,

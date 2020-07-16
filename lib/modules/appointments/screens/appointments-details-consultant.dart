@@ -79,6 +79,8 @@ class AppointmentDetailsConsultantState
             .getProviderServices(
                 _provider.selectedAppointment.serviceProvider.id)
             .then((_) async {
+          _provider.getProviderEmployees(_provider.selectedAppointmentDetail.serviceProvider.id, '21/07/2020', '21/07/2020');
+
           int lastWorkEstimate =
               _provider.selectedAppointmentDetail.lastWorkEstimate();
 

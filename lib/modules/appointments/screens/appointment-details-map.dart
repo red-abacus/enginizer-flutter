@@ -267,7 +267,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     Provider.of<WorkEstimateProvider>(context).defaultQuantity = (_provider
                 .selectedAppointmentDetail.auctionMapDirections.totalDistance /
             1000)
-        .round();
+        .round() as double;
     Provider.of<WorkEstimateProvider>(context).maxDate = _provider
         .selectedAppointmentDetail
         .auctionMapDirections

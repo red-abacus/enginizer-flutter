@@ -6,8 +6,6 @@ import 'package:app/modules/consultant-user-details/provider/user-consultant.pro
 import 'package:app/modules/consultant-user-details/widgets/user-details-active-personnel.widget.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-graph-consultant.widget.dart';
 import 'package:app/modules/consultant-user-details/widgets/user-details-index-consultant.widget.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
 import 'package:app/modules/shared/widgets/image-picker.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';

@@ -71,7 +71,7 @@ class WorkEstimateProvider with ChangeNotifier {
 
   Map<String, dynamic> estimatorFormState = Map.from(initialEstimatorFormState);
 
-  int defaultQuantity;
+  double defaultQuantity;
 
   _initValues() {
     shouldAskForPr = false;

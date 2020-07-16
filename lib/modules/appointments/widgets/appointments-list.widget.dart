@@ -1,8 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -140,25 +138,7 @@ class AppointmentsList extends StatelessWidget {
   _statusDropdownItems(BuildContext context) {
     List<DropdownMenuItem<AppointmentStatusState>> list = [];
 
-    var statuses = List<AppointmentStatusState>();
-
-    if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.PERSONNEL_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statusesMechanic();
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.ALL_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statuses();
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.PARTS_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statusesParts();
-    } else if (PermissionsManager.getInstance().hasAccess(
-        MainPermissions.AppointmentsStatuses,
-        PermissionAppointmentsStatuses.PR_STATUSES)) {
-      statuses = AppointmentStatusStateUtils.statusesParts();
-    }
+    var statuses = AppointmentStatusStateUtils.statuses();
 
     statuses.forEach((status) {
       list.add(DropdownMenuItem(

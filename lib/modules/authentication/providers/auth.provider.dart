@@ -99,23 +99,12 @@ class Auth with ChangeNotifier {
           await register(FirebaseManager.getInstance().fcmToken);
         }
 
-        PermissionsManager.getInstance()
-            .setServiceItemsResponse(authUser, null);
+        PermissionsManager.getInstance().initialise(authUser);
 
-        if (this.authUserDetails.userProvider != null) {
-          if (authUser.role == Roles.ProviderAdmin ||
-              authUser.role == Roles.ProviderConsultant) {
-            PermissionsManager.getInstance().setServiceItemsResponse(
-                authUser,
-                await _providerService.getProviderServiceItems(
-                    this.authUserDetails.userProvider.id));
-
-            if (PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Appointments,
-                PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
-              LocatorManager.getInstance().refresh();
-            }
-          }
+        if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Appointments,
+            PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+          LocatorManager.getInstance().refresh();
         }
       }
     }
@@ -142,23 +131,12 @@ class Auth with ChangeNotifier {
           if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
             await register(FirebaseManager.getInstance().fcmToken);
           }
-          PermissionsManager.getInstance()
-              .setServiceItemsResponse(authUser, null);
+          PermissionsManager.getInstance().initialise(authUser);
 
-          if (this.authUserDetails.userProvider != null) {
-            if (authUser.role == Roles.ProviderAdmin ||
-                authUser.role == Roles.ProviderConsultant) {
-              PermissionsManager.getInstance().setServiceItemsResponse(
-                  authUser,
-                  await _providerService.getProviderServiceItems(
-                      this.authUserDetails.userProvider.id));
-
-              if (PermissionsManager.getInstance().hasAccess(
-                  MainPermissions.Appointments,
-                  PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
-                LocatorManager.getInstance().refresh();
-              }
-            }
+          if (PermissionsManager.getInstance().hasAccess(
+              MainPermissions.Appointments,
+              PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+            LocatorManager.getInstance().refresh();
           }
         }
       }

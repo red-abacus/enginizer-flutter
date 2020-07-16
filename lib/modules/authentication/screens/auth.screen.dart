@@ -86,25 +86,17 @@ class _AuthScreenState extends State<AuthScreen> {
           },
         ),
         FlatButton(
-          child: Text('Consultant Provider'),
+          child: Text('Service'),
           onPressed: () {
             _login('consilier.service@autowass.com', 'autowass123');
           },
         ),
         FlatButton(
-          child: Text('Mechanic'),
+          child: Text('Seller'),
           onPressed: () {
-            _login('mechanic.provider@autowass.com', 'password');
+            _login('seller.service@autowass.com', 'autowass123');
           },
         ),
-        Expanded(
-          child: FlatButton(
-            child: Text('furnizor'),
-            onPressed: () {
-              _login('consultant.parts@autowass.com', 'autowass123');
-            },
-          ),
-        )
       ],
     );
   }
@@ -126,7 +118,7 @@ class _AuthScreenState extends State<AuthScreen> {
           },
         ),
         FlatButton(
-          child: Text('Admin Provider'),
+          child: Text('Admin'),
           onPressed: () {
             _login('admin.service@autowass.com', 'password');
           },
@@ -143,6 +135,18 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Text('Painter Consultant'),
           onPressed: () {
             _login('painter.provider@autowass.com', 'autowass123');
+          },
+        ),
+        FlatButton(
+          child: Text('PR'),
+          onPressed: () {
+            _login('pr.service@autowass.com', 'autowass123');
+          },
+        ),
+        FlatButton(
+          child: Text('Mecanic'),
+          onPressed: () {
+            _login('mecanic.service@autowass.com', 'autowass123');
           },
         ),
       ],

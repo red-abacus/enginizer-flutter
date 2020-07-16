@@ -42,11 +42,8 @@ class PromotionsState extends State<Promotions> {
           child: _renderList(_isLoading),
         ),
         floatingActionButton: PermissionsManager.getInstance().hasAccess(
-                    MainPermissions.Promotions,
-                    PermissionsPromotion.CREATE_PROMOTION) ||
-                PermissionsManager.getInstance().hasAccess(
-                    MainPermissions.Promotions,
-                    PermissionsPromotion.SELLER_PROMOTION)
+                MainPermissions.Promotions,
+                PermissionsPromotion.CREATE_PROMOTION)
             ? FloatingActionButton(
                 heroTag: null,
                 backgroundColor: Theme.of(context).primaryColor,
@@ -128,7 +125,7 @@ class PromotionsState extends State<Promotions> {
   }
 
   _selectPromotion(Promotion promotion) {
-    if (promotion.getStatus() != PromotionStatus.Finished ) {
+    if (promotion.getStatus() != PromotionStatus.Finished) {
       Provider.of<CreatePromotionProvider>(context).initialise(
           Provider.of<Auth>(context).authUser.providerId,
           promotion: promotion);
@@ -142,10 +139,10 @@ class PromotionsState extends State<Promotions> {
           builder: (BuildContext context) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter state) {
-                  return CreatePromotionModal(
-                    refreshState: _refreshState,
-                  );
-                });
+              return CreatePromotionModal(
+                refreshState: _refreshState,
+              );
+            });
           });
     }
   }

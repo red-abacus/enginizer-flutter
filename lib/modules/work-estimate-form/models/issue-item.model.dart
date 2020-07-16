@@ -54,7 +54,7 @@ class IssueItem {
         typeId: json['typeId'],
         code: json['code'],
         name: json['name'],
-        quantity: json['quantity'] != null ? json['quantity'] : 0.0,
+        quantity: json['quantity'] != null ? double.parse('${json['quantity']}') : 0.0,
         price: json['price'] != null ? json['price'] : 0.0,
         priceVAT: json['priceVAT'] != null ? json['priceVAT'] : 0.0,
         total: json['total'] != null ? json['total'] : 0.0,

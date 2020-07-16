@@ -29,11 +29,11 @@ class AppointmentRequest {
           providerType == AppointmentProviderType.Specific ? true : false
     };
 
-    if (pickupPosition != null) {
+    if (pickupPosition != null && pickupPosition.isValid()) {
       propMap['from'] = pickupPosition.toJson();
     }
 
-    if (returnPosition != null) {
+    if (returnPosition != null && returnPosition.isValid()) {
       propMap['to'] = returnPosition.toJson();
     }
 

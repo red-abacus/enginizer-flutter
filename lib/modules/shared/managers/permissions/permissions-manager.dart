@@ -1,21 +1,16 @@
-import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-appointments-statuses.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-promotions.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-user-profile.dart';
 
 class PermissionsManager {
   static var manager = PermissionsManager();
 
   PermissionsSideBar _permissionsSideBar;
   PermissionsAuction _permissionsAuction;
-  PermissionsUserProfile _permissionsUserProfile;
-  PermissionAppointmentsStatuses _permissionAppointmentsStatuses;
   PermissionsOrder _permissionsOrder;
   PermissionsAppointment _permissionsAppointment;
   PermissionsCar _permissionsCar;
@@ -31,20 +26,13 @@ class PermissionsManager {
     manager = PermissionsManager();
   }
 
-  setServiceItemsResponse(JwtUser jwtUser,
-      ServiceProviderItemsResponse serviceProviderItemsResponse) {
-    _permissionsSideBar =
-        PermissionsSideBar(jwtUser);
-    _permissionsAuction = PermissionsAuction(jwtUser, serviceProviderItemsResponse);
-    _permissionsUserProfile = PermissionsUserProfile();
-    _permissionAppointmentsStatuses =
-        PermissionAppointmentsStatuses(serviceProviderItemsResponse);
+  initialise(JwtUser jwtUser) {
+    _permissionsSideBar = PermissionsSideBar(jwtUser);
+    _permissionsAuction = PermissionsAuction(jwtUser);
     _permissionsOrder = PermissionsOrder(jwtUser);
-    _permissionsAppointment =
-        PermissionsAppointment(jwtUser, serviceProviderItemsResponse);
+    _permissionsAppointment = PermissionsAppointment(jwtUser);
     _permissionsCar = PermissionsCar(jwtUser);
-    _permissionsPromotion =
-        PermissionsPromotion(jwtUser, serviceProviderItemsResponse);
+    _permissionsPromotion = PermissionsPromotion(jwtUser);
   }
 
   bool hasAccess(MainPermissions mainPermission, String permission) {
@@ -53,10 +41,6 @@ class PermissionsManager {
         return _permissionsSideBar.hasAccess(userRole, permission);
       case MainPermissions.Auctions:
         return _permissionsAuction.hasAccess(userRole, permission);
-      case MainPermissions.UserProfile:
-        return _permissionsUserProfile.hasAccess(userRole, permission);
-      case MainPermissions.AppointmentsStatuses:
-        return _permissionAppointmentsStatuses.hasAccess(userRole, permission);
       case MainPermissions.Orders:
         return _permissionsOrder.hasAccess(userRole, permission);
         break;
@@ -78,8 +62,6 @@ class PermissionsManager {
 enum MainPermissions {
   Sidebar,
   Auctions,
-  UserProfile,
-  AppointmentsStatuses,
   Orders,
   Appointments,
   Cars,

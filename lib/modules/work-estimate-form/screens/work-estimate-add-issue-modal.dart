@@ -204,7 +204,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                                                 'quantity'] =
                                             provider.defaultQuantity != null
                                                 ? provider.defaultQuantity
-                                                : 1;
+                                                : 1.0;
                                         provider.estimatorFormState['price'] =
                                             foundProviderItem.price;
                                         provider.estimatorFormState[

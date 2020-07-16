@@ -12,7 +12,6 @@ import 'package:app/modules/shop/models/shop-item.model.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
 import 'package:app/modules/appointments/model/personnel/employee.dart';
-import 'package:app/utils/date_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppointmentConsultantProvider with ChangeNotifier {
@@ -29,7 +28,6 @@ class AppointmentConsultantProvider with ChangeNotifier {
   WorkEstimateDetails workEstimateDetails;
   List<ServiceProviderItem> serviceProviderItems = [];
 
-  List<Employee> employees = [];
   List<CarTimetable> carTimetable = [];
   ShopItem shopItem;
 
@@ -139,5 +137,17 @@ class AppointmentConsultantProvider with ChangeNotifier {
     request.startDate = this.shopItem?.startDate;
     request.endDate = this.shopItem?.endDate;
     return request;
+  }
+
+  Future<List<Employee>> getProviderEmployees(
+      int providerId, String startDate, String endDate) async {
+    try {
+      await _providerService.getProviderEmployees(
+          providerId, startDate, endDate);
+      notifyListeners();
+      return [];
+    } catch (error) {
+      throw (error);
+    }
   }
 }

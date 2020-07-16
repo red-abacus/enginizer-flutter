@@ -234,7 +234,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
       Provider.of<WorkEstimateProvider>(context).defaultQuantity =
           (_provider.appointmentDetails.auctionMapDirections.totalDistance /
                   1000)
-              .round();
+              .round() as double;
       Provider.of<WorkEstimateProvider>(context).maxDate = _provider
           .appointmentDetails
           .auctionMapDirections

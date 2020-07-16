@@ -1,8 +1,5 @@
-import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
-import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
-import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 
 class PermissionsSideBar {
   static final String DASHBOARD = 'VIEW_DASHBOARD';

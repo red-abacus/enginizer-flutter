@@ -332,7 +332,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter state) {
                   return CreatePromotionModal(
-                    refreshState: _loadData(),
+                    refreshState: _loadData,
                   );
                 });
               });
@@ -389,7 +389,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter state) {
                       return CreatePromotionModal(
-                        refreshState: _loadData(),
+                        refreshState: _loadData,
                       );
                     });
               });

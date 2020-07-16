@@ -17,6 +17,6 @@ class PartCreateRequest {
         'name': name,
         'price': price,
         'providedBy': 0,
-        'typeId': 9
+        'typeId': 2
       };
 }
