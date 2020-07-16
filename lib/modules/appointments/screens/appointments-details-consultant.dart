@@ -465,18 +465,20 @@ class AppointmentDetailsConsultantState
         });
   }
 
-  _completeAppointmentConfirmed() {
+  _completeAppointmentConfirmed() async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      _provider
+      await _provider
           .completeAppointment(_provider.selectedAppointmentDetail.id)
           .then((value) {
         Provider.of<AppointmentsProvider>(context).initDone = false;
 
-        setState(() {});
+        setState(() {
+          _isLoading = false;
+        });
       });
     } catch (error) {
       if (error

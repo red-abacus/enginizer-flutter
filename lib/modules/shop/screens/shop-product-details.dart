@@ -161,8 +161,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
   }
 
   _appointmentButton() {
-    return _provider.selectedShopItem.service.getShopAppointmentType() ==
-            ShopAppointmentType.CarRent
+    return _provider.selectedShopItem.service.isRentService()
         ? Container(
             margin: EdgeInsets.only(top: 20),
             child: FlatButton(
@@ -182,7 +181,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
               icon: Icon(Icons.phone, color: Colors.white),
               color: red,
               label: Text(
-                S.of(context).online_shop_appointment_title,
+                S.of(context).online_shop_call,
                 style: TextHelper.customTextStyle(color: Colors.white),
               ),
               onPressed: () {
@@ -193,8 +192,7 @@ class _ShopProductDetailsState extends State<ShopProductDetails> {
   }
 
   _detailsButton() {
-    return _provider.selectedShopItem.service.getShopAppointmentType() ==
-            ShopAppointmentType.CarRent
+    return _provider.selectedShopItem.service.isRentService()
         ? Container(
             margin: EdgeInsets.only(top: 20, left: 10),
             child: FlatButton(

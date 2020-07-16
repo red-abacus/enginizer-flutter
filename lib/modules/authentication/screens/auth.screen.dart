@@ -132,9 +132,9 @@ class _AuthScreenState extends State<AuthScreen> {
     return Row(
       children: <Widget>[
         FlatButton(
-          child: Text('Painter Consultant'),
+          child: Text('Tractari'),
           onPressed: () {
-            _login('painter.provider@autowass.com', 'autowass123');
+            _login('tow.service@autowass.com', 'autowass123');
           },
         ),
         FlatButton(

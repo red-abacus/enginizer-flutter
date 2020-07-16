@@ -133,8 +133,8 @@ class ShopAppointmentProvider with ChangeNotifier {
     request.carId = selectedCar?.id;
     request.promotionId = shopItem.id;
     request.scheduleDateTime = dateEntry?.dateTime;
-    request.pickupDateTime = startDateTime.date;
-    request.returnDateTime = endDateTime.date;
+    request.pickupDateTime = startDateTime?.date;
+    request.returnDateTime = endDateTime?.date;
     request.pickupPosition = pickupPosition;
     request.returnPosition = returnPosition;
     return request;

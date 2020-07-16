@@ -122,6 +122,8 @@ class ProviderService {
           path: _PROVIDERS_PATH,
           queryParameters: queryParameters);
       final response = await _dio.getUri(uri);
+//      final response = await _dio.get('${Environment.PROVIDERS_BASE_API}/$_PROVIDERS_PATH', queryParameters: queryParameters);
+
       if (response.statusCode == 200) {
         return _mapProviders(response.data);
       } else {

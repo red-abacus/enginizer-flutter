@@ -305,7 +305,7 @@ class _AppointmentDetailsWidgetState
               widget.writeReview(widget.appointmentDetail);
             },
             label: Text(
-              S.of(context).appointment_write_review.toUpperCase(),
+              S.of(context).appointment_write_review,
               style: TextHelper.customTextStyle(
                   color: red, weight: FontWeight.bold, size: 20),
             ),

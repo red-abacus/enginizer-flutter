@@ -23,7 +23,7 @@ class CarStatusUtils {
     if (status != null) {
       switch (status) {
         case CarStatus.ForSell:
-          return S.of(context).general_auction;
+          return S.of(context).car_status_for_sell;
         case CarStatus.Pending:
           return S.of(context).auctions_finished;
         case CarStatus.Sold:

@@ -236,7 +236,7 @@ class CarClientDetailsWidget extends StatelessWidget {
           label: S.of(context).car_mark_as_sold,
           labelStyle: TextHelper.customTextStyle(
               color: Colors.grey, weight: FontWeight.bold, size: 16),
-          onTap: () => this.markAsSold));
+          onTap: () => this.markAsSold()));
     }
 
     buttons.add(SpeedDialChild(

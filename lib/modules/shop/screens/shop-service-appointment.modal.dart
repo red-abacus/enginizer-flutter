@@ -28,8 +28,6 @@ class _ShopServiceAppointmentModalState
   bool _isLastStep = false;
   List<Step> _steps = [];
 
-  ShopAppointmentType appointmentType = ShopAppointmentType.Simple;
-
   Map<int, dynamic> _stepStateData = {
     0: {"state": StepState.indexed, "active": true},
     1: {"state": StepState.disabled, "active": false},
@@ -152,9 +150,6 @@ class _ShopServiceAppointmentModalState
               state: _stepStateData[3]['state'])
         ]);
         break;
-      case ShopAppointmentType.CarRent:
-        // TODO
-        break;
       case ShopAppointmentType.Rca:
         // TODO
         break;
@@ -209,7 +204,7 @@ class _ShopServiceAppointmentModalState
   }
 
   _next() {
-    switch (this.appointmentType) {
+    switch (_provider.shopItem.getShopAppointmentType()) {
       case ShopAppointmentType.Simple:
         switch (_currentStepIndex) {
           case 0:
@@ -257,22 +252,16 @@ class _ShopServiceAppointmentModalState
                   StepState.indexed;
               _stepStateData[_currentStepIndex + 1]['active'] = true;
               _goTo(_currentStepIndex + 1);
-              _isLastStep = false;
+              _isLastStep = true;
             }
             break;
           case 3:
             if (_provider.returnPosition.latLng != null) {
               _stepStateData[_currentStepIndex]['state'] = StepState.complete;
-              _stepStateData[_currentStepIndex + 1]['state'] =
-                  StepState.indexed;
-              _stepStateData[_currentStepIndex + 1]['active'] = true;
-              _goTo(_currentStepIndex + 1);
-              _isLastStep = true;
+              _submit();
             }
             break;
         }
-        break;
-      case ShopAppointmentType.CarRent:
         break;
       case ShopAppointmentType.Rca:
         break;

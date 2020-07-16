@@ -160,13 +160,17 @@ class AppointmentsService {
   Future<AppointmentsResponse> getAppointments(
       AppointmentsRequest request) async {
     try {
+      // TODO
       var uri = Uri(
           scheme: Environment.APPOINTMENTS_SCHEME,
           host: Environment.APPOINTMENTS_HOST,
           path: _APPOINTMENTS_PATH,
           queryParameters: request.toJson());
+            final response = await _dio.getUri(uri);
 
-      final response = await _dio.getUri(uri);
+//      final response = await _dio.get(_APPOINTMENTS_API_PATH,
+//          queryParameters: request.toJson());
+
       if (response.statusCode == 200) {
         return AppointmentsResponse.fromJson(response.data);
       } else {

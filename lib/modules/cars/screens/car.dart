@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
 import 'package:app/modules/cars/widgets/car-documents.widget.dart';
@@ -276,6 +277,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
 
     try {
       await _provider.carMarkAsSold(_provider.selectedCar.id).then((value) {
+        Provider.of<CarsProvider>(context).initDone = false;
+
         setState(() {
           _provider.selectedCar = value;
           _isLoading = false;
@@ -332,7 +335,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter state) {
                   return CreatePromotionModal(
-                    refreshState: _loadData,
+                    refreshState: _refreshState,
                   );
                 });
               });
@@ -405,5 +408,10 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         _isLoading = false;
       });
     }
+  }
+
+  _refreshState() {
+    Provider.of<CarsProvider>(context).initDone = false;
+    _loadData();
   }
 }

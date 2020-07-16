@@ -34,14 +34,14 @@ class GenericModel {
       case 'TOW_SERVICE':
       case 'PICKUP_RETURN':
         return ShopAppointmentType.Location;
-      // TODO - need to check appointment for this
-      case 'RENT_SERVICE':
-        return ShopAppointmentType.CarRent;
-      // TODO - need to check appointment for this
       case 'RCA_SERVICE':
         return ShopAppointmentType.Rca;
     }
 
     return null;
+  }
+
+  bool isRentService() {
+    return name == 'RENT_SERVICE';
   }
 }
