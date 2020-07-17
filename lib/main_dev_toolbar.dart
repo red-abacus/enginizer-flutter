@@ -164,8 +164,7 @@ class AppState extends State<App> {
             child: MaterialApp(
               home: authProvider.isAuth
                   ? NavigationToolbarApp(
-                      authUser: authProvider.authUser,
-                      authUserDetails: authProvider.authUserDetails)
+                      authUser: authProvider.authUser)
                   : FutureBuilder(
                       future: authProvider.tryAutoLogin(),
                       builder: (ctx, authResultSnapshot) =>

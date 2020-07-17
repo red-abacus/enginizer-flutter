@@ -62,8 +62,7 @@ class _AppointmentDetailsChildrenWidgetState
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${widget.appointmentDetail?.status?.assetName()}.svg'
-                            .toLowerCase(),
+                        widget.appointmentDetail?.status?.assetName(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
                     ),
@@ -355,7 +354,8 @@ class _AppointmentDetailsChildrenWidgetState
       margin: EdgeInsets.only(top: 15),
       child: Text(
         text,
-        style: TextHelper.customTextStyle(color: gray2, weight: FontWeight.bold, size: 13),
+        style: TextHelper.customTextStyle(
+            color: gray2, weight: FontWeight.bold, size: 13),
       ),
     );
   }
@@ -376,7 +376,8 @@ class _AppointmentDetailsChildrenWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           )
@@ -401,7 +402,8 @@ class _AppointmentDetailsChildrenWidgetState
                   .of(context)
                   .appointment_details_services_appointment_cancel
                   .toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
+              style: TextHelper.customTextStyle(
+                  color: red, weight: FontWeight.bold, size: 20),
             ),
             backgroundColor: Colors.white,
           ),
@@ -473,8 +475,8 @@ class _AppointmentDetailsChildrenWidgetState
               onPressed: () => {widget.seeEstimate(widget.appointmentDetail)},
               child: Text(
                 S.of(context).appointment_details_estimator.toUpperCase(),
-                style:
-                    TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 16),
+                style: TextHelper.customTextStyle(
+                    color: red, weight: FontWeight.bold, size: 16),
               ),
             ),
         ],

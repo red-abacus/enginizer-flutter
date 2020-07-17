@@ -51,23 +51,14 @@ class AppointmentStatus {
   }
 
   String assetName() {
+    String prefix = 'assets/images/statuses/';
+    String suffix = '.svg';
     switch (getState()) {
-      case AppointmentStatusState.ON_HOLD:
-        return 'pending';
-      case AppointmentStatusState.IN_WORK:
-        return 'in_work';
-      case AppointmentStatusState.IN_REVIEW:
-        return 'waiting';
-      case AppointmentStatusState.OPEN_BID:
-        return 'in_bid';
-      case AppointmentStatusState.PENDING:
-        return 'waiting';
-      case AppointmentStatusState.DONE:
       case AppointmentStatusState.NEW:
       case AppointmentStatusState.ACCEPTED:
-        return 'completed';
+        return prefix + 'completed' + suffix;
       default:
-        return name.toLowerCase();
+        return prefix + name.toLowerCase() + suffix;
     }
   }
 

@@ -134,10 +134,10 @@ class ShopItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
+                    width: 100,
                     child: image != null
                         ? Image.network(
                             image.name,
-                            width: 100,
                             height: 120,
                             fit: BoxFit.fitWidth,
                           )
@@ -155,12 +155,19 @@ class ShopItemCard extends StatelessWidget {
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 6),
-                                child: Text(
-                                  S
-                                      .of(context)
-                                      .online_shop_card_no_photos_title,
-                                  style: TextHelper.customTextStyle(
-                                      color: gray2, size: 10),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        S
+                                            .of(context)
+                                            .online_shop_card_no_photos_title,
+                                        textAlign: TextAlign.center,
+                                        style: TextHelper.customTextStyle(
+                                            color: gray2, size: 10),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ],
@@ -208,7 +215,8 @@ class ShopItemCard extends StatelessWidget {
       children: [
         if (this.shopItem.discount > 0)
           Container(
-            child: Text('${this.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
+            child: Text(
+                '${this.shopItem.price.toStringAsFixed(1)} ${S.of(context).general_currency}',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     decoration: TextDecoration.lineThrough,

@@ -6,7 +6,7 @@ import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'cards/appointment-card.widget.dart';
+import 'cards/appointment.card.dart';
 
 class AppointmentsList extends StatelessWidget {
   List<Appointment> appointments = [];

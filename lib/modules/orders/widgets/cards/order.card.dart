@@ -60,8 +60,7 @@ class OrderCard extends StatelessWidget {
       padding: EdgeInsets.all(30),
       color: appointment.status.resolveStatusColor(),
       child: SvgPicture.asset(
-        'assets/images/statuses/${appointment.status.assetName()}.svg'
-            .toLowerCase(),
+        appointment.status.assetName(),
         semanticsLabel: 'Appointment Status Image',
       ),
     );
@@ -133,7 +132,9 @@ class OrderCard extends StatelessWidget {
             .toUpperCase(),
         textAlign: TextAlign.right,
         style: TextHelper.customTextStyle(
-            color: appointment.status.resolveStatusColor(), weight: FontWeight.bold, size: 12),
+            color: appointment.status.resolveStatusColor(),
+            weight: FontWeight.bold,
+            size: 12),
       ),
     );
   }

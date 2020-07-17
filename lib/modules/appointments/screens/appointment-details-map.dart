@@ -10,7 +10,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/appointment-car-receive-form.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map-details.widget.dart';
 import 'package:app/modules/appointments/widgets/map/appointment-map.widget.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
@@ -241,7 +241,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }
@@ -261,7 +261,7 @@ class AppointmentDetailsMapState extends State<AppointmentDetailsMap>
     Provider.of<WorkEstimateProvider>(context)
         .setIssues(context, _provider.selectedAppointmentDetail.issues);
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-        Provider.of<Auth>(context).authUserDetails.userProvider.id;
+        Provider.of<Auth>(context).authUser.providerId;
     Provider.of<WorkEstimateProvider>(context).selectedAppointmentDetail =
         _provider.selectedAppointmentDetail;
 

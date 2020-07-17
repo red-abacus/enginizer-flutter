@@ -2,32 +2,23 @@ import 'dart:async';
 
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/response/service-providers-response.model.dart';
-import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/authentication/models/auth.model.dart';
-import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
-import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/models/user.model.dart';
 import 'package:app/modules/authentication/services/auth.service.dart';
-import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:app/modules/notifications/services/notification.service.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-appointment.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-manager.dart';
 import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
-import 'package:app/utils/firebase/firestore_manager.dart';
 import 'package:app/utils/jwt.helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   final AuthService _authService = inject<AuthService>();
-  final UserService _userService = inject<UserService>();
-  final ProviderService _providerService = inject<ProviderService>();
   final NotificationService _notificationService =
       inject<NotificationService>();
-
-  JwtUserDetails authUserDetails;
 
   String _token;
   List<User> users = [];
@@ -35,7 +26,7 @@ class Auth with ChangeNotifier {
   ServiceProviderResponse serviceProviderResponse;
 
   bool get isAuth {
-    return _token != null && authUserDetails != null;
+    return _token != null;
   }
 
   JwtUser get authUser {
@@ -93,19 +84,16 @@ class Auth with ChangeNotifier {
     if (authUser != null) {
       PermissionsManager.getInstance().userRole = authUser.role;
 
-      this.authUserDetails = await _userService.getUserDetails(authUser.userId);
-      if (this.authUserDetails != null) {
-        if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
-          await register(FirebaseManager.getInstance().fcmToken);
-        }
+      if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
+        register(FirebaseManager.getInstance().fcmToken);
+      }
 
-        PermissionsManager.getInstance().initialise(authUser);
+      PermissionsManager.getInstance().initialise(authUser);
 
-        if (PermissionsManager.getInstance().hasAccess(
-            MainPermissions.Appointments,
-            PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
-          LocatorManager.getInstance().refresh();
-        }
+      if (PermissionsManager.getInstance().hasAccess(
+          MainPermissions.Appointments,
+          PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+        LocatorManager.getInstance().refresh();
       }
     }
 
@@ -125,19 +113,15 @@ class Auth with ChangeNotifier {
       if (authUser != null) {
         PermissionsManager.getInstance().userRole = authUser.role;
 
-        this.authUserDetails =
-            await _userService.getUserDetails(authUser.userId);
-        if (this.authUserDetails != null) {
-          if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
-            await register(FirebaseManager.getInstance().fcmToken);
-          }
-          PermissionsManager.getInstance().initialise(authUser);
+        if (FirebaseManager.getInstance().fcmToken.isNotEmpty) {
+          register(FirebaseManager.getInstance().fcmToken);
+        }
+        PermissionsManager.getInstance().initialise(authUser);
 
-          if (PermissionsManager.getInstance().hasAccess(
-              MainPermissions.Appointments,
-              PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
-            LocatorManager.getInstance().refresh();
-          }
+        if (PermissionsManager.getInstance().hasAccess(
+            MainPermissions.Appointments,
+            PermissionsAppointment.SHARE_APPOINTMENT_LOCATION)) {
+          LocatorManager.getInstance().refresh();
         }
       }
 
@@ -161,12 +145,6 @@ class Auth with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', _token);
       prefs.setString("email", email);
-
-      if (authUser != null) {
-        this.authUserDetails =
-            await _userService.getUserDetails(authUser.userId);
-      }
-
       notifyListeners();
       return response;
     } catch (error) {

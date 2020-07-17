@@ -85,8 +85,7 @@ class _AppointmentDetailsConsultantWidgetState
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: SvgPicture.asset(
-                          'assets/images/statuses/${widget.appointmentDetail?.status?.assetName()}.svg'
-                              .toLowerCase(),
+                          widget.appointmentDetail?.status?.assetName(),
                           semanticsLabel: 'Appointment Status Image',
                         ),
                       )),

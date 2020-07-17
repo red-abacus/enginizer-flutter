@@ -1,6 +1,5 @@
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
-import 'package:app/modules/shop/models/shop-item.model.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/screens/shop-service-appointment.modal.dart';
@@ -81,7 +80,7 @@ class _ShopServiceDetailsState extends State<ShopServiceDetails> {
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }

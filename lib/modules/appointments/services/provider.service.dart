@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/modules/appointments/model/request/provider-review-request.model.dart';
+import 'package:app/modules/authentication/models/provider-schedule.model.dart';
 import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
@@ -38,6 +39,8 @@ class ProviderService {
   static const GET_WORK_STATIONS_EXCEPTION = 'GET_WORK_STATIONS_EXCEPTION';
   static const WRITE_PROVIDER_REVIEW_EXCEPTION =
       'WRITE_PROVIDER_REVIEW_EXCEPTION';
+  static const GET_SERVICE_PROVIDER_SCHEDULE_EXCEPTION =
+      'GET_SERVICE_PROVIDER_SCHEDULE_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -73,6 +76,10 @@ class ProviderService {
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _SERVICE_PROVIDER_REVIEWS_SUFFIX = '/reviews';
 
+  static const String _SERVICE_PROVIDER_SCHEDULE_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String _SERVICE_PROVIDER_SCHEDULE_SUFFIX = '/schedule';
+
   static const String _GET_WORK_STATIONS_PATH =
       '${Environment.PROVIDERS_BASE_API}/workstations';
 
@@ -90,7 +97,7 @@ class ProviderService {
     try {
       final response = await _dio.get(_SERVICES_PATH, queryParameters: params);
       if (response.statusCode == 200) {
-        return _mapServices(response.data);
+        return ServiceProviderItemsResponse.fromJson(response.data);
       } else {
         throw Exception(GET_SERVICES_EXCEPTION);
       }
@@ -122,10 +129,9 @@ class ProviderService {
           path: _PROVIDERS_PATH,
           queryParameters: queryParameters);
       final response = await _dio.getUri(uri);
-//      final response = await _dio.get('${Environment.PROVIDERS_BASE_API}/$_PROVIDERS_PATH', queryParameters: queryParameters);
 
       if (response.statusCode == 200) {
-        return _mapProviders(response.data);
+        return ServiceProviderResponse.fromJson(response.data);
       } else {
         throw Exception(GET_PROVIDERS_EXCEPTION);
       }
@@ -240,7 +246,7 @@ class ProviderService {
       final response =
           await _dio.get(_buildGetProviderServiceItemsPath(providerId));
       if (response.statusCode == 200) {
-        return _mapProviderServiceItems(response.data);
+        return ServiceProviderItemsResponse.fromJson(response.data);
       } else {
         throw Exception(GET_PROVIDER_SERVICE_ITEMS_EXCEPTION);
       }
@@ -314,6 +320,20 @@ class ProviderService {
     }
   }
 
+  Future<List<ProviderSchedule>> getProviderSchedule(int providerId) async {
+    try {
+      final response = await _dio.get(_buildGetProviderSchedule(providerId));
+
+      if (response.statusCode == 200) {
+        return _mapProviderSchedule(response.data);
+      } else {
+        throw Exception(WRITE_PROVIDER_REVIEW_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_SERVICE_PROVIDER_SCHEDULE_EXCEPTION);
+    }
+  }
+
   _mapServiceProviderTimetable(List<dynamic> response) {
     List<ServiceProviderTimetable> list = [];
 
@@ -352,17 +372,14 @@ class ProviderService {
     return list;
   }
 
-  _mapServices(Map<String, dynamic> commingServices) {
-    var response = ServiceProviderItemsResponse.fromJson(commingServices);
-    return response;
-  }
+  _mapProviderSchedule(List<dynamic> response) {
+    List<ProviderSchedule> list = [];
 
-  _mapProviders(Map<String, dynamic> commingServices) {
-    return ServiceProviderResponse.fromJson(commingServices);
-  }
+    response.forEach((item) {
+      list.add(ProviderSchedule.fromJson(item));
+    });
 
-  _mapProviderServiceItems(dynamic response) {
-    return ServiceProviderItemsResponse.fromJson(response);
+    return list;
   }
 
   _buildGetServiceProviderReviews(int providerId) {
@@ -393,5 +410,11 @@ class ProviderService {
     return _PROVIDER_SERVICE_ITEMS_PREFIX +
         providerId.toString() +
         _PROVIDER_SERVICE_ITEMS_SUFFIX;
+  }
+
+  _buildGetProviderSchedule(int providerId) {
+    return _SERVICE_PROVIDER_SCHEDULE_PREFIX +
+        providerId.toString() +
+        _SERVICE_PROVIDER_SCHEDULE_SUFFIX;
   }
 }

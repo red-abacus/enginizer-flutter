@@ -1,6 +1,6 @@
 
 class ServiceProviderTimetableStatusUtils {
-  static ServiceProviderTimetableStatus status(String value) {
+  static status(String value) {
     switch (value) {
       case 'CLOSED':
         return ServiceProviderTimetableStatus.Closed;

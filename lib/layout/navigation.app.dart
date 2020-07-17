@@ -1,13 +1,10 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
-import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
-import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
-import 'package:app/modules/consultant-user-details/provider/user-consultant.provider.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/extra-services/screens/extra-services.dart';
 import 'package:app/modules/invoices/screens/invoices.dart';
@@ -45,71 +42,84 @@ class DrawerItem {
 
 class NavigationApp extends StatefulWidget {
   final JwtUser authUser;
-  final JwtUserDetails authUserDetails;
 
-  List<DrawerItem> get drawerItems {
+  List<DrawerItem> _drawerItems;
+
+  List<DrawerItem> getDrawerItems(BuildContext context) {
+    if (_drawerItems != null) {
+      return _drawerItems;
+    }
+
     List<DrawerItem> items = [];
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.DASHBOARD)) {
-      items.add(new DrawerItem('Dashboard', Dashboard.route, Icons.dashboard));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_dashboard, Dashboard.route, Icons.dashboard));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.CARS)) {
-      items.add(new DrawerItem("Cars", Cars.route, Icons.directions_car));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_cars, Cars.route, Icons.directions_car));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.APPOINTMENT)) {
-      items.add(new DrawerItem(
-          "Appointments", Appointments.route, Icons.event_available));
+      items.add(new DrawerItem(S.of(context).dashboard_appointments,
+          Appointments.route, Icons.event_available));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.AUCTION)) {
-      items.add(new DrawerItem("Auctions", Auctions.route, Icons.dashboard));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_auctions, Auctions.route, Icons.dashboard));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.SHOP)) {
-      items.add(new DrawerItem("Shop", Shop.route, Icons.shopping_cart));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_shop, Shop.route, Icons.shopping_cart));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PARTS)) {
-      items.add(new DrawerItem('Parts', Parts.route, Parts.icon));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_parts, Parts.route, Parts.icon));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.ORDERS)) {
-      items.add(new DrawerItem('Orders', Orders.route, Orders.icon));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_orders, Orders.route, Orders.icon));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.PROMOTIONS)) {
-      items
-          .add(new DrawerItem('Promotions', Promotions.route, Promotions.icon));
+      items.add(new DrawerItem(S.of(context).dashboard_promotions,
+          Promotions.route, Promotions.icon));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.INVOICES)) {
-      items.add(new DrawerItem('Invoices', Invoices.route, Invoices.icon));
+      items.add(new DrawerItem(
+          S.of(context).dashboard_invoices, Invoices.route, Invoices.icon));
     }
 
     if (PermissionsManager.getInstance()
         .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.WORK_ESTIMATE)) {
-      items.add(new DrawerItem('Work Estimates', WorkEstimates.route, WorkEstimates.icon));
+      items.add(new DrawerItem(S.of(context).dashboard_work_estimate_history,
+          WorkEstimates.route, WorkEstimates.icon));
     }
 
     if (PermissionsManager.getInstance().hasAccess(
         MainPermissions.Sidebar, PermissionsSideBar.EXTRA_SERVICES)) {
-      items.add(new DrawerItem(
-          'Extra Services', ExtraServices.route, ExtraServices.icon));
+      items.add(new DrawerItem(S.of(context).dashboard_extra_services,
+          ExtraServices.route, ExtraServices.icon));
     }
 
     items.add(new DrawerItem(
-        'Notifications',
+        S.of(context).dashboard_notifications,
         Notifications.route,
         NotificationsManager.notificationsCount == 0
             ? Icons.notifications
@@ -118,26 +128,39 @@ class NavigationApp extends StatefulWidget {
     return items;
   }
 
-  NavigationApp({this.authUser, this.authUserDetails});
+  NavigationApp({this.authUser});
 
-  String get activeDrawerRoute {
+  String _activeDrawerRoute;
+
+  String getActiveDrawerRoute(BuildContext context) {
+    if (_activeDrawerRoute != null) {
+      return _activeDrawerRoute;
+    }
     switch (this.authUser.role) {
       case Roles.Super:
-        return Dashboard.route;
+        _activeDrawerRoute = Dashboard.route;
+        break;
       case Roles.Client:
-        return Cars.route;
+        _activeDrawerRoute = Cars.route;
+        break;
       case Roles.ProviderAdmin:
-        return Promotions.route;
+        _activeDrawerRoute = Promotions.route;
+        break;
       case Roles.ProviderConsultant:
-        if (drawerItems.isNotEmpty) {
-          return drawerItems.first.route;
+        if (getDrawerItems(context).isNotEmpty) {
+          _activeDrawerRoute = getDrawerItems(context).first.route;
+        } else {
+          _activeDrawerRoute = '/';
         }
-        return '/';
+        break;
       case Roles.ProviderPersonnel:
-        return Appointments.route;
+        _activeDrawerRoute = Appointments.route;
+        break;
       default:
-        return '/';
+        _activeDrawerRoute = '/';
     }
+
+    return _activeDrawerRoute;
   }
 
   List<DrawerItem> activeDrawerItems;
@@ -157,12 +180,12 @@ class NavigationAppState extends State<NavigationApp> {
     NotificationsManager.navigationAppState = this;
 
     if (widget.activeDrawerItems == null) {
-      widget.activeDrawerItems = widget.drawerItems;
+      widget.activeDrawerItems = widget.getDrawerItems(context);
     }
 
     var auth = Provider.of<Auth>(context);
     if (_selectedDrawerRoute == null || _selectedDrawerRoute == '/') {
-      _selectedDrawerRoute = widget.activeDrawerRoute;
+      _selectedDrawerRoute = widget.getActiveDrawerRoute(context);
     }
 
     List<Widget> drawerOptions = _buildDrawerOptions();
@@ -181,8 +204,8 @@ class NavigationAppState extends State<NavigationApp> {
             FlatButton(
               padding: EdgeInsets.all(0.0),
               child: UserAccountsDrawerHeader(
-                accountEmail: Text(widget.authUserDetails.email),
-                accountName: Text(widget.authUserDetails.name),
+                accountEmail: Text(widget.authUser?.sub),
+                accountName: Text(widget.authUser?.given_name),
                 currentAccountPicture: CircleAvatar(),
               ),
               onPressed: () {
@@ -201,7 +224,7 @@ class NavigationAppState extends State<NavigationApp> {
                     MainPermissions.Sidebar, PermissionsSideBar.TICKETS))
                   ListTile(
                       title: new Text(
-                        'Tax Payment',
+                        S.of(context).dashboard_tax,
                         style: TextHelper.customTextStyle(),
                         textAlign: TextAlign.left,
                       ),
@@ -351,33 +374,37 @@ class NavigationAppState extends State<NavigationApp> {
     switch (widget.authUser.role) {
       case Roles.Client:
         if (AppConfig.of(context).enviroment == Enviroment.Dev) {
-          Provider.of<UserProvider>(context, listen: false).userDetails =
-              Provider.of<Auth>(context).authUserDetails;
-
-          setState(() => _selectedDrawerRoute = UserDetails.route);
-          Navigator.of(context).pop(); // close the drawer
+          // TODO
+//          Provider.of<UserProvider>(context, listen: false).userDetails =
+//              Provider.of<Auth>(context).authUserDetails;
+//
+//          setState(() => _selectedDrawerRoute = UserDetails.route);
+//          Navigator.of(context).pop(); // close the drawer
         }
         break;
       case Roles.ProviderConsultant:
-        Provider.of<UserConsultantProvider>(context, listen: false)
-            .userDetails = Provider.of<Auth>(context).authUserDetails;
-
-        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-        Navigator.of(context).pop(); // close the drawer
+      // TODO
+//        Provider.of<UserConsultantProvider>(context, listen: false)
+//            .userDetails = Provider.of<Auth>(context).authUserDetails;
+//
+//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+//        Navigator.of(context).pop(); // close the drawer
         break;
       case Roles.ProviderPersonnel:
-        Provider.of<UserConsultantProvider>(context, listen: false)
-            .userDetails = Provider.of<Auth>(context).authUserDetails;
-
-        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-        Navigator.of(context).pop(); // close the drawer
+        // TODO
+//        Provider.of<UserConsultantProvider>(context, listen: false)
+//            .userDetails = Provider.of<Auth>(context).authUserDetails;
+//
+//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+//        Navigator.of(context).pop(); // close the drawer
         break;
       case Roles.ProviderAdmin:
-        Provider.of<UserConsultantProvider>(context, listen: false)
-            .userDetails = Provider.of<Auth>(context).authUserDetails;
-
-        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-        Navigator.of(context).pop(); // close the drawer
+        // TODO
+//        Provider.of<UserConsultantProvider>(context, listen: false)
+//            .userDetails = Provider.of<Auth>(context).authUserDetails;
+//
+//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+//        Navigator.of(context).pop(); // close the drawer
         break;
       default:
         return '/';

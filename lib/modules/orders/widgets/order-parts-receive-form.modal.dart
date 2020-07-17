@@ -83,11 +83,8 @@ class _OrderPartsReceiveFormModalState
                             TextHelper.customTextStyle(color: gray3, size: 16),
                       ),
                       TextSpan(
-                        text: Provider.of<Auth>(context)
-                                .authUserDetails
-                                ?.userProvider
-                                ?.name ??
-                            'AUTOWASS MANAGER SRL',
+                        // TODO
+                        text: 'AUTOWASS MANAGER',
                         style: TextHelper.customTextStyle(
                             color: gray3, weight: FontWeight.bold, size: 16),
                       ),

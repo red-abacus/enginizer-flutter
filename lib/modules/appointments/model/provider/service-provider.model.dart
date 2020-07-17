@@ -1,6 +1,6 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-rating.model.dart';
-import 'package:app/modules/authentication/models/user-provider-schedule.model.dart';
+import 'package:app/modules/authentication/models/provider-schedule.model.dart';
 
 class ServiceProvider {
   int id;
@@ -14,7 +14,7 @@ class ServiceProvider {
   String image;
   ServiceProviderRating rating;
   bool isVATPayer;
-  List<UserProviderSchedule> userProviderSchedules;
+  List<ProviderSchedule> userProviderSchedules;
 
   List<ServiceProviderItem> items = [];
 
@@ -70,11 +70,11 @@ class ServiceProvider {
   }
 
   static _mapUserProviderSchedules(List<dynamic> list) {
-    List<UserProviderSchedule> userProviderSchedules = [];
+    List<ProviderSchedule> userProviderSchedules = [];
 
     if (list != null) {
       list.forEach((item) {
-        UserProviderSchedule schedule = UserProviderSchedule.fromJson(item);
+        ProviderSchedule schedule = ProviderSchedule.fromJson(item);
 
         if (schedule != null) {
           userProviderSchedules.add(schedule);

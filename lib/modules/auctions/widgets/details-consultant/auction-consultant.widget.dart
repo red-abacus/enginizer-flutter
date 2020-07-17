@@ -226,22 +226,18 @@ class AuctionConsultantWidgetState extends State<AuctionConsultantWidget> {
 
   _getEstimateButton() {
     if (widget.auctionDetails != null) {
-      JwtUserDetails userDetails = Provider.of<Auth>(context).authUserDetails;
-
-      if (userDetails != null) {
-        Bid userBid =
-            widget.auctionDetails.getConsultantBid(userDetails.userProvider.id);
-        if (userBid != null) {
-          return FlatButton(
-            child: Text(
-              S.of(context).appointment_details_estimator.toUpperCase(),
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 24),
-            ),
-            onPressed: () {
-              _seeEstimate(userBid);
-            },
-          );
-        }
+      Bid userBid =
+      widget.auctionDetails.getConsultantBid(Provider.of<Auth>(context).authUser.providerId);
+      if (userBid != null) {
+        return FlatButton(
+          child: Text(
+            S.of(context).appointment_details_estimator.toUpperCase(),
+            style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 24),
+          ),
+          onPressed: () {
+            _seeEstimate(userBid);
+          },
+        );
       }
     }
 

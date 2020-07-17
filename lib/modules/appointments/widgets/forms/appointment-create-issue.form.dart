@@ -25,10 +25,10 @@ class AppointmentCreateIssueFormState
     var providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
     var issues = providerServiceProvider.issuesFormState;
 
-    return Form(
-      key: _formKey,
-      child: Container(
-        padding: EdgeInsets.only(bottom: 60),
+    return Container(
+      padding: EdgeInsets.only(bottom: 60),
+      child: Form(
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[

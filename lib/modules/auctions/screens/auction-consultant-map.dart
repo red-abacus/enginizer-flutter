@@ -1,7 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/auctions/models/bid.model.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/auctions/services/auction.service.dart';
@@ -228,7 +228,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
       Provider.of<WorkEstimateProvider>(context)
           .setIssues(context, _provider.appointmentDetails.issues);
       Provider.of<WorkEstimateProvider>(context).serviceProviderId =
-          Provider.of<Auth>(context).authUserDetails.userProvider.id;
+          Provider.of<Auth>(context).authUser.providerId;
       Provider.of<WorkEstimateProvider>(context).selectedAuctionDetails =
           _provider.auctionDetails;
       Provider.of<WorkEstimateProvider>(context).defaultQuantity =
@@ -286,7 +286,7 @@ class AuctionConsultantMapState extends State<AuctionConsultantMap>
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }

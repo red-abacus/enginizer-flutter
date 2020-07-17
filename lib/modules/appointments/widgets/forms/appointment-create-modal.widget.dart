@@ -130,10 +130,11 @@ class _AppointmentCreateModalState extends State<AppointmentCreateModal> {
   }
 
   Widget _buildContent(BuildContext context) {
+    bool showBottomButtons = MediaQuery.of(context).viewInsets.bottom == 0.0;
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : Stack(
-            children: [_buildStepper(context), _bottomButtonsWidget()],
+            children: [_buildStepper(context), if (showBottomButtons) _bottomButtonsWidget()],
           );
   }
 

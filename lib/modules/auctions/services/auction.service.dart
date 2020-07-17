@@ -42,9 +42,6 @@ class AuctionsService {
           queryParameters: auctionRequest.toJson());
       final response = await _dio.getUri(uri);
 
-//      final response = await _dio.get('${Environment.BIDS_BASE_API}/auctions',
-//          queryParameters: auctionRequest.toJson());
-
       if (response.statusCode == 200) {
         return AuctionResponse.fromJson(response.data);
       } else {

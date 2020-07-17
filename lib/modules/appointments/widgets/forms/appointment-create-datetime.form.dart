@@ -3,8 +3,10 @@ import 'package:app/modules/appointments/model/provider/service-provider-timeser
 import 'package:app/modules/appointments/model/personnel/time-entry.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
 import 'package:app/utils/flush_bar.helper.dart';
+import 'package:app/utils/text.helper.dart';
 import 'package:flutter/material.dart';
 import 'package:app/modules/appointments/widgets/personnel/scheduler.widget.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +25,7 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
   bool _initDone = false;
   bool _isLoading = false;
 
-  ProviderServiceProvider _providerServiceProvider;
+  ProviderServiceProvider _provider;
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +38,39 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
   }
 
   _getContent() {
+    var entries =
+        CalendarEntry.getDateEntries(_provider.serviceProviderTimetable);
+
     return Container(
       margin: EdgeInsets.only(bottom: 60),
       child: Column(
         children: [
-          SchedulerWidget(
-            calendarEntries: CalendarEntry.getDateEntries(DateTime.now(), [],
-                _providerServiceProvider.serviceProviderTimetable),
-            dateEntrySelected: _dateEntrySelected,
-            dateEntry: Provider.of<ProviderServiceProvider>(context).dateEntry,
-            disableSelect: false,
-            shouldScroll: false,
-          )
+          entries.length > 0
+              ? SchedulerWidget(
+                  calendarEntries: entries,
+                  dateEntrySelected: _dateEntrySelected,
+                  dateEntry:
+                      Provider.of<ProviderServiceProvider>(context).dateEntry,
+                  disableSelect: false,
+                  shouldScroll: false,
+                )
+              : Container(
+                  margin: EdgeInsets.only(top: 20, right: 20, left: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          S
+                              .of(context)
+                              .appointment_create_no_timetable_available,
+                          textAlign: TextAlign.center,
+                          style: TextHelper.customTextStyle(
+                              size: 16, color: gray3),
+                        ),
+                      )
+                    ],
+                  ),
+                )
         ],
       ),
     );
@@ -56,9 +79,9 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      _providerServiceProvider = Provider.of<ProviderServiceProvider>(context);
+      _provider = Provider.of<ProviderServiceProvider>(context);
 
-      if (_providerServiceProvider.selectedProvider != null) {
+      if (_provider.selectedProvider != null) {
         _loadData();
       }
 
@@ -77,9 +100,9 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
         DateUtils.addDayToDate(DateTime.now(), 7), "dd/MM/yyyy");
 
     try {
-      await _providerServiceProvider
+      await _provider
           .loadServiceProviderTimetables(
-              _providerServiceProvider.selectedProvider, startDate, endDate)
+              _provider.selectedProvider, startDate, endDate)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -101,7 +124,7 @@ class AppointmentDateTimeFormState extends State<AppointmentDateTimeForm> {
 
   _dateEntrySelected(DateEntry dateEntry) {
     setState(() {
-      _providerServiceProvider.dateEntry = dateEntry;
+      _provider.dateEntry = dateEntry;
     });
   }
 }

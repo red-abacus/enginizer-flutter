@@ -240,26 +240,29 @@ class NavigationToolbarAppState extends State<NavigationToolbarApp> {
     switch (widget.authUser.role) {
       case Roles.Client:
         if (AppConfig.of(context).enviroment == Enviroment.Dev) {
-          Provider.of<UserProvider>(context, listen: false).userDetails =
-              Provider.of<Auth>(context).authUserDetails;
-
-          setState(() => _selectedDrawerRoute = UserDetails.route);
-          Navigator.of(context).pop(); // close the drawer
+          // TODO
+//          Provider.of<UserProvider>(context).userDetails =
+//              Provider.of<Auth>(context).authUserDetails;
+//
+//          setState(() => _selectedDrawerRoute = UserDetails.route);
+//          Navigator.of(context).pop(); // close the drawer
         }
         break;
       case Roles.ProviderConsultant:
-        Provider.of<UserConsultantProvider>(context, listen: false)
-            .userDetails = Provider.of<Auth>(context).authUserDetails;
-
-        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-        Navigator.of(context).pop(); // close the drawer
+        // TODO
+//        Provider.of<UserConsultantProvider>(context, listen: false)
+//            .userDetails = Provider.of<Auth>(context).authUserDetails;
+//
+//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+//        Navigator.of(context).pop(); // close the drawer
         break;
       case Roles.ProviderPersonnel:
-        Provider.of<UserConsultantProvider>(context, listen: false)
-            .userDetails = Provider.of<Auth>(context).authUserDetails;
-
-        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-        Navigator.of(context).pop(); // close the drawer
+        // TODO
+//        Provider.of<UserConsultantProvider>(context, listen: false)
+//            .userDetails = Provider.of<Auth>(context).authUserDetails;
+//
+//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+//        Navigator.of(context).pop(); // close the drawer
         break;
       default:
         return '/';

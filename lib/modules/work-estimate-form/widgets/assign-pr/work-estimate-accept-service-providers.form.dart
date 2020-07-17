@@ -4,7 +4,7 @@ import 'package:app/modules/appointments/model/provider/service-provider.model.d
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/cards/service-provider.card.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/shared/widgets/alert-info.widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'package:app/utils/constants.dart';
@@ -181,7 +181,7 @@ class WorkEstimateAcceptServiceProvidersFormState
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }

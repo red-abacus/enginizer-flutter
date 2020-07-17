@@ -5,7 +5,7 @@ import 'package:app/modules/appointments/providers/provider-service.provider.dar
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
 import 'package:app/modules/appointments/widgets/cards/service-provider.card.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/shared/widgets/alert-info.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
@@ -185,7 +185,7 @@ class AppointmentCreateProvidersFormState
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }

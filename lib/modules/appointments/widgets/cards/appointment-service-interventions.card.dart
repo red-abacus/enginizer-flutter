@@ -1,4 +1,4 @@
-import 'package:app/modules/appointments/widgets/cards/appointment-service.intervention.card.dart';
+import 'package:app/modules/appointments/widgets/cards/appointment-service-intervention.card.dart';
 import 'package:app/modules/cars/models/recommendations/car-intervention.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';

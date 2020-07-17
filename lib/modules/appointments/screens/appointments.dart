@@ -6,9 +6,11 @@ import 'package:app/modules/appointments/providers/appointment-mechanic.provider
 import 'package:app/modules/appointments/providers/appointment.provider.dart';
 import 'package:app/modules/appointments/providers/appointments.provider.dart';
 import 'package:app/modules/appointments/providers/provider-service.provider.dart';
+import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/screens/appointment-details-map.dart';
 import 'package:app/modules/appointments/screens/appointments-details-consultant.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/appointments/widgets/forms/appointment-create-modal.widget.dart';
 import 'package:app/modules/appointments/widgets/appointments-list.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';

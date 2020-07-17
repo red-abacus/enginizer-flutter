@@ -1,7 +1,7 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/appointment/appointment-details.model.dart';
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/auctions/widgets/details-consultant/car-details-parts.widget.dart';
 import 'package:app/modules/orders/providers/order.provider.dart';
 import 'package:app/modules/orders/providers/orders.provider.dart';
@@ -199,7 +199,7 @@ class OrderDetailsState extends State<OrderDetails>
           builder: (_) {
             return StatefulBuilder(
                 builder: (BuildContext context, StateSetter state) {
-              return ServiceDetailsModal();
+              return ServiceProviderDetailsModal();
             });
           });
     }

@@ -60,7 +60,7 @@ class AppointmentCard extends StatelessWidget {
       padding: EdgeInsets.all(30),
       color: appointment.status.resolveStatusColor(),
       child: SvgPicture.asset(
-        'assets/images/statuses/${appointment.status.assetName()}.svg'.toLowerCase(),
+        appointment.status.assetName(),
         semanticsLabel: 'Appointment Status Image',
       ),
     );

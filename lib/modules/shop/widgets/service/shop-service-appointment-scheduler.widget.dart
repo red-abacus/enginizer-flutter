@@ -38,8 +38,7 @@ class _ShopServiceAppointmentSchedulerWidgetState
       child: Column(
         children: [
           SchedulerWidget(
-            calendarEntries: CalendarEntry.getDateEntries(
-                DateTime.now(), [], _provider.timetables),
+            calendarEntries: CalendarEntry.getDateEntries(_provider.timetables),
             dateEntrySelected: _dateEntrySelected,
             dateEntry: _provider.dateEntry,
             disableSelect: false,

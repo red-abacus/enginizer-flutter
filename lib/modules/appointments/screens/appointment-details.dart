@@ -11,7 +11,7 @@ import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details-children.widget.dart';
 import 'package:app/modules/appointments/widgets/details/appointment-details.widget.dart';
 import 'package:app/modules/appointments/widgets/map/client-map-directions.modal.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/cars/widgets/car-general-details.widget.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
@@ -271,7 +271,7 @@ class AppointmentDetailsState extends State<AppointmentDetails>
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }

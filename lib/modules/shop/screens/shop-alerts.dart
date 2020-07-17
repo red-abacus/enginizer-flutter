@@ -52,7 +52,7 @@ class ShopAlertsState extends State<ShopAlerts> {
                   : Center(
                       child: Text(
                         S.of(context).online_shop_no_alerts_title,
-                        style: TextHelper.customTextStyle(color: Colors.black),
+                        style: TextHelper.customTextStyle(color: Colors.black, size: 18),
                       ),
                     ),
         ),

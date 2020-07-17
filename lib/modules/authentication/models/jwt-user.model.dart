@@ -31,11 +31,14 @@ class JwtUser {
   factory JwtUser.fromJson(Map<String, dynamic> json) {
     return JwtUser(
         userId: json['userId'],
-        email: json['email'],
-        sub: json['sub'],
+        email: json['email'] != null ? json['sub'] : '',
+        sub: json['sub'] != null ? json['sub'] : '',
         role: json['role'],
-        permissions: json['permissions'] != null ? json['permissions'].cast<String>() : [],
-        userType: json['userType'],
-        providerId: json['providerId']);
+        given_name: json['givenName'] != null ? json['givenName'] : '',
+        permissions: json['permissions'] != null
+            ? json['permissions'].cast<String>()
+            : [],
+        userType: json['userType'] != null ? json['userType'] : '',
+        providerId: json['providerId'] != null ? json['providerId'] : null);
   }
 }

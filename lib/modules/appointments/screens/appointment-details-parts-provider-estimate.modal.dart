@@ -4,7 +4,7 @@ import 'package:app/modules/appointments/model/provider/service-provider.model.d
 import 'package:app/modules/appointments/providers/service-provider-details.provider.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/appointments/widgets/service-details-modal.widget.dart';
+import 'package:app/modules/appointments/widgets/details/service-provider/service-provider-details.modal.dart';
 import 'package:app/modules/appointments/providers/select-parts-provider.provider.dart';
 import 'package:app/modules/appointments/widgets/cards/service-provider.card.dart';
 import 'package:app/modules/shared/widgets/alert-info.widget.dart';
@@ -226,7 +226,7 @@ class _AppointmentDetailsPartsProviderEstimateModalState
         builder: (_) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return ServiceDetailsModal();
+            return ServiceProviderDetailsModal();
           });
         });
   }

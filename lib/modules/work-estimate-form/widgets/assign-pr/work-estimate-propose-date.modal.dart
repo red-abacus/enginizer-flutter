@@ -123,8 +123,7 @@ class _WorkEstimateProposeDateModalState
     return Container(
       padding: EdgeInsets.only(bottom: 60),
       child: SchedulerWidget(
-        calendarEntries: CalendarEntry.getDateEntries(
-            DateTime.now(), [], _provider.timetable),
+        calendarEntries: CalendarEntry.getDateEntries(_provider.timetable),
         dateEntrySelected: _dateEntrySelected,
         dateEntry: _provider.selectedDateEntry,
         disableSelect: false,

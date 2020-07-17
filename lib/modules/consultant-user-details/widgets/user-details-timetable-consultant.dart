@@ -1,12 +1,12 @@
-import 'package:app/modules/authentication/models/user-provider-schedule-slot.model.dart';
-import 'package:app/modules/authentication/models/user-provider-schedule.model.dart';
+import 'package:app/modules/authentication/models/provider-schedule-slot.model.dart';
+import 'package:app/modules/authentication/models/provider-schedule.model.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsTimetableConsultant extends StatelessWidget {
-  List<UserProviderSchedule> schedules;
+  List<ProviderSchedule> schedules;
 
   UserDetailsTimetableConsultant({this.schedules});
 
@@ -19,7 +19,7 @@ class UserDetailsTimetableConsultant extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            for (UserProviderSchedule schedule in schedules)
+            for (ProviderSchedule schedule in schedules)
               _timetableRow(schedule)
           ],
         ),
@@ -27,7 +27,7 @@ class UserDetailsTimetableConsultant extends StatelessWidget {
     );
   }
 
-  _timetableRow(UserProviderSchedule schedule) {
+  _timetableRow(ProviderSchedule schedule) {
     return Container(
       height: 40,
       child: Row(
@@ -40,13 +40,13 @@ class UserDetailsTimetableConsultant extends StatelessWidget {
                   color: black_text, weight: FontWeight.bold),
             ),
           ),
-          for (UserProviderScheduleSlot slot in schedule.slots) _hourContainer(slot),
+          for (ProviderScheduleSlot slot in schedule.slots) _hourContainer(slot),
         ],
       ),
     );
   }
 
-  _hourContainer(UserProviderScheduleSlot slot) {
+  _hourContainer(ProviderScheduleSlot slot) {
     return Container(
       height: 40,
         child: Container(

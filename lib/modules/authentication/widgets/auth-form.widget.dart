@@ -96,7 +96,6 @@ class _AuthFormState extends State<AuthForm> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _controller.dispose();
   }
@@ -199,7 +198,6 @@ class _AuthFormState extends State<AuthForm> with TickerProviderStateMixin {
             focusNode: _nameFieldFocus,
             enabled: _authMode == AuthMode.Signup,
             decoration: InputDecoration(labelText: S.of(context).auth_name),
-            obscureText: true,
             validator: _authMode == AuthMode.Signup
                 ? (value) {
                     _authData['name'] = value;

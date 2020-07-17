@@ -29,16 +29,6 @@ class _IssuesListWidgetState extends State<IssuesListWidget> {
         });
   }
 
-  Widget buildIssuesListBox(BuildContext context, List<Issue> issues) {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: issues.length,
-        itemBuilder: (context, index) {
-          return _buildListTile(context, index, issues);
-        });
-  }
-
   ListTile _buildListTile(BuildContext context, int index, List<Issue> issues) {
     if (issues.length > 1) {
       return ListTile(

@@ -38,8 +38,7 @@ class AppointmentDetailsMechanicWidget extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/images/statuses/${appointment?.status?.assetName()}.svg'
-                            .toLowerCase(),
+                        appointment?.status?.assetName(),
                         semanticsLabel: 'Appointment Status Image',
                       ),
                     ),
