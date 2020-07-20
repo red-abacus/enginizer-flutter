@@ -3,6 +3,7 @@ import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
+import 'package:app/modules/authentication/models/user-provider.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
@@ -206,7 +207,14 @@ class NavigationAppState extends State<NavigationApp> {
               child: UserAccountsDrawerHeader(
                 accountEmail: Text(widget.authUser?.sub),
                 accountName: Text(widget.authUser?.given_name),
-                currentAccountPicture: CircleAvatar(),
+                currentAccountPicture: ClipOval(
+                  child: FadeInImage.assetNetwork(
+                    image: widget.authUser?.profilePicture ?? '',
+                    placeholder:
+                        'assets/images/defaults/default_profile_icon.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
               onPressed: () {
                 _showUserDetails();
@@ -374,16 +382,12 @@ class NavigationAppState extends State<NavigationApp> {
     switch (widget.authUser.role) {
       case Roles.Client:
         if (AppConfig.of(context).enviroment == Enviroment.Dev) {
-          // TODO
-//          Provider.of<UserProvider>(context, listen: false).userDetails =
-//              Provider.of<Auth>(context).authUserDetails;
-//
-//          setState(() => _selectedDrawerRoute = UserDetails.route);
-//          Navigator.of(context).pop(); // close the drawer
+          setState(() => _selectedDrawerRoute = UserDetails.route);
+          Navigator.of(context).pop(); // close the drawer
         }
         break;
       case Roles.ProviderConsultant:
-      // TODO
+        // TODO
 //        Provider.of<UserConsultantProvider>(context, listen: false)
 //            .userDetails = Provider.of<Auth>(context).authUserDetails;
 //

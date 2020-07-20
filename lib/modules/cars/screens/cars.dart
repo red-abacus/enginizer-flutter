@@ -156,31 +156,19 @@ class CarsState extends State<Cars> {
   }
 
   _openCarCreateModal(BuildContext ctx) {
-    Provider.of<ServiceProviderDetailsProvider>(context).serviceProviderId = 1;
+    Provider.of<CarsMakeProvider>(context).initParams();
 
-    showModalBottomSheet(
-        isScrollControlled: true,
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         context: context,
-        builder: (_) {
+        isScrollControlled: true,
+        builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-                return ServiceProviderDetailsModal();
+                return CarCreateModal();
               });
         });
-
-//    Provider.of<CarsMakeProvider>(context).initParams();
-//
-//    showModalBottomSheet<void>(
-//        shape: RoundedRectangleBorder(
-//          borderRadius: BorderRadius.circular(10.0),
-//        ),
-//        context: context,
-//        isScrollControlled: true,
-//        builder: (BuildContext context) {
-//          return StatefulBuilder(
-//              builder: (BuildContext context, StateSetter state) {
-//                return CarCreateModal();
-//              });
-//        });
   }
 }

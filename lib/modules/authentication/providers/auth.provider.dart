@@ -29,6 +29,10 @@ class Auth with ChangeNotifier {
     return _token != null;
   }
 
+  void setToken(String token) {
+    _token = token;
+  }
+
   JwtUser get authUser {
     if (_token == null) {
       return null;

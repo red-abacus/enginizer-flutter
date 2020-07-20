@@ -8,7 +8,9 @@ class CustomTextFormField extends StatelessWidget {
   final bool enabled;
   final String errorText;
   bool validate = true;
+  bool obscureText = false;
   TextInputType textInputType = TextInputType.text;
+  int charactersCondition = 0;
 
   CustomTextFormField(
       {this.labelText,
@@ -17,7 +19,9 @@ class CustomTextFormField extends StatelessWidget {
       this.enabled = true,
       this.errorText,
       this.validate,
-      this.textInputType});
+      this.textInputType,
+      this.obscureText,
+      this.charactersCondition});
 
   TextEditingController _textController;
 
@@ -28,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
       ..selection = TextSelection.collapsed(offset: currentValue.length);
 
     return TextFormField(
+      obscureText: obscureText,
       keyboardType: textInputType,
         decoration: InputDecoration(labelText: labelText),
         onChanged: (value) {
@@ -38,6 +43,10 @@ class CustomTextFormField extends StatelessWidget {
         validator: (value) {
           if (validate) {
             if (value.isEmpty) {
+              return errorText;
+            }
+
+            if (charactersCondition > 0 && value.length < charactersCondition) {
               return errorText;
             }
           }

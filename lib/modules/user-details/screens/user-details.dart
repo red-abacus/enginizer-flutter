@@ -1,6 +1,16 @@
+import 'dart:io';
+
 import 'package:app/generated/l10n.dart';
+import 'package:app/modules/authentication/providers/auth.provider.dart';
 import 'package:app/modules/authentication/providers/user.provider.dart';
+import 'package:app/modules/authentication/services/user.service.dart';
+import 'package:app/modules/shared/widgets/image-picker.widget.dart';
+import 'package:app/modules/user-details/models/request/change-password-request.model.dart';
+import 'package:app/modules/user-details/widgets/user-details-billing-details.widget.dart';
+import 'package:app/modules/user-details/widgets/user-details-change-password.widget.dart';
+import 'package:app/modules/user-details/widgets/user-details-profile.widget.dart';
 import 'package:app/utils/constants.dart';
+import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,467 +28,195 @@ class UserDetails extends StatefulWidget {
   }
 }
 
-class UserDetailsState extends State<UserDetails> {
+class UserDetailsState extends State<UserDetails>
+    with TickerProviderStateMixin {
   var _initDone = false;
   var _isLoading = false;
 
-  UserProvider userProvider;
+  UserProvider _provider;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(vsync: this, length: 2);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(
-      builder: (context, userProvider, _) => Scaffold(
-        body: _isLoading == true
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : _userDetailsContainer(),
+    return Scaffold(
+      appBar: TabBar(
+        labelColor: red,
+        indicatorColor: red,
+        controller: _tabController,
+        tabs: [
+          Tab(text: S.of(context).user_profile_profile_title),
+          Tab(text: S.of(context).user_profile_billing_data),
+        ],
       ),
+      body: _isLoading == true
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: _tabController,
+              children: [
+                UserDetailsProfileWidget(
+                  getUserProfileImage: _getUserProfileImage,
+                  saveUserDetails: _saveUserDetails,
+                  changePassword: _showPasswordWidget,
+                ),
+                UserDetailsBillingDetailsWidget(saveBillingDetails: _saveBillingDetails,)
+              ],
+            ),
     );
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     if (!_initDone) {
-      userProvider = Provider.of<UserProvider>(context);
+      _provider = Provider.of<UserProvider>(context);
 
       setState(() {
         _isLoading = true;
       });
 
-      Provider.of<UserProvider>(context).initialiseParams();
-      Provider.of<UserProvider>(context).getUserDetails().then((_) {
+      try {
+        await _provider
+            .getUserDetails(Provider.of<Auth>(context).authUser.userId)
+            .then((_) {
+          _provider.initialiseParams();
+
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error.toString().contains(UserService.GET_USER_DETAILS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_user_details, context);
+        }
+
         setState(() {
           _isLoading = false;
         });
-      });
+      }
     }
 
     _initDone = true;
     super.didChangeDependencies();
   }
 
-  _userDetailsContainer() {
-    return Form(
-      child: SingleChildScrollView(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _avatarContainer(),
-            _detailsContainer(),
-            _cardContainer(),
-            _changePasswordContainer()
-//            _nameContainer(),
-//            _emailContainer(),
-//            _saveButtonContainer(),
-//            _currentPasswordContainer(),
-//            _newPasswordContainer(),
-//            _confirmPasswordContainer(),
-//            _savePasswordButtonContainer(),
-          ],
+  _getUserProfileImage() {
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-      ),
+        context: context,
+        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+              if (file != null) {
+                _uploadUserProfileImage(file);
+              }
+            }));
+  }
+
+  _uploadUserProfileImage(File file) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .uploadUserProfileImage(file, _provider.userDetails.id)
+          .then((value) {
+        setState(() {
+          _provider.userDetails?.profilePhotoUrl = value;
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(UserService.UPLOAD_USER_PROFILE_IMAGE_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_upload_image_profile, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _saveUserDetails() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _provider
+          .updateUserDetails(_provider.updateUserRequest)
+          .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(UserService.UPDATE_USER_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_update_user_profile, context);
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  _showPasswordWidget() {
+    _provider.changePasswordRequest = new ChangePasswordRequest();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return UserDetailsChangePasswordWidget();
+      },
     );
   }
 
-  _avatarContainer() {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            color: red,
-            height: 90,
-          ),
-          Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                child: Center(
-                  child: Container(
-                    width: 140,
-                    height: 140,
-                    child: CircleAvatar(),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Text(
-                  userProvider.name,
-                  style: TextHelper.customTextStyle(
-                      color: gray3, weight: FontWeight.bold, size: 20),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+  _saveBillingDetails() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-  _detailsContainer() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-      child: Column(
-        children: <Widget>[
-          _getEmailDetails(Icons.email, userProvider.email),
-          _getEmailDetails(Icons.pin_drop,
-              'Str. Memorandumului, nr. 7, bl. H, sc. 2, ap. 6, Cluj-Napoca'),
-          _getEmailDetails(Icons.perm_identity, 'Persoana fizica'),
-        ],
-      ),
-    );
-  }
+    try {
+      await _provider
+          .updateUserBillingInfo(_provider.changeBillingInfoRequest)
+          .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      if (error
+          .toString()
+          .contains(UserService.UPDATE_USER_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S.of(context).general_error,
+            S.of(context).exception_update_user_profile, context);
+      }
 
-  _cardContainer() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            '${S.of(context).user_profile_payment_method}:',
-            style: TextHelper.customTextStyle(
-                color: gray3, weight: FontWeight.bold, size: 15),
-          ),
-          _cardDetailsContainer(),
-        ],
-      ),
-    );
-  }
-
-  _cardDetailsContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Material(
-        elevation: 2,
-        borderRadius: new BorderRadius.circular(10.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(10),
-                  width: 60,
-                  height: 60,
-                  child: SvgPicture.asset(
-                    'assets/images/icons/visa.svg',
-                    semanticsLabel: 'Visa Icon',
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Visa •••• 0033',
-                          style: TextHelper.customTextStyle(
-                              color: gray3, weight: FontWeight.bold, size: 13),
-                        ),
-                        Text(
-                          '${S.of(context).user_profile_expires_in} Ianuarie / 2022',
-                          maxLines: 3,
-                          style: TextHelper.customTextStyle(
-                              color: gray3, weight: FontWeight.bold, size: 13),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Opacity(
-              opacity: 0.2,
-              child: Container(
-                height: 1,
-                color: gray3,
-              ),
-            ),
-            Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FlatButton(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      child: Text(
-                        S.of(context).user_profile_add_new_card,
-                        style: TextHelper.customTextStyle(
-                            color: gray3, weight: FontWeight.bold, size: 13),
-                      ),
-                      onPressed: () {},
-                    ),
-                    FlatButton(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      child: Text(
-                        S.of(context).general_delete,
-                        style: TextHelper.customTextStyle(
-                            color: gray3, weight: FontWeight.bold, size: 13),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ]),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _getEmailDetails(dynamic icon, String title) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        children: <Widget>[
-          Icon(
-            icon,
-            color: gray3,
-            size: 24.0,
-            semanticLabel: 'Selected car check',
-          ),
-          Flexible(
-            child: Container(
-              margin: EdgeInsets.only(left: 30),
-              child: Text(
-                title,
-                style: TextHelper.customTextStyle(
-                    color: gray3, weight: FontWeight.bold, size: 15),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  _changePasswordContainer() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: Align(
-        alignment: Alignment.center,
-        child: FlatButton(
-          child: Text(
-            S.of(context).user_profile_change_password,
-            style: TextHelper.customTextStyle(
-                color: Colors.blue, weight: FontWeight.bold, size: 16),
-          ),
-          onPressed: () {},
-        ),
-      ),
-    );
-  }
-
-  _nameContainer() {
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Container(
-              child: Text(
-                '${S.of(context).auth_name} : ',
-                style: TextHelper.customTextStyle(color: gray2, size: 16),
-              ),
-            ),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(left: 20),
-              child: TextFormField(
-                autovalidate: true,
-                initialValue: userProvider.name,
-                style: TextHelper.customTextStyle(
-                    color: black_text, weight: FontWeight.bold, size: 16),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return S.of(context).auth_error_nameRequired;
-                  } else {
-                    return null;
-                  }
-                },
-                onChanged: (val) {
-                  userProvider.name = val;
-                },
-              ),
-            ))
-          ],
-        ));
-  }
-
-  _emailContainer() {
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Container(
-              child: Text(
-                '${S.of(context).auth_email} : ',
-                style: TextHelper.customTextStyle(color: gray2, size: 16),
-              ),
-            ),
-            Expanded(
-                child: Container(
-              margin: EdgeInsets.only(left: 20),
-              child: TextFormField(
-                autovalidate: true,
-                initialValue: userProvider.email,
-                style: TextHelper.customTextStyle(
-                    color: black_text, weight: FontWeight.bold, size: 16),
-                validator: (value) {
-                  if (value.isEmpty || !value.contains('@')) {
-                    return S.of(context).auth_error_invalidEmail;
-                  } else {
-                    return null;
-                  }
-                },
-                onChanged: (val) {
-                  userProvider.email = val;
-                },
-              ),
-            ))
-          ],
-        ));
-  }
-
-  _saveButtonContainer() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        margin: EdgeInsets.only(right: 20, top: 20),
-        child: FlatButton(
-          onPressed: () {
-            _saveDetails();
-          },
-          color: red,
-          textColor: Colors.white,
-          child: Text(S.of(context).general_save_changes),
-        ),
-      ),
-    );
-  }
-
-  _currentPasswordContainer() {
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Container(
-                child: Text(
-                  '${S.of(context).user_profile_current_password} : ',
-                  style: TextHelper.customTextStyle(color: gray2, size: 16),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 6,
-                child: Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: TextFormField(
-                    obscureText: true,
-                    initialValue: 'password',
-                    style: TextHelper.customTextStyle(
-                        color: black_text, weight: FontWeight.bold, size: 16),
-                  ),
-                ))
-          ],
-        ));
-  }
-
-  _newPasswordContainer() {
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Container(
-                child: Text(
-                  '${S.of(context).user_profile_new_password} : ',
-                  style: TextHelper.customTextStyle(color: gray2, size: 16),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 6,
-                child: Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: TextFormField(
-                    obscureText: true,
-                    initialValue: 'password',
-                    style: TextHelper.customTextStyle(
-                        color: black_text, weight: FontWeight.bold, size: 16),
-                  ),
-                ))
-          ],
-        ));
-  }
-
-  _confirmPasswordContainer() {
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Container(
-                child: Text(
-                  '${S.of(context).user_profile_confirm_password} : ',
-                  style: TextHelper.customTextStyle(color: gray2, size: 16),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 6,
-                child: Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: TextFormField(
-                    obscureText: true,
-                    initialValue: 'password',
-                    style: TextHelper.customTextStyle(
-                        color: black_text, weight: FontWeight.bold, size: 16),
-                  ),
-                ))
-          ],
-        ));
-  }
-
-  _savePasswordButtonContainer() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        margin: EdgeInsets.only(right: 20, top: 20),
-        child: FlatButton(
-          onPressed: () {},
-          color: red,
-          textColor: Colors.white,
-          child: Text(S.of(context).user_profile_save_password),
-        ),
-      ),
-    );
-  }
-
-  _saveDetails() {
-    userProvider
-        .updateUserDetails(userProvider.email, userProvider.name)
-        .then((_) {});
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

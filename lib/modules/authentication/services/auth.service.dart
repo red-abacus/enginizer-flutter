@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app/modules/user-details/models/request/change-password-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/authentication/models/auth.model.dart';
@@ -11,8 +12,12 @@ class AuthService {
   static const FORGOT_PASSWORD_EXCEPTION = 'FORGOT_PASSWORD_EXCEPTION';
   static const FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND =
       'FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND';
+  static const CHANGE_PASSWORD_EXCEPTION = 'CHANGE_PASSWORD_EXCEPTION';
+  static const CHANGE_PASSWORD_OLD_PASSWORD_EXCEPTION = 'CHANGE_PASSWORD_OLD_PASSWORD_EXCEPTION';
 
   static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
+
+  static const String _CHANGE_PASSWORD_PATH = '${Environment.AUTH_BASE_URL}/auth/changePassword';
 
   Dio _dio = inject<Dio>();
 
@@ -79,6 +84,30 @@ class AuthService {
         throw (FORGOT_PASSWORD_EXCEPTION_USER_NOT_FOUND);
       } else {
         throw (FORGOT_PASSWORD_EXCEPTION);
+      }
+    }
+  }
+
+  Future<String> changePassword(ChangePasswordRequest changePasswordRequest) async {
+    try {
+      final response =
+          await _dio.post(_CHANGE_PASSWORD_PATH, data: changePasswordRequest.toJson());
+      if (response.statusCode == 200) {
+        return response.data['token'];
+      } else {
+        throw (FORGOT_PASSWORD_EXCEPTION);
+      }
+    } catch (e) {
+      if (e.response != null) {
+        if (e.response.data['message'].contains('general.messages.400.changePassword.incorrectOldPassword')) {
+          throw(CHANGE_PASSWORD_OLD_PASSWORD_EXCEPTION);
+        }
+        else {
+          throw(CHANGE_PASSWORD_EXCEPTION);
+        }
+      }
+      else {
+        throw(CHANGE_PASSWORD_EXCEPTION);
       }
     }
   }

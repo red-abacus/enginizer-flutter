@@ -180,7 +180,7 @@ class CarService {
 
     try {
       final response =
-          await _dio.patch('$_CAR_API_PATH/$id/image', data: formData);
+      await _dio.patch('$_CAR_API_PATH/$id/image', data: formData);
 
       if (response.statusCode < 300) {
         return CarFuelConsumptionResponse.fromJson(response.data);

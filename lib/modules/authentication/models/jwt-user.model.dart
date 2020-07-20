@@ -12,6 +12,7 @@ class JwtUser {
   int providerId;
   int exp;
   String aud;
+  String profilePicture;
 
   JwtUser(
       {this.userId,
@@ -26,7 +27,8 @@ class JwtUser {
       this.userType,
       this.providerId,
       this.exp,
-      this.aud});
+      this.aud,
+      this.profilePicture});
 
   factory JwtUser.fromJson(Map<String, dynamic> json) {
     return JwtUser(
@@ -39,6 +41,7 @@ class JwtUser {
             ? json['permissions'].cast<String>()
             : [],
         userType: json['userType'] != null ? json['userType'] : '',
-        providerId: json['providerId'] != null ? json['providerId'] : null);
+        providerId: json['providerId'] != null ? json['providerId'] : null,
+        profilePicture: json['photoUrl'] != null ? json['photoUrl'] : '');
   }
 }

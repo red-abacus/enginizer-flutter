@@ -1,14 +1,9 @@
 import 'dart:convert';
 
 import 'package:app/config/injection.dart';
-import 'package:app/modules/appointments/model/appointment/appointment.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider.model.dart';
-import 'package:app/modules/appointments/model/response/appointments-response.model.dart';
 import 'package:app/modules/appointments/model/response/service-provider-items-response.model.dart';
-import 'package:app/modules/appointments/providers/appointments.provider.dart';
-import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
-import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
 import 'package:app/modules/authentication/models/jwt-user-details.model.dart';
 import 'package:app/modules/authentication/services/user.service.dart';
 import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
@@ -45,10 +40,10 @@ class UserConsultantProvider with ChangeNotifier {
   Future<JwtUserDetails> updateUserDetails(String email, String name) async {
     var payload = json.encode({'email': email, 'name': name});
 
-    this.userDetails =
-        await _userService.updateUserDetails(userDetails.id, payload);
-    notifyListeners();
-    return this.userDetails;
+//    this.userDetails =
+//        await _userService.updateUserDetails(userDetails.id, payload);
+//    notifyListeners();
+//    return this.userDetails;
   }
 
   Future<ServiceProvider> getServiceProviderDetails(int providerId) async {
