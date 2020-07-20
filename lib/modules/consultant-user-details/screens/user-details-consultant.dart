@@ -14,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UserDetailsConsultant extends StatefulWidget {
+class UserDetailsConsultantTest extends StatefulWidget {
   static const String route = '/user-details-consultant';
 
   String title;
@@ -25,7 +25,7 @@ class UserDetailsConsultant extends StatefulWidget {
   }
 }
 
-class UserDetailsConsultantState extends State<UserDetailsConsultant> {
+class UserDetailsConsultantState extends State<UserDetailsConsultantTest> {
   var _initDone = false;
   var _isLoading = false;
 

@@ -3,10 +3,9 @@ import 'package:app/modules/appointments/screens/appointments.dart';
 import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
-import 'package:app/modules/authentication/models/user-provider.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
+import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
-import 'package:app/modules/consultant-user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/extra-services/screens/extra-services.dart';
 import 'package:app/modules/invoices/screens/invoices.dart';
 import 'package:app/modules/notifications/screens/notifications.dart';
@@ -17,6 +16,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-manager.dart
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
+import 'package:app/modules/user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/modules/work-estimates/screens/work-estimates.dart';
 import 'package:app/utils/app_config.dart';
@@ -387,12 +387,8 @@ class NavigationAppState extends State<NavigationApp> {
         }
         break;
       case Roles.ProviderConsultant:
-        // TODO
-//        Provider.of<UserConsultantProvider>(context, listen: false)
-//            .userDetails = Provider.of<Auth>(context).authUserDetails;
-//
-//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-//        Navigator.of(context).pop(); // close the drawer
+        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
+        Navigator.of(context).pop(); // close the drawer
         break;
       case Roles.ProviderPersonnel:
         // TODO

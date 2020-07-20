@@ -3,6 +3,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-appointment.
 import 'package:app/modules/shared/managers/permissions/permissions-auction.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-car.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
+import 'package:app/modules/shared/managers/permissions/permissions-profile.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-promotions.dart';
 import 'package:app/modules/shared/managers/permissions/permissions-side-bar.dart';
 
@@ -15,6 +16,7 @@ class PermissionsManager {
   PermissionsAppointment _permissionsAppointment;
   PermissionsCar _permissionsCar;
   PermissionsPromotion _permissionsPromotion;
+  PermissionsProfile _permissionsProfile;
 
   String userRole;
 
@@ -33,6 +35,7 @@ class PermissionsManager {
     _permissionsAppointment = PermissionsAppointment(jwtUser);
     _permissionsCar = PermissionsCar(jwtUser);
     _permissionsPromotion = PermissionsPromotion(jwtUser);
+    _permissionsProfile = PermissionsProfile(jwtUser);
   }
 
   bool hasAccess(MainPermissions mainPermission, String permission) {
@@ -43,16 +46,14 @@ class PermissionsManager {
         return _permissionsAuction.hasAccess(userRole, permission);
       case MainPermissions.Orders:
         return _permissionsOrder.hasAccess(userRole, permission);
-        break;
       case MainPermissions.Appointments:
         return _permissionsAppointment.hasAccess(userRole, permission);
-        break;
       case MainPermissions.Cars:
         return _permissionsCar.hasAccess(userRole, permission);
-        break;
       case MainPermissions.Promotions:
         return _permissionsPromotion.hasAccess(userRole, permission);
-        break;
+      case MainPermissions.Profile:
+        return _permissionsProfile.hasAccess(userRole, permission);
     }
 
     return false;
@@ -66,6 +67,7 @@ enum MainPermissions {
   Appointments,
   Cars,
   Promotions,
+  Profile
 }
 
 enum ConsultantServiceType {

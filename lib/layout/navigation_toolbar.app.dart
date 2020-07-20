@@ -14,6 +14,7 @@ import 'package:app/modules/orders/screens/orders.dart';
 import 'package:app/modules/promotions/screens/promotions.screen.dart';
 import 'package:app/modules/shared/widgets/notifications-manager.dart';
 import 'package:app/modules/shop/screens/shop.dart';
+import 'package:app/modules/user-details/screens/user-details-consultant.dart';
 import 'package:app/modules/user-details/screens/user-details.dart';
 import 'package:app/modules/work-estimates/screens/work-estimates.dart';
 import 'package:app/utils/app_config.dart';
