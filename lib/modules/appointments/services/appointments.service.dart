@@ -10,6 +10,7 @@ import 'package:app/modules/appointments/enum/mechanic-task-type.enum.dart';
 import 'package:app/modules/appointments/model/personnel/mechanic-task.model.dart';
 import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
+import 'package:app/modules/work-estimate-form/models/provider-payment.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/order-issue-item-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
@@ -68,6 +69,7 @@ class AppointmentsService {
       'FINISH_APPOINTMENT_EXCEPTION';
   static const String COMPLETE_APPOOINTMENT_EXCEPTION =
       'COMPLETE_APPOOINTMENT_EXCEPTION';
+  static const String PAYMENT_PROVIDER_EXCEPTION = 'PAYMENT_PROVIDER_EXCEPTION';
 
   static const String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
@@ -152,6 +154,10 @@ class AppointmentsService {
   static const String _FINISH_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _FINISH_APPOINTMENT_SUFFIX = '/finish';
+
+  static const String _PAYMENT_APPOINTMENT_PREFIX =
+      '${Environment.APPOINTMENTS_BASE_API}/appointments/';
+  static const String _PAYMENT_APPOINTMENT_SUFFIX = '/payment';
 
   Dio _dio = inject<Dio>();
 
@@ -574,6 +580,26 @@ class AppointmentsService {
     }
   }
 
+  Future<ProviderPayment> getPaymentProvider(
+      String returnUrl, int appointmentId) async {
+    Map<String, dynamic> map = new Map();
+    map['returnUrl'] = returnUrl;
+
+    print('test ${_buildPaymentAppointment(appointmentId)}');
+
+    try {
+      final response = await _dio.post(_buildPaymentAppointment(appointmentId),
+          data: jsonEncode(map));
+      if (response.statusCode == 200) {
+        return ProviderPayment.fromJson(response.data);
+      } else {
+        throw Exception(PAYMENT_PROVIDER_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(PAYMENT_PROVIDER_EXCEPTION);
+    }
+  }
+
   _mapAppointment(dynamic response) {
     return Appointment.fromJson(response);
   }
@@ -731,5 +757,11 @@ class AppointmentsService {
     return _COMPLETE_APPOINTMENT_PREFIX +
         appointmentId.toString() +
         _COMPLETE_APPOINTMENT_SUFFIX;
+  }
+
+  _buildPaymentAppointment(int providerId) {
+    return _PAYMENT_APPOINTMENT_PREFIX +
+        providerId.toString() +
+        _PAYMENT_APPOINTMENT_SUFFIX;
   }
 }

@@ -85,6 +85,7 @@ import 'modules/shop/providers/shop.provider.dart';
 import 'modules/shop/screens/shop.dart';
 import 'modules/user-details/screens/user-details-consultant.dart';
 import 'modules/user-details/screens/user-details.dart';
+import 'modules/work-estimate-form/providers/payment.provider.dart';
 import 'modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'modules/work-estimates/providers/work-estimates.provider.dart';
@@ -135,6 +136,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AuctionProvider()),
           ChangeNotifierProvider.value(value: AuctionConsultantProvider()),
           ChangeNotifierProvider.value(value: WorkEstimateProvider()),
+          ChangeNotifierProvider.value(value: PaymentProvider()),
           ChangeNotifierProvider.value(value: WorkEstimateAcceptProvider()),
           ChangeNotifierProvider.value(value: SelectPartsProviderProvider()),
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),

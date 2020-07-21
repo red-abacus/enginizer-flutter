@@ -69,6 +69,8 @@ dependencies:
   dotted_decoration: ^1.2.1
   esys_flutter_share: ^1.0.2
   flutter_rating_bar: ^3.0.1+1
+  uni_links: ^0.4.0
+
 
 dev_dependencies:
   flutter_test:

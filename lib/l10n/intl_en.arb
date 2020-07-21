@@ -332,6 +332,7 @@
   "estimator_accept_modal_step3_title": "Select provider",
   "estimator_accept_modal_step3_alert": "In Auction mode, the services will bid to carry out your transport",
   "estimator_print": "Print",
+  "estimator_pay_advance": "Pay advance",
   "import_item_imported_title": "Importer",
   "import_item_imported_manufacturer": "Manufacturer",
   "import_item_status_title": "Status",
@@ -775,5 +776,6 @@
   "exception_update_user_profile": "There was an error trying to update user profile.",
   "exception_change_password": "There was an error trying to update user password.",
   "exception_change_password_old_password": "Current password is incorrect.",
-  "exception_password_changed": "Password updated."
+  "exception_password_changed": "Password updated.",
+  "exception_payment_provider": "There was an error trying to initialise payment."
 }

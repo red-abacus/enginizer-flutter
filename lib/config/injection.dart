@@ -21,6 +21,7 @@ import 'package:app/modules/shop/providers/shop-alert-make.provider.dart';
 import 'package:app/modules/shop/providers/shop-appointment.provider.dart';
 import 'package:app/modules/shop/providers/shop.provider.dart';
 import 'package:app/modules/shop/services/shop.service.dart';
+import 'package:app/modules/work-estimate-form/providers/payment.provider.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'package:app/modules/work-estimates/providers/work-estimates.provider.dart';
 import 'package:dio/adapter.dart';
@@ -109,6 +110,7 @@ void setupDependencyInjection(SharedPreferences s) async {
   inject.registerFactory(() => AuctionProvider());
   inject.registerFactory(() => AuctionConsultantProvider());
   inject.registerFactory(() => WorkEstimateProvider());
+  inject.registerFactory(() => PaymentProvider());
   inject.registerFactory(() => WorkEstimateAcceptProvider());
   inject.registerFactory(() => SelectPartsProviderProvider());
   inject.registerFactory(() => AppointmentConsultantProvider());
