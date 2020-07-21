@@ -324,6 +324,7 @@
   "estimator_accept_modal_step3_title": "Select provider",
   "estimator_accept_modal_step3_alert": "In Auction mode, the services will bid to carry out your transport",
   "estimator_print": "Print",
+  "estimator_pay_advance": "Pay advance",
   "import_item_imported_title": "Importer",
   "import_item_imported_manufacturer": "Manufacturer",
   "import_item_status_title": "Status",
@@ -736,5 +737,6 @@
   "exception_send_provider_review": "There was an error trying to send provider review.",
   "exception_get_invoice_pdf": "There was an error trying to load invoice pdf.",
   "exception_use_promotion": "There was an error trying to use this promotion.",
-  "exception_car_timetable": "There was an error trying to load car availability"
+  "exception_car_timetable": "There was an error trying to load car availability",
+  "exception_payment_provider": "There was an error trying to initialise payment."
 }

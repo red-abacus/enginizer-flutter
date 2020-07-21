@@ -19,6 +19,7 @@ import 'package:app/modules/shared/managers/permissions/permissions-order.dart';
 import 'package:app/modules/shared/widgets/locator/locator.manager.dart';
 import 'package:app/modules/work-estimate-form/enums/transport-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/providers/payment.provider.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate-accept.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-order-modal.dart';
 import 'package:app/modules/work-estimate-form/services/work-estimates.service.dart';
@@ -33,6 +34,7 @@ import 'package:app/modules/appointments/screens/appointments-details-consultant
 import 'package:app/modules/work-estimate-form/widgets/assign-mechanic/estimate-assign-mechanic-modal.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-pr/work-estimate-accept.modal.dart';
 import 'package:app/modules/work-estimate-form/widgets/assign-pr/work-estimate-propose-date.modal.dart';
+import 'package:app/modules/work-estimate-form/widgets/payment/payment.modal.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-final-info.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.widget.dart';
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
@@ -324,6 +326,14 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             labelStyle: TextHelper.customTextStyle(
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _acceptRecommendations()));
+        buttons.add(SpeedDialChild(
+            child: Icon(Icons.payment),
+            foregroundColor: red,
+            backgroundColor: Colors.white,
+            label: S.of(context).estimator_pay_advance,
+            labelStyle: TextHelper.customTextStyle(
+                color: Colors.grey, weight: FontWeight.bold, size: 16),
+            onTap: () => _payAdvance()));
         break;
       case EstimatorMode.Edit:
         buttons.add(operationHistoryButton);
@@ -833,6 +843,24 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
                     },
                 title:
                     S.of(context).estimator_accept_recommendations_alert_title);
+          });
+        });
+  }
+
+  _payAdvance() {
+    Provider.of<PaymentProvider>(context).appointmentId =
+        _provider.selectedAppointmentDetail.id;
+    
+    showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter state) {
+            return PaymentModal();
           });
         });
   }

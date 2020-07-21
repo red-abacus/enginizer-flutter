@@ -316,6 +316,7 @@
   "estimator_accept_modal_step3_title": "Alege furnizor",
   "estimator_accept_modal_step3_alert": "În modul Licitație, service-urile vor licita pentru a efectua transportul.",
   "estimator_print": "Printează",
+  "estimator_pay_advance": "Plătește avansul",
   "import_item_imported_title": "Importator",
   "import_item_imported_manufacturer": "Producător",
   "import_item_status_title": "Status",
@@ -735,5 +736,6 @@
   "exception_send_provider_review": "A intervenit o problemă în procesul de trimitere a recenziei.",
   "exception_get_invoice_pdf": "A intervenit o problemă încărcarea PDF-ului.",
   "exception_use_promotion": "A intervenit o problemă la utilizarea promoției.",
-  "exception_car_timetable": "A apărut o eroare la încercarea de a încărca disponibilitatea mașinii."
+  "exception_car_timetable": "A apărut o eroare la încercarea de a încărca disponibilitatea mașinii.",
+  "exception_payment_provider": "A apărut o eroare în încercarea de inițializare a plății."
 }
