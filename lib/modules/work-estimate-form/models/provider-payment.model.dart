@@ -17,7 +17,7 @@ class ProviderPayment {
     <!DOCTYPE html>
     <html>
     <body onload="document.f.submit();">
-    <form id="f" name="f" method="post" action="http://sandboxsecure.mobilpay.ro">
+    <form id="f" name="f" method="post" action="$url">
     <input type="hidden" name="env_key" value="$envKey" />
     <input type="hidden" name="data" value="$data" />
     </form>

@@ -6,6 +6,7 @@ import 'package:app/modules/invoices/models/invoice-details.model.dart';
 import 'package:app/modules/invoices/models/requests/invoices-request.model.dart';
 import 'package:app/modules/invoices/models/responses/invoices-response.model.dart';
 import 'package:app/modules/work-estimate-form/models/import-item-request.model.dart';
+import 'package:app/modules/work-estimate-form/models/provider-payment.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/issue-item-request.model.dart';
 import 'package:app/modules/work-estimate-form/models/issue-item.model.dart';
 import 'package:app/modules/work-estimates/models/request/work-estimates-request.model.dart';
@@ -39,6 +40,8 @@ class WorkEstimatesService {
   static const String GET_WORK_ESTIMATE_PDF_EXCEPTION =
       'GET_WORK_ESTIMATE_PDF_EXCEPTION';
   static const String GET_INVOICE_PDF_EXCEPTION = 'GET_INVOICE_PDF_EXCEPTION';
+  static const String GET_WORK_ESTIMATE_PAYMENT_EXCEPTION =
+      'GET_WORK_ESTIMATE_PAYMENT_EXCEPTION';
 
   static const String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
@@ -75,6 +78,10 @@ class WorkEstimatesService {
   static const String _GET_INVOICE_PDF_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
   static const String _GET_INVOICE_PDF_SUFFIX = '/download';
+
+  static const String _GET_WORK_ESTIMATE_PAYMENT_PREFIX =
+      '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
+  static const String _GET_WORK_ESTIMATE_PAYMENT_SUFFIX = '/payment';
 
   Dio _dio = inject<Dio>();
 
@@ -295,6 +302,24 @@ class WorkEstimatesService {
     }
   }
 
+  Future<ProviderPayment> getWorkEstimatePayment(
+      String returnUrl, int workEstimateId) async {
+    Map<String, dynamic> map = new Map();
+    map['returnUrl'] = returnUrl;
+
+    try {
+      final response = await _dio
+          .post(_buildGetWorkEstimatePayment(workEstimateId), data: returnUrl);
+      if (response.statusCode == 200) {
+        return ProviderPayment.fromJson(response.data);
+      } else {
+        throw Exception(GET_WORK_ESTIMATE_PAYMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(GET_WORK_ESTIMATE_PAYMENT_EXCEPTION);
+    }
+  }
+
   _buildAcceptWorkEstimate(int workEstimateId) {
     return _WORK_ESTIMATE_ACCEPT_PREFIX +
         workEstimateId.toString() +
@@ -329,5 +354,11 @@ class WorkEstimatesService {
     return _GET_INVOICE_PDF_PREFIX +
         invoiceId.toString() +
         _GET_INVOICE_PDF_SUFFIX;
+  }
+
+  _buildGetWorkEstimatePayment(int workEstimateId) {
+    return _GET_WORK_ESTIMATE_PAYMENT_PREFIX +
+        workEstimateId.toString() +
+        _GET_WORK_ESTIMATE_PAYMENT_SUFFIX;
   }
 }

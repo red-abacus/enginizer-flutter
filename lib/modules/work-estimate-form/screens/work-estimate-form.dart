@@ -40,6 +40,7 @@ import 'package:app/modules/work-estimate-form/widgets/work-estimate-issue-edit.
 import 'package:app/modules/work-estimate-form/widgets/work-estimate/work-estimate-sections-widget.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/shared/widgets/alert-warning-dialog.dart';
+import 'package:app/modules/work-estimates/enums/work-estimate-payment-status.enum.dart';
 import 'package:app/presentation/custom_icons.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/date_utils.dart';
@@ -407,6 +408,18 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
             labelStyle: TextHelper.customTextStyle(
                 color: Colors.grey, weight: FontWeight.bold, size: 16),
             onTap: () => _print()));
+
+        if (_provider.workEstimateDetails?.paymentStatus ==
+            WorkEstimatePaymentStatus.Unpaid) {
+          buttons.add(SpeedDialChild(
+              child: Icon(Icons.payment),
+              foregroundColor: red,
+              backgroundColor: Colors.white,
+              label: S.of(context).estimator_pay_work_estimate,
+              labelStyle: TextHelper.customTextStyle(
+                  color: Colors.grey, weight: FontWeight.bold, size: 16),
+              onTap: () => _payAdvance()));
+        }
         break;
       default:
         break;
@@ -847,22 +860,51 @@ class _WorkEstimateFormState extends State<WorkEstimateForm> {
         });
   }
 
-  _payAdvance() {
-    Provider.of<PaymentProvider>(context).appointmentId =
-        _provider.selectedAppointmentDetail.id;
-    
-    showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter state) {
-            return PaymentModal();
-          });
+  _payAdvance() async {
+    int providerId;
+
+    if (_provider.selectedAppointmentDetail != null) {
+      providerId = _provider.selectedAppointmentDetail?.serviceProvider?.id;
+    } else if (_provider.workEstimate != null) {
+      providerId = _provider.workEstimate?.serviceProvider?.id;
+    }
+
+    if (providerId != null) {
+      try {
+        await Provider.of<PaymentProvider>(context)
+            .providerHasPayment(providerId)
+            .then((value) {
+          if (value) {
+            Provider.of<PaymentProvider>(context).initialise();
+
+            if (widget.mode == EstimatorMode.ReadOnlyHistory) {
+              Provider.of<PaymentProvider>(context).workEstimateId =
+                  _provider.workEstimateId;
+            } else {
+              Provider.of<PaymentProvider>(context).appointmentId =
+                  _provider.selectedAppointmentDetail.id;
+            }
+
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return PaymentModal();
+              },
+            );
+          } else {
+            FlushBarHelper.showFlushBar(S.of(context).general_error,
+                S.of(context).exception_payment_provider, context);
+          }
         });
+      } catch (error) {
+        if (error
+            .toString()
+            .contains(ProviderService.PROVIDER_HAS_PAYMENT_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_payment_provider, context);
+        }
+      }
+    }
   }
 
   _sendRecommendations() async {

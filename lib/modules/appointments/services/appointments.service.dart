@@ -580,16 +580,14 @@ class AppointmentsService {
     }
   }
 
-  Future<ProviderPayment> getPaymentProvider(
+  Future<ProviderPayment> getAppointmentPayment(
       String returnUrl, int appointmentId) async {
     Map<String, dynamic> map = new Map();
     map['returnUrl'] = returnUrl;
 
-    print('test ${_buildPaymentAppointment(appointmentId)}');
-
     try {
       final response = await _dio.post(_buildPaymentAppointment(appointmentId),
-          data: jsonEncode(map));
+          data: returnUrl);
       if (response.statusCode == 200) {
         return ProviderPayment.fromJson(response.data);
       } else {

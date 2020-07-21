@@ -104,6 +104,7 @@ class WorkEstimatesState extends State<WorkEstimates> {
   _selectWorkEstimate(WorkEstimate workEstimate) {
     Provider.of<WorkEstimateProvider>(context)
         .refreshValues(EstimatorMode.ReadOnlyHistory);
+    Provider.of<WorkEstimateProvider>(context).workEstimate = workEstimate;
     Provider.of<WorkEstimateProvider>(context).workEstimateId = workEstimate.id;
     Provider.of<WorkEstimateProvider>(context).serviceProviderId =
         workEstimate.serviceProvider.id;

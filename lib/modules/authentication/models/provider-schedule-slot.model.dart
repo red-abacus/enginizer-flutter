@@ -5,7 +5,8 @@ class ProviderScheduleSlot {
   ProviderScheduleSlot({this.startTime, this.endTime});
 
   factory ProviderScheduleSlot.fromJson(Map<String, dynamic> json) {
-    return ProviderScheduleSlot(
-        startTime: json['startTime'], endTime: json['endTime']);
+    return ProviderScheduleSlot();
+    // TODO
+//        startTime: json['startTime'], endTime: json['endTime']);
   }
 }

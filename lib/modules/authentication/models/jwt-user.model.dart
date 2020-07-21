@@ -31,7 +31,6 @@ class JwtUser {
       this.profilePicture});
 
   factory JwtUser.fromJson(Map<String, dynamic> json) {
-    print('permissions ${json['permissions']}');
     return JwtUser(
         userId: json['userId'],
         email: json['email'] != null ? json['sub'] : '',

@@ -5,6 +5,7 @@ import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/enums/work-estimate-status.enum.dart';
 import 'package:app/modules/work-estimate-form/models/issue-recommendation.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimates/enums/work-estimate-payment-status.enum.dart';
 
 import '../../work-estimate-form/models/issue.model.dart';
 
@@ -17,6 +18,7 @@ class WorkEstimateDetails {
   ServiceProvider serviceProvider;
   WorkEstimateStatus status;
   double totalCost;
+  WorkEstimatePaymentStatus paymentStatus;
 
   WorkEstimateDetails(
       {this.id,
@@ -26,7 +28,8 @@ class WorkEstimateDetails {
       this.issues,
       this.serviceProvider,
       this.status,
-      this.totalCost});
+      this.totalCost,
+      this.paymentStatus});
 
   factory WorkEstimateDetails.fromJson(Map<String, dynamic> json) {
     return WorkEstimateDetails(
@@ -43,7 +46,10 @@ class WorkEstimateDetails {
         status: json['status'] != null
             ? WorkEstimateStatusUtils.fromString(json['status'])
             : null,
-        totalCost: json['totalCost'] != null ? json['totalCost'] : 0.0);
+        totalCost: json['totalCost'] != null ? json['totalCost'] : 0.0,
+        paymentStatus: json['paymentStatus'] != null
+            ? WorkEstimatePaymentStatusUtils.status(json['paymentStatus'])
+            : null);
   }
 
   workEstimateRequest(EstimatorMode estimatorMode) {

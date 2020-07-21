@@ -26,6 +26,7 @@ import 'package:app/modules/work-estimate-form/models/issue.model.dart';
 import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/work-estimate-form/models/requests/work-estimate-request.model.dart';
+import 'package:app/modules/work-estimates/models/work-estimate.model.dart';
 import 'package:flutter/cupertino.dart';
 
 class WorkEstimateProvider with ChangeNotifier {
@@ -58,6 +59,7 @@ class WorkEstimateProvider with ChangeNotifier {
   List<ServiceProviderTimetable> timetable;
   DateEntry selectedDateEntry;
 
+  WorkEstimate workEstimate;
   AppointmentDetail selectedAppointmentDetail;
   AuctionDetail selectedAuctionDetails;
 

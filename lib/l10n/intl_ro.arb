@@ -330,6 +330,7 @@
   "estimator_accept_modal_step3_alert": "În modul Licitație, service-urile vor licita pentru a efectua transportul.",
   "estimator_print": "Printează",
   "estimator_pay_advance": "Plătește avansul",
+  "estimator_pay_work_estimate": "Plătește devizul",
   "import_item_imported_title": "Importator",
   "import_item_imported_manufacturer": "Producător",
   "import_item_status_title": "Status",
@@ -589,6 +590,8 @@
   "invoice_product_total": "Total produse",
   "invoice_print": "Printează",
   "invoice_save": "Salvează",
+  "payment_success_advance_title": "Success!",
+  "payment_success_advance_body": "Ați finalizat cu succes plata în avans.",
   "general_find": "Caută",
   "general_status": "Status",
   "general_car": "Masină",
@@ -776,5 +779,6 @@
   "exception_change_password": "A apărut o eroare la încercarea de a actualiza parola.",
   "exception_change_password_old_password": "Parola curentă este incorectă",
   "exception_password_changed": "Parolă actualizată",
-  "exception_payment_provider": "A apărut o eroare în încercarea de inițializare a plății."
+  "exception_payment_provider": "A apărut o eroare în încercarea de inițializare a plății.",
+  "exception_provider_has_payment": "Acest furnizor de servicii nu a setat detaliile de plată."
 }

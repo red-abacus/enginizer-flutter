@@ -7,10 +7,10 @@ class CustomTextFormField extends StatelessWidget {
   final Function listener;
   final bool enabled;
   final String errorText;
-  bool validate = true;
-  bool obscureText = false;
-  TextInputType textInputType = TextInputType.text;
-  int charactersCondition = 0;
+  bool validate;
+  bool obscureText;
+  TextInputType textInputType;
+  int charactersCondition;
 
   CustomTextFormField(
       {this.labelText,
@@ -18,10 +18,10 @@ class CustomTextFormField extends StatelessWidget {
       this.currentValue,
       this.enabled = true,
       this.errorText,
-      this.validate,
-      this.textInputType,
-      this.obscureText,
-      this.charactersCondition});
+      this.validate = true,
+      this.textInputType = TextInputType.text,
+      this.obscureText = false,
+      this.charactersCondition = 0});
 
   TextEditingController _textController;
 

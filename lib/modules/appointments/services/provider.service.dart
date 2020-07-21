@@ -41,6 +41,8 @@ class ProviderService {
       'WRITE_PROVIDER_REVIEW_EXCEPTION';
   static const GET_SERVICE_PROVIDER_SCHEDULE_EXCEPTION =
       'GET_SERVICE_PROVIDER_SCHEDULE_EXCEPTION';
+  static const PROVIDER_HAS_PAYMENT_EXCEPTION =
+      'PROVIDER_HAS_PAYMENT_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -82,6 +84,10 @@ class ProviderService {
 
   static const String _GET_WORK_STATIONS_PATH =
       '${Environment.PROVIDERS_BASE_API}/workstations';
+
+  static const String _PROVIDER_HAS_PAYMENT_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String _PROVIDER_HAS_PAYMENT_SUFFIX = '/hasPayment';
 
   Dio _dio = inject<Dio>();
 
@@ -334,6 +340,19 @@ class ProviderService {
     }
   }
 
+  Future<bool> providerHasPayment(int providerId) async {
+    try {
+      final response = await _dio.get(_buildProviderHasPayment(providerId));
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception(PROVIDER_HAS_PAYMENT_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(PROVIDER_HAS_PAYMENT_EXCEPTION);
+    }
+  }
+
   _mapServiceProviderTimetable(List<dynamic> response) {
     List<ServiceProviderTimetable> list = [];
 
@@ -416,5 +435,11 @@ class ProviderService {
     return _SERVICE_PROVIDER_SCHEDULE_PREFIX +
         providerId.toString() +
         _SERVICE_PROVIDER_SCHEDULE_SUFFIX;
+  }
+
+  _buildProviderHasPayment(int providerId) {
+    return _PROVIDER_HAS_PAYMENT_PREFIX +
+        providerId.toString() +
+        _PROVIDER_HAS_PAYMENT_SUFFIX;
   }
 }
