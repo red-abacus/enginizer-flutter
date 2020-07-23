@@ -32,6 +32,7 @@ import 'package:app/screens/splash.screen.dart';
 import 'package:app/utils/app_config.dart';
 import 'package:app/utils/firebase/firebase_manager.dart';
 import 'package:app/utils/firebase/firestore_manager.dart';
+import 'package:app/utils/string.utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -119,6 +120,7 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    StringUtils.registrationNumberMatches('J12');
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(

@@ -11,10 +11,8 @@ import 'package:app/modules/user-details/widgets/user-details-change-password.wi
 import 'package:app/modules/user-details/widgets/user-details-profile.widget.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
-import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class UserDetails extends StatefulWidget {

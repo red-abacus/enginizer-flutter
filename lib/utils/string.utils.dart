@@ -4,10 +4,8 @@ class StringUtils {
     return string1?.toLowerCase()?.contains(string2?.toLowerCase());
   }
 
-  static String _registrationNoRegex = '([A-Z][1-9]{2})\/([1-9]{4})\/([1-9]{4})\/([1-9]{4})';
-
   static bool registrationNumberMatches(String sender) {
-    RegExp regExp = RegExp(_registrationNoRegex);
+    RegExp regExp = RegExp(r'([A-Z]{1}[0-9]{2})/([0-9]{4})/([0-9]{4})$');
     return regExp.hasMatch(sender);
   }
 }

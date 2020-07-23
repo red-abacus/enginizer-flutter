@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/modules/appointments/model/request/provider-review-request.model.dart';
 import 'package:app/modules/authentication/models/provider-schedule.model.dart';
+import 'package:app/modules/authentication/models/unit-provider.model.dart';
 import 'package:app/modules/consultant-user-details/models/response/work-station-response.modal.dart';
+import 'package:app/modules/user-details/models/request/update-unit-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-review.model.dart';
@@ -14,6 +17,8 @@ import 'package:app/modules/auctions/models/estimator/item-type.model.dart';
 import 'package:app/modules/auctions/models/estimator/provider-item.model.dart';
 import 'package:app/modules/appointments/model/personnel/employee.dart';
 import 'package:app/utils/environment.constants.dart';
+
+import 'package:http_parser/http_parser.dart';
 
 class ProviderService {
   static const String GET_SERVICES_EXCEPTION =
@@ -43,6 +48,9 @@ class ProviderService {
       'GET_SERVICE_PROVIDER_SCHEDULE_EXCEPTION';
   static const PROVIDER_HAS_PAYMENT_EXCEPTION =
       'PROVIDER_HAS_PAYMENT_EXCEPTION';
+  static const EDIT_PROVIDER_EXCEPTION = 'EDIT_PROVIDER_EXCEPTION';
+  static const UPLOAD_PROFILE_PICTURE_EXCEPTION =
+      'UPLOAD_PROFILE_PICTURE_EXCEPTION';
 
   static const String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
@@ -88,6 +96,10 @@ class ProviderService {
   static const String _PROVIDER_HAS_PAYMENT_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _PROVIDER_HAS_PAYMENT_SUFFIX = '/hasPayment';
+
+  static const String _UPLOAD_PROFILE_IMAGE_PREFIX =
+      '${Environment.PROVIDERS_BASE_API}/providers/';
+  static const String _UPLOAD_PROFILE_IMAGE_SUFFIX = '/image';
 
   Dio _dio = inject<Dio>();
 
@@ -353,6 +365,44 @@ class ProviderService {
     }
   }
 
+  Future<UnitProvider> editProvider(UpdateUnitRequest updateUnitRequest) async {
+    try {
+      final response = await _dio.patch(
+          _PROVIDER_DETAILS_PATH + updateUnitRequest.providerId.toString(),
+          data: jsonEncode(updateUnitRequest.toJson()));
+      if (response.statusCode == 200) {
+        return UnitProvider.fromJson(response.data);
+      } else {
+        throw Exception(EDIT_PROVIDER_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(EDIT_PROVIDER_EXCEPTION);
+    }
+  }
+
+  Future<String> uploadProviderProfileImage(File file, int providerId) async {
+    var formData = FormData();
+
+    formData.files.add(MapEntry(
+      "file",
+      await MultipartFile.fromFile(file.path,
+          filename: file.path.split('/').last,
+          contentType: MediaType('image', file.path.split('.').last)),
+    ));
+
+    try {
+      final response =
+      await _dio.patch(_buildProviderUploadProfileImage(providerId), data: formData);
+      if (response.statusCode < 300) {
+        return response.data;
+      } else {
+        throw Exception(UPLOAD_PROFILE_PICTURE_EXCEPTION);
+      }
+    } catch (error) {
+      throw Exception(UPLOAD_PROFILE_PICTURE_EXCEPTION);
+    }
+  }
+
   _mapServiceProviderTimetable(List<dynamic> response) {
     List<ServiceProviderTimetable> list = [];
 
@@ -441,5 +491,11 @@ class ProviderService {
     return _PROVIDER_HAS_PAYMENT_PREFIX +
         providerId.toString() +
         _PROVIDER_HAS_PAYMENT_SUFFIX;
+  }
+
+  _buildProviderUploadProfileImage(int providerId) {
+    return _UPLOAD_PROFILE_IMAGE_PREFIX +
+        providerId.toString() +
+        _UPLOAD_PROFILE_IMAGE_SUFFIX;
   }
 }

@@ -4,7 +4,6 @@ import 'package:app/modules/auctions/screens/auctions.dart';
 import 'package:app/modules/authentication/models/jwt-user.model.dart';
 import 'package:app/modules/authentication/models/roles.model.dart';
 import 'package:app/modules/authentication/providers/auth.provider.dart';
-import 'package:app/modules/authentication/providers/user.provider.dart';
 import 'package:app/modules/cars/screens/cars.dart';
 import 'package:app/modules/extra-services/screens/extra-services.dart';
 import 'package:app/modules/invoices/screens/invoices.dart';
@@ -387,18 +386,12 @@ class NavigationAppState extends State<NavigationApp> {
         }
         break;
       case Roles.ProviderConsultant:
+      case Roles.ProviderAdmin:
+      case Roles.ProviderPersonnel:
         setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
         Navigator.of(context).pop(); // close the drawer
         break;
       case Roles.ProviderPersonnel:
-        // TODO
-//        Provider.of<UserConsultantProvider>(context, listen: false)
-//            .userDetails = Provider.of<Auth>(context).authUserDetails;
-//
-//        setState(() => _selectedDrawerRoute = UserDetailsConsultant.route);
-//        Navigator.of(context).pop(); // close the drawer
-        break;
-      case Roles.ProviderAdmin:
         // TODO
 //        Provider.of<UserConsultantProvider>(context, listen: false)
 //            .userDetails = Provider.of<Auth>(context).authUserDetails;

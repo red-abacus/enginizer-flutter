@@ -1,5 +1,6 @@
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-rating.model.dart';
+import 'package:app/modules/authentication/models/provider-address.model.dart';
 import 'package:app/modules/authentication/models/provider-schedule.model.dart';
 
 class ServiceProvider {
@@ -15,6 +16,10 @@ class ServiceProvider {
   ServiceProviderRating rating;
   bool isVATPayer;
   List<ProviderSchedule> userProviderSchedules;
+  String description;
+  String invoiceSeries;
+  int invoiceNumber;
+  ProviderAddress providerAddress;
 
   List<ServiceProviderItem> items = [];
 
@@ -30,7 +35,11 @@ class ServiceProvider {
       this.image,
       this.rating,
       this.isVATPayer,
-      this.userProviderSchedules});
+      this.userProviderSchedules,
+      this.description,
+      this.invoiceSeries,
+      this.invoiceNumber,
+      this.providerAddress});
 
   factory ServiceProvider.fromJson(Map<String, dynamic> json) {
     return ServiceProvider(
@@ -51,7 +60,19 @@ class ServiceProvider {
             ? ServiceProviderRating.fromJson(json["ratingDto"])
             : null,
         isVATPayer: json['isVATPayer'] != null ? json['isVATPayer'] : true,
-        userProviderSchedules: json['schedule'] != null ? _mapUserProviderSchedules(json['schedule']) : []);
+        userProviderSchedules: json['schedule'] != null
+            ? _mapUserProviderSchedules(json['schedule'])
+            : [],
+        contactPerson:
+            json['contactPerson'] != null ? json['contactPerson'] : '',
+        invoiceSeries:
+            json['invoiceSeries'] != null ? json['invoiceSeries'] : '',
+        invoiceNumber:
+            json['invoiceNumber'] != null ? json['invoiceNumber'] : null,
+        description: json['description'] != null ? json['description'] : '',
+        providerAddress: json['unitAddress'] != null
+            ? ProviderAddress.fromJson(json['unitAddress'])
+            : ProviderAddress.fromJson(Map()));
   }
 
   Map<String, dynamic> toJson() {

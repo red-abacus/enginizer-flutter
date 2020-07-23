@@ -141,8 +141,7 @@ class AppState extends State<App> {
           ChangeNotifierProvider.value(value: AppointmentConsultantProvider()),
           ChangeNotifierProvider.value(value: AppointmentMechanicProvider()),
           ChangeNotifierProvider.value(value: ServiceProviderDetailsProvider()),
-          ChangeNotifierProvider.value(
-              value: WorkEstimatesProvider()),
+          ChangeNotifierProvider.value(value: WorkEstimatesProvider()),
           ChangeNotifierProvider.value(
               value: PickUpCarFormConsultantProvider()),
           ChangeNotifierProvider.value(value: CarReceptionFormProvider()),
@@ -165,8 +164,7 @@ class AppState extends State<App> {
           return OverlaySupport(
             child: MaterialApp(
               home: authProvider.isAuth
-                  ? NavigationToolbarApp(
-                      authUser: authProvider.authUser)
+                  ? NavigationToolbarApp(authUser: authProvider.authUser)
                   : FutureBuilder(
                       future: authProvider.tryAutoLogin(),
                       builder: (ctx, authResultSnapshot) =>
@@ -227,8 +225,7 @@ class AppState extends State<App> {
                 UserDetails.route: (context) => UserDetails(),
                 UserDetailsConsultant.route: (context) =>
                     UserDetailsConsultant(),
-                WorkEstimates.route: (context) =>
-                    WorkEstimates(),
+                WorkEstimates.route: (context) => WorkEstimates(),
                 Notifications.route: (context) => Notifications(),
                 Parts.route: (context) => Parts(),
                 Part.route: (context) => Part(),
