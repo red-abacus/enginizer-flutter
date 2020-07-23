@@ -63,11 +63,11 @@ android {
             dimension "app"
         }
 
-        beta {
+        staging {
             dimension "app"
         }
 
-        dev_toolbar {
+        production {
             dimension "app"
         }
     }

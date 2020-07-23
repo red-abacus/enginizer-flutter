@@ -52,52 +52,52 @@ class ProviderService {
   static const UPLOAD_PROFILE_PICTURE_EXCEPTION =
       'UPLOAD_PROFILE_PICTURE_EXCEPTION';
 
-  static const String _SERVICES_PATH =
+  static String _SERVICES_PATH =
       '${Environment.PROVIDERS_BASE_API}/services';
 
   static const String _PROVIDERS_PATH = 'api/providers';
 
-  static const String _PROVIDER_DETAILS_PATH =
+  static String _PROVIDER_DETAILS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers/';
 
-  static const String _APPOINTMENTS_PATH =
+  static String _APPOINTMENTS_PATH =
       '${Environment.PROVIDERS_BASE_API}/providers';
 
-  static const String _PROVIDER_TIMETABLE_PREFIX =
+  static String _PROVIDER_TIMETABLE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _PROVIDER_TIMETABLE_SUFFIX = "/timetable";
 
-  static const String _PROVIDER_EMPLOYEE_PREFIX =
+  static String _PROVIDER_EMPLOYEE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _PROVIDER_EMPLOYEE_SUFFIX = '/people-timetable';
 
-  static const String _ITEM_TYPES_PATH =
+  static String _ITEM_TYPES_PATH =
       '${Environment.PROVIDERS_BASE_API}/itemTypes';
 
-  static const String _PROVIDER_ITEMS_PREFIX =
+  static String _PROVIDER_ITEMS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _PROVIDER_ITEMS_SUFFIX = '/items';
 
-  static const String _PROVIDER_SERVICE_ITEMS_PREFIX =
+  static String _PROVIDER_SERVICE_ITEMS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _PROVIDER_SERVICE_ITEMS_SUFFIX = '/services';
 
-  static const String _SERVICE_PROVIDER_REVIEWS_PREFIX =
+  static String _SERVICE_PROVIDER_REVIEWS_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _SERVICE_PROVIDER_REVIEWS_SUFFIX = '/reviews';
 
-  static const String _SERVICE_PROVIDER_SCHEDULE_PREFIX =
+  static String _SERVICE_PROVIDER_SCHEDULE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _SERVICE_PROVIDER_SCHEDULE_SUFFIX = '/schedule';
 
-  static const String _GET_WORK_STATIONS_PATH =
+  static String _GET_WORK_STATIONS_PATH =
       '${Environment.PROVIDERS_BASE_API}/workstations';
 
-  static const String _PROVIDER_HAS_PAYMENT_PREFIX =
+  static String _PROVIDER_HAS_PAYMENT_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _PROVIDER_HAS_PAYMENT_SUFFIX = '/hasPayment';
 
-  static const String _UPLOAD_PROFILE_IMAGE_PREFIX =
+  static String _UPLOAD_PROFILE_IMAGE_PREFIX =
       '${Environment.PROVIDERS_BASE_API}/providers/';
   static const String _UPLOAD_PROFILE_IMAGE_SUFFIX = '/image';
 

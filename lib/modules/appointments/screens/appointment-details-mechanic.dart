@@ -1,5 +1,4 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/modules/appointments/services/appointments.service.dart';
 import 'package:app/modules/appointments/widgets/personnel/appointment-details-mechanic-documentations.widget.dart';
 import 'package:app/modules/auctions/enum/appointment-status.enum.dart';
@@ -16,8 +15,6 @@ import 'package:app/modules/appointments/widgets/personnel/appointment-details-m
 import 'package:app/modules/work-estimate-form/enums/estimator-mode.enum.dart';
 import 'package:app/modules/work-estimate-form/providers/work-estimate.provider.dart';
 import 'package:app/modules/work-estimate-form/screens/work-estimate-form.dart';
-import 'package:app/utils/app_config.dart';
-import 'package:app/utils/constants.dart';
 import 'package:app/utils/flush_bar.helper.dart';
 import 'package:app/utils/locale.manager.dart';
 import 'package:flutter/cupertino.dart';
@@ -109,10 +106,6 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
               title: _titleText(),
             ),
             body: _buildContent(),
-            bottomNavigationBar: _getBottomBar(),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: _getBottomBarFloatingAction(),
           );
   }
 
@@ -196,24 +189,6 @@ class AppointmentDetailsMechanicState extends State<AppointmentDetailsMechanic>
         _isLoading = false;
       });
     }
-  }
-
-  _getBottomBar() {
-    return AppConfig.of(context).enviroment == Enviroment.Dev_Toolbar
-        ? NavigationToolbarAppState.bottomBarApp
-        : null;
-  }
-
-  _getBottomBarFloatingAction() {
-    return AppConfig.of(context).enviroment == Enviroment.Dev_Toolbar
-        ? FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: red,
-            tooltip: S.of(context).general_add,
-            child: Icon(Icons.add),
-            elevation: 2.0,
-          )
-        : Container();
   }
 
   _titleText() {

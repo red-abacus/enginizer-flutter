@@ -10,16 +10,16 @@ class BidsService {
   static const String ACCEPT_BID_EXCEPTION = 'ACCEPT_BID_EXCEPTION';
   static const String REJECT_BID_EXCEPTION = 'REJECT_BID_EXCEPTION';
 
-  static const String _BIDS_PATH = '${Environment.BIDS_BASE_API}/bids';
+  static String _BIDS_PATH = '${Environment.BIDS_BASE_API}/bids';
 
-  static const String _AUCTION_BIDS_PREFIX =
+  static String _AUCTION_BIDS_PREFIX =
       '${Environment.BIDS_BASE_API}/auctions/';
   static const String _AUCTION_BIDS_SUFFIX = '/bids';
 
-  static const String _ACCEPT_BID_PREFIX = '${Environment.BIDS_BASE_API}/bids/';
+  static String _ACCEPT_BID_PREFIX = '${Environment.BIDS_BASE_API}/bids/';
   static const String _ACCEPT_BID_SUFFIX = '/accept';
 
-  static const String _REJECT_BID_PREFIX = '${Environment.BIDS_BASE_API}/bids/';
+  static String _REJECT_BID_PREFIX = '${Environment.BIDS_BASE_API}/bids/';
   static const String _REJECT_BID_SUFFIX = '/reject';
 
   Dio _dio = inject<Dio>();

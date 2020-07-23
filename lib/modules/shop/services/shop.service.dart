@@ -22,19 +22,19 @@ class ShopService {
   static const String GET_SHOP_ITEM_DETAILS_EXCEPTION =
       'GET_SHOP_ITEM_DETAILS_EXCEPTION';
 
-  static const String _GET_SHOP_ALERTS_PATH =
+  static String _GET_SHOP_ALERTS_PATH =
       '${Environment.PROMOTIONS_BASE_API}/alerts';
 
-  static const String _ADD_SHOP_ALERT_PATH =
+  static String _ADD_SHOP_ALERT_PATH =
       '${Environment.PROMOTIONS_BASE_API}/alerts';
 
-  static const String _REMOVE_SHOP_ALERT_PATH =
+  static String _REMOVE_SHOP_ALERT_PATH =
       '${Environment.PROMOTIONS_BASE_API}/alerts/';
 
-  static const String _GET_SHOP_ITEMS_PATH =
+  static String _GET_SHOP_ITEMS_PATH =
       '${Environment.PROMOTIONS_BASE_API}/marketplace';
 
-  static const String _GET_SHOP_ITEM_DETAILS_PATH =
+  static String _GET_SHOP_ITEM_DETAILS_PATH =
       '${Environment.PROMOTIONS_BASE_API}/marketplace/';
 
   Future<List<ShopAlert>> getShopAlerts() async {

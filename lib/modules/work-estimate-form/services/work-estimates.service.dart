@@ -43,43 +43,43 @@ class WorkEstimatesService {
   static const String GET_WORK_ESTIMATE_PAYMENT_EXCEPTION =
       'GET_WORK_ESTIMATE_PAYMENT_EXCEPTION';
 
-  static const String _CREATE_WORK_ESTIMATE_PATH =
+  static String _CREATE_WORK_ESTIMATE_PATH =
       '${Environment.BIDS_BASE_API}/bids';
 
-  static const String _WORK_ESTIMATES_PATH =
+  static String _WORK_ESTIMATES_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates';
 
-  static const String _WORK_ESTIMATE_ITEMS_PREFIX =
+  static String _WORK_ESTIMATE_ITEMS_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_ITEMS_SUFFIX = '/items';
 
-  static const String _WORK_ESTIMATE_ACCEPT_PREFIX =
+  static String _WORK_ESTIMATE_ACCEPT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_ACCEPT_SUFFIX = '/accept';
 
-  static const String _WORK_ESTIMATE_REJECT_PREFIX =
+  static String _WORK_ESTIMATE_REJECT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_REJECT_SUFFIX = '/reject';
 
-  static const String _WORK_ESTIMATE_IMPORT_PREFIX =
+  static String _WORK_ESTIMATE_IMPORT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _WORK_ESTIMATE_IMPORT_SUFFIX = '/items/import';
 
-  static const String _GET_WORK_ESTIMATE_PDF_PREFIX =
+  static String _GET_WORK_ESTIMATE_PDF_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _GET_WORK_ESTIMATE_PDF_SUFFIX = '/download';
 
-  static const String _GET_INVOICES_PATH =
+  static String _GET_INVOICES_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/invoices';
 
-  static const String _GET_INVOICE_DETAILS_PATH =
+  static String _GET_INVOICE_DETAILS_PATH =
       '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
 
-  static const String _GET_INVOICE_PDF_PREFIX =
+  static String _GET_INVOICE_PDF_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/invoices/';
   static const String _GET_INVOICE_PDF_SUFFIX = '/download';
 
-  static const String _GET_WORK_ESTIMATE_PAYMENT_PREFIX =
+  static String _GET_WORK_ESTIMATE_PAYMENT_PREFIX =
       '${Environment.WORK_ESTIMATES_BASE_API}/workEstimates/';
   static const String _GET_WORK_ESTIMATE_PAYMENT_SUFFIX = '/payment';
 

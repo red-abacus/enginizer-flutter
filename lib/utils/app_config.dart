@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-enum Enviroment {Dev, Beta, Dev_Toolbar}
+enum Enviroment {Dev, Staging, Production}
 
 class AppConfig extends InheritedWidget {
   AppConfig({this.enviroment,

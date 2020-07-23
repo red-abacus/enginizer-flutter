@@ -19,11 +19,11 @@ class AuctionsService {
   static const String GET_POINTS_DISTANCE_EXCEPTION =
       'GET_POINTS_DISTANCE_EXCEPTION';
 
-  static const String _AUCTIONS_PATH = '${Environment.BIDS_BASE_API}/auctions';
+  static String _AUCTIONS_PATH = '${Environment.BIDS_BASE_API}/auctions';
 
   static const String _GET_AUCTIONS_PATH = 'api/auctions';
 
-  static const String _CREATE_BID_PATH_PREFIX =
+  static String _CREATE_BID_PATH_PREFIX =
       '${Environment.BIDS_BASE_API}/auctions/';
   static const String _CREATE_BID_PATH_SUFFIX = '/bids';
   static const String _GET_POINTS_DISTANCE =

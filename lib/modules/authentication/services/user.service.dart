@@ -16,10 +16,10 @@ class UserService {
   static const String UPDATE_USER_DETAILS_EXCEPTION =
       'UPDATE_USER_DETAILS_EXCEPTION';
 
-  static const String _GET_USER_DETAILS_PATH =
+  static String _GET_USER_DETAILS_PATH =
       '${Environment.USERS_BASE_API}/users/';
 
-  static const String _UPLOAD_USER_PROFILE_IMAGE_PREFIX =
+  static String _UPLOAD_USER_PROFILE_IMAGE_PREFIX =
       '${Environment.USERS_BASE_API}/users/';
   static const String _UPLOAD_USER_PROFILE_IMAGE_SUFFIX = '/image';
 

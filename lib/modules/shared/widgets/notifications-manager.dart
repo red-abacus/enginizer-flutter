@@ -1,5 +1,4 @@
 import 'package:app/layout/navigation.app.dart';
-import 'package:app/layout/navigation_toolbar.app.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/text.helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +8,6 @@ import 'package:overlay_support/overlay_support.dart';
 
 class NotificationsManager {
   static NavigationAppState navigationAppState;
-  static NavigationToolbarAppState navigationToolbarAppState;
   static var notificationsCount = 0;
 
   static showNotificationBanner(String title, String body) {
@@ -51,20 +49,12 @@ class NotificationsManager {
       if (navigationAppState != null) {
         navigationAppState.updateNotifications();
       }
-
-      if (navigationToolbarAppState != null) {
-        navigationToolbarAppState.updateNotifications();
-      }
     }
   }
 
   static _showNotificationsScreen() {
     if (navigationAppState != null) {
       navigationAppState.selectNotifications();
-    }
-
-    if (navigationToolbarAppState != null) {
-      navigationToolbarAppState.selectNotifications();
     }
   }
 }

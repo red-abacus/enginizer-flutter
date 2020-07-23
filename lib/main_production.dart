@@ -17,10 +17,10 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   setupDependencyInjection(prefs);
 
-  Environment.initialise(Enviroment.Dev);
+  Environment.initialise(Enviroment.Production);
 
   var configuredApp = AppConfig(
-    enviroment: Enviroment.Dev,
+    enviroment: Enviroment.Production,
     child: App(),
   );
   runApp(configuredApp);

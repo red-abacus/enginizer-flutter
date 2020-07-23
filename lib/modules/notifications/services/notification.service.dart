@@ -19,13 +19,13 @@ class NotificationService {
       'GET_NOTIFICATIONS_EXCEPTION';
   static const String MARK_AS_SEEN_EXCEPTION = 'GET_NOTIFICATIONS_EXCEPTION';
 
-  static const String _REGISTER_PATH =
+  static String _REGISTER_PATH =
       '${Environment.NOTIFICATIONS_BASE_API}/fcm/group/add';
-  static const String _UNREGISTER_PATH =
+  static String _UNREGISTER_PATH =
       '${Environment.NOTIFICATIONS_BASE_API}/fcm/group/remove';
-  static const String _GET_NOTIFICATIONS_PATH =
+  static String _GET_NOTIFICATIONS_PATH =
       '${Environment.NOTIFICATIONS_BASE_API}/notification';
-  static const String _MARK_AS_SEEN_PATH = '${Environment.NOTIFICATIONS_BASE_API}/notification/markSeen';
+  static String _MARK_AS_SEEN_PATH = '${Environment.NOTIFICATIONS_BASE_API}/notification/markSeen';
 
   Future<bool> register(String fcmToken) async {
     try {

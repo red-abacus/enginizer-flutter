@@ -40,40 +40,40 @@ class CarService {
   static String CAR_RENT_EXCEPTION = 'CAR_RENT_EXCEPTION';
   static String CAR_TIMETABLE_EXCEPTION = 'CAR_RENT_EXCEPTION';
 
-  static const String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
+  static String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
-  static const String _CAR_HISTORY_PREFIX =
+  static String _CAR_HISTORY_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_HISTORY_SUFFIX = '/history';
 
-  static const String _CAR_SELL_PREFIX = '${Environment.CARS_BASE_API}/cars/';
+  static String _CAR_SELL_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_SELL_SUFFIX = '/sell';
 
-  static const String _CAR_RENT_PREFIX = '${Environment.CARS_BASE_API}/cars/';
+  static String _CAR_RENT_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_RENT_SUFFIX = '/rent';
 
-  static const String _CAR_DOCUMENTATION_TOPICS =
+  static String _CAR_DOCUMENTATION_TOPICS =
       '${Environment.CARS_BASE_API}/techDocumentation/topic';
-  static const String _CAR_DOCUMENTATION_DOCUMENT =
+  static String _CAR_DOCUMENTATION_DOCUMENT =
       '${Environment.CARS_BASE_API}/techDocumentation/document';
 
-  static const String _CAR_ADD_DOCUMENT_PREFIX =
+  static String _CAR_ADD_DOCUMENT_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_ADD_DOCUMENT_SUFFIX = '/documents';
 
-  static const String _GET_CAR_DOCUMENTS_PREFIX =
+  static String _GET_CAR_DOCUMENTS_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _GET_CAR_DOCUMENTS_SUFFIX = '/documents';
 
-  static const String _GET_CAR_DOCUMENT_DETAILS_PREFIX =
+  static String _GET_CAR_DOCUMENT_DETAILS_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _GET_CAR_DOCUMENT_DETAILS_SUFFIX = '/documents/';
 
-  static const String _MARK_AS_SOLD_PREFIX =
+  static String _MARK_AS_SOLD_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _MARK_AS_SOLD_SUFFIX = '/sold';
 
-  static const String _CAR_TIMETABLE_PREFIX =
+  static String _CAR_TIMETABLE_PREFIX =
       '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_TIMETABLE_SUFFIX = '/timetable';
 

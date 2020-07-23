@@ -15,9 +15,9 @@ class AuthService {
   static const CHANGE_PASSWORD_EXCEPTION = 'CHANGE_PASSWORD_EXCEPTION';
   static const CHANGE_PASSWORD_OLD_PASSWORD_EXCEPTION = 'CHANGE_PASSWORD_OLD_PASSWORD_EXCEPTION';
 
-  static const String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
+  static String AUTH_API_PATH = '${Environment.AUTH_BASE_URL}/auth';
 
-  static const String _CHANGE_PASSWORD_PATH = '${Environment.AUTH_BASE_URL}/auth/changePassword';
+  static String _CHANGE_PASSWORD_PATH = '${Environment.AUTH_BASE_URL}/auth/changePassword';
 
   Dio _dio = inject<Dio>();
 

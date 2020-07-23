@@ -23,7 +23,7 @@ class CarMakeService {
   static const String LOAD_CAR_VARIANTS_FAILED_EXCEPTION =
       'LOAD_CAR_VARIANTS_FAILED';
 
-  static const String _CAR_MAKE_API_PATH =
+  static String _CAR_MAKE_API_PATH =
       '${Environment.CARS_BASE_API}/carmake';
 
   Dio _dio = inject<Dio>();

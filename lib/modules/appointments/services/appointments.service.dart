@@ -71,91 +71,91 @@ class AppointmentsService {
       'COMPLETE_APPOOINTMENT_EXCEPTION';
   static const String PAYMENT_PROVIDER_EXCEPTION = 'PAYMENT_PROVIDER_EXCEPTION';
 
-  static const String _APPOINTMENTS_API_PATH =
+  static String _APPOINTMENTS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments';
   static const String _APPOINTMENTS_PATH = 'api/appointments';
 
-  static const String _APPOINTMENTS_DETAILS_API_PATH =
+  static String _APPOINTMENTS_DETAILS_API_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String _CANCEL_APPOINTMENT_PREFIX =
+  static String _CANCEL_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _CANCEL_APPOINTMENT_SUFFIX = '/cancel';
 
-  static const String _STANDARD_TASKS_PREFIX =
+  static String _STANDARD_TASKS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
-  static const String _STANDARD_TASKS_SUFFIX = '/standardTasks';
+  static String _STANDARD_TASKS_SUFFIX = '/standardTasks';
 
-  static const String _CLIENT_TASKS_PREFIX =
+  static String _CLIENT_TASKS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _CLIENT_TASKS_SUFFIX = '/tasks';
 
-  static const String _RECEIVE_PROCEDURE_PREFIX =
+  static String _RECEIVE_PROCEDURE_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _RECEIVE_PROCEDURE_SUFFIX = '/procedure/receive';
 
-  static const String _RETURN_PROCEDURE_PREFIX =
+  static String _RETURN_PROCEDURE_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _RETURN_PROCEDURE_SUFFIX = '/procedure/return';
 
-  static const String _ADD_RECEIVE_PROCEDURE_PHOTOS_PREFIX =
+  static String _ADD_RECEIVE_PROCEDURE_PHOTOS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ADD_RECEIVE_PROCEDURE_PHOTOS_SUFFIX = '/images';
 
-  static const String _START_APPOINTMENT_PREFIX =
+  static String _START_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _START_APPOINTMENT_SUFFIX = '/start';
 
-  static const String _START_APPOINTMENT_TASK_PREFIX =
+  static String _START_APPOINTMENT_TASK_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _START_APPOINTMENT_TASK_SUFFIX = '/start';
 
-  static const String _PAUSE_APPOINTMENT_TASK_PREFIX =
+  static String _PAUSE_APPOINTMENT_TASK_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _PAUSE_APPOINTMENT_TASK_SUFFIX = '/pause';
 
-  static const String _ADD_APPOINTMENT_RECOMMENDATION_PREFIX =
+  static String _ADD_APPOINTMENT_RECOMMENDATION_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ADD_APPOINTMENT_RECOMMENDATION_SUFFIX =
       '/recommendations';
 
-  static const String _ADD_APPOINTMENT_RECOMMENDATION_IMAGE_PREFIX =
+  static String _ADD_APPOINTMENT_RECOMMENDATION_IMAGE_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ADD_APPOINTMENT_RECOMMENDATION_IMAGE_SUFFIX = '/images';
 
-  static const String _STOP_APPOINTMENT_PREFIX =
+  static String _STOP_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _STOP_APPOINTMENT_SUFFIX = '/stop';
 
-  static const String _APPOINTMENT_REQUEST_ITEMS_PREFIX =
+  static String _APPOINTMENT_REQUEST_ITEMS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENT_REQUEST_ITEMS_SUFFIX = '/requestItems';
 
-  static const String _APPOINTMENTS_ITEMS_PREFIX =
+  static String _APPOINTMENTS_ITEMS_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENTS_ITEMS_SUFFIX = '/items';
 
-  static const String _ASSIGN_EMPLOYEE_PREFIX =
+  static String _ASSIGN_EMPLOYEE_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ASSIGN_EMPLOYEE_SUFFIX = '/employee';
 
-  static const String _ORDER_APPOINTMENT_ITEM_PREFIX =
+  static String _ORDER_APPOINTMENT_ITEM_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _ORDER_APPOINTMENT_ITEM_SUFFIX = '/orderItems';
 
-  static const String _APPOINTMENT_REQUEST_TRANSPORT_PREFIX =
+  static String _APPOINTMENT_REQUEST_TRANSPORT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _APPOINTMENT_REQUEST_TRANSPORT_SUFFIX =
       '/requestTransport';
 
-  static const String _COMPLETE_APPOINTMENT_PREFIX =
+  static String _COMPLETE_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _COMPLETE_APPOINTMENT_SUFFIX = '/complete';
 
-  static const String _FINISH_APPOINTMENT_PREFIX =
+  static String _FINISH_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _FINISH_APPOINTMENT_SUFFIX = '/finish';
 
-  static const String _PAYMENT_APPOINTMENT_PREFIX =
+  static String _PAYMENT_APPOINTMENT_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/appointments/';
   static const String _PAYMENT_APPOINTMENT_SUFFIX = '/payment';
 

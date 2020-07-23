@@ -18,15 +18,15 @@ class OrderService {
   static const String ACCEPT_ORDER_EXCEPTION = 'ACCEPT_ORDER_EXCEPTION';
   static const String FINISH_ORDER_EXCEPTION = 'FINISH_ORDER_EXCEPTION';
 
-  static const String _GET_ORDERS_PATH =
+  static String _GET_ORDERS_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/orders';
-  static const String _GET_ORDER_DETAILS_PATH =
+  static String _GET_ORDER_DETAILS_PATH =
       '${Environment.APPOINTMENTS_BASE_API}/orders';
-  static const String _ACCEPT_ORDER_PATH_PREFIX =
+  static String _ACCEPT_ORDER_PATH_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/orders/';
-  static const String _ACCEPT_ORDER_PATH_SUFFX = '/accept';
+  static String _ACCEPT_ORDER_PATH_SUFFX = '/accept';
 
-  static const String _FINISH_ORDER_PATH_PREFIX =
+  static String _FINISH_ORDER_PATH_PREFIX =
       '${Environment.APPOINTMENTS_BASE_API}/orders/';
   static const String _FINISH_ORDER_PATH_SUFFX = '/finish';
 
@@ -72,8 +72,7 @@ class OrderService {
     }
   }
 
-  Future<AppointmentDetail> finishOrder(
-      int orderId) async {
+  Future<AppointmentDetail> finishOrder(int orderId) async {
     try {
       final response = await _dio.patch(_buildFinishOrderPath(orderId));
       if (response.statusCode == 200) {

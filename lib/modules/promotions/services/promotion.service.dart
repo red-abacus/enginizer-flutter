@@ -26,14 +26,14 @@ class PromotionService {
       'DELETE_PROMOTION_IMAGE_EXCEPTION';
   static const String USE_PROMOTION_EXCEPTION = 'USE_PROMOTION_EXCEPTION';
 
-  static const String _GET_PROMOTIONS_PATH =
+  static String _GET_PROMOTIONS_PATH =
       '${Environment.PROMOTIONS_BASE_API}/promotions';
 
-  static const String _ADD_PROMOTION_IMAGES_PREFIX =
+  static String _ADD_PROMOTION_IMAGES_PREFIX =
       '${Environment.PROMOTIONS_BASE_API}/promotions/';
   static const String _ADD_PROMOTION_IMAGES_SUFFIX = '/images';
 
-  static const String _USE_PROMOTION_PREFIX =
+  static String _USE_PROMOTION_PREFIX =
       '${Environment.PROMOTIONS_BASE_API}/promotions/';
   static const String _USE_PROMOTION_SUFFIX = '/use';
 
