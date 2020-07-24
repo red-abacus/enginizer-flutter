@@ -54,5 +54,9 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</>
+	<string>Autowass dorește să acceseze librăria pentru încărcarea imaginilor.</string>
+	<key>NSCameraUsageDescription</>
+    <string>Autowass dorește să acceseze camera pentru încărcarea imaginilor.</string>
 </dict>
 </plist>

@@ -227,7 +227,6 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
             )));
         break;
       case Status.ERROR:
-//        return Text(carProvider.getCarFuelConsumptionAPI.toString());
         return showPicture(car);
         break;
       case Status.COMPLETED:

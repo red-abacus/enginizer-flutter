@@ -73,17 +73,13 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
             if (error
                 .toString()
                 .contains(CarMakeService.LOAD_CAR_YEAR_FAILED_EXCEPTION)) {
-              FlushBarHelper.showFlushBar(
-                  S.of(context).general_error,
-                  S.of(context).exception_load_car_years,
-                  context);
+              FlushBarHelper.showFlushBar(S.of(context).general_error,
+                  S.of(context).exception_load_car_years, context);
             } else if (error
                 .toString()
                 .contains(CarMakeService.LOAD_CAR_VARIANTS_FAILED_EXCEPTION)) {
-              FlushBarHelper.showFlushBar(
-                  S.of(context).general_error,
-                  S.of(context).exception_load_car_variants,
-                  context);
+              FlushBarHelper.showFlushBar(S.of(context).general_error,
+                  S.of(context).exception_load_car_variants, context);
             }
 
             setState(() {
@@ -124,10 +120,8 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
                 if (error
                     .toString()
                     .contains(CarMakeService.LOAD_CAR_FUEL_FAILED_EXCEPTION)) {
-                  FlushBarHelper.showFlushBar(
-                      S.of(context).general_error,
-                      S.of(context).exception_load_car_fuel_types,
-                      context);
+                  FlushBarHelper.showFlushBar(S.of(context).general_error,
+                      S.of(context).exception_load_car_fuel_types, context);
 
                   setState(() {
                     _carsMakeProvider.carTechnicalFormState['year'] =
@@ -233,7 +227,9 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
       List<CarColor> colors) {
     List<DropdownMenuItem<CarColor>> colorsDropdownList = [];
     colors.forEach((color) => colorsDropdownList.add(DropdownMenuItem(
-        value: color, child: Text(color.translateColorName(context)))));
+        value: color,
+        child: Text(color.translateColorName(context),
+            overflow: TextOverflow.visible))));
     return colorsDropdownList;
   }
 
@@ -242,7 +238,7 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
     List<DropdownMenuItem<CarType>> typeDropdownList = [];
     carTypes.forEach((carType) => typeDropdownList.add(DropdownMenuItem(
           value: carType,
-          child: Text(carType.name),
+          child: Text(carType.name, overflow: TextOverflow.visible),
         )));
     return typeDropdownList;
   }
@@ -250,8 +246,9 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
   List<DropdownMenuItem<CarYear>> _buildCarYearDropdownItems(
       List<CarYear> carYears) {
     List<DropdownMenuItem<CarYear>> yearDropdownList = [];
-    carYears.forEach((carYear) => yearDropdownList
-        .add(DropdownMenuItem(value: carYear, child: Text(carYear.name))));
+    carYears.forEach((carYear) => yearDropdownList.add(DropdownMenuItem(
+        value: carYear,
+        child: Text(carYear.name, overflow: TextOverflow.visible))));
     return yearDropdownList;
   }
 
@@ -259,7 +256,9 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
       List<CarFuelType> carFuelTypes) {
     List<DropdownMenuItem<CarFuelType>> fuelTypeDropdownList = [];
     carFuelTypes.forEach((carFuelType) => fuelTypeDropdownList.add(
-        DropdownMenuItem(value: carFuelType, child: Text(carFuelType.name))));
+        DropdownMenuItem(
+            value: carFuelType,
+            child: Text(carFuelType.name, overflow: TextOverflow.visible))));
     return fuelTypeDropdownList;
   }
 
@@ -267,7 +266,9 @@ class CarTechnicalFormState extends State<CarTechnicalForm> {
       List<CarVariant> carVariants) {
     List<DropdownMenuItem<CarVariant>> variantsDropdownList = [];
     carVariants.forEach((carVariant) => variantsDropdownList.add(
-        DropdownMenuItem(value: carVariant, child: Text(carVariant.name))));
+        DropdownMenuItem(
+            value: carVariant,
+            child: Text(carVariant.name, overflow: TextOverflow.visible))));
     return variantsDropdownList;
   }
 }
