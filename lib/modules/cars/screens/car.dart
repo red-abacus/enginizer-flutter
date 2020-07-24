@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/appointments/model/provider/service-provider-item.model.dart';
 import 'package:app/modules/appointments/services/provider.service.dart';
+import 'package:app/modules/cars/models/request/car-fuel-request.model.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/cars/widgets/car-client-details.widget.dart';
@@ -45,8 +46,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     _tabController = new TabController(
         vsync: this,
         length: PermissionsManager.getInstance().hasAccess(
-                MainPermissions.Appointments,
-                PermissionsAppointment.CREATE_APPOINTMENT)
+            MainPermissions.Appointments,
+            PermissionsAppointment.CREATE_APPOINTMENT)
             ? 3
             : 2,
         initialIndex: 0);
@@ -82,20 +83,52 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
 
     try {
       await _provider.getCarDetails().then((_) async {
-        await _provider.getCarFuelConsumptionGraphic().then((_) async {
-          _downloadCarHistory();
-        });
+        _downloadCarHistory();
       });
     } catch (error) {
-      if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_car_fuel, context);
-      } else if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_car_details, context);
+      if (error.toString().contains(CarService.CAR_DETAILS_EXCEPTION)) {
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_car_details, context);
       }
 
       _downloadCarHistory();
+    }
+  }
+
+  _downloadCarFuel() async {
+    if (_provider.carFuelRequest.isValid()) {
+      try {
+        await _provider
+            .getCarFuelConsumptionGraphic(_provider.carFuelRequest)
+            .then((_) async {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      }
+      catch (error) {
+        if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
+          FlushBarHelper.showFlushBar(S
+              .of(context)
+              .general_error,
+              S
+                  .of(context)
+                  .exception_get_car_fuel, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+    else {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -104,24 +137,22 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         PermissionsAppointment.CREATE_APPOINTMENT)) {
       try {
         await _provider.getCarHistory(_provider.carDetails.id).then((_) async {
-          setState(() {
-            _isLoading = false;
-          });
+          _downloadCarFuel();
         });
       } catch (error) {
         if (error.toString().contains(CarService.CAR_HISTORY_EXCEPTION)) {
-          FlushBarHelper.showFlushBar(S.of(context).general_error,
-              S.of(context).exception_car_history, context);
+          FlushBarHelper.showFlushBar(S
+              .of(context)
+              .general_error,
+              S
+                  .of(context)
+                  .exception_car_history, context);
         }
 
-        setState(() {
-          _isLoading = false;
-        });
+        _downloadCarFuel();
       }
     } else {
-      setState(() {
-        _isLoading = false;
-      });
+      _downloadCarFuel();
     }
   }
 
@@ -130,16 +161,24 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     return Scaffold(
         appBar: AppBar(
           title: Text('${_provider.selectedCar?.brand?.name}'),
-          iconTheme: new IconThemeData(color: Theme.of(context).cardColor),
+          iconTheme: new IconThemeData(color: Theme
+              .of(context)
+              .cardColor),
           bottom: TabBar(
             controller: _tabController,
             tabs: [
-              Tab(text: S.of(context).car_details_title),
-              Tab(text: S.of(context).car_documents_title),
+              Tab(text: S
+                  .of(context)
+                  .car_details_title),
+              Tab(text: S
+                  .of(context)
+                  .car_documents_title),
               if (PermissionsManager.getInstance().hasAccess(
                   MainPermissions.Appointments,
                   PermissionsAppointment.CREATE_APPOINTMENT))
-                Tab(text: S.of(context).car_service_recommendations_title),
+                Tab(text: S
+                    .of(context)
+                    .car_service_recommendations_title),
             ],
           ),
         ),
@@ -151,15 +190,21 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
   showPicture(car) {
     return (uploadImage == null)
         ? Image.network(
-            '${car.image}',
-            fit: BoxFit.contain,
-            height: MediaQuery.of(context).size.height * 0.3,
-          )
+      '${car.image}',
+      fit: BoxFit.contain,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.3,
+    )
         : Image.file(
-            uploadImage,
-            fit: BoxFit.contain,
-            height: MediaQuery.of(context).size.height * 0.3,
-          );
+      uploadImage,
+      fit: BoxFit.contain,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.3,
+    );
   }
 
   _buildContent() {
@@ -171,6 +216,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         uploadCarImageListener: _uploadCarImageListener,
         showCameraDialog: _showCameraDialog,
         markAsSold: _showMarkAsSoldAlert,
+        carFuelRequest: _provider.carFuelRequest,
+        downloadCarFuel: _downloadCarFuel,
         sellCar: _sellCar,
         rentCar: _rentCar,
       ),
@@ -195,7 +242,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(10.0),
         ),
         context: context,
-        builder: (context) => ImagePickerWidget(imageSelected: (file) {
+        builder: (context) =>
+            ImagePickerWidget(imageSelected: (file) {
               if (file != null) {
                 _provider.uploadImage(file);
               }
@@ -208,9 +256,9 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return CarFuelConsumptionForm(
-                createFuelConsumption: _createCarConsumption);
-          });
+                return CarFuelConsumptionForm(
+                    createFuelConsumption: _createCarConsumption);
+              });
         });
   }
 
@@ -221,10 +269,10 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
             padding: EdgeInsets.all(10),
             child: Center(
                 child: Container(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(),
-            )));
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(),
+                )));
         break;
       case Status.ERROR:
         return showPicture(car);
@@ -241,15 +289,21 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     });
 
     try {
-      await _provider?.getCarFuelConsumptionGraphic()?.then((_) {
+      await _provider
+          ?.getCarFuelConsumptionGraphic(_provider.carFuelRequest)
+          ?.then((_) {
         setState(() {
           _isLoading = false;
         });
       });
     } catch (error) {
       if (error.toString().contains(CarService.CAR_FUEL_EXCEPITON)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_car_fuel, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_car_fuel, context);
       }
     }
   }
@@ -260,12 +314,15 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
-            return AlertConfirmationDialogWidget(
-                confirmFunction: (confirm) => {
+                return AlertConfirmationDialogWidget(
+                    confirmFunction: (confirm) =>
+                    {
                       if (confirm) {_markAsSold()}
                     },
-                title: S.of(context).car_mark_as_sold_alert_body);
-          });
+                    title: S
+                        .of(context)
+                        .car_mark_as_sold_alert_body);
+              });
         });
   }
 
@@ -276,7 +333,9 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
 
     try {
       await _provider.carMarkAsSold(_provider.selectedCar.id).then((value) {
-        Provider.of<CarsProvider>(context).initDone = false;
+        Provider
+            .of<CarsProvider>(context)
+            .initDone = false;
 
         setState(() {
           _provider.selectedCar = value;
@@ -285,8 +344,12 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
       });
     } catch (error) {
       if (error.toString().contains(CarService.CAR_MARK_AS_SOLD_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_car_mark_as_sold, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_car_mark_as_sold, context);
       }
 
       setState(() {
@@ -301,7 +364,7 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
     });
 
     CreatePromotionProvider provider =
-        Provider.of<CreatePromotionProvider>(context);
+    Provider.of<CreatePromotionProvider>(context);
 
     try {
       await provider.loadServices(null).then((value) {
@@ -321,7 +384,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         if (sellProviderItem != null) {
           Provider.of<CreatePromotionProvider>(context).initialise(null,
               car: car, serviceProviderItem: sellProviderItem);
-          Provider.of<CreatePromotionProvider>(context)
+          Provider
+              .of<CreatePromotionProvider>(context)
               .serviceProviderItemsResponse = value;
 
           showModalBottomSheet<void>(
@@ -333,17 +397,21 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
               builder: (BuildContext context) {
                 return StatefulBuilder(
                     builder: (BuildContext context, StateSetter state) {
-                  return CreatePromotionModal(
-                    refreshState: _refreshState,
-                  );
-                });
+                      return CreatePromotionModal(
+                        refreshState: _refreshState,
+                      );
+                    });
               });
         }
       });
     } catch (error) {
       if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_services, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_services, context);
       }
 
       setState(() {
@@ -378,7 +446,8 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
         if (sellProviderItem != null) {
           Provider.of<CreatePromotionProvider>(context).initialise(null,
               car: car, serviceProviderItem: sellProviderItem);
-          Provider.of<CreatePromotionProvider>(context)
+          Provider
+              .of<CreatePromotionProvider>(context)
               .serviceProviderItemsResponse = value;
 
           showModalBottomSheet<void>(
@@ -399,8 +468,12 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
       });
     } catch (error) {
       if (error.toString().contains(ProviderService.GET_SERVICES_EXCEPTION)) {
-        FlushBarHelper.showFlushBar(S.of(context).general_error,
-            S.of(context).exception_get_services, context);
+        FlushBarHelper.showFlushBar(S
+            .of(context)
+            .general_error,
+            S
+                .of(context)
+                .exception_get_services, context);
       }
 
       setState(() {
@@ -410,7 +483,9 @@ class CarDetailsState extends State<CarDetails> with TickerProviderStateMixin {
   }
 
   _refreshState() {
-    Provider.of<CarsProvider>(context).initDone = false;
+    Provider
+        .of<CarsProvider>(context)
+        .initDone = false;
     _loadData();
   }
 }

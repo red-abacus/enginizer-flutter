@@ -84,7 +84,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                               ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
                             FlushBarHelper.showFlushBar(
                                 S.of(context).general_error,
-                                S.of(context).exception_get_car_fuel,
+                                S.of(context).exception_get_provider_items,
                                 context);
                           }
                         }
@@ -146,7 +146,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
                               FlushBarHelper.showFlushBar(
                                   S.of(context).general_error,
-                                  S.of(context).exception_get_car_fuel,
+                                  S.of(context).exception_get_provider_items,
                                   context);
                             }
                           }
@@ -217,7 +217,7 @@ class WorkEstimateAddIssueModalState extends State<WorkEstimateAddIssueModal> {
                                 ProviderService.GET_PROVIDER_ITEMS_EXCEPTION)) {
                               FlushBarHelper.showFlushBar(
                                   S.of(context).general_error,
-                                  S.of(context).exception_get_car_fuel,
+                                  S.of(context).exception_get_provider_items,
                                   context);
                             }
                           }

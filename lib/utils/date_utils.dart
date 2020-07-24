@@ -15,6 +15,14 @@ class DateUtils {
     return DateTime(date.year, date.month, date.day, 0);
   }
 
+  static DateTime startOfMonth(DateTime date) {
+    return DateTime(date.year, date.month, 1);
+  }
+
+  static DateTime endOfMonth(DateTime date) {
+    return DateTime(date.year, date.month + 1, 0);
+  }
+
   static DateTime addDayToDate(DateTime date, int days) {
     return date.add(new Duration(days: days));
   }
@@ -43,8 +51,7 @@ class DateUtils {
   static DateTime dateFromString(String dateString, String format) {
     try {
       return DateFormat(format).parse(dateString);
-    }
-    catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -52,8 +59,7 @@ class DateUtils {
   static String stringFromDate(DateTime date, String format) {
     try {
       return DateFormat(format).format(date);
-    }
-    catch (_) {
+    } catch (_) {
       return '';
     }
   }

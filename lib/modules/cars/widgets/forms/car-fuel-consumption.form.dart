@@ -1,5 +1,5 @@
 import 'package:app/generated/l10n.dart';
-import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-consumption.model.dart';
 import 'package:app/modules/cars/providers/car.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
@@ -33,7 +33,7 @@ class CarFuelConsumptionFormState extends State<CarFuelConsumptionForm> {
   Widget build(BuildContext context) {
     return _isLoading
         ? Container(
-            margin: EdgeInsets.only(left: 40, right: 40, top: 120, bottom: 120),
+            margin: EdgeInsets.only(left: 20, right: 20, top: 120, bottom: 120),
             color: Colors.white,
             child: Center(
               child: CircularProgressIndicator(),
@@ -47,7 +47,7 @@ class CarFuelConsumptionFormState extends State<CarFuelConsumptionForm> {
         child: Form(
             key: _formKey,
             child: Container(
-              padding: EdgeInsets.only(left: 30, right: 30),
+              padding: EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

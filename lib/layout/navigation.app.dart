@@ -53,7 +53,8 @@ class NavigationApp extends StatefulWidget {
     List<DrawerItem> items = [];
 
     if (PermissionsManager.getInstance()
-        .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.DASHBOARD)) {
+            .hasAccess(MainPermissions.Sidebar, PermissionsSideBar.DASHBOARD) &&
+        Provider.of<Auth>(context).authUser.role == Roles.Client) {
       items.add(new DrawerItem(
           S.of(context).dashboard_dashboard, Dashboard.route, Icons.dashboard));
     }
@@ -136,31 +137,40 @@ class NavigationApp extends StatefulWidget {
     if (_activeDrawerRoute != null) {
       return _activeDrawerRoute;
     }
-    switch (this.authUser.role) {
-      case Roles.Super:
-        _activeDrawerRoute = Dashboard.route;
-        break;
-      case Roles.Client:
-        _activeDrawerRoute = Cars.route;
-        break;
-      case Roles.ProviderAdmin:
-        _activeDrawerRoute = Promotions.route;
-        break;
-      case Roles.ProviderConsultant:
-        if (getDrawerItems(context).isNotEmpty) {
-          _activeDrawerRoute = getDrawerItems(context).first.route;
-        } else {
-          _activeDrawerRoute = '/';
-        }
-        break;
-      case Roles.ProviderPersonnel:
-        _activeDrawerRoute = Appointments.route;
-        break;
-      default:
-        _activeDrawerRoute = '/';
+
+    if (getDrawerItems(context).isNotEmpty) {
+      _activeDrawerRoute = getDrawerItems(context).first.route;
+    } else {
+      _activeDrawerRoute = '/';
     }
 
     return _activeDrawerRoute;
+
+//    switch (this.authUser.role) {
+//      case Roles.Super:
+//        _activeDrawerRoute = Dashboard.route;
+//        break;
+//      case Roles.Client:
+//        _activeDrawerRoute = Cars.route;
+//        break;
+//      case Roles.ProviderAdmin:
+//        _activeDrawerRoute = Promotions.route;
+//        break;
+//      case Roles.ProviderConsultant:
+//        if (getDrawerItems(context).isNotEmpty) {
+//          _activeDrawerRoute = getDrawerItems(context).first.route;
+//        } else {
+//          _activeDrawerRoute = '/';
+//        }
+//        break;
+//      case Roles.ProviderPersonnel:
+//        _activeDrawerRoute = Appointments.route;
+//        break;
+//      default:
+//        _activeDrawerRoute = '/';
+//    }
+//
+//    return _activeDrawerRoute;
   }
 
   List<DrawerItem> activeDrawerItems;

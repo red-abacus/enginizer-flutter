@@ -80,8 +80,10 @@
   "car_details_fuel_date_km_error": "Km parcursi necompletati!",
   "car_details_fuel_price": "Preț carburant",
   "car_details_fuel_price_error": "Preț carburant necompletat",
-  "car_general_quantity": "Cantitate",
-  "car_general_quantity_error": "Cantitate necompletă!",
+  "car_details_quantity": "Quantity",
+  "car_details_quantity_empty": "Cantitate necompletă!",
+  "car_details_average": "Consumul mediu de carburant este",
+  "car_details_average_liters": "litri pe 100 km",
   "cars_no_recommendations_title": "Nu a fost înregistrată nicio recomandare pentru această mașină.",
   "car_create_appointment_from_interventions_alert": "Te rog selectează recomandările dorite pentru a crea o programare.",
   "car_create_exhaust_test": "Teste gaze esapament",
@@ -530,6 +532,11 @@
   "dashboard_end_date": "Dată final",
   "dashboard_select_car": "Alege masină",
   "dashboard_expenses": "Cheltuieli",
+  "dashboard_itp": "ITP",
+  "dashboard_products": "Produse",
+  "dashboard_services": "Servicii",
+  "dashboard_insurance": "Asigurări",
+  "dashboard_fuel": "Combustibil",
   "notifications_title": "Notificări",
   "notification_type_appointment_created": "Programare creată",
   "notification_type_appointment_canceled": "Programare anulată",
@@ -792,5 +799,6 @@
   "exception_password_changed": "Parolă actualizată",
   "exception_payment_provider": "A apărut o eroare în încercarea de inițializare a plății.",
   "exception_update_provider": "A apărut o eroare la încercarea de actualizare unității.",
-  "exception_upload_provider_profile_image": "A apărut o eroare la încărcarea imaginii de profil."
+  "exception_upload_provider_profile_image": "A apărut o eroare la încărcarea imaginii de profil.",
+  "exception_get_reports": "A apărut o eroare la încărcarea raportului."
 }

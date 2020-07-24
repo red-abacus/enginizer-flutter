@@ -3,6 +3,7 @@ import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/providers/cars.provider.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/modules/dashboard/providers/dashboard.provider.dart';
+import 'package:app/modules/dashboard/services/reports.service.dart';
 import 'package:app/modules/dashboard/widgets/dashboard-chart.widget.dart';
 import 'package:app/modules/shared/widgets/datepicker.widget.dart';
 import 'package:app/utils/constants.dart';
@@ -23,40 +24,38 @@ class _DashboardState extends State<Dashboard> {
   bool _initDone = false;
   bool _isLoading = false;
 
-  DashboardProvider _dashboardProvider;
+  DashboardProvider _provider;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CarsProvider>(
       builder: (context, carsProvider, _) => Scaffold(
-        body: Center(
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : _getContent(),
-        ),
-      ),
-    );
-  }
-
-  _getContent() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 20, top: 20),
-            child: Text(
-              S.of(context).dashboard_expenses,
-              style: TextHelper.customTextStyle(color: red, weight: FontWeight.bold, size: 20),
-            ),
-          ),
-          _filterButtons(),
-          _carDropdownWidget(),
-          Container(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 20),
-            child: DashboardChartWidget.withSampleData(),
-          )
-        ],
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(left: 20, top: 20),
+                      child: Text(
+                        S.of(context).dashboard_expenses,
+                        style: TextHelper.customTextStyle(
+                            color: red, weight: FontWeight.bold, size: 20),
+                      ),
+                    ),
+                    _filterButtons(),
+                    _carDropdownWidget(),
+                    if (_provider.reports != null)
+                      Container(
+                        margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+                        child: DashboardChartWidget.withSampleData(
+                            _provider.reports.toJson(context)),
+                      )
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -72,12 +71,15 @@ class _DashboardState extends State<Dashboard> {
                 margin: EdgeInsets.only(right: 5),
                 height: 60,
                 child: BasicDateField(
-                  maxDate: _dashboardProvider.endDate,
+                  dateTime: _provider.reportsRequest.startDate,
+                  maxDate: _provider.reportsRequest.endDate,
                   labelText: S.of(context).dashboard_start_date,
                   onChange: (value) {
                     setState(() {
-                      _dashboardProvider.startDate = value;
+                      _provider.reportsRequest.startDate = value;
                     });
+
+                    _getStatistics();
                   },
                 ),
               )),
@@ -87,12 +89,15 @@ class _DashboardState extends State<Dashboard> {
                 margin: EdgeInsets.only(left: 5),
                 height: 60,
                 child: BasicDateField(
-                  minDate: _dashboardProvider.startDate,
+                  dateTime: _provider.reportsRequest.endDate,
+                  minDate: _provider.reportsRequest.startDate,
                   labelText: S.of(context).dashboard_end_date,
                   onChange: (value) {
                     setState(() {
-                      _dashboardProvider.endDate = value;
+                      _provider.reportsRequest.endDate = value;
                     });
+
+                    _getStatistics();
                   },
                 ),
               )),
@@ -105,7 +110,7 @@ class _DashboardState extends State<Dashboard> {
     return Container(
       margin: EdgeInsets.only(right: 20, left: 20),
       child: DropdownButtonFormField(
-        value: _dashboardProvider.selectedCar,
+        value: _provider.reportsRequest.car,
         isDense: true,
         hint: Text(
           S.of(context).dashboard_select_car,
@@ -114,8 +119,10 @@ class _DashboardState extends State<Dashboard> {
         items: _carsDropdownItems(),
         onChanged: (newValue) {
           setState(() {
-            _dashboardProvider.selectedCar = newValue;
+            _provider.reportsRequest.car = newValue;
           });
+
+          _getStatistics();
         },
       ),
     );
@@ -124,8 +131,8 @@ class _DashboardState extends State<Dashboard> {
   @override
   void didChangeDependencies() {
     if (!_initDone) {
-      _dashboardProvider = Provider.of<DashboardProvider>(context);
-      _dashboardProvider.initialise();
+      _provider = Provider.of<DashboardProvider>(context);
+      _provider.initialise();
 
       setState(() {
         _isLoading = true;
@@ -139,7 +146,7 @@ class _DashboardState extends State<Dashboard> {
 
   _loadData() async {
     try {
-      await _dashboardProvider.loadCars().then((_) {
+      await _provider.loadCars().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -159,11 +166,36 @@ class _DashboardState extends State<Dashboard> {
   _carsDropdownItems() {
     List<DropdownMenuItem<Car>> list = [];
 
-    _dashboardProvider.cars.forEach((car) {
+    _provider.cars.forEach((car) {
       list.add(
           DropdownMenuItem(value: car, child: Text(car.registrationNumber)));
     });
 
     return list;
+  }
+
+  _getStatistics() async {
+    if (_provider.reportsRequest.isValid()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _provider.getReports(_provider.reportsRequest).then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } catch (error) {
+        if (error.toString().contains(ReportsService.GET_REPORTS_EXCEPTION)) {
+          FlushBarHelper.showFlushBar(S.of(context).general_error,
+              S.of(context).exception_get_reports, context);
+        }
+
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }

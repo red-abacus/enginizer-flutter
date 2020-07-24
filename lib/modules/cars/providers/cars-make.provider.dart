@@ -1,7 +1,7 @@
 import 'package:app/config/injection.dart';
 import 'package:app/modules/cars/models/car-brand.model.dart';
 import 'package:app/modules/cars/models/car-color.model.dart';
-import 'package:app/modules/cars/models/car-fuel.model.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel.model.dart';
 import 'package:app/modules/cars/models/car-model.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car-type.model.dart';

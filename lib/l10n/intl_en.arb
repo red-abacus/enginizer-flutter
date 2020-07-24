@@ -82,6 +82,8 @@
   "car_details_quantity": "Quantity",
   "car_details_quantity_empty": "Quantity is empty!",
   "car_details_title": "Car Details",
+  "car_details_average": "The average fuel consumption is",
+  "car_details_average_liters": "liters per 100 km",
   "car_documents_title": "Documents",
   "car_service_recommendations_title": "Service Recommendations",
   "cars_no_recommendations_title": "No service recommendations recorded for this car.",
@@ -514,6 +516,11 @@
   "dashboard_end_date": "End date",
   "dashboard_select_car": "Select car",
   "dashboard_expenses": "Expenses",
+  "dashboard_itp": "ITP",
+  "dashboard_products": "Products",
+  "dashboard_services": "Services",
+  "dashboard_insurance": "Insurance",
+  "dashboard_fuel": "Fuel",
   "notifications_title": "Notifications",
   "notification_type_appointment_created": "Appointment created",
   "notification_type_appointment_canceled": "Appointment canceled",
@@ -794,5 +801,6 @@
   "exception_payment_provider": "There was an error trying to initialise payment.",
   "exception_provider_has_payment": "This service provider has not set it's payment details",
   "exception_update_provider": "There was an error trying to update this unit provider.",
-  "exception_upload_provider_profile_image": "There was an error trying to upload profile image."
+  "exception_upload_provider_profile_image": "There was an error trying to upload profile image.",
+  "exception_get_reports": "There was an error trying to load reports."
 }

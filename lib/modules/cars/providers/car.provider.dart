@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:app/config/injection.dart';
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/cars/models/car-document.dart';
-import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
-import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
-import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-consumption.model.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-consumption.response.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
 import 'package:app/modules/cars/models/recommendations/car-intervention.model.dart';
+import 'package:app/modules/cars/models/request/car-fuel-request.model.dart';
 import 'package:app/modules/cars/services/car.service.dart';
 import 'package:app/utils/api_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CarProvider with ChangeNotifier {
   CarService carService = inject<CarService>();
@@ -34,6 +34,8 @@ class CarProvider with ChangeNotifier {
   CarDocument diagnosisProtocol;
   CarDocument generalVerification;
 
+  CarFuelRequest carFuelRequest;
+
   initialise() {
     talon = null;
     exhaust = null;
@@ -41,6 +43,8 @@ class CarProvider with ChangeNotifier {
     generalVerification = null;
     selectedInterventions = [];
     carHistory = [];
+
+    carFuelRequest = CarFuelRequest(carId: this.selectedCar.id);
   }
 
   selectCar(Car car) {
@@ -58,10 +62,11 @@ class CarProvider with ChangeNotifier {
     }
   }
 
-  Future<CarFuelGraphicResponse> getCarFuelConsumptionGraphic() async {
+  Future<CarFuelGraphicResponse> getCarFuelConsumptionGraphic(
+      CarFuelRequest carFuelRequest) async {
     try {
       carFuelGraphicResponse =
-          await carService.getFuelConsumption(selectedCar.id);
+          await carService.getFuelConsumption(carFuelRequest);
       notifyListeners();
       return carFuelGraphicResponse;
     } catch (error) {

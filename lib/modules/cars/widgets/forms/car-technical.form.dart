@@ -1,6 +1,6 @@
 import 'package:app/generated/l10n.dart';
 import 'package:app/modules/cars/models/car-color.model.dart';
-import 'package:app/modules/cars/models/car-fuel.model.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel.model.dart';
 import 'package:app/modules/cars/models/car-query.model.dart';
 import 'package:app/modules/cars/models/car-type.model.dart';
 import 'package:app/modules/cars/models/car-variant.model.dart';

@@ -20,17 +20,8 @@ class DashboardChartWidget extends StatelessWidget {
   ];
 
   /// Creates a [PieChart] with sample data and no transition.
-  factory DashboardChartWidget.withSampleData() {
-    Random random = new Random();
-
-    Map<String, double> dataMap = new Map();
-    dataMap.putIfAbsent("Manopera", () => random.nextDouble() * (1000 - 100) + 100);
-    dataMap.putIfAbsent("Piese", () => random.nextDouble() * (2000 - 500) + 500);
-    dataMap.putIfAbsent("Itp", () => random.nextDouble() * (200 - 100) + 100);
-    dataMap.putIfAbsent("Carburant", () => random.nextDouble() * (400 - 100) + 100);
-    dataMap.putIfAbsent("Asigurare", () => random.nextDouble() * (600 - 300) + 300);
-
-    return DashboardChartWidget(dataMap);
+  factory DashboardChartWidget.withSampleData(Map<String, dynamic> data) {
+    return DashboardChartWidget(data);
   }
 
   @override

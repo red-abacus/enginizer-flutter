@@ -5,15 +5,16 @@ import 'package:app/modules/appointments/model/documentation/car-documentation-t
 import 'package:app/modules/appointments/model/generic-model.dart';
 import 'package:app/modules/cars/models/car-document.dart';
 import 'package:app/modules/cars/models/car-timetable.model.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-consumption.model.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-consumption.response.dart';
 import 'package:app/modules/cars/models/recommendations/car-history.model.dart';
+import 'package:app/modules/cars/models/request/car-fuel-request.model.dart';
 import 'package:app/modules/cars/models/request/car-request.model.dart';
 import 'package:app/modules/cars/models/request/car-timetable-request.model.dart';
 import 'package:app/modules/promotions/models/request/create-promotion-request.model.dart';
 import 'package:dio/dio.dart';
 import 'package:app/config/injection.dart';
-import 'package:app/modules/cars/models/car-fuel-consumption.model.dart';
-import 'package:app/modules/cars/models/car-fuel-consumption.response.dart';
-import 'package:app/modules/cars/models/car-fuel-graphic.response.dart';
+import 'package:app/modules/cars/models/fuel/car-fuel-graphic.response.dart';
 import 'package:app/modules/cars/models/car.model.dart';
 import 'package:app/modules/cars/models/cars-reponse.model.dart';
 import 'package:app/utils/environment.constants.dart';
@@ -42,8 +43,7 @@ class CarService {
 
   static String _CAR_API_PATH = '${Environment.CARS_BASE_API}/cars';
 
-  static String _CAR_HISTORY_PREFIX =
-      '${Environment.CARS_BASE_API}/cars/';
+  static String _CAR_HISTORY_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_HISTORY_SUFFIX = '/history';
 
   static String _CAR_SELL_PREFIX = '${Environment.CARS_BASE_API}/cars/';
@@ -57,8 +57,7 @@ class CarService {
   static String _CAR_DOCUMENTATION_DOCUMENT =
       '${Environment.CARS_BASE_API}/techDocumentation/document';
 
-  static String _CAR_ADD_DOCUMENT_PREFIX =
-      '${Environment.CARS_BASE_API}/cars/';
+  static String _CAR_ADD_DOCUMENT_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_ADD_DOCUMENT_SUFFIX = '/documents';
 
   static String _GET_CAR_DOCUMENTS_PREFIX =
@@ -69,12 +68,10 @@ class CarService {
       '${Environment.CARS_BASE_API}/cars/';
   static const String _GET_CAR_DOCUMENT_DETAILS_SUFFIX = '/documents/';
 
-  static String _MARK_AS_SOLD_PREFIX =
-      '${Environment.CARS_BASE_API}/cars/';
+  static String _MARK_AS_SOLD_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _MARK_AS_SOLD_SUFFIX = '/sold';
 
-  static String _CAR_TIMETABLE_PREFIX =
-      '${Environment.CARS_BASE_API}/cars/';
+  static String _CAR_TIMETABLE_PREFIX = '${Environment.CARS_BASE_API}/cars/';
   static const String _CAR_TIMETABLE_SUFFIX = '/timetable';
 
   Dio _dio = inject<Dio>();
@@ -135,13 +132,12 @@ class CarService {
     }
   }
 
-  Future<CarFuelGraphicResponse> getFuelConsumption(int id) async {
+  Future<CarFuelGraphicResponse> getFuelConsumption(
+      CarFuelRequest carFuelRequest) async {
     try {
-      final response = await _dio.get('$_CAR_API_PATH/$id/fuel',
-          queryParameters: {
-            "month": DateTime.now().month,
-            'year': DateTime.now().year
-          });
+      final response = await _dio.get(
+          '$_CAR_API_PATH/${carFuelRequest.carId}/fuel',
+          queryParameters: carFuelRequest.toJson());
 
       if (response.statusCode < 300) {
         return CarFuelGraphicResponse.fromJson(response.data);
@@ -180,7 +176,7 @@ class CarService {
 
     try {
       final response =
-      await _dio.patch('$_CAR_API_PATH/$id/image', data: formData);
+          await _dio.patch('$_CAR_API_PATH/$id/image', data: formData);
 
       if (response.statusCode < 300) {
         return CarFuelConsumptionResponse.fromJson(response.data);
@@ -351,9 +347,11 @@ class CarService {
     }
   }
 
-  Future<List<CarTimetable>> getCarTimetable(CarTimetableRequest request) async {
+  Future<List<CarTimetable>> getCarTimetable(
+      CarTimetableRequest request) async {
     try {
-      var response = await _dio.get(_buildCarTimetablePath(request.carId), queryParameters: request.toJson());
+      var response = await _dio.get(_buildCarTimetablePath(request.carId),
+          queryParameters: request.toJson());
       if (response.statusCode == 200) {
         return _mapCarTimetable(response.data);
       } else {
