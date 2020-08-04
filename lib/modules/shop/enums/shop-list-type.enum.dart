@@ -1,0 +1,4 @@
+enum ShopListType {
+  List,
+  Grid
+}

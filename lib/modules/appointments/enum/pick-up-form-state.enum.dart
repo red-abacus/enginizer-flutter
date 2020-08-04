@@ -1,0 +1,3 @@
+enum PickupFormState {
+  Receive, Return
+}

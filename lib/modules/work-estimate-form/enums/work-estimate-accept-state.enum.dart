@@ -1,0 +1,3 @@
+enum WorkEstimateAcceptState {
+  Personal, PickUp
+}
